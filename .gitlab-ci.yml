@@ -20,26 +20,28 @@ build:
   # before_script:
   #   - apt update && apt -y install make autoconf
   # 1) Remove existing build files
-  - rm -rf builds_debug
-  - mkdir builds_debug
+  #- rm -rf builds_debug
+  #- mkdir builds_debug
   # 2) Get latest repository changes and move into builds_dir
-  - cd open-csmp
-  - git fetch
-  - git switch development 
-  - git pull origin 
-  - cd ../builds_debug
+  #- cd open-csmp
+  #- git fetch
+  #- git switch development 
+  #- git pull origin 
+  #- cd ../builds_debug
 
   script:
-  # 3) Run Cmake and move to Builds directory
+      # 1) Remove existing build files
+     - rm -rf builds_debug
+     - mkdir builds_debug
+      # 2) Get latest repository changes and move into builds_dir 
+     - cd open-csmp
+     - git fetch
+     - git switch development 
+     - git pull origin 
+     - cd ../builds_debug
+      # 3) Run CMake and Make: generate build files 
      - cmake -S ../open-csmp/ -B .
      - cmake --build . --target all -j 4. #TODO Change 4 to nproc
-  artifacts:
-    paths:
-      #- mybinary
-      # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
-       cache:
-         paths:
-           - "*.o"
 
 # run tests using the binary built before
 test:
