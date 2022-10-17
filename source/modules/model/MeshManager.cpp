@@ -1782,6 +1782,9 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
 
    @assumption Assumes element property "region identifier" is defined.
 
+   @attention: This method sets TOPO flags PERIMETER_LINE and PERIMETER_POINT
+
+
    Steps - Creation of interfaces from FaceConstructionData:
 
    1. Loops over FaceConstructionData and duplicates nodes of InnerParent if they are found to Not be within the Perimeter Nodes supplied.
@@ -1798,7 +1801,18 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
       (perimeter nodes must be well defined for this to exclude the inside nodes from the assignment)
       All the outside elements are queried for their unique Region they belong to using "region identifier" property, this is stored for SplitBoundaryInterface
 
-   5. Finally the node-to-parent element connectivity for the whole mesh is rebuilt.
+   6. If a node on an existing interface was split (even if on perimeter), then the interface object is updated to contain (potentially) the duplicate node.
+
+   7. Finally the node-to-parent element connectivity for the whole mesh is rebuilt.
+   8. Likewise, the node-to-parent interface connectivity is also rebuilt, since all interfaces (new and old), now have correct nodes within them.
+
+   Cases:
+   3D: An X intersection, where the perimeter of split boundary 1 (not split), should be split in the dimension of splitboundary 2.
+   Therefore, splitboundary node on INSIDE,OUTSIDE of SB1 is not split, and not manifold.
+   However, same node, is classified a manifold by SB2, and is split, with different nodes on INSIDE OUTSIDE of SB2. How to disambiguate?
+
+   If split if manifold --> error when we split SB1.
+
 
    @author E.P
    @date 18/8/22
@@ -1812,6 +1826,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
                                                                         typename std::vector<FaceConstructionData<dim>>::iterator last,
                                                                         typename vector<Node<dim>*>::const_iterator perim_first,
                                                                         typename vector<Node<dim>*>::const_iterator perim_last,
+                                                                        std::set<Node<dim>*> &split_perimeter_nodes,
                                                                         std::set<size_t>& region_material_ids)
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1823,7 +1838,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
     const csmp::Index region_key = dbase.StorageKey( "region identifier");
 
     if (n_original_elmts == 0U ) {
-         csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceFacesByInterFaces", "supplied iterator range is empty; nothing was done.");
+         csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceElementsByInterFaces", "supplied iterator range is empty; nothing was done.");
          return iface_ptrs;
       }
     else iface_ptrs.reserve( n_original_elmts );
@@ -1843,9 +1858,13 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
     // tracking already duplicated nodes to avoid duplicates
     //  original,  duplicate
     map<Node<dim>*,Node<dim>*>  new_nodes;
+    std::map<Node<dim>*,Node<dim>*> new_nodes_with_existing_manifold;
+    std::map<Node<dim>*,Node<dim>*> new_perimeter_nodes_without_manifold;
+
 
     // 1. converting interior Face objects into InterFace ones, duplicating their nodes
     // --------------------------------------------------------------------------------
+    // Note: WE do NOT split nodes on the perimeter of this subdomain
     // (original Face objects are removed)
     while( first != last )
       {
@@ -1853,6 +1872,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          //Getting Inside Element
          Element<dim>* inside_elmt    = first->InnerElement();
          Element<dim>* outside_elmt   = first->OuterElement();
+         Element<dim>* lower_dim_elmt = first->LowerDimElement();   //used to attribute TOPO Flag
 
          outside_neighbors_to_search.insert( outside_elmt );
          inside_parents.insert( inside_elmt );
@@ -1867,16 +1887,33 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          for ( uint32_t i{0U}; i<inside_fnids.size(); ++i ) {
            Node<dim>* inside_node = inside_elmt->N(inside_fnids[i]);
            //If we are at not at perimeter, or if we are at intersection (manifold)
-           if ( std::find( perim_first, perim_last, inside_node ) == perim_last || inside_node->IsManifold()  ){
+           bool inside_was_manifold  = inside_node->IsManifold();
+           bool inside_was_perimeter = (inside_node->Attribute() == PERIMETER_LINE || inside_node->Attribute() == PERIMETER_POINT );  //if we hit another regions perimeter (not the region we are splitting)
+           if ( std::find( perim_first, perim_last, inside_node ) == perim_last && split_perimeter_nodes.find(inside_node) == split_perimeter_nodes.end() ){
              if ( (nit=new_nodes.find( inside_node )) == new_nodes.end() ) {                // if a matching outside node has not been created yet
                   //duplicating outside node if not already duplicated
                   Node<dim>* out_node = Duplicate( inside_node, lvsNode );
                   in_out_nodes.insert( make_pair( inside_node, out_node ));
                   new_nodes.insert( make_pair( inside_node, out_node ) );
+                  if (inside_was_manifold){
+                    assert(!inside_was_perimeter);
+                    new_nodes_with_existing_manifold.insert(make_pair(inside_node, out_node));
+                  }
+                  if (inside_was_perimeter){
+                    assert(!inside_was_manifold);
+                    new_perimeter_nodes_without_manifold.insert(make_pair(inside_node,out_node));
+                  }
                }
              // if the necessary new node was already created earlier it was retrieved and is assigned here
              else in_out_nodes.insert( make_pair( inside_node, (*nit).second ));
-           } else in_out_nodes.insert(make_pair( inside_node, inside_node ));            //take inside node when node is at perimeter of model
+           } else {
+             //we are on the perimeter
+             in_out_nodes.insert(make_pair( inside_node, inside_node ));            //take inside node when node is at perimeter of model
+             //assign perimeter topo flag (needed if we have to split a perimeter later)
+             if (lower_dim_elmt->IsSurface()) inside_node->Attribute( PERIMETER_LINE  );
+             if (lower_dim_elmt->IsLine() )   inside_node->Attribute( PERIMETER_POINT );
+
+           }
 
            // add Inside and outside node INTERNAL flag if not at boundary
            if ( inside_node->AtBoundary() == NOT ) {
@@ -1945,10 +1982,87 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
 
      }//search continues untill all inside nodes are updated
 
-     // TODO: these are global changes! - do this only for nodes that are affected
+
+     //3.0 Update existing Interfaces which were intersected
+     // ---------------------------------------------------------
+     //3.1 For each duplicated node that was already a manifold (intersection)
+     for ( auto nit : new_nodes_with_existing_manifold){
+       Node<dim>* old_node = nit.first;
+       const auto interfaces = old_node->Manifold()->InterFaces(old_node);
+       //iterate over all interfaces of the node
+       uint32_t found{0U};
+       for ( uint32_t i{0U}; i < interfaces; i++ ){
+         //getting interface information
+         std::pair<InterFace<dim>*, std::pair<uint32_t, INTERFACE_SIDE>> interface_index = old_node->Manifold()->InterFaceIndex(old_node, i);
+         INTERFACE_SIDE side = interface_index.second.second;
+         //getting nodes face of higher-dim parent element
+         std::set<Node<dim>*> nds_of_parent = interface_index.first->Parent(side)->CornerNodesOfFace(interface_index.first->ParentFaceID(side));
+         // if Parent was updated with new node
+         if (nds_of_parent.find( old_node ) == nds_of_parent.end() ){
+           assert(nds_of_parent.find(nit.second) != nds_of_parent.end()); //check the parent element has the new duplicate node
+           //update interface with new node:         index             , new node,           side
+           interface_index.first->Assign(interface_index.second.first, nit.second, interface_index.second.second );
+           found++;
+         }
+       }
+       //should only update one interface per node
+       if constexpr (dim==2) assert(found == 1); //for a 1d splitboundary in 2d model
+     }
+
+
+     //3.2 For each duplicated node that was on a splitboundaries perimeter (which is not a manifold)
+     for (auto nit : new_perimeter_nodes_without_manifold){
+       Node<dim>* perimeter_node = nit.first;
+
+       //i) search for potential interfaces
+       std::set<InterFace<dim>*> potential_interfaces;
+       const uint32_t neighbors = perimeter_node->Neighbors();
+       //search for manifold nodes that are neighbors, and grab their interfaces
+       for (uint32_t n{0U}; n<neighbors; ++n){
+         Node<dim>* neighbor_node = perimeter_node->Neighbor(n);
+         //We need a manifold object that has been configured (that hasnt just been created above)
+         if (neighbor_node->IsManifold() && neighbor_node->Manifold()->NodeMapSize() != 0 ){
+           const uint32_t interfaces = neighbor_node->Manifold()->InterFaces(neighbor_node);
+           assert(interfaces > 0);
+           for ( uint32_t i{0U}; i<interfaces; ++i ){
+             potential_interfaces.insert(neighbor_node->Manifold()->I(neighbor_node, i)); //inserting interface as potentially having perimeter node
+           }
+         }//found potential interface
+       }//end interface search
+       assert(!potential_interfaces.empty()); //This can be the case if all nodes on interface are on the perimeter!! (I.e they are not split)
+
+       //ii) Search all interfaces for perimeter node
+       bool found_perimter_interface = false;
+       for ( auto ifit : potential_interfaces){
+         //search for perimeter node (inside outside nodes match)
+         for ( uint32_t n{0U}; n<ifit->FE()->Nodes(); ++n){
+            if (ifit->N(n,INSIDE) == perimeter_node && ifit->MatchingN(n,INSIDE) == ifit->MatchingN(n,OUTSIDE)){
+              //We should also have perimeter node on the outside
+              assert(ifit->MatchingN(n,OUTSIDE) == perimeter_node );
+              //Update both sides of interface with new node IF higher dim parents say so!
+              std::set<Node<dim>*> nds_of_in_face  = ifit->InnerParent()->CornerNodesOfFace( ifit->InnerParentFaceID() );
+              std::set<Node<dim>*> nds_of_out_face = ifit->OuterParent()->CornerNodesOfFace( ifit->OuterParentFaceID() );
+              if (nds_of_in_face.find(perimeter_node) == nds_of_in_face.end()){
+                assert(nds_of_out_face.find(perimeter_node) == nds_of_out_face.end());  //Check also outside face doesnt have perimeter node (not true perimeter)
+                assert(nds_of_in_face.find(nit.second) != nds_of_in_face.end());        //check we have the duplicate node instead
+                assert(nds_of_out_face.find(nit.second) != nds_of_out_face.end());      //check we have the duplicate node instead
+
+                //assign interface the new node instead
+                ifit->Assign(n, nit.second, INSIDE);
+                assert(n < ifit->FE()->CornerNodes()); //We must have a corner node
+                assert( ifit->MatchingN(n,OUTSIDE) == ifit->N(ifit->FE()->CornerNodes() - 1 - n, OUTSIDE)); //Only applied if corner node, and assumes outside nodes rotate the other way and start from last node
+                ifit->Assign(ifit->FE()->CornerNodes() - 1 - n , nit.second, OUTSIDE );
+              }// end of interface correction
+            }//end of perimeter node found
+         }//end of perimeter node search
+       }//end of interfaces corrections
+     }//end of perimeter nodes fixes
+
+
+     // TODO: these are global changes! - do this only for nodes that are affected - this also updates node parent interface connectivity
     UpdateConnectivity();
 
-    cout <<"\n"<<"MeshManager<"<< dim <<">::ReplaceFacesByInterFaces: created "<< iface_ptrs.size() <<" new interfaces and ";
+    cout <<"\n"<<"MeshManager<"<< dim <<">::ReplaceElementsByInterFaces: created "<< iface_ptrs.size() <<" new interfaces and ";
     cout << new_nodes.size() <<" new nodes."<< endl;
 
     return iface_ptrs;
@@ -3636,10 +3750,37 @@ void MeshManager<dim>::UpdateConnectivity()
     // -----------------------------------
     for ( auto& nit : nodes_ ) nit.AssignNodeNeighbors();
     
+
     // 4. Update node manifolds
     // ------------------------
-    // this is expected to have been done during interface creation
-    
+    // 4.1 (Re)-creating node connectivity to parent interfaces
+    // -----------------------------------------------------
+    // counting the parent elements of each node
+    map<Node<dim>*,set<pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE>>> >  parent_ifaces_per_node;
+    for ( auto& it : interfaces_ ) {
+      assert( it.FE() );
+      const auto nodes{ it.FE()->Nodes() };
+      for ( uint32_t n{0U}; n < nodes; ++n ) {
+        std::vector<INTERFACE_SIDE> sides{INSIDE,OUTSIDE};
+        for ( INTERFACE_SIDE side : sides ){
+          if( it.N(n,side)->IsManifold() ){
+            set<pair<InterFace<dim>*,pair<uint32_t,INTERFACE_SIDE>>> trial_set{std::make_pair( &it, make_pair(n,side))};
+            auto mit = parent_ifaces_per_node.insert( make_pair( it.N(n,side), trial_set )) ; //inserting NodeManifold - InterFace pair if it doesnt exist
+            if (mit.second == false) //if insertion didnt happen because manifold already exists
+              mit.first->second.insert( *trial_set.begin() ); //add new interface to already existing set of InterFaces for existing NodeManifold
+          }//end of found manifold
+        }//end of side iteration
+      }//end of node loop
+    }//end of interface loop
+
+
+    // 2. re-assigning the parent interface index pairs to the node manifold
+    // --------------------------------------------
+    for ( auto& n : parent_ifaces_per_node ) {
+         assert(n.first->IsManifold());
+         n.first->Manifold()->Assign(n.first, n.second); //assigning set of interfaces and index pairs to the manifold
+      }
+
  } // end UpdateConnectivity
 
 

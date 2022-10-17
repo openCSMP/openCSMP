@@ -281,6 +281,9 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// calculates the coordinate matrix from node coordinates representing the average of the inside and outside nodes of the interface
     void    BisectorCoordinateMatrix() const;
 
+    /// calculates the coordinate matrix from node coordinates representing the average of the inside and outside nodes of the interface
+    void    BisectorCoordinateMatrix(DenseMatrix<DM_MIN>& XY) const;
+
     /// finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface; uses point coordinates that must be matched
     std::pair<uint32_t,uint32_t>  SharedElementFaces();
   

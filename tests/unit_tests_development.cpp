@@ -96,6 +96,7 @@
 
 #include "InterFace_Test.h"
 #include "SplitBoundary_Test.h"
+#include "SplitBoundaryInterface_Test.h"
 
 //variable placement tests
 //#include "Placement_Test_2D.h"
@@ -128,20 +129,24 @@ TEST_CASE("Development tests", "[Dev]") {
 
   InterFace_Test test00;
   SplitBoundary_Test test01;
-  //test00.run();
-  //test01.run();
+  SplitBoundaryInterface_Test<2U> test02;
+  SplitBoundaryInterface_Test<3U> test03;
+  test00.run();
+  test01.run();
+  test02.run();
+  test03.run();
 
-  GenericFiniteVolumeTransport_Test test0;     //broken - no Finite volume defined
+  //GenericFiniteVolumeTransport_Test test0;     //broken - no Finite volume defined
   //test.run();
 
-  DirichletPressureBoxModel_VVCase test1;     //need files DirichletPressureBoxModel_VVCase
+  //DirichletPressureBoxModel_VVCase test1;     //need files DirichletPressureBoxModel_VVCase
   //test1.run();
 
-  ExplicitAdvection2D_VVCase test2;         //missing input files
+  //ExplicitAdvection2D_VVCase test2;         //missing input files
   //test2.run();
 
-  Geothermal_pseudo1D_VVCase test3("2000x1000_mesh");
-  test3.run();
+  //Geothermal_pseudo1D_VVCase test3("2000x1000_mesh");
+  //test3.run();
 
 
  //   ANSYS_Model2D_Test test;

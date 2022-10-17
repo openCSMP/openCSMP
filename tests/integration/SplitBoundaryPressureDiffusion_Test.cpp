@@ -112,7 +112,7 @@ void SplitBoundaryPressureDiffusion_Test::run()
     //      the righthandside is equivalent to that in the lefthandside.
     // ------------------------------------------------------------------------------------
 
-#ifdef USE_SAMG_SOLVER
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings;
     settings.Set_eps(0.);
     SAMG_Solver  samg_solver(&settings);

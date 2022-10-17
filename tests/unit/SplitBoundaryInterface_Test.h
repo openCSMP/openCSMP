@@ -42,10 +42,11 @@ void scaleRegion( Region<dim>& region, double xScale, double yScale, double zSca
 
 /**
     SplitBoundaryInterface_Test unit test tests all functionality related to the creation and destruction of SplitBoundary objects.
-    Refer to SplitBoundaryInterface_Test for tests of the functionality of the SplitBoundary itself.
+    Refer to SplitBoundary_Test for tests of the functionality of the SplitBoundary itself.
 
      @author Revised testst originally conceived by Roman Manasipov in 2013,
      @author refactored by Junchul Kim (2019).
+     @author refactored by Edoardo Pezzulli (2022)
      @date ported to 2016 version by SKM.
  */
  
@@ -55,43 +56,33 @@ class SplitBoundaryInterface_Test : public Test
     public:
       virtual void run();
 
-      // testing split boundary creation methods 
-      
+      // CURRENTLY RUNNING:
+      void Test_splitboundary_from_lower_dim_region(); //E.P Implemented and Tested - Contains RIGOROUS checking of nodes, elements, and interfaces correctly calibrated
+
+
+      //RUNNING, BUT WITH NO DIAGNOSTICS: Just checks methods dont crash - TODO: Add quantitative checks/tests to each of these
       void Test_splitboundary_between_regions( const std::string& model_name );
-
       void Test_splitboundary_around_regions( const std::string& model_name );
-
       void Detect_and_create_splitboundaries( const std::string& model_name );
-
       void Detect_and_create_splitboundaries_from_constructor( const std::string& model_name );
 
+
+      // NOT RUNNING/USED: These tests are currently not used/run
       void NodeParents( const csmp::Region<dim>& region, size_t minParentCount = 2 );
-
       void ElementNodes( const csmp::Region<dim>& region );
-
       void CheckRemovedLowDimParents( csmp::Boundary<dim>& boundary );
-
-      /// tests whether all InterFace elements of the SplitBoundary have both higher-dimensional neighbors
-      bool NoNeighborNull( const csmp::InterFace<dim>& interFace );
-
-      /// tests whether the splitted nodes share parent elements, located on different sides of interfaces
-      void TestSplitNodeAssignment( const csmp::Model<dim>& );
-
+      bool NoNeighborNull( const csmp::InterFace<dim>& interFace );       /// tests whether all InterFace elements of the SplitBoundary have both higher-dimensional neighbors
+      void TestSplitNodeAssignment( const csmp::Model<dim>& );      /// tests whether the splitted nodes share parent elements, located on different sides of interfaces
       void TestUnitNormals( csmp::Model<dim>&, const std::string& test_name  );
 
+      //Visualisation functions
       void VisualiseSplitBoundaries( csmp::Model<dim>&, const std::string&test_name  );
-
       void PullApartSplitboundaries( Model<dim>& model, std::vector<std::string>& fractures, double displacement );
-
       void PullApartSplitboundaries( Model<dim>& model, double displacement );
-
       void LoadModel( const std::string& model_name );
-
       void LoadModel( const std::string& model_name, std::vector<std::string>& regions );
-
       void LoadContiguousModel( const std::string& model_name, std::vector<std::string>& fractures );
-
-       void EstablishContiguousRegionsList( Model<dim>& model,
+      void EstablishContiguousRegionsList( Model<dim>& model,
                                            const std::set<std::string>& fractures_basic_set,
                                            std::set<std::string>& fractures );
 
@@ -108,6 +99,18 @@ class SplitBoundaryInterface_Test : public Test
                          
       void OutputToFile( const char* file_name,
                          const std::set<std::string>& fractures );
+
+
+
+protected:
+
+      // CreateFromRegion Test Added by E.P
+      bool Test_NodeCorrespondance_2D(const char* mesh_file );
+      bool Test_NodeAndElementsCorrespondance_3D(const char* mesh_file );
+      bool Test_NodeAndElementsCorrespondance_3D_X_Intersection( const char* mesh_file);
+      bool Test_NodeAndElementsCorrespondance_3D_X_Intersection_Reverse( const char* mesh_file);
+
+
       private:
         static const bool verbose_ = true;
   };

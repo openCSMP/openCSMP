@@ -1254,21 +1254,25 @@ are used to find mid-points.
 template<uint32_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
 {
-   if ( current_side_ == MIDDLE )
-   	 throw csmp::Exception( ERROR, "InterFace<dim>::NodeCoordinateMatrix",
-                           "Method cannot be used for intervening (MIDDLE) elements");
+   if ( current_side_ == MIDDLE ){
+     BisectorCoordinateMatrix(XY);
+     return;
+   }
 
    NodeCoordinateMatrix( XY, current_side_ );
 
 } // end NodeCoordinateMatrix
 
+
 template<uint32_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_SIDE side ) const
 {
  
-  if ( side == MIDDLE )
-    throw csmp::Exception( ERROR, "InterFace<dim>::NodeCoordinateMatrix",
-                           "Method cannot be used for intervening (MIDDLE) elements");
+  if ( side == MIDDLE ){
+      BisectorCoordinateMatrix(XY);
+      return;
+  }
+
 
   const auto n_nodes( this->FE()->Nodes() );
   XY.Resize( n_nodes, dim );
@@ -1291,6 +1295,23 @@ void  InterFace<dim>::BisectorCoordinateMatrix() const
   for ( auto i{0U}; i<n_nodes; ++i ) {
        const Point<dim> mid_point = (this->MatchingN( i, INSIDE )->Coordinate() + this->MatchingN( i, OUTSIDE )->Coordinate()) / 2.;
        this->FE()->XY.AssignRow( i, mid_point );
+    }
+
+} // end CoordinateMatrix
+
+
+/**
+       Interface bisector with XY Dense matrix to be overwritten.
+*/
+template<uint32_t dim>
+void  InterFace<dim>::BisectorCoordinateMatrix(DenseMatrix<DM_MIN>& XY) const
+{
+  const auto n_nodes( this->FE()->Nodes() );
+  XY.Resize( n_nodes, dim );
+
+  for ( auto i{0U}; i<n_nodes; ++i ) {
+       const Point<dim> mid_point = (this->MatchingN( i, INSIDE )->Coordinate() + this->MatchingN( i, OUTSIDE )->Coordinate()) / 2.;
+       XY.AssignRow( i, mid_point );
     }
 
 } // end CoordinateMatrix

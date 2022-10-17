@@ -204,6 +204,42 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
 
 
 
+///Clears existing InterFaces of assigned to node and assigns a new set to them.
+/// @attention This overwrites existing interfaces assigned to node if they are assigned.
+template<uint32_t dim>
+void NodeManifold<dim>::Assign(Node<dim>* n, std::set<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE>>> interface_indexes )
+{
+  assert(!interface_indexes.empty());
+
+  auto nmap_it = node_parent_interface_map_.find(n);
+  //If new node entry
+  if ( nmap_it==node_parent_interface_map_.end()){
+    //create interface_index_vector from set
+    vector<pair<InterFace<dim>*,pair<uint32_t,INTERFACE_SIDE>>> if_idx_vec;
+    for (auto& pair:interface_indexes){
+      if_idx_vec.push_back(pair);
+    }
+    //insert into map
+    node_parent_interface_map_.insert(make_pair(n,if_idx_vec));
+    return;
+  } else {
+    auto if_indexes = nmap_it->second;
+    //if vector is already assigned - we overwrite
+    if (!if_indexes.empty())
+      if_indexes.clear(); //clear current vector
+
+    for ( auto pair : interface_indexes)
+      if_indexes.push_back(pair);           //insert interface index pair into map
+
+    return;
+  }
+}//end of Assign
+
+
+
+
+
+
 
 template<uint32_t dim>
 uint32_t NodeManifold<dim>::Branches() const
@@ -212,6 +248,23 @@ uint32_t NodeManifold<dim>::Branches() const
 }
 
 
+template<uint32_t dim>
+uint32_t NodeManifold<dim>::NodeMapSize() const
+{
+  return node_parent_interface_map_.size();
+}
+
+
+
+
+template<uint32_t dim>
+uint32_t NodeManifold<dim>::InterFaces(Node<dim>* n) const
+{
+  //check map has been calibrated
+  assert( !node_parent_interface_map_.empty() );
+
+  return node_parent_interface_map_.at(n).size();
+}
 
 
 template<uint32_t dim>
@@ -223,6 +276,34 @@ Node<dim>* const NodeManifold<dim>::N( size_t branch ) const
 
 
 
+template<uint32_t dim>
+InterFace<dim>* NodeManifold<dim>::I(Node<dim>* n, uint32_t i)
+{
+  assert(!node_parent_interface_map_.empty());
+
+  auto interface_indexes = node_parent_interface_map_.at(n);
+  assert(i < interface_indexes.size()); //out of scope
+  return interface_indexes[i].first;
+}
+
+
+template<uint32_t dim>
+std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>> NodeManifold<dim>::InterFaceIndex(Node<dim>* n, uint32_t i)
+{
+  assert(!node_parent_interface_map_.empty());
+  auto interface_indexes = node_parent_interface_map_.at(n);
+  assert(i < interface_indexes.size()); //out of scope
+
+  return interface_indexes[i];
+}
+
+
+template<uint32_t dim>
+std::vector<std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> NodeManifold<dim>::InterFaceIndexVector(Node<dim>* n)
+{
+  assert(!node_parent_interface_map_.empty());
+  return  node_parent_interface_map_.at(n);
+}
 
 
 

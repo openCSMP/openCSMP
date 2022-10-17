@@ -155,6 +155,7 @@ public:
                                                           typename std::vector<FaceConstructionData<dim>>::iterator last,
                                                           typename std::vector<Node<dim>*>::const_iterator perim_first,
                                                           typename std::vector<Node<dim>*>::const_iterator perim_last,
+                                                          std::set<Node<dim>*> & split_perimeter_nodes,
                                                           std::set<size_t>& region_material_ids);
 
 
