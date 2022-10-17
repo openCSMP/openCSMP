@@ -40,7 +40,8 @@ build:
      - cd ../builds_debug
       # 3) Run CMake and Make: generate build files 
      - cmake -S ../open-csmp/ -B .
-     - cmake --build . --target all -j 1. #TODO Change 4 to nproc
+     - export NPROC=$(echo | nproc)
+     - cmake --build . --target all -j ${NPROC} #TODO Change 4 to nproc
 
 # run tests using the binary built before
 test:
