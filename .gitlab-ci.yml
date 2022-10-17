@@ -51,6 +51,7 @@ build:
 test:
   stage: test
   script:
+     - cd ../builds_debug
      - cp -r ../open-csmp/tests/dataset . 
      - cd dataset
      - ../tests/csmptest_development #CHECK THIS WORKS
