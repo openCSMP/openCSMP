@@ -2437,7 +2437,7 @@ void Model<dim>::Apply( PDE_Integrator<dim,Element>& problem, bool debug )
 template<uint32_t dim>
 void Model<dim>::Apply( PDE_Integrator<dim,Face>& problem, bool debug )
 {
-  for ( typename map<string, csmp::Boundary<dim> >::iterator it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
+  for ( auto it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
     problem.IntegrateOver( (*it).second, debug );
 }
 

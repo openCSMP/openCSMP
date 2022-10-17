@@ -352,6 +352,7 @@ class PDE_Integrator {
     virtual void  Accumulate( const ModelSubDomain<dim,CELLTYPE>& );
 
     /// accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
+  // TODO: refactor: rename methods Accumulate and LateAccumulate and let overloading take care of name resolution
     virtual void  AccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const Boundary<dim>& );
     
     /// accumulation of Robin-type boundary conditions to SplitBoundary interfaces

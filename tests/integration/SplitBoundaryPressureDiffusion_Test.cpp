@@ -152,10 +152,8 @@ void SplitBoundaryPressureDiffusion_Test::run()
     // source term at dt * {Q} at current pressure needs to be accumulated later
     source.AddAccumulateLater();
     source.LumpedFormulation(true);
-    
-    
+        
     // interface transfer
-    // ------------------
     NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<3U> iface_transfer( *model_ptr_,
                                                                           "conductivity",
                                                                           "fluid pressure", "fluid pressure",
@@ -196,7 +194,7 @@ void SplitBoundaryPressureDiffusion_Test::run()
         iface_transfer.UpdateTimeIncrement( time_increment );
 
         // transient pressure
-        model_ptr_->Apply( fluid_pressure );
+        fluid_pressure.IntegrateOver( *model_ptr_, model_domain );
 
         // output variables to file and screen
         printRangeOfVariable( *model_ptr_, "fluid pressure" );

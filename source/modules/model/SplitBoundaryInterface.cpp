@@ -1553,7 +1553,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      
      // 1. creating unique set of nodes matching those on the inside of the SplitBoundary in position
      // ---------------------------------------------------------------------------------------------
-     // TODO: this method should be in the mesh manager
+     // TODO: these operations should be encapsulated in the mesh manager:  vec DuplicateNodes( begin, end ); make that pointer based
      vector<Node<dim>*>    node_pointers; // to the new nodes
      vector<Element<dim>*> elmt_pointers; // new elements
      
