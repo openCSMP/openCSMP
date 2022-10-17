@@ -30,14 +30,13 @@ build:
   #- cd ../builds_debug
 
   script:
-      # 1) Remove existing build files
-     - rm -rf builds_debug
-     - mkdir builds_debug
-      # 2) Get latest repository changes and move into builds_dir 
-     - cd open-csmp
+      # 1) Get latest repository changes
      - git fetch
      - git switch development 
      - git pull origin 
+      # 2) Remove existing build files and move into it 
+     - rm -rf ../builds_debug
+     - mkdir ../builds_debug
      - cd ../builds_debug
       # 3) Run CMake and Make: generate build files 
      - cmake -S ../open-csmp/ -B .
