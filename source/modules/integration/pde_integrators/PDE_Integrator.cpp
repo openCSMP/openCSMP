@@ -769,7 +769,7 @@ void PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<di
    // 5. Resizing 'G' and righthand vector 'rh' eliminating the Dirichlet conditions
    // ------------------------------------------------------------------------------
    // Luat's code (will resize matrix and vectors)
-   ReduceSystemSizeEliminatingEssentialConditions( gref );
+   ReduceSystemSizeEliminatingEssentialConditions( gref, offset );
 
  } // end EstablishMatrixSetup
 
@@ -1083,10 +1083,10 @@ void  PDE_Integrator<dim,CELLTYPE>::AccumulateBoundaryIntegrals( const ModelSubD
        if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
          for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
            // if the material operand is flagged Neumann, an accumulation will be performed
-           // @attention it is assumed that the material operand has the same status at all integration points
+           // @attention it is assumed that the material operand has the same status at all integration points, and that Vector values are classified as NEUMANN in all dimensions!
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
                 ( it_rhs.second->MaterialOperandPlacement() == FACE &&
-                  (*git)->Status( it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ||
+                  (*git)->Status( it_rhs.second->MaterialOperandKey() , 0U) == NEUMANN ) ||
                 ( it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT &&
                   (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ) )
              {
@@ -1221,7 +1221,7 @@ void  PDE_Integrator<dim,CELLTYPE>::LateAccumulateBoundaryIntegrals( const Model
            // accumulations need to be performed only where material operands are flagged Neumann
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
                 ( it_rhs.second->MaterialOperandPlacement() == FACE &&
-                  (*git)->Status( it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ||
+                  (*git)->Status( it_rhs.second->MaterialOperandKey(), 0U ) == NEUMANN ) ||
                 ( it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT &&
                   (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ) )
              {
@@ -1814,11 +1814,11 @@ bool PDE_Integrator<dim,CELLTYPE>::IdentifySharedBoundaries( const Model<dim>& m
 
 */
 template<uint32_t dim, template<uint32_t> class CELLTYPE>
-void PDE_Integrator<dim, CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditions( const ModelSubDomain<dim,CELLTYPE>& gref )
+void PDE_Integrator<dim, CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditions( const ModelSubDomain<dim,CELLTYPE>& gref, size_t total_degrees_of_freedom )
  {
-    // SKM_FIX of size error
-    // DOF_indexes_.resize(this->rh_.size());
-    DOF_indexes_.resize( gref.Nodes() );
+    // EP Fix: DOF size error if we have VECTORS since nodes != dof 's. Need to use offset from establish matrix setup
+    DOF_indexes_.resize(total_degrees_of_freedom);
+    //DOF_indexes_.resize( gref.Nodes() ); This is wrong for VECTOR
     fill( DOF_indexes_.begin(), DOF_indexes_.end(), 0U );
     if ( trim_vectors_ ) DOF_indexes_.shrink_to_fit();
 

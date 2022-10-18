@@ -963,7 +963,6 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     const string    region_tag("region identifier");  //Note: this name is hard coded in MeshManager::ReplaceElementsByInterface()
     vector<string>  region_names;
     if ( !model.CheckRegionIdentifierIsUpToDate(region_tag.c_str()) ) {
-         model.CreateProperty( region_tag.c_str(), "rid", "uint", SCALAR, ELEMENT );
          // for each of labels created (0..regions-1), region_names remembers which region the label refers to
          if ( model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names ) == 1U )
             ErrorHandler::Instance().Note( INFO, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", region_tag.c_str(),
