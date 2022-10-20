@@ -332,10 +332,13 @@ class PDE_Integrator {
 
   protected:
 
-    /// checks whether (returns true) any Boundary object in the model is a surface of the computational domain
-    bool IdentifySharedBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&,
-                                   std::list<std::string>& shared_boundaries );
+    /// checks whether any Boundary object in the model is a surface of the computational domain
+    std::list<std::string> IdentifySharedBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&);
   
+    /// checks whether any SplitBoundary object in the model has higher-dim elements on either side the computational domain
+    std::list<std::string> IdentifySharedSplitBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&);
+
+
     /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved
     virtual void  EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& );
 
@@ -350,6 +353,12 @@ class PDE_Integrator {
 
     /// accumulates finite element integrals into solution matrix and right-hand side; uses node numbering
     virtual void  Accumulate( const ModelSubDomain<dim,CELLTYPE>& );
+
+    /// accumulates finite element integrals for Faces into right-hand side for boundaries provided; uses node numbering
+    virtual void AccumulateBoundaries(  Model<dim>& , ModelSubDomain<dim,CELLTYPE>&, std::list<std::string> shared_boundaries );
+
+    /// accumulates finite element integrals into solution matrix and right-hand side for all splitboundaries provided; uses node numbering
+    virtual void AccumulateSplitBoundaries( Model<dim>&, ModelSubDomain<dim,CELLTYPE>&, std::list<std::string> shared_splitboundaries);
 
     /// accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
   // TODO: refactor: rename methods Accumulate and LateAccumulate and let overloading take care of name resolution
