@@ -246,12 +246,11 @@ void  SplitBoundaryPressureDiffusion_Test::ConfigureModel()
     pair<string,bool> new_region = model_ptr_->InsertRegionIntoSplitBoundary("fracture_SPLITBOUNDARY", material_id_for_new_elements );
     Region<3U>& fracture = model_ptr_->Region( new_region.first );
     fracture_name_ = new_region.first;
-    fracture.InputPropertyValue( "thickness",    makeScalar(ANY,1.0-3) );
+    fracture.InputPropertyValue( "thickness",    makeScalar(ANY,1.0e-3) );
     fracture.InputPropertyValue( "porosity",     makeScalar(ANY,1.0) ); // 100%
     fracture.InputPropertyValue( "permeability", makeScalar(ANY, pow(0.001,3)/12. ) ); // 1-mm aperture fracture with 1.0e-9 m2 k
     fracture.InputPropertyValue( "conductivity", makeScalar(ANY, 1e3 * pow(0.001,3)/12. ) );
-    fracture.InputPropertyValue( "storativity",  makeScalar(ANY,1.0e-8) ); // Pa-1 (greater than matrix)
-    fracture.InputPropertyValue( "storativity",  makeScalar(ANY,1.0e-9) );
+    fracture.InputPropertyValue( "storativity",  makeScalar(ANY,1.0e-9) ); // Pa-1 (greater than matrix)
     
     // computing the hydraulic diffusivity, kappa_p = k / (phi * storativity * viscosity), storativity is equivalent to total systems compressibility
     const csmp::Index k_key   = model_ptr_->Database().StorageKey("permeability");

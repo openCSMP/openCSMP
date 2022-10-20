@@ -1,7 +1,6 @@
 #include "LinearElasticIsotropicDeformation2D_VVCase.h"
 #include "ANSYS_Model2D.h"
 #include "VTU_Interface.h"
-#include "LinearSolver.h"
 #include "PDE_Integrator.h"
 //#include "NumIntegral_BT_C_B_dV.h"
 #include "NumIntegral_BT_D_B_dV.h"
@@ -10,6 +9,13 @@
 #include "ExtractTensorVariableComponent.h"
 #include "NumIntegral_PT_op_dS.h"
 #include "ModelSubDomain.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
+#include "SAMG_Solver.h"
+#else
+#include "LinearSolver.h"
+#endif
 
 using namespace std;
 
@@ -232,11 +238,16 @@ namespace csmp
       model.Boundary("TOP").InputPropertyValue(  "Neumann stress", VectorVariable<DIM> (NEUMANN, NEUMANN, 0., s2) );            // when using boundary faces
 
       // setting up integrator
+#ifdef CSMP_WITH_SAMG_SOLVER
       SAMG_Settings settings;
       settings.Set_napproach(2); // needed apparently
       settings.Set_ncycle(1000); // Depending on the type of problem, it may take many iterations to converge for anisotropic cases.
       SAMG_Solver samgSolver(&settings);
       PDE_Integrator<DIM,Element> deformation (samgSolver);
+#else
+      CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
+      PDE_Integrator<DIM,Element>  deformation(linear_solver);
+#endif
 
 
       // Adding stiffness to the LHS list:
