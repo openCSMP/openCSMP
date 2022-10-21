@@ -5,6 +5,7 @@
 
 #include "DenseMatrix.h"
 #include "SparseMatrix.h"
+#include "CompressedRowMatrix.h"
 //#include "CompressedSparseRowMatrix.h"
 
 #include "ScalarVariable.h"
@@ -138,6 +139,9 @@ class MathOperatorLHS {
 
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
     virtual void AssignToGlobal( const CELL<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
+
+    /// used by PDE_Integrator_CRM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions)
+    virtual void AssignToGlobal( const CELL<dim>&, CompressedRowMatrix&, std::vector<double>&, const std::vector<size_t>& );
 
     virtual MathOperatorLHS<dim,CELL>* clone() const = 0;
 

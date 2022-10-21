@@ -7,9 +7,9 @@
 #include "SparseMatrix.h"
 #include "Exception.h"
 #include "CSMP_global_enumerations.h"
-#include "Region.h"
-#include "Boundary.h"
-#include "SplitBoundary.h"
+//#include "Region.h"
+#include "Element.h"
+#include "Face.h"
 #include "NimbleRegion.h"
 #include "NodeManifold.h"
 
@@ -53,11 +53,11 @@ void print(  vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >&  v )
   ia and ja are initialised, and values in a are initialised to zeros
   elimination of essential conditions is taken into account
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class CELLTYPE>
 void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix& G,
                                                             const std::map<Parameter,size_t>& test_operands,
                                                             std::vector<size_t>& DOF_indexes,
-                                                            const COMPUTATION_DOMAIN<dim>& gref)
+                                                            const ModelSubDomain<dim,CELLTYPE>& gref)
 
 {
     assert(!test_operands.empty());
@@ -333,18 +333,12 @@ void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&
 
   }
 
-  template void generateSparsityPatternEliminatingEssentialConditions<1U, Region> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const Region<1U>&);
-  template void generateSparsityPatternEliminatingEssentialConditions<2U, Region> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const Region<2U>&);
-  template void generateSparsityPatternEliminatingEssentialConditions<3U, Region> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const Region<3U>&);
-  template void generateSparsityPatternEliminatingEssentialConditions<1U, Boundary> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const Boundary<1U>&);
-  template void generateSparsityPatternEliminatingEssentialConditions<2U, Boundary> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const Boundary<2U>&);
-  template void generateSparsityPatternEliminatingEssentialConditions<3U, Boundary> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const Boundary<3U>&);
-//template void generateSparsityPatternEliminatingEssentialConditions<1U, SplitBoundary> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const SplitBoundary<1U>&);
-//template void generateSparsityPatternEliminatingEssentialConditions<2U, SplitBoundary> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const SplitBoundary<2U>&);
-//template void generateSparsityPatternEliminatingEssentialConditions<3U, SplitBoundary> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const SplitBoundary<3U>&);
-  template void generateSparsityPatternEliminatingEssentialConditions<1U, NimbleRegion> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const NimbleRegion<1U>&);
-  template void generateSparsityPatternEliminatingEssentialConditions<2U, NimbleRegion> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const NimbleRegion<2U>&);
-  template void generateSparsityPatternEliminatingEssentialConditions<3U, NimbleRegion> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const NimbleRegion<3U>&);
+  template void generateSparsityPatternEliminatingEssentialConditions<1U, Element> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const  ModelSubDomain<1U,Element>&);
+  template void generateSparsityPatternEliminatingEssentialConditions<2U, Element> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const  ModelSubDomain<2U,Element>&);
+  template void generateSparsityPatternEliminatingEssentialConditions<3U, Element> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const  ModelSubDomain<3U,Element>&);
+  template void generateSparsityPatternEliminatingEssentialConditions<1U, Face> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const  ModelSubDomain<1U,Face>&);
+  template void generateSparsityPatternEliminatingEssentialConditions<2U, Face> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const  ModelSubDomain<2U,Face>&);
+  template void generateSparsityPatternEliminatingEssentialConditions<3U, Face> (CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const  ModelSubDomain<3U,Face>&);
 
 
 

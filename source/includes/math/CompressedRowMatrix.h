@@ -4,6 +4,7 @@
 #include "SparseMatrix.h"
 #include "Index.h"
 #include "Parameter.h"
+#include "ModelSubDomain.h"
 
 namespace csmp {
 
@@ -99,8 +100,8 @@ class CompressedRowMatrix {
     std::vector<double>   a;  ///< array containing the rows of the matrix, one after the other, each row starting with its diagonal element. the first row starts at position
     static const bool     verbose_ = true;
 
-    template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-    friend void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const COMPUTATION_DOMAIN<dim>&);
+    template<uint32_t dim, template<uint32_t> class CELLTYPE>
+    friend void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const ModelSubDomain<dim,CELLTYPE>&);
 
     friend class EigenSolver;
     friend class SAMG_Solver;
@@ -111,8 +112,8 @@ void print( std::vector<std::pair<std::pair<uint32_t,uint32_t>, std::vector<bool
 
 
 /// this standalone function generates sparsity pattern for a compressed row matrix from supplied test_operands_, DOF_indexes_ and computational domain, taking into account elimination of essential conditions
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const COMPUTATION_DOMAIN<dim>&);
+template<uint32_t dim, template<uint32_t> class CELLTYPE>
+void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&, const std::map<Parameter,size_t>&, std::vector<size_t>&, const ModelSubDomain<dim,CELLTYPE>&);
 
 
 

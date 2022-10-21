@@ -486,7 +486,7 @@ void DES2PhaseSlightlyCompressibleFlow_Example::ComputeSteadyStatePressure( Mode
     settings.Set_idmp( -1 );
     settings.Set_mode_mess( -2 );
     SAMG_Solver                 samg_solver( &settings );
-    PDE_Integrator<dim,Region>  steady_pressure(samg_solver);
+    PDE_Integrator<dim,Element>  steady_pressure(samg_solver);
 #else
     EigenSolver linear_solver;
     PDE_Integrator<dim,Element>  steady_pressure(linear_solver);

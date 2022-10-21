@@ -27,6 +27,10 @@
 
 #include "EigenSolver.h"
 
+#ifdef USE_SAMG_SOLVER
+#include "SAMG_Solver.h"
+#endif
+
 
 using namespace std;
 
