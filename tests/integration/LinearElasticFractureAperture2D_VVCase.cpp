@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <cmath>
 #include "StressesAndStrains.h"
-
+#include "InterFaceFractureVisitor.h"
 
 using namespace std;
 
@@ -86,7 +86,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
     // Model configuration:
     //Input file directory locations
     string input_dir         = "";
-    string output_file       = "../Output/";
+    string output_file       = "../Output/Workshop/";
     //Variable inputs
     string vars_file         = input_dir + "LinearElasticFractureAperture2D-variables.txt";
     string regions_file      = input_dir + "LinearElasticFractureAperture2D";
@@ -116,7 +116,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
     /// -------------------------------
     /// Setting up Fracture Configuration
     /// -------------------------------
-    Fracture<dim> myFracture (model, model.SplitBoundary(sb_name), DC_TIP );            //Creates interface objects in Fracture, and initialises & configures Lubrication region
+    Fracture<dim> myFracture (model, sb_name, DC_TIP );            //Creates interface objects in Fracture, and initialises & configures Lubrication region
 
     // Model Variables:
     model.CreateProperty( "Neumann stress", "tau",  "SI",  VECTOR, FACE);
@@ -163,6 +163,14 @@ void LinearElasticFractureAperture2D_VVCase::run()
     ///==================================================================
     /// Elasticity Equations
     ///==================================================================
+    ///
+    ///     K u = f
+    ///
+    ///  K = int BT D B dV
+    ///
+    ///==================================================================
+    /// Elasticity Equations
+    ///==================================================================
     // setting up integrator
     SAMG_Settings settings;
     //myFracture.SetSolverSettings(settings);
@@ -184,6 +192,9 @@ void LinearElasticFractureAperture2D_VVCase::run()
     //StressesAndStrains<dim>  postpro( model, "Young's modulus", "Poisson's ratio", "displacement", plane_strain, true );
     //deformation.AddPostProcess( &postpro );
 
+    InterFaceFractureVisitor<dim> aperture_visit(model.Database(), "displacement", "aperture", INSIDE);
+
+
 
     ///==================================================================
     /// Displacement Solution & Verification
@@ -192,7 +203,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
     deformation.IntegrateOver( model, model.Region("Model"), false);
 
     //Moving Nodes
-    myFracture.StoreDisplacementDifferenceAsAperture("displacement" , "aperture", INSIDE);        // assumes no previous existing displacement
+    model.Accept(aperture_visit);
     //model.MoveNodeCoordinatesBy("displacement");
 
     //Setting vtu file:
@@ -245,7 +256,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
         else{
             percent_error  = std::fabs( w_num  - Sol ) / Sol*100.0;
             data[3].push_back(percent_error);
-            _equal(w_num, Sol, 0.5 );
+            _equal(w_num, Sol, 0.3 );
             avg_percent_error += percent_error;
             if (max_percent_error < percent_error )
               max_percent_error   = percent_error ;

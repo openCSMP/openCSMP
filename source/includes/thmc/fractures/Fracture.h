@@ -71,7 +71,7 @@ class Fracture
 {
 public:
     Fracture();
-    Fracture(Model<dim>& model, csmp::SplitBoundary<dim>& splitboundary, TIP_TYPE=DC_TIP);
+    Fracture(Model<dim>& model, std::string splitboundary, TIP_TYPE=DC_TIP);
 
     ~Fracture();
 

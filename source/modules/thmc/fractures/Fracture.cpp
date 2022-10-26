@@ -1,5 +1,7 @@
 ﻿#include "Fracture.h"
 #include "Exception.h"
+#include <regex>
+
 
 
 //need to provide and link GSL library if you want to use this functionality
@@ -14,15 +16,18 @@ namespace csmp{
  */
 
 template<uint32_t dim>
-Fracture<dim>::Fracture(Model<dim>& model, csmp::SplitBoundary<dim>& splitboundary, TIP_TYPE tip_type ):
+Fracture<dim>::Fracture(Model<dim>& model, std::string splitboundary, TIP_TYPE tip_type ):
   model_(&model),
-  sb_ref_(splitboundary),
+  sb_ref_(model.SplitBoundary(splitboundary)),
   tiptype_(tip_type),
   configured_(false)
 {
 
-  if ( (*(splitboundary.CellsBegin()))->HasInterveningElement() )
-      midregion_ = &model.Region(splitboundary.Name() + "_REGION");
+  if ( (*(sb_ref_.CellsBegin()))->HasInterveningElement() ){
+        std::string reg_name = std::regex_replace(sb_ref_.Name(), std::regex("SPLITBOUNDARY"), "REGION");
+        std::cout << "Fracture class looking for middle region: " << reg_name << std::endl;
+        midregion_ = &model.Region(reg_name);
+    }
 
   //0) defining default keys
   disp_key_ = model.Database().StorageKey("displacement");

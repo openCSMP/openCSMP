@@ -257,6 +257,11 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     template<class Var>
     void    NodePropertyVector( const csmp::Index&, std::vector<Var>&, INTERFACE_SIDE=INSIDE ) const;
 
+    /// returns a vector of the property of interest discretized on the node
+    template<class Var>
+    void    MatchingNodePropertyVector( const csmp::Index&, std::vector<Var>&, INTERFACE_SIDE ) const;
+
+
     /// the centre of gravity of the element (returns the mid-point of the 2-sides if detached)
     Point<dim>  BaryCenter() const;
 

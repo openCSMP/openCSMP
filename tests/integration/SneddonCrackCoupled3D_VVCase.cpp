@@ -1,0 +1,287 @@
+#include"SneddonCrackCoupled3D_VVCase.h"
+#include "SplitBoundaryInterface_Test.h"
+using namespace std;
+
+
+namespace csmp
+{
+
+
+
+SneddonCrackCoupled3D_VVCase::SneddonCrackCoupled3D_VVCase(const char* prefix)
+{
+    this->setName("SneddonCrackCoupled3D_VVCase");
+    prefix_=prefix;
+}
+
+/**
+
+    Author:  E. Pezzulli
+    Linear Elasticity: Plane stress/strain problem with central crack under uniform tension; testing the aperture profile of the crack
+    =================================
+    Domain:     "Infinite" 2D rectangle shaped model length LxL meters with central crack of half length a where L/a > 20
+    Mesh:       Linear/Quadratic Triangles tested OK; Quadrilaterials have to be tested
+    Material:   Linear ELastic Isotropic Material: E=Young's Modulus, nu= Poisson's Ratio;
+    Loading:    No stress on boundaries.
+    BC:         Zero x and y displacements on LEFT BOTTOM Corner (CRN1), and zero y displacement on CRN2 (BOTTOM RIGHT)
+    ConfigFiles:   (.asc, .dat)
+    =================================
+
+    The solution for the aperture w(x) of a horizontal fracture of half length a with origin x=0 representing middle of crack:
+
+    Plane Strain:
+    (aperture)    w = 2*Uy 4*(1 - v^2)*P/E * (a^2 - x^2 )^(1/2)
+    E = youngs Modulus, v = Poisson Ration, a = crack half length, x = distance along crack with origin at midpoint
+
+
+    Marji -  2006 - Crack Tip Elements - doi:10.1016/j.ijsolstr.2005.04.042
+    Sneddon - 1946 - The opening of griffith cracks (factor of two wrong!)
+
+
+    The following implementation is testing the creation of the Fracture Class, its initialisation and creation of InterFace Objects, constructed from
+    opposite face pairs of the master and slave Boundaries of a 2D fracture. The calculation and calibration of a Unit Normal and the creation of midPoint
+    Elements within the fracture, which are however not used/tested to work.
+
+    @attention The following implemetation relies on LinearElasticityIsotropicDeformation2D_VVcase to work
+
+    Assumptions of Test:
+    1) Relies on Boundary Naming convention when created from lower dimensional region
+
+
+*/
+
+
+
+
+void SneddonCrackCoupled3D_VVCase::run()
+{
+
+  ///==========================================================================================
+  /// Elasticity with Central Crack VV_Case
+  ///==========================================================================================
+  // Defining constants
+    enum{dim=3};
+    bool plane_strain = true;
+    const double ym (1.0e9), pr(0.3), P0(1.0e7), mu(1.0e-3), s_unif(10000000.0), Q(0.01),
+                 s_right(s_unif), s_top(s_unif), s_bottom(10.0e6), s_left(10.0e6);
+
+
+    // Model configuration:
+    //Input file directory locations
+    string input_dir         = "";
+    string output_file       = "../Output/Workshop/";
+    output_file              += prefix_;
+
+    //Variable inputs
+    string vars_file         = input_dir + "SneddonConvergenceTest-variables.txt";
+    string regions_file      = input_dir + "InternalBoundary3D_Test";
+    //Possible meshes
+    string  coarse_mesh      = "InternalBoundary3D_test";
+    string  coarse_mesh_quad = "InternalBoundary3D_quad_Test";
+    string mesh_file         = input_dir + prefix_;
+
+    bool irregular(false), binary(true);
+    ANSYS_Model3D model( mesh_file.c_str(), regions_file.c_str(), vars_file.c_str(),
+                         irregular, binary);    // Constractor for empty variables
+
+    std::string sb_name = *(model.CreateSplitBoundaryFrom( "FRACTURE" ).first.begin()) ; //relies on split boundary naming convention
+    std::string sb_reg  = *(model.InsertLowerDimensionalRegionsIntoSplitBoundaries(0).begin() );
+
+
+    //testing region model has the new unique region
+    //_test( model.Region("Model").Contains( *(model.Region("FRACTURE_SPLIT_BOUNDARY_REGION").ElementsBegin()) ) );
+
+    /// -------------------------------
+    /// Setting up Fracture Configuration
+    /// -------------------------------
+    Fracture<dim> myFracture (model, sb_name );            //Creates interface objects in Fracture, and initialises & configures Lubrication region
+    //myFracture.TestSplitNodeAssignment(true);
+
+    /// --------------------------------
+    /// Elasto-Lubrication Parameter Configuration
+    /// --------------------------------
+    model.CreateProperty( "Neumann stress", "tau",   "SI",  VECTOR, FACE);
+    model.CreateProperty( "viscosity",    "mu",    "SI",  SCALAR, NODE);
+    model.CreateProperty( "conductance operator", "K", "SI", SCALAR, NODE);
+    model.CreateProperty( "point source", "Q"  ,  "SI",  SCALAR, NODE);
+    model.CreateProperty( "displacement old", "u_0" , "SI", VECTOR, NODE);
+
+    //Initialising Parameter Values
+    model.InputPropertyValue("Neumann stress",      VectorVariable<dim>(PLAIN, PLAIN, PLAIN, 0.0, 0.0, 0.0));
+    model.InputPropertyValue("displacement",        VectorVariable<dim>(PLAIN, PLAIN, PLAIN, 0.0, 0.0, 0.0));
+    model.InputPropertyValue("displacement old",    VectorVariable<dim>(PLAIN, PLAIN, PLAIN, 0.0, 0.0, 0.0));
+    model.InputPropertyValue("fluid pressure",      ScalarVariable( DIRICH, 0.0 ) );      //Initilising fluid pressure zero everywhere - so its ignored
+    model.InputPropertyValue("aperture",            ScalarVariable(PLAIN, 0.01));
+    model.InputPropertyValue("conductance operator",ScalarVariable( PLAIN, 0.0 ) ); //default initialisation
+    model.InputPropertyValue("point source",        ScalarVariable(PLAIN,0.0));
+
+    //Inputting material property values
+    model.InputPropertyValue("Young's modulus", ScalarVariable( PLAIN, ym ) );
+    model.InputPropertyValue("Poisson's ratio", ScalarVariable( PLAIN, pr ) );
+    model.InputPropertyValue("viscosity",       ScalarVariable( PLAIN, mu ) );
+
+
+    // Inputting fluid pressure values and Flags
+    model.Region(sb_reg).InputPropertyValue("fluid pressure", ScalarVariable( DIRICH, P0),  COMPLETE);     //uniform fluid pressure accross fracture
+    model.Region(sb_reg).InputPropertyValue("displacement", VectorVariable<dim>(DIRICH,DIRICH,DIRICH, 0.0, 0.0,0.0));
+    /// --------------------------------
+    /// Elasticity Boundary Conditions
+    /// --------------------------------
+    //Elasticity Dirichlet
+    Node<dim> *cornerNodeLeftBottom, *cornerNodeRightBottom, *cornerNodeRightTop;
+    for (vector<Node<dim>*>::const_iterator node (model.Region("Model").NodesBegin()); node != model.Region("Model").NodesEnd(); ++node )
+    {
+        if ( (*node)->AtBoundary() == CNR1 ) cornerNodeLeftBottom = (*node);
+        if ( (*node)->AtBoundary() == CNR2 ) cornerNodeRightBottom = (*node);
+        if ( (*node)->AtBoundary() == CNR3 ) cornerNodeRightTop = (*node);
+    }
+
+    cornerNodeLeftBottom->Store(model.Database().StorageKey("displacement"),VectorVariable<dim> (DIRICH, DIRICH, DIRICH, 0., 0., 0.));   // when using boundary faces
+    cornerNodeRightBottom->Store(model.Database().StorageKey("displacement"), VectorVariable<dim>(PLAIN, DIRICH, DIRICH, 0.0,0.0,0.));   // for stopping rotation of body
+    cornerNodeRightTop->Store(model.Database().StorageKey("displacement"), VectorVariable<dim>(PLAIN, PLAIN, DIRICH, 0.0,0.0, 0.0));   // for stopping rotation of body
+
+
+    /// --------------------------------
+    /// Fluid Flow Boundary Conditions
+    /// --------------------------------
+    auto frac_elms = myFracture.ElementMap(MIDDLE);
+    auto e_it = frac_elms.begin();
+    advance( e_it, frac_elms.size()/2);
+    double parents = static_cast<double>( e_it->second->N(0)->Parents()); //make sures we only apply Q and not Q*parents
+    double nodes_per_element  = static_cast<double>(e_it->second->Nodes() );
+    e_it->second->N(0)->Store(model.Database().StorageKey("point source"), ScalarVariable( NEUMANN, Q/parents*nodes_per_element  ));
+    cout << "\nFlux " << Q/parents << " applied to Nodes with Coord" << e_it->second->N(0)->Coordinate() << std::endl;
+
+
+
+    ///==================================================================
+    /// Elasticity Equations
+    ///==================================================================
+    ///
+    ///     K u + Cp = 0
+    ///
+    ///  K = int BT D B dV
+    ///  C = int NT n N dS
+    ///
+    // setting up integrator
+    //SAMG_Settings settings;
+    //myFracture.SetSolverSettings(settings); //setting HF specific Solver settings
+    //settings.Set_ncycle(5000);
+    //settings.Set_napproach(2); // this is important because it sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
+                               // which is needed for deformation simulations
+    //SAMG_Solver samgSolver(&settings);
+    EigenSolver eigen;
+    PDE_Integrator<dim,Element> Coupled_HM (eigen);
+
+    // Adding stiffness to the LHS list:
+    NumIntegral_BT_D_B_dV<dim > stiffnessMatrix( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
+    Coupled_HM.Add( &stiffnessMatrix );
+
+    //Adding coupled traction term LHS
+    //NumIntegral_PT_n_N_dS<dim> Coupled_pressure_tractions(model.Database(), "fluid pressure", "displacement");
+    //Coupled_HM.AddSplitBoundaryIntegral( &Coupled_pressure_tractions);
+
+    //Adding surface tractions to the RHS (BoundaryIntegrals) list: (like zeroing right hand side)
+    NumIntegral_SetRHS_to_Zero<dim> zero_load_rhs( model.Database(), "displacement");
+    Coupled_HM.Add( &zero_load_rhs);
+
+    //NumIntegral_PT_op_dS_Experimental<dim >  nodalTractions( model.Database(), "Neumann stress", "displacement" );
+    //Coupled_HM.AddBoundaryIntegral( &nodalTractions );
+
+
+
+    ///-------------------------------------------------------------------------------------------
+    /// Lubrication Equation
+    ///-------------------------------------------------------------------------------------------
+    /// Steady State with Implicit Boundary Condition
+    ///
+    ///       dt* H p + C u  = Q + C u^(n-1)
+    ///
+    /// -----------------------------------------
+    ///   H   =   int dNT * (w^3/(12*mu)) * dN dx
+    ///   C   =   int NT * n * P dx
+    ///
+    //Interelations
+    InterFaceFractureVisitor<dim> aperture_and_conductivity(model.Database(), "displacement", "aperture", MIDDLE, "conductivity", "viscosity", 1e-4);
+
+    //Conductance operator LHS
+    NumIntegral_dNT_op_dN_dV<dim> Conductance(model.Database(), "conductance operator", "fluid pressure", "fluid pressure");
+    Coupled_HM.Add(&Conductance);
+
+    //NumIntegral_NT_n_P_dS<dim> New_aperture(model.Database(), "displacement", "fluid pressure");
+    //Coupled_HM.AddSplitBoundaryIntegral( &New_aperture);
+
+    //NumIntegral_NT_n_rhs_P_dS<dim> Old_aperture(model.Database(), "displacement old", "fluid pressure");
+    //Coupled_HM.AddSplitBoundaryIntegral( &Old_aperture );
+
+    //Point source
+    PointSource_rhsop<dim> point_source( model.Database(), "point source", "fluid pressure");
+    Coupled_HM.Add( &point_source );
+
+    /// checking Initialisation of properties
+    printRangeOfVariable(model, "fluid pressure");
+    printRangeOfVariable(model, "displacement");
+    printRangeOfVariable(model, "displacement old");
+    printRangeOfVariable(model, "Neumann stress");
+    printRangeOfVariable(model, "aperture");
+    printRangeOfVariable(model, "conductance operator");
+    printRangeOfVariable(model, "point source");
+
+    ///=========================================
+    /// Outputing to VTU
+    ///=========================================
+    //Output variables:
+    VTU_Interface<dim> vtu_elastic( model );
+    vtu_elastic.OmitZeroInFileName(true);
+    vtu_elastic.DeleteConnectivity();
+
+    list<string> outputProps_elastic;
+    outputProps_elastic.push_back("displacement");
+    outputProps_elastic.push_back("fluid pressure");
+
+    ///==================================================================
+    /// Displacement Solution & Verification
+    ///==================================================================
+    //setting time steps
+    double dt = 1.0;
+    double t  = 0.0;
+    double T  = 1.0;
+    while ( t < T){
+      t += dt;
+
+      //Configure with new displacement
+      model.Accept(aperture_and_conductivity);
+
+      //Updating old displacements for rhs volume change
+      model.CopyReplace("displacement", "displacement old");
+
+      /// SOLVE ------------
+      Coupled_HM.IntegrateOver( model, model.Region("Model"), false);
+
+      //Updating Volume of aperture
+      double Volume = myFracture.Volume();
+
+      //Outputing
+      myFracture.SolOut(MIDDLE, "aperture", "fluid pressure");
+
+      std::cout << "Fracture Volume and Flux = " << Volume << " " << Q*t << std::endl;
+      vtu_elastic.OutputDataToVTU( output_file, outputProps_elastic, "Model", static_cast<int>(t) );
+    }
+
+    //Visualising node movement
+    model.MoveNodeCoordinatesBy("displacement");
+    // Moving mid region
+    vtu_elastic.OutputDataToVTU( output_file, outputProps_elastic, "Model", static_cast<int>(t) );
+
+    std::cout << "NO TESTING YET DONE" << std::endl;
+
+    std::cout << "Finished test SneddonCrackCoupled 3D " << std::endl;
+
+    return;
+
+
+}
+
+
+
+} // csmp

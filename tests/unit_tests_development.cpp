@@ -103,6 +103,10 @@
 #include "LinearElasticFractureAperture2D_VVCase.h"
 #include "LinearElasticIsotropicDeformation2D_VVCase.h"
 
+#include "SneddonCrack_VVCase.h"
+#include "SneddonCrackCoupled_VVCase.h"
+#include "SneddonCrackCoupled3D_VVCase.h"
+
 //variable placement tests
 //#include "Placement_Test_2D.h"
 //#include "Placement_Test_3D.h"
@@ -121,25 +125,16 @@ using namespace std;
 using namespace csmp;
 
 TEST_CASE("Development tests", "[Dev]") {
-  // Operand_Test test;
-  // PropertyAtPointVisitor_Test test(true);
-    //ModelSubDomain_Test test;
-    // Vset_TestCase test;
-    // GenericFiniteVolumeTransport_Test test;
-  //FiniteVolumeTransportBasics_Test test;
-    // FiniteVolumeStencil_Test test;
-    // ANSYS_SplitBoundaryMatch_Test  skm_test;
-    //Placement_Test_2D test; 
-    //Placement_Test_3D test;
+
 
   InterFace_Test test00;
   SplitBoundary_Test test01;
   SplitBoundaryInterface_Test<2U> test02;
   SplitBoundaryInterface_Test<3U> test03;
-  test00.run();
-  test01.run();
-  test02.run();
-  test03.run();
+  //test00.run();
+  //test01.run();
+  //test02.run();
+  //test03.run();
 
 
   GenericFiniteVolumeTransport_Test test0;     //broken - no Finite volume defined
@@ -156,10 +151,10 @@ TEST_CASE("Development tests", "[Dev]") {
 
   ///Elasticity Benchmarks
   LinearElasticIsotropicDeformation2D_VVCase elasticity("");
-  elasticity.run();
+  //elasticity.run();
 
   LinearElasticFractureAperture2D_VVCase i_test("InternalBoundary_test");
-  i_test.run();
+  //i_test.run();
 
   LinearElasticFractureAperture2D_VVCase ii_test("InternalCrack_tri_lin_02");
   //ii_test.run();
@@ -168,9 +163,11 @@ TEST_CASE("Development tests", "[Dev]") {
   //iii_test.run();
 
   LinearElasticFractureAperture2D_VVCase iv_test("InternalCrack_tri_lin_005");
-  //iv_test.run();
+  iv_test.run();
 
 
+  SneddonCrack_VVCase stest1("InternalCrack_tri_lin_01");
+  //stest1.run();
 
 
  //   ANSYS_Model2D_Test test;

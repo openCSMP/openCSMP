@@ -1,6 +1,7 @@
 #include "LinearElasticIsotropicDeformation2D_VVCase.h"
 #include "ANSYS_Model2D.h"
 #include "VTU_Interface.h"
+#include "LinearSolver.h"
 #include "PDE_Integrator.h"
 //#include "NumIntegral_BT_C_B_dV.h"
 #include "NumIntegral_BT_D_B_dV.h"
@@ -9,13 +10,6 @@
 #include "ExtractTensorVariableComponent.h"
 #include "NumIntegral_PT_op_dS.h"
 #include "ModelSubDomain.h"
-
-#ifdef CSMP_WITH_SAMG_SOLVER
-#include "SAMG_Settings.h"
-#include "SAMG_Solver.h"
-#else
-#include "LinearSolver.h"
-#endif
 
 using namespace std;
 
@@ -238,20 +232,16 @@ namespace csmp
       model.Boundary("TOP").InputPropertyValue(  "Neumann stress", VectorVariable<DIM> (NEUMANN, NEUMANN, 0., s2) );            // when using boundary faces
 
       // setting up integrator
-#ifdef CSMP_WITH_SAMG_SOLVER
-      SAMG_Settings settings;
-      settings.Set_napproach(2); // needed apparently
-      settings.Set_ncycle(1000); // Depending on the type of problem, it may take many iterations to converge for anisotropic cases.
-      SAMG_Solver samgSolver(&settings);
-      PDE_Integrator<DIM,Element> deformation (samgSolver);
-#else
-      CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
-      PDE_Integrator<DIM,Element>  deformation(linear_solver);
-#endif
+      //SAMG_Settings settings;
+      //settings.Set_napproach(2); // needed apparently
+      //settings.Set_ncycle(1000); // Depending on the type of problem, it may take many iterations to converge for anisotropic cases.
+      //SAMG_Solver samgSolver(&settings);
+      EigenSolver eigen;
+      PDE_Integrator<DIM,Element> deformation (eigen);
 
 
       // Adding stiffness to the LHS list:
-      NumIntegral_BT_D_B_dV<DIM> stiffnessMatrix( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
+      NumIntegral_BT_D_B_dV<DIM > stiffnessMatrix( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
       stiffnessMatrix.PlaneStress(plane_strain_);  //E.P Note: Plane stress(true) makes the model Plane strain! Misleading. Should be relabelled PlaneStrain()
       deformation.Add( &stiffnessMatrix );
 

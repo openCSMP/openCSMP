@@ -1417,7 +1417,7 @@ double  InterFace<dim>::LengthInDirection( const VectorVariable<dim>& vecDirecti
     returns property values at the nodes.
     
          @attention the order of the nodes corresponds to the numbering of the face of the corresponding higher dimensional element 
-         on the in- or outside.
+         on the in- or outside. Unless the return_nodes_outside_that_match_inside == true
 */
 template<uint32_t dim>
 template< class Var>
@@ -1436,29 +1436,88 @@ void  InterFace<dim>::NodePropertyVector( const csmp::Index& idx, vector<Var>& V
   V.resize( n_nodes );
 
   for ( auto i{0U}; i<n_nodes; i++ )
-    N( i, side )->Read( idx, V[i] );
+    N( i, side )->Read( idx, V[i] );              //OUTSIDE nodes correspond to ordering of face of higher dim parent
 }
 
+
 // scalar
-template void  InterFace<1U>::NodePropertyVector( const csmp::Index&, vector<ScalarVariable>&, INTERFACE_SIDE ) const;
-template void  InterFace<2U>::NodePropertyVector( const csmp::Index&, vector<ScalarVariable>&, INTERFACE_SIDE ) const;
-template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, vector<ScalarVariable>&, INTERFACE_SIDE ) const;
+template void  InterFace<1U>::NodePropertyVector( const csmp::Index&, vector<ScalarVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<2U>::NodePropertyVector( const csmp::Index&, vector<ScalarVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, vector<ScalarVariable>&, INTERFACE_SIDE) const;
 // vector
-template void  InterFace<1U>::NodePropertyVector( const csmp::Index&, vector<VectorVariable<1U> >&, INTERFACE_SIDE ) const;
-template void  InterFace<2U>::NodePropertyVector( const csmp::Index&, vector<VectorVariable<2U> >&, INTERFACE_SIDE ) const;
-template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, vector<VectorVariable<3U> >&, INTERFACE_SIDE ) const;
+template void  InterFace<1U>::NodePropertyVector( const csmp::Index&, vector<VectorVariable<1U> >&, INTERFACE_SIDE) const;
+template void  InterFace<2U>::NodePropertyVector( const csmp::Index&, vector<VectorVariable<2U> >&, INTERFACE_SIDE) const;
+template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, vector<VectorVariable<3U> >&, INTERFACE_SIDE) const;
 // tensor
-template void  InterFace<1U>::NodePropertyVector( const csmp::Index&, vector<TensorVariable<1U> >&, INTERFACE_SIDE ) const;
-template void  InterFace<2U>::NodePropertyVector( const csmp::Index&, vector<TensorVariable<2U> >&, INTERFACE_SIDE ) const;
-template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, vector<TensorVariable<3U> >&, INTERFACE_SIDE ) const;
+template void  InterFace<1U>::NodePropertyVector( const csmp::Index&, vector<TensorVariable<1U> >&, INTERFACE_SIDE) const;
+template void  InterFace<2U>::NodePropertyVector( const csmp::Index&, vector<TensorVariable<2U> >&, INTERFACE_SIDE) const;
+template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, vector<TensorVariable<3U> >&, INTERFACE_SIDE) const;
 // array
-template void  InterFace<1U>::NodePropertyVector( const csmp::Index&, vector<ArrayVariable>&, INTERFACE_SIDE ) const;
-template void  InterFace<2U>::NodePropertyVector( const csmp::Index&, vector<ArrayVariable>&, INTERFACE_SIDE ) const;
-template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, vector<ArrayVariable>&, INTERFACE_SIDE ) const;
+template void  InterFace<1U>::NodePropertyVector( const csmp::Index&, vector<ArrayVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<2U>::NodePropertyVector( const csmp::Index&, vector<ArrayVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, vector<ArrayVariable>&, INTERFACE_SIDE) const;
 // flagged array
-template void  InterFace<1U>::NodePropertyVector( const csmp::Index&, vector<FlaggedArrayVariable>&, INTERFACE_SIDE ) const;
-template void  InterFace<2U>::NodePropertyVector( const csmp::Index&, vector<FlaggedArrayVariable>&, INTERFACE_SIDE ) const;
-template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, vector<FlaggedArrayVariable>&, INTERFACE_SIDE ) const;
+template void  InterFace<1U>::NodePropertyVector( const csmp::Index&, vector<FlaggedArrayVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<2U>::NodePropertyVector( const csmp::Index&, vector<FlaggedArrayVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, vector<FlaggedArrayVariable>&, INTERFACE_SIDE) const;
+
+
+/**
+    returns property values at the nodes.
+
+         @attention the order of the nodes corresponds to the numbering of the face of the corresponding higher dimensional element
+         on the in- or outside. Unless the return_nodes_outside_that_match_inside == true
+*/
+template<uint32_t dim>
+template< class Var>
+void  InterFace<dim>::MatchingNodePropertyVector( const csmp::Index& idx, vector<Var>& V, INTERFACE_SIDE side ) const
+{
+  if ( idx.place != NODE ) {
+    cerr << "\nInterFace<" << dim;
+    cerr << ">::NodePropertyVector: Requested property ";
+    cerr << "is not placed on the nodes; property Index: " << endl;
+    idx.Out();
+    return;
+  }
+
+  // resizing V if necessary
+  const auto  n_nodes( this->FE()->Nodes() );
+  V.resize( n_nodes );
+
+  for ( auto i{0U}; i<n_nodes; i++ )
+    MatchingN( i, side )->Read( idx, V[i] );              //OUTSIDE nodes correspond to ordering of face of higher dim parent
+}
+
+
+
+
+// scalar
+template void  InterFace<1U>::MatchingNodePropertyVector( const csmp::Index&, vector<ScalarVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<2U>::MatchingNodePropertyVector( const csmp::Index&, vector<ScalarVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<3U>::MatchingNodePropertyVector( const csmp::Index&, vector<ScalarVariable>&, INTERFACE_SIDE) const;
+// vector
+template void  InterFace<1U>::MatchingNodePropertyVector( const csmp::Index&, vector<VectorVariable<1U> >&, INTERFACE_SIDE) const;
+template void  InterFace<2U>::MatchingNodePropertyVector( const csmp::Index&, vector<VectorVariable<2U> >&, INTERFACE_SIDE) const;
+template void  InterFace<3U>::MatchingNodePropertyVector( const csmp::Index&, vector<VectorVariable<3U> >&, INTERFACE_SIDE) const;
+// tensor
+template void  InterFace<1U>::MatchingNodePropertyVector( const csmp::Index&, vector<TensorVariable<1U> >&, INTERFACE_SIDE) const;
+template void  InterFace<2U>::MatchingNodePropertyVector( const csmp::Index&, vector<TensorVariable<2U> >&, INTERFACE_SIDE) const;
+template void  InterFace<3U>::MatchingNodePropertyVector( const csmp::Index&, vector<TensorVariable<3U> >&, INTERFACE_SIDE) const;
+// array
+template void  InterFace<1U>::MatchingNodePropertyVector( const csmp::Index&, vector<ArrayVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<2U>::MatchingNodePropertyVector( const csmp::Index&, vector<ArrayVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<3U>::MatchingNodePropertyVector( const csmp::Index&, vector<ArrayVariable>&, INTERFACE_SIDE) const;
+// flagged array
+template void  InterFace<1U>::MatchingNodePropertyVector( const csmp::Index&, vector<FlaggedArrayVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<2U>::MatchingNodePropertyVector( const csmp::Index&, vector<FlaggedArrayVariable>&, INTERFACE_SIDE) const;
+template void  InterFace<3U>::MatchingNodePropertyVector( const csmp::Index&, vector<FlaggedArrayVariable>&, INTERFACE_SIDE) const;
+
+
+
+
+
+
+
 
 
 // SCREEN OUTPUT
