@@ -73,7 +73,8 @@ class CompressedRowMatrix {
 
     size_t Rows() const;
     size_t Cols() const;
-    /// total number of available storage sites for non-zero matrix elements
+    size_t TotalExistingEntries() const { return ja.size(); }
+  /// total number of available storage sites for non-zero matrix elements
     size_t NonZeroEntries() const;
 
     /// this function erases all elements in ia, ja and a
@@ -105,6 +106,7 @@ class CompressedRowMatrix {
 
     friend class EigenSolver;
     friend class SAMG_Solver;
+    friend class CompressedRowMatrix_Test;
 };
 
 /// to print the vector of diagonal elements in the matrix
