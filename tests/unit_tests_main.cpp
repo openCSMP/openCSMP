@@ -115,6 +115,7 @@
 #include "LinearCuboid_Test.h"
 #include "SplitBoundary_Test.h"
 #include "SplitBoundaryInterface_Test.h"
+#include "MiscFunctionality_Test.h"
 
 using namespace std;
 using namespace csmp;
@@ -201,7 +202,7 @@ int main()
   //      refactored.addTest( new ANSYS_Model2D_Test() );
   //      refactored.addTest( new SplitBoundary_Test() );
 
-  refactored.addTest( new SparseMatrix_Test() );
+  refactored.addTest( new MiscFunctionality_Test() );
 
   //      refactored.addTest( new MeshManager_Test() );
   //      refactored.addTest( new NodeManifoldManager_Test() );
