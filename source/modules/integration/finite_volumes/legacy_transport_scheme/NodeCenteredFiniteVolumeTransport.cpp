@@ -116,7 +116,7 @@ NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( const
                                                                            bool second_order_in_space,
                                                                            bool second_order_in_time,
                                                                            const char* elmt_thickness_attribute,
-                                                                           const char* velocity_multiplier)
+                                                                           const char* velocity_multiplier )
     : pref_(sg.Database()),
       gref_(sg.Region(group_name)),
       mref_(sg),
@@ -594,12 +594,15 @@ void NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables() const
         throw csmp::Exception( FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
     }
 
+/* only in 2nd-order accurate calculations
+
     if ( (diff_key_.place != ELEMENT || diff_key_.type != SCALAR) and diff_key_.index != ULONG_MAX ) {
         string  msg ="The 'diffusivity' variable '";
         msg       += pref_.Name( diff_key_ );
         msg       +="' must be a scalar-type element variable";
         throw csmp::Exception( FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
     }
+*/
 
     if ( adv1_key_.place != NODE ){
         string  msg ="The advected variable '";
@@ -3312,8 +3315,8 @@ template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarBoundaryValuesByFiniteVolumeCrossSectionalArea(
         Model<dim>& model,BOX_BOUNDARY boundary, const char* property )
 {
-    csmp::Index  prop_key = pref_.StorageKey(property);
-    Region<dim>  rref(model.Region(parseBoundary(boundary).c_str()));
+    const csmp::Index  prop_key = pref_.StorageKey(property);
+    Region<dim>&       rref(model.Region(parseBoundary(boundary).c_str()));
 
     if ( prop_key.type != SCALAR || prop_key.place != NODE )
         throw csmp::Exception( ERROR, "FiniteVolumeTransport::ConvertScalarBoundaryValues",

@@ -1,10 +1,13 @@
-#ifndef VELOCITYANDVOLUMEFLUXVISITOR_H
-#define VELOCITYANDVOLUMEFLUXVISITOR_H
+#ifndef CSMP_VELOCITY_AND_VOLUME_FLUX_VISITOR_H
+#define CSMP_VELOCITY_AND_VOLUME_FLUX_VISITOR_H
 
 #include "Visitor.h"
-#include "Model.h"
+#include "FiniteElementManager.h"
 
 namespace csmp {
+
+template<uint32_t> class VectorVariable;
+template<uint32_t> class Model;
 
 /// IMPORTANT: for legacy purposes, the transport class assumes that the supplied velocity has already been scaled
 /// to adjust for facet areas coming from the thickness attribute (LDE's).  This is perhaps a little unintuitive,
@@ -24,7 +27,7 @@ template<uint32_t dim>
 class SinglePhaseVelocityVisitor : public Visitor<dim> {
   public:
 
-    SinglePhaseVelocityVisitor(Model<dim>& model,
+    SinglePhaseVelocityVisitor(Model<dim>&,
                                const char* porosity,
                                const char* conductivity,
                                const char* fluid_density,
@@ -64,4 +67,4 @@ class SinglePhaseVelocityVisitor : public Visitor<dim> {
 
 } // csmp
 
-#endif
+#endif // CSMP_VELOCITY_AND_VOLUME_FLUX_VISITOR_H

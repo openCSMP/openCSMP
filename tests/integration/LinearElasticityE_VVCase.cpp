@@ -6,6 +6,7 @@
 #include "PT_op.h"
 #include "NumIntegral_BT_D_B_dV.h"
 #include "StressesAndStrains2.h"
+#include "LinearSolver.h"
 #include "ExtractTensorVariableComponent.h"
 
 using namespace std;
@@ -59,10 +60,10 @@ namespace csmp
 #else
       CSMP_DEFAULT_LINEAR_SOLVER solver;
 #endif
-      PDE_Integrator<DIM,Region> deformation( solver );
+      PDE_Integrator<DIM,Element> deformation( solver );
 
-      PT_op<DIM,Element<DIM> > bforces( model.Database(), "force", "displacement" );
-      NumIntegral_BT_D_B_dV<DIM,Element<DIM> > stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
+      PT_op<DIM> bforces( model.Database(), "force", "displacement" );
+      NumIntegral_BT_D_B_dV<DIM> stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
       deformation.Add( &stiffness );
       deformation.Add( &bforces );
       deformation.IntegrateOver( model.Region("Model"), true );

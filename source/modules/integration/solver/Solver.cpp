@@ -116,14 +116,14 @@ void  Solver::Solve( SparseMatrix& A,
     vector<double>(x).swap(x);
 
     if ( Verbose() ) {
-      if ( A.Symmetric() )
-        cout <<"\nSolver::SolveMatrixEquation: Solution matrix is symmetric."<< endl;
+        if ( A.Symmetric() )
+          cout <<"\nSolver::SolveMatrixEquation: Solution matrix is symmetric."<< endl;
 
-      cout <<"\nSolver::SolveMatrixEquation: Global matrix before solution:"<< endl;
-      A.Out();
-      cout <<"\nSolver::SolveMatrixEquation: Righthand vector:"<< endl;
-      out( b );
-    }
+        cout <<"\nSolver::SolveMatrixEquation: Global matrix before solution:"<< endl;
+        A.Out();
+        cout <<"\nSolver::SolveMatrixEquation: Righthand vector:"<< endl;
+        out( b );
+      }
     
     // Setup initial guess with correct BC, This assumes that b has been setup with Dirichlet
     // BC and A with corresponding 1's on diagonal
@@ -132,8 +132,8 @@ void  Solver::Solve( SparseMatrix& A,
     
     // Delegate solution process (this is a purely virtual function)
 	
-	// cout << "\nSolving Ax=b with GuessSidel\n\n"; 
-	SolveMatrixEquation(A, b, x, no_unknowns);
+	  // cout << "\nSolving Ax=b with GuessSidel\n\n";
+	  SolveMatrixEquation(A, b, x, no_unknowns);
                                      
     if ( Verbose() ) {
          cout <<"\nSolver::SolveMatrixEquation: Global matrix after solution:"<< endl;
@@ -145,6 +145,8 @@ void  Solver::Solve( SparseMatrix& A,
       }
                                     
  } // end SolveMatrixEquation
+
+
 
 /*
 

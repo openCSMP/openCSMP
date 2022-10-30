@@ -154,21 +154,18 @@ const VectorVariable<3U> Rho_g( PLAIN, PLAIN ,PLAIN, 0. , - 2.4e+4 , 0.);
     SAMG_Settings settings;
     settings.Set_napproach(2);
     SAMG_Solver solver(&settings);
-    PDE_Integrator<3U,Region> deformation( solver );
+    PDE_Integrator<3U,Element> deformation( solver );
     #else
     CSMP_DEFAULT_LINEAR_SOLVER solver;
-    PDE_Integrator<3U,Region> deformation( solver );
+    PDE_Integrator<3U,Element> deformation( solver );
     #endif
 
-    PT_op<3U,Element<3U> > bforces( model.Database(), "force", "displacement" );
+    PT_op<3U> bforces( model.Database(), "force", "displacement" );
 
     NumIntegral_BT_D_B_dV<3U> stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
-
-    NumIntegral_PT_op_dV<3U>     bodyforce(  model.Database(), "gravity force", "displacement");
-
-    NumIntegral_PT_op_dV<3U>     AppliedStress( model.Database(), "Neumann stress", "displacement");
-
-    NumIntegral_BT_op_dV<3U>     WellBorePressure( model.Database(),"fluid pressure", "displacement");
+    NumIntegral_PT_op_dV<3U>  bodyforce(  model.Database(), "gravity force", "displacement");
+    NumIntegral_PT_op_dV<3U>  AppliedStress( model.Database(), "Neumann stress", "displacement");
+    NumIntegral_BT_op_dV<3U>  WellBorePressure( model.Database(),"fluid pressure", "displacement");
 
 
     deformation.Add( &stiffness );

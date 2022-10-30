@@ -170,9 +170,6 @@ here we instantiated an array on the element of size 22. So to recap the variabl
   3 .. TensorVariable
   4 to max<uint32_t> ArrayVariable of that size
 
-@todo (2-C) DocMe (Update to P. Lang 2012)
-@todo (3-D) Refactor!! maps
-
 */
 template<uint32_t dim>
 class PropertyDatabase  {
@@ -186,13 +183,13 @@ class PropertyDatabase  {
    ~PropertyDatabase();
    PropertyDatabase<dim>& operator=( const PropertyDatabase<dim>& p );
 
-   const char*    VariablesFile() const;
-   csmp::Index    StorageKey( const char* property_name ) const;
+   const char*      VariablesFile() const;
+   csmp::Index      StorageKey( const char* property_name ) const;
    csmp::Parameter  Parameter( const char* property_name ) const;
-   PLACEMENT      Placement( const char* property_name ) const; 
-   size_t         Index( const char* property_name ) const;
-   VARIABLE_TYPE  Type( const char* property_name ) const;
-   size_t         Components( const char* property_name ) const;
+   PLACEMENT        Placement( const char* property_name ) const;
+   uint32_t         Index( const char* property_name ) const;
+   VARIABLE_TYPE    Type( const char* property_name ) const;
+   uint32_t         Components( const char* property_name ) const;
    const char*    Name( const csmp::Index& idx ) const;
    const char*    Unit( const char* property_name ) const;
    const char*    Usage( const char* property_name ) const;
@@ -223,9 +220,9 @@ class PropertyDatabase  {
    LocalVariables             LocalVariablesAt( PLACEMENT within ) const;
    IntegrationPointVariables  IntegrationPointVariablesAt( PLACEMENT within ) const;
   
-   void                       VariableCountAt( PLACEMENT within, size_t& scalars,
-                                               size_t& vectors, size_t& tensors,
-                                               size_t& arrayCount, size_t& arrayLength ) const;
+   void                       VariableCountAt( PLACEMENT within, uint32_t& scalars,
+                                               uint32_t& vectors, uint32_t& tensors,
+                                               uint32_t& arrayCount, uint32_t& arrayLength ) const;
    
    double       UnitConversionFactor( const char* current_system, 
                                         const char* desired_system, 
@@ -234,12 +231,12 @@ class PropertyDatabase  {
    /// adding a property at runtime from the command line (NB: you should call method CreateProperty() of model to do this)
    csmp::Index    AddProperty();    
 
-   csmp::Index    AddProperty( const char* property_name, const char* unit, size_t last_max_index,
-                               VARIABLE_TYPE, PLACEMENT, size_t vsize = 1,
+   csmp::Index    AddProperty( const char* property_name, const char* notation, const char* unit, uint32_t last_max_index,
+                               VARIABLE_TYPE, PLACEMENT, uint32_t vsize = 1,
                                double vmin=-1.0e+30 , double vmax=1.0e+30 , std::string usage="???" );
 
-   csmp::Index    AddProperty( const char* property_name, const char* unit,
-                               VARIABLE_TYPE, PLACEMENT, size_t vsize = 1,
+   csmp::Index    AddProperty( const char* property_name, const char* notation, const char* unit,
+                               VARIABLE_TYPE, PLACEMENT, uint32_t vsize = 1,
                                double vmin=-1.0e+30 , double vmax=1.0e+30, std::string usage="???" );
                                    
    void           DeleteProperty( const char* property_name ); 
@@ -247,32 +244,35 @@ class PropertyDatabase  {
    std::map<std::string,csmp::Parameter>::const_iterator  Begin() const;
    std::map<std::string,csmp::Parameter>::const_iterator  End() const;
 
-   std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator  VariableCountBegin() const; 
-   std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator  VariableCountEnd() const; 
+   std::map<PLACEMENT,std::map<VARIABLE_TYPE,uint32_t> >::const_iterator  VariableCountBegin() const;
+   std::map<PLACEMENT,std::map<VARIABLE_TYPE,uint32_t> >::const_iterator  VariableCountEnd() const;
 
    void   FlushToScreen() const;
    void   FlushToScreen( const char* propname ) const;
-   void   ListVariables() const;
    void   ListVariableNames() const;
    void   ListKeys( std::list<csmp::Index>& keys ) const;
-   void   ListProperties( std::map<std::string,csmp::Index>& props ) const;
-   void   ListProperties( const std::set<std::string>&, std::set<PLACEMENT>& props ) const;
-   size_t ListProperties( PLACEMENT place, std::map<std::string,csmp::Index>& props ) const;
-   size_t ListProperties( PLACEMENT place, std::set<std::string>& props ) const;
-   size_t ListProperties( PLACEMENT, VARIABLE_TYPE, std::set<std::string>& props ) const;
+   void   ListVariables() const;
+   void   ListVariables( std::map<std::string,csmp::Index>& props ) const;
+   void   ListVariables( const std::set<std::string>&, std::set<PLACEMENT>& props ) const;
+   uint32_t ListVariables( PLACEMENT place, std::map<std::string,csmp::Index>& props ) const;
+   uint32_t ListVariables( PLACEMENT place, std::set<std::string>& props ) const;
+   uint32_t ListVariables( PLACEMENT, VARIABLE_TYPE, std::set<std::string>& props ) const;
 
-   size_t VariableCount( PLACEMENT )                  const;
-   size_t VariableCount( VARIABLE_TYPE )              const;
-   size_t VariableCount( PLACEMENT, VARIABLE_TYPE )   const;
-   size_t VariableCount()                             const;
+   uint32_t VariableCount( PLACEMENT )                  const;
+   uint32_t VariableCount( VARIABLE_TYPE )              const;
+   uint32_t VariableCount( PLACEMENT, VARIABLE_TYPE )   const;
+   uint32_t VariableCount()                             const;
 
-   size_t ArrayLengthTotal( PLACEMENT place ) const;
+   uint32_t ArrayLengthTotal( PLACEMENT place ) const;
    void   ArrayLengths( PLACEMENT place, std::vector<uint32_t>& arrayLengths ) const;
 
-   size_t FlaggedArrayLengthTotal( PLACEMENT place ) const;
+   uint32_t FlaggedArrayLengthTotal( PLACEMENT place ) const;
    void   FlaggedArrayLengths( PLACEMENT place, std::vector<uint32_t>& arrayLengths ) const;
    
    bool   WriteVariablesFile( const char* fileName ) const;
+   
+   /// writes  templatized INDEX variable definitions of the current variables  into header file and instantiates their keys
+   void   WriteVariableSetToHeaderFile( const char* header_file, const char* variable_set_name ) const;
 
    void   Out() const;
 
@@ -285,16 +285,10 @@ class PropertyDatabase  {
    bool   Verbose() { return this->verbose_; }
 
  private:
-   const size_t vectorFlags, tensorFlags;
-   bool verbose_;
-   std::string  physvarsFile;
-   std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> > variableCount_; ///< all placements and variable types in here
-   std::map<std::string,csmp::Parameter>  propList_; ///< all parameters (and with those the indices)
-   IndexTracker indexTracker_; ///< used to keep track of all index references and update indices after runtime changes
   
    void   Initialize( const char* variables_file );
    void   InitializeCount();
-   void   InitializeVariableTypeCount( std::map<VARIABLE_TYPE,size_t>& );
+   void   InitializeVariableTypeCount( std::map<VARIABLE_TYPE,uint32_t>& );
    void   UpdateParametersAndDatabase();
    void   CountVariables(); 
    void   AttachIndices();
@@ -310,18 +304,32 @@ class PropertyDatabase  {
    void   EstablishArrayOffsets         ( PLACEMENT whithin );
    void   EstablishFlaggedArrayOffsets  ( PLACEMENT whithin );
    void   EstablishVariableTypeDependentProperties( int vtype, csmp::Index& key ) const;
-   void   EstablishVariableTypeDependentProperties( int vtype, size_t size, csmp::Index& key ) const;
+   void   EstablishVariableTypeDependentProperties( int vtype, uint32_t size, csmp::Index& key ) const;
    void   EstablishVariableTypeDependentProperties( std::string type, csmp::Index& key ) const;
    void   EstablishPlacementDependentProperties( PLACEMENT placement, csmp::Index& key ) const;
   
-   void   VariableCount( PLACEMENT within, size_t& scalars, size_t& vectors, size_t& tensors,
-                         size_t& arrayCount, size_t& arrayLength, size_t& flaggedArrayCount,
-                         size_t& flaggedArrayLength ) const;
+   void   VariableCount( PLACEMENT within, uint32_t& scalars, uint32_t& vectors, uint32_t& tensors,
+                         uint32_t& arrayCount, uint32_t& arrayLength, uint32_t& flaggedArrayCount,
+                         uint32_t& flaggedArrayLength ) const;
   
    IntegrationPointVariables  ElementIntegrationPointVariables() const;
    IntegrationPointVariables  FaceIntegrationPointVariables() const;
    IntegrationPointVariables  InterFaceIntegrationPointVariables() const;
+
+ private:
+ 
+   const uint32_t vectorFlags, tensorFlags;
+   bool verbose_;
+   std::string  physvarsFile;
+   std::map<PLACEMENT,std::map<VARIABLE_TYPE,uint32_t> > variableCount_; ///< all placements and variable types in here
+   std::map<std::string,csmp::Parameter>  propList_; ///< all parameters (and with those the indices)
+   IndexTracker indexTracker_; ///< used to keep track of all index references and update indices after runtime changes
 };
+
+
+/// counts variables in PropertyDatabase that are placed on finite volumes
+template<uint32_t dim>
+uint32_t finiteVolumeVariables( const PropertyDatabase<dim>& );
 
 } // csmp
 

@@ -16,7 +16,7 @@ class LinearRectangle : public FiniteElement {
 		virtual uint32_t MidSideNodes() const { return 0; }
 		virtual void CornerNodes(std::vector<uint32_t>& ids) const;
 		virtual void NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids) const;
-		virtual void NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids) const;
+    virtual std::vector<uint32_t>  NodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
 		virtual void Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K);

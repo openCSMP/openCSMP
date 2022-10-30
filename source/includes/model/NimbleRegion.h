@@ -1,14 +1,13 @@
 #ifndef CSMP_NIMBLE_REGION_H
 #define CSMP_NIMBLE_REGION_H
 
-#include "CSMP_definitions.h"
-#include "Exception.h"
-#include "ErrorHandler.h"
+#include "ModelSubDomain.h"
 
 namespace csmp {
 
 template<uint32_t> class Node;
 template<uint32_t> class Element;
+template<uint32_t> class Region;
 
 /**
     Flexible collection of Element and Node object pointers
@@ -55,23 +54,14 @@ template<uint32_t> class Element;
     2. InterFace / task share with DES algorithm to convey update information.
 */
 template<uint32_t dim>
-class NimbleRegion {
-  public:
-    /// for flexibility with regard to application domain
-    typedef Element<dim>  CellType;
-    
+class NimbleRegion : public ModelSubDomain<dim,Element>,
+                     public LocalVariableStorage<dim,Region> {
   public:
     /// construction of region from nodes, relying on existing node-parent-element connectivity to identify elements
-    NimbleRegion( typename std::vector<Node<dim>*>::const_iterator first, typename std::vector<Node<dim>*>::const_iterator last );
+    NimbleRegion( const PropertyDatabase<dim>&,
+                  typename std::vector<Node<dim>*>::const_iterator first,
+                  typename std::vector<Node<dim>*>::const_iterator last );
 
-    /// constructs region from supplied nodes, relying on existing node-parent-element connectivity to identify elements and perimeter nodes
-    void Update( typename std::vector<Node<dim>*>::const_iterator first, typename std::vector<Node<dim>*>::const_iterator last );
-
-    /// as above, but with different way to find perimeter (FAIL: perimeter incorrect for discontiguous patches)
-    void Update2( typename std::vector<Node<dim>*>::const_iterator first, typename std::vector<Node<dim>*>::const_iterator last );
-    
-    void Update3( typename std::vector<Node<dim>*>::const_iterator first, typename std::vector<Node<dim>*>::const_iterator last );
-  
 /* CARRY OUT DIAGNOSTICS WHETHER THESE INTERFACES ARE WORTH IMPLEMENTING
 
     /// adjust to arbitrary yet small shape modifications, where most of the region stays the same; argument new current nodes
@@ -90,6 +80,9 @@ class NimbleRegion {
     /// removing storage
     void Erase();
 
+    /// Local variable storage interface
+    virtual PLACEMENT Placement() const { return REGION; }
+
     // retrieving information
   
     size_t Nodes() const;
@@ -100,46 +93,35 @@ class NimbleRegion {
 
     // accessors
   
-    CellType* const E(size_t);
+    Element<dim>* const E(size_t);
     Node<dim>* const N(size_t);
 
-    const CellType* const E(size_t) const;
+    const Element<dim>* const E(size_t) const;
     const Node<dim>* const N(size_t) const;
-
-    // iterators
-  
-    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const;
-
-    typename std::vector<CellType*>::const_iterator         CellsBegin() const;
-    typename std::vector<CellType*>::const_iterator         CellsEnd() const;
   
     /// writes the current element and node memberships to the console
     void Out() const;
-    
-    std::string Name() const
-        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::Name","Method not implemented");};
-    bool IsPerimeterNode( const csmp::Node<dim>* ) const 
-        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::IsPerimeterNode","Method not implemented");};
-    void UpdateMemberIndexes() const
-        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::UpdateMemberIndexes","Method not implemented");};    
-    bool IsPerimeterCell( const size_t eidx ) const
-        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::IsPerimeterCell","Method not implemented");};  
-    size_t SharedPerimeterNodes(typename std::vector<csmp::Node<dim>*>::const_iterator start,
-                                typename std::vector<csmp::Node<dim>*>::const_iterator end ) const
-        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::SharedPerimeterNodes","Method not implemented");};  
-    
 
   private:
     NimbleRegion() = delete;
+    
+    /// constructs region from supplied nodes, relying on existing node-parent-element connectivity to identify elements and perimeter nodes
+    void Update( typename std::vector<Node<dim>*>::const_iterator first, typename std::vector<Node<dim>*>::const_iterator last );
+
+    /// as above, but with different way to find perimeter (FAIL: perimeter incorrect for discontiguous patches)
+    void Update2( typename std::vector<Node<dim>*>::const_iterator first, typename std::vector<Node<dim>*>::const_iterator last );
+    
+    void Update3( typename std::vector<Node<dim>*>::const_iterator first, typename std::vector<Node<dim>*>::const_iterator last );
   
+  private:
     // current implementation based on idea that vectors are resized with little overhead as long as their capacity is not changed
     // sets are used to keep nodes and elements unique
     std::vector<Node<dim>*>     nodes_;             ///< sorted into interior and perimeter ranges
     size_t                      n_interior_nodes_;  ///< first perimeter node
     std::vector<Element<dim>*>  elements_;          ///< all elements, interior and exterior
     const bool                  verbose_ = true;    ///< flag for testing and reporting
+                       
+    friend class NimbleRegion_Test;
 };
 
 } // csmp   

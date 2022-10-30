@@ -1,6 +1,7 @@
 #include "vsetMakers.h"
 #include "Box.h"
 #include "CSMP_definitions.h"
+#include "CSMP_global_enumerations.h"
 
 #include "IsoparametricLinearHexahedron.h"
 #include "IsoparametricLinearPyramid.h"
@@ -110,14 +111,14 @@ VSet<2U> test_CreateVSet()
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
   	
   	//define boundaries
-  	vset.AddBFlag( 0, CNR1 );
-    vset.AddBFlag( 1, BOTTOM_OUTSIDE );
-    vset.AddBFlag( 2, CNR2 );
-    vset.AddBFlag( 3, LEFT_OUTSIDE );
-    vset.AddBFlag( 5, RIGHT_OUTSIDE );
-    vset.AddBFlag( 6, CNR4 );
-	  vset.AddBFlag( 7, TOP_OUTSIDE );
-    vset.AddBFlag( 8, CNR3 );
+  	vset.BFlag( 0, CNR1 );
+    vset.BFlag( 1, BOTTOM_OUTSIDE );
+    vset.BFlag( 2, CNR2 );
+    vset.BFlag( 3, LEFT_OUTSIDE );
+    vset.BFlag( 5, RIGHT_OUTSIDE );
+    vset.BFlag( 6, CNR4 );
+	  vset.BFlag( 7, TOP_OUTSIDE );
+    vset.BFlag( 8, CNR3 );
     
     vset.EstablishZeroBasedNumbering();
     vset.Out();
@@ -198,10 +199,10 @@ void test_Create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bS
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
   	
   	//----------------------------NODE BOUNDARIES
-  	vset.AddBFlag( 1, CNR1);
-  	vset.AddBFlag( 2, CNR2);
-  	vset.AddBFlag( 3, CNR3);
-  	vset.AddBFlag( 4, CNR4);
+  	vset.BFlag( 1, CNR1);
+  	vset.BFlag( 2, CNR2);
+  	vset.BFlag( 3, CNR3);
+  	vset.BFlag( 4, CNR4);
   	
     vset.EstablishZeroBasedNumbering();
     vset.Out();
@@ -432,12 +433,12 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
   	
   	//----------------------------NODE BOUNDARIES
-  	vset.AddBFlag( 7, CNR1);
-  	vset.AddBFlag( 8, CNR2);
-  	vset.AddBFlag( 2, CNR3);
-  	vset.AddBFlag( 0, CNR4);
-  	vset.AddBFlag( 1, TOP_OUTSIDE );
-  	vset.AddBFlag( 4, RIGHT_OUTSIDE);
+  	vset.BFlag( 7, CNR1);
+  	vset.BFlag( 8, CNR2);
+  	vset.BFlag( 2, CNR3);
+  	vset.BFlag( 0, CNR4);
+  	vset.BFlag( 1, TOP_OUTSIDE );
+  	vset.BFlag( 4, RIGHT_OUTSIDE);
    
     //-------------------------MATERIALS
     vector<int32_t> pmtrl( vset.Elements(), 1 );
@@ -457,6 +458,9 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
         VData etc. functionality for the clean-up of 'pfverts', line-element connectivity etc.
                 
         Also returns corresponding model topology and property data in the form of "element number" and "node number" for testing.
+        
+        @attention VSet does not contain any Face objects. It therefore needs to be used in conjunction with Element to Face conversion
+        to create Boundary objects.
         
         @author SKM
         @date 1/10/2021
@@ -491,38 +495,42 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
   	std::deque<double> px(nodes);
   	std::deque<double> py(nodes);
   	std::deque<double> pz(nodes,0.);
-  	std::deque<int8_t> bflags(nodes,NOT);
+  	std::deque<int8_t> bflags(nodes,NOT), gflags(nodes,MESH_VERTEX);
   	
-  	px[0]=0.;    py[0]=5.;    bflags[0] = CNR4;
-  	px[1]=2.;    py[1]=5.;    bflags[1] = TOP;
-  	px[2]=5.;    py[2]=5.;    bflags[2] = TOP;
-  	px[3]=6;     py[3]=5.;    bflags[3] = CNR3;
-  	px[4]=0.;    py[4]=4.;    bflags[4] = LEFT;
-  	px[5]=2.;    py[5]=4.;
-  	px[6]=4.;    py[6]=3.5;
-  	px[7]=6.;    py[7]=3.;    bflags[7] = RIGHT;
-  	px[8]=1.8;   py[8]=3.2;
-  	px[9]=2.8;   py[9]=3.;
-  	px[10]=3.5;  py[10]=2.5;
-  	px[11]=4.7;  py[11]=2.5;
-  	px[12]=6.;   py[12]=2.;   bflags[12] = RIGHT;
-  	px[13]=0.;   py[13]=2.5;  bflags[13] = LEFT;
-  	px[14]=2.;   py[14]=1.5;
-  	px[15]=4.2;  py[15]=1.;
-  	px[16]=6.;   py[16]=0.;   bflags[16] = CNR2;
-  	px[17]=0.;   py[17]=0.;   bflags[17] = CNR1;
-  	px[18]=2.5;  py[18]=0.;   bflags[18] = BOTTOM;
-  	px[19]=4.3;  py[19]=0.;   bflags[19] = BOTTOM;
-  	px[20]=4.8;  py[20]=3.;
-  	px[21]=5.;   py[21]=4.5;
+  	px[0]=0.;    py[0]=5.;    bflags[0] = CNR4;       gflags[0] = EXTERIOR_POINT;
+  	px[1]=2.;    py[1]=5.;    bflags[1] = TOP;        gflags[1] = EXTERIOR_LINE;
+  	px[2]=5.;    py[2]=5.;    bflags[2] = TOP;        gflags[2] = EXTERIOR_LINE;
+  	px[3]=6;     py[3]=5.;    bflags[3] = CNR3;       gflags[3] = EXTERIOR_POINT;
+  	px[4]=0.;    py[4]=4.;    bflags[4] = LEFT;       gflags[4] = EXTERIOR_LINE;
+  	px[5]=2.;    py[5]=4.;    bflags[5] = INTERNAL;   gflags[5] = PERIMETER_POINT;
+  	px[6]=4.;    py[6]=3.5;   bflags[6] = INTERNAL;   gflags[6] = INTERIOR_LINE;
+  	px[7]=6.;    py[7]=3.;    bflags[7] = RIGHT;      gflags[7] = EXTERIOR_LINE;
+  	px[8]=1.8;   py[8]=3.2;   bflags[8] = INTERNAL;   gflags[8] = PERIMETER_POINT;
+  	px[9]=2.8;   py[9]=3.;    bflags[9] = INTERNAL;   gflags[9] = INTERSECTION_POINT;
+  	px[10]=3.5;  py[10]=2.5;  bflags[10] = INTERNAL;  gflags[10] = INTERIOR_LINE;
+  	px[11]=4.7;  py[11]=2.5;  bflags[11] = INTERNAL;  gflags[11] = PERIMETER_POINT;
+  	px[12]=6.;   py[12]=2.;   bflags[12] = RIGHT;     gflags[12] = EXTERIOR_LINE;
+  	px[13]=0.;   py[13]=2.5;  bflags[13] = LEFT;      gflags[13] = EXTERIOR_LINE;
+  	px[14]=2.;   py[14]=1.5;  bflags[14] = INTERNAL;  gflags[14] = PERIMETER_POINT;
+  	px[15]=4.2;  py[15]=1.;   bflags[15] = INTERNAL;  gflags[15] = PERIMETER_POINT;
+  	px[16]=6.;   py[16]=0.;   bflags[16] = CNR2;      gflags[16] = EXTERIOR_POINT;
+  	px[17]=0.;   py[17]=0.;   bflags[17] = CNR1;      gflags[17] = EXTERIOR_POINT;
+  	px[18]=2.5;  py[18]=0.;   bflags[18] = BOTTOM;    gflags[18] = EXTERIOR_POINT;
+  	px[19]=4.3;  py[19]=0.;   bflags[19] = BOTTOM;    gflags[19] = EXTERIOR_LINE;
+  	px[20]=4.8;  py[20]=3.;   bflags[20] = INTERNAL;  gflags[20] = PERIMETER_POINT;
+  	px[21]=5.;   py[21]=4.5;  bflags[21] = INTERNAL;  gflags[21] = PERIMETER_POINT;
   	  	  	
   	vset.AddXYZ( px, py, pz );
   	
   	//--------------------------NODE BOUNDARY FLAGS
     size_t n(0U);
     for ( auto it : bflags )
-  	  vset.AddBFlag( n++, it );
+  	  vset.BFlag( n++, it );
 
+  	//--------------------------NODE GEOMETRY FLAGS
+    n = 0U;
+    for ( auto it : gflags )
+  	  vset.BREP_Flag( n++, it );
 
   	//--------------------------ELEMENTS
   	// define nodes per element
@@ -680,7 +688,7 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 
 
 
-/// model SPLIT22_BASIC with box boundaries (Faces) and one through-going and one internal crossing split boundary
+/// model  SPLIT22_BASIC  with box boundaries (Faces) and one through-going and one internal crossing split boundary
 ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
  {
     //--------------------------ELEMENT TYPES
@@ -708,7 +716,7 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
   	vset.Resize( vecElementTypes, npes, epes, n_nodes, n_faces, n_interfaces );
   	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
 
-  	//-----------------------NODES (36)
+  	//-----------------------NODES (35)
   	//define node coordinates
   	std::deque<double> px = { 0,1,3,4.5, 0,1,3,4.5, 0,1.5, 0,2,2,3,4.5, 0,1.4,2.4,2.4,3.5,4.5, 0,1.4,2.4,2.4,3.5,4.5, 0,1.5,3,4.5, 0,1.5,3,4.5 };
     assert( px.size() == n_nodes );
@@ -718,12 +726,20 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
   	  	  	
   	vset.AddXYZ( px, py, pz );
   	
-  	//--------------------------NODE BOUNDARY FLAGS
-    BOX_BOUNDARY B{BOTTOM}, R{RIGHT}, U{TOP}, L{LEFT}, I{INTERNAL}, N{NOT};
+  	//--------------------------NODE BOUNDARY FLAGS (35)
+    const BOX_BOUNDARY B{BOTTOM}, R{RIGHT}, U{TOP}, L{LEFT}, I{INTERNAL}, N{NOT};
     //                          0  1 2  3    4 5 6 7  8 9 1011121314 151617181920 212223242526 27282930  31  32 33  34
     vector<int8_t> bflags = { CNR4,U,U,CNR3, L,N,N,R, L,I, L,I,I,N,R, L,I,I,I,I,R, L,I,I,I,I,R, L,N,I,R, CNR1,B,B,CNR2 };
     assert( bflags.size() == n_nodes );
     vset.AddBFlags( bflags.begin(), bflags.end() );
+    
+    
+    //--------------------------TOPOTYPE NODE FLAGS (35)
+    const TOPOTYPE v{MESH_VERTEX}, i{INTERSECTION_POINT}, e{EXTERIOR_POINT}, p{PERIMETER_POINT}, l{INTERIOR_LINE}, x{EXTERIOR_LINE};
+    //                        0 1 2 3  4 5 6 7  8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34
+    vector<int8_t> gflags = { e,x,x,e, x,v,v,x, x,p, x, l, l, v, x, x, l, i, i, l, x, x, l, i, i, l, x, x, v, p, x, e, x, x, e };
+    assert( gflags.size() == n_nodes );
+    vset.AddBREP_Flags( gflags.begin(), gflags.end() );
 
 
   	//--------------------------ELEMENTS
@@ -745,8 +761,8 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
                                         {28,26,2,U,3,U}, {29,27,1,U,3,U}, {30,28,0,U,3,U},
                                         {31,29,0,L,0,L}, {32,30,3,L,0,L}, {33,31,5,L,0,L}, {34,32,8,L,0,L}, {35,33,12,L,0,L}, {19,34,16,L,0,L},
                                         // interface neigbhors: like faces, but with extra entry for potential index of intervening element
-                                        {37,L,8,12,1,3,I}, {I,36,9,13,0,3,I}, {39,I,10,14,1,1,I}, {R,38,11,15,1,3,I},
-                                        {41,I,5,6,2,0,I}, {I,40,9,10,1,0,I}, {I,I,13,14,2,2,I} };
+                                        {37,L,8,12,1,3,I}, {38,36,9,13,0,3,I}, {39,37,10,14,1,1,I}, {R,38,11,15,1,3,I},
+                                        {41,I,5,6,2,0,I}, {42,40,9,10,1,0,I}, {I,41,13,14,2,2,I} };
     assert( pfverts.size() == n_cells );
     vset.AddPfverts( pfverts.begin(), pfverts.end() );
 
@@ -770,6 +786,13 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
 
     assert( mesh_topology.Cells() == vset.Elements() + vset.Faces() + vset.Interfaces() );
     assert( mesh_topology.Cells() == vset.TotalNumberOfCells() );
+    
+    // node manifolds
+    ManifoldType SB{ ManifoldType::SPLIT_BOUNDARY }, SBE{ ManifoldType::SPLIT_BOUNDARY_END }, SBX{ ManifoldType::SPLIT_BOUNDARY_CROSSING };
+    vector<pair<vector<size_t>,ManifoldType> > node_manifolds = { {{11,12},SB}, {{15,21},SBE}, {{16,22},SB},
+                                                                  {{17,18,23,24},SBX}, {{19,25},SB}, {{20,26},SBE} };
+    vset.AddNodeManifolds( node_manifolds.begin(),
+                           node_manifolds.end() );
 
     // adding corresponding materials to VSet
     const size_t n_elements{19};
@@ -780,18 +803,18 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     // adding node and element numbers for comparisons
     PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
     elmt_nums.Reserve( vset.Elements() );
-    for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    for ( size_t n{0U}; n<vset.Elements(); ++n ) pushBack( elmt_nums, makeScalar( ANY, n ) );
     vset.AddData( "element number", elmt_nums );
     // node numbers
     PropertyData node_nums( NODE, SCALAR, 2U );
     node_nums.Reserve( vset.Vertices() );
-    for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    for ( size_t n{0U}; n<vset.Vertices(); ++n ) pushBack( node_nums, makeScalar( ANY, n ) );
     vset.AddData( "node number", node_nums );
     // permeability
     PropertyData perm( ELEMENT, SCALAR, 2U );
     perm.Reserve( vset.Elements() );
-    for ( size_t i{0U}; i<mesh_topology.CellsWithinDomain("upper"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-13 ) );
-    for ( size_t i{0U}; i<mesh_topology.CellsWithinDomain("lower"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-12 ) );
+    for ( size_t n{0U}; n<mesh_topology.CellsWithinDomain("upper"); ++n ) pushBack( perm, makeScalar( ANY, 1.0e-13 ) );
+    for ( size_t n{0U}; n<mesh_topology.CellsWithinDomain("lower"); ++n ) pushBack( perm, makeScalar( ANY, 1.0e-12 ) );
     vset.AddData( "permeability", perm );
 
     vset.Out();
@@ -881,14 +904,14 @@ void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
     vset.ResizeBFlags();
   	
   	//----------------------------NODE BOUNDARIES
-  	vset.AddBFlag( 0, CNR1);
-  	vset.AddBFlag( 1, CNR2);
-  	vset.AddBFlag( 2, CNR3);
-  	vset.AddBFlag( 3, CNR4);
-  	vset.AddBFlag( 4, CNR5);
-  	vset.AddBFlag( 5, CNR6);
-  	vset.AddBFlag( 6, CNR7);
-  	vset.AddBFlag( 7, CNR8);
+  	vset.BFlag( 0, CNR1);
+  	vset.BFlag( 1, CNR2);
+  	vset.BFlag( 2, CNR3);
+  	vset.BFlag( 3, CNR4);
+  	vset.BFlag( 4, CNR5);
+  	vset.BFlag( 5, CNR6);
+  	vset.BFlag( 6, CNR7);
+  	vset.BFlag( 7, CNR8);
  
      //-------------------------MATERIALS
     vector<int32_t> pmtrl( vset.Elements(), 1 );
@@ -1086,7 +1109,7 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
       if(bBoundary!=NOT)
       {
         const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-        vset.AddBFlag( iNode, bBoundary);
+        vset.BFlag( iNode, bBoundary);
       }
   	}
   	
@@ -1260,7 +1283,7 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
   	 if(bBoundary!=NOT)
      {
         const size_t iNode(((iDim_i)*j+i));
-        vset.AddBFlag( iNode, bBoundary);
+        vset.BFlag( iNode, bBoundary);
      }
      }
     
@@ -1291,7 +1314,7 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
     	  pz.push_back(new_pz);
     	  //set new duplicate node
         deqElements[iElement][0]= 1+ node_number;
-        vset.AddBFlag( node_number, IRREGULAR_OUTSIDE);
+        vset.BFlag( node_number, IRREGULAR_OUTSIDE);
       }
       
       //create new duplicate node (1)
@@ -1306,7 +1329,7 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
       deqElements[iElement][1]= 1+ node_number;
       
       //set boundary
-  	  vset.AddBFlag( node_number, IRREGULAR_OUTSIDE);
+  	  vset.BFlag( node_number, IRREGULAR_OUTSIDE);
      }
   	 
   	 if (under_slit)
@@ -1322,7 +1345,7 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
         //set new duplicate node
         deqElements[iElement][2]= 1+ node_number;
         //set boundary
-        vset.AddBFlag( node_number, IRREGULAR_OUTSIDE);
+        vset.BFlag( node_number, IRREGULAR_OUTSIDE);
 
         if(i > x_dimension-depth_of_slit) // node is NOT at the end of the slit
           {
@@ -1338,7 +1361,7 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
             deqElements[iElement][3]= 1+ node_number;
             
             //set boundary
-            vset.AddBFlag( node_number, IRREGULAR_OUTSIDE );
+            vset.BFlag( node_number, IRREGULAR_OUTSIDE );
           }
        }
       
@@ -1365,6 +1388,8 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
 
 
 /**
+    3D model, which is a cube of hexahedra with six pyramid elements in the middle.
+    
     Creates:
     - 32 elements (26 hex + 6 pyramids)
     - 64 nodes
@@ -1391,9 +1416,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     int              nodes((iDim_i*iDim_j*iDim_k)+1);  //number of nodes: 64 on a 4x4x4 grid + 1 barycenter
   	deque<uint32_t>  npes(iNrOfElements);  //number of nodes per element
     deque<uint32_t>  epes(iNrOfElements);  //element type per element
-    deque<int8_t>    etypes(iNrOfElements,ISOPARAMETRIC_LINEAR_HEXAHEDRON);
-
-// NB: the pyramid elements still need to be dealt with
+    deque<int8_t>    etypes(iNrOfElements,ISOPARAMETRIC_LINEAR_HEXAHEDRON); // NB: the pyramid elements still need to be dealt with
 
     for( int iElement = 0; iElement < 26U; iElement++ )
   	{
@@ -1744,7 +1767,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
       {
         // SKM FIX const size_t iNode((iDim_k2*k+(iDim_j)*j+i)+1);
         const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-        vset.AddBFlag( iNode, bBoundary);
+        vset.BFlag( iNode, bBoundary);
       }
   	}
   	
@@ -1771,8 +1794,10 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 /**
     Generates 24 hexahedra + 6 prism elements.
     The model can be distorted on demand.
+    
+    @note model comes with the correct box boundary flags.
 */
-void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
+void test_Create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(30/*24 hexahedrons + 6 prisms*/);
     
@@ -2267,7 +2292,7 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
       {
         // SKM_FIX const size_t iNode((iDim_k2*k+(iDim_j)*j+i)+1);
         const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-        vset.AddBFlag( iNode, bBoundary);
+        vset.BFlag( iNode, bBoundary);
       }
   	}
   	
@@ -2355,7 +2380,7 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     for ( size_t i{0U}; i<vset.Vertices(); ++i ) {
          if ( vset.BoundaryFlag(i) != bflags[i] )
 // original data were not correct:   cerr <<"\n\t"<< (int)vset.BoundaryFlag(i) <<" vs. "<< (int)bflags[i];
-         vset.AddBFlag( i, bflags[i] );
+         vset.BFlag( i, bflags[i] );
       }
 
     vset.EstablishZeroBasedNumbering();
@@ -2452,12 +2477,12 @@ void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
   	
   	//----------------------------NODE BOUNDARIES
-  	vset.AddBFlag( 1, CNR1);
-  	vset.AddBFlag( 2, CNR2);
-  	vset.AddBFlag( 3, CNR3);
-  	vset.AddBFlag( 4, CNR5);
-  	vset.AddBFlag( 5, CNR6);
-  	vset.AddBFlag( 6, CNR7);
+  	vset.BFlag( 1, CNR1);
+  	vset.BFlag( 2, CNR2);
+  	vset.BFlag( 3, CNR3);
+  	vset.BFlag( 4, CNR5);
+  	vset.BFlag( 5, CNR6);
+  	vset.BFlag( 6, CNR7);
     
     //-------------------------MATERIALS
     vector<int32_t> pmtrl( vset.Elements(), 1 );
@@ -2696,7 +2721,7 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
       {
         // SKM FIX: const size_t iNode((iDim_k2*k+(iDim_j)*j+i)+1);
         const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-        vset.AddBFlag( iNode, bBoundary);
+        vset.BFlag( iNode, bBoundary);
       }
   	}
   	
@@ -2716,8 +2741,10 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 
 
 
+
 /**
        Decomposition of a hexahedron into 6 tetrahedra.
+       Only 6 elements!
 */
 void testCreateTetra_VSet( VSet<3U>& vset )
  {
@@ -2768,14 +2795,14 @@ void testCreateTetra_VSet( VSet<3U>& vset )
   	vset.AddXYZ( px, py, pz );
     vset.ResizeBFlags();
     
-    vset.AddBFlag(0,CNR5);
-    vset.AddBFlag(1,CNR6);
-    vset.AddBFlag(2,CNR2);
-    vset.AddBFlag(3,CNR1);
-    vset.AddBFlag(4,CNR8);
-    vset.AddBFlag(5,CNR7);
-    vset.AddBFlag(6,CNR3);
-    vset.AddBFlag(7,CNR4);
+    vset.BFlag(0,CNR5);
+    vset.BFlag(1,CNR6);
+    vset.BFlag(2,CNR2);
+    vset.BFlag(3,CNR1);
+    vset.BFlag(4,CNR8);
+    vset.BFlag(5,CNR7);
+    vset.BFlag(6,CNR3);
+    vset.BFlag(7,CNR4);
 
 
     // -------------------------PELMT
@@ -3176,7 +3203,7 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
       {
         // SKM FIX const size_t iNode((iDim_k2*k+(iDim_j)*j+i)+1);
         const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-        vset.AddBFlag( iNode, bBoundary);
+        vset.BFlag( iNode, bBoundary);
       }
   	}
  
@@ -3305,11 +3332,6 @@ deque<double> pz{5.69268,13.547,10,11.9315,10,7.98355,8.51612,10.1406,11.0563,9.
 
 
 vset.AddXYZ( px, py, pz );
-
-const int8_t bf(IRREGULAR);
-vector<int8_t>  bflags{bf,bf,0,0,0,bf,0,bf,0,bf,bf,0,0,0,0,0,bf,bf,0,bf,0,bf,0,0,0,0,0,0,0,0,0,0,0,0,0,0,bf,0,bf,0,bf,0,bf,bf,bf,0,bf,0,bf,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,0,bf,bf,bf,bf,0,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,0,0,bf,0,0,bf,bf,bf,bf,bf,bf,bf,0,0,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,0,bf,0,0,0,0,bf,0,0,bf,bf,0,0,0,bf,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,bf,bf,bf,0,0,0,0,bf,bf,0,bf,bf,0,bf,bf,bf,bf,0,0,bf,0,bf,bf,bf,bf,0,0,0,0,bf,bf,0,0,bf,bf,0,0,0,0,0,0,0,bf,bf,bf,0,0,0,bf,bf,bf,bf,bf,0,bf,bf,bf,0,0,bf,0,0,0,0,0,0,0,0,0,bf,bf,bf,bf,0,0,0,bf,0,0,0,bf,bf,bf,0,0,0,bf,0,bf,bf,bf,bf,0,bf,bf,bf,0,bf,bf,bf,bf,0,0,0,0,bf,0,0,0,0,0,0,0,bf,bf,bf,bf,0,0,0,bf,0,0,0,bf,bf,bf,0,0,0,bf,0,bf,bf,bf,0,bf,bf,0,0,0,0,0,bf,0,0,0,bf,bf,0,bf,0,bf,bf,0,bf,0,bf,bf,0,bf,bf,0,bf,bf,0,bf,0,0,bf,0,bf,bf,bf,bf,bf,bf,bf,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf};
-
-vset.AddBFlags( bflags.begin(), bflags.end());
 
 //'plist' nodes that make up the elements
 deque<vector<int64_t> >  plist( 1872 );
@@ -7066,35 +7088,71 @@ deque<vector<int64_t> >  pfverts( 1872 );
 	pfverts[1870] = { 1854, 1857 };
 	pfverts[1871] = { 1859, 1865 };
 
-// checking whether pfverts has the expected size
-size_t n_pfvert_entries{0};
-for ( auto et : etypes )
-  n_pfvert_entries += CSMP_ElementSpecifications::NodesPerElementOfType( et );
+  // checking whether pfverts has the expected size
+  size_t n_pfvert_entries{0};
+  for ( auto et : etypes )
+    n_pfvert_entries += CSMP_ElementSpecifications::NodesPerElementOfType( et );
 
-size_t n_pfvert_entries_actual{0};
-for ( auto pt : pfverts )
-  n_pfvert_entries_actual += pt.size();
-assert( n_pfvert_entries_actual == n_pfvert_entries ); // all good 
+  size_t n_pfvert_entries_actual{0};
+  for ( auto pt : pfverts )
+    n_pfvert_entries_actual += pt.size();
+  assert( n_pfvert_entries_actual == n_pfvert_entries ); // all good
 
-vset.AddPfverts( pfverts.begin(), pfverts.end());
+  vset.AddPfverts( pfverts.begin(), pfverts.end());
+  
+  
+  // boundary flags
+  const int8_t bf(IRREGULAR);
+  // side boundaries to start with
+  vector<int8_t>  bflags{bf,bf,0,0,0,bf,0,bf,0,bf,bf,0,0,0,0,0,bf,bf,0,bf,0,bf,0,0,0,0,0,0,0,0,0,0,0,0,0,0,bf,0,bf,0,bf,0,bf,bf,bf,0,bf,0,bf,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,0,bf,bf,bf,bf,0,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,0,0,bf,0,0,bf,bf,bf,bf,bf,bf,bf,0,0,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,0,bf,0,0,0,0,bf,0,0,bf,bf,0,0,0,bf,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,bf,bf,bf,0,0,0,0,bf,bf,0,bf,bf,0,bf,bf,bf,bf,0,0,bf,0,bf,bf,bf,bf,0,0,0,0,bf,bf,0,0,bf,bf,0,0,0,0,0,0,0,bf,bf,bf,0,0,0,bf,bf,bf,bf,bf,0,bf,bf,bf,0,0,bf,0,0,0,0,0,0,0,0,0,bf,bf,bf,bf,0,0,0,bf,0,0,0,bf,bf,bf,0,0,0,bf,0,bf,bf,bf,bf,0,bf,bf,bf,0,bf,bf,bf,bf,0,0,0,0,bf,0,0,0,0,0,0,0,bf,bf,bf,bf,0,0,0,bf,0,0,0,bf,bf,bf,0,0,0,bf,0,bf,bf,bf,0,bf,bf,0,0,0,0,0,bf,0,0,0,bf,bf,0,bf,0,bf,bf,0,bf,0,bf,bf,0,bf,bf,0,bf,bf,0,bf,0,0,bf,0,bf,bf,bf,bf,bf,bf,bf,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf};
 
-const int32_t  material_identifier{1};
-vector<int32_t> pmtrl( vset.Elements(), material_identifier );
-vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+  // INTERNAL boundaries inferred from lower-dimensional elements that are not part of the side boundaries
+  for ( const auto& eit : plist ) {
+       // identifying interior elements
+       bool at_boundary{false};
+       for ( const auto& n : eit )
+         if ( bflags[n] != NOT ) {
+              at_boundary = true;
+              break;
+           }
+       if ( !at_boundary )
+         for ( const auto& n : eit )
+           bflags[n] = INTERNAL;
+    }
 
-PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
-elmt_nums.Reserve( vset.Elements() );
+  vset.AddBFlags( bflags.begin(), bflags.end() );
 
-for ( auto i{0U}; i<vset.Elements(); ++i )
-  pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );
-vset.AddData( "element number", elmt_nums );
+  // geometry flags
+  vector<int8_t>  gflags( bflags.size(), MESH_VERTEX );
+  for ( size_t i{0U}; i<bflags.size(); i++ ) {
+       if (      bflags[i] == IRREGULAR ) gflags[i] = EXTERIOR_SURFACE;
+       else if ( bflags[i] == INTERNAL )  gflags[i] = INTERIOR_SURFACE;
+    }
+  
+  vset.AddBREP_Flags( gflags.begin(), gflags.end() );
 
-PropertyData node_nums( NODE, SCALAR, 3U );
-node_nums.Reserve( vset.Vertices() );
+  
+// MATERIAL PROPERTIES
 
-for ( auto i{0U}; i<vset.Vertices(); ++i )
-  pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
-vset.AddData( "node number", node_nums ); } // end test_Create_FracBox
+  const int32_t  material_identifier{1};
+  vector<int32_t> pmtrl( vset.Elements(), material_identifier );
+  vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+
+  PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
+  elmt_nums.Reserve( vset.Elements() );
+
+  for ( auto i{0U}; i<vset.Elements(); ++i )
+    pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );
+  vset.AddData( "element number", elmt_nums );
+
+  PropertyData node_nums( NODE, SCALAR, 3U );
+  node_nums.Reserve( vset.Vertices() );
+
+  for ( auto i{0U}; i<vset.Vertices(); ++i )
+    pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
+  vset.AddData( "node number", node_nums );
+
+} // end test_Create_FracBox
 
 
 

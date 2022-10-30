@@ -15,6 +15,8 @@ using namespace std;
 namespace csmp
 {
 
+// TODO: test should not depend on ANSYS_Models
+// TODO: run 2 and 3D versions
 void NodeManifoldManager_Test::run()
 {
   
@@ -39,8 +41,6 @@ void NodeManifoldManager_Test::run()
   //Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "kueper_one_interface" );
   //Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "lens2D" );
   //Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "UnitSquareFracs_yline" );
-  
-
 }
 
 
@@ -96,7 +96,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
   }  
 
  
-  if(!modelIN->Database().IsDefined("region ID")) modelIN->CreateProperty( "region ID", "none", SCALAR, ELEMENT, 1, 0, 1000); 
+  if(!modelIN->Database().IsDefined("region ID")) modelIN->CreateProperty( "region ID", "rid", "uint", SCALAR, ELEMENT, 1, 0, 1000);
   modelIN->Region("Model").InputPropertyValue("region ID", makeScalar(PLAIN, 0));
   size_t region_id(1);
   for ( auto it = modelIN->UniqueRegionsBegin(); it != modelIN->UniqueRegionsEnd(); it++ ) {
@@ -113,7 +113,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
   //cout<<"before split, region FRACS has "<<modelIN->Region("FRACS").PerimeterNodes()<<" perimeter nodes"<<endl;
   cout<<"before split, region FAULT has "<<modelIN->Region("FAULT").PerimeterNodes()<<" perimeter nodes"<<endl;
   //cout<<"before split, region FAULT_SURFACE has "<<modelIN->Region("FAULT_SURFACE").Nodes()<<"  nodes"<<endl;
-  if(!modelIN->Database().IsDefined("node indicator")) modelIN->CreateProperty( "node indicator", "none", SCALAR, NODE, 1, 0, 1000); 
+  if(!modelIN->Database().IsDefined("node indicator")) modelIN->CreateProperty( "node indicator", "nind", "none", SCALAR, NODE, 1, 0, 1000);
   modelIN->Region("Model").InputPropertyValue("node indicator", makeScalar(PLAIN, 0));
   csmp::INDEX<SCALAR,NODE> key_nd = csmp::INDEX<SCALAR,NODE>( modelIN->Database().StorageKey("node indicator") );
   double min_x(1e10);
@@ -163,7 +163,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
   }  
 
   //assign different entry pressures to different regions
-  if(!modelIN->Database().IsDefined("entry pressure")) modelIN->CreateProperty( "entry pressure", "Pa", SCALAR, ELEMENT, 1, 0 ,50000000); 
+  if(!modelIN->Database().IsDefined("entry pressure")) modelIN->CreateProperty( "entry pressure", "pd", "Pa", SCALAR, ELEMENT, 1, 0 ,50000000);
   modelIN->Region("Model").InputPropertyValue("entry pressure", makeScalar(PLAIN, 0.));
   double entry_pressure = 100.;   
   for ( auto it = modelIN->RegionsBegin(); it != modelIN->RegionsEnd(); it++ ) {
@@ -198,7 +198,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
 
   //added
   //min_x = 1e10;
-  if(!modelIN->Database().IsDefined("element indicator")) modelIN->CreateProperty( "element indicator", "none", SCALAR, ELEMENT, 1, 0 ,50000000); 
+  if(!modelIN->Database().IsDefined("element indicator")) modelIN->CreateProperty( "element indicator", "eind", "none", SCALAR, ELEMENT, 1, 0 ,50000000); 
   modelIN->Region("Model").InputPropertyValue("element indicator", makeScalar(PLAIN, 0.));
   csmp::INDEX<SCALAR,ELEMENT> key_element = csmp::INDEX<SCALAR,ELEMENT>( modelIN->Database().StorageKey("element indicator") );
   csmp::INDEX<SCALAR,ELEMENT> key_pd = csmp::INDEX<SCALAR,ELEMENT>( modelIN->Database().StorageKey("entry pressure") );

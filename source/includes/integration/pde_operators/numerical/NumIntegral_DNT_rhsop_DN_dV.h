@@ -6,6 +6,8 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /**
 
 @brief RHS = div^2 . operand - interpolation function derivative matrix collapsed 
@@ -18,8 +20,8 @@ into righthand side vector.
 @copyright 1999 by Dr. Stephan K. Matthaei & Stephen G. Roberts
 
 */
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_DNT_rhsop_DN_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_DNT_rhsop_DN_dV : public MathOperatorRHS<dim,CELL> {
   public:
     NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& p, 
                                  const char* oper,          
@@ -28,11 +30,13 @@ class NumIntegral_DNT_rhsop_DN_dV : public MathOperatorRHS<dim> {
     NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& p, 
                                  const char* integral_multiplier,
                                  const char* oper,          
-                                 const char* test );       
+                                 const char* test );
+                                 
+    virtual ~NumIntegral_DNT_rhsop_DN_dV() {}
     
-    virtual void GetOperands( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
 
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
     void IgnoreOperand( bool ignore );
     virtual NumIntegral_DNT_rhsop_DN_dV<dim,CELL>* clone() const

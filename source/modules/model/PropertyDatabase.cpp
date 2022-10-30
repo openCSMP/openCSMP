@@ -8,6 +8,7 @@
 #include "TensorVariable.h"
 #include "ArrayVariable.h"
 #include <sstream>
+#include <chrono>
 
 using namespace std;
 
@@ -15,10 +16,10 @@ namespace csmp {
 
 
 #define PHYSVARS_BFILE "CSMP_variables.dat"
-#define MEMBERS 10 // entries in one line of property description
+#define MEMBERS 10 // maximum entries in one line of property description
 
 
-/** initializes from text variables file
+/** Initializes variables database from text variables file
  */
 template<uint32_t dim>
 PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName )
@@ -33,8 +34,11 @@ PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName )
     Initialize(variablesFileName);
  }
 
+
 /**
-      Reader of binary variables file which also permits restriction to a subset of variables
+      Reader of binary variables file which also permits restriction to a subset of variables.
+      
+      @attention if the variablesFileName is empty, the variables file name is initialised to 'EmptyVariablesFile.'
 */
 template<uint32_t dim>
 PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, const set<string>& subset_variables )
@@ -49,6 +53,7 @@ PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, const se
     if ( !BinaryIn( variablesFileName, subset_variables ) )
       throw csmp::Exception( ERROR, "PropertyDatabase", "Not able to load from binary file" );
  }
+
 
 
 /// default constructor: all variable counters are set to zero
@@ -115,7 +120,7 @@ void PropertyDatabase<dim>::Initialize( const char* variables_file )
 
 
 template<uint32_t dim>
-void PropertyDatabase<dim>::InitializeVariableTypeCount( std::map<VARIABLE_TYPE,size_t>& typeCount )
+void PropertyDatabase<dim>::InitializeVariableTypeCount( std::map<VARIABLE_TYPE,uint32_t>& typeCount )
   {
     set<VARIABLE_TYPE> types;
     variableTypeSet(types);
@@ -177,14 +182,14 @@ std::map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::End() co
 
 
 template<uint32_t dim>
-std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator PropertyDatabase<dim>::VariableCountEnd() const
+std::map<PLACEMENT,std::map<VARIABLE_TYPE,uint32_t> >::const_iterator PropertyDatabase<dim>::VariableCountEnd() const
   {
     return variableCount_.end();
   }
 
 
 template<uint32_t dim>
-std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator PropertyDatabase<dim>::VariableCountBegin() const
+std::map<PLACEMENT,std::map<VARIABLE_TYPE,uint32_t> >::const_iterator PropertyDatabase<dim>::VariableCountBegin() const
   {
     return variableCount_.begin();
   }
@@ -242,23 +247,24 @@ Returns the csmp::Index.index of the target physical variable.
 @param s The name of the physical variable whose index shall be determined.
 
 @return The variable index which defines the number of the corresponding property
-vector inside of the MemoryManager. 
+vector inside of the MemoryManager.  If undefined, numeric_limits<uint32_t>::max() is returned.
 
 @section messages Messages
 
 If the variable is not defined, an error will be reported. 
 */
 template<uint32_t dim>
-size_t PropertyDatabase<dim>::Index( const char* s ) const 
+uint32_t PropertyDatabase<dim>::Index( const char* s ) const
   {
      auto iter(propList_.find(std::string(s)));
      
      if ( iter != propList_.end() ) 
        return (*iter).second.key.index;
      else 
-       std::cout <<"\nPropertyDatabase::Index: Unable to identify index of: " << s << std::endl;
+       std::cerr <<"\nPropertyDatabase::Index: Unable to identify index of: " << s << std::endl;
 
-     return ULONG_MAX;  
+     return numeric_limits<uint32_t>::max(); // ULONG_MAX
+     
   } // end Index 
 
 
@@ -311,7 +317,7 @@ FlaggedArray:   variable (as defined in the variables file)
 If the variable is not defined, an error will be reported. 
 */
 template<uint32_t dim>
-size_t  PropertyDatabase<dim>::Components( const char* s ) const 
+uint32_t  PropertyDatabase<dim>::Components( const char* s ) const
   {
      auto iter(propList_.find(std::string(s)));
      
@@ -411,7 +417,7 @@ const char*  PropertyDatabase<dim>::Usage( const char* s ) const
 
  There is a special implementation here since we don't want to store the IndexTracker association with the Parameter Index objects.
  We write to binary following the below outline:
- -# Number of parameters (size_t)
+ -# Number of parameters (uint32_t)
  -# Each parameter
   - Name (char)
   - csmp::Parameter
@@ -427,16 +433,16 @@ const char*  PropertyDatabase<dim>::Usage( const char* s ) const
 template<uint32_t dim>
 bool PropertyDatabase<dim>::BinaryOut( fstream& fp ) const
   {
-  size_t parameterCount( propList_.size() );
-  fp.write( (char*) &parameterCount, sizeof(size_t) );
+    size_t parameterCount( propList_.size() );
+    fp.write( (char*) &parameterCount, sizeof(size_t) );
 
-  for( auto& prop : propList_ )
-    {
-      binaryFileWrite( fp, prop.first.c_str() );
-      prop.second.Out(fp);
-    }
+    for( auto& prop : propList_ )
+      {
+        binaryFileWrite( fp, prop.first.c_str() );
+        prop.second.Out(fp);
+      }
 
-    return true; /// @todo (1-C) Meaningless return statement
+      return true; /// @todo (1-C) Meaningless return statement
   }
 
 
@@ -476,7 +482,7 @@ bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>& subset_var
   fp.read( (char*) &parameterCount, sizeof(size_t) );
 
   char buf[255];
-  for( size_t i(0); i < parameterCount; ++i )
+  for( auto i{0U}; i < parameterCount; ++i )
   {
     binaryFileRead( fp, buf );
     string parameterName(buf);
@@ -866,7 +872,7 @@ csmp::Index  PropertyDatabase<dim>::AddProperty()
          VARIABLE_TYPE vType = (*propList_.find(new_prop)).second.key.type;
 
          /// Roman,2013: Added explicit way of reading the size of variable provided by user input in function added_prop.DefineFromStdin()
-         size_t size = (*propList_.find(new_prop)).second.key.dataDepth;
+         uint32_t size = (*propList_.find(new_prop)).second.key.dataDepth;
          //EstablishVariableTypeDependentProperties( static_cast<int>(vType), added_prop.key );
          EstablishVariableTypeDependentProperties( static_cast<int>(vType), size, added_prop.key );
          EstablishPlacementDependentProperties( added_prop.key.place, added_prop.key );
@@ -919,11 +925,11 @@ database.
 @return The Index reflecting the new state ov LocalVariables and IntegrationPointVariables, including added property.
 */
 template<uint32_t dim>
-csmp::Index PropertyDatabase<dim>::AddProperty( const char *property_name, const char *unit,
-                                                VARIABLE_TYPE vtype, PLACEMENT vplace, size_t vsize,
+csmp::Index PropertyDatabase<dim>::AddProperty( const char *property_name, const char* notation, const char *unit,
+                                                VARIABLE_TYPE vtype, PLACEMENT vplace, uint32_t vsize,
                                                 double vmin, double vmax, string usage )
 {
-    return AddProperty( property_name, unit, VariableCount( vplace, vtype) , vtype, vplace, vsize, vmin, vmax, usage );
+    return AddProperty( property_name, notation, unit, VariableCount( vplace, vtype) , vtype, vplace, vsize, vmin, vmax, usage );
 }
 
 
@@ -933,7 +939,7 @@ Adds a new physical variable at runtime to the property database. The
 new variable is temporary in the sense that it will not be added to the
 binary variable database file. 
 
-@warning Any runtime change in variables invalidates existing Index objects! The need to be refreshed.
+@warning Any runtime change in variables invalidates existing Index objects! They need to be refreshed.
 
 @section arguments Input Arguments
 
@@ -969,55 +975,67 @@ database.
 
 */
 template<uint32_t dim>
-csmp::Index  PropertyDatabase<dim>::AddProperty( const char* s, const char* unit, size_t index,
-                                                 VARIABLE_TYPE vtype, PLACEMENT place, size_t vsize,
+csmp::Index  PropertyDatabase<dim>::AddProperty( const char* name, const char* notation, const char* unit, uint32_t index,
+                                                 VARIABLE_TYPE vtype, PLACEMENT place, uint32_t vsize,
                                                  double vmin, double vmax, string usage )
  {
-    auto iter(propList_.find(string(s)));
+    auto iter(propList_.find(string(name)));
 
+    // checking for uniqueness of name
     if ( iter != propList_.end() ) {
-         cout <<"\nWARNING, PropertyDatabase<dim>::AddProperty: '"<< s <<"' already exists. Nothing was done."<< endl;
+         ErrorHandler::Instance().Note( WARNING, "PropertyDatabase<dim>::AddProperty:",
+                                        name, "property already exists. Nothing was done.");
          (*iter).second.Out();
-         return StorageKey(s);
-      }
-    else {
-         csmp::Parameter  added_prop;
-         assert( s != NULL );
-         added_prop.name = s;
-         // first two letters of variable name is used as notation
-         // (this is safe when the string is valid because it has at least one char plus terminating
-         //  null character)
-         string notation; 
-         for ( int i=0; i<2; i++ ) notation += s[i]; 
-         added_prop.notation  = notation;
-         added_prop.key.place = place;
-         added_prop.key.type  = vtype;
-         added_prop.key.index = index;  
-         added_prop.unit      = unit;
-         added_prop.min       = vmin;
-         added_prop.max       = vmax;
-         added_prop.usage =usage;
-         added_prop.reference ="not specified";
-         added_prop.explanation ="new property defined at runtime";
-         if (this->Verbose()) cout <<"\nINFO, PropertyDatabase<dim>::AddProperty adding new property: '"<< s <<"'\n";
-
-         /// Roman,2013: Added explicit way of reading the size of variable
-         EstablishVariableTypeDependentProperties( static_cast<int>(vtype), vsize, added_prop.key );
-         EstablishPlacementDependentProperties(  added_prop.key.place, added_prop.key );
-
-         propList_[ added_prop.name ] = added_prop;
-
-         // update indices and binary database
-         UpdateParametersAndDatabase();
-
-         // update existing index references
-         UpdateIndexReferences();
+         return StorageKey(name);
       }
 
-    // returning the up-to-date storage key for the newly created variable
-    return StorageKey(s);
+    // checking for uniqueness of notation
+    {
+      set<string>  variable_abbreviations;
+      for ( const auto& it : propList_ ) variable_abbreviations.insert( it.second.notation );
+      if ( variable_abbreviations.size() < propList_.size() )
+           ErrorHandler::Instance().Note( WARNING, "PropertyDatabase<dim>::AddProperty:",
+                                         "notation of stored variables in not unique");
+                                         
+      if ( variable_abbreviations.find(notation) != variable_abbreviations.end() ) {
+           ErrorHandler::Instance().Note( WARNING, "PropertyDatabase<dim>::AddProperty:",
+                                          notation, "notation for new variable is not unique; aborting operation");
+           (*iter).second.Out();
+           return csmp::Index();
+        }
+    }
+   csmp::Parameter  added_prop;
+   assert( strlen(name) > 0 );
+   added_prop.name      = name;
+   assert( strlen(notation) > 0 );
+   added_prop.notation  = notation;
+   added_prop.key.place = place;
+   added_prop.key.type  = vtype;
+   added_prop.key.index = index;
+   added_prop.unit      = unit;
+   added_prop.min       = vmin;
+   added_prop.max       = vmax;
+   added_prop.usage =usage;
+   added_prop.reference ="not specified";
+   added_prop.explanation ="new property defined at runtime";
+   if (this->Verbose()) cout <<"\nINFO, PropertyDatabase<dim>::AddProperty adding new property: '"<< name <<"'\n";
 
- } // end AddProperty
+   /// Roman,2013: Added explicit way of reading the size of variable
+   EstablishVariableTypeDependentProperties( static_cast<int>(vtype), vsize, added_prop.key );
+   EstablishPlacementDependentProperties(  added_prop.key.place, added_prop.key );
+
+   propList_[ added_prop.name ] = added_prop;
+
+   // update indices and binary database
+   UpdateParametersAndDatabase();
+
+   // update existing index references
+   UpdateIndexReferences();
+
+  // returning the up-to-date storage key for the newly created variable
+  return StorageKey(name);
+
+} // end AddProperty
 
 
 /** Deletes the target property from the property database.
@@ -1063,6 +1081,8 @@ void PropertyDatabase<dim>::DeleteProperty( const char* s )
  } // end DeleteProperty
 
 
+
+
 /** Creates a list of Index class objects corresponding to the current
 set of physical variables stored in the property database.
 
@@ -1089,7 +1109,7 @@ erased before the new physical variable data are entered.
 
 */
 template<uint32_t dim>
-void PropertyDatabase<dim>::ListProperties( map<string,csmp::Index>& props ) const
+void PropertyDatabase<dim>::ListVariables( map<string,csmp::Index>& props ) const
  {
     props.erase( props.begin(), props.end() );
 
@@ -1099,22 +1119,22 @@ void PropertyDatabase<dim>::ListProperties( map<string,csmp::Index>& props ) con
 
 /// enlists properties with a specific placement
 template<uint32_t dim>
-size_t PropertyDatabase<dim>::ListProperties( PLACEMENT pl, map<string,csmp::Index>& props ) const
+uint32_t PropertyDatabase<dim>::ListVariables( PLACEMENT pl, map<string,csmp::Index>& props ) const
  {
     props.clear();
 
     for ( auto& prop : propList_ )
       {
-      csmp::Index key = StorageKey( prop.second.name.c_str() );
-      if( key.place == pl )
-        props[ prop.second.name ] = key;
+        csmp::Index key = StorageKey( prop.second.name.c_str() );
+        if( key.place == pl )
+          props[ prop.second.name ] = key;
       }
-    return props.size();
+    return static_cast<uint32_t>(props.size());
  }
 
 /// reports properties with the target placement as a set
 template<uint32_t dim>
-size_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, set<string>& props ) const
+uint32_t PropertyDatabase<dim>::ListVariables( PLACEMENT place, set<string>& props ) const
  {
     props.clear();
 
@@ -1122,12 +1142,12 @@ size_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, set<string>& prop
       if ( prop.second.key.place == place )
         props.insert( prop.second.name );
 
-    return props.size();
+    return static_cast<uint32_t>(props.size());
  }
 
 /// reports properties with a specific placement and type as a set
 template<uint32_t dim>
-size_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, VARIABLE_TYPE vtype, set<string>& props ) const
+uint32_t PropertyDatabase<dim>::ListVariables( PLACEMENT place, VARIABLE_TYPE vtype, set<string>& props ) const
   {
   props.clear();
 
@@ -1135,7 +1155,7 @@ size_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, VARIABLE_TYPE vty
     if ( prop.second.key.place == place && prop.second.key.type == vtype )
       props.insert( prop.second.name );
  
-      return props.size();
+      return static_cast<uint32_t>(props.size());
  }
 
 
@@ -1436,7 +1456,7 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const ArrayVariable& var 
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(array)", "property could not be identified");
     double ary_min(var[0]), ary_max(var[0]);
-    for ( size_t i=1U; i<var.Size(); ++i ) {
+    for ( uint32_t i=1U; i<var.Size(); ++i ) {
         if ( isnan(var[i]) ) return false;
         ary_min = min( ary_min, var[i] );
         ary_max = max( ary_max, var[i] );
@@ -1460,7 +1480,7 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const FlaggedArrayVariabl
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(flagged array)", "property could not be identified");
     double ary_min(var[0]), ary_max(var[0]);
-    for ( size_t i=1U; i<var.Size(); ++i ) {
+    for ( uint32_t i=1U; i<var.Size(); ++i ) {
         if ( isnan(var[i]) ) return false;
         ary_min = min( ary_min, var[i] );
         ary_max = max( ary_max, var[i] );
@@ -1522,8 +1542,8 @@ void PropertyDatabase<dim>::Out() const
      cout <<"total number of stored properties: "<< VariableCount() << endl;
      if ( VariableCount() > 0 ) {
           cout <<"detailed variable counts:\n";
-          for( map<PLACEMENT,map<VARIABLE_TYPE,size_t> >::const_iterator it( VariableCountBegin() ); it != VariableCountEnd(); ++it )
-           for( map<VARIABLE_TYPE,size_t>::const_iterator iit( it->second.begin() ); iit != it->second.end(); ++iit )
+          for( map<PLACEMENT,map<VARIABLE_TYPE,uint32_t> >::const_iterator it( VariableCountBegin() ); it != VariableCountEnd(); ++it )
+           for( map<VARIABLE_TYPE,uint32_t>::const_iterator iit( it->second.begin() ); iit != it->second.end(); ++iit )
              if ( VariableCount( it->first, iit->first ) > 0 )
                cout <<"\t"<< parseType(iit->first) << " variables on " << parsePlacement(it->first) << ": "  << VariableCount( it->first, iit->first ) << endl;
 
@@ -1568,12 +1588,105 @@ bool PropertyDatabase<dim>::WriteVariablesFile( const char* fileName ) const
   }
 
 
+
+
+/**
+   Writes templatized INDEX variable definitions of the current variables  into header file and instantiates their keys.
+   If the variable set name is empty, the variables are inserted into the global namespace.
+*/
+template<uint32_t dim>
+void PropertyDatabase<dim>::WriteVariableSetToHeaderFile( const char* header_file, const char* variable_set_name ) const
+ {
+    ErrorHandler& csmp_error{ ErrorHandler::Instance() };
+ 
+    ofstream ofs( header_file );
+    if ( !ofs.is_open() ) {
+         csmp_error.Note( ERROR, "PropertyDatabase<dim>::WriteVariableSetToHeaderFile",
+                          header_file, "input file could not be opened");
+         return;
+      }
+
+    // 1. writing the file header and time when this file was created
+    // --------------------------------------------------------------
+    time_t now_time = chrono::system_clock::to_time_t(chrono::system_clock::now());
+
+    if ( !variable_set_name )
+      ofs <<"\\"<< header_file <<": written by PropertyDatabase<dim>::WriteVariableSetToHeaderFile: "<< ctime(&now_time) <<"\n";
+    else {
+         ofs <<"\\"<< header_file <<": variable set: "<< variable_set_name;
+         ofs <<"written by PropertyDatabase<dim>::WriteVariableSetToHeaderFile: " << ctime(&now_time) <<"\n";
+      }
+    ofs << endl;
+      
+    // 2. Instantiating the variables, either globally or locally, creating names from their notation which must be unique
+    // -------------------------------------------------------------------------------------------------------------------
+    if ( variable_set_name ) {
+         ofs <<"struct "<< variable_set_name <<" {";
+      }
+    // testing whether notation is unique
+    size_t      n_variables{ propList_.size() };
+    set<string> unique_variable_identifiers;
+    for ( const auto& it : propList_ )
+      unique_variable_identifiers.insert( it.second.notation );
+        
+    if ( unique_variable_identifiers.size() < n_variables ) {
+         csmp_error.Note( ERROR, "PropertyDatabase<dim>::WriteVariableSetToHeaderFile",
+                          header_file, "contained variable notation is non unique; keys could not be created");
+         return;
+      }
+
+    // writing the variable keys
+    for ( const auto& it : propList_ ) {
+         ofs <<"csmp::INDEX<"<< parseType(it.second.key.type) <<","<< parsePlacement(it.second.key.place);
+         ofs <<"> key_"<< it.second.notation <<"; \\ '"<< it.first << endl;
+      }
+
+
+    // 3. Providing a function or method to register the variables with the PropertyDatabase
+    // -------------------------------------------------------------------------------------
+    // function
+    if ( !variable_set_name ) {
+         ofs <<"\n"<<"template<uint32_t dim>"<< endl;
+         ofs <<"void registerGlobalVariableINDEX_KeysWithPropertyDatabase( PropertyDatabase<dim>& db ) {"<< endl;
+         ofs <<"double vmin, vmax;"<< endl;
+         ofs <<"for ( const auto& it : propList_ ) {"<< endl;
+         ofs <<"     it.second.Range( vmin, vmax );"<< endl;
+         ofs <<"     db.AddProperty( it.first.c_str(), /* it.second.notation */ it.second.unit,"<< endl;
+         ofs <<"                     it.second.key.type, it.second.key.place, it.second.key.dataDepth, vmin, vmax );"<< endl;
+         ofs <<"  }"<< endl << endl;
+         ofs <<"}"<< endl;
+      }
+    // member constructor of the variable set that registers it with the PropertyDatabase
+    ofs <<"\n"<<"template<uint32_t dim>"<< endl;
+    ofs <<"explicit "<< variable_set_name <<"( const PropertyDatabase<dim>& db )\n :"<< endl;
+    // instantiating the variable keys
+    for ( const auto& it : propList_ ) {
+         ofs <<" key_"<< it.second.notation;
+         ofs <<"( INDEX<"<< parseType(it.second.key.type) <<","<< parsePlacement(it.second.key.place) <<">( ";
+         ofs <<"db.StorageKey\""<< it.first <<"\") ))"<< endl;
+      }
+   // finishing the in-class definition of the constructor
+   ofs <<"  {"<< endl <<"  }"<< endl;
+
+    // end of struct definition
+    if ( variable_set_name ) {
+         ofs <<"\n };"<< endl;
+      }
+
+ } // end WriteVariableSetToHeaderFile
+
+
+
+
+
+
+
 /// Clears arrayLengths and inserts depth of ARRAY variables for place in order of index
 template<uint32_t dim>
 void PropertyDatabase<dim>::ArrayLengths( PLACEMENT place, std::vector<uint32_t>& arrayLengths ) const
   {
     arrayLengths.clear();
-    map<size_t,size_t> offsetIndexMap;
+    map<uint32_t,uint32_t> offsetIndexMap;
     for ( auto& prop : propList_ )
       if ( prop.second.key.type  == ARRAY && prop.second.key.place == place  )
         offsetIndexMap[prop.second.key.index] = prop.second.key.dataDepth;
@@ -1583,12 +1696,12 @@ void PropertyDatabase<dim>::ArrayLengths( PLACEMENT place, std::vector<uint32_t>
 
 
 template<uint32_t dim>
-size_t PropertyDatabase<dim>::ArrayLengthTotal( PLACEMENT place ) const
+uint32_t PropertyDatabase<dim>::ArrayLengthTotal( PLACEMENT place ) const
   {
     vector<uint32_t> lengths;
     ArrayLengths( place, lengths );
-    size_t totalLength(0);
-    for( size_t i(0); i < lengths.size(); ++i )
+    uint32_t totalLength(0);
+    for( uint32_t i(0); i < lengths.size(); ++i )
       totalLength += lengths[i];
     return totalLength;
   }
@@ -1598,7 +1711,7 @@ template<uint32_t dim>
 void PropertyDatabase<dim>::FlaggedArrayLengths( PLACEMENT place, std::vector<uint32_t>& arrayLengths ) const
   {
     arrayLengths.clear();
-    map<size_t,size_t> offsetIndexMap;
+    map<uint32_t,uint32_t> offsetIndexMap;
     for ( auto& prop : propList_ )
       if ( prop.second.key.type  == FLAGGEDARRAY && prop.second.key.place == place  )
         offsetIndexMap[prop.second.key.index] = prop.second.key.dataDepth;
@@ -1608,12 +1721,12 @@ void PropertyDatabase<dim>::FlaggedArrayLengths( PLACEMENT place, std::vector<ui
 
 
 template<uint32_t dim>
-size_t PropertyDatabase<dim>::FlaggedArrayLengthTotal( PLACEMENT place ) const
+uint32_t PropertyDatabase<dim>::FlaggedArrayLengthTotal( PLACEMENT place ) const
   {
     vector<uint32_t> lengths;
     FlaggedArrayLengths( place, lengths );
-    size_t totalLength(0);
-    for( size_t i(0); i < lengths.size(); ++i )
+    uint32_t totalLength(0);
+    for( uint32_t i(0); i < lengths.size(); ++i )
       totalLength += lengths[i];
     return totalLength;
   }
@@ -1656,7 +1769,7 @@ void PropertyDatabase<dim>::AttachIndices()
 template<uint32_t dim>
 void PropertyDatabase<dim>::UpdateIndexReferences()
   {
-    size_t i(0);
+    uint32_t i(0);
     // update
     for ( auto it(indexTracker_.IndicesBegin()); it != indexTracker_.IndicesEnd(); ++it, ++i )
       if ( IsDefined( it->second.c_str() ) ) {
@@ -1710,7 +1823,7 @@ void PropertyDatabase<dim>::EstablishScalarOffsets( PLACEMENT whithin )
 template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishVectorOffsets( PLACEMENT whithin )
   {
-    const size_t scalars( VariableCount( whithin, SCALAR ) );
+    const uint32_t scalars( VariableCount( whithin, SCALAR ) );
 
     ///  Vectors: data offset = flag offset = scalars at this placement plus index times dim (as many flags as components)
     for( auto& prop : propList_ )
@@ -1722,9 +1835,9 @@ void PropertyDatabase<dim>::EstablishVectorOffsets( PLACEMENT whithin )
 template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishTensorOffsets( PLACEMENT whithin )
   {
-    const size_t scalars( VariableCount( whithin, SCALAR ) );
-    const size_t vectors( VariableCount( whithin, VECTOR ) );
-    const size_t offsetToTensors( scalars + vectors*dim );
+    const uint32_t scalars( VariableCount( whithin, SCALAR ) );
+    const uint32_t vectors( VariableCount( whithin, VECTOR ) );
+    const uint32_t offsetToTensors( scalars + vectors*dim );
 
     ///  Tensors: data offset != flag offset (as many flags as dim)
     for( auto& prop : propList_ )
@@ -1739,20 +1852,20 @@ void PropertyDatabase<dim>::EstablishTensorOffsets( PLACEMENT whithin )
 template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishArrayOffsets( PLACEMENT whithin )
   {
-    const size_t scalars( VariableCount( whithin, SCALAR ) );
-    const size_t vectors( VariableCount( whithin, VECTOR ) );
-    const size_t tensors( VariableCount( whithin, TENSOR ) );
-    const size_t offsetToArrayData( scalars + vectors*dim + tensors*dim*dim );
-    const size_t offsetToArrayFlag( scalars + vectors*vectorFlags + tensors*tensorFlags );
+    const uint32_t scalars( VariableCount( whithin, SCALAR ) );
+    const uint32_t vectors( VariableCount( whithin, VECTOR ) );
+    const uint32_t tensors( VariableCount( whithin, TENSOR ) );
+    const uint32_t offsetToArrayData( scalars + vectors*dim + tensors*dim*dim );
+    const uint32_t offsetToArrayFlag( scalars + vectors*vectorFlags + tensors*tensorFlags );
 
     // we need to sort first acc to indexes
-    map<size_t,csmp::Parameter*> sortedArrays;
+    map<uint32_t,csmp::Parameter*> sortedArrays;
     for( auto& prop : propList_ )
       if( prop.second.key.place == whithin && prop.second.key.type == ARRAY )
         sortedArrays[prop.second.key.index] = &(prop.second);
 
     // then we calculate the relative offset depending on the order and size of all arrays
-    size_t currentDataOffset(0);
+    uint32_t currentDataOffset(0);
     for( auto& sarr : sortedArrays )
       {
         sarr.second->key.dataOffset = currentDataOffset;
@@ -1771,23 +1884,23 @@ void PropertyDatabase<dim>::EstablishArrayOffsets( PLACEMENT whithin )
 template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishFlaggedArrayOffsets( PLACEMENT whithin )
   {
-    const size_t scalars( VariableCount( whithin, SCALAR ) );
-    const size_t vectors( VariableCount( whithin, VECTOR ) );
-    const size_t tensors( VariableCount( whithin, TENSOR ) );
-    const size_t arrays ( VariableCount( whithin, ARRAY ) );
-    const size_t arraysDepth( ArrayLengthTotal  ( whithin ) );
+    const uint32_t scalars( VariableCount( whithin, SCALAR ) );
+    const uint32_t vectors( VariableCount( whithin, VECTOR ) );
+    const uint32_t tensors( VariableCount( whithin, TENSOR ) );
+    const uint32_t arrays ( VariableCount( whithin, ARRAY ) );
+    const uint32_t arraysDepth( ArrayLengthTotal  ( whithin ) );
 
-    const size_t offsetToFlaggedArrayData( scalars + vectors*dim + tensors*dim*dim + arraysDepth);
-    const size_t offsetToFlaggedArrayFlag( scalars + vectors*vectorFlags + tensors*tensorFlags + arrays );
+    const uint32_t offsetToFlaggedArrayData( scalars + vectors*dim + tensors*dim*dim + arraysDepth);
+    const uint32_t offsetToFlaggedArrayFlag( scalars + vectors*vectorFlags + tensors*tensorFlags + arrays );
 
     // we need to sort first acc to indexes
-    map<size_t,csmp::Parameter*> sortedArrays;
+    map<uint32_t,csmp::Parameter*> sortedArrays;
     for( auto& prop : propList_ )
       if( prop.second.key.place == whithin && prop.second.key.type == FLAGGEDARRAY )
         sortedArrays[prop.second.key.index] = &(prop.second);
 
     // then we calculate the relative offset depending on the order and size of all arrays
-    size_t currentOffset(0);
+    uint32_t currentOffset(0);
     for( auto& sarr : sortedArrays )
       {
         sarr.second->key.dataOffset = currentOffset;
@@ -1907,7 +2020,7 @@ void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( int vtype,
 
 /// Roman, 2013: Added explicit way of establishing type and size of the variable dependent properties
 template<uint32_t dim>
-void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( int vtype, size_t vsize, csmp::Index& key ) const
+void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( int vtype, uint32_t vsize, csmp::Index& key ) const
   {
     if( static_cast<VARIABLE_TYPE>(vtype) == SCALAR )
       {
@@ -1952,9 +2065,9 @@ void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( int vtype,
 template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( std::string vtype, csmp::Index& key ) const
   {
-    std::string vtype_name;
-    size_t      vtype_position;
-    const char* vtype_delims =" 1234567890";
+    std::string   vtype_name;
+    unsigned long vtype_position;
+    const char*   vtype_delims =" 1234567890";
 
     // Transform the name of the type to uppercase representation
     std::transform(vtype.begin(),vtype.end(),vtype.begin(),::toupper);
@@ -2015,15 +2128,15 @@ LocalVariables PropertyDatabase<dim>::LocalVariablesAt( PLACEMENT within ) const
              within == INTER_FACE_FACET_INTEGRATION_POINT )
       return LocalVariablesAt(INTER_FACE);
 
-    const size_t scalars( VariableCount( within, SCALAR ) );
-    const size_t vectors( VariableCount( within, VECTOR ) );
-    const size_t tensors( VariableCount( within, TENSOR) );
-    const size_t arrayDepth( ArrayLengthTotal(within) );
-    const size_t arrays( VariableCount( within, ARRAY ) );
-    const size_t flaggedArrayDepth  ( FlaggedArrayLengthTotal(within) );
-    const size_t flaggedArrays      ( VariableCount( within, FLAGGEDARRAY ) );
-    const size_t dataDepth( scalars + vectors*dim + tensors*dim*dim + arrayDepth + flaggedArrayDepth );
-    const size_t flagDepth( scalars + vectors*vectorFlags + tensors*tensorFlags + arrays + flaggedArrayDepth);
+    const uint32_t scalars( VariableCount( within, SCALAR ) );
+    const uint32_t vectors( VariableCount( within, VECTOR ) );
+    const uint32_t tensors( VariableCount( within, TENSOR) );
+    const uint32_t arrayDepth( ArrayLengthTotal(within) );
+    const uint32_t arrays( VariableCount( within, ARRAY ) );
+    const uint32_t flaggedArrayDepth  ( FlaggedArrayLengthTotal(within) );
+    const uint32_t flaggedArrays      ( VariableCount( within, FLAGGEDARRAY ) );
+    const uint32_t dataDepth( scalars + vectors*dim + tensors*dim*dim + arrayDepth + flaggedArrayDepth );
+    const uint32_t flagDepth( scalars + vectors*vectorFlags + tensors*tensorFlags + arrays + flaggedArrayDepth);
     return LocalVariables( scalars, vectors, tensors, arrays, arrayDepth, flaggedArrays, flaggedArrayDepth, dataDepth, flagDepth );
   }
 
@@ -2046,18 +2159,18 @@ IntegrationPointVariables PropertyDatabase<dim>::IntegrationPointVariablesAt( PL
 template<uint32_t dim>
 IntegrationPointVariables PropertyDatabase<dim>::ElementIntegrationPointVariables() const
   {
-    size_t scalarsSI(0), vectorsSI(0), tensorsSI(0), arrayCountSI(0), arrayLengthSI(0),flaggedArrayCountSI(0),flaggedArrayLengthSI(0);
+    uint32_t scalarsSI(0), vectorsSI(0), tensorsSI(0), arrayCountSI(0), arrayLengthSI(0),flaggedArrayCountSI(0),flaggedArrayLengthSI(0);
     VariableCount( ELEMENT_INTEGRATION_POINT, scalarsSI, vectorsSI, tensorsSI, arrayCountSI, arrayLengthSI, flaggedArrayCountSI, flaggedArrayLengthSI );
-    const size_t totalDataDepthSI( scalarsSI + vectorsSI*dim + tensorsSI*dim*dim + arrayLengthSI + flaggedArrayLengthSI );
-    const size_t totalFlagDepthSI( scalarsSI + vectorsSI*vectorFlags + tensorsSI*tensorFlags + arrayCountSI + flaggedArrayLengthSI );
-    size_t scalarsSE(0), vectorsSE(0), tensorsSE(0), arrayCountSE(0), arrayLengthSE(0),flaggedArrayCountSE(0),flaggedArrayLengthSE(0);
+    const uint32_t totalDataDepthSI( scalarsSI + vectorsSI*dim + tensorsSI*dim*dim + arrayLengthSI + flaggedArrayLengthSI );
+    const uint32_t totalFlagDepthSI( scalarsSI + vectorsSI*vectorFlags + tensorsSI*tensorFlags + arrayCountSI + flaggedArrayLengthSI );
+    uint32_t scalarsSE(0), vectorsSE(0), tensorsSE(0), arrayCountSE(0), arrayLengthSE(0),flaggedArrayCountSE(0),flaggedArrayLengthSE(0);
     VariableCount( SECTOR_INTEGRATION_POINT, scalarsSE, vectorsSE, tensorsSE, arrayCountSE, arrayLengthSE, flaggedArrayCountSE, flaggedArrayLengthSE );
-    const size_t totalDataDepthSE( scalarsSE + vectorsSE*dim + tensorsSE*dim*dim + arrayLengthSE + flaggedArrayLengthSE);
-    const size_t totalFlagDepthSE( scalarsSE + vectorsSE*vectorFlags + tensorsSE*tensorFlags + arrayCountSE + flaggedArrayLengthSE );
-    size_t scalarsFA(0), vectorsFA(0), tensorsFA(0), arrayCountFA(0), arrayLengthFA(0),flaggedArrayCountFA(0),flaggedArrayLengthFA(0);
+    const uint32_t totalDataDepthSE( scalarsSE + vectorsSE*dim + tensorsSE*dim*dim + arrayLengthSE + flaggedArrayLengthSE);
+    const uint32_t totalFlagDepthSE( scalarsSE + vectorsSE*vectorFlags + tensorsSE*tensorFlags + arrayCountSE + flaggedArrayLengthSE );
+    uint32_t scalarsFA(0), vectorsFA(0), tensorsFA(0), arrayCountFA(0), arrayLengthFA(0),flaggedArrayCountFA(0),flaggedArrayLengthFA(0);
     VariableCount( FACET_INTEGRATION_POINT, scalarsFA, vectorsFA, tensorsFA, arrayCountFA, arrayLengthFA, flaggedArrayCountFA, flaggedArrayLengthFA );
-    const size_t totalDataDepthFA( scalarsFA + vectorsFA*dim + tensorsFA*dim*dim + arrayLengthFA + flaggedArrayLengthFA );
-    const size_t totalFlagDepthFA( scalarsFA + vectorsFA*vectorFlags + tensorsFA*tensorFlags + arrayCountFA + flaggedArrayLengthFA );
+    const uint32_t totalDataDepthFA( scalarsFA + vectorsFA*dim + tensorsFA*dim*dim + arrayLengthFA + flaggedArrayLengthFA );
+    const uint32_t totalFlagDepthFA( scalarsFA + vectorsFA*vectorFlags + tensorsFA*tensorFlags + arrayCountFA + flaggedArrayLengthFA );
     
     return IntegrationPointVariables( scalarsSI, vectorsSI, tensorsSI, arrayCountSI, arrayLengthSI, flaggedArrayCountSI, flaggedArrayLengthSI,
                                       totalDataDepthSI, totalFlagDepthSI,
@@ -2071,18 +2184,18 @@ IntegrationPointVariables PropertyDatabase<dim>::ElementIntegrationPointVariable
 template<uint32_t dim>
 IntegrationPointVariables PropertyDatabase<dim>::FaceIntegrationPointVariables() const
   {
-    size_t scalarsSI(0), vectorsSI(0), tensorsSI(0), arrayCountSI(0), arrayLengthSI(0),flaggedArrayCountSI(0),flaggedArrayLengthSI(0);
+    uint32_t scalarsSI(0), vectorsSI(0), tensorsSI(0), arrayCountSI(0), arrayLengthSI(0),flaggedArrayCountSI(0),flaggedArrayLengthSI(0);
     VariableCount( FACE_INTEGRATION_POINT, scalarsSI, vectorsSI, tensorsSI, arrayCountSI, arrayLengthSI, flaggedArrayCountSI, flaggedArrayLengthSI );
-    const size_t totalDataDepthSI( scalarsSI + vectorsSI*dim + tensorsSI*dim*dim + arrayLengthSI + flaggedArrayLengthSI );
-    const size_t totalFlagDepthSI( scalarsSI + vectorsSI*vectorFlags + tensorsSI*tensorFlags + arrayCountSI + flaggedArrayLengthSI );
-    size_t scalarsSE(0), vectorsSE(0), tensorsSE(0), arrayCountSE(0), arrayLengthSE(0),flaggedArrayCountSE(0),flaggedArrayLengthSE(0);
+    const uint32_t totalDataDepthSI( scalarsSI + vectorsSI*dim + tensorsSI*dim*dim + arrayLengthSI + flaggedArrayLengthSI );
+    const uint32_t totalFlagDepthSI( scalarsSI + vectorsSI*vectorFlags + tensorsSI*tensorFlags + arrayCountSI + flaggedArrayLengthSI );
+    uint32_t scalarsSE(0), vectorsSE(0), tensorsSE(0), arrayCountSE(0), arrayLengthSE(0),flaggedArrayCountSE(0),flaggedArrayLengthSE(0);
     VariableCount( FACE_SECTOR_INTEGRATION_POINT, scalarsSE, vectorsSE, tensorsSE, arrayCountSE, arrayLengthSE, flaggedArrayCountSE, flaggedArrayLengthSE );
-    const size_t totalDataDepthSE( scalarsSE + vectorsSE*dim + tensorsSE*dim*dim + arrayLengthSE + flaggedArrayLengthSE);
-    const size_t totalFlagDepthSE( scalarsSE + vectorsSE*vectorFlags + tensorsSE*tensorFlags + arrayCountSE + flaggedArrayLengthSE);
-    size_t scalarsFA(0), vectorsFA(0), tensorsFA(0), arrayCountFA(0), arrayLengthFA(0),flaggedArrayCountFA(0),flaggedArrayLengthFA(0);
+    const uint32_t totalDataDepthSE( scalarsSE + vectorsSE*dim + tensorsSE*dim*dim + arrayLengthSE + flaggedArrayLengthSE);
+    const uint32_t totalFlagDepthSE( scalarsSE + vectorsSE*vectorFlags + tensorsSE*tensorFlags + arrayCountSE + flaggedArrayLengthSE);
+    uint32_t scalarsFA(0), vectorsFA(0), tensorsFA(0), arrayCountFA(0), arrayLengthFA(0),flaggedArrayCountFA(0),flaggedArrayLengthFA(0);
     VariableCount( FACE_FACET_INTEGRATION_POINT, scalarsFA, vectorsFA, tensorsFA, arrayCountFA, arrayLengthFA, flaggedArrayCountFA, flaggedArrayLengthFA );
-    const size_t totalDataDepthFA( scalarsFA + vectorsFA*dim + tensorsFA*dim*dim + arrayLengthFA + flaggedArrayLengthFA );
-    const size_t totalFlagDepthFA( scalarsFA + vectorsFA*vectorFlags + tensorsFA*tensorFlags + arrayCountFA + flaggedArrayLengthFA );
+    const uint32_t totalDataDepthFA( scalarsFA + vectorsFA*dim + tensorsFA*dim*dim + arrayLengthFA + flaggedArrayLengthFA );
+    const uint32_t totalFlagDepthFA( scalarsFA + vectorsFA*vectorFlags + tensorsFA*tensorFlags + arrayCountFA + flaggedArrayLengthFA );
 
     return IntegrationPointVariables( scalarsSI, vectorsSI, tensorsSI, arrayCountSI, arrayLengthSI, flaggedArrayCountSI, flaggedArrayLengthSI,
                                       totalDataDepthSI, totalFlagDepthSI,
@@ -2095,18 +2208,18 @@ IntegrationPointVariables PropertyDatabase<dim>::FaceIntegrationPointVariables()
 template<uint32_t dim>
 IntegrationPointVariables PropertyDatabase<dim>::InterFaceIntegrationPointVariables() const
   {
-    size_t scalarsSI(0), vectorsSI(0), tensorsSI(0), arrayCountSI(0), arrayLengthSI(0),flaggedArrayCountSI(0),flaggedArrayLengthSI(0);
+    uint32_t scalarsSI(0), vectorsSI(0), tensorsSI(0), arrayCountSI(0), arrayLengthSI(0),flaggedArrayCountSI(0),flaggedArrayLengthSI(0);
     VariableCount( INTER_FACE_INTEGRATION_POINT, scalarsSI, vectorsSI, tensorsSI, arrayCountSI, arrayLengthSI, flaggedArrayCountSI, flaggedArrayLengthSI );
-    const size_t totalDataDepthSI( scalarsSI + vectorsSI*dim + tensorsSI*dim*dim + arrayLengthSI +flaggedArrayLengthSI );
-    const size_t totalFlagDepthSI( scalarsSI + vectorsSI*vectorFlags + tensorsSI*tensorFlags + arrayCountSI + flaggedArrayLengthSI );
-    size_t scalarsSE(0), vectorsSE(0), tensorsSE(0), arrayCountSE(0), arrayLengthSE(0),flaggedArrayCountSE(0),flaggedArrayLengthSE(0);
+    const uint32_t totalDataDepthSI( scalarsSI + vectorsSI*dim + tensorsSI*dim*dim + arrayLengthSI +flaggedArrayLengthSI );
+    const uint32_t totalFlagDepthSI( scalarsSI + vectorsSI*vectorFlags + tensorsSI*tensorFlags + arrayCountSI + flaggedArrayLengthSI );
+    uint32_t scalarsSE(0), vectorsSE(0), tensorsSE(0), arrayCountSE(0), arrayLengthSE(0),flaggedArrayCountSE(0),flaggedArrayLengthSE(0);
     VariableCount( INTER_FACE_SECTOR_INTEGRATION_POINT, scalarsSE, vectorsSE, tensorsSE, arrayCountSE, arrayLengthSE, flaggedArrayCountSE, flaggedArrayLengthSE );
-    const size_t totalDataDepthSE( scalarsSE + vectorsSE*dim + tensorsSE*dim*dim + arrayLengthSE + flaggedArrayLengthSE);
-    const size_t totalFlagDepthSE( scalarsSE + vectorsSE*vectorFlags + tensorsSE*tensorFlags + arrayCountSE + flaggedArrayLengthSE );
-    size_t scalarsFA(0), vectorsFA(0), tensorsFA(0), arrayCountFA(0), arrayLengthFA(0),flaggedArrayCountFA(0),flaggedArrayLengthFA(0);
+    const uint32_t totalDataDepthSE( scalarsSE + vectorsSE*dim + tensorsSE*dim*dim + arrayLengthSE + flaggedArrayLengthSE);
+    const uint32_t totalFlagDepthSE( scalarsSE + vectorsSE*vectorFlags + tensorsSE*tensorFlags + arrayCountSE + flaggedArrayLengthSE );
+    uint32_t scalarsFA(0), vectorsFA(0), tensorsFA(0), arrayCountFA(0), arrayLengthFA(0),flaggedArrayCountFA(0),flaggedArrayLengthFA(0);
     VariableCount( INTER_FACE_FACET_INTEGRATION_POINT, scalarsFA, vectorsFA, tensorsFA, arrayCountFA, arrayLengthFA, flaggedArrayCountFA, flaggedArrayLengthFA );
-    const size_t totalDataDepthFA( scalarsFA + vectorsFA*dim + tensorsFA*dim*dim + arrayLengthFA + flaggedArrayLengthFA );
-    const size_t totalFlagDepthFA( scalarsFA + vectorsFA*vectorFlags + tensorsFA*tensorFlags + arrayCountFA + flaggedArrayLengthFA );
+    const uint32_t totalDataDepthFA( scalarsFA + vectorsFA*dim + tensorsFA*dim*dim + arrayLengthFA + flaggedArrayLengthFA );
+    const uint32_t totalFlagDepthFA( scalarsFA + vectorsFA*vectorFlags + tensorsFA*tensorFlags + arrayCountFA + flaggedArrayLengthFA );
 
     return IntegrationPointVariables( scalarsSI, vectorsSI, tensorsSI, arrayCountSI, arrayLengthSI, flaggedArrayCountSI, flaggedArrayLengthSI,
                                       totalDataDepthSI, totalFlagDepthSI,
@@ -2118,76 +2231,77 @@ IntegrationPointVariables PropertyDatabase<dim>::InterFaceIntegrationPointVariab
 
 
 template<uint32_t dim>
-void PropertyDatabase<dim>::VariableCount( PLACEMENT within, size_t& scalars, size_t& vectors, size_t& tensors, size_t& arrayCount, size_t& arrayLength, size_t& flaggedArrayCount, size_t& flaggedArrayLength ) const
+void PropertyDatabase<dim>::VariableCount( PLACEMENT within, uint32_t& scalars, uint32_t& vectors, uint32_t& tensors,
+                                           uint32_t& arrayCount, uint32_t& arrayLength,
+                                           uint32_t& flaggedArrayCount, uint32_t& flaggedArrayLength ) const
   {
     scalars             = VariableCount     ( within, SCALAR );
     vectors             = VariableCount     ( within, VECTOR );
     tensors             = VariableCount     ( within, TENSOR );
-
     arrayCount          = VariableCount     ( within, ARRAY  );
     arrayLength         = ArrayLengthTotal  ( within );
     flaggedArrayCount   = VariableCount     ( within, FLAGGEDARRAY  );
     flaggedArrayLength  = FlaggedArrayLengthTotal   ( within );
-
   }
 
+
+
 template<uint32_t dim>
-size_t PropertyDatabase<dim>::VariableCount() const
+uint32_t PropertyDatabase<dim>::VariableCount() const
   {
-    size_t variableCount(0);
-    for( map<PLACEMENT,map<VARIABLE_TYPE,size_t> >::const_iterator it( variableCount_.begin() ); 
-      it != variableCount_.end(); ++it )
-      for( map<VARIABLE_TYPE,size_t>::const_iterator iit( it->second.begin() );  iit != it->second.end(); ++iit )
+    uint32_t variableCount(0);
+    for( auto it( variableCount_.begin() );  it != variableCount_.end(); ++it )
+      for( auto iit( it->second.begin() );  iit != it->second.end(); ++iit )
         variableCount += iit->second;
+        
     return variableCount;
   }
 
+
+
 template<uint32_t dim>
-size_t PropertyDatabase<dim>::VariableCount( PLACEMENT variablePlacement, VARIABLE_TYPE variableType ) const
+uint32_t PropertyDatabase<dim>::VariableCount( PLACEMENT variablePlacement, VARIABLE_TYPE variableType ) const
   {
-    size_t variableCount(0);
-    for( map<PLACEMENT,map<VARIABLE_TYPE,size_t> >::const_iterator it( variableCount_.begin() ); 
-      it != variableCount_.end(); ++it )
+    uint32_t variableCount(0);
+    for( auto it( variableCount_.begin() );  it != variableCount_.end(); ++it )
       if( it->first == variablePlacement )
-        for( map<VARIABLE_TYPE,size_t>::const_iterator iit( it->second.begin() ); 
-             iit != it->second.end(); ++iit )
+        for( auto iit( it->second.begin() ); iit != it->second.end(); ++iit )
           if( iit->first == variableType )
-          variableCount += iit->second;
+            variableCount += iit->second;
+            
     return variableCount;
   }
 
 
 template<uint32_t dim>
-size_t PropertyDatabase<dim>::VariableCount( VARIABLE_TYPE variableType ) const
+uint32_t PropertyDatabase<dim>::VariableCount( VARIABLE_TYPE variableType ) const
   {
-    size_t variableCount(0);
-    for( map<PLACEMENT,map<VARIABLE_TYPE,size_t> >::const_iterator it( variableCount_.begin() ); 
-         it != variableCount_.end(); ++it )
-         for( map<VARIABLE_TYPE,size_t>::const_iterator iit( it->second.begin() ); 
-              iit != it->second.end(); ++iit )
+    uint32_t variableCount(0);
+    for( auto it( variableCount_.begin() ); it != variableCount_.end(); ++it )
+         for( auto iit( it->second.begin() ); iit != it->second.end(); ++iit )
            if( iit->first == variableType )
              variableCount += iit->second;
+             
     return variableCount;
   }
 
 
 template<uint32_t dim>
-size_t PropertyDatabase<dim>::VariableCount( PLACEMENT variablePlacement ) const
+uint32_t PropertyDatabase<dim>::VariableCount( PLACEMENT variablePlacement ) const
   {
-    size_t variableCount(0);
-    for( map<PLACEMENT,map<VARIABLE_TYPE,size_t> >::const_iterator it( variableCount_.begin() ); 
-         it != variableCount_.end(); ++it )
+    uint32_t variableCount(0);
+    for( auto it( variableCount_.begin() ); it != variableCount_.end(); ++it )
       if( it->first == variablePlacement )
-        for( map<VARIABLE_TYPE,size_t>::const_iterator iit( it->second.begin() ); 
-             iit != it->second.end(); ++iit )
+        for( auto iit( it->second.begin() ); iit != it->second.end(); ++iit )
           variableCount += iit->second;
+          
     return variableCount;
   }
 
 
 /// Clears propertyPlacements and inserts all PLACEMENT for all propertyNames
 template<uint32_t dim>
-void PropertyDatabase<dim>::ListProperties( const set<string>& propertyNames, set<PLACEMENT>& propertyPlacments ) const
+void PropertyDatabase<dim>::ListVariables( const set<string>& propertyNames, set<PLACEMENT>& propertyPlacments ) const
 {
   propertyPlacments.clear();
   for( set<string>::const_iterator it( propertyNames.begin() ); it != propertyNames.end(); ++it )
@@ -2199,11 +2313,33 @@ void PropertyDatabase<dim>::ListProperties( const set<string>& propertyNames, se
 
 
 
-
-
 template class PropertyDatabase<1U>;
 template class PropertyDatabase<2U>;
 template class PropertyDatabase<3U>;
+
+
+// non-member functions
+
+/// counts variables in PropertyDatabase that are placed on finite volumes
+template<uint32_t dim>
+uint32_t finiteVolumeVariables( const PropertyDatabase<dim>& database )
+ {
+    uint32_t FV_variables = database.VariableCount( SECTOR_INTEGRATION_POINT );
+    FV_variables    += database.VariableCount( FACET_INTEGRATION_POINT );
+                      
+    FV_variables    += database.VariableCount( FACE_SECTOR_INTEGRATION_POINT );
+    FV_variables    += database.VariableCount( FACE_FACET_INTEGRATION_POINT );
+
+    FV_variables    += database.VariableCount( INTER_FACE_SECTOR_INTEGRATION_POINT );
+    FV_variables    += database.VariableCount( INTER_FACE_FACET_INTEGRATION_POINT );
+
+    return FV_variables;
+ }
+
+template uint32_t finiteVolumeVariables( const PropertyDatabase<3>& );
+template uint32_t finiteVolumeVariables( const PropertyDatabase<2>& );
+template uint32_t finiteVolumeVariables( const PropertyDatabase<1>& );
+
 
 } // end namespace csmp
 

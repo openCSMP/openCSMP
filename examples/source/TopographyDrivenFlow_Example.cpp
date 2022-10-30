@@ -6,9 +6,10 @@
 #include "CSMP_highLevelUtilities.h"
 
 #include "TRIANGLE_Interface.h"
-#include "Integral_NT_op_N_dV.h"
-#include "Integral_dNT_op_dN_dV.h"
-#include "Integral_NT_op_dNi_dV.h"
+#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_op_dNi_dV.h"
+#include "LinearSolver.h"
 
 #include "PropertyHandle.h"
 
@@ -33,7 +34,7 @@ void TopographyDrivenFlow_Example::Specifications()
   SetCategory( "Simulation of Physical Processes" );
   AddAuthor( "SKM" );
   AddDescription( "Topography-driven flow in a cross-sectional model for a steady-state fluid pressure distribution" );
-  AddDescription( "source in: TopographyDrivenFlow_Example.cpp" );
+  AddDescription( "source in: TopographyDrivenFlow_Example.cpp, example16.txt(variable file)" );
   AddRequirement( "file set: 'topo.1'");
 }
 
@@ -51,6 +52,7 @@ void TopographyDrivenFlow_Example::Run()
        which is offsetting an aquifer horizon.
 
   *********************************************************************** */
+    /*
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
 
@@ -65,6 +67,25 @@ void TopographyDrivenFlow_Example::Run()
     cin >> file_name;
     mesh_interface.ReadTriangle2DMesh( file_name, mesh_container );
     Model<2U>  model( mesh_container, "example16.txt" );
+    */
+
+    // ------------------------------------------------------------
+    // 0. Load CSMP native format model
+    // ------------------------------------------------------------
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'topo.1':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "topo.1";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "example16.txt";
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<2U>  model(model_name, variable_file);
+
     printModelDimensions( model, true );
 
   // ---------------------------------------------------------------
@@ -92,20 +113,20 @@ void TopographyDrivenFlow_Example::Run()
   // -----------------------------------------------------------------------------
   // 3. compute absolute fluid pressure taking into account topography
   // -----------------------------------------------------------------------------
-#ifdef CSMP_WITH_SAMG_SOLVER
+#ifdef USE_SAMG_SOLVER
     SAMG_Solver  samg_solver;
-    PDE_Integrator<2U,Region>  steady_state_pressure(samg_solver);
+    PDE_Integrator<2U,Element>  steady_state_pressure(samg_solver);
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-    PDE_Integrator<2U,Region>  steady_state_pressure(linear_solver);
+    EigenSolver  linear_solver;
+    PDE_Integrator<2U,Element>  steady_state_pressure(linear_solver);
 #endif
 
     // conductance matrix [K] on the lefthand side
-    Integral_dNT_op_dN_dV<2U,Element<2U> >    conductance( model.Database(), "conductivity", "absolute fluid pressure",  "absolute fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<2U>    conductance( model.Database(), "conductivity", "absolute fluid pressure",  "absolute fluid pressure" );
     // source vector {Q} on the righthand side
-    Integral_NT_op_N_dV<2U,Element<2U> >      source( model.Database(),  "fluid volume source", "absolute fluid pressure" );
+    NumIntegral_NT_op_N_dV<2U>      source( model.Database(),  "fluid volume source", "absolute fluid pressure" );
     // gravity term on righthand side
-    Integral_NT_op_dNi_dV<2U,Element<2U> >    gravity( model.Database(),  "fluid density",  "conductivity", "absolute fluid pressure" );
+    NumIntegral_NT_op_dNi_dV<2U>    gravity( model.Database(),  "fluid density",  "conductivity", "absolute fluid pressure" );
 
     // add PDE_Operators to the FE Algorithm
     steady_state_pressure.Add( &conductance );
@@ -159,6 +180,8 @@ void TopographyDrivenFlow_Example::Run()
     vtk_output.OutputDataToVTK( model, "nodal-velocity", "nodal velocity", 1 );
 
     cout <<"\nmain: That's it..."<< endl;
+
+    fs::current_path("../../example_inputs/");
 
 } // Run()
 

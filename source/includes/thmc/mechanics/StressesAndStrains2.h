@@ -22,7 +22,7 @@ template<uint32_t> class Model;
     @note the strain and stress component vectors are normalised to 1.
 */
 template<>
-class StressesAndStrains<2U> : public MathOperatorLHS<2U> {
+class StressesAndStrains<2U> : public MathOperatorLHS<2U,Element> {
   public:
     StressesAndStrains( const Model<2U> & sg, 
                         const char* oper,   ///< Young's modulus

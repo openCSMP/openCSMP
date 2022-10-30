@@ -8,23 +8,22 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
-                                                              const char* diffusivity,
-                                                              const char* diffusing_variable,
-                                                              const char* storage_variable,
-                                                              const char* element_source_variable )
-  
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+TransientDiffusor<dim,CELLTYPE>::TransientDiffusor( Model<dim>& sg,
+                                                    const char* diffusivity,
+                                                    const char* diffusing_variable,
+                                                    const char* storage_variable,
+                                                    const char* element_source_variable )
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), element_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), element_source_variable, diffusing_variable) ),
    capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
    capacitance_rhs_( sg.Database(), storage_variable, diffusing_variable ),
    nodal_source_(0),
@@ -32,6 +31,15 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
    grad_multiplier_(1.),
    dep_var_name_(diffusing_variable)
  {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
    	if ( !isoparametricElementMesh( sg ) )
 		  throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
 		                                     "elements are not isoparametric; use other Algorithm" ); 
@@ -84,8 +92,8 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+TransientDiffusor<dim,CELLTYPE>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* diffusivity,
                                                                             const char* diffusing_variable,
                                                                             const char* storage_variable,
@@ -95,20 +103,29 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), element_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), element_source_variable, diffusing_variable) ),
    capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
    capacitance_rhs_( sg.Database(), storage_variable, diffusing_variable ),
-   nodal_source_(new PointSource_rhsop<dim,ComputationCell>(sg.Database(), point_source_variable, diffusing_variable) ),
+   nodal_source_(new PointSource_rhsop<dim,CELLTYPE>(sg.Database(), point_source_variable, diffusing_variable) ),
    gravity_(0),
    grad_multiplier_(1.),
    dep_var_name_(diffusing_variable)
  {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
     if ( !isoparametricElementMesh( sg ) )
           throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):",
                                              "elements are not isoparametric; use other Algorithm" );
@@ -165,8 +182,8 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+TransientDiffusor<dim,CELLTYPE>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* lhs_diffusivity,
                                                                             const char* rhs_diffusivity,
                                                                             const char* diffusing_variable,
@@ -177,20 +194,29 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
    capacitance_rhs_( sg.Database(), storage_variable, diffusing_variable ),
-   nodal_source_(new PointSource_rhsop<dim,ComputationCell>(sg.Database(), point_source_variable, diffusing_variable) ),
+   nodal_source_(new PointSource_rhsop<dim,CELLTYPE>(sg.Database(), point_source_variable, diffusing_variable) ),
    gravity_(0),
    grad_multiplier_(1.),
    dep_var_name_(diffusing_variable)
  {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
     if ( !isoparametricElementMesh( sg ) )
           throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):",
                                               "elements are not isoparametric; use other Algorithm" );
@@ -251,31 +277,43 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 } // end constructor
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
-                                                              const char* diffusivity,
-                                                              const char* diffusing_variable,
-                                                              const char* storage_variable,
-                                                              const char* spatial_source_variable,
-                                                              const char* gradient_variable,
-                                                              double gradient_multiplier )
- :
+
+
+
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+TransientDiffusor<dim,CELLTYPE>::TransientDiffusor( Model<dim>& sg,
+                                                    const char* diffusivity,
+                                                    const char* diffusing_variable,
+                                                    const char* storage_variable,
+                                                    const char* spatial_source_variable,
+                                                    const char* gradient_variable,
+                                                    double gradient_multiplier )
+:
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
    capacitance_rhs_( sg.Database(), storage_variable, diffusing_variable ),
    nodal_source_(0),
-   gravity_(new NumIntegral_dNT_op_dV<dim,ComputationCell>(sg.Database(), gradient_variable, diffusing_variable) ),
+   gravity_(new NumIntegral_dNT_op_dV<dim,CELLTYPE>(sg.Database(), gradient_variable, diffusing_variable) ),
    grad_multiplier_(gradient_multiplier),
    dep_var_name_(diffusing_variable)
  {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
     if ( !isoparametricElementMesh( sg ) )
           throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):",
                                               "elements are not isoparametric; use other Algorithm" );
@@ -335,33 +373,41 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 // TODO: fix: rhs_diffusivity is never used
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
-                                                                            const char* lhs_diffusivity,
-                                                                            const char* rhs_diffusivity,
-                                                                            const char* diffusing_variable,
-                                                                            const char* storage_variable,
-                                                                            const char* spatial_source_variable,
-                                                                            const char* gradient_variable, 
-                                                                            double gradient_multiplier )
-                                     
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+TransientDiffusor<dim,CELLTYPE>::TransientDiffusor( Model<dim>& sg,
+                                                    const char* lhs_diffusivity,
+                                                    const char* rhs_diffusivity,
+                                                    const char* diffusing_variable,
+                                                    const char* storage_variable,
+                                                    const char* spatial_source_variable,
+                                                    const char* gradient_variable,
+                                                    double gradient_multiplier )
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
    capacitance_rhs_( sg.Database(), storage_variable, diffusing_variable ),
    nodal_source_(0),
-   gravity_(new NumIntegral_dNT_op_dV<dim,ComputationCell>(sg.Database(), gradient_variable, diffusing_variable) ),
+   gravity_(new NumIntegral_dNT_op_dV<dim,CELLTYPE>(sg.Database(), gradient_variable, diffusing_variable) ),
    grad_multiplier_(gradient_multiplier),
    dep_var_name_(diffusing_variable)
  {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
     if ( !isoparametricElementMesh( sg ) )
           throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):",
                                               "elements are not isoparametric; use other Algorithm" );
@@ -426,35 +472,44 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 
+
 // TODO: fix: rhs_diffusivity is never used
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
-                                                                            const char* lhs_diffusivity,
-                                                                            const char* rhs_diffusivity,
-                                                                            const char* diffusing_variable,
-                                                                            const char* storage_variable,
-                                                                            const char* spatial_source_variable,
-                                                                            const char* point_source_variable,
-                                                                            const char* gradient_variable, 
-                                                                            double gradient_multiplier )
-                                     
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+TransientDiffusor<dim,CELLTYPE>::TransientDiffusor( Model<dim>& sg,
+                                                    const char* lhs_diffusivity,
+                                                    const char* rhs_diffusivity,
+                                                    const char* diffusing_variable,
+                                                    const char* storage_variable,
+                                                    const char* spatial_source_variable,
+                                                    const char* point_source_variable,
+                                                    const char* gradient_variable,
+                                                    double gradient_multiplier )
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
    capacitance_rhs_( sg.Database(), storage_variable, diffusing_variable ),
-   nodal_source_(new PointSource_rhsop<dim,ComputationCell>(sg.Database(), point_source_variable, diffusing_variable) ),
-   gravity_(new NumIntegral_dNT_op_dV<dim,ComputationCell>(sg.Database(), gradient_variable, diffusing_variable) ),
+   nodal_source_(new PointSource_rhsop<dim,CELLTYPE>(sg.Database(), point_source_variable, diffusing_variable) ),
+   gravity_(new NumIntegral_dNT_op_dV<dim,CELLTYPE>(sg.Database(), gradient_variable, diffusing_variable) ),
    grad_multiplier_(gradient_multiplier),
    dep_var_name_(diffusing_variable)
  {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "TransientDiffusor: template template parameter must be Element or Face");
+
     if ( !isoparametricElementMesh( sg ) )
           throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):",
                                               "elements are not isoparametric; use other Algorithm" );
@@ -524,8 +579,10 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-TransientDiffusor<dim,COMPUTATION_DOMAIN>::~TransientDiffusor()
+
+
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+TransientDiffusor<dim,CELLTYPE>::~TransientDiffusor()
  {
     delete source_;
     delete nodal_source_;
@@ -536,11 +593,8 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::~TransientDiffusor()
 
 
 
-
-
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void TransientDiffusor<dim,COMPUTATION_DOMAIN>::ComputeTransientStateFullyImplicit(
-                                                                          Model<dim>& model,
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void TransientDiffusor<dim,CELLTYPE>::ComputeTransientStateFullyImplicit( Model<dim>& model,
                                                                           double time_increment,
                                                                           bool verbose )
  {
@@ -558,8 +612,8 @@ void TransientDiffusor<dim,COMPUTATION_DOMAIN>::ComputeTransientStateFullyImplic
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void TransientDiffusor<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void TransientDiffusor<dim,CELLTYPE>::AdjustSolverSettings()
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
     // basic solver settings for hybrid element meshes
@@ -574,20 +628,20 @@ void TransientDiffusor<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
 
 
 #ifdef CSMP_WITH_SAMG_SOLVER
-    template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-    SAMG_Settings& TransientDiffusor<dim,COMPUTATION_DOMAIN>::GetSolverSettings()
+    template<uint32_t dim,template<uint32_t> class CELLTYPE>
+    SAMG_Settings& TransientDiffusor<dim,CELLTYPE>::GetSolverSettings()
      { return settings_; }
 #else
     /// add extra functionality for alternative solver if needed
 #endif
 
 
-template class TransientDiffusor<1U,Region>;
-template class TransientDiffusor<2U,Region>;
-template class TransientDiffusor<3U,Region>;
+template class TransientDiffusor<1U>;
+template class TransientDiffusor<2U>;
+template class TransientDiffusor<3U>;
 
-template class TransientDiffusor<1U,Boundary>;
-template class TransientDiffusor<2U,Boundary>;
-template class TransientDiffusor<3U,Boundary>;
+template class TransientDiffusor<1U,Face>;
+template class TransientDiffusor<2U,Face>;
+template class TransientDiffusor<3U,Face>;
 
 } // end csmp

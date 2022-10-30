@@ -14,6 +14,7 @@
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
+#include "LinearSolver.h"
 
 // utilities
 #include "CSMP_definitions.h"
@@ -34,7 +35,7 @@ void QuadraticPressure_parallelPlatePermeability_Example::Specifications()
   AddDescription( "Quadratic finite element interpolation, Dirichlet essential conditions" );
   AddDescription( "Region saved to a binary vset, then a second Region is built from it" );
   AddDescription( "source in: QuadraticPressure_parallelPlatePermeability_Example.cpp" );
-  AddRequirement( "file set: 'veins_20k.1'");
+  AddRequirement( "file set: 'veins_20k.1', variable file (example2.txt)");
 }
 
 
@@ -54,6 +55,7 @@ void QuadraticPressure_parallelPlatePermeability_Example::Specifications()
 */
 void QuadraticPressure_parallelPlatePermeability_Example::Run()
 {
+    /*
      // 1. Reader for Shewchuk's 'Triangle' FE meshes
     //     et up the converter that converts the linear input triangles to
     //     quadratic (6 nodes) traingular finite elements
@@ -72,7 +74,25 @@ void QuadraticPressure_parallelPlatePermeability_Example::Run()
     // -------------------------------------------------------------------
     Model<2U>  model( mesh_container, "example2.txt" );
     mesh_container.Erase();
-  
+    */
+
+    // ------------------------------------------------------------
+    // 1. Load CSMP native format model
+    // ------------------------------------------------------------
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'veins_20k.1':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "veins_20k.1";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "example2.txt";
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<2U>  model(model_name, variable_file);
+
 
     // 3. Input of material properties and initial conditions
     // (the permeability is read in from the 'Triangle' input files)
@@ -128,25 +148,25 @@ void QuadraticPressure_parallelPlatePermeability_Example::Run()
     //    fluid fluxes (by setting the boolean variable in the constructor of the post-
     //    processor to true, the element velocities are averaged to the nodes)
     // --------------------------------------------------------------------------------------
-#ifdef CSMP_WITH_SAMG_SOLVER
+#ifdef USE_SAMG_SOLVER
     SAMG_Settings  settings; // all settings according to Klaus
     settings.Set_ncgtyp(5);
     settings.Set_nxtyp(0);
     settings.Set_ndefault(40);
     SAMG_Solver  samg_solver(&settings);
 
-    PDE_Integrator<2U,Region>  total_pressure_quadratic(samg_solver);
+    PDE_Integrator<2U,Element>  total_pressure_quadratic(samg_solver);
 #else
     CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-    PDE_Integrator<2U,Region>  total_pressure_quadratic(linear_solver);
+    PDE_Integrator<2U,Element>  total_pressure_quadratic(linear_solver);
 #endif
 
     // conductance matrix [K] on the left-hand side
-    NumIntegral_dNT_op_dN_dV<2U,Element<2U> > conductance( model.Database(),"conductivity","fluid pressure","fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<2U> conductance( model.Database(),"conductivity","fluid pressure","fluid pressure" );
     // source vector {Q} on the right-hand side
-    NumIntegral_NT_op_N_dV<2U,Element<2U> >   source( model.Database(),"fluid volume source","fluid pressure" );
+    NumIntegral_NT_op_N_dV<2U>   source( model.Database(),"fluid volume source","fluid pressure" );
     // post-processing operation to compute flow velocities
-    VelocityAndVolumeFlux<2U,Element<2U> >    velocity( model, "conductivity","porosity","fluid pressure", true );
+    VelocityAndVolumeFlux<2U>    velocity( model, "conductivity","porosity","fluid pressure", true );
 
     // add PDE_Operators to the FE Algorithm
     total_pressure_quadratic.Add( &conductance );
@@ -181,6 +201,8 @@ void QuadraticPressure_parallelPlatePermeability_Example::Run()
     vtk_output.OutputDataToVTK( model, "nvelocity",      "nodal velocity",    0 );
     vtk_output.OutputDataToVTK( model, "volume-flux",    "volume flux",       0 );
     vtk_output.OutputDataToVTK( model, "nvolume-flux",   "nodal volume flux", 0 );
+
+    fs::current_path("../../example_inputs/");
 
 } // end Run
 

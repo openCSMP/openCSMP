@@ -142,7 +142,7 @@ namespace csmp {
     #else
     /// add extra functionality for alternative solver if needed
     #endif
-    PDE_Integrator<dim,Region>* steady_state_pressure_solver_;
+    PDE_Integrator<dim,Element>* steady_state_pressure_solver_;
 
     // Velocity Computations
     void UpdateSaturations(TwoPhaseModel<dim>& saturationFunctions );

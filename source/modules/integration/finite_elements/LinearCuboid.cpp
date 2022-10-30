@@ -202,15 +202,18 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		return 0.0; // To satisfy base function and compiler!
 	}
 
-	/** Standard ordering is un-counter clockwise */
+	// Standard ordering is un-counter clockwise
+ /*
 	void LinearCuboid::CounterClockwiseNodes(std::vector<uint32_t>& ids) const
 	{
 		ids.resize(8);
 		ids[0] = 0; ids[1] = 3; ids[2] = 2; ids[3] = 1;
 		ids[4] = 4; ids[5] = 7; ids[6] = 6; ids[7] = 5;
 	}
+*/
 
-	void LinearCuboid::dN_Partial_At(vector<double>& DN, const vector<double>& xyz, uint32_t partial )
+
+void LinearCuboid::dN_Partial_At(vector<double>& DN, const vector<double>& xyz, uint32_t partial )
 	{
 		const double vol = Volume(), sgn[] = { 1.,-1.,-1.,1.,1.,-1.,-1.,1. };
 		const uint32_t ind[] = { 6,7,4,5,2,3,0,1 };
@@ -224,14 +227,17 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		}	
 	}
 
-	void LinearCuboid::MidSideNodes(std::vector<uint32_t>& ids) const
+
+
+void LinearCuboid::MidSideNodes(std::vector<uint32_t>& ids) const
 	{
 		cerr << "\nIsoparametricLinearCuboid::MidSideNodes WARNING: MidSideNodes not present " << endl;
 		ids[0] = 0;
 	}
 
-	// mide-sigments by averaging of corresponding nodes
-	void LinearCuboid::MidSegmentPoints(DenseMatrix<DM12>& XS)
+
+// mid-sigments by averaging of corresponding nodes
+void LinearCuboid::MidSegmentPoints(DenseMatrix<DM12>& XS)
 	{
 		XS.Resize(12, 3); // 12 npe , 3 coordinates
 		for (auto i = 0; i < 3; ++i) {
@@ -250,8 +256,10 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		}
 	}
 
-	//center of each face by average of mid-sigments
-	void LinearCuboid::CenterOfFacePoints(DenseMatrix<DM12>& XF)
+
+
+//center of each face by average of mid-sigments
+void LinearCuboid::CenterOfFacePoints(DenseMatrix<DM12>& XF)
 	{
 		XF.Resize(6, 3); // 6 number of faces, 3 coordinates
 		for (auto i = 0; i < 3; ++i) {
@@ -265,7 +273,7 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 	}
 
 	/** for cuboid and with standard ordering */
-	void LinearCuboid::EdgeLengths(std::vector<double>& v )
+void LinearCuboid::EdgeLengths(std::vector<double>& v )
 	{
 		const double dx = XY(5, 0) - XY(3, 0);
 		const double dy = XY(5, 1) - XY(3, 1);
@@ -273,7 +281,8 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		v = {dx,dz,dx,dz,dy,dy,dy,dy,dx,dz,dx,dz};
 	}
 
-	void LinearCuboid::CornerNodes(std::vector<uint32_t>& ids) const
+
+void LinearCuboid::CornerNodes(std::vector<uint32_t>& ids) const
 	{
 		ids.resize(8);
 		ids[0] = 0; ids[1] = 1; ids[2] = 2; ids[3] = 3;
@@ -322,19 +331,21 @@ std::vector<uint32_t>  LinearCuboid::NodesConnectedTo( uint32_t node_id ) const
 
 
 
-// TODO: this is different from IsoparamLinHex - check basic conventions
-void LinearCuboid::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
-	{
-		fnids.resize(4);
+
+vector<uint32_t>  LinearCuboid::NodesOfFace( uint32_t face_id ) const
+ {
 		switch (face_id) {
-		case 0: fnids = {0,1,2,3}; break;
-		case 1: fnids = {0,1,4,5}; break;
-		case 2: fnids = {1,2,5,6}; break;
-		case 3: fnids = {2,3,6,7}; break;
-		case 4: fnids = {0,3,4,7}; break;
-		case 5: fnids = {4,5,6,7}; break;
-		}
-	}
+        case 0: return vector<uint32_t>{0,3,2,1};
+        case 1: return vector<uint32_t>{0,1,5,4};
+        case 2: return vector<uint32_t>{1,2,6,5};
+        case 3: return vector<uint32_t>{2,3,7,6};
+        case 4: return vector<uint32_t>{0,4,7,3};
+        case 5: return vector<uint32_t>{4,5,6,7};
+      }
+    cerr <<"\nLinearCuboid::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
+
 
 
 vector<uint32_t>  LinearCuboid::CornerNodesOfFace( uint32_t face_id ) const
@@ -344,7 +355,7 @@ vector<uint32_t>  LinearCuboid::CornerNodesOfFace( uint32_t face_id ) const
         case 1: return vector<uint32_t>{0,1,5,4};
         case 2: return vector<uint32_t>{1,2,6,5};
         case 3: return vector<uint32_t>{2,3,7,6};
-        case 4: return vector<uint32_t>{0,3,7,3};
+        case 4: return vector<uint32_t>{0,4,7,3};
         case 5: return vector<uint32_t>{4,5,6,7};
       }
     cerr <<"\nLinearCuboid::CornerNodesOfFace: face "<< face_id <<" does not exist.";

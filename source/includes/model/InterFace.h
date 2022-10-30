@@ -90,17 +90,16 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
 
     InterFace() = delete;
 
-    /// constructs complete InterFace from Element and supplied outside nodes
+    /// New! SKM 29/7/2022: constructs  InterFace using the nodes and their numbering in the InterFace's higher-dimensional neighbors
     InterFace( csmp::Element<dim>&,
                csmp::Element<dim>* inner_parent,
                csmp::Element<dim>* outer_parent,
                uint32_t adjacent_face_of_inner_element,
                uint32_t adjacent_face_of_outer_element,
                const LocalVariables&  interface_props,
-               const IntegrationPointVariables&  interface_integration_point_props,
-               std::vector<Node<dim>*> outside_nodes );
+               const IntegrationPointVariables&  interface_integration_point_props );
 
-    /// constructs complete InterFace with Face nodes as inside nodes and outside nodes in opposite order as supplied get connected to outside element
+    /// constructs complete InterFace using the Face nodes as inside nodes (in same order) and outside nodes supplied opposite order matching the inside nodes
     InterFace( csmp::Face<dim>*,
                const LocalVariables&  interface_props,
                const IntegrationPointVariables&  interface_integration_point_props,
@@ -188,11 +187,13 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     typename std::vector<csmp::InterFace<dim>*>::const_iterator   NeighborsBegin() const;
     typename std::vector<csmp::InterFace<dim>*>::const_iterator   NeighborsEnd()   const;
 
-    /// access to all nodes connected to the InterFace (inside nodes first)
+    /// access ONLY to the nodes on the Current_Side of the interface (determined by member current_side_)
     csmp::Node<dim>* const N( uint32_t n_local ) const;
     
     /// access the nodes that are connected to either, the inside or the outside of the Face
     csmp::Node<dim>* const N( uint32_t n_local, INTERFACE_SIDE side ) const;
+
+    csmp::Node<dim>* const MatchingN( uint32_t n_local, INTERFACE_SIDE side) const;
 
     /// switches internal state variable that sets interface side
     void            CurrentSide( INTERFACE_SIDE side );
@@ -226,6 +227,9 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
 
     /// is an equi-dimensional element connected to the MIDDLE element pointer of this InterFace
     bool           HasInterveningElement() const { return middleElement_!=nullptr; }
+    
+    /// tests whether the INSIDE nodes match the OUTSIDE nodes w.r.t. their position
+    bool           AreNodesCollocated(double tolerance=std::numeric_limits<double>::epsilon()) const;
   
     /// local number of the face in the inner parent element, which borders against the interface
     void           ParentFaceID( INTERFACE_SIDE, uint32_t idx );
@@ -240,34 +244,36 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// returns area of the interface; MIDDLE case is returned only if there is an intervening element
     double  Area( INTERFACE_SIDE=INSIDE ) const;
     
-    /// unit normals on either side point from INSIDE to OUTSIDE, but have different orientation when nodes are spatially separated 
-    void    UnitNormal( VectorVariable<dim>&, INTERFACE_SIDE side ) const;
+    /// returns the outward-pointing unit normal (from INSIDE to OUTSIDE)  using the middle element (if any) or inside node coordinates to construct face
+    csmp::Point<dim>  UnitNormal( INTERFACE_SIDE side ) const;
   
-    /// returns normal to original side of interface (the one of the surface element from which the InterFace was constructed originally)
-    void    UnitNormal( VectorVariable<dim>& ) const;
-  
-    /// returns normal pointing from inside to outside higher-dimensional Element of InterFace, calculated for bisector plane if intervening element is present
+    /// returns the outward-pointing unit normal (from INSIDE to OUTSIDE)  using the middle element (if any) or bisector node coordinates to construct face
     csmp::Point<dim>  UnitNormal() const;
 
     /// computes distance between corresponding pairs of nodes; @return false if nodes overlap, true if they are separated
-    // TODO: review this functionality / adapt to manifolds
-    bool    NodeSpacing( uint32_t n_local, VectorVariable<dim>& ) const;
+    double NodeSpacing( uint32_t n_local ) const;
 
     /// returns a vector of the property of interest discretized on the node
     template<class Var>
     void    NodePropertyVector( const csmp::Index&, std::vector<Var>&, INTERFACE_SIDE=INSIDE ) const;
 
-    /// inputs node coordinates into supplied matrix; for MIDDLE the nodes of the intervening element are used if this is present
-    void    NodeCoordinateMatrix( DenseMatrix<DM_MIN>&, INTERFACE_SIDE ) const;
+    /// returns a vector of the property of interest discretized on the node
+    template<class Var>
+    void    MatchingNodePropertyVector( const csmp::Index&, std::vector<Var>&, INTERFACE_SIDE ) const;
 
-    /// inputs node coordinates into supplied matrix; treating the Interface like a volumetric element; @note makes  sense only if there is a finite node separation, else degenerate
-    void    NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
 
     /// the centre of gravity of the element (returns the mid-point of the 2-sides if detached)
     Point<dim>  BaryCenter() const;
 
     /// projects node points onto line returning max distance between them; vec direction can have any length
     double  LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
+    
+    /// as needed by FiniteElementPolicy (uses current_side_ to retrieve matrix)
+    void NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
+
+    /// as needed in the accumulation process in pde operators for a specifc side
+    void NodeCoordinateMatrix( DenseMatrix<DM_MIN>&, INTERFACE_SIDE side ) const;
+
 
     // ------------------------------------------------------------------------
     // Screen Output
@@ -276,6 +282,12 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     void Out() const;
     
   protected:
+
+    /// calculates the coordinate matrix from node coordinates representing the average of the inside and outside nodes of the interface
+    void    BisectorCoordinateMatrix() const;
+
+    /// calculates the coordinate matrix from node coordinates representing the average of the inside and outside nodes of the interface
+    void    BisectorCoordinateMatrix(DenseMatrix<DM_MIN>& XY) const;
 
     /// finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface; uses point coordinates that must be matched
     std::pair<uint32_t,uint32_t>  SharedElementFaces();
@@ -303,8 +315,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     uint32_t       inner_parent_face_id_ = UNSPECIFIED; ///< face number of inside higher-dimensional parent element
     uint32_t       outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent element
     // used for compatibility with Element and Face methods (Neighbor etc.)
-    INTERFACE_SIDE current_side_;        ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
-    bool           collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
+    mutable INTERFACE_SIDE current_side_;        ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
 
     friend class InterFace_Test; ///< friend declaration needed for the testing of private methods
 };

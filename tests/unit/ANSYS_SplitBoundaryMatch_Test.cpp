@@ -46,7 +46,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
 */
 bool ANSYS_SplitBoundaryMatch_Test::TestForDiscontiguousModel()
  {
-      ErrorHandler& csmp_error{ ErrorHandler::Instance() };
+      // ErrorHandler& csmp_error{ ErrorHandler::Instance() };
       
       // BINARY IO
       // ---------
@@ -153,7 +153,7 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
         }
       const string variablesFile("ANSYS_SplitBoundaryMatch_Test-variables.txt");
       //                   fileset             regions-file
-      ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), true, true );
+      ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), false, true );
       Region<3U>    model_domain(model.Region("Model"));
       model_domain.UpdateMemberIndexes();
       VTK_Interface<3U>  vtk_output;
@@ -204,7 +204,7 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
     // creating region labels and tagging the regions with unique integer indentifiers
     const string region_tag("region identifier");
     if ( !model.Database().IsDefined(region_tag.c_str()) )
-      model.CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
+      model.CreateProperty( region_tag.c_str(), "rid", "uint", SCALAR, ELEMENT );
     const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
     vector<string>  region_names;
     const size_t model_regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
@@ -254,9 +254,11 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
             // output the split boundary here
             SplitBoundary<3U>& splitBoundary1 = (*model.SplitBoundariesBegin()).second;
             splitBoundary1.Out(); // too many nodes in manifolds!
-            TestThatManifoldNodesAreColocated( splitBoundary1 );
+            TestThatManifoldNodesAreCollocated( splitBoundary1 );
             const csmp::Index var_key = model.Database().StorageKey("nodal variable");
-            PrintSplitBoundaryNodeVariableVector( var_key, splitBoundary1.NodesBegin(), splitBoundary1.NodesEnd(), INSIDE );
+            pair<vector<Node<3U>*>,size_t> inside_nodes  = splitBoundary1.InsideNodes();
+            // pair<vector<Node<3U>*>,size_t> outside_nodes = splitBoundary1.OutsideNodes();
+            PrintSplitBoundaryNodeVariableVector( var_key, inside_nodes.first.begin(), inside_nodes.first.end(), INSIDE );
             set<string> var_names{"nodal variable"};
             // TODO: this method is broken because it expects that 'node_vec' contains all duplicated nodes
             vtu_output.OutputDataToVTU( splitBoundary1.Name(), var_names, splitBoundary1, 0L );
@@ -337,33 +339,35 @@ void ANSYS_SplitBoundaryMatch_Test::PrintSplitBoundaryNodeVariableVector( const 
 
 
 
-void ANSYS_SplitBoundaryMatch_Test::TestThatManifoldNodesAreColocated( const SplitBoundary<3U>& split_boundary )
+void ANSYS_SplitBoundaryMatch_Test::TestThatManifoldNodesAreCollocated( const SplitBoundary<3U>& split_boundary )
  {
     // getting the coordinate range for scaling
     Point<3U> minCoord{1e9,1e9,1e9}, maxCoord{-1e9,-1e9,-1e9};
-    for ( size_t i{0U}; i<split_boundary.Nodes(); i++ )
-      {
-         Point<3U> ref_point = split_boundary.N(i)->Coordinate();
-         minCoord = min( minCoord, ref_point );
-         maxCoord = max( maxCoord, ref_point );
-      }
+    for ( const auto& nit : split_boundary.NodeManifolds() )
+      for ( auto i{0U}; i<nit->Branches(); i++ )
+        {
+           Point<3U> ref_point = nit->N(i)->Coordinate();
+           minCoord = min( minCoord, ref_point );
+           maxCoord = max( maxCoord, ref_point );
+        }
     const double scale_factor = minCoord.DistanceTo( maxCoord );
 
-    for ( size_t i{0U}; i<split_boundary.Nodes(); i++ )
-      {
-         // adding all manifold points and then dividing by their number before comparing to inside node location
-         Point<3U> ref_point = split_boundary.N(i)->Coordinate();
-         minCoord = min( minCoord, ref_point );
-         Point<3U> avg_point{0.,0.,0.};
-         for ( auto j{0U}; j<split_boundary.ManifoldNode(i)->Branches(); j++ )
-           avg_point += split_boundary.ManifoldNode(i)->N(j)->Coordinate();
-         // averaging
-         avg_point /= static_cast<double>(split_boundary.ManifoldNode(i)->Branches());
-         // testing
-         if ( ref_point.DistanceTo(avg_point) > numeric_limits<double>::epsilon()*scale_factor )
-           cout <<"\nnode "<< split_boundary.N(i)->Idx() <<": offset by: "<< ref_point.DistanceTo(avg_point) << endl;
-         _test( ref_point.DistanceTo(avg_point) <= numeric_limits<double>::epsilon()*scale_factor );
-      }
+    for ( const auto& nit : split_boundary.NodeManifolds() )
+      for ( auto i{0U}; i<nit->Branches(); i++ )
+        {
+           // adding all manifold points and then dividing by their number before comparing to inside node location
+           Point<3U> ref_point = nit->N(i)->Coordinate();
+           minCoord = min( minCoord, ref_point );
+           Point<3U> avg_point{0.,0.,0.};
+           for ( auto j{0U}; j<nit->Branches(); j++ )
+             avg_point += nit->N(j)->Coordinate();
+           // averaging
+           avg_point /= static_cast<double>(nit->Branches());
+           // testing
+           if ( ref_point.DistanceTo(avg_point) > numeric_limits<double>::epsilon()*scale_factor )
+             cout <<"\nnode "<< nit->N(i)->Idx() <<": offset by: "<< ref_point.DistanceTo(avg_point) << endl;
+           _test( ref_point.DistanceTo(avg_point) <= numeric_limits<double>::epsilon()*scale_factor );
+        }
       
  } // end TestThatManifoldNodesAreColocated
 

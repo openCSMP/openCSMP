@@ -46,8 +46,8 @@ void PDE_Integrator_Test::TestAssembly()
     
     // 1. setting up PDE_Integrator for simple case with a single scalar variable
     // --------------------------------------------------------------------------
-    GaussJordan_Solver        solver;
-    PDE_Integrator<2U,Region> pde_integrator(solver);
+    GaussJordan_Solver         solver;
+    PDE_Integrator<2U,Element> pde_integrator(solver);
 
     // Create pde-operators
     LHS_FixedValueMatrix<2U>  lhs( model.Database(), "permeability", "fluid pressure", "fluid pressure", 1. );

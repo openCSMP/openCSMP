@@ -1,15 +1,16 @@
 #ifndef Upwind_Integral_dNT_rhsop_dN_dV_h
 #define Upwind_Integral_dNT_rhsop_dN_dV_h
 
-#include "CSMP_definitions.h"
 #include "MathOperatorRHS.h"
 
 namespace csmp {
 
-template<uint32_t dim,class CELL=Element<dim> >
-class Upwind_Integral_dNT_rhsop_dN_dV : public MathOperatorRHS<dim> {
+template<uint32_t> class Element;
+
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class Upwind_Integral_dNT_rhsop_dN_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    Upwind_Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& p,
+    Upwind_Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>&,
                                      const char* oper, 
                                      const char* basic,
                                      const char* test,
@@ -17,8 +18,8 @@ class Upwind_Integral_dNT_rhsop_dN_dV : public MathOperatorRHS<dim> {
                                      const char* trigger,
                                      const double prefactor = 1. );
     
-    virtual void GetOperands( const CELL& );
-    virtual void ComputeContribution( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
+    virtual void ComputeContribution( const CELL<dim>& );
   
   private:
     DenseMatrix<DM_MIN>  DN, DNT;

@@ -358,7 +358,7 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
    else {
         // for the elements that have data, these are extrapolated to the nodes
         const string target_variable_node = target_variable + " node";
-        model.CreateProperty( target_variable_node.c_str(), "extrapolated", SCALAR, NODE );
+        model.CreateProperty( target_variable_node.c_str(), "tvnd", "extrapolated", SCALAR, NODE );
         const csmp::Index prop_key_node = model.Database().StorageKey( target_variable_node.c_str() );
         // assigning Dirichlet constraints to the nearest nodes
         for ( size_t elmt{0U}; elmt < cells_with_points_.size(); ++elmt )
@@ -373,7 +373,7 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
 #else
         GaussJordan_Solver solver;
 #endif
-        PDE_Integrator<2,Region>      extrapolator( solver );
+        PDE_Integrator<2,Element>     extrapolator( solver );
         NumIntegral_dNT_dN_dV<2>      lhs( model.Database(), target_variable_node.c_str(), target_variable_node.c_str() );
         NumIntegral_SetRHS_to_Zero<2> rhs( model.Database(), target_variable_node.c_str() );
         extrapolator.Add( &lhs );

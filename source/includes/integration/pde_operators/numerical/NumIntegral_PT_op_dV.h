@@ -5,15 +5,19 @@
 
 namespace csmp {
 
-/// vector solution variable: integration of 'body forces', e.g., action of gravity
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_PT_op_dV : public MathOperatorRHS<dim> {
+template<uint32_t> class Element;
+
+/** vector solution variable: integration of 'body forces', e.g., action of gravity
+ */
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_PT_op_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_PT_op_dV( const PropertyDatabase<dim>& pref, const char* oper, const char* test );
+    NumIntegral_PT_op_dV( const PropertyDatabase<dim>&, const char* oper, const char* test );
+    virtual ~NumIntegral_PT_op_dV() {}
     
-    virtual void GetOperands( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
  
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
     virtual NumIntegral_PT_op_dV<dim,CELL>* clone() const { return new NumIntegral_PT_op_dV<dim,CELL> (*this); }
   private:

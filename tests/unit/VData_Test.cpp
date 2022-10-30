@@ -24,7 +24,6 @@ using namespace std;
 namespace csmp {
 
   
-  
 /** TESTING DATA MEMBERS
 
     std::vector<double>             px, py, pz; (1)
@@ -211,7 +210,7 @@ void VData_Test::run()
   vdata2.Plist( 0, 2, 3 );
   _test( vdata2.CheckFix() );
   vdata2.Plist( 0, 0 , 9999 );
-  vdata2.AddBFlag( 1, 100 );
+  vdata2.BFlag( 1, 100 );
   _test( !( vdata2.CheckFix() ) );
 
   // .)ORPHANS
@@ -308,13 +307,40 @@ void VData_Test::run()
   
   // TESTING ADVANCED FUNCTIONALITY
   // ==============================
+  TestBinaryIO();
+  
   Test_CreateConsistentLineElementOrientations2D();
   
   // SKM tests of VData mesh-fix functions
   // TODO:  TestReplacementOfCornerTetrahedra();
 
+// extra tests (stand-alone functions etc.)
+  Test_InitialiseNodeTopologyIdentifiers();
+
 } // run
   
+
+
+/* test read-write complete VSet, including boundaries and interfaces
+*/
+void VData_Test::TestBinaryIO()
+ {
+    VSet<2U> vset1, vset2;
+    ModelTopology topo = test_Create_BoundarySplitBoundaryPatch( vset1 );
+    fstream fp( "VData_complete_model", ios::out | ios::binary );
+    vset1.OutBinary( fp );
+    fp.close();
+    fp.open( "VData_complete_model", std::ios::in | std::ios::binary);
+    vset2.InBinary( fp );
+    
+    _test( vset1 == vset2 );
+
+} // end TestBinaryIO
+
+ 
+ 
+
+
 
 
 
@@ -396,6 +422,53 @@ void VData_Test::Test_CreateConsistentLineElementOrientations2D()
     _test( vset2.Plist( 28, 1) == 21 );
     
  } // end Test_CreateConsistentLineElementOrientations2D
+
+
+
+
+
+void VData_Test::Test_InitialiseNodeTopologyIdentifiers()
+ {
+    // 1. Testing a VSet<2> that contains Faces and Interfaces already
+    // ---------------------------------------------------------------
+    {
+      VSet<2U> vset1, vset2;
+      ModelTopology topo = test_Create_BoundarySplitBoundaryPatch( vset1 );
+      vset2 = vset1;
+      
+      // recreating the node geometry identifiers, to see whether same results are obtained
+      vset2.InitialiseNodeTopologyIdentifiers();
+      
+      _test( vset2 == vset1 );
+    }
+
+   // 2. Testing a VSet with elements only, but with line element regions
+   // -------------------------------------------------------------------
+   {
+      VSet<2U> vset1, vset2;
+      test_Create_MeshPatchWithLineElements_VSet( vset1 );
+      vset2 = vset1;
+      vset2.InitialiseNodeTopologyIdentifiers();
+      _test( vset2 == vset1 );
+   }
+
+   // 2. Testing the VSet FRAC_BOX with intersecting fractures & regions only
+   // -----------------------------------------------------------------------
+   {
+      VSet<3U> vset1, vset2;
+      ModelTopology   topo;
+      test_Create_FracBox( topo, vset1 );
+      // using model topology to assign bounndary flags
+      topo.AssignBoxShapedModelFlags( vset1 ); // includes FlagNodesUsingBoundaryDomains(vset1);
+      
+      vset2 = vset1;
+      vset2.InitialiseNodeTopologyIdentifiers();
+      // TODO: fix boundary flags for FRAC_BOX so it can be used for this test
+      // _test( vset2 == vset1 );
+   }
+
+ } // end Test_InitialiseNodeTopologyIdentifiers
+
 
 
 

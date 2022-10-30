@@ -2,6 +2,7 @@
 #define CSMP_NEW_EVENT_H
 
 #include "Node.h"
+#include "FibonacciHeap.h"
 
 namespace csmp {
 
@@ -13,6 +14,7 @@ class Event {
   public:
     //constructor
     explicit Event(Node<dim>* nd);
+    Event(Event&&);
     Event() = delete;
     //getting node
     csmp::Node<dim>* getNode() const {return node_;}
@@ -27,12 +29,18 @@ class Event {
     std::vector<double> facetAreaCollection;
     std::vector<Point<dim>> facetNormalCollection;
 
+    typedef ajb::detail::FibonacciHeap_Node<double,size_t> Heap_Node;
+    void setHeapNode(Heap_Node* heap_node) {heap_node_ = heap_node;}
+    Heap_Node* getHeapNode() {return heap_node_;}
+
   private:
     csmp::Node<dim>*	node_;
-    bool valid_; //validity
-    bool inPEPStack_; //whether in PEPStack  
-    bool  inQueue_; //whether in event queue      
+    Heap_Node* heap_node_;
     double t_schedule_; //scheduled time stamp used for sorting event queue
+    //validity (false = event needs to be rescheduled after it is executed, becomes true after re-scheduling)
+    bool valid_;
+    bool inPEPStack_; //whether in PEPStack  
+    bool  inQueue_; //whether in event queue
 };
 
 } // csmp

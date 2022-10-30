@@ -160,6 +160,46 @@ bool isBACK( BOX_BOUNDARY bd )
 
 
 /**
+     For irregular shaped boundaries that were created from surfaces
+     @todo figure out whether edges and corners should be included?
+*/
+bool canBeIRREGULAR( BOX_BOUNDARY bd )
+{
+  if ( bd == IRREGULAR ) return true;
+  if ( isEdge( bd ) )  return true;
+  if ( isCorner( bd ) )  return true;
+  return false;
+}
+
+
+
+/**
+    Finds the corner nodes of a boxed shaped model so that boundary conditions can be assigned.
+    Function uses domain 'Model'  to avoid linear search.
+    
+     @return returns nodes that are either flagged  CNR1, CNR2 or INTERNAL from one-dimensional model
+ */
+Node<1U>* const cornerFlaggedNode( Model<1U>& model, BOX_BOUNDARY corner_flag )
+ {
+    // the corner nodes are the perimeter nodes of the model domain
+    Region<1U>& model_domain = model.Region("Model");
+    assert( model_domain.PerimeterNodes() >= 2 ); // at least the corners must be there
+    
+    auto nit = model_domain.PerimeterNodesBegin();
+    while ( nit != model_domain.NodesEnd() ) {
+         if ( (*nit)->AtBoundary() == corner_flag )
+           return (*nit);
+         nit++;
+      }
+      
+    cerr <<"\n"<<"cornerFlaggedNode: corner node flagged "<< parseBoundary(corner_flag);
+    cerr <<" was not found."<< endl;
+    return nullptr;
+ }
+
+
+
+/**
    Parses the BOX_BOUNDARY identifier (see Box.h). If the boundary flag cannot be resolved a value of NOT is returned if it is positive and IRREGULAR if negative.
 */
 BOX_BOUNDARY intToBOX_BOUNDARY( int8_t i )
@@ -1225,44 +1265,38 @@ void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
            
          // BOTTOM 
          if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 0U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( BOTTOM );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(0U) )
+                (*it)->N(j)->AtBoundary( BOTTOM );
               continue;
            }
          // RIGHT 
          if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 2U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( RIGHT );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(2U) )
+                (*it)->N(j)->AtBoundary( RIGHT );
               continue;
            }
          // TOP 
          if ( (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(3) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 5U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( TOP );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(5U) )
+                (*it)->N(j)->AtBoundary( TOP );
               continue;
            }
          // LEFT 
          if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 4U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( LEFT );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(4U) )
+                (*it)->N(j)->AtBoundary( LEFT );
               continue;
            }
          // FRONT 
          if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 1U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( FRONT );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(1U) )
+                (*it)->N(j)->AtBoundary( FRONT );
               continue;
            }
          // BACK 
          if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 3U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( BACK );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(3U) )
+                (*it)->N(j)->AtBoundary( BACK );
               continue;
            }
          // BACK CORNERS 
@@ -1406,12 +1440,9 @@ template<uint32_t dim, template<uint32_t> class CELL>
 BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
  {
     assert( eptr != nullptr );
+    assert( b_face < eptr->Faces() );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    if ( eptr->Neighbor(b_face) != nullptr ) {
-//         csmp_error.Note( ERROR, "atBoundary:", "element face is not a boundary face.");
-         return NOT;
-      }
     if ( b_face >= eptr->Neighbors() ) {
          csmp_error.Note( ERROR, "atBoundary:", "element face number is out of range:", to_string(b_face) );
          return NOT;
@@ -1419,28 +1450,20 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
 
     // storing the box-boundary flags of the boundary face in a set
     set<BOX_BOUNDARY>  eflags;
-    vector<uint32_t>     fnids;
-    eptr->FE()->NodesOfFace( b_face, fnids );
-    for ( size_t j{0}; j<fnids.size(); ++j )
-      if ( eptr->N( fnids[j] )->AtBoundary() != NOT )
-        eflags.insert( eptr->N( fnids[j] )->AtBoundary() );
-      
-    // even if all flags=NOT, the face lies on an internal boundary
-    if ( eflags.empty() ) return INTERNAL;
+    for ( const auto& fnit : eptr->CornerNodesOfFace(b_face) )
+      if ( fnit->AtBoundary() != NOT ) eflags.insert( fnit->AtBoundary() );
+    if ( eflags.empty() ) return NOT;
 
     // Case 1: one-dimensional model
     // -----------------------------
-    if constexpr( dim == 1 ) {
-         if ( eflags.size() == 1U ) return (*eflags.begin());
-      }
+    if constexpr( dim == 1U )
+      if ( eflags.size() == 1U ) return (*eflags.begin());
     
     // Case 2: two-dimensional model
     // -----------------------------
-    if constexpr ( dim == 2 ) {
+    if constexpr ( dim == 2U ) {
          // elements are considered boundary elements only if they have a face on the model boundary
-         if ( eflags.size() == 1U ) {
-              return (*eflags.begin());
-           }
+         if ( eflags.size() == 1U ) return (*eflags.begin());
          // if there are two different flags
          else if ( eflags.size() == 2U ) {
               // if there is a corner involved, the other flag is chosen because an element must not span a corner
@@ -1462,24 +1485,14 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
               csmp_error.Note( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
               return flag1;
            }
-         // in 2D, a face can only have 2D nodes unless this is a higher order element
-         else if ( eflags.size() >= 3U ) {
-              // 3 flags are legitimate only for quadrilaterals at the corners of a rectangular model
-              if ( eptr->Interpolation() == 1 ) {
-                   cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
-                   for ( auto i{0U}; i<eptr->Nodes(); ++i )
-                     cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
-                   cerr << endl;
-                   csmp_error.Note( ERROR, "atBoundary(2D):", "too many nodes in boundary flag array.");
-                }
-              else {
-                   // only the corner nodes are considered
-                   BOX_BOUNDARY flag1 = eptr->N( fnids[0] )->AtBoundary();
-                   BOX_BOUNDARY flag2 = eptr->N( fnids[1] )->AtBoundary();
-                   if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
-                   if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
-                }
-           }
+         // A face can only have 2D corner nodes
+         else {
+                 cerr <<"\n\n\tcell: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
+                 for ( auto i{0U}; i<eptr->Nodes(); ++i )
+                   cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
+                 cerr << endl;
+                 csmp_error.Note( ERROR, "atBoundary(2D):", "unable to identify meaningful BOX_BOUNDARY flag for cell face.");
+            }
           return MULTIPLE;
             
       } // if dim=2
@@ -1494,8 +1507,15 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
          
          // only for surface elements two different flags if they belong to the same face indicate a boundary position
          if ( eflags.size() >= 2U ) {
-              // if a surface element face is located on a model edge
-              if ( eptr->FE()->IsSurface() ) {
+              // for faces of volume elements only the sides of a model are valid options
+              if ( eptr->IsVolume() ) {
+                   for ( auto bit : eflags )
+                     if ( isSide(bit) )
+                      return bit;
+                }
+              // if this is a face of a surface element located on a model edge
+              // so that it has only 2 corner nodes
+              else if ( eptr->IsSurface() ) {
                    auto flag_it = eflags.begin();
                    const BOX_BOUNDARY flag1 = (*flag_it);
                    flag_it++;
@@ -1503,21 +1523,12 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
                    // intersections between internal and external boundaries
                    if ( flag1 != NOT && flag2 == INTERNAL ) return flag1;
                    if ( flag2 != NOT && flag1 == INTERNAL ) return flag2;
-                   // if there is a corner involved, the other flag is chosen because an element face cannot span a corner
-                   if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
-                   if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
+                   // if there is a corner involved, the other flag is chosen because the face of a surface cell cannot span a corner
+                   if ( isCorner(flag1) ) return flag2;
+                   if ( isCorner(flag2) ) return flag1;
                    return whichBoundary( flag1, flag2 );
                 }
-              // only the sides of the model are an option
-              else if ( eptr->FE()->IsVolume() ) {
-                   for ( auto bit : eflags )
-                     if ( isSide(bit) )
-                      return bit;
-                }
-              else {
-                   csmp_error.Note( ERROR, "atBoundary(3D):", "Line element face should only have a single flag.");
-                }
-
+              else csmp_error.Note( ERROR, "atBoundary(3D):", "Line element face should only have a single flag.");
            }
          
       } // end dim=3
@@ -2205,6 +2216,8 @@ BOX_BOUNDARY  whichBoundary( BOX_BOUNDARY node_flag1, BOX_BOUNDARY node_flag2 )
     if ( node_flag1 == EDGE10 || node_flag2 == EDGE10 ) return EDGE10;
     if ( node_flag1 == EDGE11 || node_flag2 == EDGE11 ) return EDGE11;
     if ( node_flag1 == EDGE12 || node_flag2 == EDGE12 ) return EDGE12;
+    
+    // corner cases are handled in first block
     
     return MULTIPLE;
  

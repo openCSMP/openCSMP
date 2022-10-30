@@ -3,6 +3,10 @@
 #include "FlowFunctionsModule.h"
 #include "Element.h"
 #include "ErrorHandler.h"
+#include "CSMP_highLevelUtilities.h"
+#include "Model.h"
+#include "CSMP_mathUtilities.h"
+#include "Region.h"
 
 using namespace std;
 
@@ -44,13 +48,11 @@ size_t ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes( 
     if ( number_of_tables <= 0 )
       throw csmp::Exception( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes", "no data tables contained in input file." );
 
-    kr1_.resize(number_of_tables);
-    kr2_.resize(number_of_tables);
-    pc_.resize(number_of_tables);
-  
     for ( int i=0; i < number_of_tables; i++ )
-      {
-        std::cout << "\nReading data table for RRT: " << i << "\n";
+    {
+        size_t rocktype;
+        rt_file >> rocktype;
+        std::cout << "\nReading data table for RRT: " << rocktype << "\n";
 
         unsigned int number_of_entries;
         rt_file >> number_of_entries;
@@ -88,9 +90,13 @@ size_t ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes( 
         std::cout << "sw\tkro\tkrw\tpc\n";
       
         std::vector<double> sw, kro, krw, pc;
+        double swr(0.), snr(0.);
+        double pre_sw_value(0.);
+        double sw_value(0.), kro_value, krw_value, pc_value;
+        bool swr_found(false), snr_found(false);
         for ( size_t n = 0; n < number_of_entries; n++ )
         {
-            double sw_value, kro_value, krw_value, pc_value;
+            pre_sw_value = sw_value;
             rt_file >> sw_value >> kro_value >> krw_value >> pc_value;
 
             std::cout << sw_value << "\t" << kro_value << "\t" << krw_value << "\t" << pc_value <<"\n";
@@ -99,13 +105,27 @@ size_t ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes( 
             kro.push_back(kro_value);
             krw.push_back(krw_value);
             pc.push_back(pc_value);
-          }
-      
+
+            if(!swr_found && krw_value > 0.0) {swr = pre_sw_value; swr_found = true;}
+            if(!snr_found && kro_value == 0.0) {snr = 1.0 - sw_value; snr_found = true;}
+        }
+
+        std::cout << "swr = " <<swr<<", snr = "<<snr<<endl;
         std::cout << "\n";
-      
-        kr1_[i].Initialize( sw, krw, krw_start_derivative, krw_end_derivative );
-        kr2_[i].Initialize( sw, kro, kro_start_derivative, kro_end_derivative );
-        pc_[i].Initialize( sw, pc, pc_start_derivative, pc_end_derivative );
+
+        input_sw_[rocktype] = sw;
+        input_pc_[rocktype] = pc;
+
+        csmp::CubicSpline kr1_spline, kr2_spline, pc_spline;
+        kr1_spline.Initialize( sw, krw, krw_start_derivative, krw_end_derivative );
+        kr2_spline.Initialize( sw, kro, kro_start_derivative, kro_end_derivative );
+        pc_spline.Initialize( sw, pc, pc_start_derivative, pc_end_derivative );
+
+        kr1_[rocktype] = kr1_spline;
+        kr2_[rocktype] = kr2_spline;
+        pc_[rocktype] = pc_spline;
+        swr_[rocktype] = swr;
+        snr_[rocktype] = snr;
      }
 
   //Out();
@@ -136,7 +156,6 @@ template<uint32_t dim, template<uint32_t> class USER>
 size_t ExperimentalSaturationFunctions<dim,USER>::RockType( Element<dim>* const e ) const
  {
     const size_t rocktype = static_cast<uint32_t>(e->Read( User()->key_RRT ));
-    assert( rocktype < pc_.size() );
     return rocktype;
  }
 
@@ -154,10 +173,11 @@ size_t ExperimentalSaturationFunctions<dim,USER>::RockType( Element<dim>* const 
 template<uint32_t dim, template<uint32_t> class USER>
 double ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation( Element<dim>* const e ) const
  {
+   /*
     if ( e->Read(User()->key_srH2O) > 0. || e->Read(User()->key_srCO2) > 0. )
       throw csmp::Exception( ERROR, "ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation",
                              "Do not set end-point saturation values in conjunction with experimental flow functions as they are defined implicitly");
-   
+    */
     return e->PropertyValueAtBaryCenter( User()->key_sH2O );
  }
   
@@ -168,9 +188,11 @@ double ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation( Element<d
 template<uint32_t dim, template<uint32_t> class USER>
 double ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation_at( Element<dim>* const e, double sw ) const
  {
+    /*
     if ( e->Read(User()->key_srH2O) > 0. || e->Read(User()->key_srCO2) > 0. )
       throw csmp::Exception( ERROR, "ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation_at",
                              "Do not set end-point saturation values in conjunction with experimental flow functions as they are defined implicitly");
+    */
     return sw;
  }
 
@@ -191,7 +213,7 @@ double ExperimentalSaturationFunctions<dim,USER>::pc( Element<dim>* const e ) co
     assert( sw <= 1. );
 
     // as defined by spline curves over full saturation range
-    return min( pc_[ RockType(e) ].Value(sw), max_capillary_pressure_ );
+    return min( pc_.find( RockType(e) )->second.Value(sw), max_capillary_pressure_ );
  }
 
 
@@ -205,7 +227,7 @@ double ExperimentalSaturationFunctions<dim,USER>::pc_at( Element<dim>* const e, 
     assert( sw <= 1. );
 
     // as defined by spline curves over full saturation range
-    return min( pc_[ RockType(e) ].Value(sw), max_capillary_pressure_ );
+    return min( pc_.find( RockType(e) )->second.Value(sw), max_capillary_pressure_ );
  }
 
 
@@ -222,7 +244,7 @@ double ExperimentalSaturationFunctions<dim,USER>::dpcds( Element<dim>* const e )
     assert( sw <= 1. );
 
     // as defined by spline curves over full saturation range
-    return max( pc_[ RockType(e) ].Derivative(sw), -max_derivative_ );
+    return max( pc_.find( RockType(e) )->second.Derivative(sw), -max_derivative_ );
 }
   
 
@@ -235,7 +257,7 @@ double ExperimentalSaturationFunctions<dim,USER>::dpcds_at( Element<dim>* const 
     assert( sw <= 1. );
 
     // as defined by spline curves over full saturation range
-    return max( pc_[ RockType(e) ].Derivative(sw), -max_derivative_ );
+    return max( pc_.find( RockType(e) )->second.Derivative(sw), -max_derivative_ );
 }
 
 
@@ -250,7 +272,7 @@ double ExperimentalSaturationFunctions<dim,USER>::krw( Element<dim>* const e ) c
     assert( sw <= 1. );
 
     // as defined by spline curves over full saturation range
-    return max( kr1_[ RockType(e) ].Value( sw ), 0. );
+    return max( kr1_.find( RockType(e) )->second.Value( sw ), 0. );
 }
   
 
@@ -262,7 +284,7 @@ double ExperimentalSaturationFunctions<dim,USER>::krw_at( Element<dim>* const e,
     assert( sw <= 1. );
    
     // as defined by spline curves over full saturation range
-    return max( kr1_[ RockType(e) ].Value( sw ), 0. );
+    return max( kr1_.find( RockType(e) )->second.Value( sw ), 0. );
  }
 
 
@@ -276,7 +298,7 @@ double ExperimentalSaturationFunctions<dim,USER>::krn( Element<dim>* const e ) c
     assert( sw <= 1. );
 
     // as defined by spline curves over full saturation range
-    return max( kr2_[ RockType(e) ].Value( sw ), 0. );
+    return max( kr2_.find( RockType(e) )->second.Value( sw ), 0. );
   }
 
  
@@ -289,7 +311,7 @@ double ExperimentalSaturationFunctions<dim,USER>::krn_at( Element<dim>* const e,
     assert( sw <= 1. );
 
     // as defined by spline curves over full saturation range
-    return max( kr2_[ RockType(e) ].Value( sw ), 0. );
+    return max( kr2_.find( RockType(e) )->second.Value( sw ), 0. );
  }
   
 
@@ -305,9 +327,9 @@ double ExperimentalSaturationFunctions<dim,USER>::dkrwds( Element<dim>* const e 
     const double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O  );
     assert( sw >= 0. );
     assert( sw <= 1. );
-  
-    return min( kr1_[ RockType(e) ].Derivative( sw ), max_derivative_ );
-}
+
+    return min( kr1_.find( RockType(e) )->second.Derivative( sw ), max_derivative_ );
+  }
 
 
 
@@ -319,7 +341,7 @@ double ExperimentalSaturationFunctions<dim,USER>::dkrwds_at( Element<dim>* const
     assert( sw >= 0. );
     assert( sw <= 1. );
 
-    return min( kr1_[ RockType(e) ].Derivative( sw ), max_derivative_ );
+    return min( kr1_.find( RockType(e) )->second.Derivative( sw ), max_derivative_ );
  }
 
 
@@ -333,8 +355,8 @@ template<uint32_t dim, template<uint32_t> class USER>
 double ExperimentalSaturationFunctions<dim,USER>::dkrnds( Element<dim>* const e ) const
  {
     const double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
- 
-    return max( kr2_[ RockType(e) ].Derivative( sw ), -max_derivative_ );
+
+    return max( kr2_.find( RockType(e) )->second.Derivative( sw ), -max_derivative_ );
  }
 
 
@@ -348,8 +370,8 @@ double ExperimentalSaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const
  {
     assert( sw >= 0. );
     assert( sw <= 1. );
-  
-    return max( kr2_[ RockType(e) ].Derivative( sw ), -max_derivative_ );
+
+    return max( kr2_.find( RockType(e) )->second.Derivative( sw ), -max_derivative_ );
  }
 
 
@@ -524,24 +546,82 @@ void ExperimentalSaturationFunctions<dim,USER>::Out() const
     cout <<"\nrelative permeability of phase 1 (krw(sw)), for all rock types:\n";
     int number(0);
     for ( auto it=kr1_.begin(); it!=kr1_.end(); it++ ) {
-        cout <<"\nrock type "<< number++;
-        (*it).Out();
+        cout <<"\nrock type "<< it->first;
+        it->second.Out();
       }
     cout <<"\nrelative permeability of phase 2 (krnw(sw)), for all rock types:\n";
     number = 0;
     for ( auto it=kr2_.begin(); it!=kr2_.end(); it++ ) {
-        cout <<"\nrock type "<< number++;
-        (*it).Out();
+        cout <<"\nrock type "<< it->first;
+        it->second.Out();
       }
     cout <<"\ncapillary pressure curve, pc(sw), for all rock types:\n";
     number = 0;
     for ( auto it=pc_.begin(); it!=pc_.end(); it++ ) {
-        cout <<"\nrock type "<< number++;
-        (*it).Out();
+        cout <<"\nrock type "<< it->first;
+        it->second.Out();
       }
 
     cout <<"\nmaximum slope of derivative curves: "<< max_derivative_ << endl;
  }
+
+
+
+
+/// return wetting-phase saturation based on effective saturation
+template<uint32_t dim, template<uint32_t> class USER>
+double ExperimentalSaturationFunctions<dim,USER>::seff_to_sw( Element<dim>* const e, double seff ) const
+{
+    double swr = e->Read(User()->key_srH2O);
+    double snr = e->Read(User()->key_srCO2);
+    return seff * (1. - swr - snr) + swr;
+
+}
+
+
+
+/// inverse capillary pressure function
+template<uint32_t dim, template<uint32_t> class USER>
+double ExperimentalSaturationFunctions<dim,USER>::sw_from_pc_at( Element<dim>* const e, double pc, double sw ) const
+{
+    // only for the min saturation of water precautions are needed
+    // the actual saturation is used instead of the effective saturation
+    if ( pc >= MaxCapillaryPressure() )
+      return seff_to_sw(e, 0.);
+
+    if ( pc == 0.0 )
+      return seff_to_sw(e, 1.);
+
+    std::vector<double> input_pc = input_pc_.find( RockType(e) )->second;
+    std::vector<double> input_sw = input_sw_.find( RockType(e) )->second;
+    size_t i(0);
+    for( i = 1; i < input_pc.size() ; ++i )
+      if( ( pc <=input_pc[i-1] ) && (pc > input_pc[i]))
+        break;
+
+    double x = pc, x1 = input_pc[i-1], x2 = input_pc[i], y1 = input_sw[i-1], y2 = input_sw[i];
+    double k1 = 1.0 / dpcds_at(e,y1);
+    double k2 = 1.0 / dpcds_at(e,y2);
+    return splineValue( x, x1, x2, y1, y2, k1, k2);
+  }
+
+
+
+///initialise swr and snr from input table data
+template<uint32_t dim, template<uint32_t> class USER>
+void ExperimentalSaturationFunctions<dim,USER>::initialiseResidualSaturations( Model<dim>& model )
+{
+    Region<dim>& mref = model.Region("Model");
+    for ( auto eit = mref.CellsBegin(); eit!= mref.CellsEnd(); eit++ ) {
+      double swr = swr_.find( RockType(*eit) )->second;
+      double snr = snr_.find( RockType(*eit) )->second;
+      (*eit)->Store( User()->key_srH2O, makeScalar(PLAIN, swr) );
+      (*eit)->Store( User()->key_srCO2, makeScalar(PLAIN, snr) );
+    }
+    cout<<"ExperimentalSaturationFunctions<dim,USER>:finished assigning residual saturations to all elements"<<endl;
+    printRangeOfVariable( model, "residual saturation carbonic phase" );
+    printRangeOfVariable( model, "residual saturation aqueous phase" );
+  }
 
   
 template class ExperimentalSaturationFunctions<1U,FlowFunctionsModule3>;

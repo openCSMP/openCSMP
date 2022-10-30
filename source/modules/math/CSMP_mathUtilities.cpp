@@ -255,7 +255,7 @@ void out( const Var& obj )
              row_break = 0;
           }
       }
-   cout << endl;
+   cout << endl << endl;
  }
 
 // template explicit instantiations

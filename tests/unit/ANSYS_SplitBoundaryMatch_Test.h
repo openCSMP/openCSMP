@@ -33,7 +33,7 @@ class ANSYS_SplitBoundaryMatch_Test : public Test {
                                                std::vector<Node<3U>*>::const_iterator end,
                                                INTERFACE_SIDE );
                                                
-    void TestThatManifoldNodesAreColocated( const SplitBoundary<3U>& );
+    void TestThatManifoldNodesAreCollocated( const SplitBoundary<3U>& );
 };
 
 } // csmp

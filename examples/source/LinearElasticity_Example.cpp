@@ -50,7 +50,7 @@ void LinearElasticity_Example::Specifications()
   AddAuthor( "SKM" );
   AddDescription( "Linear elasticity with fractures and regional computations" );
   AddDescription( "source in: LinearElasticity_Example.cpp" );
-  AddRequirement( "input file set: 'blunt30deg.1'");
+  AddRequirement( "input file set: 'blunt30deg.1', blunt30deg.1-configuration.txt, LinearElasticity_Example-variables.txt");
 }
 
 
@@ -77,6 +77,7 @@ void LinearElasticity_Example::Specifications()
 */
 void LinearElasticity_Example::Run()
 {
+    /*
     TRIANGLE_Interface  mesh_interface;
     VSet<2U>            mesh_container;
     char                file_name[200];
@@ -89,6 +90,26 @@ void LinearElasticity_Example::Run()
     // 'example12.txt' is the text file that defines the variables used in this example
     Model<2U>  model( mesh_container, "LinearElasticity_Example-variables.txt" );
     mesh_container.Erase();
+    */
+
+    // ---------------------------------------------------------------------------------------
+    // 1. Load CSMP native format model
+    // ---------------------------------------------------------------------------------------
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'blunt30deg.1':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "blunt30deg.1";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "LinearElasticity_Example-variables.txt";
+    string config_file = model_name;
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<2U>  model(model_name, variable_file);
+
     printModelDimensions( model, true );
 
     // assigns the element area to a distributed variable called 'area'
@@ -116,7 +137,7 @@ void LinearElasticity_Example::Run()
     if ( with_pore_pressure ) with_volume_strains =  stdio.RecordLogicalChoice("Would you like to model 'volume strains'");
 
     InputDataManager<2U>  model_configuration;
-    model_configuration.ConfigureFromFile( model, file_name );
+    model_configuration.ConfigureFromFile( model, config_file.c_str() );
 
     // writing user-choices to file
     stdio.Out();
@@ -149,15 +170,15 @@ void LinearElasticity_Example::Run()
     settings.Set_napproach(2); // this is important because it sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
                                // which is needed for deformation simulations
     SAMG_Solver  solver(&settings);
-    PDE_Integrator<2U,Region>  deformation( solver );
+    PDE_Integrator<2U,Element>  deformation( solver );
 #else
     CSMP_DEFAULT_LINEAR_SOLVER  solver;
-    PDE_Integrator<2U,Region>  deformation( solver );
+    PDE_Integrator<2U,Element>  deformation( solver );
 #endif
 
-    PT_op<2U,Element<2U> >     bforces( model.Database(), "force", "displacement" );
+    PT_op<2U>                  bforces( model.Database(), "force", "displacement" );
     NumIntegral_BT_D_B_dV<2U>  stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement");
-    if ( with_plane_stress ) stiffness.PlaneStress();
+    if ( with_plane_stress )   stiffness.PlaneStress();
     NumIntegral_PT_op_dS<2U>   bstresses( model.Database(), "Neumann stress", "displacement" );
     NumIntegral_PT_op_dV<2U>   bodyforce( model.Database(), "gravity force", "displacement");
     NumIntegral_BT_D_op_dV<2U> volstrain( model.Database(), "dilatation", "Young's modulus", "Poisson's ratio", "displacement");
@@ -245,6 +266,8 @@ void LinearElasticity_Example::Run()
       }
 
     cout <<"\nmain: That's it..."<< endl;
+
+    fs::current_path("../../example_inputs/");
   
 } // end Run
 
@@ -262,13 +285,13 @@ void LinearElasticity_Example::SteadyStatePressure( Model<2U>& model )
    // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
    //ostream &cout = *GetStream();
    
-   SteadyStateDiffusor<2U,Region>  pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
+   SteadyStateDiffusor<2U,Element>  pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
 
-   VelocityAndVolumeFlux<2U,Element<2U> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
+   VelocityAndVolumeFlux<2U>  postpro( model, "conductivity", "porosity", "fluid pressure" );
 
    pressure.AddPostProcess( &postpro );
    
-#ifdef SAMG_MULTIPLE_INSTANCES
+#ifdef CSMP_WITH_SAMG_SOLVER && SAMG_MULTIPLE_INSTANCES
    pressure.GetSolverSettings().SetSolverInstance(2);
 #endif
    pressure.ComputeSteadyState( model.Region("Model") );

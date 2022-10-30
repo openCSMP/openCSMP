@@ -9,6 +9,7 @@
 #include "FiniteElementManager.h"
 #include "FiniteVolumeStencilManager.h"
 #include "plf_colony.h"
+#include "Region.h" 
 
 namespace csmp {
 
@@ -19,20 +20,20 @@ template<uint32_t> class PropertyDatabase;
 template<uint32_t> class VSet;
 template<uint32_t> class NodeManifoldManager;
 template<uint32_t,template<uint32_t> class> class ModelSubDomain;
+template<uint32_t> class FaceConstructionData;
 
 /**
-@brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
-internal application is hidden and may vary between models (tree-storage is default).
+    @brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
+    internal application is hidden and may vary between models (tree-storage is default).
 
-@author S.K. Matthai
-@date 2021 (complete rewrite)
+    @author S.K. Matthai
+    @date 2021 (complete rewrite)
 
-@remark gain access via Mesh() public interface of Model.
+    @remark gain access via Mesh() public interface of Model.
 
-@attention the MeshManager takes care of the creation and destruction of Elements, Faces or Interfaces.
-Region or Boundary objects merely contain pointers to these.
+    @attention the MeshManager takes care of the creation and destruction of Elements, Faces or Interfaces.
+    Region or Boundary objects merely contain pointers to these.
 
-TODO: which kind of mesh error diagnostics should the MeshManager implement? - should these be in a separate compilation unit?
 */
 template<uint32_t dim>
 class MeshManager {
@@ -47,7 +48,7 @@ public:
   ~MeshManager();
 
   /// sets up distributed storage for variables, finite elements, and mesh connectivity, returns vectors of pointers remembering index-pointer mapping
-  bool Initialize( const PropertyDatabase<dim>&, const VSet<dim>& );
+  bool Initialize( const PropertyDatabase<dim>&, const VSet<dim>&, bool initialise_FV_stencils );
 
   // ==============================================================
   //
@@ -114,9 +115,12 @@ public:
   const FiniteElementManager& FiniteElements() const { return fem_manager_; }
 
   /// direct access for backward compatibility
-  const FiniteVolumeStencilManager<dim>& FiniteVolumes() const { return fvm_manager_; }
+  const FiniteVolumeStencilManager<dim>* const FiniteVolumes() const { return fvm_manager_; }
 
+  ///  assigns the finite volume stencils to the finite volume policies of the element, face, and interface so that this functionality can be used
+  void InitializeFiniteVolumeStencils( const PropertyDatabase<dim>&, bool assign_stencils_to_elements );
   
+ 
   // ==============================================================
   //
   // MESH MODIFICATION
@@ -141,29 +145,42 @@ public:
   std::vector<InterFace<dim>*>  ReplaceFacesByInterFaces( const PropertyDatabase<dim>&,
                                                           typename std::vector<Face<dim>*>::iterator first,
                                                           typename std::vector<Face<dim>*>::iterator first_at_boundary,
-                                                          typename std::vector<Face<dim>*>::iterator last );
+                                                          typename std::vector<Face<dim>*>::iterator last,
+                                                          typename std::vector<Node<dim>*>::const_iterator perim_first,
+                                                          typename std::vector<Node<dim>*>::const_iterator perim_last);
+
+  /// replaces supplied Face objects with InterFace ones adding  necessary nodes and node manifolds, establishing new connectivity; the input Faces are deleted
+  std::vector<InterFace<dim>*>  ReplaceElementsByInterFaces( const PropertyDatabase<dim>&,
+                                                          typename std::vector<FaceConstructionData<dim>>::iterator first,
+                                                          typename std::vector<FaceConstructionData<dim>>::iterator last,
+                                                          typename std::vector<Node<dim>*>::const_iterator perim_first,
+                                                          typename std::vector<Node<dim>*>::const_iterator perim_last,
+                                                          std::set<Node<dim>*> & split_perimeter_nodes,
+                                                          std::set<size_t>& region_material_ids);
+
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary nodes, node manifolds, and InterFace connectivity, updating overall connectivity as well; inside elements are first in pair
   std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
                                            const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >&,
-                                           bool multiplicate_perimeter_nodes );
+                                           bool multiplicate_perimeter_nodes,
+                                           Region<dim>& out_region );
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary node manifolds and InterFace connectivity; inside elements are first in pair
   std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeMatchingElements( const PropertyDatabase<dim>&,
                                            const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
 
   /// by location only, no parent element  gets connected
-  Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
+  Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&,
+                                  BOX_BOUNDARY = NOT, TOPOTYPE = MESH_VERTEX );
 
   /// only if there is not already a node at this location, else a pointer to that node is returned, no parent element  gets connected
   Node<dim>* const		 AddNodeAtUniqueLocation( const Point<dim>&, size_t nearby_node,
                                                 const LocalVariables& node_variables,
-                                                BOX_BOUNDARY = NOT );
+                                                BOX_BOUNDARY = NOT,
+                                                TOPOTYPE = MESH_VERTEX );
 
    /// duplicates Node, automatically creating a node manifold or adding it to an existing one; manifold type is established
-  Node<dim>* const     Duplicate( Node<dim>* const nptr_inside,
-                                  INTERFACE_SIDE new_node_side,
-                                  const LocalVariables& lvars );
+  Node<dim>* const     Duplicate( Node<dim>* const nptr_inside, const LocalVariables& lvars );
 
   /// method tries to find neighbors through the parent connectivity of the nodes
   Element<dim>*	const AddElement( CSMP_FEM_TYPE,
@@ -269,23 +286,23 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
   void ConnectNodesToParentsAndNeighbors( typename std::vector<Element<dim>*>::iterator first,
                                           typename std::vector<Element<dim>*>::iterator last );
 
-  /// disconnects nodes from potential manifolds and deletes them
-  size_t DeleteAndRepairConnnectivity( typename std::vector<Node<dim>*>::iterator first,
-                                       typename std::vector<Node<dim>*>::iterator last );
-
   /// deletes elements and potentially orphaned nodes if any;  parent element storage of the nodes is rebuild and connectivity repaired;  input pointers are nulled
-  size_t DeleteAndRepairConnnectivity( typename std::vector<Element<dim>*>::iterator first,
-                                       typename std::vector<Element<dim>*>::iterator last );
+  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<Element<dim>*>::iterator first,
+                                            typename std::vector<Element<dim>*>::iterator last );
 
   /// disconnects face patch from potential adjacent faces before deleting faces; input pointers are nulled
-  size_t DeleteAndRepairConnnectivity( typename std::vector<Face<dim>*>::iterator first,
-                                       typename std::vector<Face<dim>*>::iterator last );
+  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<Face<dim>*>::iterator first,
+                                            typename std::vector<Face<dim>*>::iterator last );
 
   /// disconnectes interfaces from not-targeted neighbors before deleting them;  does not remove multiplicated nodes or manifolds;  input pointers are nulled
-  size_t DeleteAndRepairConnnectivity( typename std::vector<InterFace<dim>*>::iterator first,
-                                       typename std::vector<InterFace<dim>*>::iterator last );
+  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<InterFace<dim>*>::iterator first,
+                                            typename std::vector<InterFace<dim>*>::iterator last );
 
-  /// JCK's method to test the connectivity of a mesh after it had been read from binary file
+  /// disconnects nodes from potential manifolds and deletes the latter
+  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<Node<dim>*>::iterator first,
+                                            typename std::vector<Node<dim>*>::iterator last );
+
+  /// method to test the connectivity of a mesh
   size_t CheckElementConnectivity() const;
 
   /// prints stored objects and their connectivity to screen
@@ -328,19 +345,17 @@ private:
 
 private:
 
-  FiniteElementManager             fem_manager_;
-  FiniteVolumeStencilManager<dim>  fvm_manager_; ///< current finite volume specifications // TODO: make this a trait class because it needs no dynamic data!
+  FiniteElementManager              fem_manager_;
+  FiniteVolumeStencilManager<dim>*  fvm_manager_ = nullptr;           ///<  finite volume specifications
+  NodeManifoldManager<dim>*         node_manifold_manager_ = nullptr; ///<  node manifolds in case there are InterFace objects making up SplitBoundaries
 
   /// access is via root node or element only
   bool hybrid_element_mesh_;	///< true if the mesh consists of different FE types
 
-  // root pointers to contiguous mesh patches; mutable to allow for behind scene updates
   plf::colony<Node<dim>>      nodes_;          ///<  nodes
-  plf::colony<Element<dim>>   elements_;       ///<  pointers elements
+  plf::colony<Element<dim>>   elements_;       ///<  pointers to elements in the model
   plf::colony<Face<dim>>      faces_;          ///<  pointers faces making up the boundaries
   plf::colony<InterFace<dim>> interfaces_;     ///<  pointers to interfaces making up the split boundaries
-  // only used in models that contain node SplitBoundaries / IterFace objects
-  NodeManifoldManager<dim>*   node_manifold_manager_ = nullptr; ///<  node manifolds of SplitBoundaries
 
   friend class MeshManager_Test; ///< so that private methods can be tested
   friend class Model<dim>;       ///<  exclusive access to private member functions

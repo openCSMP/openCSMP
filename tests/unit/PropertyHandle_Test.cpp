@@ -102,8 +102,11 @@ void PropertyHandle_Test::run()
         (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, sc );
         _equal( sc(), 10., numeric_limits<double>::epsilon() );
 
+//printRangeOfVariable( *model, "node variable 1", true );
+//printRangeOfVariable( *model, "integration point variable 2", true );
+
         // INTEGRATION POINT
-        Index  ipkey   = model->Database().StorageKey( "integration point variable 2" );
+        Index  ipkey = model->Database().StorageKey( "integration point variable 2" );
         IPVariable2 += nodeVariable1;
         (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 9., numeric_limits<double>::epsilon() );

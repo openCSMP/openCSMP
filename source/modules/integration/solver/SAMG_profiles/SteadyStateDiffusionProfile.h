@@ -28,7 +28,7 @@ class SteadyStateDiffusionProfile : public SAMG_Profile {
     virtual bool Solve( double modelTime );
 
     /// bridging to solver
-    SteadyStateDiffusor<dim,Region>& Solver() { return ssds_; }
+    SteadyStateDiffusor<dim,Element>& Solver() { return ssds_; }
 
   private:
     SteadyStateDiffusionProfile();
@@ -38,7 +38,7 @@ class SteadyStateDiffusionProfile : public SAMG_Profile {
   private:
     Model<dim>& model_;
 
-    SteadyStateDiffusor<dim,Region> ssds_;
+    SteadyStateDiffusor<dim,Element> ssds_;
 
     bool firstCall_;
     std::string   dumpFileName_;

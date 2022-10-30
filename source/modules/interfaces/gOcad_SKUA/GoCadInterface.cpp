@@ -1851,7 +1851,7 @@ void  GoCadInterface<dim>::OutputVariableToTSurface( const Model<dim>& sgroup,
                                                         long        timestep )
 const
  {
-   const Region<dim>  sg(sgroup.Region("Model"));
+   const Region<dim>&  sg(sgroup.Region("Model"));
    sg.UpdateMemberIndexes();
  
    csmp::Index prop_key = sgroup.Database().StorageKey(var);
@@ -2075,7 +2075,7 @@ void  GoCadInterface<dim>::OutputVariableToTSurface( const Model<dim>& sgroup,
                                                     long   timestep ) 
 const
  {
-   const Region<dim>  sg(sgroup.Region("Model"));
+   const Region<dim>&  sg(sgroup.Region("Model"));
    sg.UpdateMemberIndexes();
 
    // 1. Property Access in the Model
@@ -2312,13 +2312,13 @@ template<uint32_t dim>
 void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup, 
                                                       const char* fname, long timestep ) const
  {
-   const Region<dim>  sg(sgroup.Region("Model"));
+   const Region<dim>&  sg(sgroup.Region("Model"));
    sg.UpdateMemberIndexes();
 
    // 1. Property Access in the Model
    // ------------------------------------
    map<string,Index>  prop_list;
-   sgroup.Database().ListProperties( prop_list );
+   sgroup.Database().ListVariables( prop_list );
 
    if ( prop_list.empty() )
      {
@@ -2502,7 +2502,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                                                      const char* var, 
                                                      long timestep ) const
  {
-   const Region<dim>  sg(sgroup.Region("Model"));
+   const Region<dim>&  sg(sgroup.Region("Model"));
    sg.UpdateMemberIndexes();
 
    // 1. Property Access in the Model
@@ -2747,7 +2747,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                                                       const char* var, 
                                                       long timestep ) const
  {
-   const Region<dim>  sg(sgroup.Region("Model"));
+   const Region<dim>&  sg(sgroup.Region("Model"));
    sg.UpdateMemberIndexes();
 
    // 0. Finding the desired Region
@@ -3014,7 +3014,7 @@ void GoCadInterface<dim>::OutputRegionsToGoCadFiles( const Model<dim>& sgroup,
                                                        const char* property, 
                                                        long timestep ) const
  {
-    const Region<dim>  sg(sgroup.Region("Model"));
+    const Region<dim>&  sg(sgroup.Region("Model"));
     sg.UpdateMemberIndexes();
 
     typename map<string,Region<dim> >::const_iterator  it;

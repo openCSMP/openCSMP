@@ -434,6 +434,15 @@ bool  VectorVariable<2U>::IsWithinRange( double vmin, double vmax ) const
 }
 
 
+  /// tests whether variable contains NaN value(s)
+bool  VectorVariable<2U>::Has_NaN_Values() const {
+   if ( isnan(data[0]) ) return true;
+   if ( isnan(data[1]) ) return true;
+   return false;
+}
+
+
+
 bool VectorVariable<2U>::Out( std::fstream& fp ) const
 {
   const int32_t flag_0( this->flag[0] );

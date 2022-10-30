@@ -1,0 +1,54 @@
+CVFEM with GEM
+
+# (block2) default property values
+fluid pressure			25000000.
+temperature			150.
+permeability			1.e-15
+porosity			0.1
+nodal porosity			0.1
+salinity			0.
+thermal conductivity		2.
+nodal heat capacity rock	880.
+total heat capacity	2138400.
+nodal heat capacity	2138400.
+density rock			2700.
+nodal density rock		2700.
+lithostatic pressure		25000000.
+nodal compressibility rock	1.e-15
+nodal heat flux bottom		0.
+fluid source rate		0.
+fluid source h			0.
+fluid source wt			0.
+nodal source liquid		0. 
+nodal source vapor		0.
+upwind control liquid		0.
+upwind control vapor		0.
+time factor			0.
+magmatic fluid mass liquid	0. 
+magmatic liquid mass mobility	0.
+magmatic fluid mass vapor	0.
+magmatic vapor mass mobility	0.
+magmatic salt content liquid	0.
+magmatic liquid salt mobility	0.
+magmatic salt content vapor	0.
+magmatic vapor salt mobility	0.
+gravity flag			0.
+
+# (block3) regional property values
+
+# (block4) boundary conditions for box-shaped model
+RIGHT	DIRICH	fluid pressure		25000000.	25000000.
+LEFT	DIRICH	fluid pressure		50000000.	50000000.
+LEFT	DIRICH	temperature		350.	350.
+RIGHT	DIRICH	temperature		150.	150.
+
+# (block5) essential conditions for regions
+
+# (block6) csmp::Boundary properties
+
+# (block7) run settings 250 years 1year 10years
+duration	7884000000.
+time increment	31536000.
+output time	315360000.
+
+

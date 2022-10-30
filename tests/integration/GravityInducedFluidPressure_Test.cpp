@@ -21,6 +21,7 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
+#include "LinearSolver.h"
 #include "GaussJordan_Solver.h"
 
 #include "ANSYS_Model3D.h"
@@ -510,14 +511,14 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator( double
     // 7. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
     // --------------------------------------------------------------------------------------------
     GaussJordan_Solver         GJ_solver;
-    PDE_Integrator<1U,Region>  hydrostatic_pressure(GJ_solver);
+    PDE_Integrator<1U,Element>  hydrostatic_pressure(GJ_solver);
   
-    NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<1U>  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
 
     const csmp::Index g_key(model1D_->Database().StorageKey("acceleration gravity"));
     const double    acc_gravity(model1D_->Read(g_key));
     // unless specified otherwise, in a 1D model, gravity will automatically act in the x-direction
-    NumIntegral_NT_op_dNi_dV<1U,Element<1U> >  hydrostatic_gravity( model1D_->Database(), "fluid mixture density",
+    NumIntegral_NT_op_dNi_dV<1U>  hydrostatic_gravity( model1D_->Database(), "fluid mixture density",
                                                                    "total mobility permeability product", "fluid pressure", acc_gravity );
     hydrostatic_pressure.Add( &hydrostatic_conductance );
     hydrostatic_pressure.Add( &hydrostatic_gravity );
@@ -559,15 +560,15 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator_CRM( do
 
     // 7. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
     // --------------------------------------------------------------------------------------------
-    GaussJordan_Solver         GJ_solver;
-    PDE_Integrator<1U,Region>  hydrostatic_pressure(GJ_solver);
+    GaussJordan_Solver          GJ_solver;
+    PDE_Integrator<1U,Element>  hydrostatic_pressure(GJ_solver);
  
-    NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<1U>  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
 
     const csmp::Index g_key(model1D_->Database().StorageKey("acceleration gravity"));
     const double    acc_gravity(model1D_->Read(g_key));
     // unless specified otherwise, in a 1D model, gravity will automatically act in the x-direction
-    NumIntegral_NT_op_dNi_dV<1U,Element<1U> >  hydrostatic_gravity( model1D_->Database(), "fluid mixture density",
+    NumIntegral_NT_op_dNi_dV<1U>  hydrostatic_gravity( model1D_->Database(), "fluid mixture density",
                                                                    "total mobility permeability product", "fluid pressure", acc_gravity );
     hydrostatic_pressure.Add( &hydrostatic_conductance );
     hydrostatic_pressure.Add( &hydrostatic_gravity );
@@ -612,7 +613,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator2( doubl
     // --------------------------------------------------------------------------------------------
     const size_t                   dim(1U);
     GaussJordan_Solver             GJ_solver;
-    PDE_Integrator<dim,Region>     hydrostatic_pressure(GJ_solver);
+    PDE_Integrator<dim,Element>    hydrostatic_pressure(GJ_solver);
     NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model1D_->Database(), "total mobility permeability product", "fluid pressure", "fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model1D_->Database(), "gravity term", "fluid pressure" );
 
@@ -677,7 +678,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     // 1. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
     // --------------------------------------------------------------------------------------------
     GaussJordan_Solver             GJ_solver;
-    PDE_Integrator<dim,Region>     hydrostatic_pressure(GJ_solver);
+    PDE_Integrator<dim,Element>    hydrostatic_pressure(GJ_solver);
     NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model->Database(), "gravity term", "reduced fluid pressure" );
 
@@ -775,7 +776,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     // 1. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
     // --------------------------------------------------------------------------------------------
     GaussJordan_Solver             GJ_solver;
-    PDE_Integrator<dim,Region>     hydrostatic_pressure(GJ_solver);
+    PDE_Integrator<dim,Element>    hydrostatic_pressure(GJ_solver);
     NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model->Database(), "gravity term", "reduced fluid pressure" );
 
@@ -898,7 +899,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
 #else
     CSMP_DEFAULT_LINEAR_SOLVER     solver;
 #endif
-    PDE_Integrator<dim,Region>     hydrostatic_pressure(solver);
+    PDE_Integrator<dim,Element>    hydrostatic_pressure(solver);
     NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model->Database(), "gravity term", "reduced fluid pressure" );
 

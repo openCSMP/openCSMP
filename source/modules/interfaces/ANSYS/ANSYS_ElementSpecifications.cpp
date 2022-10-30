@@ -1032,37 +1032,39 @@ CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_TypeName( const 
     string etype(ANSYS_element_type);
  
     if ( isoparametric ) {
-	    // bar elements
-	    if ( etype == "BAR_2" )    return ISOPARAMETRIC_LINEAR_BAR;
-	    if ( etype == "BAR_3" )    return ISOPARAMETRIC_QUADRATIC_BAR;
-	    // trapezoidal elements (quads)
-	    if ( etype == "QUAD_4" )   return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
-	    if ( etype == "QUAD_4_X" ) return ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL;
-	    if ( etype == "QUAD_8" )   return ISOPARAMETRIC_QUADRATIC_QUADRILATERAL;
-	    if ( etype == "QUAD_8_X" ) return ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL;
-	    if ( etype == "QUAD_9" )   return ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9;
-	    // triangles
-	    if ( etype == "TRI_3" )    return ISOPARAMETRIC_LINEAR_TRIANGLE;
-	    if ( etype == "TRI_3_X" )  return ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE;
-	    if ( etype == "TRI_6" )    return ISOPARAMETRIC_QUADRATIC_TRIANGLE;
-	    if ( etype == "TRI_6_X" )  return ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE;
-	    // tetrahedral elements
-	    if ( etype == "TETRA_4" )  return ISOPARAMETRIC_LINEAR_TETRAHEDRON;
-	    if ( etype == "TETRA_10" ) return ISOPARAMETRIC_QUADRATIC_TETRAHEDRON;
-	    // hexahedral elements
-	    if ( etype == "HEXA_8" )   return ISOPARAMETRIC_LINEAR_HEXAHEDRON;
-	    if ( etype == "HEXA_20" )  return ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20;
-	    if ( etype == "HEXA_27" )  return ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27;
-	    // pyramids
-	    if ( etype == "PYRA_5" )   return ISOPARAMETRIC_LINEAR_PYRAMID;
-	    if ( etype == "PYRA_13" )  return ISOPARAMETRIC_QUADRATIC_PYRAMID13;
-	    if ( etype == "PYRA_14" )  return ISOPARAMETRIC_QUADRATIC_PYRAMID14;
-	    // pentahedra
-	    if ( etype == "PENTA_6" )  return ISOPARAMETRIC_LINEAR_PRISM;
-	    if ( etype == "PENTA_15" ) return ISOPARAMETRIC_QUADRATIC_PRISM15;
-	    if ( etype == "PENTA_18" ) return ISOPARAMETRIC_QUADRATIC_PRISM18;
+        // bar elements
+        if ( etype == "BAR_2" )    return ISOPARAMETRIC_LINEAR_BAR;
+        if ( etype == "BAR_3" )    return ISOPARAMETRIC_QUADRATIC_BAR;
+        // trapezoidal elements (quads)
+        if ( etype == "QUAD_4" )   return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+        if ( etype == "QUAD_4_X" ) return ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL;
+        if ( etype == "QUAD_8" )   return ISOPARAMETRIC_QUADRATIC_QUADRILATERAL;
+        if ( etype == "QUAD_8_X" ) return ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL;
+        if ( etype == "QUAD_9" )   return ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9;
+        // triangles
+        if ( etype == "TRI_3" )    return ISOPARAMETRIC_LINEAR_TRIANGLE;
+        if ( etype == "TRI_3_X" )  return ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE;
+        if ( etype == "TRI_6" )    return ISOPARAMETRIC_QUADRATIC_TRIANGLE;
+        if ( etype == "TRI_6_X" )  return ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE;
+        // tetrahedral elements
+        if ( etype == "TETRA_4" )  return ISOPARAMETRIC_LINEAR_TETRAHEDRON;
+        if ( etype == "TETRA_10" ) return ISOPARAMETRIC_QUADRATIC_TETRAHEDRON;
+        // hexahedral elements
+        if ( etype == "HEXA_8" )   return ISOPARAMETRIC_LINEAR_HEXAHEDRON;
+        if ( etype == "HEXA_20" )  return ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20;
+        if ( etype == "HEXA_27" )  return ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27;
+        // pyramids
+        if ( etype == "PYRA_5" )   return ISOPARAMETRIC_LINEAR_PYRAMID;
+        if ( etype == "PYRA_13" )  return ISOPARAMETRIC_QUADRATIC_PYRAMID13;
+        if ( etype == "PYRA_14" )  return ISOPARAMETRIC_QUADRATIC_PYRAMID14;
+        // pentahedra
+        if ( etype == "PENTA_6" )  return ISOPARAMETRIC_LINEAR_PRISM;
+        if ( etype == "PENTA_15" ) return ISOPARAMETRIC_QUADRATIC_PRISM15;
+        if ( etype == "PENTA_18" ) return ISOPARAMETRIC_QUADRATIC_PRISM18;
       }
-      
+
+    // STRAIGHT-SIDED ELEMENTS WITH A GLOBAL COORDINATE SYSTEM
+
     // bar elements
     if ( etype == "BAR_2" )    return LINEAR_BAR;
     if ( etype == "BAR_3" )    return QUADRATIC_BAR;

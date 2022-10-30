@@ -171,8 +171,11 @@ class ModelTopology {
     template<uint32_t dim>
     void        RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset );
 
-	  /// region names
+	  /// region, boundary or split boundary names
 	  void		    DomainNames( std::vector<std::string>& ) const;
+   
+    /// changes the name of a domain in the most efficient way; reports whether operation was successful
+    bool        ChangeDomainName( const std::string& old_name, const std::string& new_name );
 
     /// properties of regions
     void        PropertiesOfDomains( const char* regions_file,
@@ -212,7 +215,7 @@ class ModelTopology {
     bool  AssignBoxShapedModelFlags( VSet<dim>& ) const;
 
     template<uint32_t dim>
-    void  AssignMaterialProperties( VSet<dim>&,const std::multimap<std::string,std::vector<size_t> >& object_elements);
+    void  AssignMaterialProperties( VSet<dim>&,const std::multimap<std::string,std::vector<size_t> >& object_elements );
 
     bool  CheckCellNumbering() const;
 
@@ -237,6 +240,11 @@ class ModelTopology {
     /// deduces node boundary flags from BOX_BOUNDARY and other regions the name of which contains 'BOUNDARY'
     bool  FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const;
     bool  FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const;
+
+    /// Boundary Flag nodes on lowerdimensional elements to INTERNAL - ATTENTION - THIS OVERWRITES, SO IT SHOULD BE DONE BEFORE BOXBOUNDARY FLAGS ARE SET
+    //E.P Experimental 08.2022 - This is not used or tested, but may be needed to set TOPO Flags correctly, since they rely on INTERNAL flag being set.
+    bool  FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<2U>& vset ) const;
+    bool  FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<3U>& vset ) const;
 
 
   private:

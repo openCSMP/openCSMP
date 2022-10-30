@@ -1,0 +1,390 @@
+#include "NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region.h"
+#include "Index.h"
+#include "Element.h"
+#include "Face.h"
+#include "InterFace.h"
+#include "Model.h"
+#include "Exception.h"
+
+using namespace std;
+
+namespace csmp {
+
+/**
+    Constructor gets the finite element types that  NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region  needs to turn the InterFace into the equivalent
+    of a volumetric element from the FiniteElementManager. Since InterFaces can either be triangles or quadrilaterals, their extruded volumetric
+    pendants are prism and hexahedral elements.
+    
+    @attention the variable 'thickness' needs to be defined on the InterFace, else the pde operator will not work.
+*/
+template<uint32_t dim>
+NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region( const Model<dim>& model,
+                                                                                                           const char*       oper,
+                                                                                                           const char*       basic,
+                                                                                                           const char*       test,
+                                                                                                           double dt )
+  : MathOperatorLHS<dim,InterFace>(model.Database(),oper,basic,test),
+    diffusivity_key_(model.Database().StorageKey("hydraulic diffusivity")),
+    delta_t_(dt)
+{
+    MathOperatorLHS<dim,InterFace>::Name("NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region", oper, basic, test );
+    
+    // element interpolation function operand i
+    if ( MathOperatorLHS<dim,InterFace>::BasicOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,InterFace>::BasicOperandType() != SCALAR )
+      throw csmp::Exception( ERROR, "NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::(constructor)",
+                      basic, "Operand (basic) must be a scalar property placed on the nodes." );
+
+    // element interpolation function operand j
+    if ( MathOperatorLHS<dim,InterFace>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,InterFace>::TestOperandType() != SCALAR )
+      throw csmp::Exception( ERROR, "NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::(constructor)",
+                      test, "Operand (test) must be a scalar property placed on the nodes." );
+
+    // oper = material operand
+    if ( MathOperatorLHS<dim,InterFace>::MaterialOperandPlacement() != ELEMENT ||
+         MathOperatorLHS<dim,InterFace>::MaterialOperandType() != SCALAR )
+    throw csmp::Exception( ERROR, "NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim,CELL>::GetOperands",
+                                  "material operand placements other than on the CELL are not handled yet. " );
+}
+
+
+
+
+/**
+   Computes difference between the variable values at the topologically collocated nodes, including that in the intervening
+   lower-dimensional region, using it to compute   the transfer coefficient (=coupling coefficient) at the time level t + delta t.
+   
+   The conductivity (Operand value) is read from the higher-dimensional neighbors of the lower-dimensional region.
+*/
+template<uint32_t dim>
+void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::GetOperands( const InterFace<dim>& e )
+ {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.HasInterveningElement() );
+    
+    // retrieving conductivity from inner and outer higher-dimensional parent elements
+    // (their values for the intervening element are ignored as they are accumulated separately)
+    const double conductivity_inner = e.InnerParent()->Read( MathOperatorLHS<dim,InterFace>::MaterialOperandKey() );
+    const double diffusivity_inner  = e.InnerParent()->Read( diffusivity_key_ );
+    const double conductivity_outer = e.OuterParent()->Read( MathOperatorLHS<dim,InterFace>::MaterialOperandKey() );
+    const double diffusivity_outer  = e.OuterParent()->Read( diffusivity_key_ );
+
+    // and the values of the transported variable at the interface faces and the intervening element
+/*
+    vector<ScalarVariable> node_var_iface, node_var_elmt;
+    e.NodePropertyVector( MathOperatorLHS<dim,InterFace>::TestOperandKey(), node_var_iface );
+    e.InterveningElement()->NodePropertyVector( MathOperatorLHS<dim,InterFace>::TestOperandKey(), node_var_elmt );
+*/
+    // computing transfer coefficient values using the variable values of the interface faces and those of the
+    const auto n_nodes{ e.InterveningElement()->Nodes() };
+    transfer_coefficients_.resize( n_nodes );
+
+    // inside face and intervening element (nodes have the same indices)
+    for ( auto i{0U}; i<n_nodes; i++ ) {
+         // nodes of inner face come first
+         double delta_var0 = e.N(i)->Read( MathOperatorLHS<dim,InterFace>::TestOperandKey() ) -
+                             e.InterveningElement()->N(i)->Read( MathOperatorLHS<dim,InterFace>::TestOperandKey() );
+         // computing the flux across the inner interface at t+dt
+         double flux = flux1DAtX0( delta_var0, diffusivity_inner, delta_t_, conductivity_inner );
+         // computing the transfer coefficient that will give rise to this node-to-node flux at t+dt
+         transfer_coefficients_[i] = flux / conductivity_inner;
+      }
+    // outside face and intervening element (nodes have the same indices)
+    for ( auto i{0U}; i<n_nodes; i++ ) {
+         // nodes of outer face
+         double delta_var0 = e.N(e.Nodes()-1U-i)->Read( MathOperatorLHS<dim,InterFace>::TestOperandKey() ) -
+                             e.InterveningElement()->N(i)->Read( MathOperatorLHS<dim,InterFace>::TestOperandKey() );
+         // computing the flux across the inner interface at t+dt
+         double flux = flux1DAtX0( delta_var0, diffusivity_outer, delta_t_, conductivity_outer );
+         // computing the transfer coefficient that will give rise to this node-to-node flux at t+dt
+         transfer_coefficients_[i+n_nodes] = flux / conductivity_outer;
+      }
+
+ } // end GetOperands
+
+
+
+
+
+
+
+
+
+/** Computes integral over shape function derivatives squared. These are the shape functions of the volumetric elements that match
+    the lower-dimensional InterFace.
+
+    @attention The connections could also be established using line elements, but this would require a more complicated
+    accumulation process.
+    
+    @todo in GetOperands implement the collection of material operands from integration points otherwise second part of method will not work
+*/
+template<uint32_t dim>
+void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::ComputeContribution( const InterFace<dim>& iface )
+ {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( iface.UsesLocalCoordinates() == true );
+    assert( iface.HasInterveningElement() );
+
+    // initialize output matrix, for creating the cross couplings between the face nodes with the intervening element
+    // (ordering interface-inside-nodes, interface-outside nodes, intervening-element nodes
+    const uint32_t n_total_nodes{ iface.Nodes() + iface.InterveningElement()->Nodes() },
+                   n_elmt_nodes{ iface.InterveningElement()->Nodes() };
+    MathOperatorLHS<dim,InterFace>::LHS.Resize( n_total_nodes, n_total_nodes );
+    MathOperatorLHS<dim,InterFace>::LHS.Zero();
+    
+    // computing node-related fractions of the area of the intervening finite element
+    const double area3 = iface.Area() / static_cast<double>( iface.InterveningElement()->Nodes() );
+    
+    // updating the transfer coefficients to take that area into account
+    for ( auto& tc : transfer_coefficients_ ) tc *= area3;
+
+    // populating the element contribution matrix with the transfer coefficients
+    // matrix diagonal
+    for ( auto i{0U}; i<n_total_nodes; i++ )
+      MathOperatorLHS<dim,InterFace>::LHS(i,i) = transfer_coefficients_[i];
+    // off-diagonal elements dependent on node-node connections
+    // interface-inside-nodes with intervening-element nodes
+    for ( auto i{0U}; i<n_elmt_nodes; i++ ) {
+         // upper diagonal
+         MathOperatorLHS<dim,InterFace>::LHS(i,i+n_elmt_nodes*2U) = -transfer_coefficients_[i];
+         // lower diagonal
+         MathOperatorLHS<dim,InterFace>::LHS(i+n_elmt_nodes*2U,i) = -transfer_coefficients_[i];
+      }
+    // interface-outside-nodes with intervening-element nodes
+    for ( auto i{n_elmt_nodes}; i<n_elmt_nodes*2U; i++ ) {
+         // upper diagonal
+         MathOperatorLHS<dim,InterFace>::LHS(i,i+n_elmt_nodes) = -transfer_coefficients_[i];
+         // lower diagonal
+         MathOperatorLHS<dim,InterFace>::LHS(i+n_elmt_nodes,i) = -transfer_coefficients_[i];
+      }
+    // intervening element nodes with interface nodes
+    for ( auto i{n_elmt_nodes*2U}; i<n_total_nodes; i++ ) {
+         // upper diagonal - inside
+         MathOperatorLHS<dim,InterFace>::LHS(i,i-n_elmt_nodes*2) = -transfer_coefficients_[i];
+         // lower diagonal - inside
+         MathOperatorLHS<dim,InterFace>::LHS(i-n_elmt_nodes*2,i) = -transfer_coefficients_[i];
+         // upper diagonal - outside
+         MathOperatorLHS<dim,InterFace>::LHS(i,i-n_elmt_nodes) = -transfer_coefficients_[i];
+         // lower diagonal - outside
+         MathOperatorLHS<dim,InterFace>::LHS(i-n_elmt_nodes,i) = -transfer_coefficients_[i];
+      }
+      
+   MathOperatorLHS<dim,InterFace>::LHS.Out();
+   cout << endl;
+
+} // end ComputeContribution
+
+
+
+
+
+/** AssignToGlobal matrix function
+ 
+     Ordering of nodes in the vectors is  inner face nodes, outer face nodes, and intervening element nodes
+     
+    @author SKM - modified from LKT's version that eliminates Dirichlet constraints from G
+*/
+template<uint32_t dim>
+void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( const InterFace<dim>& iface,
+                                                                             SparseMatrix& G,
+                                                                             vector<double>& pivotVector,
+                                                                             const vector<size_t>& DOF_indexes )
+	{
+    const uint32_t n_total_nodes{ iface.Nodes() + iface.InterveningElement()->Nodes() },
+                   n_elmt_nodes{ iface.InterveningElement()->Nodes() };
+
+		// map local to global indexes for test and basic operands
+		this->IDT.resize(n_total_nodes); // ii
+		this->IDB.resize(n_total_nodes); // jj
+    // inner face
+		for ( auto i{0U}; i < n_elmt_nodes; i++ ) {
+        this->IDT[i] = iface.N(i)->Idx();
+        this->IDB[i] = this->IDT[i];
+      }
+    // outer face
+    const auto n_elmt_nodes2{ n_elmt_nodes * 2U };
+		for ( auto i{n_elmt_nodes}; i < n_elmt_nodes2; i++ ) {
+//        this->IDT[i] = iface.N(i)->Idx();
+// TODO: check whether this inverse order is correct for the outside nodes
+        this->IDT[i] = iface.N(n_elmt_nodes2-i-1U)->Idx();
+        this->IDB[i] = this->IDT[i];
+      }
+    // intervening element
+    for ( auto i{n_elmt_nodes2}; i < n_total_nodes; i++ ) {
+        this->IDT[i] = iface.N(n_elmt_nodes2-i-1U)->Idx();
+        this->IDB[i] = this->IDT[i];
+      }
+
+    // applying offset to interpolation function operand
+		for (auto i{0U}; i < this->IDT.size(); i++) {
+        this->IDT[i] += this->TestOperandOffset();
+        this->IDT[i] = DOF_indexes[ this->IDT[i] ];
+      }
+
+    // applying offset to weighting function operand
+		for (auto i{0U}; i < this->IDB.size(); i++) {
+        this->IDB[i] += this->BasicOperandOffset();
+        this->IDB[i] = DOF_indexes[ this->IDB[i] ];
+      }
+
+		// get local value from the given (local) node
+		vector<double> nodal_values(this->IDB.size());
+		{
+			if ( this->TestOperandType() == SCALAR ) {
+        // inner face
+				for ( auto nIdx{0U}; nIdx < n_elmt_nodes; ++nIdx )
+          nodal_values[nIdx] = iface.N(nIdx)->Read(this->TestOperandKey());
+        // outer face
+				for ( auto nIdx{ n_elmt_nodes }; nIdx < n_elmt_nodes2; ++nIdx )
+          nodal_values[nIdx] = iface.N(nIdx)->Read(this->TestOperandKey());
+        // intervening element
+				for (auto nIdx{ n_elmt_nodes2 }; nIdx < n_total_nodes; ++nIdx )
+          nodal_values[nIdx] = iface.InterveningElement()->N(nIdx-n_elmt_nodes2)->Read(this->TestOperandKey());
+        }
+			else {
+				throw csmp::Exception( ERROR,
+					                    "NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal(InterFace):",
+					                    "Undefined variable type");
+			}
+		}
+
+		// perform assignment from local matrix to global matrix
+
+		if ( this->multiply_accumulate_ )
+      {
+        throw csmp::Exception( ERROR,
+                              "NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal(InterFace):",
+                              "Multiply Accumulate not supported yet");
+
+        //if (IDT[i] != NULL_IDX) {
+        //  for (size_t j{0U}; j<LHS.Cols(); j++)
+        //    if (IDB[j] != NULL_IDX) {
+        //      G.MultiplyEntryWith(IDT[i],
+        //        IDB[j],
+        //        LHS(i, j) * factor_);
+        //    }
+        //}
+      }
+		else if ( this->add_accumulate_ || this->add_accumulate_later_ )
+		{
+			for (auto i{0U}; i < this->LHS.Rows(); i++) {
+				if ( this->IDT[i] != NULL_IDX ) {
+					for (auto j{0U}; j < this->LHS.Cols(); j++) {
+						if ( this->IDB[j] == NULL_IDX ) {
+							pivotVector[ this->IDT[i] ] -= this->LHS(i,j) * nodal_values[j] * this->factor_;  // notice sign iface.N(j / this->TestOperandOffset())->Read(this->TestOperand())
+						}
+						else {
+							G.Add( this->IDT[i],
+								     this->IDB[j],
+								     this->LHS(i, j) * this->factor_ );
+						}
+					}
+				}
+			}
+
+			/*for (auto i{0U}; i<LHS.Rows(); i++)
+			  if (IDT[i] != NULL_IDX) {
+				for (size_t j{0U}; j < LHS.Cols(); j++)
+				  if (IDB[j] != NULL_IDX) {
+					G.Add(IDT[i],
+					  IDB[j],
+					  LHS(i, j) * factor_);
+				  }
+			  }*/
+		}
+		else if ( this->subtract_accumulate_ || this->subtract_accumulate_later_ )
+      {
+        for ( auto i{0U}; i < this->LHS.Rows(); i++ ) {
+          if ( this->IDT[i] != NULL_IDX ) {
+            for (auto j{0U}; j < this->LHS.Cols(); j++ ) {
+              if ( this->IDB[j] == NULL_IDX ) {
+                pivotVector[ this->IDT[i] ] += this->LHS(i,j) * nodal_values[j] * this->factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
+              }
+              else {
+                G.Add( this->IDT[i],
+                       this->IDB[j],
+                       -this->LHS(i, j) * this->factor_ );
+              }
+            }
+          }
+        }
+
+			/*for (auto i{0U}; i<LHS.Rows(); i++)
+			  if (IDT[i] != NULL_IDX) {
+				for (size_t j{0U}; j < LHS.Cols(); j++)
+				  if (IDB[j] != NULL_IDX) {
+					G.Add(IDT[i],
+					  IDB[j],
+					  -LHS(i, j) * factor_);
+				  }
+			  }*/
+		}
+		else
+			throw csmp::Exception( ERROR,
+				                    "NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal(InterFace):",
+				                    "accumulation instructions could not be parsed.");
+
+	} // end AssignToGlobal (InterFace)
+
+
+// FOR DEBUGGING
+//cout <<"\nNumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region: on InterFace "<< e.Idx() << endl;
+//MathOperatorLHS<dim>::LHS.Out();
+
+// for ( auto i{0U}; i<this->LHS.Rows(); i++ )
+//   if ( this->LHS(i,i) < numeric_limits::epsilon() ) 
+//     cout <<"\nNumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region: zero element in diagonal of element matrix.";
+
+
+
+/** Analytic one-dimensional temperature profile in homogeneous material.
+ 
+    @param val_farfield difference of variable value in medium before boundary value was changed (oC) and the new value assigned at X0
+    @param diffusivity  diffusivity (m2/s)
+    @param x distance from interface (m)
+    @param t time (s)
+*/
+double diffusion1D( double val_farfield, double diffusivity, double x, double t )
+ {
+    return val_farfield * erf( x / (2. * sqrt( diffusivity * t ) ) );
+ }
+ 
+
+/**
+     Derivative *  conductivity product at  position x0, as a function of time and the initial difference between the variable value in the farfield
+     and at the X0 boundary
+*/
+double flux1DAtX0( double val_farfield, double diffusivity, double t, double conductivity )
+ {
+    // derivative pf previous expression
+    constexpr double pi = 3.14159265358979323846;
+    const double     sqrtPi{ sqrt(pi) }; // x{0.};
+    // const double     x2{ x * x };
+    // exp(0) = 1! double dTdx  = T0 * exp( -x2 ) / (kappa * t);
+    double dvaldx  = val_farfield / (diffusivity * t);
+    dvaldx /= sqrtPi * sqrt( diffusivity * t );
+ 
+    // heat flux
+    return dvaldx * conductivity;
+ }
+
+
+
+
+template class NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<1U>;
+template class NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<2U>;
+template class NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<3U>;
+
+} // csmp
+
+
+
+
+
+
+
+
+
+
+

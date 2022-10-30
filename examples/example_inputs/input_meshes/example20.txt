@@ -1,0 +1,17 @@
+name	MParameter	unit	index	min.	max.	place
+									
+unit normal		FN	X	2	-1.00E+01	1.00E+01	element
+fluid volume source	Qv	m3 s-1	1	-1.00E+01	1.00E+01	element
+nodal fluid volume source	QNv	m3 s-1	1	-1.00E+01	1.00E+01	node
+permeability		k	m2	1	1.00E-23	1.00E+01	element
+porosity		phi	X	1	1.00E-05	1.00E+00	element
+conductivity		K	m s-1	1	1.00E-12	1.00E+01	element
+fluid pressure		p	Pa	1	-1.00E+08	1.00E+08	node
+velocity		ut	m s-1	2	-1.00E+05	1.00E+05	element
+pore velocity		vt	m s-1	2	-1.00E+05	1.00E+05	element
+volume flux		qv	m3 s-1	1	0.00E+00	1.00E+05	element
+concentration		S0	X	1	0.00E+00	1.50E+02	node
+previous concentration	S1	X	1	0.00E+00	1.10E+00	node
+mapped concentration	S2	X	1	0.00E+00	1.10E+00	node
+nodal flux mismatch	NMF	m3	1	-1.00E+10	1.00E+10	node
+

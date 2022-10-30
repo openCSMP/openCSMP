@@ -5,24 +5,28 @@
 #include "MathOperatorRHS.h"
 
 namespace csmp {
+
+template<uint32_t> class Element;
+
 /**
+
+Vector solution variable: volume strain
+
 @author S.K. Matthaei
 @author S. Roberts
 @date 1999 */
 
-/// vector solution variable: volume strain
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_BT_D_op_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_BT_D_op_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    //                                                                          for instance:                                           
-    NumIntegral_BT_D_op_dV( const PropertyDatabase<dim>& pref, const char* oper,     // volume strain
-                                                          const char* youngs,   // Young's modulus
-                                                          const char* poissons, // Poisson's ratio
-                                                          const char* test, bool plane_strain=true );   // displacement
+    NumIntegral_BT_D_op_dV( const PropertyDatabase<dim>&, const char* oper,     // volume strain
+                            const char* youngs,   // Young's modulus
+                            const char* poissons, // Poisson's ratio
+                            const char* test, bool plane_strain=true ); // displacement
 
-    virtual void GetOperands( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
 
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
     void PlaneStress();
     

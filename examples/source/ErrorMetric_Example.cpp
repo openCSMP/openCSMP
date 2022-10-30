@@ -28,7 +28,7 @@ void ErrorMetric_Example::Specifications()
   AddAuthor( "SKM" );
   AddDescription( "fluid pressure computation and evaluation of the discretization error" );
   AddDescription( "source in: ErrorMetric_Example.cpp" );
-  AddRequirement( "file set: 'prism_test'");
+  AddRequirement( "file set: 'prism_test', prism_test-configuration.txt, example25.txt(variable file)");
 }
 
 
@@ -36,7 +36,7 @@ void ErrorMetric_Example::Specifications()
 
    3D fluid pressure computation and evaluation of the discretization error incurred.
 
-   Use models 'prism_test' or 'fracs4' (.dat, .asc, -regions.txt, -configuration.txt)
+   Use models 'prism_test' or 'fracs4' (binary files, -configuration.txt)
    as input file suites.
 
   **************************************************************************************** */
@@ -45,10 +45,30 @@ void ErrorMetric_Example::Run()
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
 
+    /*
     const string model_name("prism_test");
     const bool irregular_mesh(false);
     const bool binary_file(true);
     ANSYS_Model3D  model( model_name.c_str(), "example25.txt", irregular_mesh, binary_file );
+    */
+
+    // ------------------------------------------------------------
+    // 0. Load CSMP native format model
+    // ------------------------------------------------------------
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'prism_test':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "prism_test";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "example25.txt";
+    string config_file = model_name;
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<3U>  model(model_name, variable_file);
 
     printModelDimensions( model, true );
 
@@ -72,10 +92,10 @@ void ErrorMetric_Example::Run()
    // -----------------------------------------------------------------------
    // 2. steady-state fluid pressure
    // -----------------------------------------------------------------------
-    SteadyStateDiffusor<3U,Region> steady_state_pressure( model, "conductivity", "fluid pressure",
+    SteadyStateDiffusor<3U,Element> steady_state_pressure( model, "conductivity", "fluid pressure",
                                                                         "fluid volume source" );
 
-    VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model, "conductivity", "porosity", "fluid pressure" );
+    VelocityAndVolumeFlux<3U>  postpro0( model, "conductivity", "porosity", "fluid pressure" );
 
     steady_state_pressure.AddPostProcess( &postpro0 );
     steady_state_pressure.ComputeSteadyState( model.Region("Model") );
@@ -115,6 +135,8 @@ void ErrorMetric_Example::Run()
     vtk_output.OutputDataToVTK( model, "FRAC_VOLUMES", "discretization-error", "discretization error", 1, true );
     vtk_output.OutputDataToVTK( model, "discretization-error-magnitude", "discretization error magnitude", 1, true );
     vtk_output.OutputDataToVTK( model, "FRAC_VOLUMES", "discretization-error-magnitude", "discretization error magnitude", 1, true );
+
+    fs::current_path("../../example_inputs/");
 
 } // Run()
 

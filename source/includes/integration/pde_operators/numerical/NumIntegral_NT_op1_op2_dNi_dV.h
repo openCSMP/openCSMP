@@ -6,6 +6,8 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /**
 @author S.K. Matthaei
 @date 2005
@@ -15,18 +17,18 @@ gravity term in transient flow: -S / dt  +  K     g   delta_rho grad Z
 
 @note only use in BE scheme where storage term is divided by time-increment
 */
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_NT_op1_op2_dNi_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_NT_op1_op2_dNi_dV( const PropertyDatabase<dim>&,
                                    const char* oper,          // e.g., fluid density
                                    const char* mtrl1,         // e.g., storativity
                                    const char* mtrl2,         // e.g., conductivity
                                    const char* test );        // e.g., fluid pressure
     
-    virtual void GetOperands( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
 
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
     virtual void MultiplyWithTimeFactor( double dt );
   

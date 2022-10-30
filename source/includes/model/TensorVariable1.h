@@ -63,6 +63,8 @@ class TensorVariable<1U> {
     bool             operator<( const TensorVariable& t ) const; 
     
     bool             IsWithinRange( double vmin, double vmax ) const;
+    bool             Has_NaN_Values() const { return std::isnan(data); }
+
     VARIABLE_FLAG&   Flag( uint32_t i=0 );
     VARIABLE_FLAG    Flag( uint32_t i=0 ) const;
     uint32_t         Size() const;

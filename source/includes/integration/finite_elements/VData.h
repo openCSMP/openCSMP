@@ -1,7 +1,8 @@
 #ifndef CSMP_VDATA_H
 #define CSMP_VDATA_H
 
-#include  "CSMP_definitions.h"
+#include "CSMP_definitions.h"
+#include "CSMP_global_enumerations.h"
 
 namespace csmp {
 
@@ -41,11 +42,23 @@ The VData object contains coordinate objects, deques of
 vectors to store the connectivity and maps to hold the boundary flags
 and boundary values.
 
+Detailed content:
+
+(double) px, py, pz[0..n-1]  = coordinates of n nodes (= FE vertices)
+
+(int8_t) bflags[0..n-1] = negative numbers for nodes at boundary, see later
+
+(enum int8_t) pelmt[0..e-1] = CSMP_FEM_TYPE of e finite elements  (1 entry only for single element-type mesh)
+
+(size_t) plist[0..e *[sum npe[e]]] = nodes making up each element
+
+(int64_t) pfverts[0..e *[sum fpe[e]]] = neighbor elements adjacent to the faces of each element
+
+For Face and InterFace objects, 'pfverts' also contains the indices of the higher-dimensional neighbor element.
+
 */
 class VData {
-
   public:
-
     VData();
 
     /// constructor for hybrid element meshes 
@@ -67,7 +80,14 @@ class VData {
 
     void AddElementTypes( std::deque<int8_t>::const_iterator first,
                           std::deque<int8_t>::const_iterator last );
+     
+    /// the storage for node manifolds inside of VData
+    typedef std::vector< std::pair< std::vector<size_t>, ManifoldType > >  manifoldContainer;
 
+    /// initialises / overwrites the manifold information stored in the VData object
+    void AddNodeManifolds( manifoldContainer::const_iterator first,
+                           manifoldContainer::const_iterator last );
+                          
     /// resizes for a single-element type mesh
     void Resize( size_t nodes_per_element, size_t nbors_per_element, int8_t etype, size_t nodes, size_t elmts );
    
@@ -89,6 +109,7 @@ class VData {
     void ResizeElementNeighbors( size_t eid, uint32_t nperelmt );
     void ResizePfverts( const std::deque<uint32_t>& mixed_ele_pfverts );
     void ResizeBFlags( /* nodes */ );
+    void ResizeBREP_Flags( /* nodes */ );
 
     virtual ~VData();
     VData( const VData& );
@@ -97,7 +118,7 @@ class VData {
     VData& operator=( VData&& ) = default;
     
     /// compares 'pelmt', 'plist', 'pvferts' and 'pbflags' among the VData; specific mismatches are reported to std::cerr
-    bool   operator==( const VData& ) const;
+    bool operator==( const VData& ) const;
     
     /// using element types, coordinate range, and boundary flags, asesses whether this is a 1D, 2D , or three dimensional model
     int SpatialDimension() const;
@@ -116,6 +137,9 @@ class VData {
   
     /// combined number of any entities: elements + faces + interfaces
     size_t TotalNumberOfCells() const;
+    
+    /// topologically collocated nodes along the node-matched boundaries of mesh patches
+    size_t NodeManifolds() const;
 
     /// CSMP types of the elements, faces and interfaces contained in the mesh
     size_t ElementTypes() const;
@@ -171,7 +195,7 @@ class VData {
     void  P( uint32_t coordinate_axis, size_t i, double );
 
     /// to get vertex=node coordinate of node i for user defined coordinate component (x,y, or z)
-    double  P( uint32_t coordinate_axis, size_t i ) const;
+    double P( uint32_t coordinate_axis, size_t i ) const;
 
     /// set CSMP finite element type of element in 'pelmt' container
     void   ElementType( size_t eidx, int8_t type );
@@ -195,10 +219,16 @@ class VData {
     int64_t  Pfvert( size_t eidx, uint32_t i ) const;
 
     /// adds id (0..n-1) of boundary node and its BOX_BOUNDARY flag (negative integer)
-    void AddBFlag( size_t node_id, std::int8_t bflag );
+    void BFlag( size_t node_id, std::int8_t bflag );
 
     /// returns the boundary flag BOX_BOUNDARY  of the node
     std::int8_t BFlag( size_t node_id ) const;
+
+     /// adds id (0..n-1) of boundary node and its BOX_BOUNDARY flag (negative integer)
+    void BREP_Flag( size_t node_id, std::int8_t brep_flag );
+
+    /// returns the boundary flag BOX_BOUNDARY  of the node
+    std::int8_t BREP_Flag( size_t node_id ) const;
 
     /// returns the box boundary identifier of the node if it is located on the model boundary; else returs NOT
     std::int8_t BoundaryFlag( size_t vertex ) const;
@@ -224,6 +254,12 @@ class VData {
     std::vector<std::int8_t>::iterator            BFlagsEnd();
     std::vector<std::int8_t>::const_iterator      BFlagsBegin() const;
     std::vector<std::int8_t>::const_iterator      BFlagsEnd() const;
+    
+    /// labels of the nodes that indicate which point, line or surface of the Boundary Representation (BREP) of the original model it represents
+    std::vector<std::int8_t>::iterator            BREP_FlagsBegin();
+    std::vector<std::int8_t>::iterator            BREP_FlagsEnd();
+    std::vector<std::int8_t>::const_iterator      BREP_FlagsBegin() const;
+    std::vector<std::int8_t>::const_iterator      BREP_FlagsEnd() const;
 
     // const iterators
     std::vector<int8_t>::const_iterator                 PelmtBegin() const;
@@ -266,8 +302,14 @@ class VData {
     /// neighbor iterator for first interface plist; equivalent to PlistFacesEnd; use PlistEnd() for last one
     std::deque<std::vector<int64_t> >::const_iterator    PfvertsInterfaceBegin() const;
  
+    /// read / write access to the stored node manifolds
+    manifoldContainer::iterator                          PmanifoldsBegin();
+    manifoldContainer::iterator                          PmanifoldsEnd();
  
-    // EXTRA DATA, MESH MODIFICATION AND REPAIR 
+    manifoldContainer::const_iterator                    PmanifoldsBegin() const;
+    manifoldContainer::const_iterator                    PmanifoldsEnd() const;
+ 
+    // EXTRA DATA, MESH MODIFICATION AND REPAIR
 
     /// flips clockwise-numbered elements, into counter-clockwise right-hand rule compliant orientation; lower dimensional elements are made consistent; returns how many were flipped
     size_t RenumberElementsCounterClockwise2D();
@@ -284,18 +326,12 @@ class VData {
     /// creates an extra array 'pnode' equivalent to a sparsity pattern recording to which nodes each node pnode[i] is connected to
     void   EstablishNodeNeighborConnectivity( std::vector<std::set<size_t>>& pnode ) const;
 
+    /// initialises the TOPOTYPE flags, indicating which elements of the model boundary representation the node forms part of / represents
+    void   InitialiseNodeTopologyIdentifiers();
     
-    // PERSISTANCE (storing mesh in binary file)
-    
-    /// vertex manifolds: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
-    typedef std::map<size_t,std::set<std::pair<size_t,INTERFACE_SIDE> > > vertexManifoldIndices;
-
-    /// checks for collocated vertices and collects them into transfer data structure; returns number of manifolds found
-    size_t ExtractNodeManifolds( vertexManifoldIndices& ) const;
-  
     /// eliminate nodes that are not connected to any element, face or interface; report whether there were any
     bool DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes=true );
-  
+      
     /// clear the container
     void Erase();
 
@@ -341,13 +377,14 @@ class VData {
     bool                               hybrid_mesh_;      ///< mesh that consists of different element types
     std::vector<double>                px, py, pz;        ///< node coordinates
     std::vector<int8_t>                pelmt;             ///< CSMP element type info, needed to read plist & pfverts
-    // although there's little point to having 64-bit pointers but not 64-bit sizes, after all.
     std::deque<std::vector<int64_t> >  plist;             ///< nodes of each element, face and interface in that order
     std::deque<std::vector<int64_t> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
-    // all enums / flags must fit into 8-bit integers
-    std::vector<std::int8_t>           bflags;            ///< flags for those nodes that lie on model boundary
+    std::vector<std::int8_t>           bflags;            ///< int_8 enumeration flags for those nodes that lie on model boundaries
+    std::vector<std::int8_t>           gflags_;           ///< int_8 enumeration flags distinguishing mesh nodes that contribute to the model topology / geometry
     int64_t                            first_face_;       ///< faces come after elements; if none this is equal to elements
     int64_t                            first_interface_;  ///< interfaces come after faces; if none this is equal to elements
+    // collocated nodes connecting mesh patches, and their flags
+    manifoldContainer                  pmanifolds_;       ///< node manifolds, are added separately: @todo must be constructed separately
 
     friend class VData_Test;
 };
@@ -366,5 +403,6 @@ void elementToVTK( const VData& vdata, size_t eidx, const char* outfile );
 } // csmp
 
 #endif 
+
 
 

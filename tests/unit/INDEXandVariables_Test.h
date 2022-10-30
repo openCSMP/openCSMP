@@ -19,12 +19,12 @@ and the corresponding Read(), Store() and Status() operations.
 */
 class INDEXandVariables_Test : public Test {
   public:
-    explicit INDEXandVariables_Test( const char* );
+    INDEXandVariables_Test();
     virtual void run();
 
   private:
-    void runModel( Model<3>& );
-    const char* prefix_;
+    void runModel( Model<2>& );
+    static const bool verbose_ = true;
 };
 
   } // csmp

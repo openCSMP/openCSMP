@@ -97,7 +97,7 @@ void NimbleRegion_Test::run()
     Region<2U>&  model_domain(model2D_->Region("Model"));
     Region<2U>&  sub_domain(model2D_->Region("central"));
     cout <<"\nrun: creating NimbleRegion object from region '"<< sub_domain.Name() <<"' with "<< sub_domain.Nodes() <<" nodes and "<< sub_domain.Cells() <<" elements.\n";
-		NimbleRegion<2U>  plume_region( sub_domain.NodesBegin(), sub_domain.NodesEnd() ); // will have a halo of one element extra
+		NimbleRegion<2U>  plume_region( model2D_->Database(), sub_domain.NodesBegin(), sub_domain.NodesEnd() ); // will have a halo of one element extra
     plume_region.Out();
     // tested: O.K.
     // TODO: wrap into automatic test

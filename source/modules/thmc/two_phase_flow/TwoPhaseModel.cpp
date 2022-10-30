@@ -845,8 +845,9 @@ double TwoPhaseModel<dim>::dkrnds_numerical( double h ) const
       return ( krn_at( seff_ ) - krn_at( seff_ - h ) ) / h * dSedSw;
 
   return ( krn_at( seff_+h ) - krn_at( seff_-h ) )/ (2.0*h) * dSedSw;
-
 }
+
+
 
 template<uint32_t dim>
 double TwoPhaseModel<dim>::dfds_numerical( double h) const

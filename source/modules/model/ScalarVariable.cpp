@@ -11,10 +11,10 @@ VARIABLE_FLAG&  ScalarVariable::Flag() { return flag_; }
 VARIABLE_FLAG   ScalarVariable::Flag() const { return flag_; }
 
 
-size_t ScalarVariable::Size() const { return 1U; }
+uint32_t ScalarVariable::Size() const { return 1U; }
 
 
-void ScalarVariable::Resize( size_t, double newValue ) { data_ = newValue; }
+void ScalarVariable::Resize( uint32_t, double newValue ) { data_ = newValue; }
 
 
 

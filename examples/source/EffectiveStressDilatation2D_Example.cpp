@@ -64,7 +64,7 @@ void EffectiveStressDilatation2D_Example::Specifications()
   AddDescription( "Quadratic finite element interpolation, Dirichlet essential conditions" );
   AddDescription( "Region saved to a binary vset, then a second Region is built from it" );
   AddDescription( "source in: EffectiveStressDilatation2D_Example.cpp" );
-  AddRequirement( "file set: 'fractured_slate'");
+  AddRequirement( "file set: 'fractured_slate', EffectiveStressDilatation2D_Example_variables.txt");
 }
 
 
@@ -104,7 +104,8 @@ void EffectiveStressDilatation2D_Example::Run()
   
   // name of input file set
   const char* bin_file="fractured_slate";
-  
+
+  /*
   // 1.0 create an input interface for ANSYS 2D meshes
   // ---------------------------------------------------------------------------
   ANSYS_Interface    mesh_interface(true); // true = isoparametric elements
@@ -132,6 +133,24 @@ void EffectiveStressDilatation2D_Example::Run()
   Model<DIM>  model( mesh_topology, mesh_container, "EffectiveStressDilatation2D_Example_variables.txt", true );
   mesh_container.Erase();
   mesh_topology.Erase();
+  */
+
+  // ------------------------------------------------------------
+  // 1. Load CSMP native format model
+  // ------------------------------------------------------------
+  string model_name;
+  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'fractured_slate':"<<endl;
+  cin.ignore();
+  getline(cin, model_name);
+  if (model_name.length() == 0) model_name = "fractured_slate";
+
+  //find the name of current example source file
+  string file_name = GetExampleFileName(__FILE__);
+  string variable_file = "EffectiveStressDilatation2D_Example_variables.txt";
+  //create of directory with current example name, go into this directory, and copy input files into it.
+  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+  //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model<DIM>  model(model_name, variable_file);
   
   // 2.1 create Boundaries and convert them into SplitBoundary objects
   model.CreateSplitBoundaryFrom("SET1");
@@ -177,7 +196,7 @@ void EffectiveStressDilatation2D_Example::Run()
   // gas static pressure in the well
   const double pg(2300. * 9.81 * 100. + 100325.);
   well.InputPropertyValue( "fluid pressure", makeScalar(PLAIN,pg), COMPLETE, INSIDE );
-  well.ChangePropertyStatus( "fluid pressure", DIRICH );
+  well.ChangeNodePropertyStatus( "fluid pressure", DIRICH, COMPLETE, INSIDE );
   well.InputPropertyValue( "fracture permeability", makeScalar(PLAIN,1.0e-7) );
   well.InputPropertyValue( "fracture porosity",     makeScalar(PLAIN,1.0) );
 
@@ -236,6 +255,8 @@ void EffectiveStressDilatation2D_Example::Run()
       }
   
     cout <<"\nRun: a total of "<< cumulative_production <<" (m3), was produced after "<< model_time/86400. <<" days\n";
+
+    fs::current_path("../../example_inputs/");
   
 } // end Run
 
@@ -253,38 +274,38 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<D
     static bool first_call(true);
     
      if ( first_call ) {
-         fluid_pressure_ = new TransientDiffusor<DIM,Region>( model,
+         fluid_pressure_ = new TransientDiffusor<DIM,Element>( model,
                                                            "conductivity",
                                                            "fluid pressure", "total system compressibility",
                                                            "fluid volume source" );
        
          // post-processing operation to compute flow velocities
-         static VelocityAndVolumeFlux<DIM,Element<DIM> >  velocity( model, "conductivity", "porosity", "fluid pressure", false );
+         static VelocityAndVolumeFlux<DIM>  velocity( model, "conductivity", "porosity", "fluid pressure", false );
          fluid_pressure_->AddPostProcess( &velocity );
 
          #ifdef CSMP_WITH_SAMG_SOLVER
          // targeting SAMG DLL 2 for this pressure solver (same as for steady state solver, but now reusing solution from previous timestep if available)
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().SetSolverInstance(2);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().SetSolverInstance(2);
          // io
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout1( 0 );
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout2( 0 );
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_idmp( -1 );
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_iout1( 0 );
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_iout2( 0 );
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_idmp( -1 );
          // SAMG solution criteria
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_eps(0.);
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_rel_eps(1.E-10);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_eps(0.);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_rel_eps(1.E-10);
          
          // Re-use solver setup from previous timestep, internal checks force setup when required
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(7);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(7);
 
          // Re-use solver setup from previous timestep, internal checks force setup when required
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(7);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(7);
          // Agressive first level coarsening nredlev(1) for decreased setup time and reduced no. of cycles
       //    dynamic_cast<SteadyStateDiffusionSolver<3U,Region>*>(fluid_pressure_)->GetSolverSettings().GetSolverSettings().Set_nred(1);
          // Pre-adjust SAMG coarse matrix size relative to original size, based on solver output
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_a_cmplx(2);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_a_cmplx(2);
          // Pre-adjust SAMG mesh complexity, based on solver output
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_g_cmplx(1.5);
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_w_avrge(2);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_g_cmplx(1.5);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_w_avrge(2);
          #else
          /// add extra functionality for alternative solver if needed
          #endif
@@ -321,14 +342,14 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<D
     if ( first_call )  {
         #ifdef CSMP_WITH_SAMG_SOLVER
          // suppress verbose output
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout1(-1);
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout2(-1);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_iout1(-1);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_iout2(-1);
          // absolute tolerance set to 1e-14
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_eps( 1.E-14 );
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_eps( 1.E-14 );
          // use solution from last step as an initial guess
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_itypu(0);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_itypu(0);
          // reuse solver setup from last call
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(3);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(3);
         #else
         /// add extra functionality for alternative solver if needed
         #endif
@@ -352,10 +373,8 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<D
 void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2U>& model, const char* split_boundary_name, double time_increment )
  {
     static bool first_call(true);
-
-
     // ([C] + dt[K]){p}t+dt = [C]{p}t + dt {Q}t+dt
-    PDE_Integrator<2U,SplitBoundary>  transient_pressure;
+    PDE_Integrator<2U,Element>  transient_pressure;
 #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings;
     SAMG_Solver    samg_solver(&settings);
@@ -366,26 +385,26 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2
     transient_pressure.SetSolver( linear_solver );
 #endif
 
-    NumIntegral_dNT_op_dN_dV<2U,InterFace<2U> >  conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<2U>  conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
                                                conductance.MultiplyWithTimeIncrement(true);
 
-    NumIntegral_NT_lhsop_N_dV<2U,InterFace<2U> > capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_lhsop_N_dV<2U> capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
                                                capacitance_lhs.LumpedFormulation(true);
 
-    NumIntegral_NT_op_N_dV<2U,InterFace<2U> >  capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
+    NumIntegral_NT_op_N_dV<2U>  capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
                                                capacitance_rhs.LumpedFormulation(true);
 
-    NumIntegral_NT_op_N_dV<2U,InterFace<2U> >  source( model.Database(), "fluid volume source",  "fluid pressure" );
+    NumIntegral_NT_op_N_dV<2U>  source( model.Database(), "fluid volume source",  "fluid pressure" );
                                                source.MultiplyWithTimeIncrement(true);
                                                source.AddAccumulateLater();
                                                source.LumpedFormulation(true);
    
-    PointSource_rhsop<2U>                      nsource( model.Database(), "nodal fluid volume source",  "fluid pressure" );
+    PointSource_rhsop<2U>  nsource( model.Database(), "nodal fluid volume source",  "fluid pressure" );
                                                source.MultiplyWithTimeIncrement(true);
                                                source.AddAccumulateLater();
                                                source.LumpedFormulation(true);
 
-    VelocityAndVolumeFlux<2U,Element<2U> >    velocity( model,  "conductivity", "porosity", "fluid pressure", false );
+    VelocityAndVolumeFlux<2U>    velocity( model,  "conductivity", "porosity", "fluid pressure", false );
 
     transient_pressure.Add( &conductance );
     transient_pressure.Add( &capacitance_lhs );
@@ -438,7 +457,8 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2
     cout <<"\n\t\t(FD Backward-Euler time increment, delta_t="<< time_increment <<" secs)."<< endl;
     transient_pressure.TimeIncrement( 1. / time_increment );
 
-    transient_pressure.IntegrateOver( model.SplitBoundary(split_boundary_name) );
+    // integration over the lower dimensional region representing the SplitBoundary
+    transient_pressure.IntegrateOver( model.Region(split_boundary_name) );
 
     // setting relative solution tolerance after first solve
     if ( first_call )  {

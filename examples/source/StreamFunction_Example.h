@@ -23,8 +23,8 @@ private:
                               BOX_BOUNDARY boundary0, BOX_BOUNDARY boundary1,
                               double total_flux, const char* stream_func_var );
 
-  void analyze_sensitivity( Model<2U>& sg, const char* group, Standard_IO_Handler& io,
-                            Interrelation<2U>& itr, PDE_Integrator<2U,Region>& algo );
+  void AnalyseSensitivity( Model<2U>&, const char* region, Standard_IO_Handler&,
+                           Interrelation<2U>&, PDE_Integrator<2U,Element>& );
 
   template<uint32_t dim> double integrateDomainBoundaryFlux( Model<dim>& sg );
 

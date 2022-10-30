@@ -21,8 +21,8 @@ void StatisticalAnalyzer_Example::Specifications()
   AddDescription( "source in: StatisticalAnalyzer_Example.cpp" );
   AddDescription( "generate histograms with csmp::StatisticalAnalyzer" );
   AddDescription( "source file in: StatisticalAnalyzer_Example.cpp" );
-  AddRequirement( "LeftRight .asc,.dat,-regions.txt" );
-  AddRequirement( "StatisticalAnalyzer_Example_var.txt" );
+  AddRequirement( "LeftRight (CSMP binary files))" );
+  AddRequirement( "variable file (StatisticalAnalyzer_Example_var.txt)" );
 }
 
 
@@ -32,6 +32,7 @@ void StatisticalAnalyzer_Example::Specifications()
 */
 void StatisticalAnalyzer_Example::Run()
 {
+  /*
   const bool          isoparametric(true);
   ANSYS_Interface     mesh_interface(isoparametric);
   VSet<2U>            mesh_container;
@@ -46,6 +47,22 @@ void StatisticalAnalyzer_Example::Run()
   mesh_interface.Read_ANSYS_Mesh( model_name.c_str(), mesh_container, mesh_topology, binary_file, true );
 
   Model<2U> reservoir_model( mesh_topology, mesh_container, "StatisticalAnalyzer_Example_var.txt", true );
+  */
+
+  string model_name;
+  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'LeftRight':"<<endl;
+  cin.ignore();
+  getline(cin, model_name);
+  if (model_name.length() == 0) model_name = "LeftRight";
+
+  //find the name of current example source file
+  string file_name = GetExampleFileName(__FILE__);
+  string variable_file = "StatisticalAnalyzer_Example_var.txt";
+  string config_file = model_name;
+  //create of directory with current example name, go into this directory, and copy input files into it.
+  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+  //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model<2U>  reservoir_model(model_name, variable_file);
 
   Region<2>& regionref = reservoir_model.Region("Model");
 
@@ -87,6 +104,8 @@ void StatisticalAnalyzer_Example::Run()
   porosity_histogram.RegionPropertyHistogramsElement( "porosity", bins, porosity_results );
   //                                                             output file name                   log10_of_bin_values
   porosity_histogram.OutputRegionPropertyAbundancePolygonsMaple( "porosity", bins, porosity_results, false );
+
+  fs::current_path("../../example_inputs/");
 
 } // Run()
 

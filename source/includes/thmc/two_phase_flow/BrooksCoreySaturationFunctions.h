@@ -63,6 +63,10 @@ class BrooksCoreySaturationFunctions {
         double dkrnds_Numerical( Element<dim>* const, double delta_s=0.001 ) const ;
   
         double dpcds_Numerical(  Element<dim>* const, double h = 0.00001 ) const;
+
+        double seff_to_sw( Element<dim>* const e, double seff ) const;
+
+        double sw_from_pc_at( Element<dim>* const e, double pc, double sw ) const;
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }

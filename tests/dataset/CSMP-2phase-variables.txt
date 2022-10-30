@@ -18,6 +18,7 @@ total system compressibility			CT	Pa-1	1	1.00E-15	1.00E-05	element
 capillary diffusivity				DC	m2 s-1	1	1.00E-50	1.00E+00	element
 diffusivity					D	m2 s-1	1	1.00E-50	1.00E+00	element
 permeability					K	m2	1	1.00E-25	1.00E+00	element
+vertical permeability				Kv	m2	1	1.00E-25	1.00E+00	element
 porosity					PHI	X	1	1.00E-05	1.00E+00	element
 pore volume					PV	m s-1	1	1.00E-20	1.00E+08	element
 density oil					RHOO	kg m-3	1	1.00E+02	1.80E+03	node
@@ -53,5 +54,7 @@ relperm endpoint oil				KRNR	m	1	1.00E-06	1.00E+03	element
 relperm endpoint water				KRWR	m	1	1.00E-06	1.00E+03	element
 transfer start					TST	s	1	0.0		1.00E+15	element
 relperm model					RPM	X	1	0.		10.		region
+rock type						RRT	int	1	0	256	element
+rocktype						RRTnew	int	1	0	256	element
 
 

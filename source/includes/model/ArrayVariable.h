@@ -139,12 +139,13 @@ template<uint32_t> class PropertyDatabase;
       double         Component( uint32_t ) const;
 
       /// returns number of array elements
-      size_t         Size() const;
-      void           Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
+      uint32_t       Size() const;
+      void           Resize( uint32_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
       VARIABLE_FLAG  Flag(  ) const;
       VARIABLE_FLAG& Flag(  );
       void           Flag( VARIABLE_FLAG flag );
       bool           IsWithinRange( double min, double max ) const;
+      bool           Has_NaN_Values() const;
       void           MinMax( double& min, double& max ) const;
       void           Sort();
 

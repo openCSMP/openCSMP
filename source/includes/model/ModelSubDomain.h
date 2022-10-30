@@ -34,11 +34,11 @@ class PropertyConstraints;
 */
 struct SubDomainInfo {
    std::string         name;                           ///< unique name
-   std::vector<uint32_t> interior_elmts;                 ///< cells that have no face on the perimeter
-   std::vector<uint32_t> perimeter_elmts;                ///< cells that have at least one face on perimeter
+   std::vector<uint32_t> interior_elmts;               ///< cells that have no face on the perimeter
+   std::vector<uint32_t> perimeter_elmts;              ///< cells that have at least one face on perimeter
    std::vector<std::vector<int8_t> > perimeter_faces;  ///< local 0..faces-1 identifiers of the faces of the simplices that lie on domain boundary
-   std::vector<uint32_t> interior_nodes;                 ///< nodes within the subdomain
-   std::vector<uint32_t> perimeter_nodes;                ///< nodes on the perimeter of the subdomain
+   std::vector<uint32_t> interior_nodes;               ///< nodes within the subdomain
+   std::vector<uint32_t> perimeter_nodes;              ///< nodes on the perimeter of the subdomain
 };
 
 
@@ -52,9 +52,7 @@ struct SubDomainInfo {
 */
 template<uint32_t dim,template<uint32_t> class CELL>
 class ModelSubDomain {
-  public:
-    typedef CELL<dim> CellType; // used by SteadyStateDiffusor and others
-    
+  public:    
     /// constructs incomplete subdomain for later initialisation with suitable methods in subclasses
     ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>& );
     ModelSubDomain( const ModelSubDomain& );
@@ -125,10 +123,7 @@ class ModelSubDomain {
     void    UpdateMemberIndexes() const;
     
     /// output current indices to vector
-    void    MemberCellIndexes( std::vector<size_t>& ) const;
-    
-    /// setting all cell indices to a specific value
-    void    SetCellIndexes( size_t new_idx );
+    std::vector<size_t>  MemberCellIndexes() const;
 
     // ----------------------------------------
     // access
@@ -229,7 +224,8 @@ class ModelSubDomain {
 
     /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
     template<typename Var>
-    void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
+    void InputPropertyValue( const char* input_prop, const Var& new_value,
+                             VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
 
     /// changes the flag of the scalar variable 'property' to new value; applied either in the entire subdomain or its interior or perimeter
     void ChangePropertyStatus( const char* property,

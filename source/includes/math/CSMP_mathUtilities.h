@@ -95,7 +95,7 @@ double splineDerivative( double x, double x1, double x2, double y1, double y2, d
 double splineSecondDerivative( double x, double x1, double x2, double y1, double y2, double k1, double k2);
   
 
-// ROOT FINDING
+// ROOT FINDING 
 
 /// finding root of function f(x) by Secant method within the x range [xmin,xmax]
 double secant_method( double xmin, double xmax, double (*function)( double ), double tolerance);

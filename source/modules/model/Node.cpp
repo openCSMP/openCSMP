@@ -18,7 +18,8 @@ template<uint32_t dim>
 Node<dim>::Node()
     : idx_(numeric_limits<size_t>::max()),
       manifold_(nullptr),
-      at_boundary_(NOT)
+      at_boundary_(NOT),
+      BREP_entity_(MESH_VERTEX)
   {
   }
 
@@ -28,12 +29,14 @@ Node<dim>::Node()
     Initialises everything except for parent element related vectors.
 */
 template<uint32_t dim>
-Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs, BOX_BOUNDARY boundary_flag )
+Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs,
+                 BOX_BOUNDARY boundary_flag, TOPOTYPE topotype )
  : LocalVariableStorage<dim,Node>(lvs),
    xyz_(pt),
    idx_(idx),
    manifold_(nullptr),
-   at_boundary_(boundary_flag)
+   at_boundary_(boundary_flag),
+   BREP_entity_(topotype)
  {
  }
 
@@ -51,7 +54,8 @@ Node<dim>::Node( const Node<dim>& nd )
     neighbor_node_pointers_(nd.neighbor_node_pointers_),
     manifold_(nd.manifold_),
     parent_node_indexes_(nd.parent_node_indexes_),
-    at_boundary_(nd.at_boundary_)
+    at_boundary_(nd.at_boundary_),
+    BREP_entity_(nd.BREP_entity_)
   {
     this->LVS( nd.LVS() );
     // NB: if this is a manifold, the new Node must be added to it,
@@ -71,7 +75,8 @@ Node<dim>::Node( Node<dim>&& nd )
     neighbor_node_pointers_{ move(nd.neighbor_node_pointers_) },
     manifold_{ move(nd.manifold_) },
     parent_node_indexes_{ move(nd.parent_node_indexes_) },
-    at_boundary_{ move(nd.at_boundary_) }
+    at_boundary_{ move(nd.at_boundary_) },
+    BREP_entity_{ move(nd.BREP_entity_)}
   {
     this->LVS( move(nd.LVS()) );
   }
@@ -97,6 +102,7 @@ Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
          xyz_                     = nd.xyz_;
          idx_                     = nd.idx_;
          at_boundary_             = nd.at_boundary_;
+         BREP_entity_             = nd.BREP_entity_;
          parent_element_pointers_ = nd.parent_element_pointers_;
          neighbor_node_pointers_  = nd.neighbor_node_pointers_;
          manifold_                = nd.manifold_;
@@ -121,6 +127,7 @@ Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
     xyz_                     = nd.xyz_;
     idx_                     = nd.idx_;
     at_boundary_             = nd.at_boundary_;
+    BREP_entity_             = move( nd.BREP_entity_ );
     parent_element_pointers_ = move( nd.parent_element_pointers_ );
     neighbor_node_pointers_  = move( nd.neighbor_node_pointers_ );
     manifold_                = move( nd.manifold_ );
@@ -145,35 +152,36 @@ template<uint32_t dim>
 bool  Node<dim>::operator==( const Node<dim>& nd )
  {
     // TODO: fix Node comparitor
-    cerr <<"Node<"<< dim <<">: called operato== Node comparitor, extremely costly and of questionable value\n";
+    cerr <<"Node<"<< dim <<">: called operator==(Node) comparitor, extremely costly and of questionable value\n";
     if ( &nd != this )
-    {
-        if( Coordinate() == nd.Coordinate() )
-        {
-            if( parent_element_pointers_.size() == nd.parent_element_pointers_.size() )
+      {
+          if ( BREP_entity_ != nd.BREP_entity_ ) return false;
+          if ( Coordinate() == nd.Coordinate() )
             {
-                if( parent_element_pointers_.empty() )
+                if ( parent_element_pointers_.size() == nd.parent_element_pointers_.size() )
                 {
-                    if( idx_ == nd.idx_ )
+                    if ( parent_element_pointers_.empty() )
+                      {
+                          if( idx_ == nd.idx_ )
+                              return true;
+                          return false;
+                      }
+
+                    set<Element<dim>*> elmts1(parent_element_pointers_.begin(), parent_element_pointers_.end());
+                    set<Element<dim>*> elmts2(nd.parent_element_pointers_.begin(), nd.parent_element_pointers_.end());
+                    vector<Element<dim>*> elmts_intersect;
+                    set_intersection( elmts1.begin(), elmts1.end(),
+                                      elmts2.begin(), elmts2.end(),
+                                      back_inserter(elmts_intersect) );
+                    if( elmts_intersect.size() == parent_element_pointers_.size() )
                         return true;
+
                     return false;
                 }
-
-                std::set<Element<dim>*> elmts1(parent_element_pointers_.begin(), parent_element_pointers_.end());
-                std::set<Element<dim>*> elmts2(nd.parent_element_pointers_.begin(), nd.parent_element_pointers_.end());
-                std::vector<Element<dim>*> elmts_intersect;
-                std::set_intersection( elmts1.begin(), elmts1.end(),
-                                       elmts2.begin(), elmts2.end(),
-                                       std::back_inserter(elmts_intersect) );
-                if( elmts_intersect.size() == parent_element_pointers_.size() )
-                    return true;
-
                 return false;
             }
-            return false;
-        }
-        return false;
-    }
+          return false;
+      }
     return true;
  }
  
@@ -297,7 +305,7 @@ void  Node<dim>::Accept( csmp::Visitor<dim>& v )
 
 /// initialises the corner-node to neighbor corner node pointer vector
 template<uint32_t dim>
-void  Node<dim>::Assign( std::set<Node<dim>*>& neighbor_nodes )
+void  Node<dim>::Assign( set<Node<dim>*>& neighbor_nodes )
  {
     neighbor_node_pointers_.assign( neighbor_nodes.begin(), neighbor_nodes.end() );
  }
@@ -305,7 +313,7 @@ void  Node<dim>::Assign( std::set<Node<dim>*>& neighbor_nodes )
  
  
 template<uint32_t dim>
-void  Node<dim>::Assign( std::vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors )
+void  Node<dim>::Assign( vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors )
  {
     neighbor_node_pointers_.assign( neighbor_nodes.begin(), neighbor_nodes.end() );
     if ( sort_neighbors )
@@ -632,6 +640,63 @@ void Node<dim>::Assign( NodeManifold<dim>& nmf )
  }
 
 
+/**
+   If node is part of line elements (2D) or surface elements (3D), method returns a unit normal that represents the average of the normals of the connected elements.
+   
+   @return false if 1) the node is not located on the inside of a patch of lower dimensional elements, 2) not properly initialised or 3) adjacent element normals are pointing in opposite directions
+*/
+template<uint32_t dim>
+bool Node<dim>::UnitNormal( Point<dim>& avg_nrml ) const
+ {
+    // 1. verifying that the node indeed lies on an internal surface
+    // 1.1 finding the surface elements connected to the node and their normals
+    uint32_t    dim_1_elmt_count{0U};
+    Point<dim>  surf_nrml; // initialised to zero
+    avg_nrml = 0.;
+
+    if constexpr ( dim == 3U ) {
+        for ( auto i{0U}; i<Parents(); i++ )
+          if ( Parent(i) && Parent(i)->IsSurface() ) {
+              if ( dim_1_elmt_count >= 1 && dotProduct( surf_nrml, Parent(i)->UnitNormal() ) < 0. ) {
+                   Out();
+                   ErrorHandler::Instance().Note( ERROR, "Node<3U>::UnitNormal",
+                                                         "surface element normals point into opposite directions");
+                   return false;
+                }
+              surf_nrml = Parent(i)->UnitNormal();
+              avg_nrml += surf_nrml;
+              dim_1_elmt_count++;
+           }
+       }
+
+    if constexpr ( dim == 2U ) {
+        for ( auto i{0U}; i<Parents(); i++ )
+          if ( Parent(i) && Parent(i)->IsLine() ) {
+              if ( dim_1_elmt_count >= 1  && dotProduct( surf_nrml, Parent(i)->UnitNormal() ) < 0. ) {
+                   Out();
+                   ErrorHandler::Instance().Note( ERROR, "Node<2U>::UnitNormal",
+                                                         "line element normals point into opposite directions");
+                   return false;
+                }
+              surf_nrml = Parent(i)->UnitNormal();
+              avg_nrml += surf_nrml;
+              dim_1_elmt_count++;
+           }
+       }
+
+    if ( dim_1_elmt_count <= 2 ) {
+         ErrorHandler::Instance().Note( ERROR, "Node<dim>::UnitNormal",
+                                               "supplied node does not lie in the interior of a surface");
+         return false;
+      }
+    // 1.2 obtaining average normal orientation by normalisation
+    avg_nrml /= static_cast<double>(dim_1_elmt_count);
+    
+    return true;
+
+ } // end UnitNormal
+
+
 
 // OUTPUT
 
@@ -643,6 +708,10 @@ template<uint32_t dim>
 void Node<dim>::Out() const
  {
     cout <<"\n\nNode<"<< dim <<">: "<< idx_;
+    if ( BREP_entity_ != MESH_VERTEX ) {
+         string str(parseTopology(BREP_entity_));
+         cout <<", topologic role: "<< str;
+      }
     if ( at_boundary_ != NOT ) {
          string str(parseBoundary(at_boundary_));
          cout <<", Boundary flag: "<< str;
@@ -918,6 +987,94 @@ template pair<Element<1>*,size_t> parentElement( typename vector<Node<1>*>::cons
 
 
 
+/**
+    Determines role of Node (simple mesh node vs. geometric constraint), using BOX_BOUNDARY flagging and parent element connectivity.
+    Returns the inferred topo type classifier.
+    
+    @attention full diagnostics are possible only if the mesh contains line elements for each (edge) curve and triangles or quadrilaterals for each surface of the original BREP.
+    
+    @return geometric classifier of the node point.
+*/
+template<uint32_t dim>
+TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<dim>* const node )
+ {
+   // establishing the geometric attributes of the nodes
+   const bool at_external_boundary = ( node->AtBoundary() != NOT && node->AtBoundary() != INTERNAL ) ? true : false;
+   const bool BREP_defining_node   = ( at_external_boundary == true || node->AtBoundary() == INTERNAL ) ? true : false;
+   
+   // using parent elements to determine whether the node is situated on a line or surface
+   int part_of_line{0}, part_of_surface{0};
+   const auto n_parent_elmts{ node->Parents() };
+   if ( BREP_defining_node ) {
+       // ! works only if the topology defining cells are elements because node has no connection to Face or InterFace
+       if ( n_parent_elmts > 0U ) {
+           for ( uint32_t i{0U}; i<n_parent_elmts; i++ ) {
+                if ( node->Parent(i)->IsLine() )
+                  part_of_line++;
+                else if ( node->Parent(i)->IsSurface() )
+                  part_of_surface++;
+             }
+         }
+     }
+ 
+   switch( node->Attribute() ) {
+        // if the point serves the sole purpose of discretisation, away from any BREP entities
+        case MESH_VERTEX: if ( !BREP_defining_node ) return MESH_VERTEX;
+        // essential point of the input geometry such as a line intersection, two surfaces touching etc.
+        case INTERSECTION_POINT: if ( BREP_defining_node && part_of_line > 2U ) return INTERSECTION_POINT;
+        // includes end points of lines
+        case PERIMETER_POINT:
+               if constexpr ( dim == 2U ) if ( BREP_defining_node && part_of_line == 1U )
+                 return PERIMETER_POINT;
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && part_of_line == 2U )
+                 return PERIMETER_POINT;
+        // point where a line touches the outside boundary of a model
+        case EXTERIOR_POINT: if ( at_external_boundary && part_of_line == 0U ) return EXTERIOR_POINT;
+        case INTERIOR_LINE:
+               if constexpr ( dim == 2U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 1U )
+                 return INTERIOR_LINE;
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 2U )
+                 return INTERIOR_LINE;
+        case PERIMETER_LINE:
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 2U )
+                 return INTERIOR_LINE;
+        case EXTERIOR_LINE:
+               if ( BREP_defining_node && at_external_boundary && part_of_line >= 1U ) return EXTERIOR_LINE;
+        case INTERSECTION_LINE:
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary &&
+                                               part_of_line >= 1U && part_of_surface >= 2U )
+                 return INTERSECTION_LINE;
+        case INTERIOR_SURFACE:
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary &&
+                                               part_of_line == 0U && part_of_surface == 1U )
+                 return INTERIOR_SURFACE;
+        case PERIMETER_SURFACE:
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && at_external_boundary &&
+                                               part_of_line == 0U && part_of_surface == 1U )
+                 return PERIMETER_SURFACE;
+        case EXTERIOR_SURFACE:
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && at_external_boundary &&
+                                               part_of_line == 0U && part_of_surface == 1U )
+                 return EXTERIOR_SURFACE;
+        default:
+          cerr <<"\nconsistencyCheck(NodeManifold): TOPOTYPE of Node could not be resolved."<< endl;
+      
+      } // end switch
+      
+    return MESH_VERTEX;
+          
+ } // end checkModelPartThatNodeBelongsTo
+
+template TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<3U>* const );
+template TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<2U>* const );
+template TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<1U>* const );
+
+
+
+
+
+
+
 template<uint32_t dim>
 void printNeighbors( const Node<dim>* const nptr )
  {
@@ -998,6 +1155,60 @@ template size_t sizeOf( const Node<3>* const );
 template size_t sizeOf( const Node<2>* const );
 template size_t sizeOf( const Node<1>* const );
 
+
+
+/**
+    For a node that lies on an internal surface, method finds it volumetric (3D) or surface (2D) parent elements on the inside or outside of this lower dimensional feature.
+    functions throws if assumptions are not met, i.e., the node does not lie in the interior of a lower dimensional feature.
+    
+    @attention the inside outside classification is based on a geometric average of the normals of the surface elements that the node forms part of.
+    If any of these normals diverges by more that 90o from the others the result is inconclusive
+    
+    @param node on the interior of a surface inside of the model
+    
+    @return vectors of pointers to the equidimensional elements on the inside and the outside of the surface that the node lies in the interior of.
+    
+*/
+template<uint32_t dim>
+pair<vector<Element<dim>*>,vector<Element<dim>*>>  parentElementsAdjacentTo( const Node<dim>* const node )
+ {
+    // 0. checking prerequities
+    assert( node != nullptr );
+    assert( node->AtBoundary() == INTERNAL || node->AtBoundary() == NOT );
+    assert( node->Parents() >= 2U ); // must be initialised
+ 
+    // 1. verifying that the node lies on an internal surface and determining unit normal to it by averaging
+    Point<dim>  avg_nrml;
+    if ( !node->UnitNormal( avg_nrml ) )
+      throw csmp::Exception( ERROR, "parentElementsAdjacentTo",
+                            "supplied node does not lie in the interior of a surface");
+    
+    vector<Element<dim>*> inside_elmt_ptrs, outside_elmt_ptrs;
+    uint32_t              e_count{ 0U };
+    
+    // 2. for the volumetric parent elements of the node, determine which side of the surface they lie on
+    //   (assumption: if dot product between node and barycentre of these elements is negative they lie on the inside)
+    for ( auto i{0U}; i<node->Parents(); i++ )
+      if ( node->Parent(i) && node->Parent(i)->IsEquidimensional() ) {
+           // find distance between node and barycentre of volumetric/surface element
+           Point<dim> bctr_vec = node->Parent(i)->BaryCenter() - node->Coordinate();
+           // inside elements are found
+           if ( dotProduct( avg_nrml, bctr_vec ) < 0. )
+             inside_elmt_ptrs.push_back( node->Parent(i) );
+           else
+             outside_elmt_ptrs.push_back( node->Parent(i) );
+           e_count++;
+       }
+       
+    if ( e_count >= 1 )
+    return make_pair( inside_elmt_ptrs, outside_elmt_ptrs );
+    
+    return pair<vector<Element<dim>*>,std::vector<Element<dim>*>>{};
+     
+ } // end parentElementsInsideAndOutsideOfSurface
+
+template pair<vector<Element<3>*>,vector<Element<3>*>>  parentElementsAdjacentTo( const Node<3>* const );
+template pair<vector<Element<2>*>,vector<Element<2>*>>  parentElementsAdjacentTo( const Node<2>* const );
 
 
 } // end namespace csmp

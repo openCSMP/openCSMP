@@ -488,11 +488,11 @@ template<uint32_t dim>
 void Region<dim>::OutputDataTo( VSet<dim>& vset ) const
 {
   map<string, Index>  properties;
-  this->pref_.ListProperties( NODE, properties );
+  this->pref_.ListVariables( NODE, properties );
   map<string, Index>  propertiesElement;
-  this->pref_.ListProperties( ELEMENT, propertiesElement );
+  this->pref_.ListVariables( ELEMENT, propertiesElement );
   map<string, Index>  propertiesElementIP;
-  this->pref_.ListProperties( ELEMENT_INTEGRATION_POINT, propertiesElementIP );
+  this->pref_.ListVariables( ELEMENT_INTEGRATION_POINT, propertiesElementIP );
   properties.insert( propertiesElement.begin(), propertiesElement.end() );
   properties.insert( propertiesElementIP.begin(), propertiesElementIP.end() );
 
@@ -509,9 +509,9 @@ void Region<dim>::OutputFvDataTo( VSet<dim>& vset ) const
   map<string, Index>  properties;
   map<string, Index>  propertiesElementSEIP;
   map<string, Index>  propertiesElementFAIP;
-  this->pref_.ListProperties( SECTOR_INTEGRATION_POINT, propertiesElementSEIP );
+  this->pref_.ListVariables( SECTOR_INTEGRATION_POINT, propertiesElementSEIP );
   properties.insert( propertiesElementSEIP.begin(), propertiesElementSEIP.end() );
-  this->pref_.ListProperties( FACET_INTEGRATION_POINT, propertiesElementFAIP );
+  this->pref_.ListVariables( FACET_INTEGRATION_POINT, propertiesElementFAIP );
   properties.insert( propertiesElementFAIP.begin(), propertiesElementFAIP.end() );
 
   OutputTo( vset, properties );
@@ -1442,7 +1442,9 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
   sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
   
-  this->IdentifyPerimeter();
+  if( !this->cell_vec_.empty() ) {
+      this->IdentifyPerimeter();
+  }
 
   this->cell_vec_.shrink_to_fit();
   this->node_vec_.shrink_to_fit();
@@ -2528,7 +2530,6 @@ To compute the surface area, only elements of dim-1 are considered.
 
 @todo SKM: method will produce nonsense if line elements intersect the boundary.
 
-TODO: SKM: implement and use virtual void FiniteElement::AreaOfFace() rather than iffy statement in area calculation
 */
 template<uint32_t dim>
 double  Region<dim>::SurfaceArea() const
@@ -2541,51 +2542,46 @@ double  Region<dim>::SurfaceArea() const
     return std::numeric_limits<double>::signaling_NaN();
   }
 
-  auto               bit( this->bd_face_vec_.begin() );
-  vector<uint32_t>  fnids;
-  double            area( 0. );
+  auto    bit( this->bd_face_vec_.begin() );
+  double  area{0.};
 
-  if ( dim == 3U ) {
-    // for all elements located on the region boundary
-    for ( auto i = this->InteriorCells(); i<this->Cells(); ++i, ++bit )
-      // since each element can have multiple boundary faces
-      for ( uint32_t j{0U}; j<(*bit).size(); j++ ) {
-        const uint32_t face( (*bit)[j] );
-        this->cell_vec_[i]->FE()->NodesOfFace( face, fnids );
-        const CSMP_FEM_TYPE etype( this->cell_vec_[i]->FE()->ElementTypeOfFace( face ) );
-        // triangular face
-        if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE or
-             etype == LINEAR_TRIANGLE3D or
-             etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE )
-          area += triangleArea( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(),
+  if constexpr ( dim == 3U ) {
+      // for all elements located on the region boundary
+      for ( auto i = this->InteriorCells(); i<this->Cells(); ++i, ++bit )
+        // since each element can have multiple boundary faces
+        for ( uint32_t j{0U}; j<(*bit).size(); j++ ) {
+          const uint32_t face( (*bit)[j] );
+          auto fnids = this->cell_vec_[i]->FE()->NodesOfFace( face );
+          const CSMP_FEM_TYPE etype( this->cell_vec_[i]->FE()->ElementTypeOfFace( face ) );
+          // triangular face
+          if ( isTriangular(etype) )
+            area += triangleArea( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(),
+                                  this->cell_vec_[i]->N( fnids[1U] )->Coordinate(),
+                                  this->cell_vec_[i]->N( fnids[2U] )->Coordinate() );
+          // quadrilateral face
+          else if ( isQuadrilateral(etype) )
+            area += facetArea4( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(),
                                 this->cell_vec_[i]->N( fnids[1U] )->Coordinate(),
-                                this->cell_vec_[i]->N( fnids[2U] )->Coordinate() );
-        // quadrilateral face
-        if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL or etype == LINEAR_RECTANGLE or
-             etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL )
-          area += facetArea4( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(),
-                              this->cell_vec_[i]->N( fnids[1U] )->Coordinate(),
-                              this->cell_vec_[i]->N( fnids[2U] )->Coordinate(),
-                              this->cell_vec_[i]->N( fnids[3U] )->Coordinate() );
-        // linear face
-        if ( etype == ISOPARAMETRIC_LINEAR_BAR or
-             etype == ISOPARAMETRIC_QUADRATIC_BAR ) {
-          area += this->cell_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
-          //csmp_error.Note( WARNING, "Region<dim>::SurfaceArea", "line-element thickness on perimeter is assumed to be one." );
+                                this->cell_vec_[i]->N( fnids[2U] )->Coordinate(),
+                                this->cell_vec_[i]->N( fnids[3U] )->Coordinate() );
+          // linear face
+          else if ( isLineElement(etype) ) {
+            area += this->cell_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
+            //csmp_error.Note( WARNING, "Region<dim>::SurfaceArea", "line-element thickness on perimeter is assumed to be one." );
+          }
+          // additional case of point face where a line-element is perpendicular to a boundary node
         }
-        // additional case of point face where a line-element is perpendicular to a boundary node
-      }
-  }
+    }
   // in 2D the face is a segment the length of which has to be used
-  else if ( dim == 2U ) {
-    // for all surface elements on the region boundary (excluding line elements)
-    for ( size_t i = this->InteriorCells(); i<this->Cells(); i++, bit++ )
-      if ( this->cell_vec_[i]->FE()->IsSurface() )
-        for ( size_t j{0U}; j<(*bit).size(); j++ ) {
-          this->cell_vec_[i]->FE()->NodesOfFace( (*bit)[j], fnids );
-          area += this->cell_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
-        }
-  }
+  else if constexpr ( dim == 2U ) {
+      // for all surface elements on the region boundary (excluding line elements)
+      for ( size_t i = this->InteriorCells(); i<this->Cells(); i++, bit++ )
+        if ( this->cell_vec_[i]->FE()->IsSurface() )
+          for ( size_t j{0U}; j<(*bit).size(); j++ ) {
+            auto fnids = this->cell_vec_[i]->FE()->NodesOfFace( (*bit)[j] );
+            area += this->cell_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
+          }
+    }
 
   return area;
 

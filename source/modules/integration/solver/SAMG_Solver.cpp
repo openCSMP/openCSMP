@@ -160,6 +160,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
   f_.resize( new_nnu );
 
   crmat_ = A;
+  crmat_.ConvertToSAMGFormat();
 
   if ( Verbose() )
     cout << "\nSAMGp_Solver::SolveMatrixEquation: Sizes NNU(rows=cols): "

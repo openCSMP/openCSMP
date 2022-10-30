@@ -12,22 +12,19 @@ public:
     explicit IsoparametricQuadraticLineElement( uint32_t dimensions=2 );
     ~IsoparametricQuadraticLineElement();
 
-    virtual double    Volume();
+    virtual double      Volume();
     virtual void        CornerNodes( std::vector<uint32_t>& ids ) const;
-    virtual uint32_t      CornerNodes() const { return 4U; }
+    virtual uint32_t    CornerNodes() const { return 2U; }
     virtual void        MidSideNodes( std::vector<uint32_t>& ids ) const;
-    virtual uint32_t      MidSideNodes() const { return 4U; }
+    virtual uint32_t    MidSideNodes() const { return 1U; }
     virtual void        NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
-    virtual void        NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
+
+    virtual std::vector<uint32_t>  NodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
     virtual void        N_AtBaryCenter( std::vector<double>& N );
     virtual void        CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
     virtual void        EdgeLengths( std::vector<double>& vec );
-    virtual void        ConsecutiveNodesAtBoundary( const std::vector<uint32_t>& bnodes,
-                                                  std::vector<uint32_t>& fnids );
-
-    // TODO: virtual void   UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
 
     virtual double    WeightAtIntegrationPoint( uint32_t i ) const;
     virtual void      N_AtIntegrationPoint( uint32_t IP, std::vector<double>& N );
@@ -41,8 +38,10 @@ public:
 
     virtual void      IntegralN( DenseMatrix<DM_MIN>& M );
 
-    virtual void      UnitNormal( std::vector<double>& vc ) const;
+    virtual std::vector<double>  UnitNormal() const;
     
+    // TODO: virtual void   UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
+
     virtual void      IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
     virtual void      ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                   const std::vector<double>& IVAR, 

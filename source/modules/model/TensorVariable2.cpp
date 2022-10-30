@@ -713,6 +713,16 @@ bool  TensorVariable<2U>::IsWithinRange( double vmin, double vmax ) const
  }
  
  
+ /**
+    Checks only the diagonal.
+*/
+bool  TensorVariable<2U>::Has_NaN_Values() const {
+   if ( isnan(data[0][0]) ) return true;
+   if ( isnan(data[1][1]) ) return true;
+   return false;
+}
+
+ 
 /// vector-matrix multiplication: v^T = (v^T * A)^T = A^T v
 VectorVariable<2U>  operator*( const VectorVariable<2U>& vc, const TensorVariable<2U>& ts )
  {

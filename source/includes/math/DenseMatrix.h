@@ -172,6 +172,11 @@ class DenseMatrix {
 
 // associated operators
 
+/// comparitor of elements using compareFloats
+template<uint32_t mn_max>
+bool operator==( const DenseMatrix<mn_max>&, const DenseMatrix<mn_max>& );
+
+
 template<uint32_t mn_max>
 DenseMatrix<mn_max>  operator+( const DenseMatrix<mn_max>& a, 
                                 const DenseMatrix<mn_max>& b );

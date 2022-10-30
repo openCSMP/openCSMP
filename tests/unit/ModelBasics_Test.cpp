@@ -43,6 +43,9 @@ void ModelBasics_Test::run()
      
      // builds model from regions, converting lower-dimensional elements into faces
      _test( TestWriteModelToDiskAndReadBack() );
+     
+     // 2D model with split boundaries
+     _test( TestWriteModelToDiskAndReadBackWithInterfaces() );
  
    } // end run
 
@@ -85,8 +88,8 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack()
      test_Create_FracBox( topology, vset );
 
      // creating model
-     const bool create_boundaries_from_faces{true};
-     Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", create_boundaries_from_faces );
+     const bool do_not_use_regions_file{true};
+     Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", do_not_use_regions_file );
      model.Name("FracBox");
      
      // assigning some dummy values to verify functionality
@@ -121,7 +124,54 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack()
      
      return true;
  }
- 
+
+
+
+
+// 2D model SPLIT_22 with crossing split boundaries
+bool ModelBasics_Test::TestWriteModelToDiskAndReadBackWithInterfaces()
+ {
+     VSet<2U> vset;
+     ModelTopology topology = test_Create_BoundarySplitBoundaryPatch( vset );
+
+     // creating model
+     Model<2U>  model( topology, vset, "CSMP-1phase-variables.txt", false );
+     model.Name("FracBox");
+     
+     // assigning some dummy values to verify functionality
+     Region<2U>& model_domain = model.Region("Model");
+     Region<2U>& matrix_domain = model.Region("lower");
+     model_domain.InputPropertyValue( "fluid pressure", makeScalar(ANY,1e5) );
+     model_domain.InputPropertyValue( "permeability", makeScalar(ANY,1.0e-15) );
+     matrix_domain.InputPropertyValue( "permeability", makeScalar(ANY,1.0e-12) );
+
+     if ( verbose_ ) model.Out(); // crashes when trying to print normals to FV Stencil for ISO_LIN_HEX
+       
+     // saving model to disk
+     model.OutputToBinaryFile( "ModelBasics_Test" );
+     
+     // bringing model back
+     set<string>  subset_variables; // all variables
+     Model<2U>    restored_model( string{"ModelBasics_Test"}, subset_variables );
+     double       pmin, pmax;
+     restored_model.MinMaxOf( "permeability", pmin, pmax );
+     
+     _test( approximatelyEqual( pmin, 1.0e-15 ) );
+     _test( approximatelyEqual( pmax, 1.0e-12 ) );
+     
+     // testing fundamental assumption made working with default initialisations of 'size_t'
+     uint32_t default_uint = std::numeric_limits<uint32_t>::max();
+     _test( std::numeric_limits<size_t>::max() != UINT_MAX ); // false because UINT_MAX is not for size_t
+     _test( hasDefaultValueForUnassignedInteger( default_uint ) );
+     _test( default_uint == UINT_MAX );
+     
+     // some visual QC, using VTK
+     if ( verbose_ ) restored_model.Out();
+     
+     return true;
+     
+ } // TestWriteModelToDiskAndReadBackWithInterfaces
+
 
 
 

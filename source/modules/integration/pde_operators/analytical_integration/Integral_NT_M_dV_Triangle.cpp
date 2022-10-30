@@ -12,19 +12,19 @@ namespace csmp {
 /** For the mapping between a finite volume and linear finite element
 discretization.  
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 Integral_NT_M_dV_Triangle<dim,CELL>::Integral_NT_M_dV_Triangle( const PropertyDatabase<dim>& pref,
-                                                                   const char* test )
-  : MathOperatorRHS<dim>(pref,"permeability",test),
+                                                                const char* test )
+  : MathOperatorRHS<dim,CELL>(pref,"permeability",test),
     NPROP(3)
  {
-    MathOperatorRHS<dim>::Name("Integral_NT_M_dV_Triangle", "__", test );
+    MathOperatorRHS<dim,CELL>::Name("Integral_NT_M_dV_Triangle", "__", test );
     
         // testing the Operands 
-    if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
-         MathOperatorRHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorRHS<dim,CELL>::TestOperandPlacement() != NODE || 
+         MathOperatorRHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "Integral_NT_M_dV_Triangle<dim>::(constructor)", 
-                   test, "Mapped variable must be a scalar property placed on the nodes." );
+                             test, "Mapped variable must be a scalar property placed on the nodes." );
  }
 
 
@@ -33,14 +33,14 @@ Integral_NT_M_dV_Triangle<dim,CELL>::Integral_NT_M_dV_Triangle( const PropertyDa
 
 /** Reads the Operand values from the elements.
 */
-template<uint32_t dim,class CELL>
-void Integral_NT_M_dV_Triangle<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void Integral_NT_M_dV_Triangle<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
 
    // reading Young's modulus (must be an element variables)
-   e.NodePropertyVector( MathOperatorRHS<dim>::TestOperandKey(), NPROP );
+   e.NodePropertyVector( MathOperatorRHS<dim,CELL>::TestOperandKey(), NPROP );
 }
 
 
@@ -54,10 +54,10 @@ multiplied with the Operand.
 
 N Phi_CV = sum_j Ni(at area barycenter) * area_j * Phi_i
 */
-template<uint32_t dim,class CELL>
-void Integral_NT_M_dV_Triangle<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void Integral_NT_M_dV_Triangle<dim,CELL>::ComputeContribution( const CELL<dim>& e )
   {
-     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
+     MathOperatorRHS<dim,CELL>::RHS.resize(e.Nodes());
 
      Point<dim>  ctr(e.BaryCenter());
 
@@ -76,9 +76,9 @@ void Integral_NT_M_dV_Triangle<dim,CELL>::ComputeContribution( const CELL& e )
      e.N_AtGlobalPoint( this->IPOL, xyz.Coordinates() );
      // assigning nodal contribution of M-sector integral 1
      //                                Ni        Mj        
-     MathOperatorRHS<dim>::RHS[0] = this->IPOL[0] * NPROP[0]();
-     MathOperatorRHS<dim>::RHS[1] = this->IPOL[1] * NPROP[0]();
-     MathOperatorRHS<dim>::RHS[2] = this->IPOL[2] * NPROP[0]();
+     MathOperatorRHS<dim,CELL>::RHS[0] = this->IPOL[0] * NPROP[0]();
+     MathOperatorRHS<dim,CELL>::RHS[1] = this->IPOL[1] * NPROP[0]();
+     MathOperatorRHS<dim,CELL>::RHS[2] = this->IPOL[2] * NPROP[0]();
 
      // sector surrounding node 1
      // -------------------------
@@ -90,9 +90,9 @@ void Integral_NT_M_dV_Triangle<dim,CELL>::ComputeContribution( const CELL& e )
      xyz += (e.N(1)->Coordinate() + e.N(2)->Coordinate()) / 2.;
      xyz /= 4.; 
      e.N_AtGlobalPoint( this->IPOL, xyz.Coordinates() );
-     MathOperatorRHS<dim>::RHS[0] += this->IPOL[0] * NPROP[1]();
-     MathOperatorRHS<dim>::RHS[1] += this->IPOL[1] * NPROP[1]();
-     MathOperatorRHS<dim>::RHS[2] += this->IPOL[2] * NPROP[1]();
+     MathOperatorRHS<dim,CELL>::RHS[0] += this->IPOL[0] * NPROP[1]();
+     MathOperatorRHS<dim,CELL>::RHS[1] += this->IPOL[1] * NPROP[1]();
+     MathOperatorRHS<dim,CELL>::RHS[2] += this->IPOL[2] * NPROP[1]();
 
      // sector surrounding node 2
      // -------------------------
@@ -104,24 +104,24 @@ void Integral_NT_M_dV_Triangle<dim,CELL>::ComputeContribution( const CELL& e )
      xyz += (e.N(0)->Coordinate() + e.N(2)->Coordinate()) / 2.;
      xyz /= 4.; 
      e.N_AtGlobalPoint( this->IPOL, xyz.Coordinates() );
-     MathOperatorRHS<dim>::RHS[0] += this->IPOL[0] * NPROP[2]();
-     MathOperatorRHS<dim>::RHS[1] += this->IPOL[1] * NPROP[2]();
-     MathOperatorRHS<dim>::RHS[2] += this->IPOL[2] * NPROP[2]();
+     MathOperatorRHS<dim,CELL>::RHS[0] += this->IPOL[0] * NPROP[2]();
+     MathOperatorRHS<dim,CELL>::RHS[1] += this->IPOL[1] * NPROP[2]();
+     MathOperatorRHS<dim,CELL>::RHS[2] += this->IPOL[2] * NPROP[2]();
      
      // Evaluating the M-Volume integrals for the FV solution
      vol_div3 = e.Volume() / 3.;
-     MathOperatorRHS<dim>::RHS[0] *= vol_div3;
-     MathOperatorRHS<dim>::RHS[1] *= vol_div3;
-     MathOperatorRHS<dim>::RHS[2] *= vol_div3;
+     MathOperatorRHS<dim,CELL>::RHS[0] *= vol_div3;
+     MathOperatorRHS<dim,CELL>::RHS[1] *= vol_div3;
+     MathOperatorRHS<dim,CELL>::RHS[2] *= vol_div3;
 
 } // end ComputeContribution
 
 
 
-template class Integral_NT_M_dV_Triangle<2U,Element<2U> >;
-template class Integral_NT_M_dV_Triangle<3U,Element<3U> >;
+template class Integral_NT_M_dV_Triangle<2U,Element>;
+template class Integral_NT_M_dV_Triangle<3U,Element>;
 
-template class Integral_NT_M_dV_Triangle<2U,Face<2U> >;
-template class Integral_NT_M_dV_Triangle<3U,Face<3U> >;
+template class Integral_NT_M_dV_Triangle<2U,Face>;
+template class Integral_NT_M_dV_Triangle<3U,Face>;
 
 } // csmp

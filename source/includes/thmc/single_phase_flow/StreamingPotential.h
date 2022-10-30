@@ -1,5 +1,5 @@
-#ifndef STREAMING_POTENTIAL_H
-#define STREAMING_POTENTIAL_H
+#ifndef CSMP_INTERRELATION_STREAMING_POTENTIAL_H
+#define CSMP_INTERRELATION_STREAMING_POTENTIAL_H
 
 #include "Interrelation.h"
 #include "PropertyHandle.h"
@@ -40,6 +40,6 @@ class PotentialSource : public Interrelation<dim> {
  
 } // csmp 
 
-#endif
+#endif // CSMP_INTERRELATION_STREAMING_POTENTIAL_H
 
 

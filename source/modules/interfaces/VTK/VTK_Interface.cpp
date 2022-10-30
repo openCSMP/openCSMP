@@ -129,6 +129,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
   {
      std::string file_name( this->OutputFileAndSubFolderName( initial_file_name ) );
 
+     if( !sg.ContainsRegion( region ) ) return;
      const Region<dim>&  gref(sg.Region(region));
      gref.UpdateMemberIndexes();
 
@@ -142,7 +143,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      string       variable;
      set<string>  node_props;
 
-     sg.Database().ListProperties( NODE, node_props );
+     sg.Database().ListVariables( NODE, node_props );
      csmp::Index  prop_key(sg.Database().StorageKey((*node_props.begin()).c_str())); 
      
 
@@ -450,6 +451,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
        throw Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region):",
                       "Thus far variables placed on REGION or BOUNDARY cannot be visualised with VTK (this could however be done with the VTK primitive POLYGONAL)");
 
+     if( !sg.ContainsRegion( group_name ) ) return;
      const Region<dim>&  gref(sg.Region(group_name));
      gref.UpdateMemberIndexes();  // renumber nodes and elements
      
@@ -460,8 +462,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      //    target Region object.
      // ------------------------------------------------------------
      // finding the group in the group list
-     vector<size_t>  elmt_ids;
-     gref.MemberCellIndexes( elmt_ids );
+     vector<size_t>  elmt_ids = gref.MemberCellIndexes();
 
      if ( elmt_ids.empty() )     
        throw csmp::Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region)",
@@ -2626,7 +2627,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      string       variable;
      set<string>  node_props;
 
-     model.Database().ListProperties( NODE, node_props );
+     model.Database().ListVariables( NODE, node_props );
 
      // 2. opening data output file in ascii format
      // -------------------------------------------
@@ -2688,7 +2689,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      // 5. writing CELLS (cell-size and member nodes (point)) = plist equivalent
      // ------------------------------------------------------------------------
      ofs <<"CELLS "<< geometric_primitives_VTK.size() <<" "<< cell_list_size << endl;
-     vector<uint32_t> fnids;
+
      for ( size_t i=subdomain.InteriorCells(); i<subdomain.Cells(); ++i )
        for ( uint32_t j{0U}; j<subdomain.PerimeterFaces(i); ++j ) {
              // writing out the number of nodes per face
@@ -2697,9 +2698,8 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
              else if ( fem_type == LINEAR_TRIANGLE3D )                ofs << 3U <<" ";
              else if ( fem_type == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) ofs << 6U <<" ";
              // writing out the node numbers (indexes)
-             subdomain.E(i)->FE()->NodesOfFace( subdomain.PerimeterFace(i,j), fnids );
-             for ( size_t k{0U}; k<fnids.size(); ++k )
-               ofs << subdomain.E(i)->N( fnids[k] )->Idx() <<" ";
+             for ( const auto& k : subdomain.E(i)->FE()->NodesOfFace( subdomain.PerimeterFace(i,j) ) )
+               ofs << subdomain.E(i)->N( k )->Idx() <<" ";
              ofs << endl;
          }
      ofs << endl;

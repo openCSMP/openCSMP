@@ -5,15 +5,11 @@
 
 namespace csmp {
 
-
-class Averaging_Example : public Example
-{
-public:
-  virtual void Run();
-  virtual void Specifications();
-
+class Averaging_Example : public Example {
+  public:
+    virtual void Run();
+    virtual void Specifications();
 };
-
 
 } // csmp
 

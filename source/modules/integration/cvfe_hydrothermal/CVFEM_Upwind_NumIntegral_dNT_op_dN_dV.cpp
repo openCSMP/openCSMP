@@ -1,23 +1,26 @@
 #include "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV.h"
+#include "UpwindControlVisitor.h"
+#include "ExplicitFiniteVolumeTransportPHX.h"
 
 using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim>
-CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::~CVFEM_Upwind_NumIntegral_dNT_op_dN_dV() {}
+template<uint32_t dim, template<uint32_t> class CELL>
+CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim,CELL>::~CVFEM_Upwind_NumIntegral_dNT_op_dN_dV() {}
 
-template<uint32_t dim>
-CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::CVFEM_Upwind_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
-                                                                            UpwindControlVisitor<dim>& upwind_visitor,
-                                                                            ExplicitFiniteVolumeTransportPHX<dim>& fv_transport,
-                                                            				const char* oper, 
-                                                            				const char* basic, 
-                                                            				const char* test,
-                                                            				const char* upwind,
-                                                            				const char* grav_trigger)
+
+template<uint32_t dim, template<uint32_t> class CELL>
+CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim,CELL>::CVFEM_Upwind_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
+                                                                                        UpwindControlVisitor<dim>& upwind_visitor,
+                                                                                        ExplicitFiniteVolumeTransportPHX<dim>& fv_transport,
+                                                                                        const char* oper,
+                                                                                        const char* basic,
+                                                                                        const char* test,
+                                                                                        const char* upwind,
+                                                                                        const char* grav_trigger )
  
-  : CVFEM_MathOperatorLHS<dim>(pref,oper,basic,test),
+  : CVFEM_MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
     UpwindVisitor(upwind_visitor),
     finite_volume(fv_transport),
     B(dim,3),
@@ -29,38 +32,41 @@ CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::CVFEM_Upwind_NumIntegral_dNT_op_dN_d
     name += upwind;
     char * cname = new char[name.length()+1];
     strcpy(cname, name.c_str());
-    MathOperatorLHS<dim>::Name(cname, oper, basic, test);
+    MathOperatorLHS<dim,CELL>::Name(cname, oper, basic, test);
 
     // testing the Operands 
 
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT )
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT )
     throw csmp::Exception( ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
-                    oper, "Operand must be placed on the element.");
+                           oper, "Operand must be placed on the element.");
 
-    if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
     throw csmp::Exception( ERROR,  "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
-                    test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
+                           test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
     throw csmp::Exception( ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
-                    test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
+                           test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
     
     if (uvar_.place != NODE || uvar_.type != SCALAR)
     throw csmp::Exception( ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
-                    upwind, "Upwind variable must be a scalar property placed on the nodes.");
+                           upwind, "Upwind variable must be a scalar property placed on the nodes.");
                     
     if (gtvar_.place != NODE || gtvar_.type != SCALAR)
     throw csmp::Exception( ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
-                    grav_trigger, "Upwind variable must be a scalar property placed on the nodes.");
+                           grav_trigger, "Upwind variable must be a scalar property placed on the nodes.");
                     
 }
 
-template<uint32_t dim>
-void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperands( Element<dim>& e )
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
  {
-
-
- 	MathOperatorLHS<dim>::GetOperands(e);
+ 	MathOperatorLHS<dim,CELL>::GetOperands(e);
       
   if (uvar_.place == NODE && uvar_.type == SCALAR)
     e.NodePropertyVector( uvar_, el_uvar);
@@ -72,13 +78,14 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperands( Element<dim>& e )
     
  } // end GetOperands
 
-template<uint32_t dim>
-void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperandsCVFEM( Element<dim>& e,
-                                          				      csmp::Index upwind_var_key )
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim,CELL>::GetOperandsCVFEM( const CELL<dim>& e,
+                                          				                      csmp::Index upwind_var_key )
  {
-
-
-  MathOperatorLHS<dim>::GetOperands(e);
+  MathOperatorLHS<dim,CELL>::GetOperands(e);
       
   if (uvar_.place == NODE && uvar_.type == SCALAR && 
       upwind_var_key.place == NODE && upwind_var_key.type == SCALAR)
@@ -96,18 +103,22 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperandsCVFEM( Element<dim>&
     
  } // end GetOperandsCVFEM
 
-template<uint32_t dim>
-void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::ComputeContribution( Element<dim>& e )
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
- 
     GetUpwindMatrix( e );
     
     // initialize output matrix
-    MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
-    MathOperatorLHS<dim>::LHS.Zero();
+    MathOperatorLHS<dim,CELL>::LHS.Resize( e.Nodes(), e.Nodes() );
+    MathOperatorLHS<dim,CELL>::LHS.Zero();
 
        e.dN( B );
-       operand = MathOperatorLHS<dim>::MTRL[0](0,0);
+       operand = MathOperatorLHS<dim,CELL>::MTRL[0](0,0);
 //       B *= operand;
 //    Point<dim> facet_point;
 //    std::vector<csmp_float> facet_point_vector;
@@ -137,21 +148,22 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::ComputeContribution( Element<di
     			 if (upwind(inside_node_, outside_node_) == 1) contribution *= el_uvar[inside_node_]();
     			 else if (upwind(inside_node_, outside_node_) == 2) contribution *= el_uvar[outside_node_]();
     			 else contribution = 0.0;
-                 MathOperatorLHS<dim>::LHS(inside_node_,n)  -= contribution;
-                 MathOperatorLHS<dim>::LHS(outside_node_,n) += contribution;
+                 MathOperatorLHS<dim,CELL>::LHS(inside_node_,n)  -= contribution;
+                 MathOperatorLHS<dim,CELL>::LHS(outside_node_,n) += contribution;
                }
             }
        }
 
-
 } // end ComputeContribution
 
 
-template<uint32_t dim>
-void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetUpwindMatrix( Element<dim>& e )
-{
 
-  upwind = UpwindVisitor.UpwindMatrix( gtvar_, e.Idx() );    
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim,CELL>::GetUpwindMatrix( const CELL<dim>& e )
+{
+  upwind = UpwindVisitor.UpwindMatrix( gtvar_, e.Idx() );
 
 } // GetUpwindMatrix
 
@@ -159,5 +171,9 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetUpwindMatrix( Element<dim>& 
 template class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<1>;
 template class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<2>;
 template class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<3>;
+
+template class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<1,Face>;
+template class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<2,Face>;
+template class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<3,Face>;
 
 } // csmp

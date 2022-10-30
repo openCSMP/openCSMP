@@ -110,7 +110,7 @@ void LinearRectangle::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& s
 	} // end NodesOfSegment
 
 
-
+/*
 void LinearRectangle::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids) const
 	{
 		fnids.resize(2);
@@ -141,8 +141,20 @@ void LinearRectangle::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnid
 		else
 			std::cerr << "\nIsoparametricLinearQuadrilateral::NodesOfFace: Erratic input face ID: " << face_id << std::endl;
 	}
+*/
 
 
+vector<uint32_t>  LinearRectangle::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{0,1};
+        case 1: return vector<uint32_t>{1,2};
+        case 2: return vector<uint32_t>{2,3};
+        case 3: return vector<uint32_t>{3,0};
+      }
+    cerr <<"\nLinearRectangle::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 vector<uint32_t>  LinearRectangle::CornerNodesOfFace( uint32_t face_id ) const

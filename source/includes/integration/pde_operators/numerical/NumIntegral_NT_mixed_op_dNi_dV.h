@@ -5,23 +5,26 @@
 #include "MathOperatorRHS.h"
 
 namespace csmp {
+
+template<uint32_t> class Element;
+
 /**
 @author S.K. Matthaei
 @author S. Roberts
 @date 1999 */
 
 /// for instance for calculation of hydrostatic gradient
-template<uint32_t dim,class CELL>
-class NumIntegral_NT_mixed_op_dNi_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_NT_mixed_op_dNi_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_NT_mixed_op_dNi_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_NT_mixed_op_dNi_dV( const PropertyDatabase<dim>&, 
                               const char* nodal_mtrl_multiplier, // e.g., viscosity
                               const char* oper,                  // e.g., fluid density
                               const char* mtrl,                  // e.g., permeability
                               const char* test );                // e.g., fluid pressure
     
-    virtual void GetOperands( const CELL& );
-    virtual void ComputeContribution( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
     void SpatialDerivative( uint32_t xyz=2 );
     

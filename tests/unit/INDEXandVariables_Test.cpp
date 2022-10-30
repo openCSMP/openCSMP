@@ -1,8 +1,9 @@
 #include "INDEXandVariables_Test.h"
 #include "Region.h"
 #include "Boundary.h"
+#include "ModelTopology.h"
+#include "vsetMakers.h"
 
-#include "ANSYS_Model3D.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 
 using namespace std;
@@ -10,12 +11,11 @@ using namespace std;
 namespace csmp {
 
 /**
-     @param prefix is the test model model name. 
+     SPLIT22_BASIC   is the test model model name.
      
      The test model should contain Boundary and SplitBoundary objects
 */
-INDEXandVariables_Test::INDEXandVariables_Test( const char* prefix )
-  :  prefix_(prefix)
+INDEXandVariables_Test::INDEXandVariables_Test()
   {
     this->setName("INDEXandVariables_Test");
   }
@@ -31,15 +31,17 @@ struct IndexTrackerTestStruct
 
 void INDEXandVariables_Test::run()
   {
-// TODO: remove dependence of this test on ANSYS model!
     // Run Test for 3D Model constructed by ANSYS mesh reader
 	  string variables_filename = (string)(this->getName() + ".txt");
-    ANSYS_Model3D m0(prefix_, variables_filename.c_str(), true, true );
+    VSet<2U>       vset;
+    ModelTopology  model_topo = test_Create_BoundarySplitBoundaryPatch( vset );
+    const bool treat_domains_as_regions_and_use_regions_file_if_any{ false };
+    Model m0( model_topo, vset, variables_filename.c_str(), treat_domains_as_regions_and_use_regions_file_if_any );
     m0.OutputToBinaryFile("INDEXandVariables_Test_BinaryModel");
     runModel(m0);
 
     // Run Test for 3D Model loaded from CSMP++ binary format
-    Model<3> m1( string("INDEXandVariables_Test_BinaryModel") );
+    Model<2U> m1( string("INDEXandVariables_Test_BinaryModel") );
     runModel(m1);
   }
   
@@ -53,8 +55,10 @@ void INDEXandVariables_Test::run()
  @author  P. Lang
  @date  9/24/2012
  */
-void INDEXandVariables_Test::runModel( Model<3>& model )
-    {
+void INDEXandVariables_Test::runModel( Model<2>& model )
+  {
+      const int dim{ 2U };
+      
       // Indices
       IndexTrackerTestStruct indexCache;
       // ========================================================================
@@ -223,15 +227,15 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       ScalarVariable twoS               ( DIRICH, 2.    );
       ScalarVariable threeS             ( ROBIN, 3.     );
       // Vector's
-      VectorVariable<3> vectorV;
-      VectorVariable<3> fourV           ( NEUMANN, 4.   );
-      VectorVariable<3> fiveV           ( ANY, 5.       );
-      VectorVariable<3> sixV            ( ANY, 6.       );
+      VectorVariable<dim> vectorV;
+      VectorVariable<dim> fourV           ( NEUMANN, 4.   );
+      VectorVariable<dim> fiveV           ( ANY, 5.       );
+      VectorVariable<dim> sixV            ( ANY, 6.       );
       // Tensor's
-      TensorVariable<3> tensorV;
-      TensorVariable<3> sevenT          ( DIRICH, 7.    );
-      TensorVariable<3> eightT          ( ROBIN, 8.     );
-      TensorVariable<3> nineT           ( NEUMANN, 9.   );
+      TensorVariable<dim> tensorV;
+      TensorVariable<dim> sevenT          ( DIRICH, 7.    );
+      TensorVariable<dim> eightT          ( ROBIN, 8.     );
+      TensorVariable<dim> nineT           ( NEUMANN, 9.   );
       // Array's
       ArrayVariable ArrayV(28); // size of elemnt array variable 3
       ArrayVariable modelArray1         ( "model array 1",  model.Database(), 1.,   DIRICH  );
@@ -299,8 +303,8 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
       // single face variable test
       // TYPE: Scalar
-      model.Boundary("BOUNDARY1").InputPropertyValue( "face variable 1", makeScalar( PLAIN, 4. ) );
-      _test( ( *model.Boundary("BOUNDARY1").CellsBegin() )->Read(fKey1) == 4. );
+      model.Boundary("BOTTOM").InputPropertyValue( "face variable 1", makeScalar( PLAIN, 4. ) );
+      _test( ( *model.Boundary("BOTTOM").CellsBegin() )->Read(fKey1) == 4. );
 
       model.Database().WriteVariablesFile("CSMP-variables-output.txt");
 
@@ -311,7 +315,8 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       ScalarVariable sv1( PLAIN, 1. );
       model.InputPropertyValue( "nodal variable 1", sv1 );
       model.InputPropertyValue( "nodal variable 2", makeScalar( DIRICH, 99. ) );
-      for( vector<Node<3>*>::const_iterator it( model.Region("Model").NodesBegin() ); it != model.Region("Model").NodesEnd(); ++it )
+      Region<dim>&  model_domain = model.Region("Model");
+      for( vector<Node<dim>*>::const_iterator it( model_domain.NodesBegin() ); it != model_domain.NodesEnd(); ++it )
         {
           sv = makeScalar( DIRICH, 9999. );
           (*it)->Read( nKey1, sv );
@@ -321,10 +326,10 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // ========================================================================
       // Nodal Array Variable Test Thorough
       ArrayVariable av0(4, 10., DIRICH );
-      for( vector<Node<3>*>::const_iterator it( model.Region("Model").NodesBegin() ); it != model.Region("Model").NodesEnd(); ++it )
+      for( vector<Node<dim>*>::const_iterator it( model_domain.NodesBegin() ); it != model_domain.NodesEnd(); ++it )
         (*it)->Store( naKey1, av0 );
       ArrayVariable av00( "nodal array 1", model.Database() );
-      for( vector<Node<3>*>::const_iterator it( model.Region("Model").NodesBegin() ); it != model.Region("Model").NodesEnd(); ++it )
+      for( vector<Node<dim>*>::const_iterator it( model_domain.NodesBegin() ); it != model_domain.NodesEnd(); ++it )
         {
           // TYPE: Array
           (*it)->Read( naKey1, av00 );
@@ -336,7 +341,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       av00 = ArrayVariable( "element array 2", model.Database(), 0. );
       model.InputPropertyValue( "element array 2", av00 );
       ArrayVariable av1( 22, 77., DIRICH );
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
+      for( vector<Element<dim>*>::const_iterator it( model_domain.CellsBegin() ); it != model_domain.CellsEnd(); ++it )
         {
           // TYPE: Array
           (*it)->Read( eaKey2, av1 );
@@ -347,10 +352,10 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // ========================================================================
       // Nodal Flagged Array Variable Test Thorough
       FlaggedArrayVariable fav0(1, 10., DIRICH );
-      for( vector<Node<3>*>::const_iterator it( model.Region("Model").NodesBegin() ); it != model.Region("Model").NodesEnd(); ++it )
+      for( vector<Node<dim>*>::const_iterator it( model_domain.NodesBegin() ); it != model_domain.NodesEnd(); ++it )
         (*it)->Store( nfaKey1, fav0 );
       FlaggedArrayVariable fav00( "nodal flagged array 1", model.Database() );
-      for( vector<Node<3>*>::const_iterator it( model.Region("Model").NodesBegin() ); it != model.Region("Model").NodesEnd(); ++it )
+      for( vector<Node<2>*>::const_iterator it( model_domain.NodesBegin() ); it != model_domain.NodesEnd(); ++it )
         {
           // TYPE: Flagged Array
           (*it)->Read( nfaKey1, fav00 );
@@ -362,7 +367,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       fav00 = FlaggedArrayVariable( "element flagged array 2", model.Database(), 0. );
       model.InputPropertyValue( "element flagged array 2", fav00 );
       FlaggedArrayVariable fav1( 2, 77., DIRICH );
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
+      for( vector<Element<2>*>::const_iterator it( model_domain.CellsBegin() ); it != model_domain.CellsEnd(); ++it )
         {
           // TYPE: Flagged Array
           (*it)->Read( efaKey2, fav1 );
@@ -388,7 +393,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // TYPE: Vector
       model.InputPropertyValue( "region vector 1",          fourV );
       // TYPE: Tensor (placed on boundary)
-      model.Boundary("BOUNDARY2").InputPropertyValue( "boundary tensor 1", sevenT );
+      model.Boundary("TOP").InputPropertyValue( "boundary tensor 1", sevenT );
 
       // PLACEMENT: Node
       // TYPE: Scalar
@@ -500,15 +505,16 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // ========================================================================
       // PLACEMENT: Subdomain ( Region, Boundary )
       // TYPE: Vector
-      model.Region("Model").Read( rvKey1, vectorV );
+      model_domain.Read( rvKey1, vectorV );
       _test( vectorV == fourV );
       // TYPE: Tensor
-      model.Boundary("BOUNDARY2").Read( btKey1, tensorV );
+      Boundary<2U>& boundary2 = model.Boundary("TOP");
+      boundary2.Read( btKey1, tensorV );
       _test( tensorV == sevenT );
 
       // ========================================================================
       // PLACEMENT: Node
-      for( vector<Node<3>*>::const_iterator it( model.Region("Model").NodesBegin() ); it != model.Region("Model").NodesEnd(); ++it )
+      for( vector<Node<dim>*>::const_iterator it( model_domain.NodesBegin() ); it != model_domain.NodesEnd(); ++it )
         {
           // TYPE: Scalar
           _test( (*it)->Read( nKey1 ) == oneS() );
@@ -546,7 +552,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // ========================================================================
       // PLACEMENT: Element & Element Integration Points
 
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
+      for( vector<Element<dim>*>::const_iterator it( model_domain.CellsBegin() ); it != model_domain.CellsEnd(); ++it )
         {
           // ========================================================================
           // PLACEMENT: Element
@@ -625,7 +631,8 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
       // ========================================================================
       // PLACEMENT: Face
-      for( vector<Face<3>*>::const_iterator it( model.Boundary("BOUNDARY3").CellsBegin() ); it != model.Boundary("BOUNDARY3").CellsEnd(); ++it )
+      Boundary<dim>& left{ model.Boundary("LEFT") };
+      for( vector<Face<dim>*>::const_iterator it( left.CellsBegin() ); it !=left.CellsEnd(); ++it )
         {
         // TYPE: Scalar
         (*it)->Read( fKey1, scalarV );
@@ -741,7 +748,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // ========================================================================
       // PLACEMENT: Element & Integration Points
 
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
+      for( vector<Element<2>*>::const_iterator it( model_domain.CellsBegin() ); it != model_domain.CellsEnd(); ++it )
         {
           // ========================================================================
           // PLACEMENT: Element
@@ -928,7 +935,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
       // ========================================================================
       // PLACEMENT: Element & Integration Points
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
+      for( vector<Element<2>*>::const_iterator it( model_domain.CellsBegin() ); it != model_domain.CellsEnd(); ++it )
         {
         // ========================================================================
         // PLACEMENT: Element
@@ -1044,75 +1051,75 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
       // PLACEMENT: Element
       // TYPE: Scalar
-      csmp::Index  neweKey3  = model.CreateProperty( "new element scalar 3", "X", SCALAR, ELEMENT );
+      csmp::Index  neweKey3  = model.CreateProperty( "new element scalar 3", "nes3", "X", SCALAR, ELEMENT );
       model.InputPropertyValue( "new element scalar 3", threeS );
       // TYPE: Vector
-      csmp::Index  newevKey3 = model.CreateProperty( "new element vector 3", "X", VECTOR, ELEMENT );
+      csmp::Index  newevKey3 = model.CreateProperty( "new element vector 3", "nev3", "X", VECTOR, ELEMENT );
       model.InputPropertyValue( "new element vector 3", sixV );
       // TYPE: Tensor
-      csmp::Index  newetKey3 = model.CreateProperty( "new element tensor 3", "X", TENSOR, ELEMENT );
+      csmp::Index  newetKey3 = model.CreateProperty( "new element tensor 3", "net3", "X", TENSOR, ELEMENT );
       model.InputPropertyValue( "new element tensor 3", nineT );
       // TYPE: Array
-      csmp::Index  neweaKey3 = model.CreateProperty( "new element array 3", "X", ARRAY, ELEMENT, 28 );
+      csmp::Index  neweaKey3 = model.CreateProperty( "new element array 3", "nea3", "X", ARRAY, ELEMENT, 28 );
       model.InputPropertyValue( "new element array 3", elementArray3 );
       // TYPE: Flagged Array
-      csmp::Index  newefaKey3 = model.CreateProperty( "new element flagged array 3", "X", FLAGGEDARRAY, ELEMENT, 3 );
+      csmp::Index  newefaKey3 = model.CreateProperty( "new element flagged array 3", "nefa3", "X", FLAGGEDARRAY, ELEMENT, 3 );
       model.InputPropertyValue( "new element flagged array 3", elementFlaggedArray3 );
 
       // PLACEMENT: Element Integration Point
       // TYPE: Scalar
-      csmp::Index  neweipKey3  = model.CreateProperty( "new eip scalar 3", "X", SCALAR, ELEMENT_INTEGRATION_POINT );
+      csmp::Index  neweipKey3  = model.CreateProperty( "new eip scalar 3", "nsei3", "X", SCALAR, ELEMENT_INTEGRATION_POINT );
       model.InputPropertyValue( "new eip scalar 3", threeS );
       // TYPE: Vector
-      csmp::Index  neweipvKey3 = model.CreateProperty( "new eip vector 3", "X", VECTOR, ELEMENT_INTEGRATION_POINT );
+      csmp::Index  neweipvKey3 = model.CreateProperty( "new eip vector 3", "neiv3", "X", VECTOR, ELEMENT_INTEGRATION_POINT );
       model.InputPropertyValue( "new eip vector 3", sixV );
       // TYPE: Tensor
-      csmp::Index  neweiptKey3 = model.CreateProperty( "new eip tensor 3", "X", TENSOR, ELEMENT_INTEGRATION_POINT );
+      csmp::Index  neweiptKey3 = model.CreateProperty( "new eip tensor 3", "neit3", "X", TENSOR, ELEMENT_INTEGRATION_POINT );
       model.InputPropertyValue( "new eip tensor 3", nineT );
       // TYPE: Array
-      csmp::Index  neweipaKey3 = model.CreateProperty( "new eip array 3", "X", ARRAY, ELEMENT_INTEGRATION_POINT, 28 );
+      csmp::Index  neweipaKey3 = model.CreateProperty( "new eip array 3", "neia3", "X", ARRAY, ELEMENT_INTEGRATION_POINT, 28 );
       model.InputPropertyValue( "new eip array 3", elementArray3 );
       // TYPE: Flagged Array
-      csmp::Index  neweipfaKey3 = model.CreateProperty( "new eip flagged array 3", "X", FLAGGEDARRAY, ELEMENT_INTEGRATION_POINT, 3 );
+      csmp::Index  neweipfaKey3 = model.CreateProperty( "new eip flagged array 3", "neifa3", "X", FLAGGEDARRAY, ELEMENT_INTEGRATION_POINT, 3 );
       model.InputPropertyValue( "new eip flagged array 3", elementFlaggedArray3 );
 
       // PLACEMENT: Sector Integration Point
       // TYPE: Scalar
-      csmp::Index  newseipKey3  = model.CreateProperty( "new seip scalar 3", "X", SCALAR, SECTOR_INTEGRATION_POINT );
+      csmp::Index  newseipKey3  = model.CreateProperty( "new seip scalar 3", "nseis3", "X", SCALAR, SECTOR_INTEGRATION_POINT );
       model.InputPropertyValue( "new seip scalar 3", threeS );
       // TYPE: Vector
-      csmp::Index  newseipvKey3 = model.CreateProperty( "new seip vector 3", "X", VECTOR, SECTOR_INTEGRATION_POINT );
+      csmp::Index  newseipvKey3 = model.CreateProperty( "new seip vector 3", "nseiv3", "X", VECTOR, SECTOR_INTEGRATION_POINT );
       model.InputPropertyValue( "new seip vector 3", sixV );
       // TYPE: Tensor
-      csmp::Index  newseiptKey3 = model.CreateProperty( "new seip tensor 3", "X", TENSOR, SECTOR_INTEGRATION_POINT );
+      csmp::Index  newseiptKey3 = model.CreateProperty( "new seip tensor 3", "nseit3", "X", TENSOR, SECTOR_INTEGRATION_POINT );
       model.InputPropertyValue( "new seip tensor 3", nineT );
       // TYPE: Array
-      csmp::Index  newseipaKey3 = model.CreateProperty( "new seip array 3", "X", ARRAY, SECTOR_INTEGRATION_POINT, 28 );
+      csmp::Index  newseipaKey3 = model.CreateProperty( "new seip array 3", "nseia3", "X", ARRAY, SECTOR_INTEGRATION_POINT, 28 );
       model.InputPropertyValue( "new seip array 3", elementArray3 );
       // TYPE: Flagged Array
-      csmp::Index  newseipfaKey3 = model.CreateProperty( "new seip flagged array 3", "X", FLAGGEDARRAY, SECTOR_INTEGRATION_POINT, 3 );
+      csmp::Index  newseipfaKey3 = model.CreateProperty( "new seip flagged array 3", "nseifa3", "X", FLAGGEDARRAY, SECTOR_INTEGRATION_POINT, 3 );
       model.InputPropertyValue( "new seip flagged array 3", elementFlaggedArray3 );
 
       // PLACEMENT: Facet Integration Point
       // TYPE: Scalar
-      csmp::Index  newfaipKey3  = model.CreateProperty( "new faip scalar 3", "X", SCALAR, FACET_INTEGRATION_POINT );
+      csmp::Index  newfaipKey3  = model.CreateProperty( "new faip scalar 3", "nfais3", "X", SCALAR, FACET_INTEGRATION_POINT );
       model.InputPropertyValue( "new faip scalar 3", threeS );
       // TYPE: Vector
-      csmp::Index  newfaipvKey3 = model.CreateProperty( "new faip vector 3", "X", VECTOR, FACET_INTEGRATION_POINT );
+      csmp::Index  newfaipvKey3 = model.CreateProperty( "new faip vector 3", "nfaiv3", "X", VECTOR, FACET_INTEGRATION_POINT );
       model.InputPropertyValue( "new faip vector 3", sixV );
       // TYPE: Tensor
-      csmp::Index  newfaiptKey3 = model.CreateProperty( "new faip tensor 3", "X", TENSOR, FACET_INTEGRATION_POINT );
+      csmp::Index  newfaiptKey3 = model.CreateProperty( "new faip tensor 3", "nfait3", "X", TENSOR, FACET_INTEGRATION_POINT );
       model.InputPropertyValue( "new faip tensor 3", nineT );
       // TYPE: Array
-      csmp::Index  newfaipaKey3 = model.CreateProperty( "new faip array 3", "X", ARRAY, FACET_INTEGRATION_POINT, 28 );
+      csmp::Index  newfaipaKey3 = model.CreateProperty( "new faip array 3", "nfaia3", "X", ARRAY, FACET_INTEGRATION_POINT, 28 );
       model.InputPropertyValue( "new faip array 3", elementArray3 );
       // TYPE: Flagged Array
-      csmp::Index  newfaipfaKey3 = model.CreateProperty( "new faip flagged array 3", "X", FLAGGEDARRAY, FACET_INTEGRATION_POINT, 3 );
+      csmp::Index  newfaipfaKey3 = model.CreateProperty( "new faip flagged array 3", "nfaifa3", "X", FLAGGEDARRAY, FACET_INTEGRATION_POINT, 3 );
       model.InputPropertyValue( "new faip flagged array 3", elementFlaggedArray3 );
 
       // ========================================================================
       // PLACEMENT: Element & Integration Points
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
+      for( vector<Element<dim>*>::const_iterator it( model_domain.CellsBegin() ); it != model_domain.CellsEnd(); ++it )
         {
         // TYPE: Scalar
         (*it)->Read( eKey2, scalarV );
@@ -1259,12 +1266,12 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // Status tests
 
       // PLACEMENT: Element
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
+      for( vector<Element<dim>*>::const_iterator it( model_domain.CellsBegin() ); it != model_domain.CellsEnd(); ++it )
         {
         // TYPE: Scalar
         _test( (*it)->Status(eKey2)     == twoS.Flag() );
         _test( (*it)->Status(neweKey3)  == threeS.Flag() );
-        for( auto d{0U}; d<3; ++d )
+        for( auto d{0U}; d<dim; ++d )
           {
           // TYPE: Vector
           _test( (*it)->Status(evKey2,d)    == fiveV.Flag(d) );
@@ -1289,7 +1296,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
           // TYPE: Scalar
           _test( (*it)->Status(i,eipKey2)       == twoS.Flag() );
           _test( (*it)->Status(i,neweipKey3)    == threeS.Flag() );
-          for( auto d{0U}; d<3; ++d )
+          for( auto d{0U}; d<dim; ++d )
             {
             // TYPE: Vector
             _test( (*it)->Status(i,eipvKey2,d)      == fiveV.Flag(d) );
@@ -1320,7 +1327,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
             // TYPE: Scalar
             _test( (*it)->Status(j,i,seipKey2)      == twoS.Flag() );
             _test( (*it)->Status(j,i,newseipKey3)   == threeS.Flag() );
-            for( auto d{0U}; d<3; ++d )
+            for( auto d{0U}; d<dim; ++d )
               {
               // TYPE: Vector
               _test( (*it)->Status(j,i,seipvKey2,d)     == fiveV.Flag(d) );
@@ -1352,7 +1359,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
               // TYPE: Scalar
               _test( (*it)->Status(j,i,faipKey2)    == twoS.Flag() );
               _test( (*it)->Status(j,i,newfaipKey3) == threeS.Flag() );
-              for( auto d{0U}; d<3; ++d )
+              for( auto d{0U}; d<dim; ++d )
                 {
                 // TYPE: Vector
                 _test( (*it)->Status(j,i,faipvKey2,d)       == fiveV.Flag(d) );

@@ -25,6 +25,7 @@
 
 // utility functions
 #include "CSMP_highLevelUtilities.h"
+#include "Standard_IO_Handler.h"
 
 using namespace std;
 
@@ -34,7 +35,7 @@ void Tutorial3_Example::Specifications()
 {
   SetTitle( "Tutorial 3: Incompressible 2-phase flow" );
   SetDifficulty( 3 );
-  SetCategory( "Simulation of Physical Processes" );
+  SetCategory( "Tutorials (composite functionality)" );
   AddAuthor( "Sebastian Geiger" );
   AddDescription( "A CSMP main file that uses an ANSYS-ICEM FE mesh to build the Model and simulate" );
   AddDescription( "incompressible two-phase flow using an IMPES (Implicit Pressure Explicit Saturation) or" );
@@ -84,6 +85,7 @@ void Tutorial3_Example::Run()
 
     double model_time(0.); // time
 
+    /*
     // ---------------------------------------------------
     // 1.0 Create Model directly from ANSYS-ICEM mesh
     // ---------------------------------------------------
@@ -100,10 +102,34 @@ void Tutorial3_Example::Run()
     else                                implicit = false;
 
     ANSYS_Model2D                model( input_file.c_str(), "tutorial3_variables.txt" );
+    */
+
+
+    // ------------------------------------------------------------
+    // 1.0 Load CSMP native format model
+    // ------------------------------------------------------------
+    string input_file;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'box2d_fault':"<<endl;
+    cin.ignore();
+    getline(cin, input_file);
+    if (input_file.length() == 0) input_file = "box2d_fault";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "tutorial3_variables.txt";
+    string config_file = input_file;
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, input_file, variable_file, config_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<2U>  model(input_file, variable_file);
+
     const PropertyDatabase<2>&   p_ref = model.Database();
 
     // give the model dimensions
     printModelDimensions( model, true );
+
+    Standard_IO_Handler  stdio;
+    bool  implicit = stdio.YesNo("\nPlease choose the type of FV numerical scheme ( Y/y - Implicit, N/n - Explicit ):");
 
     // --------------------------------------------
     // 3.0 Configure the simulation from a file
@@ -129,12 +155,12 @@ void Tutorial3_Example::Run()
     // ------------------------------------------------------------------------------------------
 
     // create a steady-state CSMP FE Algorithm using a high-level class
-    SteadyStateDiffusor<2U,Region> fluid_pressure( model, "total mobility",
+    SteadyStateDiffusor<2U,Element> fluid_pressure( model, "total mobility",
                                                           "fluid pressure",
                                                           "fluid volume source" );
 
     // operation to compute velocity
-    VelocityAndVolumeFlux<2U,Element<2U> >  velo( model,
+    VelocityAndVolumeFlux<2U>  velo( model,
                                                  "total mobility",
                                                  "porosity",
                                                  "fluid pressure", true );
@@ -159,6 +185,7 @@ void Tutorial3_Example::Run()
     // 7.0 Construct the finite volume grid and transport algorithms
     // -------------------------------------------------------------
     // NULL pointer to FV transport algorithm
+    model.InstantiateFiniteVolumes();
     NodeCenteredFiniteVolumeTransport<2U>*  transport(NULL);
 
     if ( implicit ) {
@@ -286,6 +313,8 @@ void Tutorial3_Example::Run()
 
     // terminate
     cerr << "\nmain: That's it..."<< endl;
+
+    fs::current_path("../../example_inputs/");
 
 } // Run()
 

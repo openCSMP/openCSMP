@@ -44,7 +44,7 @@ FiniteElementManager::FiniteElementManager()
  
 
 FiniteElementManager::FiniteElementManager( uint32_t dim, 
-                                            size_t interpolation_order,
+                                            uint32_t interpolation_order,
                                             bool isoparametric )
   : dimensions(dim), 
     interpolation(interpolation_order),
@@ -164,14 +164,14 @@ FiniteElement*  FiniteElementManager::E( CSMP_FEM_TYPE e_type ) const
  }
 
 
-size_t  FiniteElementManager::NodesOfElementType( CSMP_FEM_TYPE etype ) const
+uint32_t  FiniteElementManager::NodesOfElementType( CSMP_FEM_TYPE etype ) const
  {
     return E( etype )->Nodes();
  }
 
 
 
-size_t  FiniteElementManager::Dimensions() const
+uint32_t  FiniteElementManager::Dimensions() const
  { return dimensions; }
 
 
@@ -293,17 +293,32 @@ void FiniteElementManager::InitializeElements( uint32_t dim, size_t interpolatio
 
 
     // can be changed, but intermediate nodes will become defunct
-void      FiniteElementManager::InterpolationOrder( size_t interpolation_order )
+void FiniteElementManager::InterpolationOrder( uint32_t interpolation_order )
  {
     interpolation = interpolation_order;
  }
  
  
-size_t FiniteElementManager::InterpolationOrder() const
+uint32_t FiniteElementManager::InterpolationOrder() const
  {
     return interpolation;
  }
  
+
+bool FiniteElementManager::UsesElementsWithLocalCoordinateSystem() const
+ {
+    if ( dimensions == 3U ) {
+	    if ( hexa_ptr != nullptr && !hexa_ptr->UsesLocalCoordinates() ) return false;
+	    if ( pyra_ptr != nullptr && !pyra_ptr->UsesLocalCoordinates() ) return false;
+	    if ( pris_ptr != nullptr && !pris_ptr->UsesLocalCoordinates() ) return false;
+	    if ( tetr_ptr != nullptr && !tetr_ptr->UsesLocalCoordinates() ) return false;
+      }
+    if ( quad_ptr != nullptr && !quad_ptr->UsesLocalCoordinates() ) return false;
+	  if ( tria_ptr != nullptr && !tria_ptr->UsesLocalCoordinates() ) return false;
+	  if ( line_ptr != nullptr && !line_ptr->UsesLocalCoordinates() ) return false;
+   
+    return true;
+ }
  
 
 
@@ -311,14 +326,14 @@ size_t FiniteElementManager::InterpolationOrder() const
 bool   FiniteElementManager::ContainsElementType( CSMP_FEM_TYPE e_type ) const
  {
     if ( dimensions == 3U ) {
-	    if ( hexa_ptr != NULL && e_type == hexa_ptr->ElementType() ) return true;
-	    if ( pyra_ptr != NULL && e_type == pyra_ptr->ElementType() ) return true;
-	    if ( pris_ptr != NULL && e_type == pris_ptr->ElementType() ) return true;
-	    if ( tetr_ptr != NULL && e_type == tetr_ptr->ElementType() ) return true;
+	    if ( hexa_ptr != nullptr && e_type == hexa_ptr->ElementType() ) return true;
+	    if ( pyra_ptr != nullptr && e_type == pyra_ptr->ElementType() ) return true;
+	    if ( pris_ptr != nullptr && e_type == pris_ptr->ElementType() ) return true;
+	    if ( tetr_ptr != nullptr && e_type == tetr_ptr->ElementType() ) return true;
       }
-    if ( quad_ptr != NULL && e_type == quad_ptr->ElementType() ) return true;
-	  if ( tria_ptr != NULL && e_type == tria_ptr->ElementType() ) return true;
-	  if ( line_ptr != NULL && e_type == line_ptr->ElementType() ) return true;
+    if ( quad_ptr != nullptr && e_type == quad_ptr->ElementType() ) return true;
+	  if ( tria_ptr != nullptr && e_type == tria_ptr->ElementType() ) return true;
+	  if ( line_ptr != nullptr && e_type == line_ptr->ElementType() ) return true;
       
     return false;   
  }

@@ -5,6 +5,7 @@
 
 namespace csmp {
 
+template<uint32_t> class Node;
 template<uint32_t> class Element;
 template<uint32_t> class Model;
 
@@ -142,6 +143,12 @@ bool isFRONT( BOX_BOUNDARY );
 /// returns whether boundary flag belongs to boundary BACK (3D only)
 bool isBACK( BOX_BOUNDARY );
 
+/// returns true also for edges and corners
+bool canBeIRREGULAR( BOX_BOUNDARY );
+
+/// returns nodes that are either flagged  CNR1 or CNR2 from one-dimensional model
+Node<1U>* const cornerFlaggedNode( Model<1U>&, BOX_BOUNDARY );
+
 /// infers from node flags, and cell types, which boundary the element face lies on including INTERNAL ones
 template<uint32_t dim, template<uint32_t> class CELL>
 BOX_BOUNDARY atBoundary( const CELL<dim>* const, uint32_t boundary_face );
@@ -231,17 +238,15 @@ double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
                             const Point<2U>& xy1,
                             const Point<2U>& xy2,
                             const Point<2U>& coord,
-                            //                       val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
+                            // val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
                             double p1, double p2, double p3, double p4 );
 
 double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
                             const Point<3U>& xy1,
                             const Point<3U>& xy2,
                             const Point<3U>& coord,
-                            //                       val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
+                            // val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
                             double p1, double p2, double p3, double p4 );
-
-
 
 
 } // end namespace csmp

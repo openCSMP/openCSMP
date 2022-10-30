@@ -17,12 +17,13 @@ namespace csmp {
     @todo make sure that the map:key nodes are ideed contained in the manifolds.
 */
 template<uint32_t dim>
-NodeManifoldManager<dim>::NodeManifoldManager( const vertexManifoldIndices& indices,
-                                               plf::colony<Node<dim>>& mesh_nodes )
+NodeManifoldManager<dim>::NodeManifoldManager( plf::colony<Node<dim>>& mesh_nodes,
+                                               VData::manifoldContainer::const_iterator first,
+                                               VData::manifoldContainer::const_iterator last )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    if ( indices.empty() ) {
+    if ( distance(first,last) == 0 ) {
         csmp_error.Note( WARNING, "NodeManifoldManager::constructor:",
                           "no manifold information contained in vertexManifoldIndices map; no manifolds were constructed" );
         return;
@@ -33,37 +34,24 @@ NodeManifoldManager<dim>::NodeManifoldManager( const vertexManifoldIndices& indi
         return;
       }
     // checking that the deque does indeed have ther required node entries
-    if ( indices.size() > mesh_nodes.size() )
+    if ( distance(first,last) > mesh_nodes.size() )
       csmp_error.Note( WARNING, "NodeManifoldManager::constructor:",
                         "it appears that more manifold indices are supplied than nodes" );
 
-#ifdef DEBUG
-// checking that the key nodes in vertexManifoldIndices map are also contained in the corresponding sets
-for ( auto& nit : indices ) {
-    set<size_t> mnodes;
-    for ( const auto& mf_nodes : nit.second ) mnodes.insert( mf_nodes.first );
-    // if the key node is not contained this is reported
-    if ( mnodes.find(nit.first) == mnodes.end() )
-        csmp_error.Note( WARNING, "NodeManifoldManager::constructor:",
-                          "manifold does not contain key node: ", to_string(nit.first) );
-  }
-#endif
-
     // creating the node manifolds
-    // NB: node_id, connected nodes and their INTERFACE_SIDE identifiers
-    //     map<size_t,set<pair<size_t,int8_t> > >
-    for ( const auto& nit : indices ) {
-        const size_t  n_nodes(nit.second.size());
+    while ( first != last ) {
+        // checking the manifold construction data
+        const size_t  n_manifold_nodes((*first).first.size());
         // a manifold requires at least two nodes
-        if ( n_nodes >= 2U ) {  // indices: map<size_t,set<pair<size_t,int8_t> > >
+        assert( n_manifold_nodes >= 2U );
+        if ( n_manifold_nodes >= 2U ) {  
             typename plf::colony<NodeManifold<dim>>::iterator mit =
-              node_manifolds_.emplace( NodeManifold<dim>( mesh_nodes, nit.second, ManifoldType::INTERFACE ) );
-            // geometric qualifier is determined through a consistency check once the manifold is in place
-            (*mit).GeometricClassifier( consistencyCheck( (*mit) ) );
+              node_manifolds_.emplace( NodeManifold<dim>( mesh_nodes, (*first).first, (*first).second ) );
             // assigning the new NodeManifold to the nodes it points to
             for ( auto i{0U}; i<(*mit).Branches(); i++ )
               (*mit).N(i)->Assign( (*mit) );
           }
+         first++;
       }
       
     cout <<"\nNodeManifoldManager(custom ctor): constructed "<< node_manifolds_.size();
@@ -191,7 +179,7 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeMani
     // 2. merging the manifolds into nmf1, deleting nmf2
     // -------------------------------------------------
     for ( auto i{0U}; i<n_nodes_nmf2; ++i )
-      nmf1->Add( nmf2->N(i), nmf2->InterFaceSide(i) );
+      nmf1->Add( nmf2->N(i) );
      
      // 3. reclassifying the manifold geometry
      // --------------------------------------
@@ -341,23 +329,13 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
         // sorted nodes
         vector<size_t>  manifold_node_list;
         manifold_node_list.reserve( n_manifold_node_entries );
+        // 'plist' like record of nodes per manifold
         for ( auto& nmf : node_manifolds_ ) {
              const size_t entries(nmf.Branches());
              for ( size_t i{0U}; i<entries; ++i )
                manifold_node_list.push_back( nmf.N(i)->Idx() );
           }
         binaryFileWrite( fp, manifold_node_list );
-      }
-      // 4. like previous record but of INTERFACE_SIDE specifiers
-      {
-        vector<int8_t>  manifold_node_topo_list;
-        manifold_node_topo_list.reserve( n_manifold_node_entries );
-        for ( auto& nmf : node_manifolds_ ) {
-             const size_t entries(nmf.Branches());
-             for ( size_t i{0U}; i<entries; ++i )
-               manifold_node_topo_list.push_back( nmf.InterFaceSide(i) );
-          }
-        binaryFileWrite( fp, manifold_node_topo_list );
       }
   } // end writing the manifold records
   
@@ -407,7 +385,7 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<
     assert( manifolds > 0 ); // this file should only be written if there are manifolds
 
     // 1. record of topologic entity classifiers
-    vector<int8_t>  manifold_topology;
+    vector<ManifoldType>  manifold_topology; // int8_t
     binaryFileRead( fp, manifold_topology );
 
     // 2. record of nodes per manifold (size, values)
@@ -422,32 +400,30 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<
     vector<uint32_t>  nodes_of_manifolds;
     binaryFileRead( fp, nodes_of_manifolds );
 
-    // 4. like previous record but of INTERFACE_SIDE specifiers
-    vector<int8_t>  topo_of_nodes;
-    binaryFileRead( fp, topo_of_nodes );
-
-
     // ------------------------------------
     // 3. reconstructing the node manifolds 
     // ------------------------------------
-    set<pair<size_t,INTERFACE_SIDE> > manifold_nodes;
-    size_t counter(0U);
+    vector<size_t>  manifold_nodes;
+    size_t          counter(0U);
     for ( auto i{0}; i<manifolds; ++i ) {
          const auto n_branches( nodes_per_manifold[i] );
+         manifold_nodes.reserve( n_branches );
          for ( auto j{0U}; j<n_branches; ++j ) {
               assert( nodes_of_manifolds[counter] < mesh_nodes.size() );
-              assert( topo_of_nodes[counter] <= OUTSIDE );
-              manifold_nodes.insert( make_pair( nodes_of_manifolds[counter],
-                                                static_cast<INTERFACE_SIDE>(topo_of_nodes[counter]) ) );
+              manifold_nodes.push_back( nodes_of_manifolds[counter] );
               counter++;
            }
-         assert( manifold_topology[i] < static_cast<int8_t>(ManifoldType::NOT_CLASSIFIED) );
-         const ManifoldType topology = static_cast<ManifoldType>(manifold_topology[i]) ;
-         node_manifolds_.emplace( NodeManifold<dim>( mesh_nodes, manifold_nodes, topology ) );
+         sort( manifold_nodes.begin(), manifold_nodes.end() );
+         manifold_nodes.erase( unique( manifold_nodes.begin(), manifold_nodes.end() ), manifold_nodes.end() );
+         assert( manifold_topology[i] < ManifoldType::SPLIT_BOUNDARY_END );
+         node_manifolds_.emplace( NodeManifold<dim>( mesh_nodes, manifold_nodes, manifold_topology[i] ) );
       }
     
     return current_sort_variable_;
- }
+    
+ } // end InputNodeManifoldsFromBinary
+    
+    
     
     
 

@@ -96,7 +96,7 @@ void ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution( Element<dim
         line_vector.NormalizeLengthTo(1.);
         VectorVariable<dim> projection = gravity_unit_vector_.ProjectOnto(line_vector.Coordinates());
 
-        for (size_t j = 0 ; j <dim; j++)
+        for ( uint32_t j{0U} ; j <dim; j++)
             gravityVector(j) = projection[j];
 
     }
@@ -115,12 +115,12 @@ void ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution( Element<dim
         Point<dim> firstcross(crossProduct(surface_normal,gravity_unit_vector_.P()));
         Point<dim> secondcross(crossProduct(surface_normal,firstcross));
 
-        for (size_t j = 0 ; j <dim; j++)
+        for (uint32_t j = 0U; j <dim; j++)
             gravityVector(j) = secondcross[j];
     }
     else
     {
-        for (size_t j = 0 ; j <dim; j++)
+        for (uint32_t j = 0U; j <dim; j++)
             gravityVector(j) = gravity_unit_vector_(j);
     }
     //-----------
@@ -131,14 +131,14 @@ void ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution( Element<dim
     gravityTerm =  element->Read( permeabilityKey_ ) * gravitational_acceleration_;
     // loop over element integration points
     if (gravityVectorKey_.place==ELEMENT_INTEGRATION_POINT){
-        for (size_t ip=0;ip<element->IntegrationPoints (); ++ip)
+        for (uint32_t ip=0U;ip<element->IntegrationPoints (); ++ip)
         {
             element->PropertyValueAtIntegrationPoint( densityKey_, ip, rho );
             element->PropertyValueAtIntegrationPoint( viscosityKey_, ip, mu );
             element->Store( ip, gravityVectorKey_, gravityVector*rho()*gravityTerm/mu() );
         }
         if (densityKey2_!=csmp::Index())
-            for (size_t ip=0;ip<element->IntegrationPoints (); ++ip)
+            for (uint32_t ip=0U;ip<element->IntegrationPoints (); ++ip)
             {
                 element->Read( ip, gravityVectorKey_, gravityVector);
                 element->PropertyValueAtIntegrationPoint( densityKey2_, ip, rho );

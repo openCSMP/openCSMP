@@ -96,9 +96,9 @@ Point<1U>  normalAtFacetCenter( const Point<1U>& pt0,
 
 /// one-point quadrature
 double  facetArea1( const Point<3U>& pt0, 
-                      const Point<3U>& pt1,
-                      const Point<3U>& pt2,
-                      const Point<3U>& pt3 )
+                    const Point<3U>& pt1,
+                    const Point<3U>& pt2,
+                    const Point<3U>& pt3 )
 {
   // x - coordinate
   double jac00(0.25 * (-pt0[0] + pt1[0] + pt2[0] - pt3[0])); // dnr
@@ -124,9 +124,9 @@ double  facetArea1( const Point<3U>& pt0,
 
 // area of the 2D quadrilateral
 double  facetArea1( const Point<2U>& pt0,
-                      const Point<2U>& pt1,
-                      const Point<2U>& pt2,
-                      const Point<2U>& pt3 )
+                    const Point<2U>& pt1,
+                    const Point<2U>& pt2,
+                    const Point<2U>& pt3 )
 {
    const double a(pt0.DistanceTo(pt3)), b(pt0.DistanceTo(pt1)), // left triangle
                   c(pt2.DistanceTo(pt3)), d(pt2.DistanceTo(pt1)), // righ triangle
@@ -176,9 +176,9 @@ IP 4, dnr, dns:
 Finite volume computations on volumetric finite elements.  
 */
 double  facetArea4( const Point<3U>& p0, 
-                      const Point<3U>& p1, 
-                      const Point<3U>& p2, 
-                      const Point<3U>& p3 )
+                    const Point<3U>& p1,
+                    const Point<3U>& p2,
+                    const Point<3U>& p3 )
 {
   // integration point 1
   // -------------------
@@ -276,17 +276,17 @@ double  facetArea4( const Point<3U>& p0,
 
 
 double  facetArea4( const Point<2U>& pt0,
-                      const Point<2U>& pt1,
-                      const Point<2U>& pt2,
-                      const Point<2U>& pt3 )
+                    const Point<2U>& pt1,
+                    const Point<2U>& pt2,
+                    const Point<2U>& pt3 )
 {
     return 1.;
 }
 
 double  facetArea4( const Point<1U>& pt0,
-                      const Point<1U>& pt1,
-                      const Point<1U>& pt2,
-                      const Point<1U>& pt3 )
+                    const Point<1U>& pt1,
+                    const Point<1U>& pt2,
+                    const Point<1U>& pt3 )
 {
     return 1.;
 }

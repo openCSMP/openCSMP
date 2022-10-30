@@ -19,6 +19,7 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
 #include "NumIntegral_op_NT_dN_orthogonal_dV.h"
+#include "LinearSolver.h"
 
 // Interrelations
 #include "ConstantFactor.h"
@@ -34,6 +35,7 @@
 #include "StatisticalAnalyzer.h"
 #include "RegionMonitor.h"
 
+
 using namespace std;
 
 namespace csmp{
@@ -47,7 +49,8 @@ void StreamFunction_Example::Specifications()
   AddDescription( "post-processing of the velocity field using the streamfunction that can be contoured" );
   AddDescription( "steady-state analysis of flow and fluid pressure in heterogeneous medium" );
   AddDescription( "source in StreamFunction_Example.cpp" );
-  AddRequirement( "file set: 'example21.1'");
+  AddRequirement( "file set: 'example21.1', example21.1-configuration.txt");
+  AddRequirement( "variable file (example21.txt), 'example21_histogram.bin'");
 }
 
 
@@ -67,6 +70,7 @@ void StreamFunction_Example::Specifications()
 ***************************************************************************************** */
 void StreamFunction_Example::Run()
 {
+   /*
    TRIANGLE_Interface  mesh_interface;
    VSet<2U>            mesh_container;
 
@@ -90,6 +94,41 @@ void StreamFunction_Example::Run()
    VSetConverter<2U>().ConvertElementTypesToOnesUsingLocalCoordinateSystem( mesh_container );
    Model<2U>  model( mesh_container, "example21.txt" );
    mesh_container.Erase();
+   */
+
+  // ------------------------------------------------------------
+  // 0. Load CSMP native format model
+  // ------------------------------------------------------------
+  string model_name;
+  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'example21.1':"<<endl;
+  cin.ignore();
+  getline(cin, model_name);
+  if (model_name.length() == 0) model_name = "example21.1";
+
+  //find the name of current example source file
+  string file_name = GetExampleFileName(__FILE__);
+  string variable_file = "example21.txt";
+  string config_file = model_name;
+  //create of directory with current example name, go into this directory, and copy input files into it.
+  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+  //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model<2U>  model(model_name, variable_file);
+
+  //copy in 'example21_histogram.bins' file to be used by StatisticalAnalyzer
+  string path = "../../example_inputs/variables_and_configuration_files/";
+  string name = "example21_histogram.bins";
+  file_name = path + name;
+  if (fs::exists(file_name)) fs::copy(file_name, "./");
+  else {
+    string error_message = "\n\nError: file '";
+    string input_directory = fs::current_path().parent_path().parent_path();
+    input_directory += "/example_inputs/variables_and_configuration_files/";
+    error_message += (name + "' does not exist in directory "  + input_directory);
+    error_message += (", example cannot run, please copy this file into this directory\n");
+    throw std::runtime_error(error_message);
+  }
+
+  Standard_IO_Handler  stdio( model_name.c_str() );
 
 
  // ------------------------------------------------------------------------------------
@@ -97,7 +136,7 @@ void StreamFunction_Example::Run()
  //    interrelations
  // ------------------------------------------------------------------------------------
    InputDataManager<2U>  model_configuration;
-   model_configuration.ConfigureFromFile( model, file_name );
+   model_configuration.ConfigureFromFile( model, config_file.c_str() );
 
    printModelDimensions( model );
 
@@ -116,17 +155,17 @@ void StreamFunction_Example::Run()
  // ------------------------------------------------------------------------------------
  // 3. Steady-state fluid pressure computation [K]{p} = {Q}
  // ------------------------------------------------------------------------------------
-   #ifdef CSMP_WITH_SAMG_SOLVER
+   #ifdef USE_SAMG_SOLVER
    SAMG_Solver solver;
-   PDE_Integrator<2U,Region>  fluid_pressure(solver);
+   PDE_Integrator<2U,Element>  fluid_pressure(solver);
    #else
-   CSMP_DEFAULT_LINEAR_SOLVER solver;
-   PDE_Integrator<2U,Region>  fluid_pressure(solver);
+   EigenSolver solver;
+   PDE_Integrator<2U,Element>  fluid_pressure(solver);
    #endif
 
-   NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  conductance( model.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
-   NumIntegral_NT_op_N_dV<2U,Element<2U> >    source( model.Database(), "fluid volume source", "fluid pressure" );
-   VelocityAndVolumeFlux<2U,Element<2U> >     velo( model, "conductivity", "porosity", "fluid pressure" );
+   NumIntegral_dNT_op_dN_dV<2U>  conductance( model.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
+   NumIntegral_NT_op_N_dV<2U>    source( model.Database(), "fluid volume source", "fluid pressure" );
+   VelocityAndVolumeFlux<2U>     velo( model, "conductivity", "porosity", "fluid pressure" );
 
    fluid_pressure.Add( &conductance );
    fluid_pressure.Add( &source );
@@ -137,7 +176,7 @@ void StreamFunction_Example::Run()
  // ------------------------------------------------------------------------------------
  // 3.1 Analysis of results
  // ------------------------------------------------------------------------------------
-   StatisticalAnalyzer<2U>                                     flux_histogram( model );
+   StatisticalAnalyzer<2U>                                 flux_histogram( model );
    vector<pair<double,double> >                            bins;
    map<string,pair<vector<pair<double,double> >,size_t> >  results;
 
@@ -257,7 +296,7 @@ rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
         printRangeOfVariable( model, stdio, group_name.c_str(), "velocity" );
         printRangeOfVariable( model, stdio, group_name.c_str(), "volume flux" );
 
-        analyze_sensitivity( model, group_name.c_str(), stdio, conductivity, fluid_pressure );
+        AnalyseSensitivity( model, group_name.c_str(), stdio, conductivity, fluid_pressure );
 
         if ( stdio.RecordLogicalChoice("Output last result from sensitivity analysis ?") ) {
              vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure",    0 );
@@ -267,6 +306,8 @@ rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
      }
 
    cout <<"\nmain: That's it..."<< endl;
+
+   fs::current_path("../../example_inputs/");
 
 
 } // Run()
@@ -279,8 +320,8 @@ rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
 // auxiliary methods
 
 // this method assumes that permeability is a scalar
-void  StreamFunction_Example::analyze_sensitivity( Model<2U>& sg, const char* group, Standard_IO_Handler& io,
-                                                   Interrelation<2U>& itr, PDE_Integrator<2U,Region>& algo )
+void  StreamFunction_Example::AnalyseSensitivity( Model<2U>& sg, const char* group, Standard_IO_Handler& io,
+                                                  Interrelation<2U>& itr, PDE_Integrator<2U,Element>& algo )
  {
     assert( sg.Database().Type("permeability") == SCALAR );
     for ( ;; ) {
@@ -498,19 +539,19 @@ void StreamFunction_Example::computeStreamFunction( Model<2U>& sg,
     sg.InputBoundaryValue( boundary0, stream_func_var, makeScalar(DIRICH, 0.) );
     sg.InputBoundaryValue( boundary1, stream_func_var, makeScalar(DIRICH, total_flux) );
 
-#ifdef CSMP_WITH_SAMG_SOLVER
+#ifdef USE_SAMG_SOLVER
     SAMG_Solver  samg_solver;
-    PDE_Integrator<2U,Region>  stream_function(samg_solver);
+    PDE_Integrator<2U,Element>  stream_function(samg_solver);
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-    PDE_Integrator<2U,Region>  stream_function(linear_solver);
+    EigenSolver  linear_solver;
+    PDE_Integrator<2U,Element>  stream_function(linear_solver);
 #endif
 
-    NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  conductance( sg.Database(),
+    NumIntegral_dNT_op_dN_dV<2U>  conductance( sg.Database(),
                                                         "resistivity", stream_func_var, stream_func_var );
 
 // RENAME THIS OPERATOR into NumIntegral_NT_op_dN_orthogonal_dV
-    NumIntegral_op_NT_dN_orthogonal_dV<2U,Element<2U> >  rhs( sg.Database(), "fluid pressure", stream_func_var );
+    NumIntegral_op_NT_dN_orthogonal_dV<2U>  rhs( sg.Database(), "fluid pressure", stream_func_var );
 
     stream_function.Add( &conductance );
     stream_function.Add( &rhs );

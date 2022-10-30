@@ -14,7 +14,7 @@ namespace csmp {
 The upwinding is based on the basic operand (which will be the pressure)
 variable.
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 Upwind_Integral_dNT_op_dN_dV<dim,CELL>::Upwind_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
                                                             				const char* oper, 
                                                             				const char* basic, 
@@ -23,7 +23,7 @@ Upwind_Integral_dNT_op_dN_dV<dim,CELL>::Upwind_Integral_dNT_op_dN_dV( const Prop
                                                             				const char* trigger,
                                                             				const double prefactor)
  
-  : MathOperatorLHS<dim>(pref,oper,basic,test),
+  : MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
     DN(2,3),
     DNT(3,2),
     uvar_(pref.StorageKey(upwind)),
@@ -34,28 +34,28 @@ Upwind_Integral_dNT_op_dN_dV<dim,CELL>::Upwind_Integral_dNT_op_dN_dV( const Prop
     name += upwind;
     char * cname = new char[name.length()+1];
     strcpy(cname, name.c_str());
-    MathOperatorLHS<dim>::Name(cname, oper, basic, test);
+    MathOperatorLHS<dim,CELL>::Name(cname, oper, basic, test);
 
     // testing the Operands 
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT )
-    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
-                    oper, "Operand must be placed on the element.");
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT )
+      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)",
+                             oper, "Operand must be placed on the element.");
 
-    if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
-                    test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
+      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)",
+                             test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
-                    test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE || MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
+      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)",
+                             test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
     
     if (uvar_.place != NODE || uvar_.type != SCALAR)
-    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
-                    upwind, "Upwind variable must be a scalar property placed on the nodes.");
+      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)",
+                             upwind, "Upwind variable must be a scalar property placed on the nodes.");
                     
     if (tvar_.place != NODE || uvar_.type != SCALAR)
-    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
-                    trigger, "Upwind variable must be a scalar property placed on the nodes.");
+      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)",
+                             trigger, "Upwind variable must be a scalar property placed on the nodes.");
                     
 }
 
@@ -69,14 +69,15 @@ vector or tensor properties, depending on what kind of property the
 Operand is.  
 
 When the property is an element property, it will be put into the
-first vector entry MTRL[0]. */
-template<uint32_t dim,class CELL>
-void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL& e )
+first vector entry MTRL[0].
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
 
-    MathOperatorLHS<dim>::GetOperands(e);
+    MathOperatorLHS<dim,CELL>::GetOperands(e);
         
     if (uvar_.place == NODE && uvar_.type == SCALAR && tvar_.place == NODE && tvar_.type == SCALAR) {
       e.NodePropertyVector( uvar_, el_uvar);
@@ -90,8 +91,12 @@ void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL& e )
  } // end GetOperands
 
 
-template<uint32_t dim,class CELL>
-void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     e.dN( DN );
     // transpose the shape function derivative matrix
@@ -99,7 +104,7 @@ void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e 
     DN.Transposed( DNT );
     
     // calculate the element contribution to LHS (E_OP is the Basic Operand)
-    DNT *= MathOperatorLHS<dim>::MTRL[0];
+    DNT *= MathOperatorLHS<dim,CELL>::MTRL[0];
     DNT *= DN;
     
     // calculate upwinding coefficients and multiply them with operand matrix   
@@ -120,11 +125,11 @@ void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e 
     }
     
     // assigning element contribution
-    MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
-    MathOperatorLHS<dim>::LHS = DNT;
+    MathOperatorLHS<dim,CELL>::LHS.Resize(e.Nodes(),e.Nodes());
+    MathOperatorLHS<dim,CELL>::LHS = DNT;
     // analytical integration over area / volume for linear triangle 
     // and tetrahedron elements, respectively
-    MathOperatorLHS<dim>::LHS *= e.Volume() * prefactor_;
+    MathOperatorLHS<dim,CELL>::LHS *= e.Volume() * prefactor_;
 
  //cout <<"\nElement: "<< e.Idx();
  //MathOperatorLHS<dim>::LHS.Out();
@@ -134,10 +139,10 @@ void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e 
 
 
 
-template class Upwind_Integral_dNT_op_dN_dV<2U,Element<2U> >;
-template class Upwind_Integral_dNT_op_dN_dV<3U,Element<3U> >;
+template class Upwind_Integral_dNT_op_dN_dV<2U,Element>;
+template class Upwind_Integral_dNT_op_dN_dV<3U,Element>;
 
-template class Upwind_Integral_dNT_op_dN_dV<2U,Face<2U> >;
-template class Upwind_Integral_dNT_op_dN_dV<3U,Face<3U> >;
+template class Upwind_Integral_dNT_op_dN_dV<2U,Face>;
+template class Upwind_Integral_dNT_op_dN_dV<3U,Face>;
 
 } // csmp

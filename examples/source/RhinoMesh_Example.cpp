@@ -26,6 +26,7 @@
 #include "RhinoSurfaceReader.h"
 #include "compareFloats.h"
 
+
 using namespace std;
 
 namespace csmp {
@@ -34,7 +35,7 @@ void RhinoMesh_Example::Specifications()
 {
   SetTitle( "RhinoSurfaceReader: Input of triangulated surfaces from Rhinoceros (McNeel&Assocs.) as mesh." );
   SetDifficulty( 2 );
-  SetCategory( "Software Functionality" );
+  SetCategory( "Software Interfaces" );
   AddAuthor( "SKM" );
   AddDescription( "source in: RhinoMesh_Example.cpp" );
   AddDescription( "3D fracture-only flow & transport simulation using Rhino meshes as input" );
@@ -49,9 +50,18 @@ void RhinoMesh_Example::Run()
 {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
-      char  file_name[200];
-      cout <<"\nmain: Enter name of input file (ASCII format): ";
-      cin >> file_name;
+     string model_name;
+     cout << "\nPlease enter the name of input model, or press ENTER to use the default model 'example20':" << endl;
+     cin.ignore();
+     getline(cin, model_name);
+     if (model_name.length() == 0) model_name = "example20";
+
+     std::string variables_file("example20.txt");
+
+     // create a working directory with current example name, go into this directory, and copy input files into it.
+     CopyInputFiles(model_name, variables_file);
+
+     auto file_name = model_name.c_str();
 
      // -----------------------------------------------------------------------
      // 0. reading in '.raw' meshes that were written to file as labeled
@@ -117,15 +127,15 @@ void RhinoMesh_Example::Run()
      // -----------------------------------------------------------------------
       #ifdef CSMP_WITH_SAMG_SOLVER
       SAMG_Solver solver;
-      PDE_Integrator<3U,Region>  steady_state_pressure(solver);
+      PDE_Integrator<3U,Element>  steady_state_pressure(solver);
       #else
       CSMP_DEFAULT_LINEAR_SOLVER solver;
-      PDE_Integrator<3U,Region>  steady_state_pressure(solver);
+      PDE_Integrator<3U,Element>  steady_state_pressure(solver);
       #endif
 
-      NumIntegral_dNT_op_dN_dV<3U,Element<3U> >  conductance0( model3D.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
-      NumIntegral_NT_op_N_dV<3U,Element<3U> >    source0( model3D.Database(), "fluid volume source", "fluid pressure" );
-      VelocityAndVolumeFlux<3U,Element<3U> >     postpro0( model3D, "conductivity", "porosity", "fluid pressure" );
+      NumIntegral_dNT_op_dN_dV<3U>  conductance0( model3D.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
+      NumIntegral_NT_op_N_dV<3U>    source0( model3D.Database(), "fluid volume source", "fluid pressure" );
+      VelocityAndVolumeFlux<3U>     postpro0( model3D, "conductivity", "porosity", "fluid pressure" );
 
       steady_state_pressure.Add( &conductance0 );
       steady_state_pressure.Add( &source0 );
@@ -163,6 +173,8 @@ void RhinoMesh_Example::Run()
       vtk_output.OutputDataToVTK( model3D, "concentration",   "concentration", 1 );
 
       cout <<"\nmain: That's it..."<< endl;
+
+      fs::current_path("../../example_inputs/");
 
 } // Run()
 
@@ -224,5 +236,56 @@ void  RhinoMesh_Example::ConcentrationRectangle( Model<3U>& sg, double concentra
          (*nit)->Store( Skey, makeScalar(PLAIN,concentration) );
      }
  }
+
+
+  void RhinoMesh_Example::CopyInputFiles(std::string& model_name, std::string& variable_file) {
+    //find the name of current example source file
+    string example_name = GetExampleFileName(__FILE__);
+    //create a working directory with the name of this example and go into it
+    fs::create_directory("../example_outputs");
+    fs::current_path("../example_outputs");
+    if (fs::is_directory(example_name)) fs::remove_all(example_name); //if directory already exists, delete it
+    fs::create_directory(example_name);
+    fs::current_path(example_name);
+
+    //copy model files into working directory
+    string input_directory = fs::current_path().parent_path().parent_path();
+    input_directory += "/example_inputs/input_meshes/";
+
+    string path = "../../example_inputs/input_meshes/";
+    string name = model_name + ".raw";
+    string file_name = path + name;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      error_message += (name + "' does not exist in directory " + input_directory);
+      error_message += (", example cannot run, please copy this file into this directory\n");
+      throw std::runtime_error(error_message);
+    }
+
+    name = model_name + ".3dm";
+    file_name = path + name;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      error_message += (name + "' does not exist in directory " + input_directory);
+      error_message += (", example cannot run, please copy this file into this directory\n");
+      throw std::runtime_error(error_message);
+    }
+
+    //copy variable file into working directory
+    input_directory = fs::current_path().parent_path().parent_path();
+    input_directory += "/example_inputs/variables_and_configuration_files/";
+
+    path = "../../example_inputs/variables_and_configuration_files/";
+    file_name = path + variable_file;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      error_message += (variable_file + "' does not exist in directory " + input_directory);
+      error_message += (", example cannot run, please copy this file into this directory\n");
+      throw std::runtime_error(error_message);
+    }
+  }
 
 } // csmp

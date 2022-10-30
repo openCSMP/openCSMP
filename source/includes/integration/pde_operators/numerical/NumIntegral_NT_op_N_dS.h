@@ -5,6 +5,8 @@
 
 namespace csmp {
 
+template<uint32_t> class Face;
+
 /**
 
 @brief Known as: "mass matrix", "fluid sources or sinks", or "capacitance matrix"
@@ -18,15 +20,15 @@ namespace csmp {
 @attention to be used to assign boundary integrals to higher-dimensional domains
 
 */
-template<uint32_t dim, template<uint32_t> class CELL>
-class NumIntegral_NT_op_N_dS : public MathOperatorRHS<dim> {
+template<uint32_t dim>
+class NumIntegral_NT_op_N_dS : public MathOperatorRHS<dim,Face> {
   public:
-    NumIntegral_NT_op_N_dS( const PropertyDatabase<dim>& p, 
+    NumIntegral_NT_op_N_dS( const PropertyDatabase<dim>&,
                             const char* oper, const char* test );
 
-    virtual void ComputeContribution( const CELL<dim>& );
+    virtual void ComputeContribution( const Face<dim>& );
     
-    virtual NumIntegral_NT_op_N_dS<dim,CELL>* clone() const { return new NumIntegral_NT_op_N_dS<dim,CELL> (*this); }
+    virtual NumIntegral_NT_op_N_dS<dim>* clone() const { return new NumIntegral_NT_op_N_dS<dim> (*this); }
 
   private:
     size_t  nodal_degrees_of_freedom;

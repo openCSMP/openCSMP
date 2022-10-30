@@ -25,6 +25,7 @@ namespace csmp {
       capillary values should be 'rock type.txt'
       File structure is as follow:
      2 ->number of tables
+     1 ->rocktype
      21 ->number of entries for table 0 (first table) excluding the first row
      -1.99513	-0.00488	0.000125	3.709875	-10557.3	-519.567 ->derivatives at start and end for kro, krw and pc
      0	1	0	5000 -> data (sw  kro krw pc)
@@ -48,6 +49,7 @@ namespace csmp {
      0.9	0.0019	0.6561	1054.092553
      0.95	0.00024375	0.81450625	1025.978352
      1	0	1	1000
+     2 ->rocktype
      6 ->number of entries for table 1 (second table) excluding the first row
      -1	-1	1	1	0	0 ->derivatives
      0	1	0	0 ->data
@@ -126,6 +128,12 @@ class ExperimentalSaturationFunctions {
     size_t RockTypes() const;
   
     void Out() const;
+
+    void initialiseResidualSaturations(Model<dim>& model);
+
+    double seff_to_sw( Element<dim>* const e, double seff ) const;
+
+    double sw_from_pc_at( Element<dim>* const e, double pc, double sw ) const;
     
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
@@ -136,10 +144,14 @@ class ExperimentalSaturationFunctions {
   
     /// converts the floating-point rocktype identifier into a positive integer 0..254
     size_t RockType( Element<dim>* const ) const;
-  
-    std::vector<csmp::CubicSpline> kr1_, kr2_, pc_;
-    const double max_derivative_         = 5.0e+8; ///< the absolute value of any derivative calculated herein must be less than this value
-    const double max_capillary_pressure_ = 2.0e+7; ///< 20 MPa ~ tensile strength of the rock
+
+    double MaxCapillaryPressure() const { return max_capillary_pressure_; }
+
+    std::map<size_t, csmp::CubicSpline> kr1_, kr2_, pc_;
+    std::map<size_t, double> swr_, snr_;
+    std::map<size_t, std::vector<double>> input_sw_, input_pc_;
+    const double max_derivative_         = 5.0e+5; ///< the absolute value of any derivative calculated herein must be less than this value
+    const double max_capillary_pressure_ = 1.0e+5; ///< tensile strength of the rock
 };
   
 } // end namespace csmp

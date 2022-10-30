@@ -38,7 +38,7 @@ void Integral_var_NT_rhsop_N_dV_Test::run() {
 
 void Integral_var_NT_rhsop_N_dV_Test::valueTest() {
   // create object
-  Integral_var_NT_rhsop_N_dV<2U,Element<2U> > integral(sg_->Database(),
+  Integral_var_NT_rhsop_N_dV<2U> integral(sg_->Database(),
                                                     "diffusivity",
                                                     "fluid pressure",
                                                     "fluid pressure",
@@ -109,13 +109,13 @@ void Integral_var_NT_rhsop_N_dV_Test::compareLumpedTest() {
 }
 
 void Integral_var_NT_rhsop_N_dV_Test::compareTest(bool lumped) {
-  Integral_var_NT_lhsop_N_dV<2U,Element<2U> > lhs(sg_->Database(),
+  Integral_var_NT_lhsop_N_dV<2U> lhs(sg_->Database(),
                                      "diffusivity",
                                      "fluid pressure",
                                      "fluid pressure",
                                      "total mobility");
   lhs.LumpedFormulation(lumped);
-  Integral_var_NT_rhsop_N_dV<2U,Element<2U> > rhs(sg_->Database(),
+  Integral_var_NT_rhsop_N_dV<2U> rhs(sg_->Database(),
                                      "diffusivity",
                                      "fluid pressure",
                                      "fluid pressure",

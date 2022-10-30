@@ -5,21 +5,23 @@
 #include "MathOperatorLHS.h"
 
 namespace csmp {
+
+template<uint32_t> class Element;
 /**
 @author S.K. Matthaei
 @author S. Roberts
 @date 1997 */
 
 /// Known as: capacitance matrix
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_NT_lhsop_N_dV : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=csmp::Element>
+class NumIntegral_NT_lhsop_N_dV : public MathOperatorLHS<dim,CELL> {
   public:
-    NumIntegral_NT_lhsop_N_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_NT_lhsop_N_dV( const PropertyDatabase<dim>&,
                                const char* oper, const char* basic, const char* test );
     
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
-    virtual NumIntegral_NT_lhsop_N_dV<dim,CELL >* clone() const { return new NumIntegral_NT_lhsop_N_dV<dim,CELL >(*this); }
+    virtual NumIntegral_NT_lhsop_N_dV<dim,CELL>* clone() const { return new NumIntegral_NT_lhsop_N_dV<dim,CELL >(*this); }
     
   private:
     DenseMatrix<DM_MIN>  TEMP;

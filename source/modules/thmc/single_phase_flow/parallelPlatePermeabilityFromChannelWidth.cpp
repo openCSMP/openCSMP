@@ -6,6 +6,7 @@
 #include "NumIntegral_dNT_dN_dV.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
+#include "LinearSolver.h"
 #include "ExtractVectorVariableLength.h"
 #include "CSMP_definitions.h"
 
@@ -39,18 +40,18 @@ void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg,
 
     #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Solver solver;
-    PDE_Integrator<dim,Region>  parabolic_profile( solver );
+    PDE_Integrator<dim,Element>  parabolic_profile( solver );
     #else
     /// add extra functionality for alternative solver if needed
     CSMP_DEFAULT_LINEAR_SOLVER solver;
-    PDE_Integrator<dim,Region> parabolic_profile( solver );
+    PDE_Integrator<dim,Element>  parabolic_profile( solver );
     #endif
   
     // the maximum computed 'parabolic function' value is equivalent to the pore radius of the corresponding pore space segment
     // laplacian matrix [L] on the left-hand side
-    NumIntegral_dNT_dN_dV<dim,Element<dim> >  laplacian( sg.Database(), "parabolic function", "parabolic function" );
+    NumIntegral_dNT_dN_dV<dim>  laplacian( sg.Database(), "parabolic function", "parabolic function" );
     // source vector {q} on the right-hand side = 1
-    NumIntegral_NT_op_N_dV<dim,Element<dim> > rhs( sg.Database(),"source term", "parabolic function" );
+    NumIntegral_NT_op_N_dV<dim> rhs( sg.Database(),"source term", "parabolic function" );
     parabolic_profile.Add( &laplacian );
     parabolic_profile.Add( &rhs );
 

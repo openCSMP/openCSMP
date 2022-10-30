@@ -13,8 +13,8 @@ namespace csmp {
 IsoparametricLinearPyramid::IsoparametricLinearPyramid( uint32_t integrationPoints )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_LINEAR_PYRAMID, true, true, 1U ),
-      NXYZ(5,3),
-      IP(integrationPoints,3)
+    NXYZ(5,3),
+    IP(integrationPoints,3)
  {
     //AAM, 07.02
     dim = 3;
@@ -408,6 +408,7 @@ IsoparametricLinearPyramid::NodesOfSegment( uint32_t segm_id, std::vector<uint32
      
      @test SKM OK
 */
+/*
 void IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
 
@@ -453,7 +454,36 @@ void IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id, std::vector<uint
     else
     std::cout <<"\nIsoparametricLinearPyramid::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
  }
+*/
 
+
+uint32_t IsoparametricLinearPyramid::NodesPerFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return 3U;
+        case 1: return 3U;
+        case 2: return 3U;
+        case 3: return 3U;
+        case 4: return 4U;
+      }
+    cerr <<"\nIsoparametricLinearPyramid::NodesPerFace: face "<< face_id <<" does not exist.";
+    return npf;
+ }
+
+
+
+vector<uint32_t>  IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{0,1,4};
+        case 1: return vector<uint32_t>{1,2,4};
+        case 2: return vector<uint32_t>{2,3,4};
+        case 3: return vector<uint32_t>{0,4,3};
+        case 4: return vector<uint32_t>{0,3,2,1};
+      }
+    cerr <<"\nIsoparametricLinearPyramid::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 vector<uint32_t>  IsoparametricLinearPyramid::CornerNodesOfFace( uint32_t face_id ) const
@@ -1034,14 +1064,14 @@ void  IsoparametricLinearPyramid::UnitNormalToFace( uint32_t face, std::vector<d
      unrml.resize(3);
    
      // quadrilateral facet at the basis of pyramid
-     if ( face == 4 ) { // OK - counter-clockwise nodes (ouside looking in):
+     if ( face == 4 ) { // 
           Point<3> nrml = normalAtFacetCenter( Point<3>(XY(0,0),XY(0,1),XY(0,2)),
-                                               Point<3>(XY(1,0),XY(1,1),XY(1,2)),
+                                               Point<3>(XY(3,0),XY(3,1),XY(3,2)),
                                                Point<3>(XY(2,0),XY(2,1),XY(2,2)),
-                                               Point<3>(XY(3,0),XY(3,1),XY(3,2)) );
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
+                                               Point<3>(XY(1,0),XY(1,1),XY(1,2)) );
+          unrml[0] = nrml[0];
+          unrml[1] = nrml[1];
+          unrml[2] = nrml[2];
           return;
        }
 
@@ -1395,6 +1425,7 @@ To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 
 */
+/*
 void
 IsoparametricLinearPyramid::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
                                                         vector<uint32_t>& fnids )
@@ -1407,6 +1438,9 @@ IsoparametricLinearPyramid::ConsecutiveNodesAtBoundary( const vector<uint32_t>& 
                "Probably because element lies at two boundaries simultaneously" );
 
  } // end ConsecutiveNodesAtBoundary
+*/
+
+
 
 
 

@@ -57,9 +57,10 @@ static void add( const INDEX<SCALAR,NODE>&, const INDEX<SCALAR,NODE>& ) {
     std::cout <<"\nadd: standard version, SCALAR/NODE full version."<< std::endl;
  } 
  
+ 
 // PROCESSING 
 
-// generic variable processor using STL functors for math operations
+/// generic variable processor using STL functors for math operations
 template<template<typename> class operation> 
 void process( const Index& A, const Index& B ) {
     std::cout <<"\nprocess: standard version, no specialisation found."<< std::endl;
@@ -72,8 +73,10 @@ void process<std::plus>( const Index&, const Index& ) {
     std::cout <<" "<< res <<" ";
  } 
  
-// necessary combinations for all math operations, (numbperm(n,r)=72 - non-physical ones
-/*
+ 
+/**
+
+Necessary combinations for all math operations, (numbperm(n,r)=72 - non-physical ones
 
 node, cpoint, face, element, region,   scalar, vector, tensor
 
@@ -83,9 +86,7 @@ scalar,scalar,node  +,-,*,/, sqrt, log, exp etc.
 vector,vector,node
 tensor,tensor,node
 
-
-*/
- 
+*/ 
 template<VARIABLE_TYPE t,PLACEMENT p> void process( const INDEX<t,p>& );
 
 template<> 
@@ -105,6 +106,7 @@ void process( const INDEX<TENSOR,ELEMENT_INTEGRATION_POINT>& );
 void process( const INDEX<TENSOR,FACE>& );
 void process( const INDEX<SCALAR,INTER_FACE>& );
 void process( const INDEX<TENSOR,REGION>& );
+
 
 // combinations
 /*
@@ -143,7 +145,7 @@ void  TemplatizedIndex_Example::Run()
     test_set.insert( 3U );
     test_set.insert( 4U );
     
-    for ( size_t i=20U; i>0; i-- )
+    for ( uint32_t i=20U; i>0; i-- )
       test_set.insert( i );
     
     for ( set<uint32_t>::const_reverse_iterator

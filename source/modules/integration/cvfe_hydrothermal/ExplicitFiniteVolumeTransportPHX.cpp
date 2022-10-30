@@ -1,6 +1,8 @@
 #include "ExplicitFiniteVolumeTransportPHX.h"
 #include "Region.h"
 #include "ErrorHandler.h"
+#include "finiteVolumeAuxiliaryFunctions.h"
+#include "StencilProcessorPHX.h"
 
 using namespace std;
 

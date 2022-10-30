@@ -1,13 +1,12 @@
 #ifndef VELOCITY_AND_VOLUME_FLUX_H
 #define VELOCITY_AND_VOLUME_FLUX_H
 
-#include "CSMP_definitions.h"
+#include "MathOperatorLHS.h"
 #include "DenseMatrix.h"
 #include "VectorVariable.h"
 
 namespace csmp {
 
-template<uint32_t> class MathOperatorLHS;
 template<uint32_t> class Element;
 template<uint32_t> class Model;
 
@@ -74,8 +73,8 @@ post-processing operator. The nodal averaging and following operations
 are done in a second cycle.  
 
 */
-template<uint32_t dim,class CELL=Element<dim> >
-class VelocityAndVolumeFlux : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class VelocityAndVolumeFlux : public MathOperatorLHS<dim,CELL> {
   public:
     VelocityAndVolumeFlux( const Model<dim>&, 
                            const char* oper,             // conductivity
@@ -117,15 +116,17 @@ class VelocityAndVolumeFlux : public MathOperatorLHS<dim> {
                            const char* nodal_velocity = "nodal velocity",
                            const char* nodal_pore_velocity = "nodal pore velocity",
                            const char* nodal_volume_flux = "nodal volume flux");
+                           
+    virtual ~VelocityAndVolumeFlux();
     
     void Verbose( bool stdoutput );
 
-    virtual void GetOperands( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
 
     /// {V} = [grad P]{k}
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
 
-    virtual void WriteOperands( CELL& );
+    virtual void WriteOperands( CELL<dim>& );
 
     virtual VelocityAndVolumeFlux<dim,CELL>* clone() const { return new VelocityAndVolumeFlux<dim,CELL> (*this); }
 

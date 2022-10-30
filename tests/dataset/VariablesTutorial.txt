@@ -1,0 +1,15 @@
+name	MParameter	unit	index	min.	max.	place
+									
+element scalar				ES			m2			1			0.00E+00	1.00E+00		element
+element vector				EV			ms-1		2			0.00E+00	1.00E+00		element
+element ip vector			EIPV		X				2			0.00E+00	1.00E+00		element integration point
+element faip scalar		EFIPV		X				1			0.00E+00	1.00E+00		facet integration point
+element seip array		EFIPV		X				15		0.00E+00	1.00E+00		sector integration point
+face scalar						FS			X				1			0.00E+00	1.00E+00		face
+interface scalar			IFS			X				1			0.00E+00	1.00E+00		interface
+nodal scalar					NS			X				1			0.00E+00	1.00E+10		node
+nodal tensor					NT			X				3			0.00E+00	1.00E+10		node
+nodal array						NA			X				30		0.00E+00	1.00E+10		node
+region scalar					RS			kg			1			0.00E+00	1.00E+10		region
+boundary vector				BV			X				2			0.00E+00	1.00E+10		boundary
+model array						MA			Pa			200		0.00E+00	1.00E+10		model

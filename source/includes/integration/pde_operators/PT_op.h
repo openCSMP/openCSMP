@@ -5,6 +5,8 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /**
  
 @brief Point sources, loads etc. for vector solution variable.
@@ -24,14 +26,17 @@ F(midpoint node) = (F / boundary-nodes)
 F(corner node)   = (F / boundary-nodes) / 2
 
 */
-template<uint32_t dim,class CELL=Element<dim> >
-class PT_op : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class PT_op : public MathOperatorRHS<dim,CELL> {
   public:
-    PT_op( const PropertyDatabase<dim>& p, const char* oper, const char* test );
+    PT_op( const PropertyDatabase<dim>&, const char* oper, const char* test );
+    virtual ~PT_op() {}
     
-    virtual void GetOperands( const CELL& e );
-    virtual void ComputeContribution( const CELL& e );
+    virtual void GetOperands( const CELL<dim>& );
+    virtual void ComputeContribution( const CELL<dim>& );
+    
     virtual PT_op<dim,CELL>* clone() const { return new PT_op<dim,CELL> (*this); }
+    
   private:
     std::vector<VectorVariable<dim> >  NODAL_FORCE;
 };

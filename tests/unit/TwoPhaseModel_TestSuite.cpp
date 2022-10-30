@@ -104,27 +104,27 @@ void TwoPhaseModel_TestSuite::run()
 
   // Adding properties that are not in the variables file
   if ( !fracture_rock_model_->Database().IsDefined( "fracture matrix interface area" ) )
-      fracture_rock_model_->CreateProperty( "fracture matrix interface area",  "SI", SCALAR, ELEMENT );
+      fracture_rock_model_->CreateProperty( "fracture matrix interface area", "Afsw", "m2", SCALAR, ELEMENT );
   if ( !fracture_rock_model_->Database().IsDefined( "fracture porosity" ) )
-      fracture_rock_model_->CreateProperty( "fracture porosity",  "SI", SCALAR, ELEMENT );
+      fracture_rock_model_->CreateProperty( "fracture porosity", "fphi", "X", SCALAR, ELEMENT );
   if ( !fracture_rock_model_->Database().IsDefined( "fracture matrix flux ratio" ) )
-      fracture_rock_model_->CreateProperty( "fracture matrix flux ratio",  "SI", SCALAR, ELEMENT );
+      fracture_rock_model_->CreateProperty( "fracture matrix flux ratio", "qfqm", "X", SCALAR, ELEMENT );
   if ( !fracture_rock_model_->Database().IsDefined( "block radius" ) )
-      fracture_rock_model_->CreateProperty( "block radius",  "SI", SCALAR, ELEMENT );
+      fracture_rock_model_->CreateProperty( "block radius", "R", "m", SCALAR, ELEMENT );
   if ( !fracture_rock_model_->Database().IsDefined( "fracture aperture" ) )
-      fracture_rock_model_->CreateProperty( "fracture aperture",  "SI", SCALAR, ELEMENT );
+      fracture_rock_model_->CreateProperty( "fracture aperture", "a", "m", SCALAR, ELEMENT );
 
   if ( !fracture_rock_model_->Database().IsDefined( "previous water saturation barycenter" ) )
-      fracture_rock_model_->CreateProperty( "previous water saturation barycenter",  "SI", SCALAR, ELEMENT );
+      fracture_rock_model_->CreateProperty( "previous water saturation barycenter", "sw0", "X", SCALAR, ELEMENT );
   fracture_rock_model_->InputPropertyValue( "previous water saturation barycenter", makeScalar(PLAIN,0.2) );
   if ( !fracture_rock_model_->Database().IsDefined( "inflection water saturation barycenter" ) )
-      fracture_rock_model_->CreateProperty( "inflection water saturation barycenter",  "SI", SCALAR, ELEMENT );
+      fracture_rock_model_->CreateProperty( "inflection water saturation barycenter", "swbi", "X", SCALAR, ELEMENT );
   fracture_rock_model_->InputPropertyValue( "inflection water saturation barycenter", makeScalar(PLAIN,0.2) );
 
   if ( !fracture_rock_model_->Database().IsDefined( "initial saturation water" ) )
-      fracture_rock_model_->CreateProperty( "initial saturation water",  "SI", SCALAR, NODE );
+      fracture_rock_model_->CreateProperty( "initial saturation water", "swi", "X", SCALAR, NODE );
   if ( !fracture_rock_model_->Database().IsDefined( "maximum residual oil saturation" ) )
-      fracture_rock_model_->CreateProperty( "maximum residual oil saturation",  "SI", SCALAR, NODE );
+      fracture_rock_model_->CreateProperty( "maximum residual oil saturation", "so_max", "X", SCALAR, NODE );
   fracture_rock_model_->InputPropertyValue( "maximum residual oil saturation", makeScalar(PLAIN,0.4) );
 
   // Matrix properties

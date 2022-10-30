@@ -1,4 +1,4 @@
-DFM model featuring a box split in two symmetric bodies(tetra/tri)
+3D DFM model featuring a box split in two symmetric bodies(tetra/tri)
 no properties
 HULL_LEFT
 HULL_RIGHT

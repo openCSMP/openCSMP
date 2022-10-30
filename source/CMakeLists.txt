@@ -51,7 +51,7 @@ FILE(GLOB CSMP_CORE_SOURCE_EXCLUSIONS
 	${MODULES_DIR}/run_control/ExampleSuiteMainWindow.cpp
 #	${MODULES_DIR}/eos/h2o_nacl_co2/PVTX_Calculator_H2O_CO2_NaCl.cpp
 #	${MODULES_DIR}/integration/finite_volumes/DES_transport_scheme/SlightlyCompressible2PhaseDESTransport.cpp
-	${MODULES_DIR}/integration/pde_integrators/PDE_Integrator_CRM.cpp
+#	${MODULES_DIR}/integration/pde_integrators/PDE_Integrator_CRM.cpp
 #	${MODULES_DIR}/integration/pde_integrators/PDE_Integrator_UoM.cpp
 #	${MODULES_DIR}/thmc/two_phase_flow/BrooksCoreySaturationFunctionswithHysteresis.cpp
 )
@@ -150,6 +150,7 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${INCLUDES_DIR}/run_control
     ${INCLUDES_DIR}/thmc
     ${INCLUDES_DIR}/utilities
+    ${INCLUDES_DIR}/integration/cvfe_hydrothermal
     ${MODULES_DIR}/analysis
     ${MODULES_DIR}/eos/h2o
     ${MODULES_DIR}/eos/h2o_nacl
@@ -203,6 +204,7 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${CMAKE_SOURCE_DIR}/thirdparty/plf_colony
     ${CMAKE_SOURCE_DIR}/thirdparty/catch2
     ${CMAKE_SOURCE_DIR}/thirdparty/eigen
+    ${CMAKE_SOURCE_DIR}/thirdparty
     ${CMAKE_SOURCE_DIR}/examples/source
 )
 

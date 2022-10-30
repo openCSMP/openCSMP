@@ -17,7 +17,7 @@ FlaggedArrayVariable::FlaggedArrayVariable( const Index& arrayKey,
                                             double defaultValue,
                                             VARIABLE_FLAG flag )
   : data_ ( arrayKey.dataDepth, defaultValue ),
-    flags_( arrayKey.dataDepth,  flag)
+    flags_( arrayKey.dataDepth, flag)
   {
   }
 
@@ -65,12 +65,12 @@ FlaggedArrayVariable& FlaggedArrayVariable::operator=( const ScalarVariable& val
   }
 
 
-size_t FlaggedArrayVariable::Size() const
+uint32_t FlaggedArrayVariable::Size() const
   {
-    return data_.size();
+    return static_cast<uint32_t>(data_.size());
   }
 
-void FlaggedArrayVariable::Resize( size_t newSize, double newValue )
+void FlaggedArrayVariable::Resize( uint32_t newSize, double newValue )
   {
     data_.resize ( newSize, newValue );
     flags_.resize( newSize, ANY );
@@ -104,13 +104,13 @@ double& FlaggedArrayVariable::operator()( size_t i )
     return data_[i];
   }
 
-void  FlaggedArrayVariable::Component( size_t i, double val )
+void  FlaggedArrayVariable::Component( uint32_t i, double val )
  {
     assert( i < Size() );
     data_[i] = val;
  }
 
-double  FlaggedArrayVariable::Component( size_t i ) const
+double  FlaggedArrayVariable::Component( uint32_t i ) const
  {
     assert( i < Size() );
     return data_[i];
@@ -354,6 +354,18 @@ bool FlaggedArrayVariable::IsWithinRange( double min, double max ) const
   }
 
 
+
+
+bool FlaggedArrayVariable::Has_NaN_Values() const
+ {
+    for( const auto& i : data_ )
+      if( isnan(i) ) return false;
+    return false;
+ }
+
+
+
+
 /// returns the minimum and maximum of the values stored in the array variable 
 void  FlaggedArrayVariable::MinMax( double& min, double& max ) const
   {
@@ -444,7 +456,7 @@ bool FlaggedArrayVariable::Out( std::fstream& fp ) const
     fp.write( (char*) &depth, sizeof(size_t));
 
     // flags
-    const size_t flag_size(sizeof(int32_t));  // VARIABLE_FLAG
+    const size_t flag_size(sizeof(int8_t));  // VARIABLE_FLAG
     vector<VARIABLE_FLAG>::const_iterator flagsEnd( flags_.end() );
     for ( vector<VARIABLE_FLAG>::const_iterator it( flags_.begin() ); it != flagsEnd; ++it )
       fp.write( (char*) &(*it), flag_size);
@@ -457,6 +469,8 @@ bool FlaggedArrayVariable::Out( std::fstream& fp ) const
 
     return true;
   }
+  
+  
 
 
 /**
@@ -484,10 +498,10 @@ bool FlaggedArrayVariable::In( std::fstream& fp )
       std::cerr <<"\nFlaggedArrayVariable::In(): could not read binary record depth"<< std::endl;
       return false;
       }
-    Resize(depth);
+    Resize( static_cast<uint32_t>(depth) );
 
     // flags
-    const size_t  flags_size( sizeof( int32_t ) );  // VARIABLE_FLAG
+    const size_t  flags_size( sizeof( int8_t ) );  // VARIABLE_FLAG
     for ( size_t i(0); i < depth; ++i )
       {
         if( !fp.read( (char*) &flags_[i], flags_size) )

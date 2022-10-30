@@ -10,27 +10,26 @@ using namespace std;
 
 namespace csmp {
 
+/**
+    creates a mesh in which all elements have the same length
+    
+    @param splitnode_coordinates location of splitboundaries, if any
+    @param origin desired first corner point of the mesh
+    @param destination desired end-point of the mesh
+*/
 template<uint32_t dim>
-LineElementMesher<dim>::LineElementMesher()
-  {
-  }
-
-
-/// create an uniform mesh
-template<uint32_t dim>
-void LineElementMesher<dim>
-::BuildUniformMesh( VSet<dim>& vset,
-                    double length,
-                    size_t n_elements,
-                    const std::vector<double>& splitnode_coordinates,
-                    const Point<dim>& origin,
-                    const Point<dim>& destination )
+void LineElementMesher<dim>::BuildUniformMesh( VSet<dim>& vset,
+                                               double length,
+                                               size_t n_elements,
+                                               const vector<double>& splitnode_coordinates,
+                                               const Point<dim>& origin,
+                                               const Point<dim>& destination )
  {
-   // 1.0 Distribute points
+   // 1. Distribute points
    UniformMesh( vset,
                 length, n_elements );
 
-   // 2.0 Complete mesh
+   // 2. Complete mesh
    CompleteMesh( vset,
                  splitnode_coordinates,
                  origin, destination );
@@ -52,7 +51,7 @@ void LineElementMesher<dim>
                     double dx_max,
                     double width_of_transition_zone,
                     MeshDensity* density,
-                    const std::vector<double>& splitnode_coordinates,
+                    const vector<double>& splitnode_coordinates,
                     const Point<dim>& origin,
                     const Point<dim>& destination )
 {
@@ -70,8 +69,8 @@ void LineElementMesher<dim>
 template<uint32_t dim>
 void LineElementMesher<dim>
 ::BuildCustomMesh( VSet<dim>& vset,
-                   const std::vector<double>& node_coordinates,
-                   const std::vector<double>& splitnode_coordinates,
+                   const vector<double>& node_coordinates,
+                   const vector<double>& splitnode_coordinates,
                    const Point<dim>& origin,
                    const Point<dim>& destination )
 {
@@ -89,8 +88,8 @@ void LineElementMesher<dim>
 template<uint32_t dim>
 void LineElementMesher<dim>
 ::BuildCustomMesh( VSet<dim>& vset,
-                   const std::vector<Point<dim> >& node_coordinates,
-                   const std::vector<Point<dim> >& splitnode_coordinates,
+                   const vector<Point<dim> >& node_coordinates,
+                   const vector<Point<dim> >& splitnode_coordinates,
                    const Point<dim>& origin,
                    const Point<dim>& destination )
 {
@@ -121,7 +120,6 @@ void LineElementMesher<dim>
 
   @author R. Manasipov
 */
-
 template<uint32_t dim>
 void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
                                                  const Point<dim>& origin,
@@ -137,7 +135,7 @@ void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
         direction.NormalizeLengthTo( 1.0 );
 
         // identify the direction of old line model
-        std::set<Point<dim> > nodes;
+        set<Point<dim> > nodes;
         Point<dim> p( 0.0 );
         for( auto i =0U; i< n_vertices; i++ ) {
             for( uint32_t dimension=0U; dimension<dim; dimension++ )
@@ -159,7 +157,7 @@ void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
              distance  = (p - old_origin).Length();
              distance *= length_factor;
              p  = origin;
-             p += distance*direction;
+             p += distance * direction;
 
              // assign new coordinate
              for( uint32_t dimension=0U; dimension<dim; dimension++ )
@@ -171,16 +169,18 @@ void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
 
 
 
+
+// TODO: create corresponding NodeManifold objects in VSet
 template<uint32_t dim>
 void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset,
-                                               const std::vector<double>& splitnodes_x )
+                                               const vector<double>& splitnodes_x )
 {
     if( !splitnodes_x.empty() && ( vset.Vertices() > 0 ) )
     {
         // convert splitnode coordinates along x axis to generic Point format
         set<Point<dim> > splitnodes;
         Point<dim> p( 0.0 );
-        for( std::vector<double>::const_iterator it = splitnodes_x.begin(); it != splitnodes_x.end(); it++ )
+        for( vector<double>::const_iterator it = splitnodes_x.begin(); it != splitnodes_x.end(); it++ )
         {
             p[ 0U ] = (*it);
             for( auto dimension = 1U; dimension<dim; dimension++)
@@ -194,19 +194,24 @@ void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset,
 } // InsertSplitNodes
 
 
+
+
+// TODO: create corresponding NodeManifold objects in VSet
 template<uint32_t dim>
 void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset, set<Point<dim> >& splitnodes )
 {
-    // add splitnodes and reestablish connectivety
+    // add splitnodes and re-establish connectivety between elements
     EstablishConnectivity( vset, splitnodes );
 
 } // InsertSplitNodes
 
+
+
 template<uint32_t dim>
 void LineElementMesher<dim>::CompleteMesh( VSet<dim>& vset,
-                                  const std::vector<double>& splitnode_coordinates,
-                                  const Point<dim>& origin,
-                                  const Point<dim>& destination )
+                                           const vector<double>& splitnode_coordinates,
+                                           const Point<dim>& origin,
+                                           const Point<dim>& destination )
 {
     if( splitnode_coordinates.empty() )
         EstablishConnectivity( vset );
@@ -222,15 +227,16 @@ void LineElementMesher<dim>::CompleteMesh( VSet<dim>& vset,
 
 template<uint32_t dim>
 void LineElementMesher<dim>::CompleteMesh( VSet<dim>& vset,
-                                           const std::vector<Point<dim> >& splitnode_coordinates,
+                                           const vector<Point<dim> >& splitnode_coordinates,
                                            const Point<dim>& origin,
                                            const Point<dim>& destination )
 {
+    // asigning 'pfverts' element neighbors
     if( splitnode_coordinates.empty() )
         EstablishConnectivity( vset );
     else
     {
-        std::set<Point<dim> > splitnodes( splitnode_coordinates.begin(), splitnode_coordinates.end() );
+        set<Point<dim> > splitnodes( splitnode_coordinates.begin(), splitnode_coordinates.end() );
         InsertSplitNodes( vset, splitnodes );
     }
 
@@ -263,10 +269,12 @@ void LineElementMesher<dim>::UniformMesh( VSet<dim>& vset,
                 n_elements );
 
    //1.1 VSet - assigning point x-coordinates
-   for ( size_t i{0UL}; i<n_vertices; i++ ){
+   for ( size_t i{0UL}; i<n_vertices; i++ ) {
+       // X-coordinate is assigned
        vset.P( 0U, i, dx * i );
+       // other coordinates are set to zero
        for( uint32_t dimension=1U; dimension<dim; dimension++ )
-           vset.P( dimension, i, 0.0 );
+           vset.P( dimension, i, 0. );
    }
 
  } // end UniformMesh
@@ -284,29 +292,29 @@ void LineElementMesher<dim>
                double dx_max,
                double width_of_transition_zone,
                MeshDensity* density
-              )
+             )
 {
    // Initial checks
    if ( dx_min > dx_max ) {
-       std::cerr << "\nLineElementMesher::RefinedMesh: ";
-       std::cerr << "Min element size (arg1) must not exceed max-size (arg2)." << endl;
+       cerr << "\nLineElementMesher::RefinedMesh: ";
+       cerr << "Min element size (arg1) must not exceed max-size (arg2)." << endl;
        return;
      }
    if ( dx_max > width_of_transition_zone ) {
-       std::cerr << "\nLineElementMesher::RefinedMesh: ";
-       std::cerr << "Max element size (arg2) should not exceed the width of variably ";
-       std::cerr << "refined mesh region (arg3)." << endl;
+       cerr << "\nLineElementMesher::RefinedMesh: ";
+       cerr << "Max element size (arg2) should not exceed the width of variably ";
+       cerr << "refined mesh region (arg3)." << endl;
        return;
      }
    if ( dx_max > length ) {
-       std::cerr << "\nLineElementMesher::RefinedMesh: ";
-       std::cerr << "Max element size (arg2) must not exceed model size (arg4)." << endl;
+       cerr << "\nLineElementMesher::RefinedMesh: ";
+       cerr << "Max element size (arg2) must not exceed model size (arg4)." << endl;
        return;
      }
 
    // 0. creating a list of nodes and element lenght
    // ------------------------------------------------------------------
-   std::vector<double>  element_length;
+   vector<double>  element_length;
    double x0(0.0);
    double delta_x(dx_min);
    double x(dx_min);
@@ -320,9 +328,9 @@ void LineElementMesher<dim>
         if ( x + delta_x > length ) {
              delta_x = length - x;
              if ( delta_x < dx_min ) {
-                  std::cerr <<"\nLineElementMesher::Initialize: last element is short compare to prescribed minimum: ";
-                  std::cerr << delta_x <<" vs. "<< dx_min << endl;
-                  std::cerr << "\nThus it will be equally distributed over the all elements, which might slighly enlarge the elements!";
+                  cerr <<"\nLineElementMesher::Initialize: last element is short compare to prescribed minimum: ";
+                  cerr << delta_x <<" vs. "<< dx_min << endl;
+                  cerr << "\nThus it will be equally distributed over the all elements, which might slighly enlarge the elements!";
                }
              const size_t elements( element_length.size() );
              delta_x /= static_cast<double>( elements );
@@ -364,7 +372,7 @@ void LineElementMesher<dim>
     //1.1 VSet - assigning point x-coordinates
     size_t  n(0U);
     x = 0.;
-    for ( std::vector<double>::const_iterator
+    for ( vector<double>::const_iterator
           it=element_length.begin(); it!=element_length.end(); it++ )
       {
          vset.P( 0U, n, x );
@@ -398,8 +406,8 @@ void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset, const vector<double>& 
 
     //1.1 VSet - assigning point x-coordinates
     size_t counter(0U);
-    std::vector<double>::const_iterator node_coordinate( node_coordinates.begin());
-    std::vector<double>::const_iterator last_coordinate( node_coordinates.end() );
+    vector<double>::const_iterator node_coordinate( node_coordinates.begin());
+    vector<double>::const_iterator last_coordinate( node_coordinates.end() );
     while( node_coordinate != last_coordinate ) {
          vset.P( 0U, counter, *node_coordinate );
          for( uint32_t dimension=1U; dimension<dim; dimension++ )
@@ -430,8 +438,8 @@ void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset, const vector<Point<dim
 
     //1.1 VSet - assigning point x-coordinates
     size_t counter(0U);
-    typename std::vector<Point<dim> >::const_iterator node_coordinate( node_coordinates.begin());
-    typename std::vector<Point<dim> >::const_iterator last_coordinate( node_coordinates.end() );
+    typename vector<Point<dim> >::const_iterator node_coordinate( node_coordinates.begin());
+    typename vector<Point<dim> >::const_iterator last_coordinate( node_coordinates.end() );
     while( node_coordinate != last_coordinate ) {
          for( uint32_t dimension=0U; dimension<dim; dimension++ )
              vset.P( dimension, counter, (*node_coordinate)[ dimension ] );
@@ -476,21 +484,21 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset )
 
         //2.1 PFVerts - assigning content
         for ( size_t i{0U}; i<n_elements; ++i ) {
-             pfvert[i][0] = static_cast<int64_t>(i) - 1;
-             pfvert[i][1] = static_cast<int64_t>(i) + 1;
+             pfvert[i][0] = static_cast<int64_t>(i) + 1;
+             pfvert[i][1] = static_cast<int64_t>(i) - 1;
           }
 
         //2.3 PFVerts - assigning boundary flags
-        pfvert[0][0]             = CNR1;
-        pfvert[n_elements-1U][1] = CNR2;
+        pfvert[0][1]             = CNR1;
+        pfvert[n_elements-1U][0] = CNR2;
 
         //3.0 VSet - adding PList, PFVerts
         vset.AddPlist( plist.begin(), plist.end() );
         vset.AddPfverts( pfvert.begin(), pfvert.end() );
 
         //4.0 VSet - adding boundary flags
-        vset.AddBFlag( 0,            CNR1 );
-        vset.AddBFlag( n_vertices-1, CNR2 );
+        vset.BFlag( 0,            CNR1 );
+        vset.BFlag( n_vertices-1, CNR2 );
     }
 
 } // EstablishConnectivity
@@ -506,14 +514,14 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset )
 */
 template<uint32_t dim>
 void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
-                                           std::set<Point<dim> >& splitnodes )
+                                                    set<Point<dim> >& splitnodes )
 {
     if( vset.Vertices() > 0 )
     {
         size_t  n_vertices( vset.Vertices() );
 
         // collect the coordinates of  nodes
-        std::set<Point<dim> > nodes;
+        set<Point<dim> > nodes;
         Point<dim> p( 0.0 );
         for( auto i =0U; i< n_vertices; i++ ) {
             for( uint32_t dimension=0U; dimension<dim; dimension++ )
@@ -526,7 +534,7 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
         // check whether all the splitnodes are lying inside the model
         const size_t n_splitnodes( splitnodes.size() );
         size_t splitnode_counter( 0U );
-        typename std::set<Point<dim> >::iterator spit( splitnodes.begin() );
+        typename set<Point<dim> >::iterator spit( splitnodes.begin() );
         while( splitnode_counter < n_splitnodes )
         {
             if( (*spit < min_coord) || (*spit > max_coord) || (*spit == min_coord) || (*spit == max_coord) )
@@ -556,13 +564,13 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
 
             //2.1 PFVerts - assigning content
             for ( size_t i{0UL}; i<n_elements; i++ ) {
-                 pfvert[i][0] = i - 1U;
-                 pfvert[i][1] = i + 1U;
+                 pfvert[i][0] = i + 1U;
+                 pfvert[i][1] = i - 1U;
               }
 
             //2.3 PFVerts - assigning boundary flags
-            pfvert[0][0]             = CNR1;
-            pfvert[n_elements-1U][1] = CNR2;
+            pfvert[0][1]             = CNR1;
+            pfvert[n_elements-1U][0] = CNR2;
 
             //3.1 VSet  - assigning point x-coordinates
             //    PList - establish
@@ -571,8 +579,8 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
 
             size_t node_counter( 0U );
             size_t element_counter( 0U );
-            typename std::set<Point<dim> >::const_iterator node_coordinate( nodes.begin() );
-            typename std::set<Point<dim> >::const_iterator last_node_coordinate( nodes.end()   );
+            typename set<Point<dim> >::const_iterator node_coordinate( nodes.begin() );
+            typename set<Point<dim> >::const_iterator last_node_coordinate( nodes.end()   );
             while( node_coordinate != last_node_coordinate )
             {
                 if( splitnodes.find( *node_coordinate ) == splitnodes.end() )
@@ -592,8 +600,8 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
                     node_counter++;
 
                     // assign boundary flags to splitnode
-                    vset.AddBFlag( node_counter - 2U, REGION_BOUNDARY );
-                    vset.AddBFlag( node_counter - 1U, REGION_BOUNDARY );
+                    vset.BFlag( node_counter - 2U, REGION_BOUNDARY );
+                    vset.BFlag( node_counter - 1U, REGION_BOUNDARY );
 
                     // assign boundary flags to elements across the interface
                     pfvert[element_counter][1U]     = REGION_BOUNDARY;
@@ -612,8 +620,8 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
             }
 
             //3.2 VSet - adding boundary flags
-            vset.AddBFlag( 0,            CNR1 );
-            vset.AddBFlag( n_vertices-1, CNR2 );
+            vset.BFlag( 0,            CNR1 );
+            vset.BFlag( n_vertices-1, CNR2 );
 
             //3.3 VSet - adding PList, PFVerts
             vset.AddPlist( plist.begin(), plist.end() );
@@ -637,7 +645,7 @@ void LinDensity::SetB( double b ){ b_ = b; }
 
 ExpDensity::ExpDensity( double a, double b ):a_(a),b_(b){}
 ExpDensity::~ExpDensity(){}
-double ExpDensity::operator()( double x ){ return b_ * std::exp( a_ * x ); }
+double ExpDensity::operator()( double x ){ return b_ * exp( a_ * x ); }
 void ExpDensity::SetA( double a ){ a_ = a; }
 void ExpDensity::SetB( double b ){ b_ = b; }
 
@@ -649,10 +657,10 @@ double ErfDensity::operator()( double x )
     #if _MSC_VER < 1800  // detecting versions older than 2013
         return b_ * csmp::erf_Chebyshev( a_ * x );
     #else
-        return b_ * std::erf( a_ * x );
+        return b_ * erf( a_ * x );
     #endif
 #else
-    return b_ * std::erf( a_ * x );
+    return b_ * erf( a_ * x );
 #endif
 }
 void ErfDensity::SetA( double a ){ a_ = a; }

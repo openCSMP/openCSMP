@@ -17,6 +17,7 @@
 #include "VTU_Interface.h"
 #include "ModelTopology.h"
 
+
 using namespace std;
 
 namespace csmp {
@@ -25,12 +26,12 @@ void QuadrilateratorToCSMPbinary_Example::Specifications()
 {
   SetTitle( "Creation of a regular quadrilateral grid and export of model to CSMP native binary file" );
   SetDifficulty( 1 );
-  SetCategory( "Software Functionality" );
+  SetCategory( "Software Interfaces" );
   AddAuthor( "SKM" );
   AddDescription( "Quadrilaterator class is used to construct the grid" );
   AddDescription( "Some grid-smoothing is illustrated" );
   AddDescription( "source in: QuadrilateratorToCSMPbinary_Example.cpp" );
-  AddRequirement( "input file set: permMatrix50x25" );
+  AddRequirement( "input file set: permMatrix50x25(.txt)" );
   AddRequirement( "IMPES-variables.txt" );
   AddRequirement( "permMatrix50x25-configuration.txt" );
 }
@@ -48,9 +49,35 @@ void QuadrilateratorToCSMPbinary_Example::Run()
     // 1. Read color-coded pixel image
     // --------------------------------------------
     // permMatrix50x25
-    cout <<"\nmain: Enter name of textfile (no extension) with the permeability data defining the flow geometry of the model: ";
     string file_name;
-    cin >> file_name;
+    cout <<"\nmain: Enter name of textfile (no extension) with the permeability data defining the flow geometry of the model:"<<endl;
+    cout<<"      (press ENTER to use the default model 'permMatrix50x25)'"<<endl;
+    cin.ignore();
+    getline(cin, file_name);
+    if (file_name.length() == 0) file_name = "permMatrix50x25";
+
+
+    //find the name of current example source file
+    string example_name = GetExampleFileName(__FILE__);
+    string model_name; //empty - no binary files to be copied
+    string variable_file = "IMPES-variables.txt";
+    string config_name =file_name;
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(example_name, model_name, variable_file, config_name);
+
+    //copy in input text file
+    string path = "../../example_inputs/input_meshes/";
+    string name = file_name + ".txt";
+    file_name = path + name;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      string input_directory = fs::current_path().parent_path().parent_path();
+      input_directory += "/example_inputs/input_meshes/";
+      error_message += (name + "' does not exist in directory "  + input_directory);
+      error_message += (", example cannot run, please copy this file into this directory\n");
+      throw std::runtime_error(error_message);
+    }
 
     Quadrilaterator    quadrilaterator; // simple FE mesher
     VSet<2U>           mesh_container;  // container to store the input mesh
@@ -74,8 +101,8 @@ void QuadrilateratorToCSMPbinary_Example::Run()
     // creating a region of all elements 'sediments'
     topology.AddDomain( "sediments",fem_types, elements );
     // constructing the rectangular model              
-    const bool create_boundary_objects(false /* since there are no line elements */), box_shaped(true);
-    Model<2U>  model( topology, mesh_container, "IMPES-variables.txt", true );
+    const bool box_shaped(true);
+    Model<2U>  model( topology, mesh_container, "IMPES-variables.txt", box_shaped );
     recreateBoxBoundaryFlags( model );
     model.Name( "permMatrix50x25" ); 
     // give the model dimensions
@@ -148,6 +175,8 @@ void QuadrilateratorToCSMPbinary_Example::Run()
 
     // writing the CSMP binary
     model.OutputToBinaryFile( model.Name() );
+
+     fs::current_path("../../example_inputs/");
  
  } // end run
 
@@ -160,9 +189,9 @@ void QuadrilateratorToCSMPbinary_Example::Run()
 // AUXILIARY FUNCTIONS
 
 /**
-    Robust detection of NO_DATA vales
+    Detection of NO_DATA values set to either -9999 or -99999
 */
-inline bool is_NO_DATA_Value( double value )
+bool is_NO_DATA_Value( double value )
  {
     // checking the value range, including no-data values
     assert( !isnan(value) );

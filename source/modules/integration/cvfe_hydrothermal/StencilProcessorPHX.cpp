@@ -1,5 +1,6 @@
 #include "StencilProcessorPHX.h"
 #include "finiteVolumeAuxiliaryFunctions.h"
+#include "Element.h"
 
 using namespace std;
 
@@ -29,13 +30,13 @@ StencilProcessorPHX<dim>::~StencilProcessorPHX()
 /** Calculating fluxes out of the control volumes, including gravity */
 template<uint32_t dim>
 void StencilProcessorPHX<dim>::DetermineFluxOutWithGravity( const FV_Parameter& param,
-                                              const Element<dim>& e,
-                                              DenseMatrix<DM_MIN>& upwind,
-                                              std::vector<std::vector<double> >& facet_flux,
-                                              std::vector<double>& flux_out,
-                                              csmp::Index rhs_key,
-                                              csmp::Index rho_key,
-                                              csmp::Index k_key)
+                                                            const Element<dim>& e,
+                                                            DenseMatrix<DM_MIN>& upwind,
+                                                            std::vector<std::vector<double> >& facet_flux,
+                                                            std::vector<double>& flux_out,
+                                                            csmp::Index rhs_key,
+                                                            csmp::Index rho_key,
+                                                            csmp::Index k_key)
   {
 
    eidx_ = e.Idx();
@@ -153,7 +154,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOut(const FV_Parameter& param,
                                               csmp::Index rhs_key )
   {
 
-  const double zero(0.);
+  const double zero{0.};
   ScalarVariable rhs_property;
   eidx_ = e.Idx();
   
@@ -164,9 +165,9 @@ void StencilProcessorPHX<dim>::DetermineFluxOut(const FV_Parameter& param,
 
           if ( param.FacetNormalVelocity(i) != zero ) {
 
-               const double n_x_A(param.FacetNormalVelocity(i) * param.FacetArea(i));
+             const double n_x_A(param.FacetNormalVelocity(i) * param.FacetArea(i));
  	           // identifying the upstream node and initialize variables for it
-               const size_t  nidx( (param.FacetNormalVelocity(i) < zero) ? outside_node_ : inside_node_ );
+             const uint32_t  nidx( (param.FacetNormalVelocity(i) < zero) ? outside_node_ : inside_node_ );
 
              if (rhs_key.place == NODE) e.N(nidx)->Read( rhs_key, rhs_property );
              else if (rhs_key.place == ELEMENT) e.Read( rhs_key, rhs_property );

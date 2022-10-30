@@ -127,10 +127,10 @@ The initialisation process involves the following steps:
 between the elements from ANSYS is not used, but this data is recreated
 */
 void ANSYS_Model3D::InitializeANSYS( bool isoparametric,
-                                      const char* mesh_file_set,
-                                      const char* regions_file_prefix,
-                                      bool irregular_mesh,
-                                      bool binary_input_file )
+                                     const char* mesh_file_set,
+                                     const char* regions_file_prefix,
+                                     bool irregular_mesh,
+                                     bool binary_input_file )
 {
   double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
@@ -148,6 +148,13 @@ void ANSYS_Model3D::InitializeANSYS( bool isoparametric,
 
     // 0. reading the mesh from ANSYS-CSMP-input files
     mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, true );
+
+    // ATTENTION (comment from SKM): Since ANSYS does not output the neighbour connectivity correctly,
+    // the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
+    // later on this connectivity will be recreated inside of the Model where suitable machinery exists.
+    vset.RemovePfverts();
+    vset.EstablishElementConnectivity3D(); // tested: OK
+    vset.InitialiseNodeTopologyIdentifiers();
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {
@@ -256,6 +263,7 @@ void ANSYS_Model3D::InitializeANSYS( const char* mesh_file_set,
     // later on this connectivity will be recreated inside of the Model where suitable machinery exists.
     vset.RemovePfverts();
     vset.EstablishElementConnectivity3D(); // tested: OK
+    vset.InitialiseNodeTopologyIdentifiers();
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {
