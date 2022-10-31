@@ -33,22 +33,17 @@ MathOperatorLHS<dim,CELL>::MathOperatorLHS()
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-MathOperatorLHS<dim,CELL>::MathOperatorLHS(const PropertyDatabase<dim>& pref,
-		const char* basic,
-		const char* test)
+MathOperatorLHS<dim,CELL>::MathOperatorLHS( const PropertyDatabase<dim>& pref,
+                                            const char* basic,
+                                            const char* test)
 		: name_("unspecified LHS-operator"),
 		bop(make_pair(pref.Parameter(basic), 0)),
 		top(make_pair(pref.Parameter(test), 0)),
 		IDT(3),
 		IDB(3),
-		MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
+		MTRL(13, DenseMatrix<DM_MIN>(2, 2) ),
 		DERIV(2, 3),
 		IPOL(3),
-		SC(3),
-		VC(3),
-		TS(3),
-		AR(3),
-		FR(3),
 		factor_(1.),
 		add_accumulate_(true),
 		subtract_accumulate_(false),
@@ -79,11 +74,6 @@ MathOperatorLHS<dim,CELL>::MathOperatorLHS( const PropertyDatabase<dim>& pref,
 		MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
 		DERIV(2, 3),
 		IPOL(3),
-		SC(3),
-		VC(3),
-		TS(3),
-		AR(3),
-		FR(3),
 		factor_(1.),
 		add_accumulate_(true),
 		subtract_accumulate_(false),
@@ -112,11 +102,6 @@ MathOperatorLHS<dim,CELL>::MathOperatorLHS( const MathOperatorLHS<dim,CELL>& mo 
       MTRL(mo.MTRL),      // Operand storage
       DERIV(mo.DERIV),
       IPOL(mo.IPOL),
-      SC(mo.SC),
-      VC(mo.VC),
-      TS(mo.TS),
-      AR(mo.AR),
-      FR(mo.FR),
       factor_(mo.factor_),
       add_accumulate_(mo.add_accumulate_),
       subtract_accumulate_(mo.subtract_accumulate_),
@@ -149,11 +134,6 @@ MathOperatorLHS<dim,CELL>& MathOperatorLHS<dim,CELL>::operator=( const MathOpera
 			MTRL = mo.MTRL;  // Operand storage
 			DERIV = mo.DERIV;
 			IPOL = mo.IPOL;
-			SC = mo.SC;
-			VC = mo.VC;
-			TS = mo.TS;
-			AR = mo.AR;
-			FR = mo.FR;
 			factor_ = mo.factor_;
 			add_accumulate_ = mo.add_accumulate_;
 			add_accumulate_later_ = mo.add_accumulate_later_;
@@ -556,29 +536,31 @@ void MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( const CELL<dim>& e_r
 		// 0. If the property is a constraint point variable a one-to-one mapping
 		//    can be performed; no interpolation is needed
 		if (idx.place == ELEMENT_INTEGRATION_POINT) {
-			if (idx.type == SCALAR) {
-				M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(ip, idx));
-			}
+        if (idx.type == SCALAR) {
+          M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(ip, idx));
+        }
 			else if (idx.type == VECTOR) {
-				e_ref.Read(ip, idx, VC[0]);
-				M.AssignToDiagonal(VC[0]);
-			}
+          VectorVariable<dim> vc;
+          e_ref.Read(ip, idx, vc );
+          M.AssignToDiagonal( vc );
+        }
 			else if (idx.type == TENSOR) {
-				e_ref.Read(ip, idx, TS[0]);
-				M = TS[0];
-			}
+          TensorVariable<dim> ts;
+          e_ref.Read(ip, idx, ts );
+          M = ts;
+        }
 			else if (idx.type == ARRAY)
-			{
-				AR[0].Resize(idx.dataDepth);
-				e_ref.Read(ip, idx, AR[0]);
-				M.AssignToDiagonal(AR[0]);
-			}
+        {
+          ArrayVariable ar(idx.dataDepth);
+          e_ref.Read(ip, idx, ar );
+          M.AssignToDiagonal( ar );
+        }
 			else if (idx.type == FLAGGEDARRAY)
-			{
-				FR[0].Resize(idx.dataDepth);
-				e_ref.Read(ip, idx, FR[0]);
-				M.AssignToDiagonal(FR[0]);
-			}
+        {
+          FlaggedArrayVariable fr(idx.dataDepth);
+          e_ref.Read(ip, idx, fr );
+          M.AssignToDiagonal( fr );
+        }
 			return;
 		}
 
@@ -590,25 +572,27 @@ void MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( const CELL<dim>& e_r
 				M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(idx));
 			}
 			else if (idx.type == VECTOR) {
-				e_ref.Read(idx, VC[0]);
-				M.AssignToDiagonal(VC[0]);
-			}
+          VectorVariable<dim> vc;
+          e_ref.Read(idx, vc );
+          M.AssignToDiagonal( vc );
+        }
 			else if (idx.type == TENSOR) {
-				e_ref.Read(idx, TS[0]);
-				M = TS[0];
-			}
+          TensorVariable<dim> ts;
+          e_ref.Read(idx, ts );
+          M = ts;
+        }
 			else if (idx.type == ARRAY)
-			{
-				AR[0].Resize(idx.dataDepth);
-				e_ref.Read(idx, AR[0]);
-				M.AssignToDiagonal(AR[0]);
-			}
+        {
+          ArrayVariable ar(idx.dataDepth);
+          e_ref.Read(idx, ar );
+          M.AssignToDiagonal( ar );
+        }
 			else if (idx.type == FLAGGEDARRAY)
-			{
-				FR[0].Resize(idx.dataDepth);
-				e_ref.Read(idx, FR[0]);
-				M.AssignToDiagonal(FR[0]);
-			}
+        {
+          FlaggedArrayVariable fr(idx.dataDepth);
+          e_ref.Read(idx, fr );
+          M.AssignToDiagonal( fr );
+        }
 			return;
 		}
 
@@ -618,29 +602,32 @@ void MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( const CELL<dim>& e_r
 		{
 			// interpolating properties
 			if (idx.type == SCALAR) {
-				e_ref.PropertyValueAtIntegrationPoint(idx, ip, SC[0]);
-				M.AssignToDiagonal(dim, SC[0]);
-			}
+          ScalarVariable sc;
+          e_ref.PropertyValueAtIntegrationPoint(idx, ip, sc );
+          M.AssignToDiagonal(dim, sc );
+        }
 			else if (idx.type == VECTOR) {
-				e_ref.PropertyValueAtIntegrationPoint(idx, ip, VC[0]);
-				M.AssignToDiagonal(VC[0]);
-			}
+          VectorVariable<dim> vc;
+          e_ref.PropertyValueAtIntegrationPoint(idx, ip, vc );
+          M.AssignToDiagonal( vc );
+        }
 			else if (idx.type == TENSOR) {
-				e_ref.PropertyValueAtIntegrationPoint(idx, ip, TS[0]);
-				M = TS[0];
-			}
+          TensorVariable<dim> ts;
+          e_ref.PropertyValueAtIntegrationPoint(idx, ip, ts );
+          M = ts;
+        }
 			else if (idx.type == ARRAY)
-			{
-				AR[0].Resize(idx.dataDepth);
-				e_ref.PropertyValueAtIntegrationPoint(idx, ip, AR[0]);
-				M.AssignToDiagonal(AR[0]);
-			}
+        {
+          ArrayVariable ar(idx.dataDepth);
+          e_ref.PropertyValueAtIntegrationPoint(idx, ip, ar );
+          M.AssignToDiagonal( ar );
+        }
 			else if (idx.type == FLAGGEDARRAY)
-			{
-				FR[0].Resize(idx.dataDepth);
-				e_ref.PropertyValueAtIntegrationPoint(idx, ip, FR[0]);
-				M.AssignToDiagonal(FR[0]);
-			}
+        {
+          FlaggedArrayVariable fr(idx.dataDepth);
+          e_ref.PropertyValueAtIntegrationPoint(idx, ip, fr );
+          M.AssignToDiagonal( fr );
+        }
 			return;
 		}
 

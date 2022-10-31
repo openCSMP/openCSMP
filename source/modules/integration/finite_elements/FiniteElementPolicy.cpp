@@ -648,8 +648,8 @@ simply return this value.
 template<uint32_t dim, template<uint32_t> class CELL>
 template<class Var>
 void FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint( const csmp::Index& idx,
-                                                                        uint32_t ip,
-                                                                        Var& var ) const
+                                                                     uint32_t ip,
+                                                                     Var& var ) const
   {
     const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
 
@@ -665,6 +665,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint( const csmp:
       }
 
     // potential size and value adjustments for array variables
+    // TODO: temp variable is needed only if the interpolated variable is not a scalar; fix!
     Var  temp;
     if constexpr( TypeMatchesVariableType<Var,ARRAY>::value || TypeMatchesVariableType<Var,FLAGGEDARRAY>::value ) {
         temp.Resize( idx.dataDepth );

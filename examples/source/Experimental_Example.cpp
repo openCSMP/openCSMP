@@ -68,7 +68,7 @@ void Experimental_Example::Run()
 
       ANSYS_Model3D model( input_file.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
       printModelDimensions(model, true);
-
+      
       /// assuming a dim-1 region, label and count material juxtaposition relationships
       const string    region_tag("region identifier");
       vector<string>  region_names;

@@ -612,10 +612,10 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
   // interpolation of property if isoparametric elements are used
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( const CELL<dim>& e_ref,
-                                                              const csmp::Index& idx,
-                                                              uint32_t ip,
-                                                              DenseMatrix<DM_MIN>& M)
+void MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( const CELL<dim>& e_ref,
+                                                            const csmp::Index& idx,
+                                                            uint32_t ip,
+                                                            DenseMatrix<DM_MIN>& M )
   {
     if (!e_ref.UsesLocalCoordinates())
       throw csmp::Exception(FATAL_ERROR,
@@ -626,92 +626,100 @@ template<uint32_t dim, template<uint32_t> class CELL>
     //    can be performed; no interpolation is needed
     if (idx.place == ELEMENT_INTEGRATION_POINT) {
       if (idx.type == SCALAR) {
-        M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(ip, idx));
-      }
+          M.AssignToDiagonalAndZeroOffDiagonal( dim, e_ref.Read(ip,idx) );
+        }
       else if (idx.type == VECTOR) {
-        e_ref.Read(ip, idx, VC[0]);
-        M.AssignToDiagonal(VC[0]);
-      }
+          // TODO: change LocalVariableStorage so that vector gets returned directly
+          VectorVariable<dim> vc;
+          e_ref.Read(ip, idx, vc );
+          M.AssignToDiagonal( vc );
+        }
       else if (idx.type == TENSOR) {
-        e_ref.Read(ip, idx, TS[0]);
-        M = TS[0];
-      }
+          TensorVariable<dim> ts;
+          e_ref.Read(ip, idx, ts );
+          M = ts;
+        }
       else if (idx.type == ARRAY)
-      {
-        AR[0].Resize(idx.dataDepth);
-        e_ref.Read(ip, idx, AR[0]);
-        M.AssignToDiagonal(AR[0]);
-      }
+        {
+           ArrayVariable ar( idx.dataDepth );
+           e_ref.Read(ip, idx, ar );
+           M.AssignToDiagonal( ar );
+        }
       else if (idx.type == FLAGGEDARRAY)
-      {
-        FR[0].Resize(idx.dataDepth);
-        e_ref.Read(ip, idx, FR[0]);
-        M.AssignToDiagonal(FR[0]);
-      }
+        {
+          FlaggedArrayVariable fr( idx.dataDepth );
+          e_ref.Read(ip, idx, fr );
+          M.AssignToDiagonal( fr );
+        }
       return;
     }
 
     // 1. If the property is an element variable it is constant over the
     //    element, such that no interpolation is needed
     if (idx.place == ELEMENT || idx.place == REGION)
-    {
-      if (idx.type == SCALAR) {
-        M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(idx));
-      }
-      else if (idx.type == VECTOR) {
-        e_ref.Read(idx, VC[0]);
-        M.AssignToDiagonal(VC[0]);
-      }
-      else if (idx.type == TENSOR) {
-        e_ref.Read(idx, TS[0]);
-        M = TS[0];
-      }
-      else if (idx.type == ARRAY)
       {
-        AR[0].Resize(idx.dataDepth);
-        e_ref.Read(idx, AR[0]);
-        M.AssignToDiagonal(AR[0]);
+        if (idx.type == SCALAR) {
+            M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(idx));
+          }
+        else if (idx.type == VECTOR) {
+            VectorVariable<dim> vc;
+            e_ref.Read(idx, vc );
+            M.AssignToDiagonal( vc );
+          }
+        else if (idx.type == TENSOR) {
+            TensorVariable<dim> ts;
+            e_ref.Read(idx, ts );
+            M = ts;
+          }
+        else if (idx.type == ARRAY)
+          {
+            ArrayVariable ar( idx.dataDepth );
+            e_ref.Read(idx, ar );
+            M.AssignToDiagonal( ar );
+          }
+        else if (idx.type == FLAGGEDARRAY)
+          {
+            FlaggedArrayVariable fr( idx.dataDepth );
+            e_ref.Read(idx, fr );
+            M.AssignToDiagonal( fr );
+          }
+        return;
       }
-      else if (idx.type == FLAGGEDARRAY)
-      {
-        FR[0].Resize(idx.dataDepth);
-        e_ref.Read(idx, FR[0]);
-        M.AssignToDiagonal(FR[0]);
-      }
-      return;
-    }
 
     // 2. If the property is a node property, it must be interpolated to the
     //    integration point
     if (idx.place == NODE)
-    {
-      // interpolating properties
-      if (idx.type == SCALAR) {
-        e_ref.PropertyValueAtIntegrationPoint(idx, ip, SC[0]);
-        M.AssignToDiagonal(dim, SC[0]);
-      }
-      else if (idx.type == VECTOR) {
-        e_ref.PropertyValueAtIntegrationPoint(idx, ip, VC[0]);
-        M.AssignToDiagonal(VC[0]);
-      }
-      else if (idx.type == TENSOR) {
-        e_ref.PropertyValueAtIntegrationPoint(idx, ip, TS[0]);
-        M = TS[0];
-      }
-      else if (idx.type == ARRAY)
       {
-        AR[0].Resize(idx.dataDepth);
-        e_ref.PropertyValueAtIntegrationPoint(idx, ip, AR[0]);
-        M.AssignToDiagonal(AR[0]);
+        // interpolating properties
+        if (idx.type == SCALAR) {
+            ScalarVariable sc;
+            e_ref.PropertyValueAtIntegrationPoint(idx, ip, sc );
+            M.AssignToDiagonal(dim, sc );
+          }
+        else if (idx.type == VECTOR) {
+            VectorVariable<dim> vc;
+            e_ref.PropertyValueAtIntegrationPoint(idx, ip, vc );
+            M.AssignToDiagonal( vc );
+          }
+        else if (idx.type == TENSOR) {
+            TensorVariable<dim> ts;
+            e_ref.PropertyValueAtIntegrationPoint(idx, ip, ts );
+            M = ts;
+          }
+        else if (idx.type == ARRAY)
+          {
+            ArrayVariable ar( idx.dataDepth );
+            e_ref.PropertyValueAtIntegrationPoint(idx, ip, ar );
+            M.AssignToDiagonal( ar );
+          }
+        else if (idx.type == FLAGGEDARRAY)
+          {
+            FlaggedArrayVariable fr( idx.dataDepth );
+            e_ref.PropertyValueAtIntegrationPoint(idx, ip, fr );
+            M.AssignToDiagonal( fr );
+          }
+        return;
       }
-      else if (idx.type == FLAGGEDARRAY)
-      {
-        FR[0].Resize(idx.dataDepth);
-        e_ref.PropertyValueAtIntegrationPoint(idx, ip, FR[0]);
-        M.AssignToDiagonal(FR[0]);
-      }
-      return;
-    }
 
     throw csmp::Exception(FATAL_ERROR,
       "MathOperatorRHS<dim,CELL>::PropertyValueAtIntegrationPoint",
@@ -737,73 +745,74 @@ template<uint32_t dim, template<uint32_t> class CELL>
   {
     // if operand property is an element property
     if (MaterialOperandPlacement() == ELEMENT || MaterialOperandPlacement() == REGION)
-    {
-      MTRL.resize(1U);
-      if (MaterialOperandType() == SCALAR)
-        MTRL[0].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(MaterialOperandKey()));
-      else if (MaterialOperandType() == VECTOR) {
-        VectorVariable<dim>  vc;
-        e_ref.Read(MaterialOperandKey(), vc);
-        MTRL[0].AssignToDiagonal(vc);
-      }
-      else if (MaterialOperandType() == TENSOR) {
-        TensorVariable<dim>  ts;
-        e_ref.Read(MaterialOperandKey(), ts);
-        MTRL[0] = ts;
-      }
-      else if (MaterialOperandType() == ARRAY)
       {
-        ArrayVariable ar(MaterialOperandDataDepth());
-        e_ref.Read(MaterialOperandKey(), ar);
-        MTRL[0].AssignToDiagonal(ar);
-      }
-      else if (MaterialOperandType() == FLAGGEDARRAY)
-      {
-        FlaggedArrayVariable fr(MaterialOperandDataDepth());
-        e_ref.Read(MaterialOperandKey(), fr);
-        MTRL[0].AssignToDiagonal(fr);
-      }
-    }
-    else // if the operand is placed on the constraint-points
-    {
-      if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT) {
-        MTRL.resize(e_ref.FE()->IntegrationPoints());
-        const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (auto i{0U}; i < n_integration_points; i++)
-        {
-          if (MaterialOperandType() == SCALAR)
-            MTRL[i].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
+        MTRL.resize(1U);
+        if (MaterialOperandType() == SCALAR)
+            MTRL[0].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(MaterialOperandKey()));
           else if (MaterialOperandType() == VECTOR) {
             VectorVariable<dim>  vc;
-            e_ref.Read(i, MaterialOperandKey(), vc);
-            MTRL[i].AssignToDiagonal(vc);
+            e_ref.Read(MaterialOperandKey(), vc);
+            MTRL[0].AssignToDiagonal(vc);
           }
-          else if (MaterialOperandType() == TENSOR) {
+        else if (MaterialOperandType() == TENSOR) {
             TensorVariable<dim>  ts;
-            e_ref.Read(i, MaterialOperandKey(), ts);
-            MTRL[i] = ts;
+            e_ref.Read(MaterialOperandKey(), ts);
+            MTRL[0] = ts;
           }
-          else if (MaterialOperandType() == ARRAY)
+        else if (MaterialOperandType() == ARRAY)
           {
             ArrayVariable ar(MaterialOperandDataDepth());
-            e_ref.Read(i, MaterialOperandKey(), ar);
+            e_ref.Read(MaterialOperandKey(), ar);
             MTRL[0].AssignToDiagonal(ar);
           }
-          else if (MaterialOperandType() == FLAGGEDARRAY)
+        else if (MaterialOperandType() == FLAGGEDARRAY)
           {
             FlaggedArrayVariable fr(MaterialOperandDataDepth());
-            e_ref.Read(i, MaterialOperandKey(), fr);
+            e_ref.Read(MaterialOperandKey(), fr);
             MTRL[0].AssignToDiagonal(fr);
           }
-        }
       }
+    else // if the operand is placed on the constraint-points
+      {
+        if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT) {
+          MTRL.resize(e_ref.FE()->IntegrationPoints());
+          const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
+          for (auto i{0U}; i < n_integration_points; i++)
+          {
+            if (MaterialOperandType() == SCALAR)
+              MTRL[i].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
+            else if (MaterialOperandType() == VECTOR) {
+              VectorVariable<dim>  vc;
+              e_ref.Read(i, MaterialOperandKey(), vc);
+              MTRL[i].AssignToDiagonal(vc);
+            }
+            else if (MaterialOperandType() == TENSOR) {
+              TensorVariable<dim>  ts;
+              e_ref.Read(i, MaterialOperandKey(), ts);
+              MTRL[i] = ts;
+            }
+            else if (MaterialOperandType() == ARRAY)
+            {
+              ArrayVariable ar(MaterialOperandDataDepth());
+              e_ref.Read(i, MaterialOperandKey(), ar);
+              MTRL[0].AssignToDiagonal(ar);
+            }
+            else if (MaterialOperandType() == FLAGGEDARRAY)
+            {
+              FlaggedArrayVariable fr(MaterialOperandDataDepth());
+              e_ref.Read(i, MaterialOperandKey(), fr);
+              MTRL[0].AssignToDiagonal(fr);
+            }
+          }
+        }
 
       // if the operand is placed on the node
       else if (MaterialOperandPlacement() == NODE) {
-        const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (auto i{0U}; i < n_integration_points; i++)
-          PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
-      }
+          const auto n_integration_points(e_ref.FE()->IntegrationPoints());
+          MTRL.resize(n_integration_points);
+          for (auto i{0U}; i < n_integration_points; i++)
+            PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
+        }
       else
         throw csmp::Exception(FATAL_ERROR,
           "MathOperatorRHS<dim,CELL>::GetOperands(Element):",
