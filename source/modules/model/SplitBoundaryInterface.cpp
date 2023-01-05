@@ -1603,6 +1603,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      
      const bool  unique_map(true);
      model->FormRegionFrom( region_name.c_str(), elmt_pointers.begin(), elmt_pointers.end(), unique_map );
+     
      // add new unique region to model region
      model->Region("Model").Add( model->Region(region_name) );
      

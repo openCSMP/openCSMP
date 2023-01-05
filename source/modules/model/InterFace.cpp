@@ -932,15 +932,15 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n ) const
 
     @section input Input Arguments
 
-    An integer from 0...n-1, where n is the number of nodes per face of the Element.
-    The nodes on the Outside match with (collocated) the nodes on the INSIDE, and therefore they no
+    An integer from 0...n-1, where n is the number of nodes per face of the Element adjacent to the InterFace.
+    The nodes on the outside match with (are collocated with) the nodes on the INSIDE, and therefore they no
     longer reflect the numbering given by the outer parent elemnts Face.
 
     @param side  side refers to the first or second parent element.
 
     @section implementation Implementation
 
-    @attention since the nodes match the face of of the adjacent higher-dimensional elements,
+    @attention since the nodes match the face nodes of of the adjacent higher-dimensional elements,
     they are numbered like these within the node container. It follows that the inside nodes in the
     node connector are in normal order, but the ones for the outside are in reverse order starting
     with the last node. Consequently, this method traverses the outside nodes in a reverse order, in order
@@ -972,7 +972,7 @@ csmp::Node<dim>* const InterFace<dim>::MatchingN( uint32_t n, INTERFACE_SIDE sid
     int one{1}, md_nodes = this->FE()->MidSideNodes();
     if (n < cn_nodes + md_nodes ){
      //Traverse the midside  nodes in reverse, but starting one node before the last node
-      const uint32_t outside_idx = fe_nodes + cn_nodes + md_nodes - 1 - uint32_t(one % md_nodes) - (n-cn_nodes);
+      const uint32_t outside_idx = fe_nodes + cn_nodes + md_nodes - 1 - static_cast<uint32_t>(one % md_nodes) - (n-cn_nodes);
       assert(outside_idx >= fe_nodes );
       return node_connector_[outside_idx];
     } else {
@@ -986,7 +986,7 @@ csmp::Node<dim>* const InterFace<dim>::MatchingN( uint32_t n, INTERFACE_SIDE sid
   if ( middleElement_ != nullptr )
     return middleElement_->N( n );
 
-  throw csmp::Exception( ERROR, "InterFace<dim>::N( local_id, side ) const", "Base Element does not exist!" );
+  throw csmp::Exception( ERROR, "InterFace<dim>::N( local_id, side ) const", "Intervening Element does not exist!" );
 
   return nullptr;
 }

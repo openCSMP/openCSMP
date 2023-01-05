@@ -1792,18 +1792,24 @@ void  Region<dim>::Add( const Region<dim>& grp )
     return;
   }
 
+  const size_t n_cells_old{ this->Cells() };
+  
   // appending the elements of the second region at the end
   this->cell_vec_.reserve( this->Cells() + grp.Cells() );
   for ( auto it=grp.CellsBegin(); it!=grp.CellsEnd(); ++it )
-    this->cell_vec_.push_back( const_cast<Element<dim>*>(*it) );
+    this->cell_vec_.push_back( (*it) );
     
   // removing potential duplicates
   sort( this->cell_vec_.begin(), this->cell_vec_.end() );
   this->cell_vec_.erase( unique( this->cell_vec_.begin(), this->cell_vec_.end() ), this->cell_vec_.end() );
   vector<csmp::Element<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
 
+  const size_t n_cells_new{ this->Cells() };
+
   this->CreateNodePointerVector();
   
+  cout <<"\n"<<"Region<dim>::Add: successfully added region '"<< grp.Name() <<"' to region '"<< this->Name();
+  cout <<"', growing its size from "<< n_cells_old <<" to "<< n_cells_new <<" cells."<< endl;
   this->IdentifyPerimeter();
 
 } // end Add

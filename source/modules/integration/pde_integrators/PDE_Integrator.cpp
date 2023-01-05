@@ -576,6 +576,7 @@ bool PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<di
      {
         if ( rh_.size() > 0 ) {
              fill( rh_.begin(), rh_.end(), 0. );
+             // TODO: does this imply tha we always need t0 rebuild this vector
              fill( pivotVector_.begin(), pivotVector_.end(), 0. );
           }
         // provisions for the SparseMatrix class
@@ -1016,7 +1017,7 @@ void PDE_Integrator<dim,CELLTYPE>::AssignInitialConditions( const ModelSubDomain
     The Dirichlet constraints have already been eliminated,
     but their contributions to the non-Dirichlet rows have to be added to the RHS.
  
-    The guts of the elimation now live in EnumerateAndFixMatrixSize().
+    The guts of the elimination now live in  ReduceSystemSizeEliminatingEssentialConditions().
 
     @author Luat Khoa Tran
 */
@@ -2033,6 +2034,7 @@ void PDE_Integrator<dim,CELLTYPE>::IntegrateOver( ModelSubDomain<dim,CELLTYPE>& 
                             "integrator contains Boundary object integrals; call IntegrateOver(model,domain), such that boundary objects can be considered." );
    
     // 2. Accumulation of finite element integrals
+    domain.RenumberNodes();
     Accumulate( domain );
 
     // 3. If the computation is transient initial conditions must be input into the righthand vector
@@ -2071,9 +2073,8 @@ void PDE_Integrator<dim,CELLTYPE>::IntegrateOver( ModelSubDomain<dim,CELLTYPE>& 
 
 
 /** 
-    Accumulates element integrals, but
-    simultaneously considering potential Boundary objects associated with the simplicial complex.
-    The domain is the computational domain to which the PDE_Integrator is applied.
+    Accumulates element integrals and boundary integrals that might arise from potential Boundaryv and SplitBoundary objects associated.
+    The domain is the computational domain to which the PDE_Integrator  is applied, but this method also collects data from the entire model.
     
     @attention costly element search; use only if there are boundary integrals on other domains present
     
@@ -2101,6 +2102,7 @@ void PDE_Integrator<dim,CELLTYPE>::IntegrateOver( Model<dim>& model,
        }
 
     // 2. Accumulation: Note that the conditions that pertain to the group must be input !
+    domain.RenumberNodes();
     Accumulate( domain );
     
      // 2.1 Accumulation of potential boundary integrals from Boundary objects that share nodes with the model subdomain of interest
@@ -2506,12 +2508,10 @@ template bool collectInterfacesInComputationRegion( const Model<1U>&, const Mode
 
 
 
+
 /**
-    Enumerate method must be applied AFTER establish matrix setup process.
-    and BEFORE the accumulated proecess.
-    When you assemble vector or tensor variables, you also have the option
-    of only assembling one of their components. To do this just set the
-    components that you do not want to assemble to DBL_MAX.
+    Method must be applied AFTER establish matrix setup process.
+    and BEFORE the accumulation process.
  
     @attention G matrix is erased by this method
     @attention Method relies on a 0..n contiguous numbering of the finite element nodes.

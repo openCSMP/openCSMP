@@ -10,6 +10,7 @@ class FiniteElement;
 template<uint32_t> class Model;
 
 double diffusion1D( double val_farfield, double diffusivity, double x, double t );
+double grad_Var_AtX0( double val_farfield, double diffusivity, double t );
 double flux1DAtX0( double val_farfield, double diffusivity, double t, double transfer_coefficient );
 
 

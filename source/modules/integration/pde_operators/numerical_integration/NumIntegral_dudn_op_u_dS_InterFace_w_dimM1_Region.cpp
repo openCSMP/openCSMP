@@ -53,9 +53,9 @@ NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::NumIntegral_dudn_op_u_dS
 
 /**
    Computes difference between the variable values at the topologically collocated nodes, including that in the intervening
-   lower-dimensional region, using it to compute   the transfer coefficient (=coupling coefficient) at the time level t + delta t.
+   lower-dimensional region, using it to compute  the transfer coefficient (=coupling coefficient) at the time level t + delta t.
    
-   The conductivity (Operand value) is read from the higher-dimensional neighbors of the lower-dimensional region.
+   The hydraulic conductivity (Operand value) is read from the higher-dimensional neighbors of the lower-dimensional region.
 */
 template<uint32_t dim>
 void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::GetOperands( const InterFace<dim>& e )
@@ -76,29 +76,41 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::GetOperands( const 
     e.NodePropertyVector( MathOperatorLHS<dim,InterFace>::TestOperandKey(), node_var_iface );
     e.InterveningElement()->NodePropertyVector( MathOperatorLHS<dim,InterFace>::TestOperandKey(), node_var_elmt );
 */
-    // computing transfer coefficient values using the variable values of the interface faces and those of the
+    // computing transfer coefficient values using the variable values at the interface nodes
+    // and the intervening element (inside - middle = 3, outside - middle = 3, 6 in total.
+    // --------------------------------------------------------------------------------------
+    // (the area of the interface is taken into account later)
     const auto n_nodes{ e.InterveningElement()->Nodes() };
-    transfer_coefficients_.resize( n_nodes );
+    transfer_coefficients_.resize( n_nodes + n_nodes );
 
     // inside face and intervening element (nodes have the same indices)
     for ( auto i{0U}; i<n_nodes; i++ ) {
          // nodes of inner face come first
          double delta_var0 = e.N(i)->Read( MathOperatorLHS<dim,InterFace>::TestOperandKey() ) -
                              e.InterveningElement()->N(i)->Read( MathOperatorLHS<dim,InterFace>::TestOperandKey() );
-         // computing the flux across the inner interface at t+dt
-         double flux = flux1DAtX0( delta_var0, diffusivity_inner, delta_t_, conductivity_inner );
-         // computing the transfer coefficient that will give rise to this node-to-node flux at t+dt
-         transfer_coefficients_[i] = flux / conductivity_inner;
+         // if there is no gradient, the existing hydraulic conductivity is set as the transfer coefficient
+         if ( fabs(delta_var0) < numeric_limits<double>::epsilon() )
+           transfer_coefficients_[i] = conductivity_inner;
+         else {
+              // using 1D analytical solution to compute pressure gradient normal to inner interface at t+dt
+              double gradient = grad_Var_AtX0( delta_var0, diffusivity_inner, delta_t_ );
+              // computing the transfer coefficient that will give rise to this node-to-node flux at t+dt
+              transfer_coefficients_[i] = (delta_var0 * conductivity_inner) / gradient;
+           }
       }
-    // outside face and intervening element (nodes have the same indices)
+    // outside face and intervening element (nodes have different indices)
     for ( auto i{0U}; i<n_nodes; i++ ) {
          // nodes of outer face
-         double delta_var0 = e.N(e.Nodes()-1U-i)->Read( MathOperatorLHS<dim,InterFace>::TestOperandKey() ) -
+         double delta_var0 = e.MatchingN(i,OUTSIDE)->Read( MathOperatorLHS<dim,InterFace>::TestOperandKey() ) -
                              e.InterveningElement()->N(i)->Read( MathOperatorLHS<dim,InterFace>::TestOperandKey() );
-         // computing the flux across the inner interface at t+dt
-         double flux = flux1DAtX0( delta_var0, diffusivity_outer, delta_t_, conductivity_outer );
-         // computing the transfer coefficient that will give rise to this node-to-node flux at t+dt
-         transfer_coefficients_[i+n_nodes] = flux / conductivity_outer;
+         if ( fabs(delta_var0) < numeric_limits<double>::epsilon() )
+           transfer_coefficients_[i+n_nodes] = conductivity_outer;
+         else {
+              // using 1D analytical solution to compute pressure gradient normal to outer interface at t+dt
+              double gradient = grad_Var_AtX0( delta_var0, diffusivity_outer, delta_t_ );
+              // computing the transfer coefficient that will give rise to this node-to-node flux at t+dt
+              transfer_coefficients_[i+n_nodes] = (delta_var0 * conductivity_outer) / gradient;
+           }
       }
 
  } // end GetOperands
@@ -134,16 +146,18 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::ComputeContribution
     MathOperatorLHS<dim,InterFace>::LHS.Zero();
     
     // computing node-related fractions of the area of the intervening finite element
+    assert( iface.FE()->MidSideNodes() == 0U );
     const double area3 = iface.Area() / static_cast<double>( iface.InterveningElement()->Nodes() );
     
-    // updating the transfer coefficients to take that area into account
+    // weighting the transfer coefficients by element area corresponding to node
     for ( auto& tc : transfer_coefficients_ ) tc *= area3;
 
-    // populating the element contribution matrix with the transfer coefficients
+    // populating the coupling matrix with the transfer coefficients
     // matrix diagonal
-    for ( auto i{0U}; i<n_total_nodes; i++ )
+    for ( auto i{0U}; i<transfer_coefficients_.size(); i++ )
       MathOperatorLHS<dim,InterFace>::LHS(i,i) = transfer_coefficients_[i];
-    // off-diagonal elements dependent on node-node connections
+      
+    // off-diagonal terms depend on node-node connections
     // interface-inside-nodes with intervening-element nodes
     for ( auto i{0U}; i<n_elmt_nodes; i++ ) {
          // upper diagonal
@@ -152,26 +166,15 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::ComputeContribution
          MathOperatorLHS<dim,InterFace>::LHS(i+n_elmt_nodes*2U,i) = -transfer_coefficients_[i];
       }
     // interface-outside-nodes with intervening-element nodes
-    for ( auto i{n_elmt_nodes}; i<n_elmt_nodes*2U; i++ ) {
+    for ( auto i{0U}; i<n_elmt_nodes; i++ ) {
          // upper diagonal
-         MathOperatorLHS<dim,InterFace>::LHS(i,i+n_elmt_nodes) = -transfer_coefficients_[i];
+         MathOperatorLHS<dim,InterFace>::LHS(n_elmt_nodes*2-1-i,i+n_elmt_nodes*2) = -transfer_coefficients_[i+n_elmt_nodes];
          // lower diagonal
-         MathOperatorLHS<dim,InterFace>::LHS(i+n_elmt_nodes,i) = -transfer_coefficients_[i];
-      }
-    // intervening element nodes with interface nodes
-    for ( auto i{n_elmt_nodes*2U}; i<n_total_nodes; i++ ) {
-         // upper diagonal - inside
-         MathOperatorLHS<dim,InterFace>::LHS(i,i-n_elmt_nodes*2) = -transfer_coefficients_[i];
-         // lower diagonal - inside
-         MathOperatorLHS<dim,InterFace>::LHS(i-n_elmt_nodes*2,i) = -transfer_coefficients_[i];
-         // upper diagonal - outside
-         MathOperatorLHS<dim,InterFace>::LHS(i,i-n_elmt_nodes) = -transfer_coefficients_[i];
-         // lower diagonal - outside
-         MathOperatorLHS<dim,InterFace>::LHS(i-n_elmt_nodes,i) = -transfer_coefficients_[i];
+         MathOperatorLHS<dim,InterFace>::LHS(i+n_elmt_nodes*2,n_elmt_nodes*2-1-i) = -transfer_coefficients_[i+n_elmt_nodes];
       }
       
-   MathOperatorLHS<dim,InterFace>::LHS.Out();
-   cout << endl;
+//   MathOperatorLHS<dim,InterFace>::LHS.Out();
+//   cout << endl;
 
 } // end ComputeContribution
 
@@ -212,7 +215,7 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
       }
     // intervening element
     for ( auto i{n_elmt_nodes2}; i < n_total_nodes; i++ ) {
-        this->IDT[i] = iface.N(n_elmt_nodes2-i-1U)->Idx();
+        this->IDT[i] = iface.N(n_total_nodes-i-1U)->Idx();
         this->IDB[i] = this->IDT[i];
       }
 
@@ -237,10 +240,10 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
           nodal_values[nIdx] = iface.N(nIdx)->Read(this->TestOperandKey());
         // outer face
 				for ( auto nIdx{ n_elmt_nodes }; nIdx < n_elmt_nodes2; ++nIdx )
-          nodal_values[nIdx] = iface.N(nIdx)->Read(this->TestOperandKey());
+          nodal_values[nIdx] = iface.N(nIdx - n_elmt_nodes)->Read(this->TestOperandKey());
         // intervening element
 				for (auto nIdx{ n_elmt_nodes2 }; nIdx < n_total_nodes; ++nIdx )
-          nodal_values[nIdx] = iface.InterveningElement()->N(nIdx-n_elmt_nodes2)->Read(this->TestOperandKey());
+          nodal_values[nIdx] = iface.InterveningElement()->N(nIdx - n_elmt_nodes2)->Read(this->TestOperandKey());
         }
 			else {
 				throw csmp::Exception( ERROR,
@@ -350,6 +353,27 @@ double diffusion1D( double val_farfield, double diffusivity, double x, double t 
     return val_farfield * erf( x / (2. * sqrt( diffusivity * t ) ) );
  }
  
+
+/**
+     Derivative of dependent variable at  position x0, as a function of time, t, and the initial difference between the variable value in the farfield
+     and at the X0 boundary
+*/
+double grad_Var_AtX0( double val_farfield, double diffusivity, double t )
+ {
+    // derivative pf previous expression
+    constexpr double pi = 3.14159265358979323846;
+    const double     sqrtPi{ sqrt(pi) }; // x{0.};
+    // const double     x2{ x * x };
+    // exp(0) = 1! double dTdx  = T0 * exp( -x2 ) / (kappa * t);
+    double dvaldx  = val_farfield / (diffusivity * t);
+    dvaldx /= sqrtPi * sqrt( diffusivity * t );
+ 
+    // derivative of dependent variable at time t
+    const double max_grad(1e20);
+    assert( fabs(dvaldx) < max_grad );
+    return dvaldx;
+ }
+
 
 /**
      Derivative *  conductivity product at  position x0, as a function of time and the initial difference between the variable value in the farfield
