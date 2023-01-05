@@ -75,7 +75,7 @@ void CopyReplaceVisitor_Test::testNodes( Model<3>* model, const V& value, const 
 {
   V cache;
   Index key( model->Database().StorageKey(propertyName) );
-  Region<3U> domain{ model->Region("Model") };
+  Region<3U>& domain{ model->Region("Model") };
   
   for( auto it( domain.NodesBegin() ); it != domain.NodesEnd(); ++it )
   {
@@ -90,7 +90,7 @@ void CopyReplaceVisitor_Test::testElements( Model<3>* model, const V& value, con
 {
   V cache;
   Index key( model->Database().StorageKey(propertyName) );
-  Region<3U> domain{ model->Region("Model") };
+  Region<3U>& domain{ model->Region("Model") };
 
   for( auto it( domain.CellsBegin() ); it != domain.CellsEnd(); ++it )
   {
@@ -104,7 +104,7 @@ void CopyReplaceVisitor_Test::testElementIntegrationPoints( Model<3>* model, con
 {
   V cache;
   Index key( model->Database().StorageKey(propertyName) );
-  Region<3U> domain{ model->Region("Model") };
+  Region<3U>& domain{ model->Region("Model") };
 
   for( auto it( domain.CellsBegin() ); it != domain.CellsEnd(); ++it )
     for( auto ip{0U}; ip < (*it)->IntegrationPoints(); ++ip )

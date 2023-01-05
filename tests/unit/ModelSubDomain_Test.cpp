@@ -332,7 +332,7 @@ bool ModelSubDomain_Test::Test_EstablishNeighborConnectivity()
     // 1. recreating the neighbor connectivity and comparing
     // -----------------------------------------------------
     const csmp::Index eid_key(model.Database().StorageKey("element number"));
-    Region<3U> domain = model.Region("Model");
+    Region<3U>& domain = model.Region("Model");
     model.Mesh().UpdateConnectivity();
     
     bool no_mismatch(true);

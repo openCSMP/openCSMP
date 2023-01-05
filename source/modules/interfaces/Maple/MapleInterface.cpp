@@ -14,7 +14,7 @@ worksheet.
 void writeVariableToMapleTextFile( const Model<1U>& sg, 
                                    const char* variable, uint32_t timestep, double time )
  {
-    const Region<1>  model_domain(sg.Region("Model"));
+    const Region<1>&  model_domain(sg.Region("Model"));
     char   num[30];  sprintf( num, "%u", timestep );
     string fname(variable);
     fname += "-maple-dataset";
@@ -104,7 +104,7 @@ void writeVariablesToMapleTextFile( const Model<1U>& sg,
                                     const char* variable1, const char* variable2, 
                                     uint32_t timestep, double time )
  {
-    const Region<1>  model_domain(sg.Region("Model"));
+    const Region<1>&  model_domain(sg.Region("Model"));
     char   num[30];  sprintf( num, "%u", timestep );
     string fname(variable1);
     fname += "-";

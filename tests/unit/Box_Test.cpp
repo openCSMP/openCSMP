@@ -309,7 +309,7 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
     vset.InitialiseNodeTopologyIdentifiers();
     Model<3U>  model( vset, "CSMP-variables.txt" );
     printModelDimensions( model );
-    Region<3U> model_domain(model.Region("Model"));
+    Region<3U>& model_domain(model.Region("Model"));
     // verifying that the perimeter of the Model region matches that of the overall model
     const double model_surface_area = model_domain.SurfaceArea();
     _equal( model_surface_area, 6. * 3. * 3., 10. ); // 6-faces with 9m2, tolerance=10 eps

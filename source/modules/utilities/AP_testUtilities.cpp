@@ -18,7 +18,7 @@ void rhinoOutput( const Model<3U>& sgroup )
  {
     system( "del iso_lin_*.txt" );
     
-    const Region<3U>  sg(sgroup.Region("Model")); 
+    const Region<3U>& sg(sgroup.Region("Model")); 
   
     // reading elements
     for ( auto eit=sg.CellsBegin(); eit!=sg.CellsEnd(); eit++ )

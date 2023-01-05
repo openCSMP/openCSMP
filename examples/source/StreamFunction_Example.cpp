@@ -204,7 +204,7 @@ void StreamFunction_Example::Run()
 
 // TESTING VTK OUTPUT OF QUADRATIC TRIANGLE ELEMENTS
 const csmp::Index pf_key = model.Database().StorageKey("fluid pressure");
-Region<2U>  rref = model.Region("Model");
+Region<2U>&       rref   = model.Region("Model");
 rref.E(5)->CoordinateMatrix();
 DenseMatrix<DM_MIN> DATA;
 DATA.Resize(1,6);
