@@ -146,7 +146,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
         if ( (*nit)->AtBoundary() == FRONT  or  (*nit)->AtBoundary() == BACK )
           (*nit)->Status( pbf.Key(), PLAIN );
       // calculation
-      parabolic_profile.IntegrateOver( gref );
+      parabolic_profile.IntegrateOver( model, gref );
       printRangeOfVariable( model, channel_region.c_str(), "parabolic function" );
 
       vtk_output.OutputDataToVTK( model, "parabolic-function", "parabolic function", 1 );
@@ -191,7 +191,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       steady_state_pressure.Add( &fsrc );
 
       model.InputPropertyValue( "fluid volume source", makeScalar(PLAIN,0.) );
-      steady_state_pressure.IntegrateOver( gref );
+      steady_state_pressure.IntegrateOver( model, gref );
       printRangeOfVariable( model, channel_region.c_str(), "fluid pressure" );
       vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 1 );
 

@@ -1,7 +1,8 @@
 #include "Tutorial4_Example_Revisited.h"
 
 // CSMP model
-#include "ANSYS_Model2D.h"
+#include "ANSYS_Model2D.h" // TODO: replace and use CSMP native model instead
+#include "Boundary.h"
 
 // FE algorithm
 #include "PDE_Integrator.h"
@@ -203,7 +204,7 @@ void Tutorial4_Example_Revisited::Run()
   stokes_flow.Add( &dummy );
 
   // solve the Stokes equation and release memory
-  stokes_flow.IntegrateOver( r_ref );
+  stokes_flow.IntegrateOver( model, r_ref );
   stokes_flow.Reset();
 
   // output resulting variable ranges

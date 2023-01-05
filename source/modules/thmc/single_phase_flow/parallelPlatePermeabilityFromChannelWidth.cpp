@@ -61,7 +61,7 @@ void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg,
     gref.InputPropertyValue( "parabolic function", makeScalar(DIRICH,1.0e-30), PERIMETER );
   
     // calculation
-    parabolic_profile.IntegrateOver( gref );
+    parabolic_profile.IntegrateOver( sg, gref );
     parabolic_profile.Reset();
     printRangeOfVariable( sg, channel_region, "parabolic function" );
   

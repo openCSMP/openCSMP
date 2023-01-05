@@ -86,8 +86,8 @@ class Boundary : public ModelSubDomain<dim, Face>,
     Boundary<dim>&  operator=( const Boundary& );
 
     /// methods required for the LocalVariableStorage
-    virtual PLACEMENT Placement() const { return BOUNDARY; }
-    virtual bool      ValidVariable( const char* variableName ) const;
+    virtual PLACEMENT Placement() const override { return BOUNDARY; }
+    virtual bool      ValidVariable( const char* variableName ) const override;
 
     /// RECONSTRUCTOR of boundary from index data stored in SubDomainInfo (call only prior to deleting anythin from colonies)
     Boundary( const PropertyDatabase<dim>&,
@@ -96,7 +96,7 @@ class Boundary : public ModelSubDomain<dim, Face>,
               BOX_BOUNDARY = IRREGULAR );
 
     /// Visitors
-    virtual void Accept( Visitor<dim>& );
+    virtual void Accept( Visitor<dim>& ) override;
 
 
     // -----------------------------------------------

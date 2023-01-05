@@ -4,9 +4,13 @@
 #include "SAMG_Solver.h"
 #include "PDE_Integrator.h"
 #include "PT_op.h"
+
+#include "Model.h"
+#include "Boundary.h"
+
 #include "NumIntegral_BT_D_B_dV.h"
-#include"NumIntegral_BT_op_dV.h"
-#include"NumIntegral_PT_op_dV.h"
+#include "NumIntegral_BT_op_dV.h"
+#include "NumIntegral_PT_op_dV.h"
 #include "StressesAndStrains.h"
 #include "ExtractTensorVariableComponent.h"
 #include "BoreHole_stability_InclinedWell3D_VVCase.h"

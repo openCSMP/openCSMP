@@ -4,6 +4,7 @@
 #include "Element.h"
 #include "Face.h"
 #include "InterFace.h"
+#include "Edge.h"
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
@@ -1705,16 +1706,17 @@ template class LocalVariableStorage<1U,Node>;
 template class LocalVariableStorage<1U,Element>;
 template class LocalVariableStorage<1U,Face>;
 template class LocalVariableStorage<1U,InterFace>;
+template class LocalVariableStorage<1U,Edge>;
 template class LocalVariableStorage<1U,Region>;
 template class LocalVariableStorage<1U,Boundary>;
 template class LocalVariableStorage<1U,SplitBoundary>;
 template class LocalVariableStorage<1U,Model>;
 
-
 template class LocalVariableStorage<2U,Node>;
 template class LocalVariableStorage<2U,Element>;
 template class LocalVariableStorage<2U,Face>;
 template class LocalVariableStorage<2U,InterFace>;
+template class LocalVariableStorage<2U,Edge>;
 template class LocalVariableStorage<2U,Region>;
 template class LocalVariableStorage<2U,Boundary>;
 template class LocalVariableStorage<2U,SplitBoundary>;
@@ -1724,6 +1726,7 @@ template class LocalVariableStorage<3U,Node>;
 template class LocalVariableStorage<3U,Element>;
 template class LocalVariableStorage<3U,Face>;
 template class LocalVariableStorage<3U,InterFace>;
+template class LocalVariableStorage<3U,Edge>;
 template class LocalVariableStorage<3U,Region>;
 template class LocalVariableStorage<3U,Boundary>;
 template class LocalVariableStorage<3U,SplitBoundary>;

@@ -440,7 +440,7 @@ void InterFace<dim>::Accept( csmp::Visitor<dim>& vis )
       vis.Visit( this );
       return;
     }
-  throw csmp::Exception( ERROR, "InterFace<dim>::Accept", "Target of visitation unresolved." );
+  throw csmp::Exception( ERROR, "InterFace<dim>::Accept", "Target of visitation unresolved (nodes not an option)." );
   
 } // end Accept
 

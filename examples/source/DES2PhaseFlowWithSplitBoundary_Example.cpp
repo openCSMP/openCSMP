@@ -1,8 +1,9 @@
 #include "DES2PhaseFlowWithSplitBoundary_Example.h"
 
 // the CSMP model
-#include "ANSYS_Model2D.h"
-#include "ANSYS_Model3D.h"
+#include "Model.h"
+#include "Boundary.h"
+#include "SplitBoundary.h"
 
 // FV algorithms
 #include "DES2PhaseSlightlyCompressibleTransport.h"

@@ -3,6 +3,7 @@
 #include "Element.h"
 #include "Face.h"
 #include "InterFace.h"
+#include "Edge.h"
 #include "variableOperations.h"
 #include "Exception.h"
 #include "CSMP_mathUtilities.h"
@@ -528,7 +529,7 @@ simply return this value.
 template<uint32_t dim, template<uint32_t> class CELL>
 template<class Var>
 void FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Index& idx,
-                                                                  Var& var ) const
+                                                               Var& var ) const
   {
     const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
     assert( fptr_ != nullptr );
@@ -1562,18 +1563,170 @@ template void FiniteElementPolicy<3U,InterFace>
 
 
 
+// EDGE
+
+// vector of properties from integration points
+// scalar
+template void FiniteElementPolicy<1U,Edge>
+::IntegrationPointPropertyVector<ScalarVariable >(const csmp::Index&, std::vector<ScalarVariable>&) const;
+template void FiniteElementPolicy<2U,Edge>
+::IntegrationPointPropertyVector<ScalarVariable >(const csmp::Index&, std::vector<ScalarVariable>&) const;
+template void FiniteElementPolicy<3U,Edge>
+::IntegrationPointPropertyVector<ScalarVariable >(const csmp::Index&, std::vector<ScalarVariable>&) const;
+// array
+template void FiniteElementPolicy<1U,Edge>
+::IntegrationPointPropertyVector<ArrayVariable >(const csmp::Index&, std::vector<ArrayVariable>&) const;
+template void FiniteElementPolicy<2U,Edge>
+::IntegrationPointPropertyVector<ArrayVariable >(const csmp::Index&, std::vector<ArrayVariable>&) const;
+template void FiniteElementPolicy<3U,Edge>
+::IntegrationPointPropertyVector<ArrayVariable >(const csmp::Index&, std::vector<ArrayVariable>&) const;
+// flagged array
+template void FiniteElementPolicy<1U,Edge>
+::IntegrationPointPropertyVector<FlaggedArrayVariable >(const csmp::Index&, std::vector<FlaggedArrayVariable>&) const;
+template void FiniteElementPolicy<2U,Edge>
+::IntegrationPointPropertyVector<FlaggedArrayVariable >(const csmp::Index&, std::vector<FlaggedArrayVariable>&) const;
+template void FiniteElementPolicy<3U,Edge>
+::IntegrationPointPropertyVector<FlaggedArrayVariable >(const csmp::Index&, std::vector<FlaggedArrayVariable>&) const;
+// vector
+template void FiniteElementPolicy<1U,Edge>
+::IntegrationPointPropertyVector<VectorVariable<1U> >(const csmp::Index&, std::vector<VectorVariable<1U> >&) const;
+template void FiniteElementPolicy<2U,Edge>
+::IntegrationPointPropertyVector<VectorVariable<2U> >(const csmp::Index&, std::vector<VectorVariable<2U> >&) const;
+template void FiniteElementPolicy<3U,Edge>
+::IntegrationPointPropertyVector<VectorVariable<3U> >(const csmp::Index&, std::vector<VectorVariable<3U> >&) const;
+// tensor
+template void FiniteElementPolicy<1U,Edge>
+::IntegrationPointPropertyVector<TensorVariable<1U> >(const csmp::Index&, std::vector<TensorVariable<1U> >&) const;
+template void FiniteElementPolicy<2U,Edge>
+::IntegrationPointPropertyVector<TensorVariable<2U> >(const csmp::Index&, std::vector<TensorVariable<2U> >&) const;
+template void FiniteElementPolicy<3U,Edge>
+::IntegrationPointPropertyVector<TensorVariable<3U> >(const csmp::Index&, std::vector<TensorVariable<3U> >&) const;
+
+// property value at point
+// scalar
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
+// array
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
+// flagged array
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
+// vector
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAt<VectorVariable<1U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<1U>& var) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAt<VectorVariable<2U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<2U>& var) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAt<VectorVariable<3U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<3U>& var) const;
+// tensor
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAt<TensorVariable<1U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<1U>& var) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAt<TensorVariable<2U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<2U>& var) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAt<TensorVariable<3U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<3U>& var) const;
+
+// property value at integration point
+// scalar
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAtIntegrationPoint<ScalarVariable >(const csmp::Index&, uint32_t, ScalarVariable&) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAtIntegrationPoint<ScalarVariable >(const csmp::Index&, uint32_t, ScalarVariable&) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAtIntegrationPoint<ScalarVariable >(const csmp::Index&, uint32_t, ScalarVariable&) const;
+// array
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAtIntegrationPoint<ArrayVariable >(const csmp::Index&, uint32_t, ArrayVariable&) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAtIntegrationPoint<ArrayVariable >(const csmp::Index&, uint32_t, ArrayVariable&) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAtIntegrationPoint<ArrayVariable >(const csmp::Index&, uint32_t, ArrayVariable&) const;
+// flagged array
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAtIntegrationPoint<FlaggedArrayVariable >(const csmp::Index&, uint32_t, FlaggedArrayVariable&) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAtIntegrationPoint<FlaggedArrayVariable >(const csmp::Index&, uint32_t, FlaggedArrayVariable&) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAtIntegrationPoint<FlaggedArrayVariable >(const csmp::Index&, uint32_t, FlaggedArrayVariable&) const;
+// vector
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAtIntegrationPoint<VectorVariable<1U> >(const csmp::Index&, uint32_t, VectorVariable<1U>&) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAtIntegrationPoint<VectorVariable<2U> >(const csmp::Index&, uint32_t, VectorVariable<2U>&) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAtIntegrationPoint<VectorVariable<3U> >(const csmp::Index&, uint32_t, VectorVariable<3U>&) const;
+// tensor
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAtIntegrationPoint<TensorVariable<1U> >(const csmp::Index&, uint32_t, TensorVariable<1U>&) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAtIntegrationPoint<TensorVariable<2U> >(const csmp::Index&, uint32_t, TensorVariable<2U>&) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAtIntegrationPoint<TensorVariable<3U> >(const csmp::Index&, uint32_t, TensorVariable<3U>&) const;
+
+// property value at bary center
+// scalar
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAtBaryCenter<ScalarVariable >(const csmp::Index& idx,ScalarVariable& var) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAtBaryCenter<ScalarVariable >(const csmp::Index& idx, ScalarVariable& var) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAtBaryCenter<ScalarVariable >(const csmp::Index& idx, ScalarVariable& var) const;
+// array
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAtBaryCenter<ArrayVariable >(const csmp::Index&, ArrayVariable&) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAtBaryCenter<ArrayVariable >(const csmp::Index&, ArrayVariable&) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAtBaryCenter<ArrayVariable >(const csmp::Index&, ArrayVariable&) const;
+// flagged array
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAtBaryCenter<FlaggedArrayVariable >(const csmp::Index&, FlaggedArrayVariable&) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAtBaryCenter<FlaggedArrayVariable >(const csmp::Index&, FlaggedArrayVariable&) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAtBaryCenter<FlaggedArrayVariable >(const csmp::Index&, FlaggedArrayVariable&) const;
+// vector
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAtBaryCenter<VectorVariable<1U> >(const csmp::Index& idx, VectorVariable<1U>& var) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAtBaryCenter<VectorVariable<2U> >(const csmp::Index& idx, VectorVariable<2U>& var) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAtBaryCenter<VectorVariable<3U> >(const csmp::Index& idx, VectorVariable<3U>& var) const;
+// tensor
+template void FiniteElementPolicy<1U,Edge>
+::PropertyValueAtBaryCenter<TensorVariable<1U> >(const csmp::Index& idx, TensorVariable<1U>& var) const;
+template void FiniteElementPolicy<2U,Edge>
+::PropertyValueAtBaryCenter<TensorVariable<2U> >(const csmp::Index& idx, TensorVariable<2U>& var) const;
+template void FiniteElementPolicy<3U,Edge>
+::PropertyValueAtBaryCenter<TensorVariable<3U> >(const csmp::Index& idx, TensorVariable<3U>& var) const;
 
 
 template class FiniteElementPolicy<1U,Element>;
 template class FiniteElementPolicy<1U,Face>;
 template class FiniteElementPolicy<1U,InterFace>;
+template class FiniteElementPolicy<1U,Edge>;
 
 template class FiniteElementPolicy<2U,Element>;
 template class FiniteElementPolicy<2U,Face>;
 template class FiniteElementPolicy<2U,InterFace>;
+template class FiniteElementPolicy<2U,Edge>;
 
 template class FiniteElementPolicy<3U,Element>;
 template class FiniteElementPolicy<3U,Face>;
 template class FiniteElementPolicy<3U,InterFace>;
+template class FiniteElementPolicy<3U,Edge>;
 
 } // end csmp

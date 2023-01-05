@@ -1,4 +1,8 @@
 #include "LinearElasticityA_VVCase.h"
+#include "Model.h"
+#include "Boundary.h"
+//#include "SplitBoundary.h"
+
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
 #include "VTU_Interface.h"
@@ -13,8 +17,7 @@
 using namespace std;
 
 
-namespace csmp
-  {
+namespace csmp {
 
   LinearElasticityA_VVCase::LinearElasticityA_VVCase(const char* prefix)
     {
@@ -50,7 +53,7 @@ namespace csmp
       // model dimension
       Point<DIM> min, max;
       model.MinMaxCoordinates( min, max );
-      const double length( max[0]-min[0] ), height( max[1]-min[1] );
+      const double length( max[0]-min[0] ); // , height( max[1]-min[1] );
       printModelDimensions( model, true );
       double volumePrior = model.Region("Model").Volume();
       cout <<"\nThe model has a volume of: "<< volumePrior <<" m^3 unloaded."<< endl;
@@ -81,7 +84,6 @@ namespace csmp
       SAMG_Solver   solver (&settings);
       settings.Set_napproach(2); 
       PDE_Integrator<DIM,Element> deformation( solver  );
-      //PDE_Integrator<DIM,Element> deformation( new LUdcmp_Solver() );
       #else
       CSMP_DEFAULT_LINEAR_SOLVER solver;
       PDE_Integrator<DIM,Element> deformation( solver );

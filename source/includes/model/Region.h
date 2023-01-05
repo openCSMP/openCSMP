@@ -121,10 +121,10 @@ class Region : public ModelSubDomain<dim, Element>,
                             SUBDOMAIN_PART = COMPLETE );
 
     /// Local variable storage interface
-    virtual PLACEMENT Placement() const { return REGION; }
+    virtual PLACEMENT Placement() const override { return REGION; }
 
     /// checks whether variable placement is compatible with placement on a region
-    virtual bool  ValidVariable( const char* variableName ) const;
+    virtual bool  ValidVariable( const char* variableName ) const override;
 
     /// outputs region into VSet polygonal data container; all properties may be output as well
     void OutputTo( VSet<dim>& vset, bool with_properties = true ) const;
@@ -208,7 +208,7 @@ class Region : public ModelSubDomain<dim, Element>,
     // ----------------------------------------
 
     /// Visitors
-    virtual void Accept( Visitor<dim>& );
+    virtual void Accept( Visitor<dim>& ) override;
 
     /// tests whether the current region includes the specified one
     bool   Includes( const Region& ) const;

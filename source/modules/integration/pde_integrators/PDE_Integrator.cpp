@@ -1,9 +1,12 @@
 #include "PDE_Integrator.h"
 #include "LinearSolver.h"
 #include "Model.h"
+#include "ModelSubDomain.h"
 #include "Region.h"
 #include "Boundary.h"
-#include "Node.h"
+#include "Face.h"
+#include "InterFace.h"
+#include "SplitBoundary.h"
 #include "NimbleRegion.h"
 #include "ErrorHandler.h"
 #include "Exception.h"
@@ -102,6 +105,7 @@ void PDE_Integrator<dim,CELLTYPE>::RetainGlobalSolutionMatrix( bool retain )
 
 /**
     Default = false, switch on if size matters more than speed.
+    TODO: is this really needed? - it should be done automatically
 */
 template<uint32_t dim,template<uint32_t> class CELLTYPE>
 void PDE_Integrator<dim,CELLTYPE>::TrimExcessCapacityOfVectors( bool trim )
@@ -412,6 +416,10 @@ void  PDE_Integrator<dim,CELLTYPE>::Reset( bool delete_math_operators )
     if ( G_.Rows()           > 0 ) G_.Erase();
     if ( DOF_indexes_.size() > 0 ) DOF_indexes_.clear();
     if ( pivotVector_.size() > 0 ) pivotVector_.clear();
+    
+    // boundary integrals
+    boundary_faces_.clear();
+    splitboundary_interfaces_.clear();
 
     // restoring defaults
     time_increment_ = 0.;
@@ -478,6 +486,8 @@ EstablishMatrixSetup() takes information from the mesh and property
 managers and may query the property database for the type of variables.
 In the case of a group-restricted computation, the group interface is
 accessed via a pointer (gptr).
+
+@return true if the setup was newly established and (false) if it was merely reused.
 
 @section application Application
 
@@ -553,7 +563,7 @@ TODO: consider case where one might want to retain the right-hand vector, but no
 TODO: rather than throwing the entire matrix away, one might just remove off-diagonal elements
 */
 template<uint32_t dim,template<uint32_t> class CELLTYPE>
-void PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& gref )
+bool PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& gref )
  {
    // -------------------------------------------------------------------
    // 0. PDE_Integrator re-use: (and has not been reset by
@@ -573,7 +583,7 @@ void PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<di
             G_.Erase();
             G_.Resize( rh_.size() );
           }
-        return;
+        return false;
      }
 
 
@@ -835,8 +845,15 @@ void PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<di
    // 5. Resizing 'G' and righthand vector 'rh' eliminating the Dirichlet conditions
    // ------------------------------------------------------------------------------
    // Luat's code (will resize matrix and vectors)
+<<<<<<< HEAD
    ReduceSystemSizeEliminatingEssentialConditions( gref, offset );
 
+=======
+   ReduceSystemSizeEliminatingEssentialConditions( gref );
+   
+   return true;
+   
+>>>>>>> 2b476c5e (chore: added Edge class which permits line element Faces to know their higher-dim neighbors (3D only))
  } // end EstablishMatrixSetup
 
 
@@ -1016,6 +1033,58 @@ void PDE_Integrator<dim, CELLTYPE>::AssignEssentialConditions( const ModelSubDom
 
 
 
+
+
+/**
+    determining whether the nodes of the supplied element are contained in the computational domain
+*/
+template<uint32_t dim, template<uint32_t> class CELLTYPE>
+bool isContainedIn( const ModelSubDomain<dim,CELLTYPE>& comp_domain, const Face<dim>& face )
+ {
+    const size_t nodes(face.Nodes());
+    for ( auto i{0U}; i<nodes; ++i )
+      // since we are dealing with a Face it will always be on the domain perimeter
+      if ( !comp_domain.IsPerimeterNode( face.N(i) ) ) return false;
+    return true;
+ }
+
+
+
+// same but for SplitBoundary objects
+template<uint32_t dim, template<uint32_t> class CELLTYPE>
+bool isContainedIn( const ModelSubDomain<dim,CELLTYPE>& comp_domain, const InterFace<dim>& interface )
+ {
+    if constexpr ( is_same<CELLTYPE<dim>,Element<dim>>::value ) {
+        if ( !comp_domain.Contains( interface.InnerParent() ) ||
+             !comp_domain.Contains( interface.OuterParent() ) ) return false;
+      }
+    else return false;
+    return true;
+ }
+
+
+
+/**
+       Assumptions:
+       - region "Model" contains all split boundaries
+       - a split boundary is considered contained if the higher-dimensional neighbor elements of all interfaces are contained in it
+*/
+template<uint32_t dim>
+bool isSplitBoundaryContainedInRegion( const SplitBoundary<dim>& split_boundary, const ModelSubDomain<dim,Element>& region )
+ {
+    // all splitboundaries are contained region "Model"
+    if ( region.Name() == "Model" ) return true;
+    
+    // checking whether all interfaces of split_boundary are contained in comp_domain
+    for ( const auto& it : split_boundary.CellVector() ) {
+         if ( !region.Contains( it->InnerParent() ) ) return false;
+         if ( !region.Contains( it->OuterParent() ) ) return false;
+      }
+    return true;
+ }
+
+
+
 /**
 
 Accumulate() loops over the finite-elements in the Model or target Region
@@ -1111,6 +1180,7 @@ void PDE_Integrator<dim,CELLTYPE>::AccumulateSplitBoundaries( Model<dim>& model,
 
 }
 
+<<<<<<< HEAD
 
 /**
     determining whether the nodes of the supplied element are contained in the computational domain
@@ -1265,6 +1335,8 @@ void  PDE_Integrator<dim,CELLTYPE>::AccumulateSplitBoundaryIntegrals( const Mode
 
 
 
+=======
+>>>>>>> 2b476c5e (chore: added Edge class which permits line element Faces to know their higher-dim neighbors (3D only))
 /**
 
 LateAccumulate() adds source and sink terms into the righthand
@@ -1312,9 +1384,71 @@ void  PDE_Integrator<dim,CELLTYPE>::LateAccumulate( const ModelSubDomain<dim,CEL
              it_rhs.second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
            }
 
- } // end Late Accumulate
+ } // end LateAccumulate
 
 
+
+
+
+
+
+/**
+    For RHS vector accumulation of Neumann-flagged element integrals evaluated on Face objects.
+*/
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::AccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& comp_domain,
+                                                                 const Boundary<dim>& boundary )
+ {
+    // accumulating into the righhand vector 'rhs'
+    // --------------------------------------------------------------
+     for ( const auto& it_rhs : rhs_boundary_operators_ )
+       if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
+         for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
+           // if the material operand is flagged Neumann, an accumulation will be performed
+           // @attention it is assumed that the material operand has the same status at all integration points
+           if ( isContainedIn( comp_domain, *(*git) ) == true && (
+                ( it_rhs.second->MaterialOperandPlacement() == FACE &&
+                  (*git)->Status( it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ||
+                ( it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT &&
+                  (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ) )
+             {
+               it_rhs.second->GetOperands( *(*git) );
+               it_rhs.second->ComputeContribution( *(*git) );
+               if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+               it_rhs.second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
+             }
+   
+ } // AccumulateBoundaryIntegrals
+
+
+
+/**
+    Version for model subdomains other than "Model"
+*/
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::AccumulateBoundaryIntegrals()
+ {
+    // accumulating into the righhand vector 'rhs'
+    // --------------------------------------------------------------
+     for ( const auto& it_rhs : rhs_boundary_operators_ )
+       if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
+         for ( const auto& bit : boundary_faces_ )
+           // if the material operand is flagged Neumann, an accumulation will be performed
+           // @attention it is assumed that the material operand has the same status at all integration points
+           if ( ( it_rhs.second->MaterialOperandPlacement() == FACE &&
+                  bit->Status( it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ||
+                ( it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT &&
+                  bit->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) )
+             {
+               it_rhs.second->GetOperands( *bit );
+               it_rhs.second->ComputeContribution( *bit );
+               if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+               it_rhs.second->AssignToGlobal( *bit, rh_, DOF_indexes_ );
+             }
+   
+ } // AccumulateBoundaryIntegrals
 
 
 
@@ -1356,7 +1490,125 @@ void  PDE_Integrator<dim,CELLTYPE>::LateAccumulateBoundaryIntegrals( const Model
  } // end LateAccumulateBoundaryIntegrals
 
 
-// same but for SplitBoundary objects
+
+
+/**
+    Version for model subdomains other than "Model"
+*/
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::LateAccumulateBoundaryIntegrals()
+ {
+    // accumulating into the righhand vector 'rhs'
+    // --------------------------------------------------------------
+     for ( const auto& it_rhs : rhs_boundary_operators_ )
+       if ( it_rhs.second->AddLater() && it_rhs.second->SubtractLater() )
+         for ( const auto& bit : boundary_faces_ )
+           // if the material operand is flagged Neumann, an accumulation will be performed
+           // @attention it is assumed that the material operand has the same status at all integration points
+           if ( ( it_rhs.second->MaterialOperandPlacement() == FACE &&
+                  bit->Status( it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ||
+                ( it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT &&
+                  bit->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) )
+             {
+               it_rhs.second->GetOperands( *bit );
+               it_rhs.second->ComputeContribution( *bit );
+               if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+               it_rhs.second->AssignToGlobal( *bit, rh_, DOF_indexes_ );
+             }
+   
+ } // LateAccumulateBoundaryIntegrals
+
+
+
+/**
+    Coupling conditions / surface integrals applied to SplitBoundary objects
+*/
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::AccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& comp_domain,
+                                                                      const SplitBoundary<dim>& splitboundary )
+ {
+    // SKM NEW: accumulating into the sparse matrix 'G'
+    // ------------------------------------------------
+     for ( const auto& it_lhs : lhs_split_boundary_operators_ )
+       if ( !it_lhs.second->AddLater() && !it_lhs.second->SubtractLater() )
+         for ( auto git = splitboundary.CellsBegin(); git!=splitboundary.CellsEnd(); ++git  )
+           {
+              it_lhs.second->GetOperands( *(*git) );
+              it_lhs.second->ComputeContribution( *(*git) );
+              if ( it_lhs.second->MultiplyWithTimeIncrement() )
+                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
+              it_lhs.second->AssignToGlobal( *(*git), this->G_, pivotVector_, DOF_indexes_);
+           }
+
+    // accumulating into the righhand vector 'rhs'
+    // --------------------------------------------------------------
+     for ( const auto& it_rhs : rhs_split_boundary_operators_ )
+       if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
+         for ( auto git=splitboundary.CellsBegin(); git!=splitboundary.CellsEnd(); git++ )
+           // if the material operand is flagged Robin, the accumulation will be performed
+           // @attention it is assumed that the material operand has the same status at all integration points
+           if ( isContainedIn( comp_domain, *(*git) ) == true && (
+                ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE &&
+                  (*git)->Status( it_rhs.second->MaterialOperandKey() ) == ROBIN ) ||
+                ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT &&
+                  (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == ROBIN ) ) )
+             {
+               it_rhs.second->GetOperands( *(*git) );
+               it_rhs.second->ComputeContribution( *(*git) );
+               if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+               it_rhs.second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
+             }
+   
+ } // AccumulateSplitBoundaryIntegrals
+
+
+
+
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::AccumulateSplitBoundaryIntegrals()
+ {
+    // accumulating into the sparse matrix 'G'
+    // ------------------------------------------------
+     for ( const auto& it_lhs : lhs_split_boundary_operators_ )
+       if ( !it_lhs.second->AddLater() && !it_lhs.second->SubtractLater() )
+         for ( const auto& git : splitboundary_interfaces_ )
+           {
+              it_lhs.second->GetOperands( *git );
+              it_lhs.second->ComputeContribution( *git );
+              if ( it_lhs.second->MultiplyWithTimeIncrement() )
+                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
+              it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_);
+           }
+
+    // accumulating into the righhand vector 'rhs'
+    // --------------------------------------------------------------
+     for ( const auto& it_rhs : rhs_split_boundary_operators_ )
+       if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
+         for (  const auto& git : splitboundary_interfaces_ )
+           // if the material operand is flagged Robin, the accumulation will be performed
+           // @attention it is assumed that the material operand has the same status at all integration points
+           if ( ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE &&
+                  git->Status( it_rhs.second->MaterialOperandKey() ) == ROBIN ) ||
+                ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT &&
+                  git->Status( 0U, it_rhs.second->MaterialOperandKey() ) == ROBIN ) )
+             {
+               it_rhs.second->GetOperands( *git );
+               it_rhs.second->ComputeContribution( *git );
+               if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+               it_rhs.second->AssignToGlobal( *git, rh_, DOF_indexes_ );
+             }
+   
+ } // AccumulateSplitBoundaryIntegrals
+
+
+
+
+/**
+    Coupling conditions / surface integrals applied to SplitBoundary objects
+*/
 template<uint32_t dim,template<uint32_t> class CELLTYPE>
 void  PDE_Integrator<dim,CELLTYPE>::LateAccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& comp_domain,
                                                                           const SplitBoundary<dim>& splitboundary )
@@ -1374,6 +1626,7 @@ void  PDE_Integrator<dim,CELLTYPE>::LateAccumulateSplitBoundaryIntegrals( const 
               it_lhs.second->AssignToGlobal( *(*git), this->G_, pivotVector_, DOF_indexes_);
            }
 
+<<<<<<< HEAD
     // E.P New: accumulating as late addition into the righhand vector 'rhs'
     // ------------------------------------------------------------
      for ( const auto& it_rhs : rhs_split_boundary_operators_ )
@@ -1394,20 +1647,77 @@ void  PDE_Integrator<dim,CELLTYPE>::LateAccumulateSplitBoundaryIntegrals( const 
      for ( const auto& it_rhs : rhs_split_boundary_operators_ )
        if ( it_rhs.second->AddLater() || it_rhs.second->SubtractLater() )
          for ( auto git=splitboundary.CellsBegin(); git!=splitboundary.CellsEnd(); git++ ){
+=======
+    // accumulating into the righhand vector 'rhs'
+    // --------------------------------------------------------------
+     for ( const auto& it_rhs : rhs_split_boundary_operators_ )
+       if ( it_rhs.second->AddLater() && it_rhs.second->SubtractLater() )
+         for ( auto git=splitboundary.CellsBegin(); git!=splitboundary.CellsEnd(); git++ )
+           // if the material operand is flagged Robin, the accumulation will be performed
+           // @attention it is assumed that the material operand has the same status at all integration points
+>>>>>>> 2b476c5e (chore: added Edge class which permits line element Faces to know their higher-dim neighbors (3D only))
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
                 ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE &&
                   (*git)->Status( it_rhs.second->MaterialOperandKey() ) == ROBIN ) ||
                 ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT &&
-                  (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ) )
+                  (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == ROBIN ) ) )
              {
                it_rhs.second->GetOperands( *(*git) );
                it_rhs.second->ComputeContribution( *(*git) );
                if ( it_rhs.second->MultiplyWithTimeIncrement() )
                  it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
-               it_rhs.second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
+               it_rhs.second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
              }
+<<<<<<< HEAD
     */
  } // end LateAccumulateBoundaryIntegrals
+=======
+   
+ } // LateAccumulateSplitBoundaryIntegrals
+
+
+
+
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::LateAccumulateSplitBoundaryIntegrals()
+ {
+    // SKM NEW: accumulating into the sparse matrix 'G'
+    // ------------------------------------------------
+     for ( const auto& it_lhs : lhs_split_boundary_operators_ )
+       if ( it_lhs.second->AddLater() && it_lhs.second->SubtractLater() )
+         for ( const auto& git : splitboundary_interfaces_  )
+           {
+              it_lhs.second->GetOperands( *git );
+              it_lhs.second->ComputeContribution( *git );
+              if ( it_lhs.second->MultiplyWithTimeIncrement() )
+                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
+              it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_);
+           }
+
+    // accumulating into the righhand vector 'rhs'
+    // --------------------------------------------------------------
+     for ( const auto& it_rhs : rhs_split_boundary_operators_ )
+       if ( it_rhs.second->AddLater() && it_rhs.second->SubtractLater() )
+         for ( const auto& git : splitboundary_interfaces_  )
+           if ( ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE &&
+                  git->Status( it_rhs.second->MaterialOperandKey() ) == ROBIN ) ||
+                ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT &&
+                  git->Status( 0U, it_rhs.second->MaterialOperandKey() ) == ROBIN ) )
+             {
+               it_rhs.second->GetOperands( *git );
+               it_rhs.second->ComputeContribution( *git );
+               if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+               it_rhs.second->AssignToGlobal( *git, rh_, DOF_indexes_ );
+             }
+   
+ } // LateAccumulateSplitBoundaryIntegrals
+
+
+
+
+
+>>>>>>> 2b476c5e (chore: added Edge class which permits line element Faces to know their higher-dim neighbors (3D only))
 
 
 
@@ -1710,6 +2020,14 @@ void PDE_Integrator<dim,CELLTYPE>::IntegrateOver( ModelSubDomain<dim,CELLTYPE>& 
  {
     // 1. configure algorithm
     EstablishMatrixSetup( domain );
+    
+    if ( !rhs_boundary_operators_.empty() ||
+         !rhs_split_boundary_operators_.empty() ||
+         !lhs_split_boundary_operators_.empty() )
+      throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::IntegrateOver( ModelSubDomain)",
+                            "this method only works if there are no split boundary or boundary integrals");
+
+ 
     if ( !rhs_boundary_operators_.empty() )
       throw csmp::Exception( ERROR, "PDE_Integrator<>::IntegrateOver(domain):",
                             "integrator contains Boundary object integrals; call IntegrateOver(model,domain), such that boundary objects can be considered." );
@@ -1752,7 +2070,6 @@ void PDE_Integrator<dim,CELLTYPE>::IntegrateOver( ModelSubDomain<dim,CELLTYPE>& 
 
 
 
-
 /** 
     Accumulates element integrals, but
     simultaneously considering potential Boundary objects associated with the simplicial complex.
@@ -1770,21 +2087,145 @@ void PDE_Integrator<dim,CELLTYPE>::IntegrateOver( Model<dim>& model,
                                                   ModelSubDomain<dim,CELLTYPE>& domain,
                                                   bool debug )
  {
-    // 1. configure algorithm
-    EstablishMatrixSetup( domain );
+    // 1. configure operators and linear algebraic system
+    if ( EstablishMatrixSetup( domain ) == true ) {
+         // collecting Faces and InterFaces if boundary integrals need to be accumulated
+         if ( !rhs_boundary_operators_.empty() ) {
+              if constexpr ( is_same<CELLTYPE<dim>,Element<dim>>::value )
+               collectBorderFacesOfComputationRegion( model, domain, boundary_faces_ );
+           }
+         if ( !lhs_split_boundary_operators_.empty() || !rhs_split_boundary_operators_.empty() ) {
+              if constexpr ( is_same<CELLTYPE<dim>,Element<dim>>::value )
+               collectInterfacesInComputationRegion( model, domain, splitboundary_interfaces_ );
+           }
+       }
 
     // 2. Accumulation: Note that the conditions that pertain to the group must be input !
     Accumulate( domain );
+    
+     // 2.1 Accumulation of potential boundary integrals from Boundary objects that share nodes with the model subdomain of interest
+    if ( !rhs_boundary_operators_.empty() ) {
+        if ( domain.Name() == "Model" ) {
+            cout <<"\nPDE_Integrator<dim,CELLTYPE>::IntegrateOver: ";
+            cout <<" accumulating boundary integrals from: ";
+            for ( auto bit=model.BoundariesBegin(); bit!=model.BoundariesEnd(); ++bit ) {
+                 const Boundary<dim>& domain_boundary = model.Boundary( (*bit).first.c_str() );
+                 cout <<" '"<< domain_boundary.Name() <<"'";
+                 AccumulateBoundaryIntegrals( domain, domain_boundary );
+              }
+            cout << endl;
+          }
+        // the prestored Face objects are used
+        else AccumulateBoundaryIntegrals();
+      }
+
+    // 2.2 Accumulation of potential split-boundary integrals from SplitBoundary objects inside of model subdomain of interest
+    if ( !lhs_split_boundary_operators_.empty() || !rhs_split_boundary_operators_.empty() ) {
+        if ( domain.Name() == "Model" ) {
+            cout <<"\nPDE_Integrator<dim,CELLTYPE>::IntegrateOver: ";
+            cout <<" accumulating splitboundary integrals from: ";
+            for ( auto sb=model.SplitBoundariesBegin(); sb!=model.SplitBoundariesEnd(); ++sb ) {
+                 const SplitBoundary<dim>& split_boundary = model.SplitBoundary( (*sb).first.c_str() );
+                 cout <<" '"<< split_boundary.Name() <<"'";
+                 AccumulateSplitBoundaryIntegrals( domain, split_boundary );
+              }
+           }
+         // the prestored InterFace objects are used
+         else AccumulateSplitBoundaryIntegrals();
+      }
    
+<<<<<<< HEAD
     // TODO: these substeps should only be done once when the problem is setup
     // 2.1 Accumulation of potential boundary integrals from Boundary objects that share nodes with the model subdomain
     list<string> shared_boundaries = IdentifySharedBoundaries( model, domain );
+=======
+
+    // 3. If the computation is transient initial conditions must be input into the righthand vector
+    if ( Transient() == true ) AssignInitialConditions( domain );
+
+    // 4. If the computation is transient initial conditions must be input into the righthand vector
+    if ( Transient() == true ) {
+         LateAccumulate( domain );
+        if ( !rhs_boundary_operators_.empty() ) {
+            if ( domain.Name() == "Model" ) {
+                cout <<"\nPDE_Integrator<dim,CELLTYPE>::IntegrateOver: ";
+                cout <<" late accumulating boundary integrals from: ";
+                for ( auto bit=model.BoundariesBegin(); bit!=model.BoundariesEnd(); ++bit ) {
+                     const Boundary<dim>& domain_boundary = model.Boundary( (*bit).first.c_str() );
+                     cout <<" '"<< domain_boundary.Name() <<"'";
+                     LateAccumulateBoundaryIntegrals( domain, domain_boundary );
+                  }
+                cout << endl;
+              }
+            // the prestored Face objects are used
+            else LateAccumulateBoundaryIntegrals();
+          }
+
+        // 2.2 Accumulation of potential split-boundary integrals from SplitBoundary objects inside of model subdomain of interest
+        if ( !lhs_split_boundary_operators_.empty() || !rhs_split_boundary_operators_.empty() ) {
+            if ( domain.Name() == "Model" ) {
+                cout <<"\nPDE_Integrator<dim,CELLTYPE>::IntegrateOver: ";
+                cout <<" late accumulating splitboundary integrals from: ";
+                for ( auto sb=model.SplitBoundariesBegin(); sb!=model.SplitBoundariesEnd(); ++sb ) {
+                     const SplitBoundary<dim>& split_boundary = model.SplitBoundary( (*sb).first.c_str() );
+                     cout <<" '"<< split_boundary.Name() <<"'";
+                     LateAccumulateSplitBoundaryIntegrals( domain, split_boundary );
+                  }
+               }
+             // the prestored InterFace objects are used
+             else LateAccumulateSplitBoundaryIntegrals();
+          }
+      }
+
+    // 5. assign conditions like Dirichlet or Neumann boundary conditions etc.
+    AssignEssentialConditions( domain );
+    
+    // Couple domains across split boundaries if continuity of the solution variable(s) is desired
+    // TODO: check whether this diagnostic is the correct one?
+    if ( !lhs_split_boundary_operators_.empty() || !rhs_split_boundary_operators_.empty() )
+      CoupleDomainsAcrossSplitBoundary( domain );
+
+    // 6. diagnostics
+    if ( debug ) {
+         Out();
+         OutputGlobals();
+         // OutputInput();
+      }
+   
+    // 7. invert global matrix
+    Solve();
+
+    // 8. write results back into Model
+    OutputResults( domain );
+                           
+    // 9. Calculation of result-dependent properties
+    PostProcess( domain );
+
+ } // end IntegrateOver
+ 
+ 
+ 
+ 
+ // SKM_TEST checks whether the contributions are written to the correct nodes
+//csmp::Index test_key = model.Database().StorageKey("test variable");
+//for ( size_t i{0U}; i<domain.Nodes(); i++ )
+// domain.N(i)->Store( test_key, makeScalar(PLAIN, rh_[i] ) );
+ 
+
+ 
+ /* CUTOUTS
+     // 2.1 Accumulation of potential boundary integrals from Boundary objects that share nodes with the model subdomain of interest
+    list<string> shared_boundaries;
+    // enlist boundaries that contact the current computational domain
+    IdentifySharedBoundaries( model, domain, shared_boundaries );
+>>>>>>> 2b476c5e (chore: added Edge class which permits line element Faces to know their higher-dim neighbors (3D only))
     if ( !shared_boundaries.empty() )
       AccumulateBoundaries(model, domain, shared_boundaries);
 
     // 2.2 Accumulation of potential split-boundary integrals from SplitBoundary objects inside of model subdomain of interest
     list<string> contained_splitboundaries = IdentifySharedSplitBoundaries( model, domain);
     if ( !contained_splitboundaries.empty() )
+<<<<<<< HEAD
       AccumulateSplitBoundaries(model,domain, contained_splitboundaries);
 
     // 3. If the computation is transient initial conditions must be input into the righthand vector
@@ -1835,6 +2276,15 @@ void PDE_Integrator<dim,CELLTYPE>::IntegrateOver( Model<dim>& model,
     PostProcess( domain );
 
  } // end IntegrateOver
+=======
+          for ( const auto& it : contained_splitboundaries ) {
+               const SplitBoundary<dim>& split_boundary = model.SplitBoundary( it.c_str() );
+               cout <<"\nPDE_Integrator<dim,CELLTYPE>::IntegrateOver: ";
+               cout <<" accumulating splitboundary integrals from: '"<< it <<"'\n";
+               AccumulateSplitBoundaryIntegrals( domain, split_boundary );
+            }
+ */
+>>>>>>> 2b476c5e (chore: added Edge class which permits line element Faces to know their higher-dim neighbors (3D only))
  
  
  
@@ -1923,6 +2373,137 @@ std::list<std::string> PDE_Integrator<dim,CELLTYPE>::IdentifySharedSplitBoundari
   return contained_splitboundaries;
 
 }
+
+/**
+    Collects pointers to Faces that may be needed to accumulate surface integrals on the computational domain.
+    Reports whether any faces were identified.
+    
+    Two cases are considered:
+        1. If the computational domain is Model, all boundaries will be considered automatically and the 'boundary_faces' vector stays uninitialsed
+        2. When computations are performed on a model subdomain the Faces that share higher-dimensional elements with it are recorded.
+        
+    @return reports on whether a Face*  vector was initialised
+    
+*/
+template<uint32_t dim>
+bool collectBorderFacesOfComputationRegion( const Model<dim>& model,
+                                            const ModelSubDomain<dim,Element>& comp_domain,
+                                            vector<const Face<dim>*>& boundary_faces )
+  {
+     // forgetting older settings
+     boundary_faces.clear();
+     
+     // in computations on the "Model" all boundaries are considered automatically
+     if ( comp_domain.Name() == "Model" ) return false;
+     
+     // searching existing faces to see whether their parents are situated on the boundary of
+     // the computational domain
+     for ( auto ft=model.Mesh().FacesBegin(); ft!=model.Mesh().FacesEnd(); ++ft ) {
+          // all Faces have higher-dim element parents on the inside
+          if ( comp_domain.IsPerimeterCell( (*ft).InnerParent() ) ) {
+               // cast needed because of issue with constness in plf::colony
+               boundary_faces.push_back( &(*ft) );
+            }
+          // the outside is considered, but only if there are elements there
+          else if ( (*ft).OuterParent() && comp_domain.IsPerimeterCell( (*ft).OuterParent() ) ) {
+                boundary_faces.push_back( &(*ft) );
+            }
+        }
+     // vector will be unique already, but may be too big
+     boundary_faces.shrink_to_fit();
+       
+     // reporting results
+     if ( boundary_faces.empty() ) return false;
+     return true;
+     
+  } // end collectBorderFacesOfComputationRegion
+
+template bool collectBorderFacesOfComputationRegion( const Model<3U>&, const ModelSubDomain<3U,Element>&, vector<const Face<3U>*>& );
+template bool collectBorderFacesOfComputationRegion( const Model<2U>&, const ModelSubDomain<2U,Element>&, vector<const Face<2U>*>& );
+template bool collectBorderFacesOfComputationRegion( const Model<1U>&, const ModelSubDomain<1U,Element>&, vector<const Face<1U>*>& );
+
+
+/**
+      Same as above but for computations on boundaries that are rimmed by line faces.
+      But method has to identify the higher-dimensional face neighbors of the line faces without being able to use inner or outer parent elements.
+      
+      @todo we must make sure that these line faces are not included into the computational domain! - Create new type ?
+      @todo an edge could be a lower-dimensional face that knows its higher dimensional faces
+       
+*/
+/*
+template<uint32_t dim>
+bool collectBorderFacesOfComputationBoundary( const Model<dim>& model, const Boundary<dim>& comp_domain,
+                                              vector<const csmp::Edge<dim>* const>& boundary_faces )
+  {
+     // forgetting older settings
+     boundary_faces.clear();
+     
+     // in computations on the "Model" all boundaries are considered automatically
+     if ( comp_domain.Name() == "Model" ) return false;
+     
+     // searching existing faces to see whether their parents are situated on the boundary of
+     // the computational domain
+     for ( auto ft=model.Mesh().EdgesBegin(); ft!=model.Mesh().EdgesEnd(); ++ft ) {
+          // all Faces have higher-dim element parents on the inside
+          if ( comp_domain.IsPerimeterCell( (*ft).InnerParent() ) ) {
+               boundary_faces.push_back( &(*ft) );
+            }
+          // the outside is considered, but only if there are elements there
+          else if ( (*ft).OuterParent() && comp_domain.IsPerimeterCell( (*ft).OuterParent() ) ) {
+                boundary_faces.push_back( &(*ft) );
+            }
+        }
+       
+     // reporting results
+     if ( boundary_faces.empty() ) return false;
+     return true;
+     
+  } // end collectBorderFacesOfComputationDomain
+
+template bool collectBorderFacesOfComputationBoundary( const Model<3U>&, const Boundary<3U>&, vector<const Edge<3U>* const>& );
+template bool collectBorderFacesOfComputationBoundary( const Model<2U>&, const Boundary<2U>&, vector<const Edge<2U>* const>& );
+template bool collectBorderFacesOfComputationBoundary( const Model<1U>&, const Boundary<1U>&, vector<const Edge<1U>* const>& );
+*/
+
+
+/**
+    Collects pointers to  InterFaces that may be needed to accumulate splitboundary integrals on a computational domain consisting of elements.
+    Only those interfaces are considered are considered that have both higher-dim parents inside of the computational domain.
+      
+*/
+template<uint32_t dim>
+bool collectInterfacesInComputationRegion( const Model<dim>& model, const ModelSubDomain<dim,Element>& comp_domain,
+                                           vector<const InterFace<dim>*>& splitboundary_interfaces )
+ {
+     // forgetting older settings
+     splitboundary_interfaces.clear();
+     
+     // in computations on the "Model" all splitboundaries will be considered automatically
+     if ( comp_domain.Name() == "Model" ) return false;
+     
+     // searching existing faces to see whether their parents are situated on the boundary of
+     // the computational domain
+     for ( auto ift=model.Mesh().InterFacesBegin(); ift!=model.Mesh().InterFacesEnd(); ++ift ) {
+          // all Faces have higher-dim element parents on the inside
+          if ( comp_domain.IsPerimeterCell( (*ift).InnerParent() ) &&
+               comp_domain.IsPerimeterCell( (*ift).OuterParent() ) ) {
+               splitboundary_interfaces.push_back( const_cast<InterFace<dim>* const>(&(*ift)) );
+            }
+        }
+     // vector will be unique already, but may be too big
+     splitboundary_interfaces.shrink_to_fit();
+       
+     // reporting results
+     if ( splitboundary_interfaces.empty() ) return false;
+     return true;
+
+ } // end collectInterfacesInComputationRegion
+
+template bool collectInterfacesInComputationRegion( const Model<3U>&, const ModelSubDomain<3U,Element>&, vector<const InterFace<3U>*>& );
+template bool collectInterfacesInComputationRegion( const Model<2U>&, const ModelSubDomain<2U,Element>&, vector<const InterFace<2U>*>& );
+template bool collectInterfacesInComputationRegion( const Model<1U>&, const ModelSubDomain<1U,Element>&, vector<const InterFace<1U>*>& );
+
 
 
 /**

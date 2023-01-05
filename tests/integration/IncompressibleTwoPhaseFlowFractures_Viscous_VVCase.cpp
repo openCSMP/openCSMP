@@ -1,4 +1,7 @@
 #include "IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h"
+#include "Model.h"
+#include "SplitBoundary.h"
+#include "Boundary.h"
 #include "ModelComparator.h"
 #include "VSet.h"
 

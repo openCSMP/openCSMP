@@ -110,11 +110,11 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     SplitBoundary<dim>&  operator=( const SplitBoundary& );
 
     /// applies visitor to split boundary
-    virtual void Accept( Visitor<dim>& );
+    virtual void Accept( Visitor<dim>& ) override;
     
     /// methods required for the LocalVariableStorage
-    virtual PLACEMENT Placement() const { return SPLIT_BOUNDARY; }
-    virtual bool ValidVariable( const char* variableName ) const;
+    virtual PLACEMENT Placement() const override { return SPLIT_BOUNDARY; }
+    virtual bool ValidVariable( const char* variableName ) const override;
 
 
     // --------------------------------------------------

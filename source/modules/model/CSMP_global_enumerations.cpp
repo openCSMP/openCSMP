@@ -6,6 +6,7 @@
 #include "FlaggedArrayVariable.h"
 #include "Region.h"
 #include "Boundary.h"
+#include "Edge.h"
 #include "SplitBoundary.h"
 #include "Exception.h"
 
@@ -181,6 +182,10 @@ template<>  PLACEMENT parsePlacement<3U,Element>() { return ELEMENT; }
 template<>  PLACEMENT parsePlacement<1U,Face>() { return FACE; }
 template<>  PLACEMENT parsePlacement<2U,Face>() { return FACE; }
 template<>  PLACEMENT parsePlacement<3U,Face>() { return FACE; }
+
+template<>  PLACEMENT parsePlacement<1U,Edge>() { return FACE; }
+template<>  PLACEMENT parsePlacement<2U,Edge>() { return FACE; }
+template<>  PLACEMENT parsePlacement<3U,Edge>() { return FACE; }
 
 template<>  PLACEMENT parsePlacement<1U,InterFace>() { return INTER_FACE; }
 template<>  PLACEMENT parsePlacement<2U,InterFace>() { return INTER_FACE; }

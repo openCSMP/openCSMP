@@ -81,6 +81,7 @@ enum PLACEMENT : std::int8_t { UNDEFINED, // default
                                FACE_INTEGRATION_POINT,
                                FACE_SECTOR_INTEGRATION_POINT,
                                FACE_FACET_INTEGRATION_POINT,
+                               EDGE, ///< only in 3D
                                INTER_FACE,
                                INTER_FACE_INTEGRATION_POINT,
                                INTER_FACE_SECTOR_INTEGRATION_POINT,

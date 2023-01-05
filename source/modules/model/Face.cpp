@@ -780,7 +780,7 @@ void Face<dim>::Accept( csmp::Visitor<dim>& vis )
          return;
       }
     if ( vis.ApplicationTarget() == NODE ) {
-         size_t n_nodes(this->Nodes());
+         uint32_t n_nodes{ this->Nodes() };
          for ( auto i{0U}; i< n_nodes; i++ )
              this->N(i)->Accept( vis );
          return;

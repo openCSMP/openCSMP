@@ -1,4 +1,6 @@
 #include "Model.h"
+#include "Boundary.h"
+#include "SplitBoundary.h"
 #include "VSet.h"
 #include "VSetConverter.h"
 #include "ModelTopology.h"

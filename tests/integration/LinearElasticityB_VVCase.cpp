@@ -1,5 +1,7 @@
 #include "LinearElasticityB_VVCase.h"
 #include "ANSYS_Model2D.h"
+#include "Model.h"
+#include "Boundary.h"
 #include "VTU_Interface.h"
 #include "LinearSolver.h"
 #include "PDE_Integrator.h"

@@ -1,4 +1,6 @@
 #include "Geothermal_pseudo1D_VVCase.h"
+#include "Model.h"
+#include "Boundary.h"
 
 using namespace std;
 

@@ -1,6 +1,7 @@
 #include "StreamFunction_Example.h"
 
 #include "Model.h"
+#include "Boundary.h"
 #include "Region.h"
 #include "PDE_Integrator.h"
 #include "CSMP_highLevelUtilities.h"

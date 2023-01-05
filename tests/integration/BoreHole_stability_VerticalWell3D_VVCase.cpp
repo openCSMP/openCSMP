@@ -1,4 +1,7 @@
 #include "ANSYS_Model3D.h"
+#include "Model.h"
+#include "Boundary.h"
+//#include "SplitBoundary.h"
 #include "VTU_Interface.h"
 #include "LinearSolver.h"
 #include "PDE_Integrator.h"

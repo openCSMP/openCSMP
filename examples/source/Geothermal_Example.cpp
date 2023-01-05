@@ -3,6 +3,7 @@
 #include "ModelTime.h"
 #include "GlobalVerbose.h"
 #include "Model.h"
+#include "Boundary.h"
 #include "VTU_Interface.h"
 #include "ANSYS_Model2D.h"
 #include "SAMG_Solver.h"

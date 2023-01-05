@@ -1,15 +1,9 @@
 #ifndef CSMP_PDE_INTEGRATOR_H
 #define CSMP_PDE_INTEGRATOR_H
 
-#include "CSMP_definitions.h"
-#include "SparseMatrix.h"
-
-#include "Region.h"
-#include "Boundary.h"
-#include "SplitBoundary.h"
-
 #include "MathOperatorRHS.h"
 #include "MathOperatorLHS.h"
+#include "SparseMatrix.h"
 
 namespace csmp {
 
@@ -17,6 +11,11 @@ template<uint32_t> class Element;
 template<uint32_t> class Face;
 template<uint32_t> class InterFace;
 template<uint32_t> class NimbleRegion;
+template<uint32_t> class Model;
+template<uint32_t,template<uint32_t> class> class ModelSubDomain;
+template<uint32_t> class Region;
+template<uint32_t> class Boundary;
+template<uint32_t> class SplitBoundary;
 class Solver;
 
 class PDE_Integrator_Test;
@@ -288,6 +287,7 @@ class PDE_Integrator {
     bool          Transient() const;
   
     /// accumulates, assembles, and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file; uses node numbering
+    // TODO: do we need this method
     void          IntegrateOver( ModelSubDomain<dim,CELLTYPE>&, bool debug=false );
 
     /// also considers  "dS" pde operators from Boundary or SplitBoundary objects if these share nodes with domain on which the solution is obtained
@@ -332,6 +332,7 @@ class PDE_Integrator {
 
   protected:
 
+<<<<<<< HEAD
     /// checks whether any Boundary object in the model is a surface of the computational domain
     std::list<std::string> IdentifySharedBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&);
   
@@ -341,6 +342,15 @@ class PDE_Integrator {
 
     /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved
     virtual void  EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& );
+=======
+    /// checks whether (returns true) any Boundary object in the model is a surface of the computational domain
+    // TODO: good but super expensive
+    bool IdentifySharedBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&,
+                                   std::list<std::string>& shared_boundaries );
+  
+    /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved, but without boundary or splitboundary integrals
+    virtual bool EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& );
+>>>>>>> 2b476c5e (chore: added Edge class which permits line element Faces to know their higher-dim neighbors (3D only))
 
     /// for the elimination of Dirichlet constraints from the solution matrix; called after EstablishMatrixSetup but before accumulation
     void  ReduceSystemSizeEliminatingEssentialConditions( const ModelSubDomain<dim,CELLTYPE>& , size_t total_degrees_of_freedom);
@@ -354,6 +364,7 @@ class PDE_Integrator {
     /// accumulates finite element integrals into solution matrix and right-hand side; uses node numbering
     virtual void  Accumulate( const ModelSubDomain<dim,CELLTYPE>& );
 
+<<<<<<< HEAD
     /// accumulates finite element integrals for Faces into right-hand side for boundaries provided; uses node numbering
     virtual void AccumulateBoundaries(  Model<dim>& , ModelSubDomain<dim,CELLTYPE>&, std::list<std::string> shared_boundaries );
 
@@ -367,14 +378,28 @@ class PDE_Integrator {
     /// accumulation of Robin-type boundary conditions to SplitBoundary interfaces
     virtual void  AccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const SplitBoundary<dim>& );
 
+=======
+>>>>>>> 2b476c5e (chore: added Edge class which permits line element Faces to know their higher-dim neighbors (3D only))
     /// accumulates finite-element integrals to matrix and vector after the corresponding entries were already multiplied with the initial conditions; uses node numbering
     virtual void  LateAccumulate( const ModelSubDomain<dim,CELLTYPE>& );
 
+    /// accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
+    virtual void  AccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const Boundary<dim>& );
+    /// version that uses 'boundary_faces_' to accumulate over
+    virtual void  AccumulateBoundaryIntegrals();
+    
+    /// accumulation of Robin-type boundary conditions to SplitBoundary interfaces
+    virtual void  AccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const SplitBoundary<dim>& );
+    /// version that uses 'splitboundary_interfaces_' to accumulate over
+    virtual void  AccumulateSplitBoundaryIntegrals();
+
     /// late accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
     virtual void  LateAccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const Boundary<dim>& );
+    virtual void  LateAccumulateBoundaryIntegrals();
     virtual void  LateAccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const SplitBoundary<dim>& );
+    virtual void  LateAccumulateSplitBoundaryIntegrals();
     
-    /// couples domains separated by SplitBoundaries using the information from NodeManifolds
+    /// couples domains separated by SplitBoundaries using the information from NodeManifolds @todo:  refactor this method from Luat to increase efficiency
     void CoupleDomainsAcrossSplitBoundary( ModelSubDomain<dim,CELLTYPE>& );
 
     /// calls connected solver object to find x in G x = rh problem
@@ -392,8 +417,11 @@ class PDE_Integrator {
     std::map<std::string,MathOperatorRHS<dim,Face>*>      rhs_boundary_operators_;  ///< surface integrals for accumulation over boundary
     std::map<std::string,MathOperatorLHS<dim,InterFace>*> lhs_split_boundary_operators_;  ///< implicit integral coupling terms for SplitBoundary
     std::map<std::string,MathOperatorRHS<dim,InterFace>*> rhs_split_boundary_operators_;  ///< explicit integral coupling terms for SplitBoundary
-    std::map<Parameter,size_t>                            basic_operands_;
-    std::map<Parameter,size_t>                            test_operands_;           ///< dependent variables in the solved system of equations
+    std::map<csmp::Parameter,size_t>                      basic_operands_;
+    std::map<csmp::Parameter,size_t>                      test_operands_;           ///< dependent variables in the solved system of equations
+  
+    std::vector<const csmp::Face<dim>*>       boundary_faces_;           ///< empty if computation applies to entire model; else Faces needed for dS integrals
+    std::vector<const csmp::InterFace<dim>*>  splitboundary_interfaces_; ///< empty if computation applies to entire model; else InterFaces needed for domain coupling
 
     SparseMatrix          G_;           ///< solution matrix
     std::vector<double>   rh_;          ///< righthand vector
@@ -419,6 +447,18 @@ class PDE_Integrator {
     
     friend PDE_Integrator_Test;
 };
+
+
+/// collects pointers to Faces that may be needed to accumulate surface integrals on a computational domain consisting of elements
+template<uint32_t dim>
+bool collectBorderFacesOfComputationRegion( const Model<dim>&, const ModelSubDomain<dim,Element>&,
+                                            std::vector<const csmp::Face<dim>*>& boundary_faces );
+    
+/// collects pointers to  InterFaces that may be needed to accumulate splitboundary integrals on a computational domain consisting of elements
+template<uint32_t dim>
+bool collectInterfacesInComputationRegion( const Model<dim>&, const ModelSubDomain<dim,Element>&,
+                                           std::vector<const csmp::InterFace<dim>*>& splitboundary_interfaces );
+ 
 
 } // csmp
 

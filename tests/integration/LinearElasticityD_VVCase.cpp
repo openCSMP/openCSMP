@@ -7,9 +7,11 @@
 #include "NumIntegral_BT_D_B_dV.h"
 #include "StressesAndStrains2.h"
 #include "ExtractTensorVariableComponent.h"
+#include "Model.h"
+#include "Boundary.h"
+#include "SplitBoundary.h"
 
 using namespace std;
-
 
 namespace csmp
   {

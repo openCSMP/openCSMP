@@ -1,6 +1,10 @@
 #include "InflowOutflowCalculation_VVCase.h"
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
+
+#include "Model.h"
+#include "Boundary.h"
+
 #include "LinearSolver.h"
 #include "PropertyHandle.h"
 #include "PDE_Integrator.h"

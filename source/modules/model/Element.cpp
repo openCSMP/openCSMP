@@ -289,8 +289,7 @@ void Element<dim>::Accept( csmp::Visitor<dim>& vis )
     return;
   }
   if ( vis.ApplicationTarget() == NODE ) {
-    for ( typename vector<csmp::Node<dim>*>::iterator
-          nit = node_connector_.begin(); nit != node_connector_.end(); nit++ ) (*nit)->Accept( vis );
+    for ( auto& nit : node_connector_ ) nit->Accept( vis );
       return;
   }
   throw logic_error( "Element<dim>::Accept: target of visitation unresolved." );

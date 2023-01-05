@@ -10,6 +10,8 @@ enum SPATIAL_DERIVATIVE { X_DIRECTION=0, Y_DIRECTION=1, Z_DIRECTION=2 };
 
 std::string parse( SPATIAL_DERIVATIVE );
 
+template<uint32_t> class Element;
+
 /**
     Volume integral over the gradient of the Operand in the direction i (i=x,y,z).
     Accumulation into the right-hand side of the linear algebraic system Ax=b
@@ -19,7 +21,7 @@ std::string parse( SPATIAL_DERIVATIVE );
     @note created to compute a grad P right-handside for a 2-step Stokes
     lubrication solver.
 */
-template<uint32_t dim, template<uint32_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_DNi_rhsop_dV : public MathOperatorRHS<dim,CELL> {
   public:
     NumIntegral_DNi_rhsop_dV( const PropertyDatabase<dim>&,

@@ -1,4 +1,7 @@
 #include "ANSYS_Model2D.h"
+#include "Model.h"
+#include "Boundary.h"
+//#include "SplitBoundary.h"
 #include "VTU_Interface.h"
 #include "LinearSolver.h"
 #include "PDE_Integrator.h"
@@ -38,7 +41,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
       const ScalarVariable zeroScalar( PLAIN, 0. );
       const VectorVariable<2U> zeroVector( PLAIN, 0. );
-   //   const VectorVariable<DIM> zeroVectorDirichlet( DIRICH, 0. );
+      //   const VectorVariable<DIM> zeroVectorDirichlet( DIRICH, 0. );
 
       // establishing model & output facility
       string input_file_name(prefix_);

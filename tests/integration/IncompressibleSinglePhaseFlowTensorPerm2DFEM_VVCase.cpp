@@ -88,7 +88,7 @@ void IncompressibleSinglePhaseFlowTensorPerm2DFEM_VVCase::run()
     //Assemble the integrator
     pressure_diffusion.Add( &stiffness );
     pressure_diffusion.Add( &fluid_src );
-    pressure_diffusion.IntegrateOver( model.Region("Model") );
+    pressure_diffusion.IntegrateOver( model, model.Region("Model") );
     // END CORE SECTION
     //------------------------------------
 

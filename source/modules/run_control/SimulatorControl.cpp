@@ -1,4 +1,8 @@
 #include "SimulatorControl.h"
+#include "Model.h"
+#include "Boundary.h"
+#include "SplitBoundary.h"
+
 #ifdef _OPENMP
 #include "omp.h"
 #endif

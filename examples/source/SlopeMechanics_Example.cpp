@@ -275,7 +275,7 @@ void SlopeMechanics_Example::Run()
     printRangeOfVariable( model, "Youngs modulus" );
     printRangeOfVariable( model, "Poissons ratio" );
     printRangeOfVariable( model, "gravity force" );
-    deformation.IntegrateOver( model_domain );
+    deformation.IntegrateOver( model, model_domain );
     // among other things the stresses and strains operator computes the (FE-based) (elastic) dilatation
     printRangeOfVariable( model, "displacement" );
   

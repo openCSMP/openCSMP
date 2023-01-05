@@ -381,7 +381,7 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
         // computation
         Region<2> target_domain(model.Region(target_region));
         Out();
-        extrapolator.IntegrateOver( target_domain );
+        extrapolator.IntegrateOver( model, target_domain );
 
         // interpolating nodal values back to the element barycentres in the region
         for ( auto it=target_domain.CellsBegin(); it!=target_domain.CellsEnd(); ++it )

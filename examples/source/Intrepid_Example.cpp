@@ -14,7 +14,9 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "PDE_Integrator.h"
-#include "Face.h"
+#include "Model.h"
+#include "Boundary.h"
+
 #include "NumIntegral_NT_op_N_dS.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"

@@ -1431,7 +1431,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
                property_int_samg.Add(&stiffness_matrix);
                property_int_samg.Add(&source);            
                // Laplace interpolatation of unknown values
-               property_int_samg.IntegrateOver(gref);
+               property_int_samg.IntegrateOver( model, gref );
             }
           //Interpolate nodal values to elements using the element temp variable container
           gref.InterpolateNodeToCellProperty(scalar_node,scalar_elmt);

@@ -7,6 +7,8 @@
 //
 
 #include "Model.h"
+#include "Boundary.h"
+//#include "SplitBoundary.h"
 #include "vsetMakers.h"
 #include "ImplicitTransport_Test.h"
 #include "VTK_Interface.h"
