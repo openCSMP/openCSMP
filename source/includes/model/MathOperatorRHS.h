@@ -3,6 +3,7 @@
 
 #include "Parameter.h"
 #include "DenseMatrix.h"
+
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
 #include "TensorVariable.h"
@@ -11,7 +12,6 @@
 
 namespace csmp {
 
-class Parameter;
 template<uint32_t> class Element;
 template<uint32_t> class PropertyDatabase;
 
@@ -145,8 +145,7 @@ class MathOperatorRHS {
     virtual void  AssignToGlobal( const CELL<dim>&, std::vector<double>& rhs );
 
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    virtual void  AssignToGlobal(const CELL<dim>&, std::vector<double>& rhs, const std::vector<size_t>&  );
-    // virtual void  AssignToGlobal(const InterFace<dim>&, std::vector<double>& rhs, const std::vector<size_t>& );
+    virtual void  AssignToGlobal( const CELL<dim>&, std::vector<double>& rhs, const std::vector<size_t>& );
 
     virtual MathOperatorRHS<dim,CELL>* clone() const = 0;
 

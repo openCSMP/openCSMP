@@ -3,7 +3,7 @@
 
 #include "CSMP_definitions.h"
 #include "MathOperatorLHS.h"
-#include "Operand.h"
+#include "InterFace.h"
 
 namespace csmp {
 

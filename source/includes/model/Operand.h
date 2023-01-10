@@ -308,7 +308,7 @@ class Operand {
   private:
     std::string          name_;
     csmp::Index          prop_key_;
-    double             omin, omax; 
+    double               omin, omax; 
     VARIABLE_FLAG        flag_essential_, flag_output_;
     size_t               calc_offset_;
     ScalarVariable       scalar_storage_;

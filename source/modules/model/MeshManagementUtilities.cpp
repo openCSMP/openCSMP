@@ -553,7 +553,7 @@ size_t countCornerNodes(typename plf::colony<Element<dim>>::const_iterator elmts
 
   for (typename plf::colony<Element<dim>>::const_iterator eit = elmts_begin; eit != elmts_end; eit++ ){
     uint32_t n_corner_nds = eit->FE()->CornerNodes();
-    for ( size_t n{0U}; n<n_corner_nds; n++ ){
+    for ( uint32_t n{0U}; n<n_corner_nds; n++ ){
       corner_nodes.insert( eit->N(n) );
     }
   }
@@ -605,15 +605,13 @@ size_t  findPointersToStandAloneMeshPatches( typename vector<CELL<dim>*>::const_
       // else partitions can be created
       std::string  group_name("meshPatch");
       std::string  subgroup_name;
-      char         num[128];
       size_t       n_subgroups(1);
     
       // creating new contiguous group from the element subset
       while ( !cells.empty() )
         {
            // creating name of contiguous subgroup
-           sprintf( num, "%lu", n_subgroups );
-           subgroup_name = group_name + num;
+           subgroup_name = group_name + to_string( n_subgroups );
            if ( n_subgroups == 1U ) {
                  std::cout <<"\findPointersToStandAloneMeshPatches: ";
                  std::cout <<"mesh is divided into the subregion(s):\n";

@@ -1069,5 +1069,5 @@ template class MathOperatorRHS<2U,InterFace>;
 template class MathOperatorRHS<3U,InterFace>;
 
 
-} // end namespace csp
+} // end namespace csmp
 

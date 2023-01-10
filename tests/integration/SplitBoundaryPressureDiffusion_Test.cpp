@@ -10,12 +10,16 @@
 #include "VSet.h"
 #include "ModelTopology.h"
 #include "Model.h"
+#include "Boundary.h"
 #include "PDE_Integrator.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
+// LHS version
 #include "NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region.h"
+// RHS version
+#include "NumIntegral_dudn_rhsop_u_dS.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"
@@ -82,6 +86,9 @@ void SplitBoundaryPressureDiffusion_Test::run()
     const double initial_fluid_pressure{ 1.0e7 };
     model_ptr_->InputPropertyValue( "fluid pressure", makeScalar(PLAIN,initial_fluid_pressure) ); // always in Pascal
     model_ptr_->InputPropertyValue( "fluid volume source", makeScalar(PLAIN,0.) ); // no sources/sinks (units m3 m-2 s-1)
+    model_ptr_->Boundary("TOP").InputPropertyValue( "fluid pressure", makeScalar(DIRICH,initial_fluid_pressure) ); // always in Pascal
+    model_ptr_->Boundary("BOTTOM").InputPropertyValue( "fluid pressure", makeScalar(DIRICH,initial_fluid_pressure) ); // always in Pascal
+
 
     // setting up transient pressure computation
     //cout << "\nEnter the pressure change on the left side of the model in percent: "<< endl;
@@ -152,24 +159,29 @@ void SplitBoundaryPressureDiffusion_Test::run()
     source.AddAccumulateLater();
     source.LumpedFormulation(true);
         
-    // interface transfer
-    NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<3U> iface_transfer( *model_ptr_,
-                                                                          "conductivity",
-                                                                          "fluid pressure", "fluid pressure",
-                                                                           60. ); // seconds initial timestep
+    // interface transfer modelled with LHS integral
+    NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<3U>  iface_transferLHS( *model_ptr_,
+                                                                             "conductivity",
+                                                                             "fluid pressure", "fluid pressure",
+                                                                              60. ); // seconds initial timestep
+
+    // interface transfer modelled with RHS integral
+    NumIntegral_dudn_rhsop_u_dS<3U>  iface_transferRHS( *model_ptr_, "fracture conductivity", "conductivity", "fluid pressure" );
+    iface_transferRHS.AddAccumulateLater();
+    
+    
 
     // coupling across the sides of the splitboundary
     // (via MathOperatorLHS)
     // ----------------------------------------------
 
     // add PDE_Operators and post-processor to the FE Algorithm
-    double time_increment{ 60. }; // seconds
     // and multiply with time-increment
     fluid_pressure.Add( &conductance );
     fluid_pressure.Add( &capacitance_lhs );
     fluid_pressure.Add( &capacitance_rhs );
     fluid_pressure.Add( &source );
-    fluid_pressure.AddSplitBoundaryIntegral( &iface_transfer );
+    fluid_pressure.AddSplitBoundaryIntegral( &iface_transferRHS );
     fluid_pressure.AddPostProcess( &velocity );
 
 
@@ -177,6 +189,7 @@ void SplitBoundaryPressureDiffusion_Test::run()
     // 4. Transient loop: Compute fluid pressure during each time-step and output the results for each time step
     // ---------------------------------------------------------------------------------------------------------
     const double maxtime{ 365. * 86400. }; // 1 year
+    double       time_increment{ 0.5 }; // seconds
     uint32_t     timestep{ 1U };
     // iout: for the transient loop, the screen output from SAMG solver is reduced
     #ifdef USE_SAMG_SOLVER
@@ -187,13 +200,16 @@ void SplitBoundaryPressureDiffusion_Test::run()
 
     while ( model_time <= maxtime )
       {
-        cout << "\n\nmain: COMPUTING TIMESTEP " << timestep << endl;
-        iface_transfer.UpdateTimeIncrement( time_increment );
+        cout << "\n\n\nmain: COMPUTING TIMESTEP " << timestep << endl;
+        iface_transferLHS.UpdateTimeIncrement( time_increment );
+        iface_transferRHS.UpdateTimeIncrement( time_increment );
 
         // transient pressure
         fluid_pressure.TimeIncrement( 1. / time_increment ); // see equation above
 //        fluid_pressure.IntegrateOver( *model_ptr_, fracture ); // model_domain );
         fluid_pressure.IntegrateOver( *model_ptr_, model_domain );
+        iface_transferLHS.ResetMinMaxTransferTerms();
+        iface_transferRHS.ResetMinMaxTransferTerms();
 
         // output variables to file and screen
         printRangeOfVariable( *model_ptr_, "fluid pressure" );
@@ -235,6 +251,8 @@ void  SplitBoundaryPressureDiffusion_Test::ConfigureModel()
     model_ptr_->InputPropertyValue( "thickness",     makeScalar(ANY,1.0) );
     model_ptr_->InputPropertyValue( "permeability",  makeScalar(ANY,1.0e-13) );  // 100 mD
     model_ptr_->InputPropertyValue( "conductivity",  makeScalar(ANY,1.0e-10) ); // dyn visc = 1.0e-3
+    // to get PDE_Integrator to detect interfaces with a fracture within and Robin boundary conditions applied
+    model_ptr_->InputPropertyValue( "fracture conductivity", makeScalar(ROBIN,numeric_limits<double>::quiet_NaN()) );
     model_ptr_->InputPropertyValue( "porosity",      makeScalar(ANY,0.13) );
     model_ptr_->InputPropertyValue( "fluid volume source", makeScalar(ANY,0.) );
     model_ptr_->InputPropertyValue( "storativity", makeScalar(ANY,1.0e-11) );

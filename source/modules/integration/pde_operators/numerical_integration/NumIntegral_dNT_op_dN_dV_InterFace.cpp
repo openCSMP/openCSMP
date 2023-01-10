@@ -3,6 +3,7 @@
 #include "Face.h"
 #include "InterFace.h"
 #include "Model.h"
+#include "Exception.h"
 
 using namespace std;
 

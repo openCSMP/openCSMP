@@ -2,7 +2,6 @@
 #define CSMP_MATH_OPERATOR_LHS_H
 
 #include "Parameter.h"
-
 #include "DenseMatrix.h"
 #include "SparseMatrix.h"
 #include "CompressedRowMatrix.h"
@@ -18,8 +17,6 @@
 namespace csmp {
 
 template<uint32_t> class Element;
-template<uint32_t> class Face;
-template<uint32_t> class InterFace;
 template<uint32_t> class PropertyDatabase;
 
 /**

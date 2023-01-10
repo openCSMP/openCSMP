@@ -1,7 +1,7 @@
-#ifndef NUM_INTEGRAL_DUDN_OP_U_DV_H
-#define NUM_INTEGRAL_DUDN_OP_U_DV_H
+#ifndef NUM_INTEGRAL_DUDN_RHSOP_U_DV_DS_H
+#define NUM_INTEGRAL_DUDN_RHSOP_U_DV_DS_H
 
-#include "MathOperatorLHS.h"
+#include "MathOperatorRHS.h"
 #include "Index.h"
 #include "InterFace.h"
 
@@ -9,7 +9,6 @@ namespace csmp {
 
 class FiniteElement;
 template<uint32_t> class Model;
-template<uint32_t> class InterFace;
 
 /**
        Use to apply a Robin type (flux) boundary condition coupling the sides of the Interface with a lower-dimensional
@@ -21,13 +20,10 @@ template<uint32_t> class InterFace;
        @date 18/8/22
 */
 template<uint32_t dim>
-class NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region : public MathOperatorLHS<dim,InterFace> {
+class NumIntegral_dudn_rhsop_u_dS : public MathOperatorRHS<dim,InterFace> {
   public:
-    NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region( const Model<dim>&,
-                                                       const char* oper,
-                                                       const char* basic,
-                                                       const char* test,
-                                                       double delta_t );
+    /// interface variable has to be flagged Robin and elmt variable will be read as a matching variable placed on the element
+    NumIntegral_dudn_rhsop_u_dS( const Model<dim>&, const char* interface_oper, const char* elmt_oper, const char* test );
     /**
        Computes difference between the variable values at the topologically collocated nodes, including that in the intervening
        lower-dimensional region, using it to compute   the transfer coefficient (=coupling coefficient) at the time level t + delta t.
@@ -37,13 +33,14 @@ class NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region : public MathOperatorLHS
     virtual void ComputeContribution( const InterFace<dim>& ) override;
     
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    virtual void AssignToGlobal( const InterFace<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& ) override;
+    virtual void AssignToGlobal( const InterFace<dim>&,
+                                 std::vector<double>& rhs,
+                                 const std::vector<size_t>& DOF_indexes ) override;
     
     /// adjusting the time increment in case it changes during the transient calculation
     void UpdateTimeIncrement( double dt ) { delta_t_ = dt; }
     
-    virtual NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>* clone() const override
-      { return new NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>(*this); }
+    virtual NumIntegral_dudn_rhsop_u_dS<dim>* clone() const override;
       
     void ResetMinMaxTransferTerms() {
          transfer_min_ =  1e30;
@@ -57,7 +54,8 @@ class NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region : public MathOperatorLHS
       double Flux1DAtX0( double val_farfield, double diffusivity, double t, double conductivity );
 
   private:
-      csmp::INDEX<SCALAR,ELEMENT>  diffusivity_key_;  ///< test function key (in base class)
+      csmp::INDEX<SCALAR,ELEMENT>  diffusivity_key_;  ///< extra key for diffusion in higher-dim elements adjacent to interface
+      csmp::INDEX<SCALAR,ELEMENT>  conductivity_key_; ///< extra key for conduction in higher-dim elements adjacent to interface
       std::vector<double>    transfer_coefficients_;  ///< as computed from delta t and delta test-function operand value at the nodes
       double  delta_t_;                               ///< current time increment (between t0 and t + delta t)
       double  transfer_min_                =  1e30;
