@@ -33,7 +33,6 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
       const double SHmin( 51.5e+06);
       const double Pmud( 31.5e+06 ); //mud pressure
       const double Pp( 31.5e+06 ); //pore pressure
-      const double length(20.);
 
      // pore presure = mud pressure
 

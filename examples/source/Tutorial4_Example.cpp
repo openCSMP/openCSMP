@@ -68,17 +68,6 @@ void Tutorial4_Example::Run()
     // ----------------------------------------------------------------------------------
     clock_t start(clock()); // record the CPU time
 
-    /*
-    string input_file;
-    cout<< "\nTutorial4_Example: Please enter the name of input mesh ( default: pores ): ";
-    cin >> input_file;
-
-    // ------------------------------
-    // 1.0 Build the CSMP Model
-    // ------------------------------
-    ANSYS_Model2D model( input_file.c_str(), "stokes_variables.txt" );
-    */
-
     // ------------------------------------------------------------
     // 1.0 Load CSMP native format model
     // ------------------------------------------------------------
@@ -151,7 +140,6 @@ void Tutorial4_Example::Run()
 #ifdef CSMP_WITH_SAMG_SOLVER
     // custom SAMG settings for multi-variable solution as identified by Malte Foerster
     SAMG_Settings settings;
-
     // nsolve
     settings.Set_napproach(3); // interpolation seperate for each unknown
     settings.Set_nxtyp(1);     // ILU relaxation

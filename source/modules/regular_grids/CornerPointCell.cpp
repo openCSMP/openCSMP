@@ -652,7 +652,7 @@ void CornerPointCell
     }
 
     /// lateral faces
-    for( size_t fid=0; fid<4; ++fid )
+    for( uint32_t fid=0U; fid<4; ++fid )
     {
         const size_t nid = (fid + 3)%quad_fem_nodes;
         this->ClearPolygonFaceNodes(fid+1);
@@ -789,7 +789,7 @@ void CornerPointCell
     }
 
     /// edges
-    for( size_t nid = 0 ; nid <quad_fem_nodes; ++nid )
+    for( uint32_t nid = 0U; nid <quad_fem_nodes; ++nid )
     {
         /// bottom edge
         points_set.clear();
@@ -856,7 +856,7 @@ void CornerPointCell
 void CornerPointCell::AddQuadFaceCentroids( std::map<std::set<uint32_t>,GridNode*>& additional_points, std::set<std::set<uint32_t> >& additional_edges )
 {
     std::vector<std::vector<uint32_t> > quad_face_nodes;
-    for( size_t fid = 0; fid<PolygonCell::GetNumFaces(); ++fid )
+    for( uint32_t fid = 0U; fid<PolygonCell::GetNumFaces(); ++fid )
     {
         const size_t num_face_nodes( this->GetNumPolygonFaceNodes( fid ) );
         if( num_face_nodes == 4 )
@@ -1467,7 +1467,7 @@ void CornerPointCell
 
          /// reorder faces
          std::set<uint32_t> faces;
-         for( size_t fid = 0; fid<6; ++fid )
+         for( uint32_t fid{0U}; fid<6; ++fid )
              faces.insert(fid);
          /// bottom quad face ( 0253 )
          this->AssignFaceOrder( 0, ( ( point_quad_faces.at( this->GetPointCustomOrder(2) )[ 0 ] == point_quad_faces.at( this->GetPointCustomOrder(0) )[ 0 ] ) ? point_quad_faces.at( this->GetPointCustomOrder(2) )[ 0 ] : ( point_quad_faces.at( this->GetPointCustomOrder(2) )[ 0 ] == point_quad_faces.at( this->GetPointCustomOrder(0) )[ 1 ] ) ? point_quad_faces.at( this->GetPointCustomOrder(2) )[ 0 ] : point_quad_faces.at( this->GetPointCustomOrder(2) )[ 1 ] ) );
@@ -1715,7 +1715,7 @@ void CornerPointCell
 
         /// reorder faces
         std::set<uint32_t> faces;
-        for( size_t fid = 0; fid<6; ++fid )
+        for( uint32_t fid{0U}; fid<6; ++fid )
             faces.insert(fid);
         /// bottom quad face ( 0321 )
         this->AssignFaceOrder( 0, point_quad_faces.at( this->GetPointCustomOrder(0) )[ 0 ] );
@@ -1765,7 +1765,7 @@ void CornerPointCell
 
         /// reorder faces
         std::set<uint32_t> faces;
-        for( size_t fid = 0; fid<6; ++fid )
+        for( uint32_t fid{0U}; fid<6; ++fid )
             faces.insert(fid);
         /// bottom quad face ( 0321 )
         this->AssignFaceOrder( 0, point_quad_faces.at( this->GetPointCustomOrder(0) )[ 0 ] );
