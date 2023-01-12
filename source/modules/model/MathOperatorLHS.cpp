@@ -661,66 +661,66 @@ void MathOperatorLHS<dim,CELL>::GetOperands( const CELL<dim>& e_ref )
  // TODO: put static assert in here as needed
 		// if operand property is an element property
 		if (MaterialOperandPlacement() == ELEMENT || MaterialOperandPlacement() == REGION)
-		{
-			MTRL.resize(1U);
-			if (MaterialOperandType() == SCALAR)
-				MTRL[0].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(MaterialOperandKey()));
-			else if (MaterialOperandType() == VECTOR) {
-				VectorVariable<dim>  vc;
-				e_ref.Read(MaterialOperandKey(), vc);
-				MTRL[0].AssignToDiagonal(vc);
-			}
-			else if (MaterialOperandType() == TENSOR) {
-				TensorVariable<dim>  ts;
-				e_ref.Read(MaterialOperandKey(), ts);
-				MTRL[0] = ts;
-			}
-			else if (MaterialOperandType() == ARRAY)
-			{
-				ArrayVariable ar(MaterialOperandDataDepth());
-				e_ref.Read(MaterialOperandKey(), ar);
-				MTRL[0].AssignToDiagonal(ar);
-			}
-			else if (MaterialOperandType() == FLAGGEDARRAY)
-			{
-				FlaggedArrayVariable fr(MaterialOperandDataDepth());
-				e_ref.Read(MaterialOperandKey(), fr);
-				MTRL[0].AssignToDiagonal(fr);
-			}
-		}
+      {
+        MTRL.resize(1U);
+        if (MaterialOperandType() == SCALAR)
+          MTRL[0].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(MaterialOperandKey()));
+        else if (MaterialOperandType() == VECTOR) {
+          VectorVariable<dim>  vc;
+          e_ref.Read(MaterialOperandKey(), vc);
+          MTRL[0].AssignToDiagonal(vc);
+        }
+        else if (MaterialOperandType() == TENSOR) {
+          TensorVariable<dim>  ts;
+          e_ref.Read(MaterialOperandKey(), ts);
+          MTRL[0] = ts;
+        }
+        else if (MaterialOperandType() == ARRAY)
+        {
+          ArrayVariable ar(MaterialOperandDataDepth());
+          e_ref.Read(MaterialOperandKey(), ar);
+          MTRL[0].AssignToDiagonal(ar);
+        }
+        else if (MaterialOperandType() == FLAGGEDARRAY)
+        {
+          FlaggedArrayVariable fr(MaterialOperandDataDepth());
+          e_ref.Read(MaterialOperandKey(), fr);
+          MTRL[0].AssignToDiagonal(fr);
+        }
+      }
 		else // if the operand is placed on the constraint-points
-		{
-			if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT) {
-				MTRL.resize(e_ref.FE()->IntegrationPoints());
-				const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-				for (auto i{0U}; i < n_integration_points; i++)
-				{
-					if (MaterialOperandType() == SCALAR)
-						MTRL[i].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
-					else if (MaterialOperandType() == VECTOR) {
-						VectorVariable<dim>  vc;
-						e_ref.Read(i, MaterialOperandKey(), vc);
-						MTRL[i].AssignToDiagonal(vc);
-					}
-					else if (MaterialOperandType() == TENSOR) {
-						TensorVariable<dim>  ts;
-						e_ref.Read(i, MaterialOperandKey(), ts);
-						MTRL[i] = ts;
-					}
-					else if (MaterialOperandType() == ARRAY)
-					{
-						ArrayVariable ar(MaterialOperandDataDepth());
-						e_ref.Read(i, MaterialOperandKey(), ar);
-						MTRL[0].AssignToDiagonal(ar);
-					}
-					else if (MaterialOperandType() == FLAGGEDARRAY)
-					{
-						FlaggedArrayVariable fr(MaterialOperandDataDepth());
-						e_ref.Read(i, MaterialOperandKey(), fr);
-						MTRL[0].AssignToDiagonal(fr);
-					}
-				}
-			}
+      {
+        if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT) {
+          MTRL.resize(e_ref.FE()->IntegrationPoints());
+          const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
+          for (auto i{0U}; i < n_integration_points; i++)
+          {
+            if (MaterialOperandType() == SCALAR)
+              MTRL[i].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
+            else if (MaterialOperandType() == VECTOR) {
+              VectorVariable<dim>  vc;
+              e_ref.Read(i, MaterialOperandKey(), vc);
+              MTRL[i].AssignToDiagonal(vc);
+            }
+            else if (MaterialOperandType() == TENSOR) {
+              TensorVariable<dim>  ts;
+              e_ref.Read(i, MaterialOperandKey(), ts);
+              MTRL[i] = ts;
+            }
+            else if (MaterialOperandType() == ARRAY)
+            {
+              ArrayVariable ar(MaterialOperandDataDepth());
+              e_ref.Read(i, MaterialOperandKey(), ar);
+              MTRL[0].AssignToDiagonal(ar);
+            }
+            else if (MaterialOperandType() == FLAGGEDARRAY)
+            {
+              FlaggedArrayVariable fr(MaterialOperandDataDepth());
+              e_ref.Read(i, MaterialOperandKey(), fr);
+              MTRL[0].AssignToDiagonal(fr);
+            }
+          }
+        }
 
 			// if the operand is placed on the node  
 			else if (MaterialOperandPlacement() == NODE) {

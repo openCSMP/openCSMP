@@ -158,6 +158,9 @@ class FiniteElementPolicy {
 
     /// computes unit normal to element if it is planar (3D) or linear (2D), vector components are returned into VectorVariable
     void       UnitNormal( VectorVariable<dim>& nrml ) const;
+    
+    /// outputs finite element and discretised variable to VTK file
+    void       OutputPropertyToVTK( const csmp::Index&, const char* file_name, const char* var_name ) const;
 
   private:
     explicit FiniteElementPolicy( const CELL<dim>& );

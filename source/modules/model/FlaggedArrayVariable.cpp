@@ -1,5 +1,6 @@
 #include "FlaggedArrayVariable.h"
 #include "ScalarVariable.h"
+#include "PropertyDatabase.h"
 
 using namespace std;
 
@@ -12,6 +13,25 @@ FlaggedArrayVariable::FlaggedArrayVariable()
   {
   }
 
+
+/// Automatically sets size to corresponding index, flag to ANY
+template<uint32_t dim>
+FlaggedArrayVariable::FlaggedArrayVariable( const char* arrayPropertyName,
+                                            const PropertyDatabase<dim>& pd,
+                                            double defaultValue,
+                                            VARIABLE_FLAG flag )
+  : data_( pd.StorageKey(arrayPropertyName).dataDepth, defaultValue ),
+    flags_( pd.StorageKey(arrayPropertyName).dataDepth, flag )
+  {
+  }
+
+
+template FlaggedArrayVariable::FlaggedArrayVariable( const char*, const PropertyDatabase<1U>&, double, VARIABLE_FLAG );
+template FlaggedArrayVariable::FlaggedArrayVariable( const char*, const PropertyDatabase<2U>&, double, VARIABLE_FLAG );
+template FlaggedArrayVariable::FlaggedArrayVariable( const char*, const PropertyDatabase<3U>&, double, VARIABLE_FLAG );
+
+
+
 /// As PropertyDatabase constructor, but using index right away
 FlaggedArrayVariable::FlaggedArrayVariable( const Index& arrayKey,
                                             double defaultValue,
@@ -21,17 +41,21 @@ FlaggedArrayVariable::FlaggedArrayVariable( const Index& arrayKey,
   {
   }
 
-FlaggedArrayVariable::FlaggedArrayVariable( unsigned int arraySize,
+
+
+FlaggedArrayVariable::FlaggedArrayVariable( uint32_t arraySize,
                                             double defaultValue,
                                             VARIABLE_FLAG flag )
   : data_ ( arraySize, defaultValue ),
     flags_( arraySize, flag)
   {
   }
+  
+  
 
 FlaggedArrayVariable::FlaggedArrayVariable( const FlaggedArrayVariable& av )
-: data_       ( av.data_ ),
-  flags_      ( av.flags_)
+: data_( av.data_ ),
+  flags_( av.flags_)
   {
   }
 
@@ -39,8 +63,8 @@ FlaggedArrayVariable& FlaggedArrayVariable::operator=( const FlaggedArrayVariabl
   {
     if( this != &av )
       {
-        data_         = av.data_;
-        flags_        = av.flags_;
+        data_  = av.data_;
+        flags_ = av.flags_;
       }
     return *this;
   }
@@ -49,7 +73,7 @@ void FlaggedArrayVariable::CopyValuesOnly( ArrayVariable& av )
 {
     if( this->Size() == av.Size() )
         for (auto i = 0 ; i< av.Size();i++)
-            data_[i]         = av(i);
+            data_[i] = av(i);
 }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator=( double val )

@@ -17,11 +17,12 @@ class FiniteElementPolicy_Test : public Test
     
     virtual void run();
     
-    void InitialiseModel();
-    
   private:
     Model<3U>* model_ptr_ = nullptr;
     Element<3U>* e_ptr_   = nullptr;
+
+    void InitialiseModel();
+    void CreateLinearScalarNodePropertyVariation();
 
     // FiniteElementPolicy interfaces trivial or tested elsewhere
     // ----------------------------------------------------------

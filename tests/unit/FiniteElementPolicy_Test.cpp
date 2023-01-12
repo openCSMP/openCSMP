@@ -10,15 +10,31 @@ using namespace std;
 namespace csmp{
 
 FiniteElementPolicy_Test::FiniteElementPolicy_Test()
-{
-  // debugging
-  assert( model_ptr_ != NULL );
-}
+  {
+    InitialiseModel();
+    // debugging
+    assert( model_ptr_ != NULL );
+    CreateLinearScalarNodePropertyVariation();
+    // testing
+    const csmp::Index key = model_ptr_->Database().StorageKey("nodal variable 2");
+    vector<ScalarVariable> nvar;
+    e_ptr_->NodePropertyVector( key, nvar );
+    if ( verbose_ ) {
+         // nodal variable values in rows
+         cout <<"\nValues of 'nodal variable' varying linearly among the nodes:\n";
+         for ( auto i{0U}; i<nvar.size(); ++i )
+           cout <<"\n\t"<<"node "<< i <<": "<< nvar[i]();
+         e_ptr_->OutputPropertyToVTK( key, "FiniteElementPolicy_Test_prop_variation", "nodal variable 2" );
+      }
+  }
+
+
 
 FiniteElementPolicy_Test::~FiniteElementPolicy_Test()
   {
      delete model_ptr_;
   }
+
 
 
 void FiniteElementPolicy_Test::InitialiseModel()
@@ -29,6 +45,30 @@ void FiniteElementPolicy_Test::InitialiseModel()
     e_ptr_     = model_ptr_->Region("Model").E(0);
  }
     
+
+
+/**
+    Creates linear variation of 'node variable 2' in element with a value of 1 at origin of local coordinate system
+*/
+void FiniteElementPolicy_Test::CreateLinearScalarNodePropertyVariation()
+ {
+    const csmp::Index key = model_ptr_->Database().StorageKey("nodal variable 2");
+    
+    // since not all elements have local coordinates and because there is no access to the local coordinates of the element
+    // the global coordinates are being used
+    Point<3U> bctr = e_ptr_->BaryCenter(); // of element with property value of 1
+    for ( auto i{0U}; i<e_ptr_->Nodes(); ++i ) {
+          Point<3U> offset = e_ptr_->N(i)->Coordinate() - bctr;
+          // computing the nodal value from the nodes offset from the barycentre where the property value is one,
+          // assuming a unit property gradient (1,1,1)
+          const Point<3U> grad(1.,1.,1.);
+          double n_value = 1. + dotProduct( offset, grad );
+          // storing the new value
+          e_ptr_->N(i)->Store( key, makeScalar(ANY,n_value) );
+      }
+ }
+
+
 
 
 /// using 'test_Create_Prism_Hexa_VSet' dataset, tests fem operations against provided data in text file
@@ -67,11 +107,13 @@ void FiniteElementPolicy_Test::run()
 
 bool FiniteElementPolicy_Test::Test_RstToXYZ()
  {
-    Point<3U> rst( 0.5,0.5,0.5 );
+    // centroid of linear prism in parametric space
+    Point<3U> rst( 1./3.,1./3., 0. );
     Point<3U> xyz = e_ptr_->RstToXYZ( rst );
-    _test( xyz == Point<3U>(1.5,2.1,0.7) );
     
-    return xyz == Point<3U>(1.5,2.1,0.7);
+    // barycenter of element 1 in physical space (double precision on Clang
+    _test( xyz == Point<3U>(1.3333333333333335,1.3333333333333335,1.5) );
+    return xyz == Point<3U>(1.3333333333333335,1.3333333333333335,1.5);
  }
 
 
@@ -85,8 +127,8 @@ bool FiniteElementPolicy_Test::Test_PropertyIntegral()
     const double value{ 9.99e+7 };
     model_ptr_->InputPropertyValue( "nodal variable 1", makeScalar(ANY, value ) );
     double integral_over_p = e_ptr_->PropertyIntegral( key );
+    
     _test( approximatelyEqual( integral_over_p, value * e_ptr_->Volume() ) );
-  
     return approximatelyEqual( integral_over_p, value * e_ptr_->Volume() );
  }
 
@@ -100,7 +142,7 @@ bool FiniteElementPolicy_Test::Test_PropertyValueAt()
     // for uniform scalar value
     const double value{ 9.99e+7 };
     model_ptr_->InputPropertyValue( "nodal variable 1", makeScalar(ANY, value ) );
-    vector<double> xyz{ 1., 1., 1. };
+    vector<double> xyz{ 1./3., 1./3., 0.5 }; // offset by 0.5 from barycentre along Z-axis
     ScalarVariable sc;
 
     const csmp::Index key = model_ptr_->Database().StorageKey("nodal variable 1");
@@ -128,7 +170,7 @@ bool FiniteElementPolicy_Test::Test_PropertyValueAt()
 
     const csmp::Index tkey = model_ptr_->Database().StorageKey("nodal tensor 1");
     TensorVariable<3U> test_tensor;
-    e_ptr_->PropertyValueAt( vkey, xyz, test_tensor );
+    e_ptr_->PropertyValueAt( tkey, xyz, test_tensor );
     _test( ts == test_tensor );
     passed_all_tests = ( ts == test_tensor );
     
@@ -144,9 +186,10 @@ bool FiniteElementPolicy_Test::Test_PropertyValueAtBaryCenter()
  {
     bool passed_all_tests{ true };
 
-    const csmp::Index skey = model_ptr_->Database().StorageKey("nodal variable 1");
-    const csmp::Index vkey = model_ptr_->Database().StorageKey("nodal vector 1");
-    const csmp::Index tkey = model_ptr_->Database().StorageKey("nodal tensor 1");
+    const csmp::Index skey  = model_ptr_->Database().StorageKey("nodal variable 1");
+    const csmp::Index skey2 = model_ptr_->Database().StorageKey("nodal variable 2");
+    const csmp::Index vkey  = model_ptr_->Database().StorageKey("nodal vector 1");
+    const csmp::Index tkey  = model_ptr_->Database().StorageKey("nodal tensor 1");
 
     ScalarVariable     sc(ANY,2.), sc_test;
     VectorVariable<3U> vc(ANY,ANY,ANY,1.,2.,3.), vc_test;
@@ -154,6 +197,9 @@ bool FiniteElementPolicy_Test::Test_PropertyValueAtBaryCenter()
     model_ptr_->InputPropertyValue( "nodal variable 1", sc );
     model_ptr_->InputPropertyValue( "nodal vector 1", vc );
     model_ptr_->InputPropertyValue( "nodal tensor 1", ts );
+    
+    // barycentre
+    const vector<double> bctr{ 1./3., 1./3., 0. }; // of linear prism element
     
     // scalars
     e_ptr_->PropertyValueAtBaryCenter( skey, sc_test );
@@ -168,13 +214,23 @@ bool FiniteElementPolicy_Test::Test_PropertyValueAtBaryCenter()
     passed_all_tests = ( vc == vc_test );
 
     // tensors
-    TensorVariable<3U> tensor, test_tensor;
+    TensorVariable<3U> test_tensor;
     e_ptr_->PropertyValueAtBaryCenter( tkey, test_tensor );
     //e_ptr_->Read( tkey, tensor );
-    _test( tensor == test_tensor );
-    passed_all_tests = ( tensor == test_tensor );
+    _test( ts == test_tensor );
+    passed_all_tests = ( ts == test_tensor );
     
-    // TODO: make same test for gradient fields
+    // test for gradient field
+    assert( e_ptr_->FE_Type() == ISOPARAMETRIC_LINEAR_PRISM );
+    vector<double> xyz{ 1.33333, 1.33333, 1.5 }; // barycentre of prism element 1
+
+    const double at_value{ e_ptr_->PropertyValueAt( skey2, xyz ) },
+                 bc_value{ e_ptr_->PropertyValueAtBaryCenter( skey2 ) };
+
+    _test( approximatelyEqual( bc_value, 1. ) );
+    _test( approximatelyEqual( at_value, bc_value ) );
+    passed_all_tests = approximatelyEqual( bc_value, 1. );
+    passed_all_tests = approximatelyEqual( at_value, bc_value );
 
     return passed_all_tests;
  }
@@ -186,9 +242,10 @@ bool FiniteElementPolicy_Test::Test_PropertyValueAtIntegrationPoint()
  {
     bool passed_all_tests{ true };
 
-    const csmp::Index skey = model_ptr_->Database().StorageKey("nodal variable 1");
-    const csmp::Index vkey = model_ptr_->Database().StorageKey("nodal vector 1");
-    const csmp::Index tkey = model_ptr_->Database().StorageKey("nodal tensor 1");
+    const csmp::Index skey  = model_ptr_->Database().StorageKey("nodal variable 1");
+    const csmp::Index skey2 = model_ptr_->Database().StorageKey("nodal variable 2");
+    const csmp::Index vkey  = model_ptr_->Database().StorageKey("nodal vector 1");
+    const csmp::Index tkey  = model_ptr_->Database().StorageKey("nodal tensor 1");
 
     ScalarVariable     sc(ANY,2.), sc_test;
     VectorVariable<3U> vc(ANY,ANY,ANY,1.,2.,3.), vc_test;
@@ -208,12 +265,23 @@ bool FiniteElementPolicy_Test::Test_PropertyValueAtIntegrationPoint()
     passed_all_tests = ( vc == vc_test );
 
     // tensors
-    TensorVariable<3U> tensor, test_tensor;
+    TensorVariable<3U> test_tensor;
     e_ptr_->PropertyValueAtIntegrationPoint( tkey, 3U, test_tensor );
     _test( ts == test_tensor );
     passed_all_tests = ( ts == test_tensor );
     
-    // TODO: make same test for gradient fields
+    // same test for scalar gradient field
+    e_ptr_->CoordinateMatrix();
+    for ( uint32_t ip{0U}; ip<e_ptr_->IntegrationPoints(); ++ip )
+      {
+         vector<double>  xyz;
+         e_ptr_->FE()->IntegrationPoint( ip, xyz );
+         const double at_value = e_ptr_->PropertyValueAt( skey2, xyz );
+         const double ip_value = e_ptr_->PropertyValueAtIntegrationPoint( skey2, ip );
+         const double epsilon{ 1.0e-7 };
+         _test( approximatelyEqual( at_value, ip_value, epsilon ) );
+         passed_all_tests = approximatelyEqual( at_value, ip_value, epsilon );
+      }
 
     return passed_all_tests;
  }
@@ -270,13 +338,56 @@ bool FiniteElementPolicy_Test::Test_ExtrapolateIntegrationPointVariableToNodes()
     /// retrieve barycenter of element face
 bool FiniteElementPolicy_Test::Test_FaceBaryCenter()
  {
-    throw csmp::Exception( ERROR, "FiniteElementPolicy_Test::Test_FaceBaryCenter", "test not fully implemented yet");
- 
-    for ( uint32_t i{0U}; i<e_ptr_->Faces(); ++i ) {
-          Point<3U> pt = e_ptr_->FaceBaryCenter(i);
-      }
-
+    // barycentres of the first 3 faces of the element will be tested
     bool passed_all_tests{ true };
+    
+    // face 0
+    uint32_t face_id{ 0U };
+    set<Node<3U>*> fnodes = e_ptr_->CornerNodesOfFace( face_id );
+    // computing face barycentre
+    Point<3U> fbctr; fbctr = 0.;
+    for ( const auto nit : fnodes ) {
+         fbctr[0] += nit->x();
+         fbctr[1] += nit->y();
+         fbctr[2] += nit->z();
+      }
+    fbctr /= static_cast<double>(fnodes.size());
+    // TEST
+    Point<3U> pt = e_ptr_->FaceBaryCenter( face_id );
+    _test( pt == fbctr );
+    passed_all_tests = ( pt == fbctr );
+
+    // face 1
+    face_id = 1U;
+    fnodes = e_ptr_->CornerNodesOfFace( face_id );
+    // computing face barycentre
+    fbctr = 0.;
+    for ( const auto nit : fnodes ) {
+         fbctr[0] += nit->x();
+         fbctr[1] += nit->y();
+         fbctr[2] += nit->z();
+      }
+    fbctr /= static_cast<double>(fnodes.size());
+    // TEST
+    pt = e_ptr_->FaceBaryCenter( face_id );
+    _test( pt == fbctr );
+    passed_all_tests = ( pt == fbctr );
+
+    // face 2
+    face_id = 2U;
+    fnodes = e_ptr_->CornerNodesOfFace( face_id );
+    // computing face barycentre
+    fbctr = 0.;
+    for ( const auto nit : fnodes ) {
+         fbctr[0] += nit->x();
+         fbctr[1] += nit->y();
+         fbctr[2] += nit->z();
+      }
+    fbctr /= static_cast<double>(fnodes.size());
+    // TEST
+    pt = e_ptr_->FaceBaryCenter( face_id );
+    _test( pt == fbctr );
+    passed_all_tests = ( pt == fbctr );
 
     return passed_all_tests;
  }

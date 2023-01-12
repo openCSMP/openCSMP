@@ -29,7 +29,7 @@ ArrayVariable::ArrayVariable()
     {
     }
 
-ArrayVariable::ArrayVariable( unsigned int arraySize, double defaultValue, VARIABLE_FLAG flag )
+ArrayVariable::ArrayVariable( uint32_t arraySize, double defaultValue, VARIABLE_FLAG flag )
     : flag_(flag), data_( arraySize, defaultValue )
     {
     }

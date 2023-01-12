@@ -47,7 +47,7 @@ IsoparametricLinearPrism::IsoparametricLinearPrism( uint32_t integrationPoints )
     DNS.resize(npe);
     DNT.resize(npe);
 
-    /* Element nymbering scheme ...
+    /* Element numbering scheme ...
 
           ^ t
           |
@@ -1447,23 +1447,20 @@ IsoparametricLinearPrism::ExtrapolateIntegrationPointVariableToNodes( uint32_t n
                                                                       vector<double>& NVAR )
 const
 {
-  if(gpe!=1) throw csmp::Exception( ERROR,	 "IsoparametricLinearPrism::PhysicalToParametric",
-                                          "Number of Integration points should be 1");
-
- assert( gpe == 1);
- assert( IVAR.size() >= (gpe*nvars) );
+   assert( IVAR.size() >= (gpe * nvars) );
 
    NVAR.resize( npe * nvars );
 
   // Define nodal values as bi-linear variation of the integration points values
   // See Zienkewitch, pp. 351, for example
     for ( uint32_t i{0U}; i<npe; i++ )
-        {
-            for ( uint32_t k{0U}; k<nvars; k++ )
-            {
-                NVAR[i*nvars + k] = IVAR[k];
-            }
-        }
+      {
+        for ( uint32_t k{0U}; k<nvars; k++ )
+          {
+             NVAR[i*nvars + k] = IVAR[k];
+          }
+      }
+
 } // end ExtrapolateIntegrationPointVariableToNodes (vectors)
 
 
@@ -1513,8 +1510,8 @@ void IsoparametricLinearPrism::JacobianAt( const std::vector<double>& rst )
 
 void
 IsoparametricLinearPrism::OutputNodeDataToVTK( const char* file_name,
-                                       const char* var_name,
-                                       DenseMatrix<DM_MIN>& DATA ) const
+                                               const char* var_name,
+                                               DenseMatrix<DM_MIN>& DATA ) const
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );

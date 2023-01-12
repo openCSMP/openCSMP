@@ -73,13 +73,13 @@ class FlaggedArrayVariable
                             double defaultValue=std::numeric_limits<double>::quiet_NaN(),
                             VARIABLE_FLAG flag = ANY );
       
-      explicit FlaggedArrayVariable( unsigned int arraySize,
-                                     double defaultValue = 0.,
-                                     VARIABLE_FLAG flag = ANY );
+      FlaggedArrayVariable( uint32_t arraySize,
+                            double defaultValue = 0.,
+                            VARIABLE_FLAG flag = ANY );
       
-      explicit FlaggedArrayVariable( const Index& arrayKey,
-                                     double defaultValue = 0.,
-                                     VARIABLE_FLAG flag = ANY );
+      FlaggedArrayVariable( const Index& arrayKey,
+                            double defaultValue = 0.,
+                            VARIABLE_FLAG flag = ANY );
                                      
       /// assignments
       FlaggedArrayVariable& operator=( const FlaggedArrayVariable& );
@@ -152,7 +152,7 @@ class FlaggedArrayVariable
       FlaggedArrayContainer::const_iterator End()   const;
 
       double NextLargestEntry(double) const;
-      bool     HasLargerEntry(double) const;
+      bool   HasLargerEntry(double) const;
 
     private:
       std::vector<VARIABLE_FLAG>  flags_;
@@ -160,18 +160,6 @@ class FlaggedArrayVariable
     };
 
   std::ostream&  operator<<( std::ostream& stream, const FlaggedArrayVariable& o );
-
-
-  /// Automatically sets size to corresponding index, flag to ANY
-  template<uint32_t dim>
-  FlaggedArrayVariable::FlaggedArrayVariable( const char* arrayPropertyName,
-                                              const PropertyDatabase<dim>& pd,
-                                              double defaultValue,
-                                              VARIABLE_FLAG flag )
-    : data_       ( pd.StorageKey(arrayPropertyName).dataDepth, defaultValue ),
-      flags_      ( pd.StorageKey(arrayPropertyName).dataDepth, flag )
-    {
-    }
 
 
   } // csmp
