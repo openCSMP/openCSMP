@@ -10,6 +10,7 @@
 #include "ExtractTensorVariableComponent.h"
 #include "NumIntegral_PT_op_dS.h"
 #include "ModelSubDomain.h"
+#include "Boundary.h"
 
 using namespace std;
 
