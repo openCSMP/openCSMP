@@ -332,28 +332,17 @@ class PDE_Integrator {
 
   protected:
 
-<<<<<<< HEAD
     /// checks whether any Boundary object in the model is a surface of the computational domain
-    std::list<std::string> IdentifySharedBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&);
-  
-    /// checks whether any SplitBoundary object in the model has higher-dim elements on either side the computational domain
-    std::list<std::string> IdentifySharedSplitBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&);
+    std::list<std::string> IdentifySharedBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>& ) const;
 
-
-    /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved
-    virtual void  EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& );
-=======
-    /// checks whether (returns true) any Boundary object in the model is a surface of the computational domain
-    // TODO: good but super expensive
-    bool IdentifySharedBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&,
-                                   std::list<std::string>& shared_boundaries );
+    /// checks whether any SplitBoundary object in the model is a surface of the computational domain
+    std::list<std::string> IdentifySharedSplitBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>& ) const;
   
     /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved, but without boundary or splitboundary integrals
     virtual bool EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& );
->>>>>>> 2b476c5e (chore: added Edge class which permits line element Faces to know their higher-dim neighbors (3D only))
 
     /// for the elimination of Dirichlet constraints from the solution matrix; called after EstablishMatrixSetup but before accumulation
-    void  ReduceSystemSizeEliminatingEssentialConditions( const ModelSubDomain<dim,CELLTYPE>& , size_t total_degrees_of_freedom);
+    void  ReduceSystemSizeEliminatingEssentialConditions( const ModelSubDomain<dim,CELLTYPE>&, size_t max_offset );
   
     /// in time-dependent calculations this method assigns initial conditions to the RHS; uses node numbering
     virtual void  AssignInitialConditions( const ModelSubDomain<dim,CELLTYPE>& );
@@ -364,22 +353,6 @@ class PDE_Integrator {
     /// accumulates finite element integrals into solution matrix and right-hand side; uses node numbering
     virtual void  Accumulate( const ModelSubDomain<dim,CELLTYPE>& );
 
-<<<<<<< HEAD
-    /// accumulates finite element integrals for Faces into right-hand side for boundaries provided; uses node numbering
-    virtual void AccumulateBoundaries(  Model<dim>& , ModelSubDomain<dim,CELLTYPE>&, std::list<std::string> shared_boundaries );
-
-    /// accumulates finite element integrals into solution matrix and right-hand side for all splitboundaries provided; uses node numbering
-    virtual void AccumulateSplitBoundaries( Model<dim>&, ModelSubDomain<dim,CELLTYPE>&, std::list<std::string> shared_splitboundaries);
-
-    /// accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
-  // TODO: refactor: rename methods Accumulate and LateAccumulate and let overloading take care of name resolution
-    virtual void  AccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const Boundary<dim>& );
-    
-    /// accumulation of Robin-type boundary conditions to SplitBoundary interfaces
-    virtual void  AccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const SplitBoundary<dim>& );
-
-=======
->>>>>>> 2b476c5e (chore: added Edge class which permits line element Faces to know their higher-dim neighbors (3D only))
     /// accumulates finite-element integrals to matrix and vector after the corresponding entries were already multiplied with the initial conditions; uses node numbering
     virtual void  LateAccumulate( const ModelSubDomain<dim,CELLTYPE>& );
 
