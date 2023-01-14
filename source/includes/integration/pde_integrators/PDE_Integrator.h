@@ -239,7 +239,7 @@ done in the following example:
   if ( with_pore_pressure )     deformation.Add( &porepressure );
 
   StressesAndStrains<2U>  postpro( example_model, "Young's modulus",
-                                                           "Poisson's ratio", "displacement", true, true );
+                                                  "Poisson's ratio", "displacement", true, true );
 
   if ( with_plane_stress ) postpro.PlaneStress();
    deformation.AddPostProcess( &postpro );

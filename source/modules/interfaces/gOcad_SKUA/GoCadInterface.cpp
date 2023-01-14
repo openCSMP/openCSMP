@@ -1860,8 +1860,8 @@ const
    strcpy( file, fname ); 
    if ( timestep > 0 )
      {
-        sprintf( step, "%ld", timestep );
-        strcat( file, step ); 
+        snprintf( step, sizeof(step), "%lu", timestep );
+        strcat( file, step );
      }
    strcat( file, ".ts" );
    
@@ -2096,8 +2096,8 @@ const
    strcpy( file, fname ); 
    if ( timestep > 0 )
      {
-        sprintf( step, "%ld", timestep );
-        strcat( file, step ); 
+        snprintf( step, sizeof(step), "%ld", timestep );
+        strcat( file, step );
      }
    strcat( file, ".ts" );
    
@@ -2340,8 +2340,8 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
    strcpy( file, fname ); 
    if ( timestep > 0 )
      {
-        sprintf( step, "%ld", timestep );
-        strcat( file, step ); 
+        snprintf( step, sizeof(step), "%ld", timestep );
+        strcat( file, step );
      }
    strcat( file, ".ts" );
    
@@ -2516,8 +2516,8 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    strcpy( file, fname ); 
    if ( timestep > 0 )
      {
-        sprintf( step, "%ld", timestep );
-        strcat( file, step ); 
+        snprintf( step, sizeof(step), "%ld", timestep );
+        strcat( file, step );
      }
    strcat( file, ".so" );
    
@@ -2772,8 +2772,8 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    strcpy( file, fname ); 
    if ( timestep > 0 )
      {
-        sprintf( step, "%ld", timestep );
-        strcat( file, step ); 
+        snprintf( step, sizeof(step), "%ld", timestep );
+        strcat( file, step );
      }
    strcat( file, ".so" );
    

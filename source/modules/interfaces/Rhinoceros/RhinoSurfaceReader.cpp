@@ -190,7 +190,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
                 {
                    coord[static_cast<uint32_t>(j)] = (*lit)[i][j];
                    // convert double coordinate value to string and add to hash key
-                   sprintf( num, "%lf", (*lit)[i][j] );
+                   snprintf( num, sizeof(num), "%lf", (*lit)[i][j]  );
                    key += num;
                 }
               // adding new map entry
@@ -227,7 +227,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
                 {
                    coord[static_cast<uint32_t>(j)] = (*lit)[i][j];
                    // convert double coordinate value to string and add to hash key
-                   sprintf( num, "%lf", (*lit)[i][j] );
+                   snprintf( num, sizeof(num), "%lf", (*lit)[i][j]  );
                    key += num;
                 }
               // search the ID map for the node number

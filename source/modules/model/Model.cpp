@@ -3072,15 +3072,15 @@ string  boundingBox( const Model<3U>& sg, double& dim_x, double& dim_y, double& 
   string  dimensions;
   char num[30];
   dimensions += "x-length (m): ";
-  sprintf( num, "%lf", dim_x );
+  snprintf( num, sizeof(num), "%lf", dim_x );
   dimensions += num;
   dimensions += ",  ";
   dimensions += "y-length: ";
-  sprintf( num, "%lf", dim_y );
+  snprintf( num, sizeof(num), "%lf", dim_y );
   dimensions += num;
   dimensions += ",  ";
   dimensions += "z-length: ";
-  sprintf( num, "%lf", dim_z );
+  snprintf( num, sizeof(num), "%lf", dim_z );
   dimensions += num;
   dimensions += " (box-shaped model). ";
 
@@ -3141,17 +3141,17 @@ double printRangeOfVariable( const Model<dim>& sg,
      // recording the measured variable value range at given timestep
      double& model_time( ModelTime::Instance().modelTime );
      char   info[100];
-     sprintf( info, "%lf", model_time );
+     snprintf( info, sizeof(info), "%lf", model_time );
      string var_info(info);
      var_info += " secs, range of'";
      var_info += var;
      var_info += "' [";
      var_info += sg.Database().Unit(var);
      var_info += "]: ";
-     sprintf( info, "%lf", pmin );
+     snprintf( info, sizeof(info), "%lf", pmin );
      var_info += info;
      var_info += " to ";
-     sprintf( info, "%lf", pmax );
+     snprintf( info, sizeof(info), "%lf", pmax );
      var_info += info;
      
      io.RecordInformation( var_info );
@@ -3214,7 +3214,7 @@ double printRangeOfVariable( const Model<dim>& sg,
      
      // recording the measured variable value range at given timestep
      char info[100];
-     sprintf( info, "%lf", model_time );
+     snprintf( info, sizeof(info), "%lf", model_time );
      string var_info(info);
      var_info += info;
      var_info += ", region: ";
@@ -3224,10 +3224,10 @@ double printRangeOfVariable( const Model<dim>& sg,
      var_info += "' [";
      var_info += p_ref.Unit(var);
      var_info += "]: ";
-     sprintf( info, "%lf", pmin );
+     snprintf( info, sizeof(info), "%lf", pmin );
      var_info += info;
      var_info += " to ";
-     sprintf( info, "%lf", pmax );
+     snprintf( info, sizeof(info), "%lf", pmax );
      var_info += info;
      
      io.RecordInformation( var_info );

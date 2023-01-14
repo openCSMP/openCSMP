@@ -797,7 +797,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
         it = groups.begin(); it != groups.end(); it++ )
   {
     cout << "\nProperty value: " << (*it).first;
-    sprintf( num, "%lu", group_idx++ );
+    snprintf( num, sizeof(num), "%lu", group_idx++ );
     (*it).second = string( gname + num );
 
     if ( (*it).second != "undefined" )
@@ -1321,7 +1321,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
       while ( !elements.empty() )
         {
            // creating name of contiguous subregion
-           sprintf( num, "%lu", n_subgroups );
+           snprintf( num, sizeof(num), "%lu", n_subgroups );
            subregion_name = region_name + num;
            if ( n_subgroups == 1U ) {
                  cout <<"\nModel<"<< dim <<">::PartitionRegionIntoContiguousSubRegions: ";
@@ -1467,7 +1467,7 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
     ++subgroupNum;
     string  subregion_name;
     char    num[128];
-    sprintf( num, "%lu", subgroupNum );
+    snprintf( num, sizeof(num), "%lu", subgroupNum );
     subregion_name = region_name + num;
     cout << "\t\t\t'" << subregion_name << "'";
     cout << " (" << subgroupSize << " elmts)" << endl;

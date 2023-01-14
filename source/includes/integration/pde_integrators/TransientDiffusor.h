@@ -12,6 +12,7 @@
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
 #include "SAMG_Settings.h"
+#include "SAMG_Exception.h"
 #else
 #include "LinearSolver.h"
 #endif

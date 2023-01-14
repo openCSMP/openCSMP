@@ -129,7 +129,7 @@ std::string AP_Timer::AsString()
   size_t uMinutes(uTotalSeconds/60%60);
   double fSeconds(fabs(m_fElapsedTime) - uTotalSeconds + uTotalSeconds%60);
   char timeStr[1024];
-  sprintf(timeStr, "time: %lu h %02lu m %06.3f s", uHours, uMinutes, fabs(fSeconds));
+  snprintf( timeStr, sizeof(timeStr), "time: %lu h %02lu m %06.3f s", uHours, uMinutes, fabs(fSeconds) );
   return( timeStr );
 
 } // AsString()
@@ -150,7 +150,7 @@ std::string AP_Timer::AverageTimeAsString(size_t uSteps)
   size_t uMinutes(uTotalSeconds/60%60);
   double fSeconds(fabs(fAverageElapsedTime) - uTotalSeconds + uTotalSeconds%60);
   char timeStr[50];
-  sprintf(timeStr, "time: %lu h %02lu m %06.3f s", uHours, uMinutes, fabs(fSeconds));
+  snprintf( timeStr, sizeof(timeStr), "time: %lu h %02lu m %06.3f s", uHours, uMinutes, fabs(fSeconds) );
   return( timeStr );
 } // AsString()
 

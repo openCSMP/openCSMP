@@ -1038,7 +1038,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
     // the timestep is appended to the name of the file that is created
     strcpy( fname, file_name );
 
-    sprintf( step, "%ld", timestep );
+    snprintf( step, sizeof(step), "%ld", timestep );
     strcat( fname, step );
 
     // outputting to text file

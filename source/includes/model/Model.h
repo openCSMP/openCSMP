@@ -241,7 +241,7 @@ public:
   // -----------------------------------------------
 
   /// writes entire model with associated properties to disk; non-constant because this involves region creation; not const because mesh is updated
-  void OutputToBinaryFile( const char* );
+  void OutputToBinaryFile( const char* ); // not const, because cells might get reshuffled
 
   /// reads model written by OutputToBinaryFile() including all associated properties; if subset of variables is not empty only these will be read
   void InputFromBinaryFile( const char* model_name, const std::set<std::string>& subset_variables );

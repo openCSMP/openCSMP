@@ -147,7 +147,7 @@ double Standard_IO_Handler::RecordChoice( const char* question )
 
     string  communication(question);
     char    num[50];
-    sprintf( num, "%lf", result );
+    snprintf( num, sizeof(num), "%lf", result );
     communication += " -> ";
     communication += num;
     input_output.push_back(communication);
@@ -173,7 +173,7 @@ long Standard_IO_Handler::RecordIntChoice( const char* question )
 
     string  communication(question);
     char    num[50];
-    sprintf( num, "%ld", result );
+    snprintf( num, sizeof(num), "%lu", result );
     communication += " -> ";
     communication += num;
     input_output.push_back(communication);

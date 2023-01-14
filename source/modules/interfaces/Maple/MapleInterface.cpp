@@ -15,7 +15,8 @@ void writeVariableToMapleTextFile( const Model<1U>& sg,
                                    const char* variable, uint32_t timestep, double time )
  {
     const Region<1>&  model_domain(sg.Region("Model"));
-    char   num[30];  sprintf( num, "%u", timestep );
+    char   num[30];
+    snprintf( num, sizeof(num), "%u", timestep );
     string fname(variable);
     fname += "-maple-dataset";
     fname += num;
@@ -105,7 +106,8 @@ void writeVariablesToMapleTextFile( const Model<1U>& sg,
                                     uint32_t timestep, double time )
  {
     const Region<1>&  model_domain(sg.Region("Model"));
-    char   num[30];  sprintf( num, "%u", timestep );
+    char   num[30];
+    snprintf( num, sizeof(num), "%u", timestep );
     string fname(variable1);
     fname += "-";
     fname += variable2;
@@ -234,7 +236,8 @@ void writeVariableToMapleTextFile( const Model<1U>& sg, const char* group,
  {
     const Region<1>& gref = sg.Region(group);
  
-    char   num[30];  sprintf( num, "%u", timestep );
+    char   num[30];  
+    snprintf( num, sizeof(num), "%u", timestep );
     string fname(group); fname+="-"; fname+=variable; fname+="-maple-dataset"; fname+=num; fname+=".mpl";
 
     for ( string::iterator it=fname.begin(); it!=fname.end(); it++ )

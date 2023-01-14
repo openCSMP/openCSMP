@@ -53,7 +53,7 @@ inline size_t HashKey::Key( size_t a, size_t b )
     
     for ( auto sit : sorter )
       {
-         std::sprintf( num, "%lu", sit );
+         std::snprintf( num, sizeof(num), "%lu", sit );
          std::strcat( key_text, num );
       }
     if ( std::strlen(key_text) > static_cast<size_t>(hash_key_digits) )
@@ -81,7 +81,7 @@ inline size_t HashKey::Key( size_t a, size_t b, size_t c )
     
     for ( auto sit : sorter )
       {
-         std::sprintf( num, "%lu", sit );
+         std::snprintf( num, sizeof(num), "%lu", sit );
          std::strcat( key_text, num );
       }
     if ( std::strlen(key_text) > static_cast<size_t>(hash_key_digits) )
@@ -109,7 +109,7 @@ inline size_t HashKey::Key( size_t a, size_t b, size_t c, size_t d )
     
     for ( auto sit : sorter )
       {
-         std::sprintf( num, "%lu", sit );
+         std::snprintf( num, sizeof(num), "%lu", sit );
          std::strcat( key_text, num );
       }
     if ( std::strlen(key_text) > static_cast<size_t>(hash_key_digits) )
@@ -137,7 +137,7 @@ inline void HashKey::Key( size_t a, size_t b, char* s )
     
     for ( auto sit : sorter )
       {
-         std::sprintf( num, "%lu", sit );
+         std::snprintf( num, sizeof(num), "%lu", sit );
          std::strcat( s, num );
       }
  }
@@ -153,7 +153,7 @@ inline void HashKey::Key( size_t a, size_t b, size_t c, char* s )
     
     for ( auto sit : sorter )
       {
-         std::sprintf( num, "%lu", sit );
+         std::snprintf( num, sizeof(num), "%lu", sit );
          std::strcat( s, num );
       }
  }
@@ -171,7 +171,7 @@ inline void HashKey::Key( size_t a, size_t b, size_t c, size_t d, char* s )
     
     for ( auto sit : sorter )
       {
-         std::sprintf( num, "%lu", sit );
+         std::snprintf( num, sizeof(num), "%lu", sit );
          std::strcat( s, num );
       }
  }
@@ -188,7 +188,7 @@ inline void HashKey::Key( size_t a, size_t b, std::string& s )
     
     for ( auto sit : sorter )
       {
-         std::sprintf( num, "%lu", sit );
+         std::snprintf( num, sizeof(num), "%lu", sit );
          s += num;
       }
  }
@@ -204,7 +204,7 @@ inline void HashKey::Key( size_t a, size_t b, size_t c, std::string& s )
     
     for ( auto sit : sorter )
       {
-         std::sprintf( num, "%lu", sit );
+         std::snprintf( num, sizeof(num), "%lu", sit );
          s += num;
       }
 //    cout <<"\nHashKey::Key: "<< s.CharPointer() << endl;
@@ -223,7 +223,7 @@ inline void HashKey::Key( size_t a, size_t b, size_t c, size_t d, std::string& s
     
     for ( auto sit : sorter )
       {
-         std::sprintf( num, "%lu", sit );
+         std::snprintf( num, sizeof(num), "%lu", sit );
          s += num;
       }
  }
