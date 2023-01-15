@@ -73,7 +73,7 @@ void NumIntegral_NT_dNi_dV_sc<dim,CELL>::ComputeContribution( const CELL<dim>& e
          det = e.dN_AtIntegrationPoint( DN, i );
          //det = e.det_JINV_AtIntegrationPoint( i );
          for ( auto j{0U}; j<e.Nodes(); j++ )
-            for ( auto k=0; k<e.Nodes(); k++ )
+            for ( auto k{0U}; k<e.Nodes(); k++ )
               transp_ ? TEMP(j,k) = IPOL[j] * DN(xyz_,k) : TEMP(j,k) = IPOL[k] * DN(xyz_,j);
          TEMP *= (det * e.WeightAtIntegrationPoint(i));
          MathOperatorLHS<dim,CELL>::LHS += TEMP;

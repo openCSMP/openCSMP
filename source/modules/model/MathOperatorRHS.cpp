@@ -774,9 +774,10 @@ template<uint32_t dim, template<uint32_t> class CELL>
       }
     else // if the operand is placed on the constraint-points
       {
+        const auto n_integration_points{ e_ref.IntegrationPoints() };
+
         if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT) {
-          MTRL.resize(e_ref.FE()->IntegrationPoints());
-          const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
+          MTRL.resize( n_integration_points );
           for (auto i{0U}; i < n_integration_points; i++)
           {
             if (MaterialOperandType() == SCALAR)
@@ -808,7 +809,6 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
       // if the operand is placed on the node
       else if (MaterialOperandPlacement() == NODE) {
-          const auto n_integration_points(e_ref.FE()->IntegrationPoints());
           MTRL.resize(n_integration_points);
           for (auto i{0U}; i < n_integration_points; i++)
             PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
