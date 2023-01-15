@@ -945,7 +945,7 @@ template<uint32_t dim>
 Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
                                                   const LocalVariables& lvars,
                                                   const IntegrationPointVariables& ivars,
-                                                  const std::vector<Node<dim>*>& nodes,
+                                                  const vector<Node<dim>*>& nodes,
                                                   int32_t material_id )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1243,7 +1243,7 @@ Face<dim>* const MeshManager<dim>::AddEdgeFace( Face<dim>* const adjacent_face1,
                                                 uint32_t parent_elmt2_segm_id,
                                                 const LocalVariables& lvars,
                                                 const IntegrationPointVariables& ivars,
-                                                const std::vector<Node<dim>*>& nodes )
+                                                const vector<Node<dim>*>& nodes )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -1774,11 +1774,13 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
 
    @param last iterator to the last FaceConstructionData of the dim-1 region which also points behind the last perimeter face
 
-   @param first iterator to perimeter node vector of dim-1 region
+   @param perim_first iterator to perimeter node vector of dim-1 region
 
-   @param last iterator to perimeter node vector of dim-1 region
+   @param perim_last iterator to perimeter node vector of dim-1 region
 
-   @param An set which will be overwritten by method with region_identifier ids which should be scheduled for rebuilding since the elements (outside) have new nodes
+   @param region_material_idsc for material identifiers placed on Elements, Regions etc.
+   
+   A set which will be overwritten by method with region_identifier ids which should be scheduled for rebuilding since the elements (outside) have new nodes
 
    @assumption Assumes element property "region identifier" is defined.
 
@@ -1822,18 +1824,18 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
 */
 template<uint32_t dim>
 vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const PropertyDatabase<dim>& dbase,
-                                                                        typename std::vector<FaceConstructionData<dim>>::iterator first,
-                                                                        typename std::vector<FaceConstructionData<dim>>::iterator last,
+                                                                        typename vector<FaceConstructionData<dim>>::iterator first,
+                                                                        typename vector<FaceConstructionData<dim>>::iterator last,
                                                                         typename vector<Node<dim>*>::const_iterator perim_first,
                                                                         typename vector<Node<dim>*>::const_iterator perim_last,
-                                                                        std::set<Node<dim>*> &split_perimeter_nodes,
-                                                                        std::set<size_t>& region_material_ids)
+                                                                        set<Node<dim>*> &split_perimeter_nodes,
+                                                                        set<size_t>& region_material_ids )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     // vector of interfaces which will be returned
     vector<InterFace<dim>*>  iface_ptrs;
-    const size_t  n_original_elmts{ static_cast<size_t>(std::distance(first,last))};
+    const size_t  n_original_elmts{ static_cast<size_t>(distance(first,last))};
 
     const csmp::Index region_key = dbase.StorageKey( "region identifier");
 
@@ -1858,8 +1860,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
     // tracking already duplicated nodes to avoid duplicates
     //  original,  duplicate
     map<Node<dim>*,Node<dim>*>  new_nodes;
-    std::map<Node<dim>*,Node<dim>*> new_nodes_with_existing_manifold;
-    std::map<Node<dim>*,Node<dim>*> new_perimeter_nodes_without_manifold;
+    map<Node<dim>*,Node<dim>*> new_nodes_with_existing_manifold;
+    map<Node<dim>*,Node<dim>*> new_perimeter_nodes_without_manifold;
 
 
     // 1. converting interior Face objects into InterFace ones, duplicating their nodes
@@ -1880,7 +1882,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          // 1.2 duplicating the nodes creating manifolds as necessary and adding boundary flags
          // ---------------------------------------------------------
          //getting vector of inside nodes to iterater
-         std::vector<uint32_t> inside_fnids = inside_elmt->FE()->NodesOfFace( first->InnerElementFace() );
+         vector<uint32_t> inside_fnids = inside_elmt->FE()->NodesOfFace( first->InnerElementFace() );
          map<Node<dim>*, Node<dim>*> in_out_nodes;
          auto               nit{ new_nodes.end() };
          // creating the node vector and reverting its order so that it matches the face of the higher dimensional outside element
@@ -1889,7 +1891,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
            //If we are at not at perimeter, or if we are at intersection (manifold)
            bool inside_was_manifold  = inside_node->IsManifold();
            bool inside_was_perimeter = (inside_node->Attribute() == PERIMETER_LINE || inside_node->Attribute() == PERIMETER_POINT );  //if we hit another regions perimeter (not the region we are splitting)
-           if ( std::find( perim_first, perim_last, inside_node ) == perim_last && split_perimeter_nodes.find(inside_node) == split_perimeter_nodes.end() ){
+           if ( find( perim_first, perim_last, inside_node ) == perim_last && split_perimeter_nodes.find(inside_node) == split_perimeter_nodes.end() ){
              if ( (nit=new_nodes.find( inside_node )) == new_nodes.end() ) {                // if a matching outside node has not been created yet
                   //duplicating outside node if not already duplicated
                   Node<dim>* out_node = Duplicate( inside_node, lvsNode );
@@ -1924,9 +1926,9 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          }//end of node loop and duplication
 
          //Need to assign outside nodes to OuterParent element
-         std::vector<uint32_t> outside_fnids = outside_elmt->FE()->NodesOfFace( first->OuterElementFace() );
+         vector<uint32_t> outside_fnids = outside_elmt->FE()->NodesOfFace( first->OuterElementFace() );
          for ( uint32_t n : outside_fnids){
-           assert( std::fabs(outside_elmt->N(n)->Coordinate().DistanceTo(in_out_nodes[outside_elmt->N(n)]->Coordinate()))< 0.001 ) ;
+           assert( fabs(outside_elmt->N(n)->Coordinate().DistanceTo(in_out_nodes[outside_elmt->N(n)]->Coordinate()))< 0.001 ) ;
            outside_elmt->Assign(n, in_out_nodes[outside_elmt->N(n)] );
          }
 
@@ -1962,7 +1964,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
            //search the nodes of neighbor for inside node
            uint32_t n_nodes = e_nbr->Nodes();
            for (uint32_t n{0U}; n < n_nodes; n++ ){
-             typename std::map<Node<dim>*,Node<dim>*>::iterator found_it = new_nodes.find( e_nbr->N(n) ); //searching for inside Node in element
+             typename map<Node<dim>*,Node<dim>*>::iterator found_it = new_nodes.find( e_nbr->N(n) ); //searching for inside Node in element
              if ( found_it != new_nodes.end() ){
                e_nbr->Assign(n, found_it->second ); //replacing inside node of neighbor with outside node
                assert( inside_parents.find(e_nbr) == inside_parents.end() );
@@ -1993,10 +1995,10 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
        uint32_t found{0U};
        for ( uint32_t i{0U}; i < interfaces; i++ ){
          //getting interface information
-         std::pair<InterFace<dim>*, std::pair<uint32_t, INTERFACE_SIDE>> interface_index = old_node->Manifold()->InterFaceIndex(old_node, i);
+         pair<InterFace<dim>*, pair<uint32_t, INTERFACE_SIDE>> interface_index = old_node->Manifold()->InterFaceIndex(old_node, i);
          INTERFACE_SIDE side = interface_index.second.second;
          //getting nodes face of higher-dim parent element
-         std::set<Node<dim>*> nds_of_parent = interface_index.first->Parent(side)->CornerNodesOfFace(interface_index.first->ParentFaceID(side));
+         set<Node<dim>*> nds_of_parent = interface_index.first->Parent(side)->CornerNodesOfFace(interface_index.first->ParentFaceID(side));
          // if Parent was updated with new node
          if (nds_of_parent.find( old_node ) == nds_of_parent.end() ){
            assert(nds_of_parent.find(nit.second) != nds_of_parent.end()); //check the parent element has the new duplicate node
@@ -2015,7 +2017,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
        Node<dim>* perimeter_node = nit.first;
 
        //i) search for potential interfaces
-       std::set<InterFace<dim>*> potential_interfaces;
+       set<InterFace<dim>*> potential_interfaces;
        const uint32_t neighbors = perimeter_node->Neighbors();
        //search for manifold nodes that are neighbors, and grab their interfaces
        for (uint32_t n{0U}; n<neighbors; ++n){
@@ -2040,8 +2042,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
               //We should also have perimeter node on the outside
               assert(ifit->MatchingN(n,OUTSIDE) == perimeter_node );
               //Update both sides of interface with new node IF higher dim parents say so!
-              std::set<Node<dim>*> nds_of_in_face  = ifit->InnerParent()->CornerNodesOfFace( ifit->InnerParentFaceID() );
-              std::set<Node<dim>*> nds_of_out_face = ifit->OuterParent()->CornerNodesOfFace( ifit->OuterParentFaceID() );
+              set<Node<dim>*> nds_of_in_face  = ifit->InnerParent()->CornerNodesOfFace( ifit->InnerParentFaceID() );
+              set<Node<dim>*> nds_of_out_face = ifit->OuterParent()->CornerNodesOfFace( ifit->OuterParentFaceID() );
               if (nds_of_in_face.find(perimeter_node) == nds_of_in_face.end()){
                 assert(nds_of_out_face.find(perimeter_node) == nds_of_out_face.end());  //Check also outside face doesnt have perimeter node (not true perimeter)
                 assert(nds_of_in_face.find(nit.second) != nds_of_in_face.end());        //check we have the duplicate node instead
@@ -2167,7 +2169,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
          auto               nit{ new_nodes.end() };
          // creating the node vector and reverting its order so that it matches the face of the higher dimensional outside element
          for ( auto i{0U}; i<n_nodes; i++ ) {
-           if ( std::find( perim_first, perim_last, (*first)->N(i) ) == perim_last ){             //using the perimeter nodes (Costly find operation)
+           if ( find( perim_first, perim_last, (*first)->N(i) ) == perim_last ){             //using the perimeter nodes (Costly find operation)
            //if ( (*first)->N(i)->Attribute() != PERIMETER_POINT && (*first)->N(i)->Attribute() != PERIMETER_LINE ){        //WHEN WE CAN RELY ON TOPO FLAGS
              if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {                // if a matching outside node has not been created yet
                   outside_nodes[i] = Duplicate( (*first)->N(i), nvars );
@@ -2248,7 +2250,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
             //search the nodes of neighbor for inside node
             uint32_t n_nodes = e_nbr->Nodes();
             for (uint32_t n{0U}; n < n_nodes; n++ ){
-              typename std::map<Node<dim>*,Node<dim>*>::iterator found_it = new_nodes.find( e_nbr->N(n) ); //searching for inside Node in element
+              typename map<Node<dim>*,Node<dim>*>::iterator found_it = new_nodes.find( e_nbr->N(n) ); //searching for inside Node in element
               if ( found_it != new_nodes.end() ){
                 e_nbr->Assign(n, found_it->second ); //replacing inside node of neighbor with outside node
                 assert( inside_parents.find(e_nbr) == inside_parents.end() );
@@ -2491,7 +2493,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
      // 3. cleaning up inter-CELL and node to parent connectivity
      // ---------------------------------------------------------
      //find parent elements of old nodes that are in outside region, unassign them from old nodes and assign to corresponding new nodes
-     std::map<Node<dim>*, Element<dim>*> old_node_unassigned_element_map;
+     map<Node<dim>*, Element<dim>*> old_node_unassigned_element_map;
      for(auto nd_pair : new_nodes) {
        auto old_node = nd_pair.first;
        for (uint32_t i{0}; i < old_node->Parents(); ++i) {
@@ -2501,7 +2503,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
          else if (dim == 3U && parent_elmt->IsVolume()) higher_dimension = true;
          if(higher_dimension && out_region.Contains(parent_elmt)) {
            auto local_nd_index = old_node->ParentNodeNumber(i);
-           old_node_unassigned_element_map.insert(std::make_pair(old_node,parent_elmt));
+           old_node_unassigned_element_map.insert(make_pair(old_node,parent_elmt));
            auto new_node = nd_pair.second;
            parent_elmt->Assign(local_nd_index, new_node );
          }
@@ -3129,8 +3131,8 @@ template void MeshManager<1>::BuildConnectivity<InterFace>( typename vector<Inte
 
 template<>
 template<template<uint32_t> class CELL>
-void MeshManager<3>::BuildVolumeConnectivity( typename std::vector<CELL<3U>*>::const_iterator first,
-                                              typename std::vector<CELL<3U>*>::const_iterator last )
+void MeshManager<3>::BuildVolumeConnectivity( typename vector<CELL<3U>*>::const_iterator first,
+                                              typename vector<CELL<3U>*>::const_iterator last )
    {
       assert( (detectDuplicateCells<3U,CELL>( first, last, true )) == 0U );
 
@@ -3194,8 +3196,8 @@ template void MeshManager<3U>::BuildVolumeConnectivity<Element>( typename vector
 */
 template<uint32_t dim>
 template<template<uint32_t> class CELL>
-void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
-                                                 typename std::vector<CELL<dim>*>::const_iterator last )
+void MeshManager<dim>::BuildSurfaceConnectivity( typename vector<CELL<dim>*>::const_iterator first,
+                                                 typename vector<CELL<dim>*>::const_iterator last )
    {
       assert( (detectDuplicateCells<dim,CELL>( first, last, true )) == 0U );
 
@@ -3346,8 +3348,8 @@ template void MeshManager<1>::BuildSurfaceConnectivity<InterFace>( typename vect
 */
 template<uint32_t dim>
 template<template<uint32_t> class CELL>
-void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
-                                              typename std::vector<CELL<dim>*>::const_iterator last )
+void MeshManager<dim>::BuildLineConnectivity( typename vector<CELL<dim>*>::const_iterator first,
+                                              typename vector<CELL<dim>*>::const_iterator last )
    {
       assert( (detectDuplicateCells<dim,CELL>( first, last, true )) == 0U );
   
@@ -3499,8 +3501,8 @@ template void MeshManager<2>::BuildLineConnectivity<InterFace>( typename vector<
        @date 10/4/22
 */
 template<uint32_t dim>
-void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFace<dim>*>::const_iterator first,
-                                                   typename std::vector<InterFace<dim>*>::const_iterator last )
+void MeshManager<dim>::BuildInterFaceConnectivity( typename vector<InterFace<dim>*>::const_iterator first,
+                                                   typename vector<InterFace<dim>*>::const_iterator last )
    {
       // for InterFaces = surface elements in s 3D model
       // -----------------------------------------------
@@ -3756,15 +3758,15 @@ void MeshManager<dim>::UpdateConnectivity()
     // 4.1 (Re)-creating node connectivity to parent interfaces
     // -----------------------------------------------------
     // counting the parent elements of each node
-    map<Node<dim>*,set<pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE>>> >  parent_ifaces_per_node;
+    map<Node<dim>*,set<pair<InterFace<dim>*,pair<uint32_t,INTERFACE_SIDE>>> >  parent_ifaces_per_node;
     for ( auto& it : interfaces_ ) {
       assert( it.FE() );
       const auto nodes{ it.FE()->Nodes() };
       for ( uint32_t n{0U}; n < nodes; ++n ) {
-        std::vector<INTERFACE_SIDE> sides{INSIDE,OUTSIDE};
+        vector<INTERFACE_SIDE> sides{INSIDE,OUTSIDE};
         for ( INTERFACE_SIDE side : sides ){
           if( it.N(n,side)->IsManifold() ){
-            set<pair<InterFace<dim>*,pair<uint32_t,INTERFACE_SIDE>>> trial_set{std::make_pair( &it, make_pair(n,side))};
+            set<pair<InterFace<dim>*,pair<uint32_t,INTERFACE_SIDE>>> trial_set{make_pair( &it, make_pair(n,side))};
             auto mit = parent_ifaces_per_node.insert( make_pair( it.N(n,side), trial_set )) ; //inserting NodeManifold - InterFace pair if it doesnt exist
             if (mit.second == false) //if insertion didnt happen because manifold already exists
               mit.first->second.insert( *trial_set.begin() ); //add new interface to already existing set of InterFaces for existing NodeManifold

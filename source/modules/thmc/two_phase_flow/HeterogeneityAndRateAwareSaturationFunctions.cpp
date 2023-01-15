@@ -1436,7 +1436,8 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_at( Element<d
 
 
 template<uint32_t dim, template<uint32_t> class USER>
-double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel( Element<dim>* const e, size_t direction ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel( Element<dim>* const e,
+                                                                             int direction ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
