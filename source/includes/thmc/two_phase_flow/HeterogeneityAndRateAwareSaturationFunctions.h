@@ -123,7 +123,7 @@ class HeterogeneityAndRateAwareSaturationFunctions {
         double PermeabilityParallelToLaminations( Element<dim>* const e ) const;
         double PermeabilityInFlowDirection( Element<dim>* const e, const TensorVariable<dim>& KK) const;
         double K_reduction_in_flow_direction( Element<dim>* const e ) const;
-        double krn_parallel( Element<dim>* const e, size_t direction ) const;
+        double krn_parallel( Element<dim>* const e, int direction ) const;
         double krn_crossflow( Element<dim>* const e ) const;
         double krn_parallel_at( Element<dim>* const e, double Sw, size_t direction ) const;
         double krn_crossflow_at( Element<dim>* const e, double Sw ) const;

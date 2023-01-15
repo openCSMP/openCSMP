@@ -208,7 +208,7 @@ void PolygonCell
     custom_node_order_.clear();
     custom_node_order_.resize( num_nodes_ );
     nodes_in_custom_order_.resize( num_nodes_ );
-    for( size_t nid = 0 ; nid < num_nodes_; ++nid )
+    for( auto nid{0U}; nid < num_nodes_; ++nid )
     {
         custom_node_order_[nid] = nid;
         nodes_in_custom_order_[nid] = nodes_[nid];
@@ -369,7 +369,7 @@ void PolygonCell::InitializeFaceOrder( size_t num_faces )
     face_nodes_in_custom_order_.resize( num_faces_ );
     face_nodes_.resize( num_faces_ );
     faces_.resize( num_faces_ );
-    for( size_t fid = 0 ; fid < num_faces_; ++fid )
+    for( auto fid{0U}; fid < num_faces_; ++fid )
     {
         custom_face_order_[ fid ] = fid;
         const size_t num_face_nodes( face_nodes_[fid].size() );
@@ -391,7 +391,7 @@ void PolygonCell::AssignFaceOrder( size_t cfid , size_t ofid )
     face_nodes_.resize( num_faces_ );
     faces_.resize( num_faces_ );
     const size_t num_face_nodes( face_nodes_[ofid].size() );
-    for( size_t nid = 0 ; nid < num_face_nodes; ++nid ) {
+    for( auto nid{0U}; nid < num_face_nodes; ++nid ) {
          face_nodes_in_custom_order_[cfid].reserve( face_nodes_in_custom_order_[cfid].size() + 1 );
          face_nodes_in_custom_order_[cfid].push_back( GetCustomNodeId( face_nodes_[ofid][nid] ) );
       }

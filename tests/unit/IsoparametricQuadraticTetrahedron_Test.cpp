@@ -248,12 +248,12 @@ void IsoparametricQuadraticTetrahedron_Test::run()
 
         // computing position of element barycenter
         csmp::Point<3U> bcenter(0.,0.,0.);
-        for ( size_t i=0; i<element_.Nodes(); i++ ) bcenter += element_.N(i)->Coordinate();
+        for ( auto i{0U}; i<element_.Nodes(); i++ ) bcenter += element_.N(i)->Coordinate();
         bcenter /= static_cast<double>(element_.Nodes());
         cout <<"\nelement barycenter: "; bcenter.Out();
         // versus 4-node approximation
         bcenter = 0.;
-        for ( size_t i=0; i<4; i++ ) bcenter += element_.N(i)->Coordinate();
+        for ( auto i{0U}; i<4; i++ ) bcenter += element_.N(i)->Coordinate();
         bcenter /= 4.;
         cout <<"\nelement barycenter (as based on corner nodes): "; bcenter.Out();
         xyz = bcenter.Coordinates();
@@ -432,7 +432,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   element_.Idx( 7 ); // to prompt update of coordinate matrix
   element_.CoordinateMatrix();
   DATA2.Resize(1, element_.Nodes());
-  for ( size_t i=0; i<element_.Nodes(); i++ ) DATA2(0,i) = NVF[i];
+  for ( auto i{0U}; i<element_.Nodes(); i++ ) DATA2(0,i) = NVF[i];
   element_.FE()->OutputNodeDataToVTK( "encoords", "dummy", DATA2 );
   // checking the normals of the faces for their correct orientation
   if ( verbose_ ) OutputFaceNormalsToVTK( "enormals", element_ );
@@ -463,7 +463,7 @@ void IsoparametricQuadraticTetrahedron_Test::TestInterpolationFunctionValues( co
    
     vector<double> IPOL(element_.Nodes()), xyz(3U);
 
-    for ( size_t i=0; i<e.Nodes(); i++ ) {
+    for ( auto i{0U}; i<e.Nodes(); i++ ) {
          Point<3U> pt = e.N(i)->Coordinate();
          xyz = pt.Coordinates();
          e.N_AtGlobalPoint( IPOL, xyz );
@@ -496,7 +496,7 @@ void IsoparametricQuadraticTetrahedron_Test::TestSumOfInterpolationFunctionValue
     vector<double> IPOL(element_.Nodes());
 
     // at integration points
-    for ( size_t i=0; i<e.IntegrationPoints(); i++ ) {
+    for ( auto i{0U}; i<e.IntegrationPoints(); i++ ) {
          e.N_AtIntegrationPoint( i, IPOL );
          double sum(0.);
          for ( size_t j=0; j<IPOL.size(); j++ ) sum += IPOL[j];
@@ -506,7 +506,7 @@ void IsoparametricQuadraticTetrahedron_Test::TestSumOfInterpolationFunctionValue
     // at element barycenter
     e.N_AtBaryCenter( IPOL );
     double sum(0.);
-    for ( size_t j=0; j<IPOL.size(); j++ ) sum += IPOL[j];
+    for ( auto j{0U}; j<IPOL.size(); j++ ) sum += IPOL[j];
   _equal( sum, 1., tolerance_factor_ * numeric_limits<double>::epsilon() );
    
  } // end
@@ -535,7 +535,7 @@ void IsoparametricQuadraticTetrahedron_Test::CheckInterpolation( const Element<3
     // using the negative sum of the global coordinates as an interpolant:
     // At all nodes, val = -x + -y + -z.
     vector<double>  node_vals(e.Nodes());
-    for ( auto i{0}; i<e.Nodes(); i++ )
+    for ( auto i{0U}; i<e.Nodes(); i++ )
       node_vals[i] = -e.N(i)->x() + -e.N(i)->y() + -e.N(i)->z();
 
     // interpolating nodal values to integration points and checking these against theoretic values
@@ -544,7 +544,7 @@ void IsoparametricQuadraticTetrahedron_Test::CheckInterpolation( const Element<3
          // interpolation
          e.N_AtIntegrationPoint( i, IPOL );
          double ivalue(0.);
-         for ( size_t j=0; j<e.Nodes(); j++ )
+         for ( auto j{0U}; j<e.Nodes(); j++ )
            ivalue += IPOL[j] * node_vals[j];
          // checking ivalue (IntegrationPoint returns the location of the integration point in physical space)
          Point<3U> xyz(element_.IntegrationPoint(i));
@@ -696,7 +696,7 @@ void IsoparametricQuadraticTetrahedron_Test::OutputFaceNormalsToVTK( const char*
     // 0. generating face normals, scaling and storing them
     // -----------------------------------------------------------
     vector<uint32_t> fnids;
-    for ( size_t i=0; i<e.Faces(); i++ ) {
+    for ( auto i{0U}; i<e.Faces(); i++ ) {
          // computing and storing normal to face
          e.FE()->UnitNormalAtFaceBarycenter( i, nrml );
          Point<3U> unormal(nrml);

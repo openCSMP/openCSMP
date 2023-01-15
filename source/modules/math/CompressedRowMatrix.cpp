@@ -110,7 +110,7 @@ void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&
           for ( const auto& node_index : node_indexes ) {
           // TODO: the CRS only takes 'int32_t' for ja as required by samg
             assert( node_index < numeric_limits<int32_t>::max() );
-            G.ja.push_back(node_index);
+            G.ja.push_back( static_cast<int32_t>(node_index) );
             G.a.push_back(initial_value);
           }
         }
