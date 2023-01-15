@@ -664,7 +664,7 @@ bool PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<di
                                                  "righthand test operand for boundary integral not found.");
              }
          }
-       // split boundareies
+       // split boundaries
        if ( !rhs_split_boundary_operators_.empty() ) {
            for ( auto& rhs_it : rhs_split_boundary_operators_ )
              {
@@ -678,7 +678,7 @@ bool PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<di
              }
          }
 
-       // Testing: for each righthand operand there must be a basic or test operand on the LHS
+       // Testing: for each lefthand operand there must be a basic or test operand on the LHS
        // ------------------------------------------------------------------------------------
        for ( auto& lhs_it : lhs_operators_ )
          if ( basic_operands_.find( lhs_it.second->BasicOperand() ) == basic_operands_.end() &&
@@ -783,7 +783,6 @@ bool PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<di
                                        "LHS test function operand matrix placement j unresolved");
      }
    
-   // ALT - This is missing from SKM version **********************************
      //LEFT HANDSIDE - SPLIT BOUNDARY INTEGRALS
      for (auto& lhs_it : lhs_split_boundary_operators_){
        //Same passing of basic and test offsets are done for pde operators defined on a split boundary
@@ -804,7 +803,7 @@ bool PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<di
                                "No matching test operand found from pde operator");
 
      }
-   // ALT - End missing section ***********************************************
+
    // RIGHT-HAND SIDE
    for ( auto& rhs_it : rhs_operators_ )
      {
@@ -825,7 +824,6 @@ bool PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<di
                                  rhs_it.first.c_str(), "RHS boundary-integral operand vector^T placement i unresolved...");
      }
 
-   // ALT - This is missing from SKM version **********************************
    // RIGHT-HAND SIDE: SPLIT BOUNDARY INTEGRALS
      for ( auto& rhs_it : rhs_split_boundary_operators_ ){
        if ( (iter=test_operands_.find(rhs_it.second->TestOperand() ) ) != test_operands_.end()){
@@ -834,7 +832,6 @@ bool PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<di
          throw csmp::Exception(ERROR, "PDE_integratorExperimental::EstablishMatrixSetup",
                                "RHS split boundary pde operator contains test operand not initialised");
      }
-   // ALT - End missing section ***********************************************
 
    setup_established_ = true;
 
