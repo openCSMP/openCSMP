@@ -9,34 +9,39 @@
 
 namespace csmp {
 
-// LHS operator that puts fixed values in the matrix
+/**
+
+LHS operator that puts fixed values in the matrix
+
+*/
 template<uint32_t dim,class CELL=Element<dim> >
 class LHS_FixedValueMatrix : public MathOperatorLHS<dim> {
   public:
     LHS_FixedValueMatrix( const PropertyDatabase<dim>& p, const char* oper, const char* basic, const char* test, double value )
-      : MathOperatorLHS<dim>(p,oper,basic,test), value_for_matrix_{value} {}
+      : MathOperatorLHS<dim>(p,oper,basic,test), value_for_matrix_{value} {
+         MathOperatorLHS<dim>::Name( "LHS_FixedValueMatrix", oper, basic, test );
+    }
     virtual ~LHS_FixedValueMatrix() {}
-    virtual void GetOperands( const CELL& ) {}
-    virtual void ComputeContribution( const CELL& e ) {
-         MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
-         MathOperatorLHS<dim>::LHS = -value_for_matrix_; // off-diagonal is negative
-         MathOperatorLHS<dim>::LHS.AssignToDiagonal( value_for_matrix_ ); // diagonal is negative
-      }
+    virtual void ComputeContribution( const CELL& );
     virtual LHS_FixedValueMatrix<dim,CELL >* clone() const { return new LHS_FixedValueMatrix<dim,CELL >(*this); }
   private:
     double value_for_matrix_;
 };
 
-// RHS operator that puts fixed values in the matrix
+/**
+
+RHS operator that puts fixed values in the matrix
+
+*/
 template<uint32_t dim,class CELL=Element<dim> >
 class RHS_FixedValueMatrix : public MathOperatorRHS<dim> {
   public:
     RHS_FixedValueMatrix( const PropertyDatabase<dim>& p, const char* basic, const char* test, double value )
-     : MathOperatorRHS<dim>(p,basic,test), value_for_vector_{value} {}
+     : MathOperatorRHS<dim>(p,basic,test), value_for_vector_{value} {
+         MathOperatorRHS<dim>::Name( "RHS_FixedValueMatrix", test );
+    }
     virtual ~RHS_FixedValueMatrix() {}
-    virtual void GetOperands( const CELL& ) {}
-    virtual void ComputeContribution( const CELL& e )
-      { this->RHS.resize(e.Nodes()); for ( auto i{0U}; i<dim; i++ ) this->RHS[i] = value_for_vector_; } // off-diagonal is negative
+    virtual void ComputeContribution( const CELL& );
     virtual RHS_FixedValueMatrix<dim,CELL >* clone() const { return new RHS_FixedValueMatrix<dim,CELL >(*this); }
   private:
     double value_for_vector_;
@@ -61,8 +66,8 @@ TODO
 */
 class PDE_Integrator_Test : public Test {
   public:
+    PDE_Integrator_Test();
     explicit PDE_Integrator_Test( Model<2U>& model );
-    explicit PDE_Integrator_Test( Model<3U>& model );
     ~PDE_Integrator_Test();
     
     void run();
@@ -107,10 +112,15 @@ class PDE_Integrator_Test : public Test {
     */
 
   private:
-    Model<2U>& model_; // 2D is fully sufficient
+    Model<2U>* model_{nullptr}; // 2D is fully sufficient
+    bool delete_model_{false};
     
     /// checks that element matrices and vectors end up in the right place
     void TestAssembly();
+    void TestAssemblySingleScalarNoDirichlet( bool debug );
+    void TestAssemblySingleScalarDirichlet( bool debug );
+    void TestAssemblySingleVectorNoDirichlet( bool debug );
+    void TestAssemblySingleVectorDirichlet( bool debug );
     
     // methods from Luat
     void Reset();
