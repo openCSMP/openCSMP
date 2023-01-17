@@ -15,8 +15,8 @@ NumIntegral_NT_dNi_dV<dim,CELL>::~NumIntegral_NT_dNi_dV() {}
 
 template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_NT_dNi_dV<dim,CELL>::NumIntegral_NT_dNi_dV( const PropertyDatabase<dim>& pref,
-                                                                 const char*            basic,
-                                                                 const char*            test )
+                                                         const char*            basic,
+                                                         const char*            test )
   : MathOperatorLHS<dim,CELL>(pref,basic,test),
     TEMP(3,3), xyz_(Y_DIRECTION), transp_(false)
 {
@@ -60,13 +60,15 @@ void NumIntegral_NT_dNi_dV<dim,CELL>::Transposed()
  
  
 /** 
-    Computes IPOL * DN_i product weighted by the determinant of Jacobian matrix.
+    Computes N_transposed * DN_i product that is weighted by the determinant of Jacobian matrix.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_NT_dNi_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
+    // making sure that is operator is only applied to volume elmts in 3D, surf in 2D and line elmts in 1D
+    assert( e.IsEquidimensional() );
 
     // initialize output matrix
     MathOperatorLHS<dim,CELL>::LHS.Resize( e.Nodes(), e.Nodes() );
