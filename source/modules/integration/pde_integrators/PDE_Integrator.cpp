@@ -182,37 +182,76 @@ void   PDE_Integrator<dim,CELLTYPE>::TimeIncrement( double dt )
 the PDE_Integrator to the Model, the matrix will have been modified by the
 Solver object.
 
+@param precision defines number of decimal places the matrix entries shall be printed with.
+
+@attention the output can be forced to print evenly spaced integers by setting the precision to -1.
+In this case, rounding is performed accordingly.
+
 @section application  Application
 
 To test the accumulation process by visual examination of the matrices,
 you must call it directly after executing Accumulate(), see below.
+
 */
 template<uint32_t dim,template<uint32_t> class CELLTYPE>
 void  PDE_Integrator<dim,CELLTYPE>::OutputGlobals( int32_t precision )
  {
-   cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
-   G_.Out( precision );
+   // 1. printing records in scientific notation with a user-specified number of decimal places
+   // -----------------------------------------------------------------------------------------
+   if ( precision >= 0 ) {
+       cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
+       G_.Out( precision );
 
-   cout.setf(ios::scientific);
-   cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
+       cout.setf(ios::scientific);
+       cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
+       for ( size_t i{0U}; i<rh_.size(); i++ )
+         {
+            cout.precision(precision);
+            if ( rh_[i] >= 0. ) cout <<" ";
+            cout << rh_[i] <<" ";
+         }
+       cout << endl;
+
+       cout <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
+       for ( size_t i{0U}; i<x_.size(); i++ )
+         {
+            cout.precision(precision);
+            if ( x_[i] >= 0 ) cout <<" ";
+            cout << x_[i] <<" ";
+         }
+       cout << endl;
+
+       cout.unsetf(ios::scientific);
+       return;
+     }
+
+
+   // 2. printing records as integers
+   // -------------------------------
+   cout <<"\nGlobal solution matrix (in integer format): "<< G_.Rows() <<" x "<< G_.Cols() << endl;
+   for ( size_t i{0u}; i<G_.Rows(); ++i ) {
+        for ( size_t j{0u}; j<G_.Cols(); ++j ) {
+             if ( G_(i,j) > 0. ) cout <<" ";
+             cout << lround( G_(i,j) ) <<" ";
+          }
+        cout << endl;
+     }
+
+   cout <<"\n\nGlobal righthand vector of length (integer format): "<< rh_.size() << endl;
    for ( size_t i{0U}; i<rh_.size(); i++ )
      {
-        cout.precision(precision);
         if ( rh_[i] >= 0. ) cout <<" ";
-        cout << rh_[i] <<" ";
+        cout << lround( rh_[i] ) <<" ";
      }
    cout << endl;
 
-   cout <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
+   cout <<"\n\nGlobal solution vector of length (integer format): "<< x_.size() << endl;
    for ( size_t i{0U}; i<x_.size(); i++ )
      {
-        cout.precision(precision);
         if ( x_[i] >= 0 ) cout <<" ";
-        cout << x_[i] <<" ";
+        cout << lround( x_[i] ) <<" ";
      }
    cout << endl;
-
-   cout.unsetf(ios::scientific);
 
  } // end OutputGlobals
 
