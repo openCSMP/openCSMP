@@ -1,78 +1,98 @@
 #include "PDE_Integrator_Test.h"
 #include "PDE_Integrator.h"
+#include "ErrorHandler.h"
+#include "Exception.h"
 #include "Attorney.h"
 
 #include "VSet.h"
 #include "ModelTopology.h"
 #include "vsetMakers.h"
 
-#include "GaussJordan_Solver.h"
+#include "LinearSolver.h"
 #include "Model.h"
 #include "Region.h"
-
-// TODO: distinguish this UNIT TEST from an INTEGRATION TEST
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
-#include "PointSource_rhsop.h"
-#include "NumIntegral_dNT_op_dV.h"
-#include "VelocityAndVolumeFlux.h"
-    // thermal equation
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
 
 using namespace std;
 
 namespace csmp {
 
-// Attorney design pattern gives access to protected / private member variables
-// and methods
-template<uint32_t dim>
-class PDE_Integrator_Attorney : public Attorney<class PDE_Integrator<dim>> {
-public:
-    using Attorney<PDE_Integrator<dim>>::Attorney; // Inherit Attorney constructor
-    using PDE_Integrator<dim>::Accumulate;
-    using PDE_Integrator<dim>::EstablishMatrixSetup;
-    using PDE_Integrator<dim>::lhs_operators_;
-    using PDE_Integrator<dim>::rhs_operators_;
-    using PDE_Integrator<dim>::G_;
-    using PDE_Integrator<dim>::rh_;
-};
-
-
-
 /**
 
-Computes contribution from fixed value input in constructor.
+Initialises Element integral contribution to global solution matrix with a fixed value as input in constructor.
 
 This method sets @a value_for_matrix_ on the diagonal and -@a value_for_matrix_
-off the diagonal. If the TestOperand is a vector, then off-diagonal terms are
+off the diagonal. If the TestOperand is a vector or array then off-diagonal terms are
 set separately for each component of the vector (no coupling).
+
+@note transformNodeIndexVector( uint32_t dim, const csmp::Index&, vector<size_t>& ); in MathOperatorRHS changes matrices according to the degrees of freedom of the solution variables
 */
 template<uint32_t dim,class CELL>
-void LHS_FixedValueMatrix<dim,CELL>::ComputeContribution( const CELL& e ) {
-    const size_t nodes = e.Nodes();
-    size_t size = nodes;
-    if( MathOperatorLHS<dim>::TestOperandType() == VECTOR ) {
-        size *= 2;
-    }
-    MathOperatorLHS<dim>::LHS.Resize( size, size );
+void LHS_FixedValueMatrix<dim,CELL>::ComputeContribution( const CELL& e )
+  {
+    const uint32_t nodes{ e.Nodes() };
+    uint32_t       dof{ nodes };
+    if ( MathOperatorLHS<dim>::TestOperandType() == VECTOR )
+      dof *= dim;
+    else if ( MathOperatorLHS<dim>::TestOperandType() == ARRAY ||
+              MathOperatorLHS<dim>::TestOperandType() == FLAGGEDARRAY )
+      dof *= MathOperatorLHS<dim>::TestOperandDataDepth();
+
+    assert( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR );
+    assert( MathOperatorLHS<dim>::MTRL[0].Rows() == dim );
+    assert( MathOperatorLHS<dim>::MTRL[0].Cols() == dim );
+
+    MathOperatorLHS<dim>::LHS.Resize( dof, dof );
     MathOperatorLHS<dim>::LHS.Zero();
-    if( MathOperatorLHS<dim>::TestOperandType() == SCALAR ) {
-        MathOperatorLHS<dim>::LHS = -value_for_matrix_; // off-diagonal is negative
-        MathOperatorLHS<dim>::LHS.AssignToDiagonal( value_for_matrix_ ); // diagonal is positive
+    
+    // SCALAR variables: fixed values are directly written to element matrix
+    if ( MathOperatorLHS<dim>::TestOperandType() == SCALAR ) {
+         MathOperatorLHS<dim>::LHS = -value_label_for_matrix_entry_; // off-diagonal is negative
+         MathOperatorLHS<dim>::LHS.AssignToDiagonal( value_label_for_matrix_entry_ ); // diagonal is positive
+         return;
+      }
+    // VECTOR variables: are expanded to achieve an ordering comp1, comp2, comp3... in LH matrix and RH vector
+    // (the different components are tagged with integers, e.g., if scalar=3, the component becomes 3x; x={0..dim}
+    else if ( MathOperatorLHS<dim>::TestOperandType() == VECTOR ) {
+        for ( uint32_t i{0U}; i < nodes; ++i )
+          {
+             for ( uint32_t j{0U}; j < nodes; ++j )
+               {
+                  // for positive diagonal elements
+                  if ( i == j ) {
+                      for ( uint32_t k{0U}; k<dim; ++k )
+                        this->LHS(i*dim+k,i*dim+k) = value_label_for_matrix_entry_ + k + 10;
+                    }
+                  // for negative off-diagonal elements
+                  else {
+                       for ( uint32_t k{0U}; k<dim; ++k )
+                         this->LHS(i*dim+k, j*dim+k) = -(value_label_for_matrix_entry_ + k + 10);
+                    }
+               }
+          }
+        this->LHS.Out();
         return;
-    } else if( MathOperatorLHS<dim>::TestOperandType() == VECTOR ) {
-        for( size_t i = 0; i < nodes; ++i ) {
-            for( size_t j = 0; j < nodes; ++j ) {
-                if( i == j ) {
-                    this->LHS(i*2, i*2) = value_for_matrix_;
-                    this->LHS(i*2+1, i*2+1) = value_for_matrix_;
-                } else {
-                    this->LHS(i*2, j*2) = -value_for_matrix_;
-                    this->LHS(i*2+1, j*2+1) = -value_for_matrix_;
-                }
-            }
-        }
+      }
+    // ARRAY or FLAGGEDARRAY variables: same as for vectors but with data-depth instead of dim
+    else if ( MathOperatorLHS<dim>::TestOperandType() == ARRAY ||
+              MathOperatorLHS<dim>::TestOperandType() == FLAGGEDARRAY )
+      {
+        const uint32_t n_ary_elmts{ MathOperatorLHS<dim>::TestOperandDataDepth() };
+        for ( uint32_t i{0U}; i < nodes; ++i )
+          {
+             for ( uint32_t j{0U}; j < nodes; ++j )
+               {
+                  // for positive diagonal elements
+                  if ( i == j ) {
+                      for ( uint32_t k{0U}; k<n_ary_elmts; ++k )
+                        this->LHS(i*n_ary_elmts+k,i*n_ary_elmts+k) = value_label_for_matrix_entry_ + k + 10;
+                    }
+                  // for negative off-diagonal elements
+                  else {
+                       for ( uint32_t k{0U}; k<n_ary_elmts; ++k )
+                         this->LHS(i*n_ary_elmts+k, j*n_ary_elmts+k) = -(value_label_for_matrix_entry_ + k + 10);
+                    }
+               }
+          }
         this->LHS.Out();
         return;
     }
@@ -89,13 +109,15 @@ Computes contribution from value input in constructor.
 */
 template<uint32_t dim,class CELL>
 void RHS_FixedValueMatrix<dim,CELL>::ComputeContribution( const CELL& e ) {
-    size_t size = e.Nodes();
-    if( MathOperatorRHS<dim>::TestOperandType() == VECTOR ) {
-        size *= 2;
-    }
-    this->RHS.resize( size );
-    for ( auto i{0U}; i<size; i++ )
-        this->RHS[i] = value_for_vector_;
+    uint32_t dof{ e.Nodes() };
+    if ( MathOperatorRHS<dim>::TestOperandType() == VECTOR ) dof *= dim;
+    else if ( MathOperatorRHS<dim>::TestOperandType() == ARRAY ||
+              MathOperatorRHS<dim>::TestOperandType() == FLAGGEDARRAY )
+     dof *= MathOperatorRHS<dim>::TestOperandDataDepth();
+    
+    this->RHS.resize( dof );
+    for ( uint32_t i{0U}; i<dof; i++ )
+        this->RHS[i] = value_label_for_vector_entry_;
 }
 
 
@@ -134,9 +156,6 @@ PDE_Integrator_Test::~PDE_Integrator_Test() {
 
 
 
-// PDE_Integrator test functions
-namespace {
-
 /**
 
 Generic function to test the matrix accumulated in PDE_Integrator from
@@ -152,12 +171,13 @@ This function tests that
   3. all other terms are zero
  
 */
-    template<uint32_t dim> void testMatrix(
+template<uint32_t dim>
+void PDE_Integrator_Test::TestMatrix(
         const PDE_Integrator_Attorney<dim>& attorney,
         const MeshManager<dim>& mesh,
         const set<BOX_BOUNDARY>& dirich,
-        const VARIABLE_TYPE variable_type
-    ) {
+        const VARIABLE_TYPE variable_type )
+  {
         const size_t nb_nodes = mesh.Nodes();
 
         // Get indices of Dirichlet Nodes, for which
@@ -173,14 +193,15 @@ This function tests that
         size_t var_size = 1;
         switch( variable_type ) {
             case VECTOR: {
-                nb_dof *= 2;
-                var_size = 2;
-                break;
-            }
+                  nb_dof  *= dim;
+                  var_size = dim;
+                }
+              break;
             case SCALAR:
+              break;
             default:
-                break;
-        }
+              throw csmp::Exception( ERROR, "TestMatrix", "Tensor, Array and FlaggedArray variables not handled yet");
+          }
 
         // Matrix should have positive diagonal terms
         size_t n = 0;
@@ -260,7 +281,8 @@ This function tests that
                 _test( attorney.G_( mip, mjp ) == 0. );
             }
         }
-    }
+        
+    } // end TestMatrix
 
 
 
@@ -277,13 +299,13 @@ This function tests that RHS value for a given non-Dirichlet node is the value
 input in the constructor times the number of parent elements for this node.
  
 */
-    template<uint32_t dim> void testRHSVector(
-        const PDE_Integrator_Attorney<dim>& attorney,
-        const MeshManager<dim>& mesh,
-        const double val,
-        const set<BOX_BOUNDARY>& dirich,
-        const VARIABLE_TYPE variable_type
-    ) {
+template<uint32_t dim>
+void PDE_Integrator_Test::TestRHSVector(  const PDE_Integrator_Attorney<dim>& attorney,
+                                          const MeshManager<dim>& mesh,
+                                          const double val,
+                                          const set<BOX_BOUNDARY>& dirich,
+                                          const VARIABLE_TYPE variable_type )
+  {
         size_t ni = 0;
         for( auto n = mesh.NodesBegin(); n != mesh.NodesEnd(); ++n ) {
             if( dirich.find( n->AtBoundary() ) != dirich.end() ) {
@@ -295,8 +317,8 @@ input in the constructor times the number of parent elements for this node.
             }
             _test( attorney.rh_[ni++] == val*n->Parents() );
         }
-    }
-} // end anonymous namespace
+        
+  } // end TestVector
 
 
 
@@ -363,8 +385,8 @@ void PDE_Integrator_Test::TestAssemblySingleScalarNoDirichlet( bool debug ) {
     // No Dirichlet conditions
     set<BOX_BOUNDARY> dirich;
 
-    GaussJordan_Solver         solver;
-    PDE_Integrator<2U,Element> pde_integrator(solver);
+    CSMP_DEFAULT_LINEAR_SOLVER  solver;
+    PDE_Integrator<2U,Element>  pde_integrator(solver);
 
     // Enable access to private PDE_Integrator members and methods
     PDE_Integrator_Attorney<2U> attorney( pde_integrator );
@@ -393,8 +415,8 @@ void PDE_Integrator_Test::TestAssemblySingleScalarNoDirichlet( bool debug ) {
     model_region.RenumberNodes();
     attorney.Accumulate( model_region );
 
-    testMatrix<2U>( attorney, mesh, dirich, SCALAR );
-    testRHSVector<2U>( attorney, mesh, val, dirich, SCALAR );
+    TestMatrix<2U>( attorney, mesh, dirich, SCALAR );
+    TestRHSVector<2U>( attorney, mesh, val, dirich, SCALAR );
 
     if( debug ) {
         attorney.Out();
@@ -436,7 +458,7 @@ void PDE_Integrator_Test::TestAssemblySingleScalarDirichlet( bool debug ) {
         }
     }
 
-    GaussJordan_Solver         solver;
+    CSMP_DEFAULT_LINEAR_SOLVER solver;
     PDE_Integrator<2U,Element> pde_integrator(solver);
 
     // Enable access to private PDE_Integrator members and methods
@@ -465,8 +487,8 @@ void PDE_Integrator_Test::TestAssemblySingleScalarDirichlet( bool debug ) {
     model_region.RenumberNodes();
     attorney.Accumulate( model_region );
 
-    testMatrix<2U>( attorney, mesh, dirich, SCALAR );
-    testRHSVector<2U>( attorney, mesh, val, dirich, SCALAR );
+    TestMatrix<2U>( attorney, mesh, dirich, SCALAR );
+    TestRHSVector<2U>( attorney, mesh, val, dirich, SCALAR );
 
     if( debug ) {
         attorney.Out();
@@ -491,7 +513,7 @@ void PDE_Integrator_Test::TestAssemblySingleVectorNoDirichlet( bool debug ) {
     // No boundary condition
     set<BOX_BOUNDARY> dirich;
 
-    GaussJordan_Solver         solver;
+    CSMP_DEFAULT_LINEAR_SOLVER solver;
     PDE_Integrator<2U,Element> pde_integrator(solver);
 
     // Enable access to private PDE_Integrator members and methods
@@ -520,8 +542,8 @@ void PDE_Integrator_Test::TestAssemblySingleVectorNoDirichlet( bool debug ) {
     model_region.RenumberNodes();
     attorney.Accumulate( model_region );
 
-    testMatrix<2U>( attorney, mesh, dirich, VECTOR );
-    testRHSVector<2U>( attorney, mesh, val, dirich, VECTOR );
+    TestMatrix<2U>( attorney, mesh, dirich, VECTOR );
+    TestRHSVector<2U>( attorney, mesh, val, dirich, VECTOR );
 
     if( debug ) {
         attorney.Out();
@@ -562,7 +584,7 @@ void PDE_Integrator_Test::TestAssemblySingleVectorDirichlet( bool debug ) {
         }
     }
 
-    GaussJordan_Solver         solver;
+    CSMP_DEFAULT_LINEAR_SOLVER solver;
     PDE_Integrator<2U,Element> pde_integrator(solver);
 
     // Enable access to private PDE_Integrator members and methods
@@ -591,8 +613,8 @@ void PDE_Integrator_Test::TestAssemblySingleVectorDirichlet( bool debug ) {
     model_region.RenumberNodes();
     attorney.Accumulate( model_region );
 
-    testMatrix<2U>( attorney, mesh, dirich, VECTOR );
-    testRHSVector<2U>( attorney, mesh, val, dirich, VECTOR );
+    TestMatrix<2U>( attorney, mesh, dirich, VECTOR );
+    TestRHSVector<2U>( attorney, mesh, val, dirich, VECTOR );
 
     if( debug ) {
         attorney.Out();
@@ -643,12 +665,12 @@ void PDE_Integrator_Test::Reset()
 
 
 
-  void PDE_Integrator_Test::run()
+void PDE_Integrator_Test::run()
   {
     //=======================================
     // test single variable
     //=======================================
-    TestAssembly();
+//    TestAssembly();
 
     // test scalar variable
     //TestSingleVariable();
@@ -667,7 +689,8 @@ void PDE_Integrator_Test::Reset()
     //=======================================
     // test multiple single variable
     //=======================================
-
+    TestAssemblyTwoScalarVariablesNoDirichlet( true /* debug */ );
+    
     // test 2 scalar variables
     //TestTwoScalarVariables();
 
@@ -781,13 +804,92 @@ void PDE_Integrator_Test::Reset()
 
 
 
+/**
+
+Testing a simple case with a single scalar variable
+
+SKM - printing matrix in integer format to better see pattern.
+
+*/
+void PDE_Integrator_Test::TestAssemblyTwoScalarVariablesNoDirichlet( bool debug )
+ {
+    cout <<"\nPDE_Integrator_Test::TestAssemblyTwoScalarVariablesNoDirichlet: starting test."<< endl;
+    Reset();
+
+    CSMP_DEFAULT_LINEAR_SOLVER  solver;
+    PDE_Integrator<2U,Element>  pde_integrator(solver);
+
+    // Enable access to private PDE_Integrator members and methods
+    PDE_Integrator_Attorney<2U> attorney( pde_integrator );
+
+    // Create pde-operators for a system with 2 coupled scalar solution variables (placed on the node)
+    const double val1 = 1.;
+    // scalar 1: 'fluid pressure'
+    LHS_FixedValueMatrix<2U>  lhs1( model_->Database(), "permeability", "fluid pressure", "fluid pressure", val1 );
+    RHS_FixedValueMatrix<2U>  rhs1( model_->Database(), "fluid volume source", "fluid pressure", val1 );
+    // assign them to pde integrator
+    attorney.Add(&lhs1);
+    attorney.Add(&rhs1);
+
+    // scalar 2: 'concentration'
+    const double val2 = 2.;
+    LHS_FixedValueMatrix<2U>  lhs2( model_->Database(), "diffusivity", "concentration", "concentration", val2 );
+    RHS_FixedValueMatrix<2U>  rhs2( model_->Database(), "fluid volume source", "concentration", val2 );
+    attorney.Add(&lhs2);
+    attorney.Add(&rhs2);
+    
+    // cross-coupling terms (upper diagonal)
+    // scalar 1: 'fluid pressure' with 'concentration'
+    LHS_FixedValueMatrix<2U>  lhs12( model_->Database(), "element number", "concentration", "fluid pressure", val1 );
+    attorney.Add(&lhs12);
+
+    // scalar 1: 'concentration' with 'fluid pressure'
+    LHS_FixedValueMatrix<2U>  lhs21( model_->Database(), "element number", "fluid pressure", "concentration", val1 );
+    attorney.Add(&lhs21);
+
+    
+    // TESTING
+    Region<2U>& model_region = model_->Region( "Model" );
+    _test( attorney.EstablishMatrixSetup( model_region ) );
+    _test( attorney.lhs_operators_.size() == 3 );
+    _test( attorney.rhs_operators_.size() == 1 );
+
+    // compare matrix with expected matrix
+    // No Dirichlet conditions: Matrix should be nb nodes x nb nodes
+    const MeshManager<2U>& mesh = model_->Mesh();
+    const size_t nb_nodes = mesh.Nodes() * 2U;
+    _test( attorney.G_.Rows() == nb_nodes );
+    _test( attorney.G_.Cols() == nb_nodes );
+
+    model_region.RenumberNodes();
+    attorney.Accumulate( model_region );
+
+    set<BOX_BOUNDARY>  dirich; // which boundary flags do the solution variables have?
+    TestMatrix<2U>( attorney, mesh, dirich, SCALAR );
+    TestRHSVector<2U>( attorney, mesh, val1, dirich, SCALAR );
+
+    if( debug ) {
+        attorney.Out();
+        attorney.OutputGlobals( 0 /* print zero decimal places */ );
+    }
+    cout <<"\nPDE_Integrator_Test::TestAssemblyTwoScalarVariablesNoDirichlet: finished test."<< endl;
+    
+} // end TestAssemblyTwoScalarVariablesNoDirichlet
+
+
+
+
+
+
+
+
 #if 0
 
 void PDE_Integrator_Test::TestTwoScalarVariables() {
     Region<2U>& region = model_->Region("Model");
     region.RenumberNodes();
     
-    GaussJordan_Solver solver;
+    CSMP_DEFAULT_LINEAR_SOLVER  solver;
 
     pde_reference_ = new PDE_Integrator_<2U, Region>(solver);
     pde_test = new PDE_Integrator<2U, Region>(solver);
@@ -806,7 +908,7 @@ void PDE_Integrator_Test::TestTwoScalarVariables() {
     pde_test_->Add(temperatureLHS);
     pde_test_->Add(sourceHeat);
 
-    const std::vector<size_t>& DOF_indexes = pde_test_->GetDOFIndex();
+    const vector<size_t>& DOF_indexes = pde_test_->GetDOFIndex();
     // 1. test matrix establish and enumerate DOFs
     pde_reference_->EstablishMatrixSetup(region);
     pde_test_->EstablishMatrixSetupTest(region);
@@ -875,14 +977,14 @@ void PDE_Integrator_Test::TestTwoScalarVariables() {
     pde_test_->Add(sourceVolume);
     pde_test_->EstablishMatrixSetupTest(region);
     pde_test_->EnumerateAndFixMatrixSize(region);
-    std::map<size_t, double> result;
+    map<size_t, double> result;
     for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
       if ((*nIter)->Status(pressureKey) != DIRICH) {
         result[(*nIter)->Idx()] = (*nIter)->Read(pressureKey);
       } 
     }
 
-    std::vector<double>* valid_x = pde_test_->GetX();
+    vector<double>* valid_x = pde_test_->GetX();
     size_t idx(0);
     for (auto& it : result) {
       (*valid_x)[idx] = it.second;

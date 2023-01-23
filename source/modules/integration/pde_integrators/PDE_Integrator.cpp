@@ -198,7 +198,7 @@ void  PDE_Integrator<dim,CELLTYPE>::OutputGlobals( int32_t precision )
  {
    // 1. printing records in scientific notation with a user-specified number of decimal places
    // -----------------------------------------------------------------------------------------
-   if ( precision >= 0 ) {
+   if ( precision > 0 ) {
        cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
        G_.Out( precision );
 
@@ -228,11 +228,33 @@ void  PDE_Integrator<dim,CELLTYPE>::OutputGlobals( int32_t precision )
 
    // 2. printing records as integers
    // -------------------------------
+   const int col_stride{ 3U };
    cout <<"\nGlobal solution matrix (in integer format): "<< G_.Rows() <<" x "<< G_.Cols() << endl;
-   for ( size_t i{0u}; i<G_.Rows(); ++i ) {
+   // column labels
+   cout <<"column:     ";
+   for ( size_t i{0u}; i<G_.Cols(); ++i ) {
+        auto digits = to_string(abs(lround(i))).length();
+        for ( uint32_t k{0U}; k<col_stride-digits; ++ k ) cout <<" ";
+        cout <<" "<< i <<" ";
+     }
+   cout << endl;
+   // row labels and matrix core
+   for ( size_t i{0u}; i<G_.Rows(); ++i )
+     {
+        // row labels
+        cout <<"row ";
+        auto offset = to_string(abs(lround(i))).length();
+        for ( uint32_t k{0U}; k<col_stride + string("column").size() - (offset+2); ++ k ) cout <<" ";
+        cout << i <<":";
+        // matrix core
         for ( size_t j{0u}; j<G_.Cols(); ++j ) {
-             if ( G_(i,j) > 0. ) cout <<" ";
-             cout << lround( G_(i,j) ) <<" ";
+             if ( isnan(G_(i,j)) ) cout <<" NaN";
+             else {
+                 auto digits = to_string(abs(lround(G_(i,j)))).length();
+                 for ( uint32_t k{0U}; k<col_stride-digits; ++ k ) cout <<" ";
+                 if ( G_(i,j) >= 0. ) cout <<" "<< lround( G_(i,j) ) <<" ";
+                 else cout << lround( G_(i,j) ) <<" ";
+               }
           }
         cout << endl;
      }

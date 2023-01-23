@@ -1112,7 +1112,7 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
 
 		IDT.resize(e.Nodes());
 		IDB.resize(e.Nodes());
-		for (auto i{0U}; i < e.Nodes(); i++) {
+		for (uint32_t i{0U}; i < e.Nodes(); i++) {
 			IDT[i] = e.N(i)->Idx();
 			IDB[i] = IDT[i];
 		}
@@ -1120,37 +1120,37 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
 		if (TestOperandType() != SCALAR)
 			transformNodeIndexVector(dim, TestOperandKey(), IDT);
 
-		for (auto i{0U}; i < IDT.size(); i++)
+		for (uint32_t i{0U}; i < IDT.size(); i++)
 			IDT[i] += this->TestOperandOffset();
 
 		if (BasicOperandType() != SCALAR)
 			transformNodeIndexVector(dim, BasicOperandKey(), IDB);
 
-		for (auto i{0U}; i < IDB.size(); i++)
+		for (uint32_t i{0U}; i < IDB.size(); i++)
 			IDB[i] += this->BasicOperandOffset();
 
 		// perform assignment from local matrix to global matrix
 
 		if (multiply_accumulate_)
 		{
-			for (auto i{0U}; i < LHS.Rows(); i++)
-				for (auto j{0U}; j < LHS.Cols(); j++)
+			for (uint32_t i{0U}; i < LHS.Rows(); i++)
+				for (uint32_t j{0U}; j < LHS.Cols(); j++)
 					G.MultiplyEntryWith(IDT[i],
 						IDB[j],
 						LHS(i, j) * factor_);
 		}
 		else if (add_accumulate_ || add_accumulate_later_)
 		{
-			for (auto i{0U}; i < LHS.Rows(); i++)
-				for (auto j{0U}; j < LHS.Cols(); j++)
+			for (uint32_t i{0U}; i < LHS.Rows(); i++)
+				for (uint32_t j{0U}; j < LHS.Cols(); j++)
 					G.Add(IDT[i],
 						IDB[j],
 						LHS(i, j) * factor_);
 		}
 		else if (subtract_accumulate_ || subtract_accumulate_later_)
 		{
-			for (auto i{0U}; i < LHS.Rows(); i++)
-				for (auto j{0U}; j < LHS.Cols(); j++)
+			for (uint32_t i{0U}; i < LHS.Rows(); i++)
+				for (uint32_t j{0U}; j < LHS.Cols(); j++)
 					G.Add(IDT[i],
 						IDB[j],
 						-LHS(i, j) * factor_);
