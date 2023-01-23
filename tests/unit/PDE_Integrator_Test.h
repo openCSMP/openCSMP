@@ -100,6 +100,7 @@ class PDE_Integrator_Test : public Test {
     
     // SKM test development
     void TestAssemblyTwoScalarVariablesNoDirichlet( bool debug );
+    void TestAssemblyScalarAndVectorVariableNoDirichlet( bool debug );
     
     // remaining methods from Luat
     void Reset();

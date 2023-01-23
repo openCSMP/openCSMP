@@ -311,11 +311,11 @@ void PDE_Integrator_Test::TestRHSVector(  const PDE_Integrator_Attorney<dim>& at
             if( dirich.find( n->AtBoundary() ) != dirich.end() ) {
                 continue;
             }
-            _test( attorney.rh_[ni++] == val*n->Parents() );
+            _test( attorney.rh_[ni++] == val * n->Parents() );
             if( variable_type == SCALAR ) {
                 continue;
             }
-            _test( attorney.rh_[ni++] == val*n->Parents() );
+            _test( attorney.rh_[ni++] == val * n->Parents() );
         }
         
   } // end TestVector
@@ -689,7 +689,8 @@ void PDE_Integrator_Test::run()
     //=======================================
     // test multiple single variable
     //=======================================
-    TestAssemblyTwoScalarVariablesNoDirichlet( true /* debug */ );
+// OK    TestAssemblyTwoScalarVariablesNoDirichlet( true /* debug */ );
+    TestAssemblyScalarAndVectorVariableNoDirichlet( true /* debug */ );
     
     // test 2 scalar variables
     //TestTwoScalarVariables();
@@ -806,9 +807,14 @@ void PDE_Integrator_Test::run()
 
 /**
 
-Testing a simple case with a single scalar variable
+Testing a  case with two scalar variables that are coupled together.
+Since the pde operators are stored in alphabetical order, 'concentration' (scalar 2, valued 2),
+gets accumulated into the first blocked matrix, and 'fluid pressure' (scalar 1, valued 1)
+gets accumlated into the second block.
 
 SKM - printing matrix in integer format to better see pattern.
+
+test_CreateSimplestPolyElement2DModel() - 2 triangles + 1 quadrilateral
 
 */
 void PDE_Integrator_Test::TestAssemblyTwoScalarVariablesNoDirichlet( bool debug )
@@ -838,11 +844,12 @@ void PDE_Integrator_Test::TestAssemblyTwoScalarVariablesNoDirichlet( bool debug 
     attorney.Add(&lhs2);
     attorney.Add(&rhs2);
     
-    // cross-coupling terms (upper diagonal)
+    // cross-coupling terms (lower diagonal of matrix)
     // scalar 1: 'fluid pressure' with 'concentration'
     LHS_FixedValueMatrix<2U>  lhs12( model_->Database(), "element number", "concentration", "fluid pressure", val1 );
     attorney.Add(&lhs12);
 
+    // cross-coupling terms (upper diagonal of matrix)
     // scalar 1: 'concentration' with 'fluid pressure'
     LHS_FixedValueMatrix<2U>  lhs21( model_->Database(), "element number", "fluid pressure", "concentration", val1 );
     attorney.Add(&lhs21);
@@ -851,8 +858,8 @@ void PDE_Integrator_Test::TestAssemblyTwoScalarVariablesNoDirichlet( bool debug 
     // TESTING
     Region<2U>& model_region = model_->Region( "Model" );
     _test( attorney.EstablishMatrixSetup( model_region ) );
-    _test( attorney.lhs_operators_.size() == 3 );
-    _test( attorney.rhs_operators_.size() == 1 );
+    _test( attorney.lhs_operators_.size() == 4 );
+    _test( attorney.rhs_operators_.size() == 2 );
 
     // compare matrix with expected matrix
     // No Dirichlet conditions: Matrix should be nb nodes x nb nodes
@@ -866,16 +873,99 @@ void PDE_Integrator_Test::TestAssemblyTwoScalarVariablesNoDirichlet( bool debug 
 
     set<BOX_BOUNDARY>  dirich; // which boundary flags do the solution variables have?
     TestMatrix<2U>( attorney, mesh, dirich, SCALAR );
-    TestRHSVector<2U>( attorney, mesh, val1, dirich, SCALAR );
+    // Note: can only test first block of the matrix which is occupied by the 'concentration' values
+    TestRHSVector<2U>( attorney, mesh, val2, dirich, SCALAR );
 
-    if( debug ) {
+    if ( debug ) {
         attorney.Out();
         attorney.OutputGlobals( 0 /* print zero decimal places */ );
-    }
+     }
     cout <<"\nPDE_Integrator_Test::TestAssemblyTwoScalarVariablesNoDirichlet: finished test."<< endl;
     
 } // end TestAssemblyTwoScalarVariablesNoDirichlet
 
+
+
+
+
+
+
+/**
+
+Testing a  case with a  scalar variable and a vector variable coupled together.
+
+SKM - printing matrix in integer format to better see pattern.
+
+test_CreateSimplestPolyElement2DModel() - 2 triangles + 1 quadrilateral
+
+*/
+void PDE_Integrator_Test::TestAssemblyScalarAndVectorVariableNoDirichlet( bool debug )
+ {
+    cout <<"\nPDE_Integrator_Test::TestAssemblyScalarAndVectorVariableNoDirichlet: starting test."<< endl;
+    Reset();
+
+    CSMP_DEFAULT_LINEAR_SOLVER  solver;
+    PDE_Integrator<2U,Element>  pde_integrator(solver);
+
+    // Enable access to private PDE_Integrator members and methods
+    PDE_Integrator_Attorney<2U> attorney( pde_integrator );
+
+    // Create pde-operators for a system with 2 coupled scalar solution variables (placed on the node)
+    const double val1 = 1.;
+    // scalar 1: 'fluid pressure'
+    LHS_FixedValueMatrix<2U>  lhs1( model_->Database(), "permeability", "nodal velocity", "nodal velocity", val1 );
+    RHS_FixedValueMatrix<2U>  rhs1( model_->Database(), "element number", "nodal velocity", val1 );
+    // assign them to pde integrator
+    attorney.Add(&lhs1);
+    attorney.Add(&rhs1);
+
+    // scalar 2: 'concentration'
+    const double val2 = 2.;
+    LHS_FixedValueMatrix<2U>  lhs2( model_->Database(), "diffusivity", "concentration", "concentration", val2 );
+    RHS_FixedValueMatrix<2U>  rhs2( model_->Database(), "fluid volume source", "concentration", val2 );
+    attorney.Add(&lhs2);
+    attorney.Add(&rhs2);
+    
+    // cross-coupling terms (lower diagonal of matrix)
+    // scalar 1: 'fluid pressure' with 'concentration'
+    LHS_FixedValueMatrix<2U>  lhs12( model_->Database(), "element number", "concentration", "nodal velocity", val1 );
+    attorney.Add(&lhs12);
+
+    // cross-coupling terms (upper diagonal of matrix)
+    // scalar 1: 'concentration' with 'fluid pressure'
+    LHS_FixedValueMatrix<2U>  lhs21( model_->Database(), "element number", "nodal velocity", "concentration", val1 );
+    attorney.Add(&lhs21);
+
+    
+    // TESTING
+    Region<2U>& model_region = model_->Region( "Model" );
+    _test( attorney.EstablishMatrixSetup( model_region ) );
+    _test( attorney.lhs_operators_.size() == 4 );
+    _test( attorney.rhs_operators_.size() == 2 );
+
+    // compare matrix with expected matrix
+    // No Dirichlet conditions: Matrix should be nb nodes x nb nodes
+    const MeshManager<2U>& mesh = model_->Mesh();
+    const size_t nb_nodes = mesh.Nodes() * 2U;
+    _test( attorney.G_.Rows() == nb_nodes );
+    _test( attorney.G_.Cols() == nb_nodes );
+
+    model_region.RenumberNodes();
+    attorney.Accumulate( model_region );
+
+/*
+    set<BOX_BOUNDARY>  dirich; // which boundary flags do the solution variables have?
+    TestMatrix<2U>( attorney, mesh, dirich, SCALAR );
+    // Note: can only test first block of the matrix which is occupied by the 'concentration' values
+    TestRHSVector<2U>( attorney, mesh, val2, dirich, SCALAR );
+*/
+    if ( debug ) {
+        attorney.Out();
+        attorney.OutputGlobals( 0 /* print zero decimal places */ );
+     }
+    cout <<"\nPDE_Integrator_Test::TestAssemblyScalarAndVectorVariableNoDirichlet: finished test."<< endl;
+    
+} // end TestAssemblyScalarAndVectorVariableNoDirichlet
 
 
 

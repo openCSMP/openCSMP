@@ -248,20 +248,24 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
     const uint32_t n_total_nodes{ iface.Nodes() + iface.InterveningElement()->Nodes() },
                    n_elmt_nodes{ iface.InterveningElement()->Nodes() };
 
-		// map local to global indexes for test and basic operands
-		this->IDT.resize(n_total_nodes); // ii
-		this->IDB.resize(n_total_nodes); // jj
+		// vectors for mapping local to global node indices for test and basic operands
+		vector<size_t> IDT( n_total_nodes ); // ii
+		vector<size_t> IDB( n_total_nodes ); // jj
+    for ( uint32_t n{0U}; n<n_total_nodes; ++n ) {
+         IDT[n] = iface.N(n)->Idx();
+         IDB[n] = IDT[n];
+      }
     
     const uint32_t n_elmt_nodes2{ n_elmt_nodes * 2 };
     
     // interface nodes + intervening element
 		for ( auto i{0U}; i < n_elmt_nodes; i++ ) {
-         this->IDT[i] = iface.N(i,INSIDE)->Idx();
-         this->IDB[i] = this->IDT[i];
-         this->IDT[i+n_elmt_nodes] = iface.N(i,OUTSIDE)->Idx();
-         this->IDB[i+n_elmt_nodes] = this->IDT[i+n_elmt_nodes];
-         this->IDT[i+n_elmt_nodes2] = iface.InterveningElement()->N(i)->Idx();
-         this->IDB[i+n_elmt_nodes2] = this->IDT[i+n_elmt_nodes2];
+         IDT[i] = iface.N(i,INSIDE)->Idx();
+         IDB[i] = IDT[i];
+         IDT[i+n_elmt_nodes] = iface.N(i,OUTSIDE)->Idx();
+         IDB[i+n_elmt_nodes] = IDT[i+n_elmt_nodes];
+         IDT[i+n_elmt_nodes2] = iface.InterveningElement()->N(i)->Idx();
+         IDB[i+n_elmt_nodes2] = IDT[i+n_elmt_nodes2];
       }
 
     // ONLY SCALARS are used in the pde operator
@@ -269,19 +273,19 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
     assert( this->TestOperandType() == SCALAR );
     
     // applying offset to interpolation function operand
-		for (auto i{0U}; i < this->IDT.size(); i++) {
-        this->IDT[i] += this->TestOperandOffset();
-        this->IDT[i] = DOF_indexes[ this->IDT[i] ];
+		for (auto i{0U}; i < IDT.size(); i++) {
+        IDT[i] += this->TestOperandOffset();
+        IDT[i] = DOF_indexes[ IDT[i] ];
       }
 
     // applying offset to weighting function operand
-		for (auto i{0U}; i < this->IDB.size(); i++) {
-        this->IDB[i] += this->BasicOperandOffset();
-        this->IDB[i] = DOF_indexes[ this->IDB[i] ];
+		for (auto i{0U}; i < IDB.size(); i++) {
+        IDB[i] += this->BasicOperandOffset();
+        IDB[i] = DOF_indexes[ IDB[i] ];
       }
 
 		// get local value from the given (local) node
-		vector<double> nodal_values(this->IDB.size(),1.);
+		vector<double> nodal_values(IDB.size(),1.);
 //  /* causes errratic values
       {
         // interface and intervening element
@@ -316,14 +320,14 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
 		else if ( this->add_accumulate_ || this->add_accumulate_later_ )
 		{
 			for (auto i{0U}; i < this->LHS.Rows(); i++) {
-				if ( this->IDT[i] != NULL_IDX ) {
+				if ( IDT[i] != NULL_IDX ) {
 					for (auto j{0U}; j < this->LHS.Cols(); j++) {
-						if ( this->IDB[j] == NULL_IDX ) {
-							pivotVector[ this->IDT[i] ] -= this->LHS(i,j) * nodal_values[j] * this->factor_;  // notice sign iface.N(j / this->TestOperandOffset())->Read(this->TestOperand())
+						if ( IDB[j] == NULL_IDX ) {
+							pivotVector[ IDT[i] ] -= this->LHS(i,j) * nodal_values[j] * this->factor_;  // notice sign iface.N(j / this->TestOperandOffset())->Read(this->TestOperand())
 						}
 						else {
-							G.Add( this->IDT[i],
-								     this->IDB[j],
+							G.Add( IDT[i],
+								     IDB[j],
 								     this->LHS(i, j) * this->factor_ );
 						}
 					}
@@ -333,14 +337,14 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
 		else if ( this->subtract_accumulate_ || this->subtract_accumulate_later_ )
       {
         for ( auto i{0U}; i < this->LHS.Rows(); i++ ) {
-          if ( this->IDT[i] != NULL_IDX ) {
+          if ( IDT[i] != NULL_IDX ) {
             for (auto j{0U}; j < this->LHS.Cols(); j++ ) {
-              if ( this->IDB[j] == NULL_IDX ) {
-                pivotVector[ this->IDT[i] ] += this->LHS(i,j) * nodal_values[j] * this->factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
+              if ( IDB[j] == NULL_IDX ) {
+                pivotVector[ IDT[i] ] += this->LHS(i,j) * nodal_values[j] * this->factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
               }
               else {
-                G.Add( this->IDT[i],
-                       this->IDB[j],
+                G.Add( IDT[i],
+                       IDB[j],
                        -this->LHS(i, j) * this->factor_ );
               }
             }

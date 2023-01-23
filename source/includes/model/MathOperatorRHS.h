@@ -156,7 +156,6 @@ class MathOperatorRHS {
     std::pair<Parameter, size_t>        top;                 ///< test function operand
 
     std::vector<double>                 RHS;                 ///< solution vector<double> to be accumulated
-    std::vector<size_t>                 IDT;                 ///< node-ID & global constraint points vector ( test operand )
 
     std::vector<DenseMatrix<DM_MIN> >   MTRL;                ///< material property matrix(es) needed for PDE operand
   
@@ -184,9 +183,10 @@ class MathOperatorRHS {
 };
 
 // for multi-dimensional solution variables
-void transformNodeIndexVector( uint32_t dim, const csmp::Index&, std::vector<size_t>& );
+//void transformNodeIndexVector( uint32_t dim, const csmp::Index&, std::vector<size_t>& );
 
-
+/// expands element dof vec in var1_comp0, var1_comp2... form
+void transformNodeIndexVector( const csmp::Index&, std::vector<size_t>& );
 
 } // csmp
 

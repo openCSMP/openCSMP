@@ -13,22 +13,20 @@ namespace csmp {
 template<uint32_t dim, template<uint32_t> class CELL>
 MathOperatorLHS<dim,CELL>::MathOperatorLHS()
   : name_("unspecified LHS-operator"),
-  IDT(3),
-  IDB(3),
-  MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
-  factor_(1.),
-  add_accumulate_(true),
-  subtract_accumulate_(false),
-  add_accumulate_later_(false),
-  subtract_accumulate_later_(false),
-  multiply_accumulate_(false),
-  lump_matrices_(false),
-  application_cycles_(1),
-  application_cycle_(0),
-  time_multiply_(false),
-  time_divide_(false)
-{
-}
+    MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
+    factor_(1.),
+    add_accumulate_(true),
+    subtract_accumulate_(false),
+    add_accumulate_later_(false),
+    subtract_accumulate_later_(false),
+    multiply_accumulate_(false),
+    lump_matrices_(false),
+    application_cycles_(1),
+    application_cycle_(0),
+    time_multiply_(false),
+    time_divide_(false)
+  {
+  }
 
 
 
@@ -37,24 +35,22 @@ MathOperatorLHS<dim,CELL>::MathOperatorLHS( const PropertyDatabase<dim>& pref,
                                             const char* basic,
                                             const char* test)
 		: name_("unspecified LHS-operator"),
-		bop(make_pair(pref.Parameter(basic), 0)),
-		top(make_pair(pref.Parameter(test), 0)),
-		IDT(3),
-		IDB(3),
-		MTRL(13, DenseMatrix<DM_MIN>(2, 2) ),
-		DERIV(2, 3),
-		IPOL(3),
-		factor_(1.),
-		add_accumulate_(true),
-		subtract_accumulate_(false),
-		add_accumulate_later_(false),
-		subtract_accumulate_later_(false),
-		multiply_accumulate_(false),
-		lump_matrices_(false),
-		application_cycles_(1),
-		application_cycle_(0),
-		time_multiply_(false),
-		time_divide_(false)
+      bop(make_pair(pref.Parameter(basic), 0)),
+      top(make_pair(pref.Parameter(test), 0)),
+      MTRL(13, DenseMatrix<DM_MIN>(2, 2) ),
+      DERIV(2, 3),
+      IPOL(3),
+      factor_(1.),
+      add_accumulate_(true),
+      subtract_accumulate_(false),
+      add_accumulate_later_(false),
+      subtract_accumulate_later_(false),
+      multiply_accumulate_(false),
+      lump_matrices_(false),
+      application_cycles_(1),
+      application_cycle_(0),
+      time_multiply_(false),
+      time_divide_(false)
 	{
 	}
 
@@ -66,25 +62,23 @@ MathOperatorLHS<dim,CELL>::MathOperatorLHS( const PropertyDatabase<dim>& pref,
                                             const char* basic,
                                             const char* test )
 		: name_("unspecified LHS-operator"),
-		op(pref.Parameter(oper)),
-		bop(make_pair(pref.Parameter(basic), 0)),
-		top(make_pair(pref.Parameter(test), 0)),
-		IDT(3),
-		IDB(3),
-		MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
-		DERIV(2, 3),
-		IPOL(3),
-		factor_(1.),
-		add_accumulate_(true),
-		subtract_accumulate_(false),
-		add_accumulate_later_(false),
-		subtract_accumulate_later_(false),
-		multiply_accumulate_(false),
-		lump_matrices_(false),
-		application_cycles_(1),
-		application_cycle_(0),
-		time_multiply_(false),
-		time_divide_(false)
+      op(pref.Parameter(oper)),
+      bop(make_pair(pref.Parameter(basic), 0)),
+      top(make_pair(pref.Parameter(test), 0)),
+      MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
+      DERIV(2, 3),
+      IPOL(3),
+      factor_(1.),
+      add_accumulate_(true),
+      subtract_accumulate_(false),
+      add_accumulate_later_(false),
+      subtract_accumulate_later_(false),
+      multiply_accumulate_(false),
+      lump_matrices_(false),
+      application_cycles_(1),
+      application_cycle_(0),
+      time_multiply_(false),
+      time_divide_(false)
 	{
 	}
 
@@ -96,8 +90,6 @@ MathOperatorLHS<dim,CELL>::MathOperatorLHS( const MathOperatorLHS<dim,CELL>& mo 
       op(mo.op),        // operand
       bop(mo.bop),       // basic operand
       top(mo.top),       // testfunction operand
-      IDT(mo.IDT),       // node-ID & global constraint points vector
-      IDB(mo.IDB),       // node-ID & global constraint points vector
       LHS(mo.LHS),
       MTRL(mo.MTRL),      // Operand storage
       DERIV(mo.DERIV),
@@ -123,27 +115,25 @@ template<uint32_t dim, template<uint32_t> class CELL>
 MathOperatorLHS<dim,CELL>& MathOperatorLHS<dim,CELL>::operator=( const MathOperatorLHS<dim,CELL>& mo )
 	{
 		if (this != &mo)
-		{
-			name_ = mo.name_;
-			op = mo.op;    // operand
-			bop = mo.bop;   // basic operand
-			top = mo.top;   // testfunction operand
-			IDT = mo.IDT;   // node-ID & global constraint points vector
-			IDB = mo.IDB;   // node-ID & global constraint points vector
-			LHS = mo.LHS;
-			MTRL = mo.MTRL;  // Operand storage
-			DERIV = mo.DERIV;
-			IPOL = mo.IPOL;
-			factor_ = mo.factor_;
-			add_accumulate_ = mo.add_accumulate_;
-			add_accumulate_later_ = mo.add_accumulate_later_;
-			multiply_accumulate_ = mo.multiply_accumulate_;
-			lump_matrices_ = mo.lump_matrices_;
-			application_cycles_ = mo.application_cycles_;
-			application_cycle_ = mo.application_cycle_;
-			time_multiply_ = mo.time_multiply_;
-			time_divide_ = mo.time_divide_;
-		}
+      {
+        name_ = mo.name_;
+        op = mo.op;    // operand
+        bop = mo.bop;   // basic operand
+        top = mo.top;   // testfunction operand
+        LHS = mo.LHS;
+        MTRL = mo.MTRL;  // Operand storage
+        DERIV = mo.DERIV;
+        IPOL = mo.IPOL;
+        factor_ = mo.factor_;
+        add_accumulate_ = mo.add_accumulate_;
+        add_accumulate_later_ = mo.add_accumulate_later_;
+        multiply_accumulate_ = mo.multiply_accumulate_;
+        lump_matrices_ = mo.lump_matrices_;
+        application_cycles_ = mo.application_cycles_;
+        application_cycle_ = mo.application_cycle_;
+        time_multiply_ = mo.time_multiply_;
+        time_divide_ = mo.time_divide_;
+      }
 		return *this;
 	}
 
@@ -779,42 +769,42 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix& G,
                                                 vector<double>& pivotVector, const vector<size_t>& DOF_indexes )
 	{
-		// map local to global indexes for test and basic operands
-		IDT.resize(e.Nodes()); // ii
-		IDB.resize(e.Nodes()); // jj
-		for (auto i{0U}; i < e.Nodes(); i++) {
-			IDT[i] = e.N(i)->Idx();
-			IDB[i] = IDT[i];
-		}
+		// vectors for mapping local to global node indices for test and basic operands
+		vector<size_t> IDT( e.Nodes() ); // ii
+		vector<size_t> IDB( e.Nodes() ); // jj
+    for ( uint32_t n{0U}; n<e.Nodes(); ++n ) {
+         IDT[n] = e.N(n)->Idx();
+         IDB[n] = IDT[n];
+      }
 
 		if (TestOperandType() != SCALAR)
-			transformNodeIndexVector(dim, TestOperandKey(), IDT);
+			transformNodeIndexVector( TestOperandKey(), IDT );
 
-		for (auto i{0U}; i < IDT.size(); i++) {
-			IDT[i] += this->TestOperandOffset();
-			IDT[i] = DOF_indexes[IDT[i]];
-		}
+		for (uint32_t i{0U}; i < IDT.size(); i++) {
+        IDT[i] += this->TestOperandOffset();
+        IDT[i]  = DOF_indexes[ IDT[i] ];
+      }
 
 		if (BasicOperandType() != SCALAR)
-			transformNodeIndexVector(dim, BasicOperandKey(), IDB);
+			transformNodeIndexVector( BasicOperandKey(), IDB );
 
-		for (auto i{0U}; i < IDB.size(); i++) {
-			IDB[i] += this->BasicOperandOffset();
-			IDB[i] = DOF_indexes[IDB[i]];
-		}
+		for (uint32_t i{0U}; i < IDB.size(); i++) {
+        IDB[i] += this->BasicOperandOffset();
+        IDB[i] = DOF_indexes[IDB[i]];
+      }
 
-		// get (component of) local value of a local node 
+		// get (component of) variable value at local (within-element) nodes
 		vector<double> nodal_values(IDB.size());
 		{
 			if (this->TestOperandType() == SCALAR) {
-				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
-					nodal_values[nIdx] = e.N(nIdx)->Read(this->TestOperandKey());
-				}
-			}
+          for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx)
+            nodal_values[nIdx] = e.N(nIdx)->Read(this->TestOperandKey());
+        }
 			else if (this->TestOperandType() == VECTOR) {
+        nodal_values.resize( nodal_values.size() * dim);
 				VectorVariable<dim> var;
-				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
-					for (auto i = 0; i < dim; ++i) {
+				for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
+					for (uint32_t i{0U}; i < dim; ++i) {
 						e.N(nIdx)->Read(this->TestOperandKey(), var);
 						nodal_values[nIdx*dim + i] = var.Component(i);
 					}
@@ -822,34 +812,34 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
 			}
 			else if (this->TestOperandType() == TENSOR) {
 				uint32_t dim2 = dim*dim;
+        nodal_values.resize( nodal_values.size() * dim2);
 				TensorVariable<dim> var;
-				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
+				for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
 					e.N(nIdx)->Read(this->TestOperandKey(), var);
-					for (auto i = 0; i < dim; ++i) {
-						for (auto j = 0; j < dim; ++j) {
+					for (uint32_t i{0U}; i < dim; ++i) {
+						for (uint32_t j{0U}; j < dim; ++j)
 							nodal_values[nIdx*dim2 + i*dim + j] = var.Component(i*dim + j);
-						}
 					}
 				}
 			}
 			else if (this->TestOperandType() == ARRAY) {
 				const auto datadepth(TestOperandKey().dataDepth);
+        nodal_values.resize( nodal_values.size() * datadepth);
 				ArrayVariable var;
-				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
+				for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
 					e.N(nIdx)->Read(this->TestOperandKey(), var);
-					for (auto i = 0; i < datadepth; ++i) {
+					for (uint32_t i{0U}; i < datadepth; ++i)
 						nodal_values[nIdx*datadepth + i] = var.Component(i);
-					}
 				}
 			}
 			else if (this->TestOperandType() == FLAGGEDARRAY) {
 				const auto datadepth(TestOperandKey().dataDepth);
+        nodal_values.resize( nodal_values.size() * datadepth);
 				FlaggedArrayVariable var;
-				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
+				for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
 					e.N(nIdx)->Read(this->TestOperandKey(), var);
-					for (auto i = 0; i < datadepth; ++i) {
+					for (uint32_t i{0U}; i < datadepth; ++i)
 						nodal_values[nIdx*datadepth + i] = var.Component(i);
-					}
 				}
 			}
 			else {
@@ -861,34 +851,16 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
 
 		// perform assignment from local matrix to global matrix
 
-		if (multiply_accumulate_)
+		if ( add_accumulate_ || add_accumulate_later_ )
 		{
-			throw csmp::Exception(ERROR,
-				"MathOperatorLHS<dim>::AssignToGlobal(Element):",
-				"Multiply Accumulate has not been supported yet");
-
-			//if (IDT[i] != NULL_IDX) {
-			//  for (size_t j{0U}; j<LHS.Cols(); j++)
-			//    if (IDB[j] != NULL_IDX) {
-			//      G.MultiplyEntryWith(IDT[i],
-			//        IDB[j],
-			//        LHS(i, j) * factor_);
-			//    }
-			//}
-		}
-		else if ( add_accumulate_ || add_accumulate_later_)
-		{
-			for (auto i{0U}; i < LHS.Rows(); i++) {
+			for (uint32_t i{0U}; i < LHS.Rows(); i++) {
 				if (IDT[i] != NULL_IDX) {
-					for (auto j{0U}; j < LHS.Cols(); j++) {
+					for (uint32_t j{0U}; j < LHS.Cols(); j++) {
 						if ( IDB[j] == NULL_IDX ) {
-							pivotVector[IDT[i]] -= LHS(i, j) * nodal_values[j] * factor_;  // notice the sign e.N(j / this->TestOperandOffset())->Read(this->TestOperand())
-						}
-						else {
-							G.Add(IDT[i],
-								IDB[j],
-								LHS(i, j) * factor_);
-						}
+                // notice the sign e.N( j / this->TestOperandOffset())->Read(this->TestOperand() )
+                pivotVector[IDT[i]] -= LHS(i, j) * nodal_values[j] * factor_;
+              }
+						else G.Add( IDT[i], IDB[j], LHS(i, j) * factor_ );
 					}
 				}
 			}
@@ -903,19 +875,31 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
 				  }
 			  }*/
 		}
+		else if (multiply_accumulate_)
+		{
+			throw csmp::Exception(ERROR,
+				"MathOperatorLHS<dim>::AssignToGlobal(Element):",
+				"Multiply Accumulate has not been supported yet");
+
+			//if (IDT[i] != NULL_IDX) {
+			//  for (size_t j{0U}; j<LHS.Cols(); j++)
+			//    if (IDB[j] != NULL_IDX) {
+			//      G.MultiplyEntryWith(IDT[i],
+			//        IDB[j],
+			//        LHS(i, j) * factor_);
+			//    }
+			//}
+		}
 		else if (subtract_accumulate_ || subtract_accumulate_later_)
 		{
-			for (auto i{0U}; i < LHS.Rows(); i++) {
+			for (uint32_t i{0U}; i < LHS.Rows(); i++) {
 				if (IDT[i] != NULL_IDX) {
-					for (auto j{0U}; j < LHS.Cols(); j++) {
-						if (IDB[j] == NULL_IDX) {
-							pivotVector[IDT[i]] += LHS(i, j) * nodal_values[j] * factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
-						}
-						else {
-							G.Add(IDT[i],
-								IDB[j],
-								-LHS(i, j) * factor_);
-						}
+					for (uint32_t j{0U}; j < LHS.Cols(); j++) {
+						if ( IDB[j] == NULL_IDX ) {
+                 // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
+                 pivotVector[IDT[i]] += LHS(i, j) * nodal_values[j] * factor_;
+              }
+						else G.Add( IDT[i], IDB[j], -LHS(i, j) * factor_);
 					}
 				}
 			}
@@ -945,26 +929,26 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
   void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, CompressedRowMatrix& G,
                                                   vector<double>& pivotVector, const vector<size_t>& DOF_indexes )
   {
-    // map local to global indexes for test and basic operands
-    IDT.resize(e.Nodes()); // ii
-    IDB.resize(e.Nodes()); // jj
-    for (auto i{0U}; i < e.Nodes(); i++) {
-      IDT[i] = e.N(i)->Idx();
-      IDB[i] = IDT[i];
-    }
+		// vectors for mapping local to global node indices for test and basic operands
+		vector<size_t> IDT( e.Nodes() ); // ii
+		vector<size_t> IDB( e.Nodes() ); // jj
+    for ( uint32_t n{0U}; n<e.Nodes(); ++n ) {
+         IDT[n] = e.N(n)->Idx();
+         IDB[n] = IDT[n];
+      }
 
     if (TestOperandType() != SCALAR)
-      transformNodeIndexVector(dim, TestOperandKey(), IDT);
+      transformNodeIndexVector( TestOperandKey(), IDT );
 
-    for (auto i{0U}; i < IDT.size(); i++) {
+    for (uint32_t i{0U}; i < IDT.size(); i++) {
       IDT[i] += this->TestOperandOffset();
       IDT[i] = DOF_indexes[IDT[i]];
     }
 
     if (BasicOperandType() != SCALAR)
-      transformNodeIndexVector(dim, BasicOperandKey(), IDB);
+      transformNodeIndexVector( BasicOperandKey(), IDB );
 
-    for (auto i{0U}; i < IDB.size(); i++) {
+    for (uint32_t i{0U}; i < IDB.size(); i++) {
       IDB[i] += this->BasicOperandOffset();
       IDB[i] = DOF_indexes[IDB[i]];
     }
@@ -973,14 +957,15 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
     vector<double> nodal_values(IDB.size());
     {
       if (this->TestOperandType() == SCALAR) {
-        for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
+        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
           nodal_values[nIdx] = e.N(nIdx)->Read(this->TestOperandKey());
         }
       }
       else if (this->TestOperandType() == VECTOR) {
+        nodal_values.resize( nodal_values.size() * dim);
         VectorVariable<dim> var;
-        for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
-          for (auto i = 0; i < dim; ++i) {
+        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
+          for (uint32_t i{0U}; i < dim; ++i) {
             e.N(nIdx)->Read(this->TestOperandKey(), var);
             nodal_values[nIdx*dim + i] = var.Component(i);
           }
@@ -988,11 +973,12 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
       }
       else if (this->TestOperandType() == TENSOR) {
         uint32_t dim2 = dim*dim;
+        nodal_values.resize( nodal_values.size() * dim2);
         TensorVariable<dim> var;
-        for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
+        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
           e.N(nIdx)->Read(this->TestOperandKey(), var);
-          for (auto i = 0; i < dim; ++i) {
-            for (auto j = 0; j < dim; ++j) {
+          for (uint32_t i{0U}; i < dim; ++i) {
+            for (uint32_t j{0U}; j < dim; ++j) {
               nodal_values[nIdx*dim2 + i*dim + j] = var.Component(i*dim + j);
             }
           }
@@ -1000,29 +986,29 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
       }
       else if (this->TestOperandType() == ARRAY) {
         const auto datadepth(TestOperandKey().dataDepth);
+        nodal_values.resize( nodal_values.size() * datadepth);
         ArrayVariable var;
-        for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
+        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
           e.N(nIdx)->Read(this->TestOperandKey(), var);
-          for (auto i = 0; i < datadepth; ++i) {
+          for (uint32_t i{0U}; i < datadepth; ++i) {
             nodal_values[nIdx*datadepth + i] = var.Component(i);
           }
         }
       }
       else if (this->TestOperandType() == FLAGGEDARRAY) {
         const auto datadepth(TestOperandKey().dataDepth);
+        nodal_values.resize( nodal_values.size() * datadepth);
         FlaggedArrayVariable var;
-        for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
+        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
           e.N(nIdx)->Read(this->TestOperandKey(), var);
-          for (auto i = 0; i < datadepth; ++i) {
+          for (uint32_t i{0U}; i < datadepth; ++i) {
             nodal_values[nIdx*datadepth + i] = var.Component(i);
           }
         }
       }
-      else {
-        throw csmp::Exception(ERROR,
+      else throw csmp::Exception(ERROR,
                               "MathOperatorLHS<dim>::AssignToGlobal(Element):",
                               "Undefined variable type");
-      }
     };
 
     // perform assignment from local matrix to global matrix
@@ -1044,16 +1030,16 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
     }
     else if ( add_accumulate_ || add_accumulate_later_)
     {
-      for (auto i{0U}; i < LHS.Rows(); i++) {
+      for (uint32_t i{0U}; i < LHS.Rows(); i++) {
         if (IDT[i] != NULL_IDX) {
-          for (auto j{0U}; j < LHS.Cols(); j++) {
+          for (uint32_t j{0U}; j < LHS.Cols(); j++) {
             if ( IDB[j] == NULL_IDX ) {
               pivotVector[IDT[i]] -= LHS(i, j) * nodal_values[j] * factor_;  // notice the sign e.N(j / this->TestOperandOffset())->Read(this->TestOperand())
             }
             else {
-              G.Add(IDT[i],
-                    IDB[j],
-                    LHS(i, j) * factor_);
+              G.Add( static_cast<uint32_t>(IDT[i]),
+                     static_cast<uint32_t>(IDB[j]),
+                     LHS(i, j) * factor_);
             }
           }
         }
@@ -1071,15 +1057,15 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
     }
     else if (subtract_accumulate_ || subtract_accumulate_later_)
     {
-      for (auto i{0U}; i < LHS.Rows(); i++) {
+      for (uint32_t i{0U}; i < LHS.Rows(); i++) {
         if (IDT[i] != NULL_IDX) {
-          for (auto j{0U}; j < LHS.Cols(); j++) {
+          for (uint32_t j{0U}; j < LHS.Cols(); j++) {
             if (IDB[j] == NULL_IDX) {
               pivotVector[IDT[i]] += LHS(i, j) * nodal_values[j] * factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
             }
             else {
-              G.Add(IDT[i],
-                    IDB[j],
+              G.Add( static_cast<uint32_t>(IDT[i]),
+                     static_cast<uint32_t>(IDB[j]),
                     -LHS(i, j) * factor_);
             }
           }
@@ -1108,23 +1094,22 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
 template<uint32_t dim, template<uint32_t> class CELL>
 void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix& G )
 	{
-		// map local to global indexes for test and basic operands
-
-		IDT.resize(e.Nodes());
-		IDB.resize(e.Nodes());
-		for (uint32_t i{0U}; i < e.Nodes(); i++) {
-			IDT[i] = e.N(i)->Idx();
-			IDB[i] = IDT[i];
-		}
+		// vectors for mapping local to global node indices for test and basic operands
+		vector<size_t> IDT( e.Nodes() ); // ii
+		vector<size_t> IDB( e.Nodes() ); // jj
+    for ( uint32_t n{0U}; n<e.Nodes(); ++n ) {
+         IDT[n] = e.N(n)->Idx();
+         IDB[n] = IDT[n];
+      }
 
 		if (TestOperandType() != SCALAR)
-			transformNodeIndexVector(dim, TestOperandKey(), IDT);
+			transformNodeIndexVector( TestOperandKey(), IDT );
 
 		for (uint32_t i{0U}; i < IDT.size(); i++)
 			IDT[i] += this->TestOperandOffset();
 
 		if (BasicOperandType() != SCALAR)
-			transformNodeIndexVector(dim, BasicOperandKey(), IDB);
+			transformNodeIndexVector( BasicOperandKey(), IDB );
 
 		for (uint32_t i{0U}; i < IDB.size(); i++)
 			IDB[i] += this->BasicOperandOffset();
