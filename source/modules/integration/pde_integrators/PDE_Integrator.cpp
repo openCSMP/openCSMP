@@ -1179,6 +1179,7 @@ void PDE_Integrator<dim,CELLTYPE>::Accumulate( const ModelSubDomain<dim,CELLTYPE
            {
              it_lhs.second->GetOperands( *(*git) );
              it_lhs.second->ComputeContribution( *(*git) );
+             // TODO: ?always multiply with timefactor? - setting it to 1.0 by default
              if ( it_lhs.second->MultiplyWithTimeIncrement() )
                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
              it_lhs.second->AssignToGlobal(*(*git), this->G_, pivotVector_, DOF_indexes_);

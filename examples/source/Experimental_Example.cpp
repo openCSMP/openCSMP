@@ -83,8 +83,22 @@ void Experimental_Example::Run()
                     }
                }
           }
-        LHS.Out(0);
+//        LHS.Out(0);
     }
+    
+    
+    cout <<"\nmain: vector vector multiplication."<<endl;
+    // ---------------------------------------------------------------
+    int rows{1}, cols{3};
+    DenseMatrix<DM_MIN>  VEC( rows, cols ), VEC_T( cols, rows );
+    VEC   = 1; VEC(0,1)   = 2.; VEC(0,2)   = 3.;
+    VEC_T = 1; VEC_T(1,0) = 2.; VEC_T(2,0) = 3.;
+    
+    // result is a 3 x 3 matrix
+    DenseMatrix<DM_MIN> MAT = VEC_T * VEC;
+    
+    MAT.Out(0);
+    
     
 } // end
 

@@ -134,7 +134,7 @@ class MathOperatorLHS {
     /// assigment to the left hand side global matrix (after everything was calculated )
     virtual void  AssignToGlobal( const CELL<dim>&, SparseMatrix& );
 
-    /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
+    /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector
     virtual void AssignToGlobal( const CELL<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
 
     /// used by PDE_Integrator_CRM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions)

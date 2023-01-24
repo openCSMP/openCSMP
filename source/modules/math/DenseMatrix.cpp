@@ -89,7 +89,9 @@ DenseMatrix<mn_max>::DenseMatrix( uint32_t m, uint32_t n )
 template<uint32_t mn_max>
 double& DenseMatrix<mn_max>::operator()( uint32_t m, uint32_t n )
  {
+#ifdef DEBUG
     CheckRange( m, n, "DenseMatrix<mn_max>::operator()");
+#endif
     return data[m][n];
  }
 
@@ -99,7 +101,9 @@ double& DenseMatrix<mn_max>::operator()( uint32_t m, uint32_t n )
 template<uint32_t mn_max>
 const double& DenseMatrix<mn_max>::operator()( uint32_t m, uint32_t n ) const
  {
+#ifdef DEBUG
     CheckRange( m, n, "DenseMatrix<mn_max>::operator()");
+#endif
     return data[m][n];
  }
 
@@ -142,7 +146,6 @@ void DenseMatrix<mn_max>::Resize( uint32_t m, uint32_t n )
  }
 
 
-#ifndef NDEBUG 
 /// indices checking but only in the debug version
 template<uint32_t mn_max>
 bool DenseMatrix<mn_max>::CheckRange( uint32_t m, uint32_t n,
@@ -150,42 +153,27 @@ bool DenseMatrix<mn_max>::CheckRange( uint32_t m, uint32_t n,
  {
     if ( m >= rows ) {
          cerr <<"\n"<< originator <<" row index violation, index="<< m;
-         cerr <<" versus, row-max=" << rows << endl;
+         cerr <<" versus row-max=" << rows << endl;
          throw length_error("DenseMatrix<mn_max>::CheckRange");
          return false;
       }
     if ( n >= cols ) {
          cerr <<"\n"<< originator <<" column index violation, index="<< n;
-         cerr <<" versus, column-max=" << cols << endl;
+         cerr <<" versus column-max=" << cols << endl;
          throw length_error("DenseMatrix<mn_max>::CheckRange");
          return false;
       }
     return true;
  }
-#else
-template<uint32_t mn_max>
-bool DenseMatrix<mn_max>::CheckRange( uint32_t, uint32_t,
-                                             const char* ) const
- {
-    return true;
- }
-#endif
 
 
 
 
-#ifndef NDEBUG 
 template<uint32_t mn_max>
 /// checks (in DEBUG mode) whether the sizes of the matrices on either side of the expression match
 bool DenseMatrix<mn_max>::CheckSizes( const DenseMatrix& mat, 
-                                                const char* originator ) const
-#else
-template<uint32_t mn_max>
-bool DenseMatrix<mn_max>::CheckSizes( const DenseMatrix&, 
-                                                const char* ) const
-#endif
+                                      const char* originator ) const
  {
-#ifndef NDEBUG 
     if ( rows != mat.rows ) {
          cerr <<"\n"<< originator <<" matrices have different sizes; rows1="<< rows;
          cerr <<" versus, rows2=" << mat.rows << endl;
@@ -198,7 +186,6 @@ bool DenseMatrix<mn_max>::CheckSizes( const DenseMatrix&,
          throw length_error("DenseMatrix<mn_max>::CheckSizes");
          return false;
       }
-#endif
     return true;
  }
  
@@ -1092,8 +1079,9 @@ void DenseMatrix<mn_max>::RowCondenseTo( vector<double>& vec ) const
 template<uint32_t mn_max>
 DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator+=( const DenseMatrix<mn_max>& mat )
  {
+#ifdef DEBUG
     CheckSizes( mat, "DenseMatrix<mn_max>::operator+=" );
-
+#endif
     for ( uint32_t i{0U}; i<rows; i++ )
       for ( uint32_t j{0U}; j<cols; j++ ) data[i][j] += mat.data[i][j];
       
@@ -1106,8 +1094,9 @@ DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator+=( const DenseMatrix<mn_max>&
 template<uint32_t mn_max>
 DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator-=( const DenseMatrix<mn_max>& mat )
  {
+#ifdef DEBUG
     CheckSizes( mat, "DenseMatrix<mn_max>::operator-=" );
-
+#endif
     for ( uint32_t i{0U}; i<rows; i++ )
       for ( uint32_t j{0U}; j<cols; j++ ) data[i][j] -= mat.data[i][j];
       
@@ -1124,8 +1113,9 @@ template<uint32_t mn_max>
 DenseMatrix<mn_max>  DenseMatrix<mn_max>::operator+( 
                                              const DenseMatrix<mn_max>& mat ) const
  {
+#ifdef DEBUG
     CheckSizes( mat, "DenseMatrix<mn_max>::operator+" );
-
+#endif
     DenseMatrix<mn_max>  temp(cols,rows);
     
     for ( uint32_t i{0U}; i<rows; i++ )
@@ -1142,8 +1132,9 @@ template<uint32_t mn_max>
 DenseMatrix<mn_max> DenseMatrix<mn_max>::operator-( 
                                             const DenseMatrix<mn_max>& mat ) const
  {
+#ifdef DEBUG
     CheckSizes( mat, "DenseMatrix<mn_max>::operator-" );
-
+#endif
     DenseMatrix<mn_max>  temp(cols,rows);
     
     for ( uint32_t i{0U}; i<rows; i++ )

@@ -5,6 +5,7 @@
 #include "Face.h"
 #include "PropertyDatabase.h"
 #include "Exception.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 
@@ -764,17 +765,26 @@ void MathOperatorLHS<dim,CELL>::MultiplyWithTimeFactor( double dt )
 
 
 
-	/// AssignToGlobal matrix function
+	/// AssignToGlobal matrix function (SparseMatrix version)
 template<uint32_t dim, template<uint32_t> class CELL>
 void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix& G,
                                                 vector<double>& pivotVector, const vector<size_t>& DOF_indexes )
 	{
-		// vectors for mapping local to global node indices for test and basic operands
-		vector<size_t> IDT( e.Nodes() ); // ii
-		vector<size_t> IDB( e.Nodes() ); // jj
-    for ( uint32_t n{0U}; n<e.Nodes(); ++n ) {
-         IDT[n] = e.N(n)->Idx();
-         IDB[n] = IDT[n];
+		// creating vectors for mapping local (element) to global (matrix) indices for basic and test function operands
+    const auto n_nodes{ e.Nodes() };
+		vector<size_t> IDB( n_nodes ); // ii - for matrix indices corresponding to base-function operand
+		vector<size_t> IDT( n_nodes ); // jj - for matrix indices corresponding to test-function operand
+    for ( uint32_t n{0U}; n<n_nodes; ++n )
+      IDB[n] = IDT[n] = e.N(n)->Idx();
+
+    // expanding vectors to degrees of freedom of basic operand (pressure, displacement, etc.)
+		if (BasicOperandType() != SCALAR)
+			transformNodeIndexVector( BasicOperandKey(), IDB );
+
+    // applying operand offsets to find matrix positions corresponding to element matrix positions
+		for (uint32_t i{0U}; i < IDB.size(); i++) {
+        IDB[i] += this->BasicOperandOffset();
+        IDB[i]  = DOF_indexes[ IDB[i] ];
       }
 
 		if (TestOperandType() != SCALAR)
@@ -785,230 +795,217 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
         IDT[i]  = DOF_indexes[ IDT[i] ];
       }
 
-		if (BasicOperandType() != SCALAR)
-			transformNodeIndexVector( BasicOperandKey(), IDB );
-
-		for (uint32_t i{0U}; i < IDB.size(); i++) {
-        IDB[i] += this->BasicOperandOffset();
-        IDB[i] = DOF_indexes[IDB[i]];
+    // consistency check: LHS can be rectangular, but its i,j dimensions must
+    // match those given by the number of nodes and degrees of freedom per node
+#ifdef DEBUG
+    csmp::ErrorHandler&  csmp_err( csmp::ErrorHandler::Instance() );
+    if ( LHS.Rows() != IDB.size() ) {
+         cout <<"\n"<<"basic operand '"<< BasicOperandName() <<"' ("<< parseType(BasicOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix rows does not match nodes  x  nodal degrees of freedom." );
+         return;
       }
+    if ( LHS.Cols() != IDT.size() ) {
+         cout <<"\n"<<"test operand '"<< TestOperandName() <<"' ("<< parseType(TestOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix columns does not match nodes  x  nodal degrees of freedom." );
+         return;
+      }
+#endif
 
-		// get (component of) variable value at local (within-element) nodes
-		vector<double> nodal_values(IDB.size());
-		{
-			if (this->TestOperandType() == SCALAR) {
-          for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx)
-            nodal_values[nIdx] = e.N(nIdx)->Read(this->TestOperandKey());
-        }
-			else if (this->TestOperandType() == VECTOR) {
-        nodal_values.resize( nodal_values.size() * dim);
-				VectorVariable<dim> var;
-				for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
-					for (uint32_t i{0U}; i < dim; ++i) {
-						e.N(nIdx)->Read(this->TestOperandKey(), var);
-						nodal_values[nIdx*dim + i] = var.Component(i);
-					}
-				}
-			}
-			else if (this->TestOperandType() == TENSOR) {
-				uint32_t dim2 = dim*dim;
-        nodal_values.resize( nodal_values.size() * dim2);
-				TensorVariable<dim> var;
-				for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
-					e.N(nIdx)->Read(this->TestOperandKey(), var);
-					for (uint32_t i{0U}; i < dim; ++i) {
-						for (uint32_t j{0U}; j < dim; ++j)
-							nodal_values[nIdx*dim2 + i*dim + j] = var.Component(i*dim + j);
-					}
-				}
-			}
-			else if (this->TestOperandType() == ARRAY) {
-				const auto datadepth(TestOperandKey().dataDepth);
-        nodal_values.resize( nodal_values.size() * datadepth);
-				ArrayVariable var;
-				for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
-					e.N(nIdx)->Read(this->TestOperandKey(), var);
-					for (uint32_t i{0U}; i < datadepth; ++i)
-						nodal_values[nIdx*datadepth + i] = var.Component(i);
-				}
-			}
-			else if (this->TestOperandType() == FLAGGEDARRAY) {
-				const auto datadepth(TestOperandKey().dataDepth);
-        nodal_values.resize( nodal_values.size() * datadepth);
-				FlaggedArrayVariable var;
-				for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
-					e.N(nIdx)->Read(this->TestOperandKey(), var);
-					for (uint32_t i{0U}; i < datadepth; ++i)
-						nodal_values[nIdx*datadepth + i] = var.Component(i);
-				}
-			}
-			else {
-				throw csmp::Exception(ERROR,
-					"MathOperatorLHS<dim>::AssignToGlobal(Element):",
-					"Undefined variable type");
-			}
-		};
+		// collect and store test-operand values from the model so that they can later be used for row elimination
+		vector<double> top_variable_node_values( IDT.size() );
+      {
+        if (this->TestOperandType() == SCALAR) {
+            for ( uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx )
+              top_variable_node_values[nIdx] = e.N(nIdx)->Read(this->TestOperandKey());
+          }
+        else if (this->TestOperandType() == VECTOR) {
+            VectorVariable<dim> var;
+            for (uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx) {
+              for (uint32_t i{0U}; i < dim; ++i) {
+                e.N(nIdx)->Read(this->TestOperandKey(), var);
+                top_variable_node_values[nIdx*dim + i] = var.Component(i);
+              }
+            }
+          }
+        else if (this->TestOperandType() == TENSOR) {
+            TensorVariable<dim> var;
+            for (uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx) {
+              e.N(nIdx)->Read(this->TestOperandKey(), var);
+              for (uint32_t i{0U}; i < dim; ++i) {
+                for (uint32_t j{0U}; j < dim; ++j)
+                  top_variable_node_values[nIdx*dim*dim + i*dim + j] = var.Component(i*dim + j);
+              }
+            }
+          }
+        else if (this->TestOperandType() == ARRAY) {
+            ArrayVariable var;
+            for (uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx) {
+              e.N(nIdx)->Read(this->TestOperandKey(), var);
+              for (uint32_t i{0U}; i < this->TestOperandDataDepth(); ++i)
+                top_variable_node_values[nIdx*this->TestOperandDataDepth() + i] = var.Component(i);
+            }
+          }
+        else if (this->TestOperandType() == FLAGGEDARRAY) {
+            FlaggedArrayVariable var;
+            for (uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx) {
+              e.N(nIdx)->Read(this->TestOperandKey(), var);
+              for (uint32_t i{0U}; i < this->TestOperandDataDepth(); ++i)
+                top_variable_node_values[nIdx*this->TestOperandDataDepth() + i] = var.Component(i);
+            }
+          }
+        else throw csmp::Exception( ERROR, "MathOperatorLHS<dim>::AssignToGlobal(Element):",
+                                   "Undefined variable type");
+      } // end value collection
 
 		// perform assignment from local matrix to global matrix
-
 		if ( add_accumulate_ || add_accumulate_later_ )
-		{
-			for (uint32_t i{0U}; i < LHS.Rows(); i++) {
-				if (IDT[i] != NULL_IDX) {
-					for (uint32_t j{0U}; j < LHS.Cols(); j++) {
-						if ( IDB[j] == NULL_IDX ) {
-                // notice the sign e.N( j / this->TestOperandOffset())->Read(this->TestOperand() )
-                pivotVector[IDT[i]] -= LHS(i, j) * nodal_values[j] * factor_;
+      {
+        assert( IDB.size() == LHS.Rows() );
+        assert( IDT.size() == LHS.Cols() );
+        for (uint32_t i{0U}; i < LHS.Rows(); i++)
+          if (IDB[i] != NULL_IDX)
+            for (uint32_t j{0U}; j < LHS.Cols(); j++) {
+                if ( IDT[j] == NULL_IDX ) {
+                     // notice the sign e.N( j / this->TestOperandOffset())->Read(this->TestOperand() )
+                     pivotVector[ IDB[i] ] -= LHS(i, j) * top_variable_node_values[j] * factor_;
+                  }
+                else G.Add( IDB[i], IDT[j], LHS(i, j) * factor_ );
               }
-						else G.Add( IDT[i], IDB[j], LHS(i, j) * factor_ );
-					}
-				}
-			}
 
-			/*for (auto i{0U}; i<LHS.Rows(); i++)
-			  if (IDT[i] != NULL_IDX) {
-				for (size_t j{0U}; j < LHS.Cols(); j++)
-				  if (IDB[j] != NULL_IDX) {
-					G.Add(IDT[i],
-					  IDB[j],
-					  LHS(i, j) * factor_);
-				  }
-			  }*/
-		}
+      }
 		else if (multiply_accumulate_)
-		{
-			throw csmp::Exception(ERROR,
-				"MathOperatorLHS<dim>::AssignToGlobal(Element):",
-				"Multiply Accumulate has not been supported yet");
+      throw csmp::Exception( ERROR, "MathOperatorLHS<dim>::AssignToGlobal(Element):",
+                            "Multiply Accumulate has not been supported yet");
 
-			//if (IDT[i] != NULL_IDX) {
-			//  for (size_t j{0U}; j<LHS.Cols(); j++)
-			//    if (IDB[j] != NULL_IDX) {
-			//      G.MultiplyEntryWith(IDT[i],
-			//        IDB[j],
-			//        LHS(i, j) * factor_);
-			//    }
-			//}
-		}
 		else if (subtract_accumulate_ || subtract_accumulate_later_)
-		{
-			for (uint32_t i{0U}; i < LHS.Rows(); i++) {
-				if (IDT[i] != NULL_IDX) {
-					for (uint32_t j{0U}; j < LHS.Cols(); j++) {
-						if ( IDB[j] == NULL_IDX ) {
-                 // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
-                 pivotVector[IDT[i]] += LHS(i, j) * nodal_values[j] * factor_;
+      {
+        assert( IDB.size() == LHS.Rows() );
+        assert( IDT.size() == LHS.Cols() );
+        for (uint32_t i{0U}; i < LHS.Rows(); i++)
+          if (IDB[i] != NULL_IDX)
+            for (uint32_t j{0U}; j < LHS.Cols(); j++) {
+                if ( IDT[j] == NULL_IDX ) {
+                     // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
+                     pivotVector[ IDB[i] ] += LHS(i, j) * top_variable_node_values[j] * factor_;
+                  }
+                else G.Add( IDT[i], IDB[j], -LHS(i, j) * factor_);
               }
-						else G.Add( IDT[i], IDB[j], -LHS(i, j) * factor_);
-					}
-				}
-			}
-
-			/*for (auto i{0U}; i<LHS.Rows(); i++)
-			  if (IDT[i] != NULL_IDX) {
-				for (size_t j{0U}; j < LHS.Cols(); j++)
-				  if (IDB[j] != NULL_IDX) {
-					G.Add(IDT[i],
-					  IDB[j],
-					  -LHS(i, j) * factor_);
-				  }
-			  }*/
-		}
-		else
-			throw csmp::Exception(ERROR,
-				"MathOperatorLHS<dim>::AssignToGlobal(Element):",
-				"accumulation instructions could not be parsed.");
+      }
+		else throw csmp::Exception( ERROR, "MathOperatorLHS<dim>::AssignToGlobal(Element):",
+				                       "accumulation instructions could not be parsed.");
 
 	} // end AssignToGlobal (Element)
 
 
 
 
-  /// AssignToGlobal matrix function
+/**
+     TODO: do we need this function to be virtual (if not it could be templatised for matrix)
+     AssignToGlobal matrix function (CompressedRowMatrix version exactly the same as previous, but virtual functions cannot be templates)
+*/
   template<uint32_t dim, template<uint32_t> class CELL>
   void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, CompressedRowMatrix& G,
                                                   vector<double>& pivotVector, const vector<size_t>& DOF_indexes )
   {
-		// vectors for mapping local to global node indices for test and basic operands
-		vector<size_t> IDT( e.Nodes() ); // ii
-		vector<size_t> IDB( e.Nodes() ); // jj
-    for ( uint32_t n{0U}; n<e.Nodes(); ++n ) {
-         IDT[n] = e.N(n)->Idx();
-         IDB[n] = IDT[n];
+		// creating vectors for mapping local (element) to global (matrix) indices for basic and test function operands
+    const auto n_nodes{ e.Nodes() };
+		vector<size_t> IDB( n_nodes ); // ii - for matrix indices corresponding to base-function operand
+		vector<size_t> IDT( n_nodes ); // jj - for matrix indices corresponding to test-function operand
+    for ( uint32_t n{0U}; n<n_nodes; ++n )
+      IDB[n] = IDT[n] = e.N(n)->Idx();
+
+    // expanding vectors to degrees of freedom of basic operand (pressure, displacement, etc.)
+		if (BasicOperandType() != SCALAR)
+			transformNodeIndexVector( BasicOperandKey(), IDB );
+
+    // applying operand offsets to find matrix positions corresponding to element matrix positions
+		for (uint32_t i{0U}; i < IDB.size(); i++) {
+        IDB[i] += this->BasicOperandOffset();
+        IDB[i]  = DOF_indexes[ IDB[i] ];
       }
 
-    if (TestOperandType() != SCALAR)
-      transformNodeIndexVector( TestOperandKey(), IDT );
+		if (TestOperandType() != SCALAR)
+			transformNodeIndexVector( TestOperandKey(), IDT );
 
-    for (uint32_t i{0U}; i < IDT.size(); i++) {
-      IDT[i] += this->TestOperandOffset();
-      IDT[i] = DOF_indexes[IDT[i]];
-    }
+		for (uint32_t i{0U}; i < IDT.size(); i++) {
+        IDT[i] += this->TestOperandOffset();
+        IDT[i]  = DOF_indexes[ IDT[i] ];
+      }
 
-    if (BasicOperandType() != SCALAR)
-      transformNodeIndexVector( BasicOperandKey(), IDB );
-
-    for (uint32_t i{0U}; i < IDB.size(); i++) {
-      IDB[i] += this->BasicOperandOffset();
-      IDB[i] = DOF_indexes[IDB[i]];
-    }
+    // consistency check: LHS can be rectangular, but its i,j dimensions must
+    // match those given by the number of nodes and degrees of freedom per node
+#ifdef DEBUG
+    csmp::ErrorHandler&  csmp_err( csmp::ErrorHandler::Instance() );
+    if ( LHS.Rows() != IDB.size() ) {
+         cout <<"\n"<<"basic operand '"<< BasicOperandName() <<"' ("<< parseType(BasicOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix rows does not match nodes  x  nodal degrees of freedom." );
+         return;
+      }
+    if ( LHS.Cols() != IDT.size() ) {
+         cout <<"\n"<<"test operand '"<< TestOperandName() <<"' ("<< parseType(TestOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix columns does not match nodes  x  nodal degrees of freedom." );
+         return;
+      }
+#endif
 
     // get (component of) local value of a local node
-    vector<double> nodal_values(IDB.size());
+    vector<double> top_variable_node_values( IDT.size() );
     {
       if (this->TestOperandType() == SCALAR) {
-        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
-          nodal_values[nIdx] = e.N(nIdx)->Read(this->TestOperandKey());
-        }
+        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx)
+          top_variable_node_values[nIdx] = e.N(nIdx)->Read(this->TestOperandKey());
       }
       else if (this->TestOperandType() == VECTOR) {
-        nodal_values.resize( nodal_values.size() * dim);
         VectorVariable<dim> var;
         for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
           for (uint32_t i{0U}; i < dim; ++i) {
             e.N(nIdx)->Read(this->TestOperandKey(), var);
-            nodal_values[nIdx*dim + i] = var.Component(i);
+            top_variable_node_values[nIdx*dim + i] = var.Component(i);
           }
         }
       }
       else if (this->TestOperandType() == TENSOR) {
-        uint32_t dim2 = dim*dim;
-        nodal_values.resize( nodal_values.size() * dim2);
+        const uint32_t dim2 = dim*dim;
         TensorVariable<dim> var;
         for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
           e.N(nIdx)->Read(this->TestOperandKey(), var);
           for (uint32_t i{0U}; i < dim; ++i) {
             for (uint32_t j{0U}; j < dim; ++j) {
-              nodal_values[nIdx*dim2 + i*dim + j] = var.Component(i*dim + j);
+              top_variable_node_values[nIdx*dim2 + i*dim + j] = var.Component(i*dim + j);
             }
           }
         }
       }
       else if (this->TestOperandType() == ARRAY) {
         const auto datadepth(TestOperandKey().dataDepth);
-        nodal_values.resize( nodal_values.size() * datadepth);
         ArrayVariable var;
         for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
           e.N(nIdx)->Read(this->TestOperandKey(), var);
           for (uint32_t i{0U}; i < datadepth; ++i) {
-            nodal_values[nIdx*datadepth + i] = var.Component(i);
+            top_variable_node_values[nIdx*datadepth + i] = var.Component(i);
           }
         }
       }
       else if (this->TestOperandType() == FLAGGEDARRAY) {
         const auto datadepth(TestOperandKey().dataDepth);
-        nodal_values.resize( nodal_values.size() * datadepth);
         FlaggedArrayVariable var;
         for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
           e.N(nIdx)->Read(this->TestOperandKey(), var);
           for (uint32_t i{0U}; i < datadepth; ++i) {
-            nodal_values[nIdx*datadepth + i] = var.Component(i);
+            top_variable_node_values[nIdx*datadepth + i] = var.Component(i);
           }
         }
       }
-      else throw csmp::Exception(ERROR,
-                              "MathOperatorLHS<dim>::AssignToGlobal(Element):",
-                              "Undefined variable type");
+      else throw csmp::Exception( ERROR, "MathOperatorLHS<dim>::AssignToGlobal(Element):",
+                                 "Undefined variable type");
     };
 
     // perform assignment from local matrix to global matrix
@@ -1018,56 +1015,29 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
       throw csmp::Exception(ERROR,
                             "MathOperatorLHS<dim>::AssignToGlobal(Element):",
                             "Multiply Accumulate has not been supported yet");
-
-      //if (IDT[i] != NULL_IDX) {
-      //  for (size_t j{0U}; j<LHS.Cols(); j++)
-      //    if (IDB[j] != NULL_IDX) {
-      //      G.MultiplyEntryWith(IDT[i],
-      //        IDB[j],
-      //        LHS(i, j) * factor_);
-      //    }
-      //}
     }
     else if ( add_accumulate_ || add_accumulate_later_)
     {
       for (uint32_t i{0U}; i < LHS.Rows(); i++) {
-        if (IDT[i] != NULL_IDX) {
+        if (IDB[i] != NULL_IDX) {
           for (uint32_t j{0U}; j < LHS.Cols(); j++) {
-            if ( IDB[j] == NULL_IDX ) {
-              pivotVector[IDT[i]] -= LHS(i, j) * nodal_values[j] * factor_;  // notice the sign e.N(j / this->TestOperandOffset())->Read(this->TestOperand())
+            if ( IDT[j] == NULL_IDX ) {
+              pivotVector[ IDB[i] ] -= LHS(i, j) * top_variable_node_values[j] * factor_;  // notice the sign e.N(j / this->TestOperandOffset())->Read(this->TestOperand())
             }
-            else {
-              G.Add( static_cast<uint32_t>(IDT[i]),
-                     static_cast<uint32_t>(IDB[j]),
-                     LHS(i, j) * factor_);
-            }
+            else  G.Add( static_cast<uint32_t>(IDB[i]), static_cast<uint32_t>(IDT[j]), LHS(i, j) * factor_);
           }
         }
       }
-
-      /*for (auto i{0U}; i<LHS.Rows(); i++)
-        if (IDT[i] != NULL_IDX) {
-        for (size_t j{0U}; j < LHS.Cols(); j++)
-          if (IDB[j] != NULL_IDX) {
-          G.Add(IDT[i],
-            IDB[j],
-            LHS(i, j) * factor_);
-          }
-        }*/
     }
     else if (subtract_accumulate_ || subtract_accumulate_later_)
     {
       for (uint32_t i{0U}; i < LHS.Rows(); i++) {
-        if (IDT[i] != NULL_IDX) {
+        if (IDB[i] != NULL_IDX) {
           for (uint32_t j{0U}; j < LHS.Cols(); j++) {
-            if (IDB[j] == NULL_IDX) {
-              pivotVector[IDT[i]] += LHS(i, j) * nodal_values[j] * factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
+            if (IDT[j] == NULL_IDX) {
+              pivotVector[ IDB[i] ] += LHS(i, j) * top_variable_node_values[j] * factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
             }
-            else {
-              G.Add( static_cast<uint32_t>(IDT[i]),
-                     static_cast<uint32_t>(IDB[j]),
-                    -LHS(i, j) * factor_);
-            }
+            else  G.Add( static_cast<uint32_t>(IDB[i]), static_cast<uint32_t>(IDT[j]), -LHS(i, j) * factor_);
           }
         }
       }
@@ -1091,59 +1061,72 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
 
 	
 
+
+/**
+    Accumulation without elimination of Dirichlet degrees of freedom
+*/
 template<uint32_t dim, template<uint32_t> class CELL>
 void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix& G )
 	{
-		// vectors for mapping local to global node indices for test and basic operands
-		vector<size_t> IDT( e.Nodes() ); // ii
-		vector<size_t> IDB( e.Nodes() ); // jj
-    for ( uint32_t n{0U}; n<e.Nodes(); ++n ) {
-         IDT[n] = e.N(n)->Idx();
-         IDB[n] = IDT[n];
-      }
+		// creating vectors for mapping local (element) to global (matrix) indices for basic and test function operands
+    const auto n_nodes{ e.Nodes() };
+		vector<size_t> IDB( n_nodes ); // ii - for matrix indices corresponding to base-function operand
+		vector<size_t> IDT( n_nodes ); // jj - for matrix indices corresponding to test-function operand
+    for ( uint32_t n{0U}; n<n_nodes; ++n )
+      IDB[n] = IDT[n] = e.N(n)->Idx();
+
+    // expanding vectors to degrees of freedom of basic operand (pressure, displacement, etc.)
+		if (BasicOperandType() != SCALAR)
+			transformNodeIndexVector( BasicOperandKey(), IDB );
+
+    // applying operand offsets to find matrix positions corresponding to element matrix positions
+		for (uint32_t i{0U}; i < IDB.size(); i++) IDB[i] += this->BasicOperandOffset();
 
 		if (TestOperandType() != SCALAR)
 			transformNodeIndexVector( TestOperandKey(), IDT );
 
-		for (uint32_t i{0U}; i < IDT.size(); i++)
-			IDT[i] += this->TestOperandOffset();
+		for (uint32_t i{0U}; i < IDT.size(); i++) IDT[i] += this->TestOperandOffset();
 
-		if (BasicOperandType() != SCALAR)
-			transformNodeIndexVector( BasicOperandKey(), IDB );
-
-		for (uint32_t i{0U}; i < IDB.size(); i++)
-			IDB[i] += this->BasicOperandOffset();
-
-		// perform assignment from local matrix to global matrix
+    // consistency check: LHS can be rectangular, but its i,j dimensions must
+    // match those given by the number of nodes and degrees of freedom per node
+#ifdef DEBUG
+    csmp::ErrorHandler&  csmp_err( csmp::ErrorHandler::Instance() );
+    if ( LHS.Rows() != IDB.size() ) {
+         cout <<"\n"<<"basic operand '"<< BasicOperandName() <<"' ("<< parseType(BasicOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix rows does not match nodes  x  nodal degrees of freedom." );
+         return;
+      }
+    if ( LHS.Cols() != IDT.size() ) {
+         cout <<"\n"<<"test operand '"<< TestOperandName() <<"' ("<< parseType(TestOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix columns does not match nodes  x  nodal degrees of freedom." );
+         return;
+      }
+#endif
 
 		if (multiply_accumulate_)
-		{
-			for (uint32_t i{0U}; i < LHS.Rows(); i++)
-				for (uint32_t j{0U}; j < LHS.Cols(); j++)
-					G.MultiplyEntryWith(IDT[i],
-						IDB[j],
-						LHS(i, j) * factor_);
-		}
+      {
+        for (uint32_t i{0U}; i < LHS.Rows(); i++)
+          for (uint32_t j{0U}; j < LHS.Cols(); j++)
+            G.MultiplyEntryWith( IDB[i], IDT[j], LHS(i, j) * factor_);
+      }
 		else if (add_accumulate_ || add_accumulate_later_)
-		{
-			for (uint32_t i{0U}; i < LHS.Rows(); i++)
-				for (uint32_t j{0U}; j < LHS.Cols(); j++)
-					G.Add(IDT[i],
-						IDB[j],
-						LHS(i, j) * factor_);
-		}
+      {
+        for (uint32_t i{0U}; i < LHS.Rows(); i++)
+          for (uint32_t j{0U}; j < LHS.Cols(); j++)
+            G.Add(IDB[i], IDT[j], LHS(i, j) * factor_);
+      }
 		else if (subtract_accumulate_ || subtract_accumulate_later_)
-		{
-			for (uint32_t i{0U}; i < LHS.Rows(); i++)
-				for (uint32_t j{0U}; j < LHS.Cols(); j++)
-					G.Add(IDT[i],
-						IDB[j],
-						-LHS(i, j) * factor_);
-		}
-		else
-			throw csmp::Exception(ERROR,
-				"MathOperatorLHS<dim>::AssignToGlobal(Element):",
-				"accumulation instructions could not be parsed.");
+      {
+        for (uint32_t i{0U}; i < LHS.Rows(); i++)
+          for (uint32_t j{0U}; j < LHS.Cols(); j++)
+            G.Add(IDB[i], IDT[j], -LHS(i, j) * factor_);
+      }
+		else throw csmp::Exception( ERROR, "MathOperatorLHS<dim>::AssignToGlobal(Element):",
+				                       "accumulation instructions could not be parsed.");
 
 	} // end AssignToGlobal (Element)
 

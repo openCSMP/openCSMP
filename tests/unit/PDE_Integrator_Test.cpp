@@ -29,94 +29,66 @@ set separately for each component of the vector (no coupling).
 template<uint32_t dim,class CELL>
 void LHS_FixedValueMatrix<dim,CELL>::ComputeContribution( const CELL& e )
   {
-    const uint32_t nodes{ e.Nodes() };
-    uint32_t       dof{ nodes };
-    if ( MathOperatorLHS<dim>::TestOperandType() == VECTOR )
-      dof *= dim;
-    else if ( MathOperatorLHS<dim>::TestOperandType() == ARRAY ||
-              MathOperatorLHS<dim>::TestOperandType() == FLAGGEDARRAY )
-      dof *= MathOperatorLHS<dim>::TestOperandDataDepth();
-
     assert( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR );
     assert( MathOperatorLHS<dim>::MTRL[0].Rows() == dim );
     assert( MathOperatorLHS<dim>::MTRL[0].Cols() == dim );
-
-    MathOperatorLHS<dim>::LHS.Resize( dof, dof );
+    
+    const uint32_t nodes{ e.Nodes() };
+    // note: element matrix is not necessarily square, e.g., when coupling matrix blocks for scalar with vector degrees of freedom
+    MathOperatorLHS<dim>::LHS.Resize( nodes * this->BasicOperandDataDepth(), nodes * this->TestOperandDataDepth() );
     MathOperatorLHS<dim>::LHS.Zero();
     
     // SCALAR variables: fixed values are directly written to element matrix
     if ( MathOperatorLHS<dim>::TestOperandType() == SCALAR ) {
          MathOperatorLHS<dim>::LHS = -value_label_for_matrix_entry_; // off-diagonal is negative
          MathOperatorLHS<dim>::LHS.AssignToDiagonal( value_label_for_matrix_entry_ ); // diagonal is positive
+         // this->LHS.Out(0);
          return;
       }
-    // VECTOR variables: are expanded to achieve an ordering comp1, comp2, comp3... in LH matrix and RH vector
+      
+    // VECTOR and other variable types: are expanded to achieve an ordering comp1, comp2, comp3... in LH matrix and RH vector
     // (the different components are tagged with integers, e.g., if scalar=3, the component becomes 3x; x={0..dim}
-    else if ( MathOperatorLHS<dim>::TestOperandType() == VECTOR ) {
+    else {
         for ( uint32_t i{0U}; i < nodes; ++i )
           {
              for ( uint32_t j{0U}; j < nodes; ++j )
                {
-                  // for positive diagonal elements
+                  // create positive diagonal elements
                   if ( i == j ) {
-                      for ( uint32_t k{0U}; k<dim; ++k )
-                        this->LHS(i*dim+k,i*dim+k) = value_label_for_matrix_entry_ + k + 10;
+                      for ( uint32_t k{0U}; k<this->BasicOperandDataDepth(); ++k )
+                        for ( uint32_t l{0U}; l<this->TestOperandDataDepth(); ++l )
+                          this->LHS( i * this->BasicOperandDataDepth() + k,
+                                     j * this->TestOperandDataDepth() + l ) = value_label_for_matrix_entry_ + l + 10;
                     }
-                  // for negative off-diagonal elements
+                  // create negative off-diagonal elements
                   else {
-                       for ( uint32_t k{0U}; k<dim; ++k )
-                         this->LHS(i*dim+k, j*dim+k) = -(value_label_for_matrix_entry_ + k + 10);
+                       for ( uint32_t k{0U}; k<this->BasicOperandDataDepth(); ++k )
+                         for ( uint32_t l{0U}; l<this->TestOperandDataDepth(); ++l )
+                           this->LHS( i * this->BasicOperandDataDepth() + k,
+                                      j * this->TestOperandDataDepth() + l ) = -(value_label_for_matrix_entry_ + l + 10);
                     }
                }
           }
-        this->LHS.Out();
+        // this->LHS.Out(0);
         return;
       }
-    // ARRAY or FLAGGEDARRAY variables: same as for vectors but with data-depth instead of dim
-    else if ( MathOperatorLHS<dim>::TestOperandType() == ARRAY ||
-              MathOperatorLHS<dim>::TestOperandType() == FLAGGEDARRAY )
-      {
-        const uint32_t n_ary_elmts{ MathOperatorLHS<dim>::TestOperandDataDepth() };
-        for ( uint32_t i{0U}; i < nodes; ++i )
-          {
-             for ( uint32_t j{0U}; j < nodes; ++j )
-               {
-                  // for positive diagonal elements
-                  if ( i == j ) {
-                      for ( uint32_t k{0U}; k<n_ary_elmts; ++k )
-                        this->LHS(i*n_ary_elmts+k,i*n_ary_elmts+k) = value_label_for_matrix_entry_ + k + 10;
-                    }
-                  // for negative off-diagonal elements
-                  else {
-                       for ( uint32_t k{0U}; k<n_ary_elmts; ++k )
-                         this->LHS(i*n_ary_elmts+k, j*n_ary_elmts+k) = -(value_label_for_matrix_entry_ + k + 10);
-                    }
-               }
-          }
-        this->LHS.Out();
-        return;
-    }
-    throw csmp::Exception( WARNING, "LHS_FixedValueMatrix<dim,CELL>::ComputeContribution", "TestOperandType not handled yet." );
-}
+      
+    throw csmp::Exception( ERROR, "LHS_FixedValueMatrix<dim,CELL>::ComputeContribution", "TestOperandType not handled yet." );
+    
+} // end ComputeContribution
 
 
 
 
-/**
-
-Computes contribution from value input in constructor.
-
+/** Computes contribution from value input in constructor.
 */
 template<uint32_t dim,class CELL>
-void RHS_FixedValueMatrix<dim,CELL>::ComputeContribution( const CELL& e ) {
-    uint32_t dof{ e.Nodes() };
-    if ( MathOperatorRHS<dim>::TestOperandType() == VECTOR ) dof *= dim;
-    else if ( MathOperatorRHS<dim>::TestOperandType() == ARRAY ||
-              MathOperatorRHS<dim>::TestOperandType() == FLAGGEDARRAY )
-     dof *= MathOperatorRHS<dim>::TestOperandDataDepth();
-    
-    this->RHS.resize( dof );
-    for ( uint32_t i{0U}; i<dof; i++ )
+void RHS_FixedValueMatrix<dim,CELL>::ComputeContribution( const CELL& e )
+ {
+    uint32_t nodes{ e.Nodes() };
+    this->RHS.resize( nodes * this->TestOperandDataDepth() );
+
+    for ( uint32_t i{0U}; i<this->RHS.size(); i++ )
         this->RHS[i] = value_label_for_vector_entry_;
 }
 
@@ -689,7 +661,7 @@ void PDE_Integrator_Test::run()
     //=======================================
     // test multiple single variable
     //=======================================
-// OK    TestAssemblyTwoScalarVariablesNoDirichlet( true /* debug */ );
+    TestAssemblyTwoScalarVariablesNoDirichlet( true /* debug */ );
     TestAssemblyScalarAndVectorVariableNoDirichlet( true /* debug */ );
     
     // test 2 scalar variables
@@ -903,52 +875,56 @@ void PDE_Integrator_Test::TestAssemblyScalarAndVectorVariableNoDirichlet( bool d
  {
     cout <<"\nPDE_Integrator_Test::TestAssemblyScalarAndVectorVariableNoDirichlet: starting test."<< endl;
     Reset();
+    const uint32_t model_dimensions{2U};
 
     CSMP_DEFAULT_LINEAR_SOLVER  solver;
-    PDE_Integrator<2U,Element>  pde_integrator(solver);
+    PDE_Integrator<model_dimensions,Element>  pde_integrator(solver);
 
     // Enable access to private PDE_Integrator members and methods
-    PDE_Integrator_Attorney<2U> attorney( pde_integrator );
+    PDE_Integrator_Attorney<model_dimensions> attorney( pde_integrator );
 
     // Create pde-operators for a system with 2 coupled scalar solution variables (placed on the node)
     const double val1 = 1.;
     // scalar 1: 'fluid pressure'
-    LHS_FixedValueMatrix<2U>  lhs1( model_->Database(), "permeability", "nodal velocity", "nodal velocity", val1 );
-    RHS_FixedValueMatrix<2U>  rhs1( model_->Database(), "element number", "nodal velocity", val1 );
+    LHS_FixedValueMatrix<model_dimensions>  lhs1( model_->Database(), "permeability", "nodal velocity", "nodal velocity", val1 );
+    RHS_FixedValueMatrix<model_dimensions>  rhs1( model_->Database(), "element number", "nodal velocity", val1 );
     // assign them to pde integrator
     attorney.Add(&lhs1);
     attorney.Add(&rhs1);
 
     // scalar 2: 'concentration'
     const double val2 = 2.;
-    LHS_FixedValueMatrix<2U>  lhs2( model_->Database(), "diffusivity", "concentration", "concentration", val2 );
-    RHS_FixedValueMatrix<2U>  rhs2( model_->Database(), "fluid volume source", "concentration", val2 );
+    LHS_FixedValueMatrix<model_dimensions>  lhs2( model_->Database(), "diffusivity", "concentration", "concentration", val2 );
+    RHS_FixedValueMatrix<model_dimensions>  rhs2( model_->Database(), "fluid volume source", "concentration", val2 );
     attorney.Add(&lhs2);
     attorney.Add(&rhs2);
     
-    // cross-coupling terms (lower diagonal of matrix)
-    // scalar 1: 'fluid pressure' with 'concentration'
-    LHS_FixedValueMatrix<2U>  lhs12( model_->Database(), "element number", "concentration", "nodal velocity", val1 );
+    // cross-coupling terms assembled into upper diagonal of matrix
+    // ------------------------------------------------------------
+    // coupling basic operand 'concentration' rows with test operand 'nodal velocity' columns
+    LHS_FixedValueMatrix<model_dimensions>  lhs12( model_->Database(), "element number", "concentration", "nodal velocity", val1 );
     attorney.Add(&lhs12);
 
-    // cross-coupling terms (upper diagonal of matrix)
-    // scalar 1: 'concentration' with 'fluid pressure'
-    LHS_FixedValueMatrix<2U>  lhs21( model_->Database(), "element number", "nodal velocity", "concentration", val1 );
+    // cross-coupling terms assembled into lower diagonal of matrix
+    // ------------------------------------------------------------
+    // coupling 'nodal velocity' with 'concentration'
+    LHS_FixedValueMatrix<model_dimensions>  lhs21( model_->Database(), "element number", "nodal velocity", "concentration", val1 );
     attorney.Add(&lhs21);
 
     
     // TESTING
-    Region<2U>& model_region = model_->Region( "Model" );
+    const Region<model_dimensions>& model_region = model_->Region( "Model" );
     _test( attorney.EstablishMatrixSetup( model_region ) );
     _test( attorney.lhs_operators_.size() == 4 );
     _test( attorney.rhs_operators_.size() == 2 );
 
     // compare matrix with expected matrix
     // No Dirichlet conditions: Matrix should be nb nodes x nb nodes
-    const MeshManager<2U>& mesh = model_->Mesh();
-    const size_t nb_nodes = mesh.Nodes() * 2U;
-    _test( attorney.G_.Rows() == nb_nodes );
-    _test( attorney.G_.Cols() == nb_nodes );
+    const MeshManager<model_dimensions>& mesh = model_->Mesh();
+    //                                  nodes * ( 1-for-scalars + dim-for-vectors)
+    const size_t n_degrees_of_freedom = mesh.Nodes() + mesh.Nodes() * model_dimensions;
+    _test( attorney.G_.Rows() == n_degrees_of_freedom );
+    _test( attorney.G_.Cols() == n_degrees_of_freedom );
 
     model_region.RenumberNodes();
     attorney.Accumulate( model_region );
