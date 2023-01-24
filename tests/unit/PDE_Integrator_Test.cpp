@@ -642,7 +642,7 @@ void PDE_Integrator_Test::run()
     //=======================================
     // test single variable
     //=======================================
-//    TestAssembly();
+    TestAssembly();
 
     // test scalar variable
     //TestSingleVariable();
@@ -659,7 +659,7 @@ void PDE_Integrator_Test::run()
 
 
     //=======================================
-    // test multiple single variable
+    // test multiple solutionvariables
     //=======================================
     TestAssemblyTwoScalarVariablesNoDirichlet( true /* debug */ );
     TestAssemblyScalarAndVectorVariableNoDirichlet( true /* debug */ );
@@ -671,109 +671,8 @@ void PDE_Integrator_Test::run()
 
     // test vector variable and vector variable
 
-  }
+  } // end run
 
-/*
-  void PDE_Integrator_Test::TestSingleVariable() {
-    // 0. prepare
-    Region<2U>& region = model_->Region("Model");
-    region.RenumberNodes();
-
-    GaussJordan_Solver solver;
-
-    // Create pde-operators
-    NumIntegral_dNT_op_dN_dV<2U> pressureLHS(model_->Database(),
-      "permeability",
-      "fluid pressure",
-      "fluid pressure");
-
-    NumIntegral_NT_op_N_dV<2U> sourceVolume(model_->Database(),
-      "fluid volume source", "fluid pressure");
-
-    PointSource_rhsop<2U> sourcePoint(model_->Database(),
-      "nodal fluid point source", "fluid pressure");
-    
-    NumIntegral_dNT_op_dV<2U> gravityTerm(model_->Database(),
-      "gravity vector",
-      "fluid pressure");
-
-    //fluid_velocity = new VelocityAndVolumeFlux<2U, Element<2U>>(*model, "total mobility", "porosity", "fluid pressure", true, "velocity");
-
-    NumIntegral_dNT_op_dN_dV<2U> temperatureLHS(model_->Database(),
-      "permeability",
-      "temperature",
-      "temperature");
-
-    NumIntegral_NT_op_N_dV<2U> sourceHeat(model_->Database(),
-      "thermal volume source", "temperature");
-
-
-    pde_reference_ = new PDE_Integrator<2U,Region>(solver);
-    pde_test_      = new PDE_Integrator<2U,Region>(solver);
-
-    pde_reference_->Add(&pressureLHS);
-    pde_reference_->Add(&sourceVolume);
-    pde_reference_->Add(&sourcePoint);
-    pde_reference_->Add(&gravityTerm);
-    pde_test_->Add(&pressureLHS);
-    pde_test_->Add(&sourceVolume);
-    pde_test_->Add(&sourcePoint);
-    pde_test_->Add(&gravityTerm);
-
-    const vector<size_t>& DOF_indexes = pde_test_->DOF_indexes_;
-
-    // 1. test matrix establish and enumerate DOFs
-    pde_reference_->EstablishMatrixSetup(region);
-    pde_test_->EstablishMatrixSetup(region);
-
-    size_t pressureDirchletDOFs(0);
-    Index pressureKey = model_->Database().StorageKey("fluid pressure");
-    for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
-      if ((*nIter)->Status(pressureKey) == DIRICH) {
-        pressureDirchletDOFs += 1;
-      }
-    }
-
-    _test((pde_reference_->GetRH()->size()) == (pde_test_->GetRH()->size()));
-
-    pde_test_->EnumerateAndFixMatrixSize(region);
-    _test(pde_reference_->GetRH()->size() == DOF_indexes.size());
-    _test(pde_reference_->GetRH()->size() == pde_test_->GetRH()->size() + pressureDirchletDOFs);
-    _test(pde_reference_->GetG()->Rows() == pde_test_->GetG()->Rows() + pressureDirchletDOFs);
-    _test(pde_reference_->GetG()->Cols() == pde_test_->GetG()->Cols() + pressureDirchletDOFs);
-
-    // 2. test accumulate
-    pde_reference_->Accumulate(region);
-    pde_test_->Accumulate(region);
-
-    // 3. test AssignInitialConditions & LateAccumulate
-    pde_reference_->TimeIncrement(0.1);
-    pde_test_->TimeIncrement(0.1);
-    pde_reference_->AssignInitialConditions(region);
-    pde_test_->AssignInitialConditions(region);
-	_test(pde_reference_->Transient() == true);
-	_test(pde_test_->Transient() == true);
-	pde_reference_->LateAccumulate(region);
-	pde_test_->LateAccumulate(region);
-
-    for (size_t i(0); i < DOF_indexes.size(); ++i) {
-      if (DOF_indexes[i] != NULL_IDX) {
-        // _test conductance matrix
-        for (size_t j(0); j < DOF_indexes.size(); ++j) {
-          if (DOF_indexes[j] != NULL_IDX) {
-            _test(pde_test_->GetG()->At(DOF_indexes[i], DOF_indexes[j]) == pde_reference_->GetG()->At(i, j));
-          }
-        }
-        // check load vector
-        _test((*pde_test_->GetRH())[DOF_indexes[i]] == (*pde_reference_->GetRH())[i]);
-      }
-    }
-
-    delete pde_reference_;
-    delete pde_test;
-
-  } // end method
-*/
 
 
 
@@ -929,12 +828,12 @@ void PDE_Integrator_Test::TestAssemblyScalarAndVectorVariableNoDirichlet( bool d
     model_region.RenumberNodes();
     attorney.Accumulate( model_region );
 
-/*
     set<BOX_BOUNDARY>  dirich; // which boundary flags do the solution variables have?
-    TestMatrix<2U>( attorney, mesh, dirich, SCALAR );
-    // Note: can only test first block of the matrix which is occupied by the 'concentration' values
-    TestRHSVector<2U>( attorney, mesh, val2, dirich, SCALAR );
-*/
+    // Note: only tests first block of the matrix which is occupied by the 'concentration' values
+    TestMatrix<model_dimensions>( attorney, mesh, dirich, SCALAR );
+    // Note: only tests first block of the matrix which is occupied by the 'concentration' values
+    TestRHSVector<model_dimensions>( attorney, mesh, val2, dirich, SCALAR );
+
     if ( debug ) {
         attorney.Out();
         attorney.OutputGlobals( 0 /* print zero decimal places */ );
@@ -944,128 +843,6 @@ void PDE_Integrator_Test::TestAssemblyScalarAndVectorVariableNoDirichlet( bool d
 } // end TestAssemblyScalarAndVectorVariableNoDirichlet
 
 
-
-
-
-
-
-#if 0
-
-void PDE_Integrator_Test::TestTwoScalarVariables() {
-    Region<2U>& region = model_->Region("Model");
-    region.RenumberNodes();
-    
-    CSMP_DEFAULT_LINEAR_SOLVER  solver;
-
-    pde_reference_ = new PDE_Integrator_<2U, Region>(solver);
-    pde_test = new PDE_Integrator<2U, Region>(solver);
-
-    pde_reference_->Add(pressureLHS);
-    pde_reference_->Add(sourceVolume);
-    pde_reference_->Add(sourcePoint);
-    pde_reference_->Add(gravityTerm);
-    pde_reference_->Add(temperatureLHS);
-    pde_reference_->Add(sourceHeat);
-
-    pde_test_->Add(pressureLHS);
-    pde_test_->Add(sourceVolume);
-    pde_test_->Add(sourcePoint);
-    pde_test_->Add(gravityTerm);
-    pde_test_->Add(temperatureLHS);
-    pde_test_->Add(sourceHeat);
-
-    const vector<size_t>& DOF_indexes = pde_test_->GetDOFIndex();
-    // 1. test matrix establish and enumerate DOFs
-    pde_reference_->EstablishMatrixSetup(region);
-    pde_test_->EstablishMatrixSetupTest(region);
-    size_t dirchletDOFs(0);
-    Index pressureKey = model_->Database().StorageKey("fluid pressure");
-    Index temperatureKey = model_->Database().StorageKey("temperature");
-    for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
-      if ((*nIter)->Status(pressureKey) == DIRICH) {
-        dirchletDOFs += 1;
-      }
-      if ((*nIter)->Status(temperatureKey) == DIRICH) {
-        dirchletDOFs += 1;
-      }
-    }
-
-    _test((pde_reference_->GetRH()->size()) == (pde_test_->GetRH()->size()));
-    pde_test_->EnumerateAndFixMatrixSize(region);
-    _test(pde_reference_->GetRH()->size() == DOF_indexes.size());
-    _test(pde_reference_->GetRH()->size() == pde_test_->GetRH()->size() + dirchletDOFs);
-    _test(pde_reference_->GetG()->Rows() == pde_test_->GetG()->Rows() + dirchletDOFs);
-    _test(pde_reference_->GetG()->Cols() == pde_test_->GetG()->Cols() + dirchletDOFs);
-
-    // 2. test accumulate
-    pde_reference_->Accumulate(region);
-    pde_test_->AccumulateTest(region);
-
-	// 3. test AssignInitialConditions & LateAccumulate
-	pde_reference_->TimeIncrement(0.1);
-	pde_test_->TimeIncrement(0.1);
-	pde_reference_->AssignInitialConditions(region);
-	pde_test_->AssignInitialConditionsTest(region);
-	_test(pde_reference_->Transient() == true);
-	_test(pde_test_->Transient() == true);
-	pde_reference_->LateAccumulate(region);
-	pde_test_->LateAccumulateTest(region);
-    for (size_t i(0); i < DOF_indexes.size(); ++i) {
-      if (DOF_indexes[i] != NULL_IDX) {
-        // _test conductance matrix
-        for (size_t j(0); j < DOF_indexes.size(); ++j) {
-          if (DOF_indexes[j] != NULL_IDX) {
-            _test(pde_test_->GetG()->At(DOF_indexes[i], DOF_indexes[j]) == pde_reference_->GetG()->At(i, j));
-          }
-        }
-        // check load vector
-        _test((*pde_test_->GetRH())[DOF_indexes[i]] == (*pde_reference_->GetRH())[i]);
-      }
-    }
-
-    delete pde_reference_;
-    delete pde_test;
-  }
-
-
-  void PDE_Integrator_Test::TestOutputSingleVariable() {
-    Region<2U>& region = model_->Region("Model");
-    region.RenumberNodes();
-    Reset();
-
-    Index pressureKey = model_->Database().StorageKey("fluid pressure");
-    Index pressureValKey = model_->Database().StorageKey("fluid pressure previous");
-    
-    GaussJordan_Solver solver;
-
-    pde_test = new PDE_Integrator_UoM_Mock<2U, Region>(solver);
-    pde_test_->Add(pressureLHS);
-    pde_test_->Add(sourceVolume);
-    pde_test_->EstablishMatrixSetupTest(region);
-    pde_test_->EnumerateAndFixMatrixSize(region);
-    map<size_t, double> result;
-    for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
-      if ((*nIter)->Status(pressureKey) != DIRICH) {
-        result[(*nIter)->Idx()] = (*nIter)->Read(pressureKey);
-      } 
-    }
-
-    vector<double>* valid_x = pde_test_->GetX();
-    size_t idx(0);
-    for (auto& it : result) {
-      (*valid_x)[idx] = it.second;
-      ++idx;
-    }
-
-    pde_test_->OutputResultsTest(region);
-    for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
-      _test((*nIter)->Read(pressureKey) == (*nIter)->Read(pressureValKey));     
-    }
-    
-    delete pde_test;
-  }
-
-#endif
 
 } // end namespace csmp
 
