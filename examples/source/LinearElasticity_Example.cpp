@@ -80,6 +80,7 @@ void LinearElasticity_Example::Run()
     // ---------------------------------------------------------------------------------------
     // 0. Import model from Shewchuk's Triangle mesher
     // ---------------------------------------------------------------------------------------
+    /* uncomment this block to use it
     TRIANGLE_Interface  mesh_interface;
     VSet<2U>            mesh_container;
     char                file_name[200];
@@ -91,13 +92,12 @@ void LinearElasticity_Example::Run()
 
     // 'example12.txt' is the text file that defines the variables used in this example
     Model<2U>  model( mesh_container, "LinearElasticity_Example-variables.txt" );
-    string     config_file = "blunt30deg.1"; // model.Name();
+    string     config_file = file_name; // model.Name();
     mesh_container.Erase();
-
+*/
     // ---------------------------------------------------------------------------------------
     // 1. Load CSMP native format model
     // ---------------------------------------------------------------------------------------
-    /*
     string model_name;
     cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'blunt30deg.1':"<<endl;
     cin.ignore();
@@ -112,7 +112,6 @@ void LinearElasticity_Example::Run()
     CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
     //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
     Model<2U>  model(model_name, variable_file);
-*/
     printModelDimensions( model, true );
 
     // assigns the element area to a distributed variable called 'area'
