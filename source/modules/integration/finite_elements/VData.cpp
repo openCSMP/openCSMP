@@ -1172,29 +1172,23 @@ bool VData::CheckFix()
 void VData::EstablishZeroBasedNumbering()
  {
     // test whether nodes are not already numbered 0..1
-    const deque<vector<int64_t> >::const_iterator constElementsEnd(plist.end());
-    for ( deque<vector<int64_t> >::const_iterator
-          it=plist.begin(); it!=constElementsEnd; it++ )
-      for ( vector<int64_t>::const_iterator n=(*it).begin(); n!=(*it).end(); n++ )
-        if ( *n == 0U ) {
+    for ( auto& it : plist )
+      for ( auto& n : it )
+        if ( n == 0U ) {
              cerr << "\nVData::EstablishZeroBasedNumbering: Numbering already is 0..n-1 based.\n";
              return;
           }
     // to convert: 
     // plist
-    const deque<vector<int64_t> >::iterator elementsEnd(plist.end());
-    for ( deque<vector<int64_t> >::iterator
-          it=plist.begin(); it!=elementsEnd; it++ )
-      for ( vector<int64_t>::iterator n=(*it).begin(); n!=(*it).end(); n++ )
-        *n -= 1U;
+    for ( auto& it : plist )
+      for ( auto& n : it )
+        n -= 1U;
 
     // pfverts
-    const deque<vector<int64_t> >::iterator pfvertsEnd(pfverts.end());
-    for ( deque<vector<int64_t> >::iterator
-          it=pfverts.begin(); it!=pfvertsEnd; it++ )
-      for ( vector<int64_t>::iterator n=(*it).begin(); n!=(*it).end(); n++ )
+    for ( auto& it : pfverts )
+      for ( auto& n : it )
         // only the neighbor element ids, not the boundary flags must be decremented
-        if ( *n > 0 ) *n -= 1;
+        if ( n > 0 ) n -= 1;
 
     // bflags & bconds - nothing needs to be done
     

@@ -437,25 +437,25 @@ Point<dim>  centerOfGravity( const Model<dim>& );
 /// prints range to screen; returns either min(arg=false) or maximum variable value (default)
 template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
-                                const char* var, bool print_maximum = true );
+                              const char* var, bool print_maximum = true );
 
 /// prints range of target variable in model to screen and logs it to IO handler
 template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
-                                Standard_IO_Handler& io, const char* var,
-                                bool max_instead_of_min = true );
+                              Standard_IO_Handler& io, const char* var,
+                              bool max_instead_of_min = true );
 
 /// prints range of target variable within specific model subdomain
 template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
-                                const char* group, const char* var, bool max_or_min = true );
+                              const char* region, const char* var, bool max_or_min = true );
 
 /// prints range of target variable within specific model subdomain and logs it to IO handler
 template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
-                                Standard_IO_Handler&,
-                                const char* group, const char* var,
-                                bool max_instead_of_min = true );
+                              Standard_IO_Handler&,
+                              const char* group, const char* var,
+                              bool max_instead_of_min = true );
 
 /// prints min/max values stored in supplied vector
 void printRangeOf( const std::vector<std::pair<double, double> >& );
