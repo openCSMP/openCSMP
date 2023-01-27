@@ -1313,7 +1313,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
      }
 
     if ( flag_value_errors > 0 ) {
-         cerr <<"\n\n\t"<<"encountered "<< flag_value_errors <<" BOX_BUNDARY flag values that were out of the range defined for this enum [-29,0].\n";
+         cerr <<"\n\n\t"<<"encountered "<< flag_value_errors <<" BOX_BOUNDARY flag values that were out of the range defined for this enum [-29,0].\n";
          csmp_error.Note( INFO, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range, setting to IRREGULAR.");
       }
 
