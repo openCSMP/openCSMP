@@ -5,6 +5,7 @@
 #include "Face.h"
 #include "PropertyDatabase.h"
 #include "Exception.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 
@@ -13,22 +14,20 @@ namespace csmp {
 template<uint32_t dim, template<uint32_t> class CELL>
 MathOperatorLHS<dim,CELL>::MathOperatorLHS()
   : name_("unspecified LHS-operator"),
-  IDT(3),
-  IDB(3),
-  MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
-  factor_(1.),
-  add_accumulate_(true),
-  subtract_accumulate_(false),
-  add_accumulate_later_(false),
-  subtract_accumulate_later_(false),
-  multiply_accumulate_(false),
-  lump_matrices_(false),
-  application_cycles_(1),
-  application_cycle_(0),
-  time_multiply_(false),
-  time_divide_(false)
-{
-}
+    MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
+    factor_(1.),
+    add_accumulate_(true),
+    subtract_accumulate_(false),
+    add_accumulate_later_(false),
+    subtract_accumulate_later_(false),
+    multiply_accumulate_(false),
+    lump_matrices_(false),
+    application_cycles_(1),
+    application_cycle_(0),
+    time_multiply_(false),
+    time_divide_(false)
+  {
+  }
 
 
 
@@ -37,24 +36,22 @@ MathOperatorLHS<dim,CELL>::MathOperatorLHS( const PropertyDatabase<dim>& pref,
                                             const char* basic,
                                             const char* test)
 		: name_("unspecified LHS-operator"),
-		bop(make_pair(pref.Parameter(basic), 0)),
-		top(make_pair(pref.Parameter(test), 0)),
-		IDT(3),
-		IDB(3),
-		MTRL(13, DenseMatrix<DM_MIN>(2, 2) ),
-		DERIV(2, 3),
-		IPOL(3),
-		factor_(1.),
-		add_accumulate_(true),
-		subtract_accumulate_(false),
-		add_accumulate_later_(false),
-		subtract_accumulate_later_(false),
-		multiply_accumulate_(false),
-		lump_matrices_(false),
-		application_cycles_(1),
-		application_cycle_(0),
-		time_multiply_(false),
-		time_divide_(false)
+      bop(make_pair(pref.Parameter(basic), 0)),
+      top(make_pair(pref.Parameter(test), 0)),
+      MTRL(13, DenseMatrix<DM_MIN>(2, 2) ),
+      DERIV(2, 3),
+      IPOL(3),
+      factor_(1.),
+      add_accumulate_(true),
+      subtract_accumulate_(false),
+      add_accumulate_later_(false),
+      subtract_accumulate_later_(false),
+      multiply_accumulate_(false),
+      lump_matrices_(false),
+      application_cycles_(1),
+      application_cycle_(0),
+      time_multiply_(false),
+      time_divide_(false)
 	{
 	}
 
@@ -66,25 +63,23 @@ MathOperatorLHS<dim,CELL>::MathOperatorLHS( const PropertyDatabase<dim>& pref,
                                             const char* basic,
                                             const char* test )
 		: name_("unspecified LHS-operator"),
-		op(pref.Parameter(oper)),
-		bop(make_pair(pref.Parameter(basic), 0)),
-		top(make_pair(pref.Parameter(test), 0)),
-		IDT(3),
-		IDB(3),
-		MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
-		DERIV(2, 3),
-		IPOL(3),
-		factor_(1.),
-		add_accumulate_(true),
-		subtract_accumulate_(false),
-		add_accumulate_later_(false),
-		subtract_accumulate_later_(false),
-		multiply_accumulate_(false),
-		lump_matrices_(false),
-		application_cycles_(1),
-		application_cycle_(0),
-		time_multiply_(false),
-		time_divide_(false)
+      op(pref.Parameter(oper)),
+      bop(make_pair(pref.Parameter(basic), 0)),
+      top(make_pair(pref.Parameter(test), 0)),
+      MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
+      DERIV(2, 3),
+      IPOL(3),
+      factor_(1.),
+      add_accumulate_(true),
+      subtract_accumulate_(false),
+      add_accumulate_later_(false),
+      subtract_accumulate_later_(false),
+      multiply_accumulate_(false),
+      lump_matrices_(false),
+      application_cycles_(1),
+      application_cycle_(0),
+      time_multiply_(false),
+      time_divide_(false)
 	{
 	}
 
@@ -96,8 +91,6 @@ MathOperatorLHS<dim,CELL>::MathOperatorLHS( const MathOperatorLHS<dim,CELL>& mo 
       op(mo.op),        // operand
       bop(mo.bop),       // basic operand
       top(mo.top),       // testfunction operand
-      IDT(mo.IDT),       // node-ID & global constraint points vector
-      IDB(mo.IDB),       // node-ID & global constraint points vector
       LHS(mo.LHS),
       MTRL(mo.MTRL),      // Operand storage
       DERIV(mo.DERIV),
@@ -123,27 +116,25 @@ template<uint32_t dim, template<uint32_t> class CELL>
 MathOperatorLHS<dim,CELL>& MathOperatorLHS<dim,CELL>::operator=( const MathOperatorLHS<dim,CELL>& mo )
 	{
 		if (this != &mo)
-		{
-			name_ = mo.name_;
-			op = mo.op;    // operand
-			bop = mo.bop;   // basic operand
-			top = mo.top;   // testfunction operand
-			IDT = mo.IDT;   // node-ID & global constraint points vector
-			IDB = mo.IDB;   // node-ID & global constraint points vector
-			LHS = mo.LHS;
-			MTRL = mo.MTRL;  // Operand storage
-			DERIV = mo.DERIV;
-			IPOL = mo.IPOL;
-			factor_ = mo.factor_;
-			add_accumulate_ = mo.add_accumulate_;
-			add_accumulate_later_ = mo.add_accumulate_later_;
-			multiply_accumulate_ = mo.multiply_accumulate_;
-			lump_matrices_ = mo.lump_matrices_;
-			application_cycles_ = mo.application_cycles_;
-			application_cycle_ = mo.application_cycle_;
-			time_multiply_ = mo.time_multiply_;
-			time_divide_ = mo.time_divide_;
-		}
+      {
+        name_ = mo.name_;
+        op = mo.op;    // operand
+        bop = mo.bop;   // basic operand
+        top = mo.top;   // testfunction operand
+        LHS = mo.LHS;
+        MTRL = mo.MTRL;  // Operand storage
+        DERIV = mo.DERIV;
+        IPOL = mo.IPOL;
+        factor_ = mo.factor_;
+        add_accumulate_ = mo.add_accumulate_;
+        add_accumulate_later_ = mo.add_accumulate_later_;
+        multiply_accumulate_ = mo.multiply_accumulate_;
+        lump_matrices_ = mo.lump_matrices_;
+        application_cycles_ = mo.application_cycles_;
+        application_cycle_ = mo.application_cycle_;
+        time_multiply_ = mo.time_multiply_;
+        time_divide_ = mo.time_divide_;
+      }
 		return *this;
 	}
 
@@ -774,226 +765,221 @@ void MathOperatorLHS<dim,CELL>::MultiplyWithTimeFactor( double dt )
 
 
 
-	/// AssignToGlobal matrix function
+	/// AssignToGlobal matrix function (SparseMatrix version)
 template<uint32_t dim, template<uint32_t> class CELL>
 void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix& G,
                                                 vector<double>& pivotVector, const vector<size_t>& DOF_indexes )
 	{
-		// map local to global indexes for test and basic operands
-		IDT.resize(e.Nodes()); // ii
-		IDB.resize(e.Nodes()); // jj
-		for (auto i{0U}; i < e.Nodes(); i++) {
-			IDT[i] = e.N(i)->Idx();
-			IDB[i] = IDT[i];
-		}
+		// creating vectors for mapping local (element) to global (matrix) indices for basic and test function operands
+    const auto n_nodes{ e.Nodes() };
+		vector<size_t> IDB( n_nodes ); // ii - for matrix indices corresponding to base-function operand
+		vector<size_t> IDT( n_nodes ); // jj - for matrix indices corresponding to test-function operand
+    for ( uint32_t n{0U}; n<n_nodes; ++n )
+      IDB[n] = IDT[n] = e.N(n)->Idx();
+
+    // expanding vectors to degrees of freedom of basic operand (pressure, displacement, etc.)
+		if (BasicOperandType() != SCALAR)
+			transformNodeIndexVector( BasicOperandKey(), IDB );
+
+    // applying operand offsets to find matrix positions corresponding to element matrix positions
+		for (uint32_t i{0U}; i < IDB.size(); i++) {
+        IDB[i] += this->BasicOperandOffset();
+        IDB[i]  = DOF_indexes[ IDB[i] ];
+      }
 
 		if (TestOperandType() != SCALAR)
-			transformNodeIndexVector(dim, TestOperandKey(), IDT);
+			transformNodeIndexVector( TestOperandKey(), IDT );
 
-		for (auto i{0U}; i < IDT.size(); i++) {
-			IDT[i] += this->TestOperandOffset();
-			IDT[i] = DOF_indexes[IDT[i]];
-		}
+		for (uint32_t i{0U}; i < IDT.size(); i++) {
+        IDT[i] += this->TestOperandOffset();
+        IDT[i]  = DOF_indexes[ IDT[i] ];
+      }
 
-		if (BasicOperandType() != SCALAR)
-			transformNodeIndexVector(dim, BasicOperandKey(), IDB);
+    // consistency check: LHS can be rectangular, but its i,j dimensions must
+    // match those given by the number of nodes and degrees of freedom per node
+#ifdef DEBUG
+    csmp::ErrorHandler&  csmp_err( csmp::ErrorHandler::Instance() );
+    if ( LHS.Rows() != IDB.size() ) {
+         cout <<"\n"<<"basic operand '"<< BasicOperandName() <<"' ("<< parseType(BasicOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix rows does not match nodes  x  nodal degrees of freedom." );
+         return;
+      }
+    if ( LHS.Cols() != IDT.size() ) {
+         cout <<"\n"<<"test operand '"<< TestOperandName() <<"' ("<< parseType(TestOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix columns does not match nodes  x  nodal degrees of freedom." );
+         return;
+      }
+#endif
 
-		for (auto i{0U}; i < IDB.size(); i++) {
-			IDB[i] += this->BasicOperandOffset();
-			IDB[i] = DOF_indexes[IDB[i]];
-		}
-
-		// get (component of) local value of a local node 
-		vector<double> nodal_values(IDB.size());
-		{
-			if (this->TestOperandType() == SCALAR) {
-				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
-					nodal_values[nIdx] = e.N(nIdx)->Read(this->TestOperandKey());
-				}
-			}
-			else if (this->TestOperandType() == VECTOR) {
-				VectorVariable<dim> var;
-				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
-					for (auto i = 0; i < dim; ++i) {
-						e.N(nIdx)->Read(this->TestOperandKey(), var);
-						nodal_values[nIdx*dim + i] = var.Component(i);
-					}
-				}
-			}
-			else if (this->TestOperandType() == TENSOR) {
-				uint32_t dim2 = dim*dim;
-				TensorVariable<dim> var;
-				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
-					e.N(nIdx)->Read(this->TestOperandKey(), var);
-					for (auto i = 0; i < dim; ++i) {
-						for (auto j = 0; j < dim; ++j) {
-							nodal_values[nIdx*dim2 + i*dim + j] = var.Component(i*dim + j);
-						}
-					}
-				}
-			}
-			else if (this->TestOperandType() == ARRAY) {
-				const auto datadepth(TestOperandKey().dataDepth);
-				ArrayVariable var;
-				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
-					e.N(nIdx)->Read(this->TestOperandKey(), var);
-					for (auto i = 0; i < datadepth; ++i) {
-						nodal_values[nIdx*datadepth + i] = var.Component(i);
-					}
-				}
-			}
-			else if (this->TestOperandType() == FLAGGEDARRAY) {
-				const auto datadepth(TestOperandKey().dataDepth);
-				FlaggedArrayVariable var;
-				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
-					e.N(nIdx)->Read(this->TestOperandKey(), var);
-					for (auto i = 0; i < datadepth; ++i) {
-						nodal_values[nIdx*datadepth + i] = var.Component(i);
-					}
-				}
-			}
-			else {
-				throw csmp::Exception(ERROR,
-					"MathOperatorLHS<dim>::AssignToGlobal(Element):",
-					"Undefined variable type");
-			}
-		};
+		// collect and store test-operand values from the model so that they can later be used for row elimination
+		vector<double> top_variable_node_values( IDT.size() );
+      {
+        if (this->TestOperandType() == SCALAR) {
+            for ( uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx )
+              top_variable_node_values[nIdx] = e.N(nIdx)->Read(this->TestOperandKey());
+          }
+        else if (this->TestOperandType() == VECTOR) {
+            VectorVariable<dim> var;
+            for (uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx) {
+              for (uint32_t i{0U}; i < dim; ++i) {
+                e.N(nIdx)->Read(this->TestOperandKey(), var);
+                top_variable_node_values[nIdx*dim + i] = var.Component(i);
+              }
+            }
+          }
+        else if (this->TestOperandType() == TENSOR) {
+            TensorVariable<dim> var;
+            for (uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx) {
+              e.N(nIdx)->Read(this->TestOperandKey(), var);
+              for (uint32_t i{0U}; i < dim; ++i) {
+                for (uint32_t j{0U}; j < dim; ++j)
+                  top_variable_node_values[nIdx*dim*dim + i*dim + j] = var.Component(i*dim + j);
+              }
+            }
+          }
+        else if (this->TestOperandType() == ARRAY) {
+            ArrayVariable var;
+            for (uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx) {
+              e.N(nIdx)->Read(this->TestOperandKey(), var);
+              for (uint32_t i{0U}; i < this->TestOperandDataDepth(); ++i)
+                top_variable_node_values[nIdx*this->TestOperandDataDepth() + i] = var.Component(i);
+            }
+          }
+        else if (this->TestOperandType() == FLAGGEDARRAY) {
+            FlaggedArrayVariable var;
+            for (uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx) {
+              e.N(nIdx)->Read(this->TestOperandKey(), var);
+              for (uint32_t i{0U}; i < this->TestOperandDataDepth(); ++i)
+                top_variable_node_values[nIdx*this->TestOperandDataDepth() + i] = var.Component(i);
+            }
+          }
+        else throw csmp::Exception( ERROR, "MathOperatorLHS<dim>::AssignToGlobal(Element):",
+                                   "Undefined variable type");
+      } // end value collection
 
 		// perform assignment from local matrix to global matrix
+		if ( add_accumulate_ || add_accumulate_later_ )
+      {
+        assert( IDB.size() == LHS.Rows() );
+        assert( IDT.size() == LHS.Cols() );
+        for (uint32_t i{0U}; i < LHS.Rows(); i++)
+          if (IDB[i] != NULL_IDX)
+            for (uint32_t j{0U}; j < LHS.Cols(); j++) {
+                if ( IDT[j] == NULL_IDX ) {
+                     // notice the sign e.N( j / this->TestOperandOffset())->Read(this->TestOperand() )
+                     pivotVector[ IDB[i] ] -= LHS(i, j) * top_variable_node_values[j] * factor_;
+                  }
+                else G.Add( IDB[i], IDT[j], LHS(i, j) * factor_ );
+              }
 
-		if (multiply_accumulate_)
-		{
-			throw csmp::Exception(ERROR,
-				"MathOperatorLHS<dim>::AssignToGlobal(Element):",
-				"Multiply Accumulate has not been supported yet");
+      }
+		else if (multiply_accumulate_)
+      throw csmp::Exception( ERROR, "MathOperatorLHS<dim>::AssignToGlobal(Element):",
+                            "Multiply Accumulate has not been supported yet");
 
-			//if (IDT[i] != NULL_IDX) {
-			//  for (size_t j{0U}; j<LHS.Cols(); j++)
-			//    if (IDB[j] != NULL_IDX) {
-			//      G.MultiplyEntryWith(IDT[i],
-			//        IDB[j],
-			//        LHS(i, j) * factor_);
-			//    }
-			//}
-		}
-		else if ( add_accumulate_ || add_accumulate_later_)
-		{
-			for (auto i{0U}; i < LHS.Rows(); i++) {
-				if (IDT[i] != NULL_IDX) {
-					for (auto j{0U}; j < LHS.Cols(); j++) {
-						if ( IDB[j] == NULL_IDX ) {
-							pivotVector[IDT[i]] -= LHS(i, j) * nodal_values[j] * factor_;  // notice the sign e.N(j / this->TestOperandOffset())->Read(this->TestOperand())
-						}
-						else {
-							G.Add(IDT[i],
-								IDB[j],
-								LHS(i, j) * factor_);
-						}
-					}
-				}
-			}
-
-			/*for (auto i{0U}; i<LHS.Rows(); i++)
-			  if (IDT[i] != NULL_IDX) {
-				for (size_t j{0U}; j < LHS.Cols(); j++)
-				  if (IDB[j] != NULL_IDX) {
-					G.Add(IDT[i],
-					  IDB[j],
-					  LHS(i, j) * factor_);
-				  }
-			  }*/
-		}
 		else if (subtract_accumulate_ || subtract_accumulate_later_)
-		{
-			for (auto i{0U}; i < LHS.Rows(); i++) {
-				if (IDT[i] != NULL_IDX) {
-					for (auto j{0U}; j < LHS.Cols(); j++) {
-						if (IDB[j] == NULL_IDX) {
-							pivotVector[IDT[i]] += LHS(i, j) * nodal_values[j] * factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
-						}
-						else {
-							G.Add(IDT[i],
-								IDB[j],
-								-LHS(i, j) * factor_);
-						}
-					}
-				}
-			}
-
-			/*for (auto i{0U}; i<LHS.Rows(); i++)
-			  if (IDT[i] != NULL_IDX) {
-				for (size_t j{0U}; j < LHS.Cols(); j++)
-				  if (IDB[j] != NULL_IDX) {
-					G.Add(IDT[i],
-					  IDB[j],
-					  -LHS(i, j) * factor_);
-				  }
-			  }*/
-		}
-		else
-			throw csmp::Exception(ERROR,
-				"MathOperatorLHS<dim>::AssignToGlobal(Element):",
-				"accumulation instructions could not be parsed.");
+      {
+        assert( IDB.size() == LHS.Rows() );
+        assert( IDT.size() == LHS.Cols() );
+        for (uint32_t i{0U}; i < LHS.Rows(); i++)
+          if (IDB[i] != NULL_IDX)
+            for (uint32_t j{0U}; j < LHS.Cols(); j++) {
+                if ( IDT[j] == NULL_IDX ) {
+                     // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
+                     pivotVector[ IDB[i] ] += LHS(i, j) * top_variable_node_values[j] * factor_;
+                  }
+                else G.Add( IDT[i], IDB[j], -LHS(i, j) * factor_);
+              }
+      }
+		else throw csmp::Exception( ERROR, "MathOperatorLHS<dim>::AssignToGlobal(Element):",
+				                       "accumulation instructions could not be parsed.");
 
 	} // end AssignToGlobal (Element)
 
 
 
 
-  /// AssignToGlobal matrix function
+/**
+     TODO: do we need this function to be virtual (if not it could be templatised for matrix)
+     AssignToGlobal matrix function (CompressedRowMatrix version exactly the same as previous, but virtual functions cannot be templates)
+*/
   template<uint32_t dim, template<uint32_t> class CELL>
   void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, CompressedRowMatrix& G,
                                                   vector<double>& pivotVector, const vector<size_t>& DOF_indexes )
   {
-    // map local to global indexes for test and basic operands
-    IDT.resize(e.Nodes()); // ii
-    IDB.resize(e.Nodes()); // jj
-    for (auto i{0U}; i < e.Nodes(); i++) {
-      IDT[i] = e.N(i)->Idx();
-      IDB[i] = IDT[i];
-    }
+		// creating vectors for mapping local (element) to global (matrix) indices for basic and test function operands
+    const auto n_nodes{ e.Nodes() };
+		vector<size_t> IDB( n_nodes ); // ii - for matrix indices corresponding to base-function operand
+		vector<size_t> IDT( n_nodes ); // jj - for matrix indices corresponding to test-function operand
+    for ( uint32_t n{0U}; n<n_nodes; ++n )
+      IDB[n] = IDT[n] = e.N(n)->Idx();
 
-    if (TestOperandType() != SCALAR)
-      transformNodeIndexVector(dim, TestOperandKey(), IDT);
+    // expanding vectors to degrees of freedom of basic operand (pressure, displacement, etc.)
+		if (BasicOperandType() != SCALAR)
+			transformNodeIndexVector( BasicOperandKey(), IDB );
 
-    for (auto i{0U}; i < IDT.size(); i++) {
-      IDT[i] += this->TestOperandOffset();
-      IDT[i] = DOF_indexes[IDT[i]];
-    }
+    // applying operand offsets to find matrix positions corresponding to element matrix positions
+		for (uint32_t i{0U}; i < IDB.size(); i++) {
+        IDB[i] += this->BasicOperandOffset();
+        IDB[i]  = DOF_indexes[ IDB[i] ];
+      }
 
-    if (BasicOperandType() != SCALAR)
-      transformNodeIndexVector(dim, BasicOperandKey(), IDB);
+		if (TestOperandType() != SCALAR)
+			transformNodeIndexVector( TestOperandKey(), IDT );
 
-    for (auto i{0U}; i < IDB.size(); i++) {
-      IDB[i] += this->BasicOperandOffset();
-      IDB[i] = DOF_indexes[IDB[i]];
-    }
+		for (uint32_t i{0U}; i < IDT.size(); i++) {
+        IDT[i] += this->TestOperandOffset();
+        IDT[i]  = DOF_indexes[ IDT[i] ];
+      }
+
+    // consistency check: LHS can be rectangular, but its i,j dimensions must
+    // match those given by the number of nodes and degrees of freedom per node
+#ifdef DEBUG
+    csmp::ErrorHandler&  csmp_err( csmp::ErrorHandler::Instance() );
+    if ( LHS.Rows() != IDB.size() ) {
+         cout <<"\n"<<"basic operand '"<< BasicOperandName() <<"' ("<< parseType(BasicOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix rows does not match nodes  x  nodal degrees of freedom." );
+         return;
+      }
+    if ( LHS.Cols() != IDT.size() ) {
+         cout <<"\n"<<"test operand '"<< TestOperandName() <<"' ("<< parseType(TestOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix columns does not match nodes  x  nodal degrees of freedom." );
+         return;
+      }
+#endif
 
     // get (component of) local value of a local node
-    vector<double> nodal_values(IDB.size());
+    vector<double> top_variable_node_values( IDT.size() );
     {
       if (this->TestOperandType() == SCALAR) {
-        for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
-          nodal_values[nIdx] = e.N(nIdx)->Read(this->TestOperandKey());
-        }
+        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx)
+          top_variable_node_values[nIdx] = e.N(nIdx)->Read(this->TestOperandKey());
       }
       else if (this->TestOperandType() == VECTOR) {
         VectorVariable<dim> var;
-        for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
-          for (auto i = 0; i < dim; ++i) {
+        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
+          for (uint32_t i{0U}; i < dim; ++i) {
             e.N(nIdx)->Read(this->TestOperandKey(), var);
-            nodal_values[nIdx*dim + i] = var.Component(i);
+            top_variable_node_values[nIdx*dim + i] = var.Component(i);
           }
         }
       }
       else if (this->TestOperandType() == TENSOR) {
-        uint32_t dim2 = dim*dim;
+        const uint32_t dim2 = dim*dim;
         TensorVariable<dim> var;
-        for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
+        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
           e.N(nIdx)->Read(this->TestOperandKey(), var);
-          for (auto i = 0; i < dim; ++i) {
-            for (auto j = 0; j < dim; ++j) {
-              nodal_values[nIdx*dim2 + i*dim + j] = var.Component(i*dim + j);
+          for (uint32_t i{0U}; i < dim; ++i) {
+            for (uint32_t j{0U}; j < dim; ++j) {
+              top_variable_node_values[nIdx*dim2 + i*dim + j] = var.Component(i*dim + j);
             }
           }
         }
@@ -1001,28 +987,25 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
       else if (this->TestOperandType() == ARRAY) {
         const auto datadepth(TestOperandKey().dataDepth);
         ArrayVariable var;
-        for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
+        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
           e.N(nIdx)->Read(this->TestOperandKey(), var);
-          for (auto i = 0; i < datadepth; ++i) {
-            nodal_values[nIdx*datadepth + i] = var.Component(i);
+          for (uint32_t i{0U}; i < datadepth; ++i) {
+            top_variable_node_values[nIdx*datadepth + i] = var.Component(i);
           }
         }
       }
       else if (this->TestOperandType() == FLAGGEDARRAY) {
         const auto datadepth(TestOperandKey().dataDepth);
         FlaggedArrayVariable var;
-        for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
+        for (uint32_t nIdx{0U}; nIdx < e.Nodes(); ++nIdx) {
           e.N(nIdx)->Read(this->TestOperandKey(), var);
-          for (auto i = 0; i < datadepth; ++i) {
-            nodal_values[nIdx*datadepth + i] = var.Component(i);
+          for (uint32_t i{0U}; i < datadepth; ++i) {
+            top_variable_node_values[nIdx*datadepth + i] = var.Component(i);
           }
         }
       }
-      else {
-        throw csmp::Exception(ERROR,
-                              "MathOperatorLHS<dim>::AssignToGlobal(Element):",
-                              "Undefined variable type");
-      }
+      else throw csmp::Exception( ERROR, "MathOperatorLHS<dim>::AssignToGlobal(Element):",
+                                 "Undefined variable type");
     };
 
     // perform assignment from local matrix to global matrix
@@ -1032,56 +1015,29 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
       throw csmp::Exception(ERROR,
                             "MathOperatorLHS<dim>::AssignToGlobal(Element):",
                             "Multiply Accumulate has not been supported yet");
-
-      //if (IDT[i] != NULL_IDX) {
-      //  for (size_t j{0U}; j<LHS.Cols(); j++)
-      //    if (IDB[j] != NULL_IDX) {
-      //      G.MultiplyEntryWith(IDT[i],
-      //        IDB[j],
-      //        LHS(i, j) * factor_);
-      //    }
-      //}
     }
     else if ( add_accumulate_ || add_accumulate_later_)
     {
-      for (auto i{0U}; i < LHS.Rows(); i++) {
-        if (IDT[i] != NULL_IDX) {
-          for (auto j{0U}; j < LHS.Cols(); j++) {
-            if ( IDB[j] == NULL_IDX ) {
-              pivotVector[IDT[i]] -= LHS(i, j) * nodal_values[j] * factor_;  // notice the sign e.N(j / this->TestOperandOffset())->Read(this->TestOperand())
+      for (uint32_t i{0U}; i < LHS.Rows(); i++) {
+        if (IDB[i] != NULL_IDX) {
+          for (uint32_t j{0U}; j < LHS.Cols(); j++) {
+            if ( IDT[j] == NULL_IDX ) {
+              pivotVector[ IDB[i] ] -= LHS(i, j) * top_variable_node_values[j] * factor_;  // notice the sign e.N(j / this->TestOperandOffset())->Read(this->TestOperand())
             }
-            else {
-              G.Add(IDT[i],
-                    IDB[j],
-                    LHS(i, j) * factor_);
-            }
+            else  G.Add( static_cast<uint32_t>(IDB[i]), static_cast<uint32_t>(IDT[j]), LHS(i, j) * factor_);
           }
         }
       }
-
-      /*for (auto i{0U}; i<LHS.Rows(); i++)
-        if (IDT[i] != NULL_IDX) {
-        for (size_t j{0U}; j < LHS.Cols(); j++)
-          if (IDB[j] != NULL_IDX) {
-          G.Add(IDT[i],
-            IDB[j],
-            LHS(i, j) * factor_);
-          }
-        }*/
     }
     else if (subtract_accumulate_ || subtract_accumulate_later_)
     {
-      for (auto i{0U}; i < LHS.Rows(); i++) {
-        if (IDT[i] != NULL_IDX) {
-          for (auto j{0U}; j < LHS.Cols(); j++) {
-            if (IDB[j] == NULL_IDX) {
-              pivotVector[IDT[i]] += LHS(i, j) * nodal_values[j] * factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
+      for (uint32_t i{0U}; i < LHS.Rows(); i++) {
+        if (IDB[i] != NULL_IDX) {
+          for (uint32_t j{0U}; j < LHS.Cols(); j++) {
+            if (IDT[j] == NULL_IDX) {
+              pivotVector[ IDB[i] ] += LHS(i, j) * top_variable_node_values[j] * factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
             }
-            else {
-              G.Add(IDT[i],
-                    IDB[j],
-                    -LHS(i, j) * factor_);
-            }
+            else  G.Add( static_cast<uint32_t>(IDB[i]), static_cast<uint32_t>(IDT[j]), -LHS(i, j) * factor_);
           }
         }
       }
@@ -1105,60 +1061,72 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix
 
 	
 
+
+/**
+    Accumulation without elimination of Dirichlet degrees of freedom
+*/
 template<uint32_t dim, template<uint32_t> class CELL>
 void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e, SparseMatrix& G )
 	{
-		// map local to global indexes for test and basic operands
+		// creating vectors for mapping local (element) to global (matrix) indices for basic and test function operands
+    const auto n_nodes{ e.Nodes() };
+		vector<size_t> IDB( n_nodes ); // ii - for matrix indices corresponding to base-function operand
+		vector<size_t> IDT( n_nodes ); // jj - for matrix indices corresponding to test-function operand
+    for ( uint32_t n{0U}; n<n_nodes; ++n )
+      IDB[n] = IDT[n] = e.N(n)->Idx();
 
-		IDT.resize(e.Nodes());
-		IDB.resize(e.Nodes());
-		for (auto i{0U}; i < e.Nodes(); i++) {
-			IDT[i] = e.N(i)->Idx();
-			IDB[i] = IDT[i];
-		}
+    // expanding vectors to degrees of freedom of basic operand (pressure, displacement, etc.)
+		if (BasicOperandType() != SCALAR)
+			transformNodeIndexVector( BasicOperandKey(), IDB );
+
+    // applying operand offsets to find matrix positions corresponding to element matrix positions
+		for (uint32_t i{0U}; i < IDB.size(); i++) IDB[i] += this->BasicOperandOffset();
 
 		if (TestOperandType() != SCALAR)
-			transformNodeIndexVector(dim, TestOperandKey(), IDT);
+			transformNodeIndexVector( TestOperandKey(), IDT );
 
-		for (auto i{0U}; i < IDT.size(); i++)
-			IDT[i] += this->TestOperandOffset();
+		for (uint32_t i{0U}; i < IDT.size(); i++) IDT[i] += this->TestOperandOffset();
 
-		if (BasicOperandType() != SCALAR)
-			transformNodeIndexVector(dim, BasicOperandKey(), IDB);
-
-		for (auto i{0U}; i < IDB.size(); i++)
-			IDB[i] += this->BasicOperandOffset();
-
-		// perform assignment from local matrix to global matrix
+    // consistency check: LHS can be rectangular, but its i,j dimensions must
+    // match those given by the number of nodes and degrees of freedom per node
+#ifdef DEBUG
+    csmp::ErrorHandler&  csmp_err( csmp::ErrorHandler::Instance() );
+    if ( LHS.Rows() != IDB.size() ) {
+         cout <<"\n"<<"basic operand '"<< BasicOperandName() <<"' ("<< parseType(BasicOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix rows does not match nodes  x  nodal degrees of freedom." );
+         return;
+      }
+    if ( LHS.Cols() != IDT.size() ) {
+         cout <<"\n"<<"test operand '"<< TestOperandName() <<"' ("<< parseType(TestOperandType()) <<")";
+         cout <<"; element nodes "<< n_nodes <<"; LHS element-matrix dimensions: "<< LHS.Rows() <<" x "<< LHS.Cols() << endl;
+         csmp_err.Note( ERROR, "MathOperatorLHS<dim,CELL>::AssignToGlobal:",
+                               "number of matrix columns does not match nodes  x  nodal degrees of freedom." );
+         return;
+      }
+#endif
 
 		if (multiply_accumulate_)
-		{
-			for (auto i{0U}; i < LHS.Rows(); i++)
-				for (auto j{0U}; j < LHS.Cols(); j++)
-					G.MultiplyEntryWith(IDT[i],
-						IDB[j],
-						LHS(i, j) * factor_);
-		}
+      {
+        for (uint32_t i{0U}; i < LHS.Rows(); i++)
+          for (uint32_t j{0U}; j < LHS.Cols(); j++)
+            G.MultiplyEntryWith( IDB[i], IDT[j], LHS(i, j) * factor_);
+      }
 		else if (add_accumulate_ || add_accumulate_later_)
-		{
-			for (auto i{0U}; i < LHS.Rows(); i++)
-				for (auto j{0U}; j < LHS.Cols(); j++)
-					G.Add(IDT[i],
-						IDB[j],
-						LHS(i, j) * factor_);
-		}
+      {
+        for (uint32_t i{0U}; i < LHS.Rows(); i++)
+          for (uint32_t j{0U}; j < LHS.Cols(); j++)
+            G.Add(IDB[i], IDT[j], LHS(i, j) * factor_);
+      }
 		else if (subtract_accumulate_ || subtract_accumulate_later_)
-		{
-			for (auto i{0U}; i < LHS.Rows(); i++)
-				for (auto j{0U}; j < LHS.Cols(); j++)
-					G.Add(IDT[i],
-						IDB[j],
-						-LHS(i, j) * factor_);
-		}
-		else
-			throw csmp::Exception(ERROR,
-				"MathOperatorLHS<dim>::AssignToGlobal(Element):",
-				"accumulation instructions could not be parsed.");
+      {
+        for (uint32_t i{0U}; i < LHS.Rows(); i++)
+          for (uint32_t j{0U}; j < LHS.Cols(); j++)
+            G.Add(IDB[i], IDT[j], -LHS(i, j) * factor_);
+      }
+		else throw csmp::Exception( ERROR, "MathOperatorLHS<dim>::AssignToGlobal(Element):",
+				                       "accumulation instructions could not be parsed.");
 
 	} // end AssignToGlobal (Element)
 

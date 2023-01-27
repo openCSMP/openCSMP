@@ -251,37 +251,42 @@ void NumIntegral_dudn_rhsop_u_dS<dim>::AssignToGlobal( const InterFace<dim>& ifa
     const uint32_t n_total_nodes{ iface.Nodes() + iface.InterveningElement()->Nodes() },
                    n_elmt_nodes{ iface.InterveningElement()->Nodes() };
 
-    this->IDT.resize(n_total_nodes);
+		// vectors for mapping local to global node indices for test and basic operands
+		vector<size_t> IDT( n_total_nodes ); // ii
+    for ( uint32_t n{0U}; n<n_total_nodes; ++n )
+      // var1_comp1 var1_comp2 ... var2_comp1 ordering
+      for (uint32_t i{0U}; i<iface.Nodes(); ++i )
+        IDT[n] = iface.N(n)->Idx();
 
     // mapping local to global node indices
     for ( auto i{0U}; i < n_elmt_nodes; i++ )
-      this->IDT[i] = iface.N(i,INSIDE)->Idx();
+      IDT[i] = iface.N(i,INSIDE)->Idx();
     for ( auto i{0U}; i < n_elmt_nodes; i++ )
-      this->IDT[i+n_elmt_nodes] = iface.N(i,OUTSIDE)->Idx();
+      IDT[i+n_elmt_nodes] = iface.N(i,OUTSIDE)->Idx();
     for ( auto i{0U}; i < n_elmt_nodes; i++ )
-      this->IDT[i+n_elmt_nodes+n_elmt_nodes] = iface.InterveningElement()->N(i)->Idx();
+      IDT[i+n_elmt_nodes+n_elmt_nodes] = iface.InterveningElement()->N(i)->Idx();
 
     // taking offsets into account
     for (auto i{0U}; i < n_total_nodes; i++) {
-         this->IDT[i] += this->TestOperandOffset();
-         this->IDT[i]  = DOF_indexes[ this->IDT[i] ]; //-> to the global index
+         IDT[i] += this->TestOperandOffset();
+         IDT[i]  = DOF_indexes[ IDT[i] ]; //-> to the global index
       }
 
     // perform assignment from local matrix to global matrix
     if (this->multiply_accumulate_) {
       for (auto i{0U}; i < n_total_nodes; i++)
-        if (this->IDT[i] != NULL_IDX)
-          rhs[this->IDT[i]] *= this->RHS[i] * this->factor_;
+        if (IDT[i] != NULL_IDX)
+          rhs[IDT[i]] *= this->RHS[i] * this->factor_;
     }
     else if (this->add_accumulate_ || this->add_accumulate_later_){
         for (auto i{0U}; i < n_total_nodes; i++)
-          if (this->IDT[i] != NULL_IDX)
-            rhs[this->IDT[i]] += this->RHS[i] * this->factor_;
+          if (IDT[i] != NULL_IDX)
+            rhs[IDT[i]] += this->RHS[i] * this->factor_;
       }
     else if (this->subtract_accumulate_ || this->subtract_accumulate_later_) {
         for (auto i{0U}; i < n_total_nodes; i++)
-          if (this->IDT[i] != NULL_IDX)
-            rhs[this->IDT[i]] -= this->RHS[i] * this->factor_;
+          if (IDT[i] != NULL_IDX)
+            rhs[IDT[i]] -= this->RHS[i] * this->factor_;
       }
     else throw csmp::Exception(ERROR,
                               "NumIntegral_dudn_rhsop_u_dS<dim>::AssignToGlobal(InterFace)",

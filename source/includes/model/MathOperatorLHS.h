@@ -134,7 +134,7 @@ class MathOperatorLHS {
     /// assigment to the left hand side global matrix (after everything was calculated )
     virtual void  AssignToGlobal( const CELL<dim>&, SparseMatrix& );
 
-    /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
+    /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector
     virtual void AssignToGlobal( const CELL<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
 
     /// used by PDE_Integrator_CRM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions)
@@ -154,21 +154,10 @@ class MathOperatorLHS {
     std::pair<Parameter, size_t>        top;     ///< test function operand and calculation offset
 
     DenseMatrix<DM_MIN>                 LHS;     ///< solution matrix to be accumulated
-    std::vector<size_t>                 IDT;     ///< node-ID & global constraint points vector ( test operand )
-    std::vector<size_t>                 IDB;     ///< node-ID & global constraint points vector ( basic operand )
 
     std::vector<DenseMatrix<DM_MIN> >   MTRL;    ///< material property matrix(es) needed for PDE operand
     DenseMatrix<DM_MIN>                 DERIV;   ///< shape function derivative matrix
     std::vector<double>                 IPOL;    ///< shape function vector
-  
-    /*
-    std::vector<ScalarVariable >        SC;      ///< node property vector<double> of scalars
-    std::vector<VectorVariable<dim> >   VC;      ///< vectors
-    std::vector<TensorVariable<dim> >   TS;      ///< tensors
-    std::vector<ArrayVariable >         AR;      ///< arrays
-    std::vector<FlaggedArrayVariable >  FR;      ///< flagged arrays
-    */
-
     double                              factor_; ///< constant scaling factor
 
     // constraints on the accumulation procedure

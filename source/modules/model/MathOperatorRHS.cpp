@@ -12,19 +12,18 @@ namespace csmp {
 template<uint32_t dim, template<uint32_t> class CELL>
   MathOperatorRHS<dim,CELL>::MathOperatorRHS()
     : name_("unspecified RHS-operator"),
-    IDT(3),
-    MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
-    factor_(1.),
-    add_accumulate_(true),
-    subtract_accumulate_(false),
-    add_accumulate_later_(false),
-    subtract_accumulate_later_(false),
-    multiply_accumulate_(false),
-    lump_matrices_(false),
-    application_cycles_(1),
-    application_cycle_(0),
-    time_multiply_(false),
-    time_divide_(false)
+      MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
+      factor_(1.),
+      add_accumulate_(true),
+      subtract_accumulate_(false),
+      add_accumulate_later_(false),
+      subtract_accumulate_later_(false),
+      multiply_accumulate_(false),
+      lump_matrices_(false),
+      application_cycles_(1),
+      application_cycle_(0),
+      time_multiply_(false),
+      time_divide_(false)
   {
   }
 
@@ -35,22 +34,21 @@ template<uint32_t dim, template<uint32_t> class CELL>
   MathOperatorRHS<dim,CELL>::MathOperatorRHS( const PropertyDatabase<dim>& pref,
                                               const char* test)
     : name_("unspecified RHS-operator"),
-    top(make_pair(pref.Parameter(test), 0)),
-    IDT(3),
-    MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
-    DERIV(2, 3),
-    IPOL(3),
-    factor_(1.),
-    add_accumulate_(true),
-    subtract_accumulate_(false),
-    add_accumulate_later_(false),
-    subtract_accumulate_later_(false),
-    multiply_accumulate_(false),
-    lump_matrices_(false),
-    application_cycles_(1),
-    application_cycle_(0),
-    time_multiply_(false),
-    time_divide_(false)
+      top(make_pair(pref.Parameter(test), 0)),
+      MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
+      DERIV(2, 3),
+      IPOL(3),
+      factor_(1.),
+      add_accumulate_(true),
+      subtract_accumulate_(false),
+      add_accumulate_later_(false),
+      subtract_accumulate_later_(false),
+      multiply_accumulate_(false),
+      lump_matrices_(false),
+      application_cycles_(1),
+      application_cycle_(0),
+      time_multiply_(false),
+      time_divide_(false)
   {
   }
 
@@ -62,24 +60,22 @@ template<uint32_t dim, template<uint32_t> class CELL>
                                               const char* oper,
                                               const char* test )
     : name_("unspecified RHS-operator"),
-    op(pref.Parameter(oper)),
-    top(make_pair(pref.Parameter(test), 0)),
-    IDT(3),
-    MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
-    DERIV(2, 3),
-    IPOL(3),
-    factor_(1.),
-    add_accumulate_(true),
-    subtract_accumulate_(false),
-    add_accumulate_later_(false),
-    subtract_accumulate_later_(false),
-    multiply_accumulate_(false),
-    lump_matrices_(false),
-    application_cycles_(1),
-    application_cycle_(0),
-    time_multiply_(false),
-    time_divide_(false)
-
+      op(pref.Parameter(oper)),
+      top(make_pair(pref.Parameter(test), 0)),
+      MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
+      DERIV(2, 3),
+      IPOL(3),
+      factor_(1.),
+      add_accumulate_(true),
+      subtract_accumulate_(false),
+      add_accumulate_later_(false),
+      subtract_accumulate_later_(false),
+      multiply_accumulate_(false),
+      lump_matrices_(false),
+      application_cycles_(1),
+      application_cycle_(0),
+      time_multiply_(false),
+      time_divide_(false)
   {
   }
 
@@ -88,24 +84,23 @@ template<uint32_t dim, template<uint32_t> class CELL>
 template<uint32_t dim, template<uint32_t> class CELL>
   MathOperatorRHS<dim,CELL>::MathOperatorRHS(const MathOperatorRHS<dim,CELL>& mo)
     : name_(mo.name_),
-    op(mo.op),    // basic operand
-    top(mo.top),   // testfunction operand
-    RHS(mo.RHS),   // solution vector to be accumulated
-    IDT(mo.IDT),   // node-ID & global constraint points vector
-    MTRL(mo.MTRL),  // basic Operand storage
-    DERIV(mo.DERIV),
-    IPOL(mo.IPOL),
-    factor_(mo.factor_),
-    add_accumulate_(mo.add_accumulate_),
-    subtract_accumulate_(mo.subtract_accumulate_),
-    add_accumulate_later_(mo.add_accumulate_later_),
-    subtract_accumulate_later_(mo.subtract_accumulate_later_),
-    multiply_accumulate_(mo.multiply_accumulate_),
-    lump_matrices_(mo.lump_matrices_),
-    application_cycles_(mo.application_cycles_),
-    application_cycle_(mo.application_cycle_),
-    time_multiply_(mo.time_multiply_),
-    time_divide_(mo.time_divide_)
+      op(mo.op),    // basic operand
+      top(mo.top),   // testfunction operand
+      RHS(mo.RHS),   // solution vector to be accumulated
+      MTRL(mo.MTRL),  // basic Operand storage
+      DERIV(mo.DERIV),
+      IPOL(mo.IPOL),
+      factor_(mo.factor_),
+      add_accumulate_(mo.add_accumulate_),
+      subtract_accumulate_(mo.subtract_accumulate_),
+      add_accumulate_later_(mo.add_accumulate_later_),
+      subtract_accumulate_later_(mo.subtract_accumulate_later_),
+      multiply_accumulate_(mo.multiply_accumulate_),
+      lump_matrices_(mo.lump_matrices_),
+      application_cycles_(mo.application_cycles_),
+      application_cycle_(mo.application_cycle_),
+      time_multiply_(mo.time_multiply_),
+      time_divide_(mo.time_divide_)
   {
   }
 
@@ -119,7 +114,6 @@ template<uint32_t dim, template<uint32_t> class CELL>
       op = mo.op;        // basic operand
       top = mo.top;       // testfunction operand
       RHS = mo.RHS;       // solution vector to be accumulated
-      IDT = mo.IDT;       // node-ID & global constraint points vector
       MTRL = mo.MTRL;      // basic Operand storage
       DERIV = mo.DERIV;
       IPOL = mo.IPOL;
@@ -846,7 +840,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::MultiplyWithTimeFactor( double dt )
+void MathOperatorRHS<dim,CELL>::MultiplyWithTimeFactor( double dt )
   {
     for (auto i = 0; i < RHS.size(); i++)
       RHS[i] *= dt;
@@ -856,16 +850,15 @@ template<uint32_t dim, template<uint32_t> class CELL>
   /// AssignToGlobal matrix functions
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<double>& rhs )
+void MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<double>& rhs )
   {
-    // map local to global indexes for test(basic) operands
-    const size_t nodes(e.Nodes());
-    IDT.resize(nodes);
-    for (auto i{0U}; i < nodes; i++)
-      IDT[i] = e.N(i)->Idx();
+		// vectors for mapping local to global node indices for test operand
+		vector<size_t> IDT( e.Nodes() ); // ii
+    for ( uint32_t n{0U}; n<e.Nodes(); ++n )
+      IDT[n] = e.N(n)->Idx();
 
     if (TestOperandType() != SCALAR)
-      transformNodeIndexVector(dim, TestOperandKey(), IDT);
+      transformNodeIndexVector( TestOperandKey(), IDT );
 
     const size_t dof(IDT.size());
 
@@ -937,17 +930,19 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-void  MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<double>& rhs, const vector<size_t>& DOF_indexes ) {
+void  MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<double>& rhs, const vector<size_t>& DOF_indexes )
+ {
 // TODO: get static assert to pass by moving functionality for SplitBoundaries to subclasses
 //    static_assert( is_same<CELL<dim>,InterFace<dim>>::value, "Override this method for InterFace is subclass");
     // map local to global indexes for test and basic operands
-    const size_t nodes(e.Nodes());
-    IDT.resize(nodes);
-    for (auto i{0U}; i < nodes; i++)
-      IDT[i] = e.N(i)->Idx();
+		// vectors for mapping local to global node indices for test and basic operands
+		// vectors for mapping local to global node indices for test operand
+		vector<size_t> IDT( e.Nodes() ); // ii
+    for ( uint32_t n{0U}; n<e.Nodes(); ++n )
+      IDT[n] = e.N(n)->Idx();
 
     if (TestOperandType() != SCALAR)
-      transformNodeIndexVector(dim, TestOperandKey(), IDT);
+      transformNodeIndexVector( TestOperandKey(), IDT );
 
     const size_t dof(IDT.size());
 
@@ -987,7 +982,7 @@ void  MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<doubl
 
   /**
 
-  If an output variable from the element is a VECTOR,TENSOR,ARRAY or FLAGGEDARRAY property,
+  If an output variable from the element is a VECTOR, TENSOR, ARRAY or FLAGGEDARRAY property,
   a mapping is applied such that the number of entries that were read at the element are
   expanded out into the N vector. This accomodates the additional degrees of freedom
   in the global solution matrix.
@@ -1013,7 +1008,28 @@ void  MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<doubl
   is a vector or tensor property.
   */
 
-  void transformNodeIndexVector( uint32_t dim, const csmp::Index& idx, vector<size_t>& N )
+void transformNodeIndexVector( const csmp::Index& idx, vector<size_t>& N )
+  {
+    assert(!N.empty());
+    assert(idx.type != SCALAR);
+
+    // creating a running index for decrementation
+    const int32_t length    = idx.dataDepth;
+    const int32_t N_size_m1 = static_cast<int32_t>(N.size() - 1);
+    
+    // for all variable types
+    N.resize( N.size() * length, 0U ); // new size of N vector ( length of array * number of nodes )
+    for ( int32_t i=N_size_m1, k=static_cast<int32_t>(N.size()-1); i >= 0; i-- )
+      // for current node, cycle through all variable components
+      for ( int32_t j{0U}; j < length; j++ )
+        N[ k-- ] = ((N[i] + 1) * length - j) - 1;
+
+  } // end transformNodeIndexVector
+
+
+/* IFFY OLD VERSION
+
+void transformNodeIndexVector( uint32_t dim, const csmp::Index& idx, vector<size_t>& N )
   {
     assert(!N.empty());
     assert(idx.type != SCALAR);
@@ -1053,6 +1069,7 @@ void  MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<doubl
     }
 
   } // end transformNodeIndexVector
+*/
 
 
 template class MathOperatorRHS<1U>;

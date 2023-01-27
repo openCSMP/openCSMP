@@ -51,7 +51,7 @@
 #include "NodeManifoldManager_Test.h" // tests split boundary functionality
 
 #include "FiniteElement_Test.h"
-#include "FiniteElement_Test.h"
+#include "FiniteElementPolicy_Test.h"
 #include "IsoparametricQuadraticTetrahedron_Test.h"
 #include "IsoparametricLinearTetrahedron.h"
 #include "IsoparametricQuadraticTetrahedron.h"
@@ -330,6 +330,7 @@ int main()
       interdependent1.addTest( new LinearCuboid_Test(false) );  // TODO: add automatic test of interpolation function derivative matrix
       // math operators etc.
       interdependent1.addTest( new Operand_Test() );
+      interdependent1.addTest( new FiniteElementPolicy_Test() );
       interdependent1.addTest( new MathOperatorLHS_Test());
       interdependent1.addTest( new MathOperatorRHS_Test());
       interdependent1.addTest( new LinearCuboid_Test(false) );

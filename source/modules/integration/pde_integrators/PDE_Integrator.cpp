@@ -182,37 +182,98 @@ void   PDE_Integrator<dim,CELLTYPE>::TimeIncrement( double dt )
 the PDE_Integrator to the Model, the matrix will have been modified by the
 Solver object.
 
+@param precision defines number of decimal places the matrix entries shall be printed with.
+
+@attention the output can be forced to print evenly spaced integers by setting the precision to -1.
+In this case, rounding is performed accordingly.
+
 @section application  Application
 
 To test the accumulation process by visual examination of the matrices,
 you must call it directly after executing Accumulate(), see below.
+
 */
 template<uint32_t dim,template<uint32_t> class CELLTYPE>
 void  PDE_Integrator<dim,CELLTYPE>::OutputGlobals( int32_t precision )
  {
-   cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
-   G_.Out( precision );
+   // 1. printing records in scientific notation with a user-specified number of decimal places
+   // -----------------------------------------------------------------------------------------
+   if ( precision > 0 ) {
+       cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
+       G_.Out( precision );
 
-   cout.setf(ios::scientific);
-   cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
+       cout.setf(ios::scientific);
+       cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
+       for ( size_t i{0U}; i<rh_.size(); i++ )
+         {
+            cout.precision(precision);
+            if ( rh_[i] >= 0. ) cout <<" ";
+            cout << rh_[i] <<" ";
+         }
+       cout << endl;
+
+       cout <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
+       for ( size_t i{0U}; i<x_.size(); i++ )
+         {
+            cout.precision(precision);
+            if ( x_[i] >= 0 ) cout <<" ";
+            cout << x_[i] <<" ";
+         }
+       cout << endl;
+
+       cout.unsetf(ios::scientific);
+       return;
+     }
+
+
+   // 2. printing records as integers
+   // -------------------------------
+   const int col_stride{ 3U };
+   cout <<"\nGlobal solution matrix (in integer format): "<< G_.Rows() <<" x "<< G_.Cols() << endl;
+   // column labels
+   cout <<"column:     ";
+   for ( size_t i{0u}; i<G_.Cols(); ++i ) {
+        auto digits = to_string(abs(lround(i))).length();
+        for ( uint32_t k{0U}; k<col_stride-digits; ++ k ) cout <<" ";
+        cout <<" "<< i <<" ";
+     }
+   cout << endl;
+   // row labels and matrix core
+   for ( size_t i{0u}; i<G_.Rows(); ++i )
+     {
+        // row labels
+        cout <<"row ";
+        auto offset = to_string(abs(lround(i))).length();
+        for ( uint32_t k{0U}; k<col_stride + string("column").size() - (offset+2); ++ k ) cout <<" ";
+        cout << i <<":";
+        // matrix core
+        for ( size_t j{0u}; j<G_.Cols(); ++j ) {
+             if ( isnan(G_(i,j)) ) cout <<" NaN";
+             else {
+                 auto digits = to_string(abs(lround(G_(i,j)))).length();
+                 for ( uint32_t k{0U}; k<col_stride-digits; ++ k ) cout <<" ";
+                 if ( G_(i,j) >= 0. ) cout <<" "<< lround( G_(i,j) ) <<" ";
+                 else cout << lround( G_(i,j) ) <<" ";
+               }
+          }
+        cout << endl;
+     }
+
+   cout <<"\n\nGlobal righthand vector of length (integer format): "<< rh_.size() << endl;
    for ( size_t i{0U}; i<rh_.size(); i++ )
      {
-        cout.precision(precision);
         if ( rh_[i] >= 0. ) cout <<" ";
-        cout << rh_[i] <<" ";
+        cout << lround( rh_[i] ) <<" ";
      }
    cout << endl;
 
-   cout <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
+   cout <<"\n\nGlobal solution vector of length (integer format): "<< x_.size() << endl;
    for ( size_t i{0U}; i<x_.size(); i++ )
      {
-        cout.precision(precision);
         if ( x_[i] >= 0 ) cout <<" ";
-        cout << x_[i] <<" ";
+        cout << lround( x_[i] ) <<" ";
      }
    cout << endl;
-
-   cout.unsetf(ios::scientific);
 
  } // end OutputGlobals
 
@@ -1118,6 +1179,7 @@ void PDE_Integrator<dim,CELLTYPE>::Accumulate( const ModelSubDomain<dim,CELLTYPE
            {
              it_lhs.second->GetOperands( *(*git) );
              it_lhs.second->ComputeContribution( *(*git) );
+             // TODO: ?always multiply with timefactor? - setting it to 1.0 by default
              if ( it_lhs.second->MultiplyWithTimeIncrement() )
                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
              it_lhs.second->AssignToGlobal(*(*git), this->G_, pivotVector_, DOF_indexes_);
