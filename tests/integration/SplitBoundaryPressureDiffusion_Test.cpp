@@ -80,7 +80,7 @@ void SplitBoundaryPressureDiffusion_Test::run()
 
     VTK_Interface<3U>  vtk_output;
     vtk_output.OutputDataToVTK( *model_ptr_, "model_perm", "permeability", 0 );
-    vtk_output.OutputDataToVTK( *model_ptr_, fracture_name_, string("model_perm"), string("permeability"), 0UL );
+    vtk_output.OutputDataToVTK( *model_ptr_, fracture_name_, string("model_perm"), string("permeability"), 0U );
 
     // assigning initial uniform fluid pressure of 10 MPa
     const double initial_fluid_pressure{ 1.0e7 };

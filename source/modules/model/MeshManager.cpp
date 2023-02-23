@@ -1580,7 +1580,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceInteriorElementsByFaces( const Prop
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     vector<Face<dim>*> face_ptrs;
-    const long         n_faces_to_build{ distance(first,last) };
+    const auto         n_faces_to_build{ distance(first,last) };
 
     if ( n_faces_to_build == 0U ) {
          csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceInteriorElementsByFaces", "supplied iterator range is empty; nothing was done.");
@@ -1670,7 +1670,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     vector<Face<dim>*> face_ptrs;
-    const long         n_faces_to_build{ distance(first,last) };
+    const auto         n_faces_to_build{ distance(first,last) };
 
     if ( n_faces_to_build == 0U ) {
          csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces", "supplied iterator range is empty; nothing was done.");

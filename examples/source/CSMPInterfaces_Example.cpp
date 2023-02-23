@@ -45,7 +45,7 @@ void CSMPInterfaces_Example::Run()
   //set working directory to 'input_meshes/'
   if(!fs::is_directory("input_meshes")) {
     string message("\nCSMPInterfaces_Example::Run(): 'input_meshes/' directory does not exists in current working directory: ");
-    message += fs::current_path();
+    message += (fs::current_path()).string();
     message += ", please ensure the working directory is set correctly (refer to open-csmp/examples/README.txt)";
     throw std::runtime_error(message);
   } else fs::current_path("input_meshes");
@@ -551,7 +551,7 @@ void CSMPInterfaces_Example::BuildFromSKUAModel(const string& model_name) {
   const string variables_file = "SKUA_model-variables.txt";
   if (!fs::exists(variables_file)) {
     string error_message = "\n\nError: file '";
-    string path = fs::current_path();
+    string path = (fs::current_path()).string();
     error_message += (variables_file + "' does not exist in directory " + path);
     error_message += (", example cannot run, please check.\n");
     throw std::runtime_error(error_message);

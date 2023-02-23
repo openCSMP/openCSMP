@@ -731,9 +731,9 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
         
  } // end connectNeighborsUsingNodeParents
  
-template size_t connectNeighborsUsingNodeParents( Element<1U>* );
-template size_t connectNeighborsUsingNodeParents( Element<2U>* );
-template size_t connectNeighborsUsingNodeParents( Element<3U>* );
+template size_t connectNeighborsUsingNodeParents( Element<1U>* const);
+template size_t connectNeighborsUsingNodeParents( Element<2U>* const);
+template size_t connectNeighborsUsingNodeParents( Element<3U>* const);
 
 
 

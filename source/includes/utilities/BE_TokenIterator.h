@@ -14,11 +14,11 @@ distributed with the code package available at www.MindView.net.*/
 #include <iterator>
 #include <string>
 
-struct Isalpha : std::unary_function<char, bool> {
+struct Isalpha {
   bool operator()(char c) { return static_cast<bool>(std::isalpha(c)); }
 };
 
-class Delimiters : std::unary_function<char, bool> {
+class Delimiters {
   std::string exclude;
 public:
   Delimiters() {}
