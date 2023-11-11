@@ -893,7 +893,10 @@ cout.flush();
 
 
 /**
-    Uses vector to create unique node vector.
+    Uses vector to create unique node vector by pushing back all node of the elements including duplicates,
+    then sorting it and eliminating the duplicates.
+    
+    TODO: speed critical function. Perhaps refactor with unordered set as intermediate container for unique nodes because there will be so many duplicates.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::CreateNodePointerVector()

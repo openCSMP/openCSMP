@@ -1,0 +1,37 @@
+'hemisphere_csmp_native-configuration.txt' for capillary seal experiment
+
+# (1) global material properties
+permeability							1.0e-10
+vertical permeability						1.0e-10
+porosity							1.00
+fluid volume source						0.0
+nodal fluid volume source					0.0
+fluid pressure							0.0
+saturation carbonic phase					0.0
+saturation aqueous phase					1.0
+viscosity carbonic phase					1.8e-05
+viscosity aqueous phase						1.0e-03
+density carbonic phase						1.
+density aqueous phase						1000.
+residual saturation aqueous phase				0.0
+residual saturation carbonic phase				0.0
+brooks corey parameter						0.0
+entry pressure							1. 
+thickness							1.0
+acceleration gravity						9.8061
+rocktype							0
+
+# (2) local material properties 
+cell_REGION_hemisphere_REGION	complete	entry pressure	194.133
+cell_REGION_injection_REGION	complete	fluid volume source	25.39
+cell_REGION_injection_REGION	complete	saturation aqueous phase	0.
+cell_REGION_injection_REGION	complete	saturation carbonic phase	1.
+
+# (3) essential conditions for regions
+cell_REGION_injection_REGION	complete	saturation aqueous phase	Dirichlet	
+cell_REGION_injection_REGION	complete	saturation carbonic phase	Dirichlet	
+
+# (4) boundary conditions for arbitrary-shaped model
+TOP	complete	Dirichlet	fluid pressure	101325.
+BOTTOM	complete	Dirichlet	fluid pressure	105247.44
+

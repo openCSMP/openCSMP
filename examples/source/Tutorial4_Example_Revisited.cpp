@@ -189,7 +189,7 @@ void Tutorial4_Example_Revisited::Run()
 
   // add each PDE Operator to the FE algorithm
 
-  // Navier-Stokes equation
+  // Stokes lubrication equation
   stokes_flow.Add( &viscosity_matr_x );
   stokes_flow.Add( &gradient_x );
   stokes_flow.Add( &viscosity_matr_y );

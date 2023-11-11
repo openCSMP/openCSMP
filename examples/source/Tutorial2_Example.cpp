@@ -48,7 +48,7 @@ void Tutorial2_Example::Specifications()
 // **********************************************************************************************
 //
 // A CSMP main file that first solves the steady state pressure diffusion equation using a fully
-// implicit FE discretisation and computes the velocity field averwards. This velocity field is
+// implicit FE discretisation and computes the velocity field afterwards. This velocity field is
 // then used to compute the advection of a non-reacting chemical species with the FV method
 // (explicit or implicit). A simple quadrilateral FE mesh is generated automatically in CSMP from
 // which the Model is built. Output is written to VTK and Matlab files.

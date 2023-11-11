@@ -651,7 +651,7 @@ void MathOperatorLHS<dim,CELL>::GetOperands( const CELL<dim>& e_ref )
 	{
  // TODO: put static assert in here as needed
 		// if operand property is an element property
-		if (MaterialOperandPlacement() == ELEMENT || MaterialOperandPlacement() == REGION)
+		if ( MaterialOperandPlacement() == ELEMENT || MaterialOperandPlacement() == FACE || MaterialOperandPlacement() == REGION )
       {
         MTRL.resize(1U);
         if (MaterialOperandType() == SCALAR)
@@ -683,7 +683,7 @@ void MathOperatorLHS<dim,CELL>::GetOperands( const CELL<dim>& e_ref )
       {
         const auto n_integration_points{ e_ref.IntegrationPoints() };
         
-        if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT) {
+        if ( MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT || MaterialOperandPlacement() == FACE_INTEGRATION_POINT ) {
           MTRL.resize( n_integration_points );
           for (auto i{0U}; i < n_integration_points; i++)
           {
@@ -722,7 +722,7 @@ void MathOperatorLHS<dim,CELL>::GetOperands( const CELL<dim>& e_ref )
 			else
 				throw csmp::Exception(FATAL_ERROR,
 					"MathOperatorLHS<dim>::GetOperands",
-					"Face based operands cannot be accumulated with this method");
+					"InterFace based operands cannot be accumulated with this method");
 		}
 
 	} // end GetOperands(CELL)

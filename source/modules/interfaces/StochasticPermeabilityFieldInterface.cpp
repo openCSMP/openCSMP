@@ -28,7 +28,7 @@ StochasticPermeabilityFieldInterface<dim>::~StochasticPermeabilityFieldInterface
 Reads in a HYDROGEN (Bellin and Rubin, 1996; Fortran source code in folder 
 /csp/varia/hydrogen) generated stochastic permeability field for a regular 
 2D finite element grid where the node-spacing in x and y direction is constant
-and the elements have the same volume. HYDROGEN input file must have the 
+and the elements have the same volume. HYDRO_GEN input file must have the 
 ending '*.perm' and be in x-y-z column format. Permeability values are
 assigned to the nodes of the FE mesh and the nodal permeability values are
 interpolated to the element center. If node coordinates and stochastic 

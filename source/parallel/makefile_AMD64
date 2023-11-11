@@ -1,0 +1,77 @@
+######################################
+# COMPLEX SYSTEMS PLATFORM MAKEFILE
+######################################
+F2C      = ../../support_libraries/f2c
+JPEG     = ../../support_libraries/jpeg
+UTILS    = ../../support_libraries/utilities
+SAMGP    = ../../support_libraries/samgp/samg/example
+METIS    = ../../support_libraries/metis-4.0
+CSP_MATH = ../applied_math
+CSP_INTF = ../interfaces
+CSP_SOLV = ../solver
+CSP_GEOM = ../computational_geometry
+CSP_FEM  = ../finite_elements
+CSP_MAIN = ../main_library
+CSP      = ./	
+CSP_LIBS = ../../libraries
+MPICHDIR  = /home/dimcou/mpich-install/lib/
+MPISRC    = /home/dimcou/mpich-install/include/
+
+INCFLAG = -I$(CSP_GEOM) -I$(CSP_FEM) -I$(CSP) -I$(CSP_MATH) -I$(CSP_INTF) -I$(CSP_SOLV)  -I$(CSP_PDE) -I$(F2C) -I$(JPEG) -I$(UTILS) -I$(SAMGP) -I$(MPICHDIR) -I$(MPISRC) -I$(CSP_MAIN) -I$(METIS)
+
+CC = g++ -m64 -march=opteron -O3 -ffast-math -funroll-all-loops -fpeel-loops \
+         -ftracer -funswitch-loops -ftree-vectorize -DSAMG_UNIX_LINUX \
+         -DSAMG_LCASE_USCORE  -Wno-deprecated -Wno-reorder -Wno-unused -Wno-switch \
+         -frtti -fexceptions -DCSP_WITH_SAMG_SOLVER -DNDEBUG
+
+# Compilation
+.SUFFIXES : .cpp .o
+
+.cpp.o :
+	$(CC) -c $(CFLAGS) $(INCFLAG) $< 
+
+#.o.:
+#	$(CC) $(CFLAGS) -o $@ $<
+
+##########################
+# Source Files
+##########################
+OBJS =  \
+FV_CommunicationData.o \
+ParallelSuperGroup.o \
+ParallelIO.o \
+Partitioner.o \
+partitionVSet.o \
+SAMGp_CommunicationData.o \
+SAMGp_Solver.o \
+VSetConnectivity.o
+
+
+#########################
+# Linking
+#########################
+default : libcsp3D_EMT64_par.a
+
+libcsp3D_EMT64_par.a : $(OBJS) 
+	ar cr libcsp3D_EMT64_par.a $(OBJS)
+	mv libcsp3D_EMT64_par.a ${CSP_LIBS}
+
+clean :
+	-rm $(OBJS)
+
+veryclean :
+	-rm $(OBJS)
+	-rm ${CSP_LIBS}/libcsp3D_EMT64_par.a
+#########################
+
+
+
+
+
+
+
+
+
+
+
+

@@ -68,7 +68,7 @@ void ErrorMetric_Example::Run()
     //create of directory with current example name, go into this directory, and copy input files into it.
     CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
     //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
-    Model<3U>  model(model_name, variable_file);
+    Model<3U>  model( model_name, variable_file );
 
     printModelDimensions( model, true );
 

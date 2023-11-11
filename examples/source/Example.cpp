@@ -137,7 +137,7 @@ string Example::GetExampleFileName(const char* path)
   return p.stem().string();
 }
 
-
+/// NB: this function expects that the directory that contains the executable is     open-csmp/examples/example_inputs/
 void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_name, std::string& model_name,
                                                            std::string& variable_file, std::string config_file)
 {

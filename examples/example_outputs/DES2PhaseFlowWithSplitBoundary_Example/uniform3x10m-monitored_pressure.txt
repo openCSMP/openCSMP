@@ -1,0 +1,19 @@
+'uniform3x10m-monitored_pressure.txt' region data recorded up to time, t = 0 seconds.
+region_name 	 volume 	 surface area 
+CURVES	0.749958	2.99983
+INLET	0.297765	0.297765
+ROCK	7.50581	30.0232
+
+Integrated values of properties: 
+
+fluid pressure
+ time	CURVES	INLET	ROCK	
+0	1.13229e+07	4.49566e+06	1.12955e+08	
+
+
+Value ranges of properties: 
+
+fluid pressure
+ time		CURVES		INLET		ROCK		
+0	1.5098e+07	1.5098e+07	1.5098e+07	1.5098e+07	1.5e+07	1.5098e+07	
+

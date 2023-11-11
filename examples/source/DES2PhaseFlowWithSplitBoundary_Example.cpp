@@ -39,7 +39,7 @@
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 
 void DES2PhaseFlowWithSplitBoundary_Example::Specifications()

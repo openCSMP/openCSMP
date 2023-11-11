@@ -1700,6 +1700,35 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t sector_or_facet, 
   }
   
   
+  
+template<uint32_t dim, template<uint32_t> class STOREE>
+void LocalVariableStorage<dim,STOREE>::StoreArrayEntry( const csmp::Index& idx, double value, uint32_t array_elmt )
+  {
+    assert( idx.type == ARRAY );
+#ifndef NDEBUG
+  assert( array_elmt <= idx.dataDepth );
+#endif
+    data_.data[ idx.dataOffset + array_elmt ] = value;
+ }
+
+
+    // SKM 1/11/23
+/// reads single double element inside of the target array
+template<uint32_t dim, template<uint32_t> class STOREE>
+double LocalVariableStorage<dim,STOREE>::ReadArrayEntry( const csmp::Index& idx, uint32_t array_elmt ) const
+ {
+    assert( idx.type == ARRAY );
+#ifndef NDEBUG
+  assert( array_elmt <= idx.dataDepth );
+#endif
+#ifdef VARIABLE_STORAGE_DEBUG
+  assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
+#endif
+    return data_.data[ idx.dataOffset + array_elmt ];
+ } // end Read (Array[array_elmt]
+
+
+
 
 
 template class LocalVariableStorage<1U,Node>;

@@ -100,6 +100,11 @@ class LocalVariableStorage {
     void            Store   ( uint32_t ip, const csmp::Index&, const VectorVariable<dim>& );
     void            Store   ( uint32_t ip, const csmp::Index&, const TensorVariable<dim>& );
     void            Store   ( uint32_t ip, const csmp::Index&, const ArrayVariable& );
+
+    // SKM 1/11/2023
+    void            StoreArrayEntry( const csmp::Index&, double array_elmt_value, uint32_t );
+    double          ReadArrayEntry( const csmp::Index&, uint32_t array_elmt ) const;
+
     void            Store   ( uint32_t ip, const csmp::Index&, const FlaggedArrayVariable& );
     VARIABLE_FLAG   Status  ( uint32_t ip, const csmp::Index& ) const;                   // scalars & arrays
     VARIABLE_FLAG   Status  ( uint32_t ip, const csmp::Index&, uint32_t ) const;           // vectors & tensors  & flagged arrays
@@ -227,13 +232,13 @@ class LocalVariableStorage {
           return *this; }
         Data& operator=( Data&& ) = default;
 #else // debugging: a lot more information is kept in storage
-        uint32_t  scalars,            ///< scalar variables stored at the site this policy is associated with
+        uint32_t scalars,           ///< scalar variables stored at the site this policy is associated with
                 vectors,            ///< vector variables at this site
                 tensors,            ///< tensor variables at this site
                 arrays,             ///< array variables at this site
                 flaggedArrays;      ///< flagged array variables at this site
         
-        uint32_t  arrayLength,        ///< length of array variables associated with this site @todo only one size?
+        uint32_t arrayLength,       ///< length of array variables associated with this site @todo only one size?
                 flaggedArrayLength; ///< length of flagged array variables @todo only one size?
 
         Data() :
@@ -554,7 +559,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<VECTOR,pla
  assert( (idx.flagOffset+dim-1) < data_.flags.size() );
  assert( (idx.dataOffset+dim-1) < data_.data.size() );
 #endif
-    for ( uint32_t i(0); i<dim; ++i ) {
+    for ( uint32_t i{0U}; i<dim; ++i ) {
          vc.Flag(i) = data_.flags[ idx.flagOffset+i ];
          vc(i)      = data_.data[ idx.dataOffset+i ];
       }
@@ -612,7 +617,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<TENSOR,pla
  }
 
 
-/// Array variable
+/// Array variable (as a whole)
 template<uint32_t dim, template<uint32_t> class STOREE>
 template<PLACEMENT place> 
 inline void LocalVariableStorage<dim,STOREE>::Store( const csmp::INDEX<ARRAY,place>& idx, const ArrayVariable& av )
@@ -636,7 +641,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( const csmp::INDEX<ARRAY,pla
   }
 
 
-/// Array variable
+/// Array variable (as a whole)
 template<uint32_t dim, template<uint32_t> class STOREE>
 template<PLACEMENT place> 
 inline void LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<ARRAY,place>& idx, ArrayVariable& av ) const
@@ -658,6 +663,15 @@ inline void LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<ARRAY,plac
       av(i)   = data_.data[ data_offset +  i ];
     av.Flag() = data_.flags[ flags_offset];
 }
+
+
+
+
+
+
+
+
+
 
 /// FlaggedArray variable
 template<uint32_t dim, template<uint32_t> class STOREE>

@@ -327,6 +327,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeSaturati
             continue;
         } else {
             DenseMatrix<DM_MIN> DN;
+            // TODO: why at barycentre?
             eptr->dN_AtBaryCenter(DN);
             VectorVariable<dim> snw_gradient;
             snw_gradient = 0.;
@@ -445,6 +446,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
           //some variables to use
           double flux_balance(0.), outflow(0.), tot_inflow(0.), tot_outflow(0.), carb_accumulation(0.), aq_accumulation(0.);
           const size_t v( (dim==1u) ? 0u : 1u );
+          // TODO: is it efficient to create those dynamic arrays on the fly?
           VectorVariable<dim> facetNrml, gravity, gradP;
           vector<double> IPOL, NRST;
 
@@ -457,6 +459,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
               Element<dim>* const eptr(nd->Parent(t));
               assert( eptr != nullptr );
       
+              // TODO: costly search, just replace using knowledge not known before
               if(truncated_node == 1 && (this->halo_stencils_.find(eptr) != this->halo_stencils_.end())) //ignore if parent element located outside domain
                   continue;
         

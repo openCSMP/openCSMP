@@ -738,7 +738,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
   void MathOperatorRHS<dim,CELL>::GetOperands( const CELL<dim>& e_ref )
   {
     // if operand property is an element property
-    if (MaterialOperandPlacement() == ELEMENT || MaterialOperandPlacement() == REGION)
+    if ( MaterialOperandPlacement() == ELEMENT || MaterialOperandPlacement() == FACE || MaterialOperandPlacement() == REGION )
       {
         MTRL.resize(1U);
         if (MaterialOperandType() == SCALAR)
@@ -770,7 +770,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
       {
         const auto n_integration_points{ e_ref.IntegrationPoints() };
 
-        if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT) {
+        if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT || MaterialOperandPlacement() == FACE_INTEGRATION_POINT ) {
           MTRL.resize( n_integration_points );
           for (auto i{0U}; i < n_integration_points; i++)
           {
@@ -810,7 +810,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
       else
         throw csmp::Exception(FATAL_ERROR,
           "MathOperatorRHS<dim,CELL>::GetOperands(Element):",
-          "Face based operands cannot be accumulated with this method");
+          "InterFace based operands cannot be accumulated with this method");
     }
 
   } // end GetOperands(Element)

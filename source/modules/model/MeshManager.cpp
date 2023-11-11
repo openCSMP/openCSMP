@@ -1778,7 +1778,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
 
    @param perim_last iterator to perimeter node vector of dim-1 region
 
-   @param region_material_idsc for material identifiers placed on Elements, Regions etc.
+   @param region_material_ids   for material identifiers placed on Elements, Regions etc.
    
    A set which will be overwritten by method with region_identifier ids which should be scheduled for rebuilding since the elements (outside) have new nodes
 
@@ -2034,7 +2034,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
        assert(!potential_interfaces.empty()); //This can be the case if all nodes on interface are on the perimeter!! (I.e they are not split)
 
        //ii) Search all interfaces for perimeter node
-       bool found_perimter_interface = false;
+//       bool found_perimter_interface = false;
        for ( auto ifit : potential_interfaces){
          //search for perimeter node (inside outside nodes match)
          for ( uint32_t n{0U}; n<ifit->FE()->Nodes(); ++n){

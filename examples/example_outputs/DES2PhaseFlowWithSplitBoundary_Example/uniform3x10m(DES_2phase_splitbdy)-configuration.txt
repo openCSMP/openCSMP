@@ -1,0 +1,298 @@
+uniform3x10m - basic test model 3 x 10 m, rectangular uniform region
+
+#----------------------------------------------------------------
+# (1) global material properties
+#----------------------------------------------------------------
+# for multilayer upscaling: equal propertions of horizontal 200mD and 600md layers 
+rock type					14
+permeability					1.0e-12
+vertical permeability				3.5e-14
+porosity					0.25
+fluid volume source				0.0
+nodal fluid volume source			0.0
+fluid pressure					0.0
+saturation carbonic phase			0.0
+saturation aqueous phase			1.0
+viscosity carbonic phase			1.0e-05
+viscosity aqueous phase				1.0e-03
+density carbonic phase				600.
+density aqueous phase				1000.
+residual saturation aqueous phase		0.0
+residual saturation carbonic phase		0.0
+brooks corey parameter				2.0
+entry pressure					1000. 
+thickness					1.0
+acceleration gravity				9.8061
+rocktype					1.
+
+#----------------------------------------------------------------
+# (2) local material properties (of the fractures and matrix)
+#----------------------------------------------------------------
+INLET	complete	rocktype		0
+INLET	complete	permeability		1.0E-10
+INLET	complete	vertical permeability	1.0E-10
+INLET	complete	porosity		1.
+INLET	complete	entry pressure		10.
+# linear relative permeability curves
+INLET	complete	brooks corey parameter	0.
+INLET	complete	residual saturation aqueous phase	0.
+INLET	complete	residual saturation carbonic phase	0.
+
+#----------------------------------------------------------------
+# (4) essential flags
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+# (3) essential conditions on model boundaries
+#----------------------------------------------------------------
+# inflow boundary
+LEFT	complete	Dirichlet	fluid pressure	15098000.	15098000.
+LEFT	complete	Dirichlet	saturation carbonic phase	1.	1.
+LEFT	complete	Dirichlet	saturation aqueous phase	0.	0.
+# constant pressure outflow boundary
+RIGHT	complete	Dirichlet	fluid pressure	15000000.	15000000.
+
+
+
+
+
+
+
+ignored
+#----------------------------------------------------------------
+# (5) computational settings
+#----------------------------------------------------------------
+time stepping	conservative
+duration	200000.
+output time	10
+output time	20
+output time	50
+output time	100
+output time	150
+output time	200
+output time	250
+output time	300
+output time	400
+output time	500
+output time	600
+output time	700
+output time	800
+output time	900
+output time	1000
+output time	1050
+output time	1100
+output time	1150
+output time	1200
+output time	1250
+output time	1300
+output time	1350
+output time	1400
+output time	1450
+output time	1500
+output time	1550
+output time	1600
+output time	1650
+output time	1700
+output time	1750
+output time	1800
+output time	1850
+output time	1900
+output time	2000
+output time	3000
+output time	4000
+output time	5000
+output time	6000
+output time	7000
+output time	8000
+output time	9000
+output time	10000
+output time	11000
+output time	12000
+output time	13000
+output time	14000
+output time	15000
+output time	16000
+output time	17000
+output time	18000
+output time	19000
+output time	20000
+output time	21000
+output time	22000
+output time	23000
+output time	24000
+output time	25000
+output time	26000
+output time	27000
+output time	28000
+output time	29000
+output time	30000
+output time	31000
+output time	32000
+output time	33000
+output time	34000
+output time	35000
+output time	36000
+output time	37000
+output time	38000
+output time	39000
+output time	40000
+output time	41000
+output time	42000
+output time	43000
+output time	44000
+output time	45000
+output time	46000
+output time	47000
+output time	48000
+output time	49000
+output time	50000
+output time	51000
+output time	52000
+output time	53000
+output time	54000
+output time	55000
+output time	56000
+output time	57000
+output time	58000
+output time	59000
+output time	60000
+output time	61000
+output time	62000
+output time	63000
+output time	64000
+output time	65000
+output time	66000
+output time	67000
+output time	68000
+output time	69000
+output time	70000
+output time	71000
+output time	72000
+output time	73000
+output time	74000
+output time	75000
+output time	76000
+output time	77000
+output time	78000
+output time	79000
+output time	80000
+output time	81000
+output time	82000
+output time	83000
+output time	84000
+output time	85000
+output time	86000
+output time	87000
+output time	88000
+output time	89000
+output time	90000
+output time	91000
+output time	92000
+output time	93000
+output time	94000
+output time	95000
+output time	96000
+output time	97000
+output time	98000
+output time	99000
+output time	100000
+output time	101000
+output time	102000
+output time	103000
+output time	104000
+output time	105000
+output time	106000
+output time	107000
+output time	108000
+output time	109000
+output time	110000
+output time	111000
+output time	112000
+output time	113000
+output time	114000
+output time	115000
+output time	116000
+output time	117000
+output time	118000
+output time	119000
+output time	120000
+output time	121000
+output time	122000
+output time	123000
+output time	124000
+output time	125000
+output time	126000
+output time	127000
+output time	128000
+output time	129000
+output time	130000
+output time	131000
+output time	132000
+output time	133000
+output time	134000
+output time	135000
+output time	136000
+output time	137000
+output time	138000
+output time	139000
+output time	140000
+output time	141000
+output time	142000
+output time	143000
+output time	144000
+output time	145000
+output time	146000
+output time	147000
+output time	148000
+output time	149000
+output time	150000
+output time	151000
+output time	152000
+output time	153000
+output time	154000
+output time	155000
+output time	156000
+output time	157000
+output time	158000
+output time	159000
+output time	160000
+output time	161000
+output time	162000
+output time	163000
+output time	164000
+output time	165000
+output time	166000
+output time	167000
+output time	168000
+output time	169000
+output time	170000
+output time	171000
+output time	172000
+output time	173000
+output time	174000
+output time	175000
+output time	176000
+output time	177000
+output time	178000
+output time	179000
+output time	180000
+output time	181000
+output time	182000
+output time	183000
+output time	184000
+output time	185000
+output time	186000
+output time	187000
+output time	188000
+output time	189000
+output time	190000
+output time	191000
+output time	192000
+output time	193000
+output time	194000
+output time	195000
+output time	196000
+output time	197000
+output time	198000
+output time	199000
+output time	200000
