@@ -149,7 +149,7 @@ void Element_Test::MoveSemanticsTest()
   // -------------------------------------
   // forced call of of move constructor
   // most comprehensive constructor but without nodes and neighbors
-  csmp::Element<2U> e1_moved( move( Element<2>( 1, &fe_q, &quad, evars, ivars, mtrl_idx ) ) );
+  csmp::Element<2U> e1_moved( std::move( Element<2>( 1, &fe_q, &quad, evars, ivars, mtrl_idx ) ) );
   _test( e1_moved.Idx() == e1.Idx() );
   _test( e1_moved.Material_ID() == e1.Material_ID() );
   _test( e1_moved.IsSurface() == e1.IsSurface() );
@@ -159,7 +159,7 @@ void Element_Test::MoveSemanticsTest()
   
   // forced move assignment to get a completely initialised element
   csmp::Element<2U> e0_move_assigned( &fe_q, &quad );
-  e0_move_assigned = move( e0 );
+  e0_move_assigned = std::move( e0 );
   _test( e0_move_assigned.Idx() == 0 );
   _test( e0_move_assigned.N(0) == &n0 );
   _test( e0_move_assigned.N(1) == &n1 );

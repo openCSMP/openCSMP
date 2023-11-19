@@ -37,8 +37,7 @@ void CoordinateTransformer<dim>::Transform( Point<dim>& p ) const
          p[i] *= flip_[i];
       }
     if ( !swapped_axes_.empty() )
-      for ( list<pair<size_t,size_t> >::const_iterator
-            it=swapped_axes_.begin(); it!=swapped_axes_.end(); it++ )
+      for ( auto it=swapped_axes_.begin(); it!=swapped_axes_.end(); it++ )
         {
            double swap       = p[ (*it).second ];
            p[ (*it).second ] = p[ (*it).first ];
@@ -60,8 +59,7 @@ Point<dim> CoordinateTransformer<dim>::Transform( const vector<double>& vec ) co
          p[i] *= flip_[i];
       }
     if ( !swapped_axes_.empty() )
-      for ( list<pair<size_t,size_t> >::const_iterator
-            it=swapped_axes_.begin(); it!=swapped_axes_.end(); it++ )
+      for ( auto it=swapped_axes_.begin(); it!=swapped_axes_.end(); it++ )
         {
            double swap       = p[ (*it).second ];
            p[ (*it).second ] = p[ (*it).first ];
@@ -87,7 +85,7 @@ void CoordinateTransformer<dim>::Rotate( size_t axis, double angle )
 
 
 template<uint32_t dim>
-void CoordinateTransformer<dim>::Translate( size_t coord, double distance_meters )
+void CoordinateTransformer<dim>::Translate( uint32_t coord, double distance_meters )
  {
     assert( coord < dim );
     translation_[coord] = distance_meters;
@@ -97,7 +95,7 @@ void CoordinateTransformer<dim>::Translate( size_t coord, double distance_meters
 
 
 template<uint32_t dim>
-void CoordinateTransformer<dim>::FlipAxis( size_t coord )
+void CoordinateTransformer<dim>::FlipAxis( uint32_t coord )
  {
     assert( coord < dim );
     flip_[coord] *= -1.;
@@ -107,7 +105,7 @@ void CoordinateTransformer<dim>::FlipAxis( size_t coord )
 
 /// classical swap
 template<uint32_t dim>
-void CoordinateTransformer<dim>::ExchangeAxes( size_t axis_a, size_t axis_b )
+void CoordinateTransformer<dim>::ExchangeAxes( uint32_t axis_a, uint32_t axis_b )
  {
     // avoiding duplicates
     if ( find( swapped_axes_.begin(), swapped_axes_.end(), make_pair(axis_a,axis_b) ) != swapped_axes_.end() ) return;

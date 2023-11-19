@@ -43,7 +43,7 @@ class DiffusionLHS : public MatrixOperator<dim> {
     mutable DenseMatrix<DM_MIN>         DN_, DNT_, RESULT_;
     const csmp::INDEX<SCALAR,ELEMENT>&  diff_key_;  ///< diffusion coefficient
     const csmp::INDEX<SCALAR,NODE>&     adv_key_;   ///< transported variable
-    size_t                              dof_ = 1U;  ///< degrees of freedom (for scalar variables dof=1, for array variables their size)
+    uint32_t                            dof_ = 1U;  ///< degrees of freedom (for scalar variables dof=1, for array variables their size)
 };
 
 } // end csmp

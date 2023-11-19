@@ -374,7 +374,7 @@ bool Region_Test::TestBoundaryFaceFunctionality()
          vector<int8_t>  face_vec;
          for ( auto i{0}; i<model1_domain.PerimeterFaces(e); ++i )
            face_vec.push_back( static_cast<int8_t>(model1_domain.PerimeterFace(e,i)) );
-         perimeter_faces.push_back( move(face_vec) );
+         perimeter_faces.push_back( std::move(face_vec) );
       }
     // counting the perimeter faces
     size_t n_perimeter_faces(0U);
@@ -401,7 +401,7 @@ bool Region_Test::TestBoundaryFaceFunctionality()
          vector<int8_t>  face_vec;
          for ( auto i{0}; i<model2_domain.PerimeterFaces(e); ++i )
            face_vec.push_back( static_cast<int8_t>(model2_domain.PerimeterFace(e,i)) );
-         perimeter_faces2.push_back( move(face_vec) );
+         perimeter_faces2.push_back( std::move(face_vec) );
       }
     // counting the perimeter faces
     size_t n_perimeter_faces2(0U);
@@ -518,7 +518,7 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
           vector<int8_t>  face_vec;
           for ( auto i{0}; i<domain.PerimeterFaces(e); ++i )
             face_vec.push_back( static_cast<int8_t>(domain.PerimeterFace(e,i)) );
-          perimeter_faces.push_back( move(face_vec) );
+          perimeter_faces.push_back( std::move(face_vec) );
        }
 
      // saving and retrieving the model from file
@@ -547,7 +547,7 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
           vector<int8_t>  face_vec;
           for ( auto i{0}; i<domain2.PerimeterFaces(e); ++i )
             face_vec.push_back( static_cast<int8_t>(domain2.PerimeterFace(e,i)) );
-          perimeter_faces2.push_back( move(face_vec) );
+          perimeter_faces2.push_back( std::move(face_vec) );
        }  
 	 
      // 3. Testing

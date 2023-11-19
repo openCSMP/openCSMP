@@ -499,7 +499,7 @@ double TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( Elem
   // ===============================================================================================
   
   template<uint32_t dim, template<uint32_t> class USER>
-  double TwoPhaseFlowFunctions<dim,USER>::dfds_Numerical( Element<dim>* const e, size_t phase, double h ) const
+  double TwoPhaseFlowFunctions<dim,USER>::dfds_Numerical( Element<dim>* const e, uint32_t phase, double h ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );

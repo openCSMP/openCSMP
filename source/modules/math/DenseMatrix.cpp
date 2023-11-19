@@ -1030,7 +1030,7 @@ DenseMatrix<mn_max>&
     temp(2,1) = data[2][0] * ts(0,1) + data[2][1] * ts(1,1) + data[2][2] * ts(2,1);
     temp(2,2) = data[2][0] * ts(0,2) + data[2][1] * ts(1,2) + data[2][2] * ts(2,2);
 
-    return *this = move(temp);
+    return *this = std::move(temp);
  }
 
 #endif // USED_TOGETHER WITH CSMP

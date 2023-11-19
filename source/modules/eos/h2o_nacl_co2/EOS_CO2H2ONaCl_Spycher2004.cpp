@@ -2222,7 +2222,7 @@ double KelvinTodegreeC( double temperatureInK )
 
 
 
-double temp( double depth )
+static double temp( double depth )
  {
     const double temp_surface(20); // 20 C
     const double therm_grad(0.03); //3 C/100m
@@ -2230,7 +2230,7 @@ double temp( double depth )
  }
 
 
-double pres( double depth )
+static double pres( double depth )
  {
     const double pres_grad(10000.); // 0.1 bar/m
     const double pres_surface(100000); // 1 bar

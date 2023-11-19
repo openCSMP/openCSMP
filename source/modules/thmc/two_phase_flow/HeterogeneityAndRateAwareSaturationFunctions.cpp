@@ -1236,7 +1236,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow( El
 
 
 template<uint32_t dim, template<uint32_t> class USER>
-double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at( Element<dim>* const e, double Sw, size_t direction ) const 
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at( Element<dim>* const e, double Sw, int direction ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -1321,7 +1321,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityParal
 
 template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityInFlowDirection( Element<dim>* const e,
-                                                                                              const TensorVariable<dim>& KK) const
+                                                                                            const TensorVariable<dim>& KK) const
 {
     bool is_composite = IsComposite(e);
     assert( is_composite );
@@ -1490,7 +1490,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow( El
 
 
 template<uint32_t dim, template<uint32_t> class USER>
-double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at( Element<dim>* const e, double Sw, size_t direction ) const 
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at( Element<dim>* const e, double Sw, int direction ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     

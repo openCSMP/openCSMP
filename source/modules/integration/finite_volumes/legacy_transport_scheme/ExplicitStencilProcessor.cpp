@@ -98,8 +98,8 @@ Initializes sector pore volume and facet flux vectors for
 current finite element = finite volume stencil.
 */
 template<uint32_t dim>
-void ExplicitStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& param,
-                                                          const Element<dim>& e , const VARIABLE_TYPE &vt, const size_t var_comp_nr)
+void ExplicitStencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
+                                                          const Element<dim>& e , const VARIABLE_TYPE &vt, uint32_t var_comp_nr )
  {
      sector_pore_volume_.resize(e.Nodes());
      psi1_.resize(e.Nodes());
@@ -150,7 +150,7 @@ void ExplicitStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& par
      }
      if (vt==FLAGGEDARRAY){
          FlaggedArrayVariable fav;
-         for ( size_t i{0U}; i<e.Nodes(); i++ ) {
+         for ( uint32_t i{0U}; i<e.Nodes(); i++ ) {
              // sector pore volumes
              sector_pore_volume_[i] = param.SectorVolume( i );
              // advected variable
@@ -287,7 +287,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
                                      const Element<dim>& e,
                                      vector<double>& res,
                                      const VARIABLE_TYPE &vt, 
-                                     const size_t var_comp_nr )
+                                     uint32_t var_comp_nr )
  {
      const double  zero(0.);
 
@@ -468,7 +468,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
      fill( grad_.begin(), grad_.end(), zero );
      for ( auto j{0U}; j<DN_.Cols(); j++ ) {
           double psi_node = e.N(j)->Read( adv1_key_ );
-          for ( size_t k{0U}; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
+          for ( uint32_t k{0U}; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
 
      for ( auto i{0U}; i<e.FV()->Facets(); i++ )

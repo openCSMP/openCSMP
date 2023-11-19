@@ -25,11 +25,11 @@ MeshIterator<dim,CELL>::MeshIterator( Node<dim>* root_node )
     while ( !current_nodes_.empty() ) {
         const csmp::Node<dim>*  n_ptr( *current_nodes_.begin() );
         // for all parent elements of the current node
-        const size_t parent_cells(n_ptr->Parents());
+        const uint32_t parent_cells(n_ptr->Parents());
         for ( auto i{0U}; i<parent_cells; ++i ) {
             // for all the nodes of each parent element
-            const size_t parent_nodes(n_ptr->Parent(i)->Nodes());
-            for ( size_t j{0U}; j<parent_nodes; ++j )
+            const uint32_t parent_nodes(n_ptr->Parent(i)->Nodes());
+            for ( uint32_t j{0U}; j<parent_nodes; ++j )
               // if this node is not the one from which we started
               if ( j != n_ptr->ParentNodeNumber(i) ) {
                   pair<typename set<csmp::Node<dim>*>::iterator, bool>

@@ -280,7 +280,7 @@ void DESAdvectionDiffusion<dim>::InitializeEvents()
         assert(*nit);
         if((*nit)->Status(  key_C0 ) != DIRICH) {
             (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index
-            FullList.push_back( move( Event<dim>(*nit) ) );
+            FullList.push_back( std::move( Event<dim>(*nit) ) );
             auto event = &(FullList.back());
             event->inPEPStack(true);
             ComputeFluxBalanceAndCFL(event);

@@ -209,7 +209,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>
          for ( NMULT[i]=0.0, j=0; j<e.Nodes(); j++ ) 
            {
               // initializing vector of NT3 matrices at integration points
-              for ( auto k=0; k<dim; k++ ) NT3[i](j,k) = IPOL[j];
+              for ( auto k=0u; k<dim; k++ ) NT3[i](j,k) = IPOL[j];
               // interpolating NMULT to the integration points
               NMULT[i] += sc_prop_vec[j]() * IPOL[j];
               // gravity operand if so specified

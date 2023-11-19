@@ -63,8 +63,8 @@ void PT_op<dim,CELL>::ComputeContribution( const CELL<dim>& e )
   
    const size_t nodes(e.Nodes());
   
-   for ( auto i{0}; i<nodes; i++ )
-     for ( size_t j{0U}; j<dim; j++ )
+   for ( uint32_t i{0u}; i<nodes; i++ )
+     for ( uint32_t j{0U}; j<dim; j++ )
          // forces must be divided by number of elements they will be accumulated from
          // to avoid multiple accumulation
          MathOperatorRHS<dim,CELL>::RHS[ i * dim + j ] = NODAL_FORCE[i][j] / static_cast<double>(e.N(i)->Parents());

@@ -52,11 +52,11 @@ class NodeCenteredFiniteVolumeAlgorithm {
                                                     double time_multiplier );
 
     void AccumulateMatrixAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>&,
-                                                            std::vector<double>& SAT0, size_t nid,size_t pnid,
+                                                            std::vector<double>& SAT0, size_t nid,uint32_t pnid,
                                                             double time_multiplier, const csmp::Index& adv1_key );
 
     void AccumulateResidualAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>&,
-                                                              std::vector<double>& SAT0, size_t nid,size_t pnid,
+                                                              std::vector<double>& SAT0, size_t nid,uint32_t pnid,
                                                               double time_multiplier, const csmp::Index& adv1_key );
 
     void CompensateInflowOutFlowBoundaries( size_t nid,
@@ -104,7 +104,7 @@ class NodeCenteredFiniteVolumeAlgorithm {
     double OutputResults(const PropertyDatabase<dim>&,
                            const csmp::Index& adv_key,
                            bool show_range ,
-                           const size_t var_comp_nr=0) const;
+                           uint32_t var_comp_nr=0) const;
 
     /// multiphase version for range 0..1 (adv1=wetting phase=1)
     double OutputResults( const PropertyDatabase<dim>&,

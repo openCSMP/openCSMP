@@ -140,11 +140,11 @@ Element<dim>::Element( Element<dim>&& el )
 //    LocalVariableStorage<dim, csmp::Element>( el.LVS() ),  does not compile, why?
     idx_(el.idx_),
     material_id_(el.material_id_),
-    // calling move() is important, else elmt destructor has to do more work!
-    elmt_connector_( move(el.elmt_connector_) ),
-    node_connector_( move(el.node_connector_) )
+    // calling std::move() is important, else elmt destructor has to do more work!
+    elmt_connector_( std::move(el.elmt_connector_) ),
+    node_connector_( std::move(el.node_connector_) )
 {
-   this->LVS( move(el.LVS()) );
+   this->LVS( std::move(el.LVS()) );
     
 //  cerr <<"\nElement(ctor): moved element: "<< Idx();
 }
@@ -188,12 +188,12 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   if ( el.FE() ) FiniteElementPolicy<dim, csmp::Element>::Assign( el.FE() );
   if ( el.FV() ) FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( el.FV() );
 
-  idx_ = move( el.idx_ );
-  elmt_connector_ = move( el.elmt_connector_ );
-  node_connector_ = move( el.node_connector_ );
+  idx_ = std::move( el.idx_ );
+  elmt_connector_ = std::move( el.elmt_connector_ );
+  node_connector_ = std::move( el.node_connector_ );
   material_id_    = el.material_id_;
   
-  this->LVS( move( el.LVS() ) );
+  this->LVS( std::move( el.LVS() ) );
 
 //  cerr <<"\nElement: move-assigned element: "<< Idx();
 

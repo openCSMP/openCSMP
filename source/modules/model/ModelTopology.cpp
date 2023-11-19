@@ -1580,7 +1580,7 @@ bool ModelTopology::ChangeDomainName( const std::string& old_name, const std::st
     if ( domainHandler.empty() ) return false;
     // else the record is renamed and re-inserted (moved)
     domainHandler.key() = new_name;
-    model_domains_.insert( move(domainHandler) );
+    model_domains_.insert( std::move(domainHandler) );
     
     return true; // success
  }

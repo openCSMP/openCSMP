@@ -564,12 +564,12 @@ double TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncre
                {
                    fill( gradPc.begin(), gradPc.end(), 0. );
                    (*(*eit)).dN_AtBaryCenter( DN );
-                   for ( size_t j{0U}; j<(*eit)->Nodes(); j++ ) {
+                   for ( uint32_t j{0U}; j<(*eit)->Nodes(); j++ ) {
                        double sn = (*eit)->N(j)->Read( this->adv1_key_ );
                        relperm.SaturationWettingPhase( 1. - sn );
                        relperm.EffectiveSaturation();
                        double pc = relperm.pc_Phase( );
-                       for ( size_t k{0U}; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
+                       for ( uint32_t k{0U}; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
                    }
                    // getting the maximum capillary flux (G= lambda overbar)
                    double  magnitude_grad_pc(gradPc[0]); // 1D
@@ -1062,10 +1062,10 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
              if((nd_ptr->Status(reference_variable_to_no_flow_bc_key_) == DIRICH)&&(nd_ptr->Status(this->adv1_key_)!=DIRICH)){
 
                  // for all SECTORS of the FE_FV-stencils which contribute to boundary finite volume (surrounding the node)
-                 for ( size_t t=0U; t<nd_ptr->Parents(); t++ )
+                 for ( uint32_t t=0U; t<nd_ptr->Parents(); t++ )
                  {
                      Element<dim>* const eptr(nd_ptr->Parent(t));
-                     size_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
+                     uint32_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
                      //if(((dim==3) && (!eptr->FE()->IsSurface()) && (!eptr->FE()->IsLine())) ||((dim==2) && (!eptr->FE()->IsLine()))){
                      //if((dim>1) && (!eptr->FE()->IsLine())){
 
@@ -1159,10 +1159,10 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
                  if((nd_ptr->Status(reference_variable_to_no_flow_bc_key_) == DIRICH)&&(nd_ptr->Status(this->adv1_key_)!=DIRICH)){
 
                      // for all SECTORS of the FE_FV-stencils which contribute to boundary finite volume (surrounding the node)
-                     for ( size_t t=0U; t<nd_ptr->Parents(); t++ )
+                     for ( uint32_t t=0U; t<nd_ptr->Parents(); t++ )
                      {
                          Element<dim>* const eptr(nd_ptr->Parent(t));
-                         size_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
+                         uint32_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
                          //if(((dim==3) && (!eptr->FE()->IsSurface()) && (!eptr->FE()->IsLine())) ||((dim==2) && (!eptr->FE()->IsLine()))){
                          //if((dim>1) && (!eptr->FE()->IsLine())){
 
@@ -1341,10 +1341,10 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
              if((nd_ptr->Status(reference_variable_to_no_flow_bc_key_) == DIRICH)&&(nd_ptr->Status(this->adv1_key_)!=DIRICH)){
 
                  // for all SECTORS of the FE_FV-stencils which contribute to boundary finite volume (surrounding the node)
-                 for ( size_t t=0U; t<nd_ptr->Parents(); t++ )
+                 for ( uint32_t t=0U; t<nd_ptr->Parents(); t++ )
                  {
                      Element<dim>* const eptr(nd_ptr->Parent(t));
-                     size_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
+                     uint32_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
                      //if(((dim==3) && (!eptr->FE()->IsSurface()) && (!eptr->FE()->IsLine())) ||((dim==2) && (!eptr->FE()->IsLine()))){
                      //if((dim>1) && (!eptr->FE()->IsLine())){
 
@@ -1461,10 +1461,10 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
                  if((nd_ptr->Status(reference_variable_to_no_flow_bc_key_) == DIRICH)&&(nd_ptr->Status(this->adv1_key_)!=DIRICH)){
 
                      // for all SECTORS of the FE_FV-stencils which contribute to boundary finite volume (surrounding the node)
-                     for ( size_t t=0U; t<nd_ptr->Parents(); t++ )
+                     for ( uint32_t t=0U; t<nd_ptr->Parents(); t++ )
                      {
                          Element<dim>* const eptr(nd_ptr->Parent(t));
-                         size_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
+                         uint32_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
                          //if(((dim==3) && (!eptr->FE()->IsSurface()) && (!eptr->FE()->IsLine())) ||((dim==2) && (!eptr->FE()->IsLine()))){
                          //if((dim>1) && (!eptr->FE()->IsLine())){
 

@@ -1746,7 +1746,7 @@ void  RegionInterface<dim, REGION_COMPLEX>::CopyRegion( const char* existing_reg
   // will not be unique because it overlaps with the original region
   pair<typename map<string, csmp::Region<dim> >::iterator, bool>
     it = (unique_region) ? uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( gr_ref ) ) ) :
-    regionMap_.insert( make_pair( output_region, move( csmp::Region<dim>( gr_ref ) ) ) );
+    regionMap_.insert( make_pair( output_region, std::move( csmp::Region<dim>( gr_ref ) ) ) );
   if ( !it.second )
     throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::CopyRegion",
                            "region to copy to- could not be formed",
@@ -2332,7 +2332,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region,
   vector<csmp::Element<dim>*>( new_region1 ).swap( new_region1 );
 
   // rebuilding the decimated region
-  r1_ref.CellVector() = move( new_region1 );
+  r1_ref.CellVector() = std::move( new_region1 );
   r1_ref.CreateNodePointerVector();
   r1_ref.IdentifyPerimeter();
 
@@ -2413,7 +2413,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::MoveToNonUniqueRegions( const char* u
 
   // performing the move
   auto region_handle = uniqueRegionMap_.extract( unique_region );
-  regionMap_.insert( move(region_handle) );
+  regionMap_.insert( std::move(region_handle) );
 
   return true;
 

@@ -93,8 +93,8 @@ void MathOperatorRHS_Test::MathOperatorRHS_CopyCtor()
     bool subtract_accumulate_later = false;
     bool lump_matrices = true;
     bool time_multiply = true;
-    size_t application_cycles = 5U;
-    size_t application_cycle = 3U;
+    uint32_t application_cycles = 5U;
+    uint32_t application_cycle = 3U;
     double factor = 1.75;
     size_t offset = 2U;
     csmp::Index perm_key = database_.StorageKey(op1.c_str());
@@ -150,8 +150,8 @@ void MathOperatorRHS_Test::MathOperatorRHS_Equal()
     bool subtract_accumulate_later = false;
     bool lump_matrices = true;
     bool time_multiply = true;
-    size_t application_cycles = 5U;
-    size_t application_cycle = 3U;
+    uint32_t application_cycles = 5U;
+    uint32_t application_cycle = 3U;
     double factor = 1.75;
     size_t offset = 2U;
     csmp::Index perm_key = database_.StorageKey(op1.c_str());
@@ -391,7 +391,7 @@ void MathOperatorRHS_Test::MathOperatorRHS_ApplicationCycles()
 {
     string op("permeability");
     string top("fluid pressure");
-    size_t application_cycles = 5U;
+    uint32_t application_cycles = 5U;
     
     NumIntegral_NT_op_N_dV<1U> MORHS( database_, op.c_str(), top.c_str() );
     
@@ -408,7 +408,7 @@ void MathOperatorRHS_Test::MathOperatorRHS_ApplicationCycle()
 {
     string op("permeability");
     string top("fluid pressure");
-    size_t application_cycle = 3U;
+    uint32_t application_cycle = 3U;
     
     NumIntegral_NT_op_N_dV<1U> MORHS( database_, op.c_str(), top.c_str() );
     

@@ -52,7 +52,7 @@ class CompressedRowMatrix {
     CompressedRowMatrix& operator=( CompressedRowMatrix&& ) noexcept ;
 
     /// standard accessor of matrix elements (asserts i,j in debug mode)
-    double  operator()( size_t, size_t ) const;
+    double  operator()( uint32_t, uint32_t ) const;
 
     /// range-checked accessor for matrix elements
     double  At( uint32_t, uint32_t ) const;
@@ -71,8 +71,8 @@ class CompressedRowMatrix {
     void Initialize( const csmp::SparseMatrix& );
     void InitializePointBased( const SparseMatrix&, size_t nsys );
 
-    size_t Rows() const;
-    size_t Cols() const;
+    uint32_t Rows() const;
+    uint32_t Cols() const;
     size_t TotalExistingEntries() const { return ja.size(); }
   /// total number of available storage sites for non-zero matrix elements
     size_t NonZeroEntries() const;

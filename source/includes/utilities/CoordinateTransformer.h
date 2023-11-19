@@ -27,13 +27,13 @@ class CoordinateTransformer {
   
     // Set the transformation operations for later processing
     /// translation along the specified axis
-    void Translate( size_t axis, double distance_meters );
+    void Translate( uint32_t axis, double distance_meters );
   
     /// multiplies coordinates of specified axis by -1
-    void FlipAxis( size_t axis );
+    void FlipAxis( uint32_t axis );
 
     /// exchange of axis
-    void ExchangeAxes( size_t axis_a, size_t axis_b );
+    void ExchangeAxes( uint32_t axis_a, uint32_t axis_b );
   
     /// returns settings to ones which preserve value of input coordinate
     void Reset();
@@ -41,7 +41,7 @@ class CoordinateTransformer {
   private:
     double translation_[dim]; ///< in x,y,z direction
     double flip_[dim];        ///< inverts the corresponding coordinate axis
-    std::list<std::pair<size_t,size_t> > swapped_axes_;   ///< as the last step
+    std::list<std::pair<uint32_t,uint32_t> > swapped_axes_;   ///< as the last step
  };
 
 } // end csmp

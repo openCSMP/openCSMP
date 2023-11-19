@@ -68,8 +68,8 @@ void DiffusionLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix&
          RESULT_ *= fe.WeightAtIntegrationPoint(i) * detJ;
 
          // assigning the matrix contribution to the solution matrix
-         for ( size_t j{0U}; j<DNT_.Rows(); j++ )
-           for ( size_t k{0U}; k<DNT_.Cols(); k++ )
+         for ( uint32_t j{0U}; j<DNT_.Rows(); j++ )
+           for ( uint32_t k{0U}; k<DNT_.Cols(); k++ )
              A.Add( fe.N(j)->Idx(), fe.N(k)->Idx(), RESULT_(j,k) );
       }
 

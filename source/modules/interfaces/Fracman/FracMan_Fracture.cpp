@@ -114,7 +114,7 @@ Explanation and file entries:
     0     1.000000e+000     0.000000e+000     0.000000e+000
 @endcode
 */    
-bool  FRACMAN_Fracture::InitializeFrom( int nprops, ifstream& ifs )
+bool  FRACMAN_Fracture::InitializeFrom( long nprops, ifstream& ifs )
  {
     char         text_line[256];
     char        *token;

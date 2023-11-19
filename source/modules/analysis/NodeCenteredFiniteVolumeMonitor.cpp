@@ -1,7 +1,7 @@
 #include "NodeCenteredFiniteVolumeMonitor.h"
 #include "Region.h"
 #include "Model.h"
-#include "Exception.h"
+#include "ErrorHandler.h"
 #include "StencilProcessor.h"
 #include "ModelTime.h"
 
@@ -72,9 +72,10 @@ template<uint32_t dim>
 void NodeCenteredFiniteVolumeMonitor<dim>::SaveToFile( const Model<dim>& sg,
                                                        bool normalize_by_initial_integral ) const
  {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
      if ( integrals.empty() && group_integrals.empty() ) {
-          throw csmp::Exception( WARNING, "NodeCenteredFiniteVolumeMonitor::SaveToFile", "No integral data yet; no output.");
+          csmp_error.Note( WARNING, "NodeCenteredFiniteVolumeMonitor::SaveToFile", "No integral data yet; no output.");
           return;
        }
  
@@ -97,27 +98,24 @@ void NodeCenteredFiniteVolumeMonitor<dim>::SaveToFile( const Model<dim>& sg,
        }
        
      if ( group_integrals.empty() ) {
-          throw csmp::Exception( WARNING, "NodeCenteredFiniteVolumeMonitor::SaveToFile", "No integral data for regions yet; no output.");
+          csmp_error.Note( WARNING, "NodeCenteredFiniteVolumeMonitor::SaveToFile", "No integral data for regions yet; no output.");
           return;
        }
 
      ofs <<"\ntime (s)"; // and the names of the groups delimited by tabs
-     for ( typename map<string,Region<dim> >::const_iterator
-           it=sg.UniqueRegionsBegin(); it!=sg.UniqueRegionsEnd(); it++ )
+     for ( auto it=sg.UniqueRegionsBegin(); it!=sg.UniqueRegionsEnd(); it++ )
        ofs <<"\t"<< (*it).first;
      ofs << endl;
      
      // writing out the regional integrals for each monitored timestep
-     for ( typename list<pair<double,list<double> > >::const_iterator 
-           it=group_integrals.begin(); it!=group_integrals.end(); it++ ) {
+     for ( auto it=group_integrals.begin(); it!=group_integrals.end(); it++ ) {
           // writing the time
           ofs << (*it).first;
           // tracking the initial values if necessary
           typename list<double>::const_iterator  iit=(*group_integrals.begin()).second.begin();
           // writing the integrals over each group
           ofs << scientific << setprecision(numeric_limits<double>::digits10);
-          for ( typename list<double>::const_iterator 
-                lit=(*it).second.begin(); lit!=(*it).second.end(); lit++, iit++ )
+          for ( auto lit=(*it).second.begin(); lit!=(*it).second.end(); lit++, iit++ )
             // normalizing the integral value if so requested
             if ( normalize_by_initial_integral ) ofs <<"\t"<< (*lit) / (*iit);
             else                                 ofs <<"\t"<< (*lit);

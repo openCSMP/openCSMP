@@ -33,8 +33,8 @@ END FORMAT
 
 */
 // returns number of points
-long FRACMAN_Interface::ReadFORMAT( ifstream& ifs, int& scale, 
-                                    int& fracs, int& props, bool ascii )
+long FRACMAN_Interface::ReadFORMAT( ifstream& ifs, long& scale, 
+                                    long& fracs, long& props, bool ascii )
  {
     char  text_line[256];
     char* result(0);
@@ -123,7 +123,7 @@ BEGIN PROPERTIES
     Prop3    =    (Real*4)    "Aperture"
 END PROPERTIES
 */
-bool  FRACMAN_Interface::ReadPROPERTIES( ifstream& ifs, int n_props, list<string>& props )
+bool  FRACMAN_Interface::ReadPROPERTIES( ifstream& ifs, long n_props, list<string>& props )
  {
     char  text_line[256];
     char* result(0);
@@ -146,7 +146,7 @@ bool  FRACMAN_Interface::ReadPROPERTIES( ifstream& ifs, int n_props, list<string
 
     // 2. reading FORMAT specifications
     if ( !props.empty() ) props.erase( props.begin(), props.end() );
-    for ( int i=0; i<n_props; i++ ) {
+    for ( long i=0; i<n_props; i++ ) {
          ifs.getline( text_line, 256 );
          // propname is ignored
          token = strtok( text_line, delims );
@@ -212,7 +212,7 @@ void FRACMAN_Interface::InitializeFrom_FRACMAN_File( const char* ffb_file )
       }
     
     // fracture data
-    for ( int i=0; i<n_fractures; i++ ) {
+    for ( long i=0; i<n_fractures; i++ ) {
          frac.InitializeFrom( n_properties, ifs );
          frac_name  = "fracture";
          frac_name += frac.TextSetID();

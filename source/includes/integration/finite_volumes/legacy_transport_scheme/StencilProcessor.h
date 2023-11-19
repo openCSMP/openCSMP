@@ -33,7 +33,7 @@ struct StencilProcessor {
     /// first-order scheme for advection-diffusion equation:  sector volumes, advected variable values, and facet fluxes
     void InitializeFirstOrder(const FV_Parameter& param,
                               const Element<dim>& e ,
-                              const VARIABLE_TYPE &vt=SCALAR, const size_t var_comp_nr=0);
+                              const VARIABLE_TYPE &vt=SCALAR, uint32_t var_comp_nr=0);
     
     /// Computes Flux Mismatch for FVs at the Boundaries
     void ComputeBoundaryFluxMismatch(const FV_Parameter& param, const Element<dim>& e);

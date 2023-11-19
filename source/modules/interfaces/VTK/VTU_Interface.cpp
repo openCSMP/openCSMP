@@ -2278,7 +2278,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
     string variableName;
     string prefix;
     ArrayVariable arrayVariable;
-    for( size_t component=0; component<key.dataDepth; component++)
+    for( uint32_t component=0; component<key.dataDepth; component++)
     {
         arrayTitle = "DataArray type=\"Float64\" Name=\"";
         variableName = model_.Database().Name( key );

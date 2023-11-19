@@ -66,14 +66,14 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const ModelSubDomain& ed )
 /// move constructor; @attention remove verbose output after testing
 template<uint32_t dim, template<uint32_t> class CELL>
 ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
- : pref_( move(ed.pref_) ),
-   cell_vec_( move(ed.cell_vec_) ),
-   node_vec_( move(ed.node_vec_) ),
-   first_bd_node_( move(ed.first_bd_node_) ),
-   bd_face_vec_( move(ed.bd_face_vec_) ),
-   subdomain_name_( move(ed.subdomain_name_) ),
-   rebuilt_needed_(move(ed.rebuilt_needed_) ),
-   domain_idx_( move(ed.domain_idx_) ) // since argument object gets destroyed there is no incrementation of domain_idx_
+ : pref_( std::move(ed.pref_) ),
+   cell_vec_( std::move(ed.cell_vec_) ),
+   node_vec_( std::move(ed.node_vec_) ),
+   first_bd_node_( std::move(ed.first_bd_node_) ),
+   bd_face_vec_( std::move(ed.bd_face_vec_) ),
+   subdomain_name_( std::move(ed.subdomain_name_) ),
+   rebuilt_needed_(std::move(ed.rebuilt_needed_) ),
+   domain_idx_( std::move(ed.domain_idx_) ) // since argument object gets destroyed there is no incrementation of domain_idx_
  {
     domain_count_++; // needed because when destructor is called on 'ed' the object count will be decremented!
     if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called move constructor.\n";
@@ -112,13 +112,13 @@ template<uint32_t dim, template<uint32_t> class CELL>
 ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( ModelSubDomain&& ed )
  {
      if ( &ed != this ) {
-         cell_vec_       = move( ed.cell_vec_ );
-         node_vec_       = move( ed.node_vec_ );
-         first_bd_node_  = move( ed.first_bd_node_ );
-         domain_idx_     = move( ed.domain_idx_ );
-         bd_face_vec_    = move( ed.bd_face_vec_ );
-         subdomain_name_ = move( ed.subdomain_name_ );
-         rebuilt_needed_ = move( ed.rebuilt_needed_ );
+         cell_vec_       = std::move( ed.cell_vec_ );
+         node_vec_       = std::move( ed.node_vec_ );
+         first_bd_node_  = std::move( ed.first_bd_node_ );
+         domain_idx_     = std::move( ed.domain_idx_ );
+         bd_face_vec_    = std::move( ed.bd_face_vec_ );
+         subdomain_name_ = std::move( ed.subdomain_name_ );
+         rebuilt_needed_ = std::move( ed.rebuilt_needed_ );
          if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called move assignment operator.\n";
        }
      return *this;
@@ -872,7 +872,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
           temp.push_back( nit );
         // now the temporary vector is assigned to the permanent one
         assert( temp.size() == node_vec_.size() );
-        node_vec_ = move( temp );
+        node_vec_ = std::move( temp );
         node_vec_.shrink_to_fit();
         
         assert( first_bd_node_ <= node_vec_.size() );

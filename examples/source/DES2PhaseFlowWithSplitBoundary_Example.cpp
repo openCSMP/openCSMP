@@ -316,7 +316,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
     monitor2.Out( (model_name + "-monitored_pressure").c_str() );
 
     // setting up time parameters (HARDWIRED PRESSURE STEPS!)
-    const double day{86400.}, year{ 86400. * 365. };
+    const double day{86400.}; // year{ 86400. * 365. };
     //double max_time (5. * year);      // run for # years
     double max_time (60. * day);      // run for 60 days
     //double time_increment(3600.); // timestep
@@ -721,7 +721,7 @@ void computeFV_Diameter_Normal_VerticalExtent( Model<dim>& model, const std::str
          // if this normal is not upward pointing, it is flipped
          if constexpr ( dim == 3U ) if ( dotProduct( nrml, Point<3U>(0.,1.,0.) ) < 0. ) nrml *= -1.;
          if constexpr ( dim == 2U ) if ( dotProduct( nrml, Point<2U>(0.,1.) ) < 0. )    nrml *= -1.;
-         (*nit)->Store( nrml_key, move( VectorVariable<dim>(nrml) ) );
+         (*nit)->Store( nrml_key, std::move( VectorVariable<dim>(nrml) ) );
       }
  
  } // end computeFV_Diameter_Normal_VerticalExtent

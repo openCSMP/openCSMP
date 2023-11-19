@@ -167,10 +167,10 @@ void FractureMatrixUpscaled<dim>::Initialize( const Element<dim>& e )
 /// @note node properties
 template<uint32_t dim>
 void FractureMatrixUpscaled<dim>::InitializeForNode( const Element<dim>& e,
-                                                        size_t fem_node )
+                                                     uint32_t fem_node )
  {
     this->sat_  = e. N(fem_node)->Read( this->sat_key_ );
-    swi_       = e. N(fem_node)->Read( swi_key_ );
+    swi_        = e. N(fem_node)->Read( swi_key_ );
     this->mun_  = e. N(fem_node)->Read( this->mun_key_ );
     this->muw_  = e. N(fem_node)->Read( this->muw_key_ );
     this->rhn_  = e. N(fem_node)->Read( this->rhn_key_ );
@@ -259,7 +259,7 @@ double FractureMatrixUpscaled<dim>::dGds( ) const
 
 
 template<uint32_t dim>
-void FractureMatrixUpscaled<dim>::Out( size_t phase ) const
+void FractureMatrixUpscaled<dim>::Out( int phase ) const
  {
     TwoPhaseModel<dim>::Out(phase);
     cout <<"\nFractureMatrixUpscaled<"<< dim << ">::Out: Additional properties: "<< endl;

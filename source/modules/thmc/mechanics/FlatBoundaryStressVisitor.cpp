@@ -118,8 +118,8 @@ void FlatBoundaryStressVisitor<dim>::Visit( Face<dim>* f )
    // using normal from the face. 
    f->UnitNormal(nrml_);
    nrml_ *= Sn;
-   size_t  nodeNumbers(f->Nodes());
-   size_t  BeginNodeNumber(0U);
+   uint32_t  nodeNumbers(f->Nodes());
+   uint32_t  BeginNodeNumber(0U);
    
    if (f->InnerParent()->Interpolation() == 2)  {
       nodeNumbers = f->FE()->MidSideNodes();
@@ -136,7 +136,7 @@ void FlatBoundaryStressVisitor<dim>::Visit( Face<dim>* f )
       f->N(i)->Read(F_key_, vc_);
       vc_ += (nrml_ + vs_);
       f->N(i)->Store(F_key_, vc_);                                         // HA. Adds both shear and normal components to the nodal force vectors. 
-      for (size_t j{0U}; j < dim; j++) f->N(i)->Status(F_key_, j, DIRICH);  // HA. Applies the forces as dirichlet boundary conditions. 
+      for (uint32_t j{0U}; j < dim; j++) f->N(i)->Status(F_key_, j, DIRICH);  // HA. Applies the forces as dirichlet boundary conditions. 
    }
 
    

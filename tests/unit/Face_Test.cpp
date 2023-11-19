@@ -152,10 +152,10 @@ void Face_Test::run()
     
     // move operations
     // copy
-    Face<DIM> face7( move(face5) );
+    Face<DIM> face7( std::move(face5) );
     _test( face7 == face4 );
     // assignment
-    face5 = move(face6);
+    face5 = std::move(face6);
     _test( face5 == face3 );
     
     

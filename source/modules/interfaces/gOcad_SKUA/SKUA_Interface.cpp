@@ -349,14 +349,14 @@ void SKUA_Interface::VariableToPointCloud( const Model<3U>& model,
               else if ( var_key.type == TENSOR ) {
                    TensorVariable<3U> ts;
                    (*it)->Read( var_key, ts );
-                   for ( size_t i{0U}; i<3U; i++ )
-                     for ( size_t j{0U}; j<3U; j++ ) ofs << ts(i,j) <<"\t";
+                   for ( uint32_t i{0U}; i<3U; i++ )
+                     for ( uint32_t j{0U}; j<3U; j++ ) ofs << ts(i,j) <<"\t";
                    ofs <<"\n";
                 }
               else { // ARRAY variable
                    ArrayVariable  ary;
                    (*it)->Read( var_key, ary );
-                   for ( size_t i{0U}; i<ary.Size(); i++ ) ofs << ary[i] <<"\t";
+                   for ( uint32_t i{0U}; i<ary.Size(); i++ ) ofs << ary[i] <<"\t";
                    ofs <<"\n";
                 }
            }
@@ -505,7 +505,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
               // doing all subsequent points, assuming that values are symmetrically distributed around surface
               // and using the unit normal
               const double dx = (*it)->Read( fth_key ) / static_cast<double>(ary.Size()*2);
-              for ( size_t i=1U; i<ary.Size(); i++ )
+              for ( uint32_t i=1U; i<ary.Size(); i++ )
                 {
                    Point<3U> out_pt =  (dx * i) * nrml;
                    Point<3U> ins_pt = (-dx * i) * nrml;

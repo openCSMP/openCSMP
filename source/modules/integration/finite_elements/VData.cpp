@@ -385,8 +385,8 @@ vector<int8_t>::iterator VData::BFlagsEnd()
 
 
 // uses actual element IDs (1...n)
-size_t  VData::PlistSize( size_t eidx ) const
- { return plist[eidx].size(); }
+uint32_t  VData::PlistSize( size_t eidx ) const
+ { return static_cast<uint32_t>(plist[eidx].size()); }
 
 
 // const iterators
@@ -402,8 +402,8 @@ deque<vector<int64_t> >::const_iterator VData::PlistBegin() const
 deque<vector<int64_t> >::const_iterator VData::PlistEnd() const
  { return plist.end(); }
 
-size_t  VData::PfvertsSize( size_t eidx ) const
- { return pfverts[eidx].size(); }
+uint32_t  VData::PfvertsSize( size_t eidx ) const
+ { return static_cast<uint32_t>(pfverts[eidx].size()); }
 
 deque<vector<int64_t> >::const_iterator VData::PfvertsBegin() const
  { return pfverts.begin(); }

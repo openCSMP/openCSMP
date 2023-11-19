@@ -88,10 +88,10 @@ void writeVariableIf( CELL<dim>* ptr,
  {
     TensorVariable<dim> ts;
     ptr->Read( idx, ts );
-    for ( auto i{0}; i<dim; i++ )
+    for ( uint32_t i{0u}; i<dim; i++ )
       if ( ptr->Status(idx,i) != dont_overwrite ) {
            ts.Flag(i) = var.Flag(i);
-           for ( size_t j{0U}; j<dim; j++ )
+           for ( uint32_t j{0U}; j<dim; j++ )
              ts(i,j) = var(i,j);
         }
     ptr->Store( idx, ts );
@@ -108,7 +108,7 @@ void writeVariableIf( CELL<dim>* ptr,
  {
     FlaggedArrayVariable fa( var.Size() );
     ptr->Read( idx, fa );
-    for ( auto i{0}; i<var.Size(); i++ )
+    for ( auto i{0u}; i<var.Size(); i++ )
       // the component gets overwritten
       if ( ptr->Status(idx,i) != dont_overwrite ) {
            fa.Flag(i) = var.Flag(i);
@@ -126,15 +126,15 @@ void writeVariableIf( CELL<dim>* ptr,
     Generic version for variables that are placed on Element/Face/Interface integration points.
 */
 template<uint32_t dim, template<uint32_t> class CELL, class Var>
-void writeVariableIf( CELL<dim>*, size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
+void writeVariableIf( CELL<dim>*, uint32_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
  {
-    std::cerr <<"\nwriteVariableIf( CELL<dim>*, size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG ): generic should never be called.\n";
+    std::cerr <<"\nwriteVariableIf( CELL<dim>*, uint32_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG ): generic should never be called.\n";
  } // end generic specification
 
 /// write guard for scalar variables
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      size_t ip,
+                      uint32_t ip,
                       const csmp::Index& idx,
                       const ScalarVariable& var,
                       VARIABLE_FLAG dont_overwrite )
@@ -146,7 +146,7 @@ void writeVariableIf( CELL<dim>* ptr,
  
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      size_t ip,
+                      uint32_t ip,
                       const csmp::Index& idx,
                       const ArrayVariable& var,
                       VARIABLE_FLAG dont_overwrite )
@@ -160,7 +160,7 @@ void writeVariableIf( CELL<dim>* ptr,
 /// write guard for vector variables
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      size_t ip,
+                      uint32_t ip,
                       const csmp::Index& idx,
                       const VectorVariable<dim>& var,
                       VARIABLE_FLAG dont_overwrite )
@@ -185,7 +185,7 @@ void writeVariableIf( CELL<dim>* ptr,
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      size_t ip,
+                      uint32_t ip,
                       const csmp::Index& idx,
                       const TensorVariable<dim>& var,
                       VARIABLE_FLAG dont_overwrite )
@@ -205,7 +205,7 @@ void writeVariableIf( CELL<dim>* ptr,
 /// write guard for vector variables
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      size_t ip,
+                      uint32_t ip,
                       const csmp::Index& idx,
                       const FlaggedArrayVariable& var,
                       VARIABLE_FLAG dont_overwrite )
@@ -230,17 +230,17 @@ void writeVariableIf( CELL<dim>* ptr,
     Generic version for finite volume-related integration points.
 */
 template<uint32_t dim, template<uint32_t> class CELL, class Var>
-void writeVariableIf( CELL<dim>*, size_t sector_or_facet,
-                      size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
+void writeVariableIf( CELL<dim>*, uint32_t sector_or_facet,
+                      uint32_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
  {
-    std::cerr <<"\nwriteVariableIf( CELL<dim>*, size_t sector_or_facet, size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG ): should never be called; only specialisation thereof.\n";
+    std::cerr <<"\nwriteVariableIf( CELL<dim>*, uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG ): should never be called; only specialisation thereof.\n";
  } // end generic specification
 
 /// write guard for scalar variables
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      size_t sector_or_facet,
-                      size_t ip,
+                      uint32_t sector_or_facet,
+                      uint32_t ip,
                       const csmp::Index& idx,
                       const ScalarVariable& var,
                       VARIABLE_FLAG dont_overwrite )
@@ -253,8 +253,8 @@ void writeVariableIf( CELL<dim>* ptr,
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      size_t sector_or_facet,
-                      size_t ip,
+                      uint32_t sector_or_facet,
+                      uint32_t ip,
                       const csmp::Index& idx,
                       const ArrayVariable& var,
                       VARIABLE_FLAG dont_overwrite )
@@ -268,8 +268,8 @@ void writeVariableIf( CELL<dim>* ptr,
 /// write guard for vector variables
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      size_t sector_or_facet,
-                      size_t ip,
+                      uint32_t sector_or_facet,
+                      uint32_t ip,
                       const csmp::Index& idx,
                       const VectorVariable<dim>& var,
                       VARIABLE_FLAG dont_overwrite )
@@ -294,8 +294,8 @@ void writeVariableIf( CELL<dim>* ptr,
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      size_t sector_or_facet,
-                      size_t ip,
+                      uint32_t sector_or_facet,
+                      uint32_t ip,
                       const csmp::Index& idx,
                       const TensorVariable<dim>& var,
                       VARIABLE_FLAG dont_overwrite )
@@ -305,7 +305,7 @@ void writeVariableIf( CELL<dim>* ptr,
     for ( auto i{0}; i<dim; i++ )
       if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
            ts.Flag(i) = var.Flag(i);
-           for ( size_t j{0U}; j<dim; j++ )
+           for ( uint32_t j{0U}; j<dim; j++ )
              ts(i,j) = var(i,j);
         }
     ptr->Store( sector_or_facet, ip, idx, ts );
@@ -315,8 +315,8 @@ void writeVariableIf( CELL<dim>* ptr,
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void writeVariableIf( CELL<dim>* ptr,
-                      size_t sector_or_facet,
-                      size_t ip,
+                      uint32_t sector_or_facet,
+                      uint32_t ip,
                       const csmp::Index& idx,
                       const FlaggedArrayVariable& var,
                       VARIABLE_FLAG dont_overwrite )

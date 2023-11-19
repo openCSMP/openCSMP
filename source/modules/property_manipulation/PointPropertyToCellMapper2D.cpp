@@ -244,7 +244,7 @@ PointPropertyToCellMapper2D::PointPropertyToCellMapper2D( string csv_file )
     
     size_t n_entries = read_CSV_File( csv_file, row_labels, col_headers, rows_of_columns );
     
-    property_data_ = move( DataTable( csv_file, row_labels, col_headers, rows_of_columns ) );
+    property_data_ = std::move( DataTable( csv_file, row_labels, col_headers, rows_of_columns ) );
     
     // lazy evaluation of: cells_with_points_
     cells_with_points_.resize( n_entries, nullptr );

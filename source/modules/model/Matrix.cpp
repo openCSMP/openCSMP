@@ -94,9 +94,9 @@ Matrix&
          Matrix  temp( rows, 3U );
     
          for ( size_t i{0U}; i<rows; i++ )
-           for ( size_t j{0U}; j<3U; j++ ) {
+           for ( uint32_t j{0U}; j<3U; j++ ) {
                  temp.data[i][j] = static_cast<double>(0.0);
-                 for ( size_t k{0U}; k<3U; k++ ) 
+                 for ( uint32_t k{0U}; k<3U; k++ ) 
                    temp.data[i][j] += data[i][k] * ts(k,j);
              }
          return *this = temp;
@@ -177,9 +177,9 @@ Matrix::operator*=( const TensorVariable<2U>& ts )
          Matrix  temp( rows, 2U );
     
          for ( size_t i{0U}; i<rows; i++ )
-           for ( size_t j{0U}; j<2U; j++ ) {
+           for ( uint32_t j{0U}; j<2U; j++ ) {
                  temp.data[i][j] = static_cast<double>(0.0);
-                 for ( size_t k{0U}; k<2U; k++ ) 
+                 for ( uint32_t k{0U}; k<2U; k++ ) 
                    temp.data[i][j] += data[i][k] * ts(k,j);
              }
          return *this = temp;
@@ -283,9 +283,9 @@ Matrix&
     
     // when loop unrolling is not possible
     if ( rows != cols ) {
-        for ( size_t i=0U; i<rows; i++ ) {
+        for ( uint32_t i=0U; i<rows; i++ ) {
                sum = static_cast<double>(0.0);
-               for ( size_t j{0U}; j<cols; j++ )
+               for ( uint32_t j{0U}; j<cols; j++ )
                  sum +=  data[i][j] * vc[j];
                data[i][0] = sum;
             }
@@ -314,9 +314,9 @@ Matrix&
     
     // when loop unrolling is not possible
     if ( rows != cols ) {
-        for ( size_t i=0U; i<rows; i++ ) {
+        for ( uint32_t i=0U; i<rows; i++ ) {
                sum = static_cast<double>(0.0);
-               for ( size_t j{0U}; j<cols; j++ )
+               for ( uint32_t j{0U}; j<cols; j++ )
                  sum +=  data[i][j] * vc[j];
                data[i][0] = sum;
             }

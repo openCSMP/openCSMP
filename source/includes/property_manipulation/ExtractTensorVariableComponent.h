@@ -22,12 +22,12 @@ class ExtractTensorVariableComponent : public Interrelation<dim> {
     Operand<dim>&        T;
     Operand<dim>&        S;
     TensorVariable<dim>  ts;
-    const size_t         comp_i, comp_j;
+    const uint32_t       comp_i, comp_j;
     
   public:
     ExtractTensorVariableComponent( const PropertyDatabase<dim>& p,
                                     const char* tens_var, const char* scalar_var, 
-                                    size_t i, size_t j );
+                                    uint32_t i, uint32_t j );
                                     
     ~ExtractTensorVariableComponent();
     

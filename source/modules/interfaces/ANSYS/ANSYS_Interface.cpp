@@ -966,10 +966,10 @@ bool ANSYS_Interface::ReadPlistASCII( ifstream& ifs, VSet<dim>& vset )
 
     map<size_t,vector<int64_t> >  plist;
     vector<int64_t>          dummy;
-    size_t                       total_items, 
-                                 element(0), item(0), 
-                                 id, nodes;
-    const size_t                 n_nodes(vset.Vertices());
+    size_t                   total_items,
+                             element(0), item(0),
+                             id, nodes;
+    const size_t             n_nodes(vset.Vertices());
     
     pair<map<size_t,vector<int64_t> >::iterator,bool>  it;
     pair<size_t,vector<int64_t> > data;

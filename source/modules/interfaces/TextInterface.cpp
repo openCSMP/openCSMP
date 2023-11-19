@@ -84,7 +84,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                 case ARRAY: {
                      ArrayVariable ary;
                      sg.Read( prop_key, ary );
-                     for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                     for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                      fprintf( fp, "\n");
                   }
                   break;
@@ -228,7 +228,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                     case ARRAY: {
                          ArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
@@ -274,7 +274,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                     case ARRAY: {
                          ArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;

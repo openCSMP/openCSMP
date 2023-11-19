@@ -50,10 +50,10 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateAqueousPhaseSaturation( 
  {
     assert( e != nullptr );
     e->N_AtBaryCenter( e->FE()->NRST );
-    const size_t nodes(e->Nodes());
+    const uint32_t nodes(e->Nodes());
     double sw(0.);
 
-    for ( size_t i{0U}; i<nodes; ++i ) {
+    for ( uint32_t i{0U}; i<nodes; ++i ) {
          double s = e->N(i)->Read( User()->key_sH2O );
          sw += e->FE()->NRST[i] * s;
       }

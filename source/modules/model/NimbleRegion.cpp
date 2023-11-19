@@ -190,7 +190,6 @@ void NimbleRegion<dim>::Update2( typename vector<Node<dim>*>::const_iterator fir
     // the node set will also be used to find the perimeter nodes
     set<Element<dim>*>  elmts;
     set<Node<dim>*>  perimeter_nodes;
-    const auto nodes_end(this->node_vec_.end());
     for ( auto& nit : this->node_vec_ )
        for ( auto i{0U}; i<nit->Parents(); ++i ) {
             assert( nit->Parent(i) != nullptr );

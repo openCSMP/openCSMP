@@ -304,7 +304,7 @@ can be retrieved.
 void StressesAndStrains<2U>::GetOperands( const Element<2U>& e )
 {
     vector<VectorVariable<2U> >  NVAR(e.Nodes());
-    size_t                       k;
+    uint32_t                     k;
     VectorVariable<2U>           avg;
                     
     if ( MathOperatorLHS<2U>::ApplicationCycle() == 1 ) {

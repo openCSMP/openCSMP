@@ -285,13 +285,13 @@ InterFace<dim>::InterFace( InterFace<dim>&& ifc )
     innerParent_( ifc.innerParent_ ),
     outerParent_( ifc.outerParent_ ),
     middleElement_( ifc.middleElement_ ),
-    node_connector_( move( ifc.node_connector_ ) ),
-    interface_connector_( move( ifc.interface_connector_ ) ),
+    node_connector_( std::move( ifc.node_connector_ ) ),
+    interface_connector_( std::move( ifc.interface_connector_ ) ),
     current_side_( ifc.current_side_ )
 {
   assert( !interface_connector_.empty() ); // detected unitialized element
                                            // variable storage: call of initialization function
-  this->LVS( move( ifc.LVS() ) );
+  this->LVS( std::move( ifc.LVS() ) );
 }
 
 
@@ -356,11 +356,11 @@ InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
   innerParent_          = ifc.innerParent_;
   outerParent_          = ifc.outerParent_;
   middleElement_        = ifc.middleElement_;
-  interface_connector_  = move( ifc.interface_connector_ );
-  node_connector_       = move( ifc.node_connector_ );
+  interface_connector_  = std::move( ifc.interface_connector_ );
+  node_connector_       = std::move( ifc.node_connector_ );
   current_side_         = ifc.current_side_;
 
-  this->LVS( move( ifc.LVS() ) );
+  this->LVS( std::move( ifc.LVS() ) );
 
   return *this;
 }

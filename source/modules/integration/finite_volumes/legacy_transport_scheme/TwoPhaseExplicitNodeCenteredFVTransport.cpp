@@ -582,7 +582,7 @@ and poroelastic sources and sinks during transient fluid flow are
 compensated for through the consideration of a flux balance vector that 
 is supplied as a method argument.  
 
-@param time_increment  the current time-increment for
+@param time_interval  the current time-increment for
 the advection step needs to be specified in order to compose the 
 solution. This time increment must satisfy the CFL condition because 
 this is an explicit transport scheme.  

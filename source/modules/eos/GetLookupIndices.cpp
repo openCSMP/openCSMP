@@ -7,8 +7,8 @@ namespace csmp
   long GetTemperatureIndex(const double& t)
   {
     // new version
-    double t_res;
-    long      it; // TODO: error, used unitialised
+    double    t_res(-273.15);
+    long      it(UNSPECIFIED); // TODO: error, used unitialised
     if ( t < 0.0e0 )
       {
           cerr << "H2OLookup::GetTemperatureIndex(const double& t) : t < 0 (t = " << t << "), better terminate ...\n";

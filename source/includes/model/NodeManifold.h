@@ -7,12 +7,13 @@
 
 namespace csmp {
 
-template<uint32_t dim> class Node;
 class Index;
 
-template<uint32_t dim> class InterFace;
+template<uint32_t> class NodeManifold;
 
+template<uint32_t> class Node;
 
+template<uint32_t> class InterFace;
 
 // TODO: shall we include specific InterFace parent connectivity to NodeManifolds?
 // TODO: do we need to track intersections between SB and Boundaries or lower-dim Regions?

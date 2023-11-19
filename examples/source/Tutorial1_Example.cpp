@@ -224,8 +224,8 @@ void Tutorial1_Example::Run()
     const double     hour(3600.0);
     const double     max_time(240.0*hour); // run for 10 days
     double           time_increment(2.0*hour); // timestep 2 hours
-    const long         save_frequency(6); // write results to file every 12 hours
-    size_t	           save_counter(1), time;
+    const long       save_frequency(6); // write results to file every 12 hours
+    size_t	         save_counter(1);
 
     // set the time increment for the FE algorithm
     fluid_pressure.TimeIncrement( 1.0/time_increment );
@@ -248,7 +248,7 @@ void Tutorial1_Example::Run()
 
          // output variables
          if ( save_counter == save_frequency ) {
-              time = static_cast<long>(model_time/hour);
+              auto time = static_cast<unsigned long>(model_time/hour);
               // to VTK files
               vtk_output.OutputDataToVTK( model, "fluid_pressure", "fluid pressure", time );
               vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       time );
@@ -266,7 +266,7 @@ void Tutorial1_Example::Run()
 
     // final output
     // VTK
-    time = static_cast<long>(model_time/hour);
+    auto time = static_cast<unsigned long>(model_time/hour);
     vtk_output.OutputDataToVTK( model, "fluid_pressure", "fluid pressure", time );
     vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       time );
     vtk_output.OutputDataToVTK( model, "flux",           "volume flux",    time );

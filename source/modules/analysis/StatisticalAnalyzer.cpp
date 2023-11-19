@@ -506,7 +506,7 @@ const
           //--------------------------------------------------------
           results[ (*grit).first ] = pair<HistogramBins,uint32_t>(result,(*grit).second.Cells());
           for ( HistogramBins::iterator
-                rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
+                ritt=result.begin(); ritt!=result.end(); ritt++ ) (*rit).second = 0.;
 
      } // end for all regions
 

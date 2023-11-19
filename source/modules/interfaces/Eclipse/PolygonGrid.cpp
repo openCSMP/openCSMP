@@ -2,6 +2,8 @@
 
 #include "ErrorHandler.h"
 
+using namespace std;
+
 namespace csmp {
 
 // GRID NODE
@@ -82,10 +84,10 @@ void GridNode::AssignPoint( const csmp::Point<3U>& pt )
 
 
 
-std::ostream&  operator<<( std::ostream& stream, const GridNode& gn )
+ostream&  operator<<( ostream& stream, const GridNode& gn )
  {
      stream <<" idx: "<< gn.GetIdx() <<", xyz: ";
-     for ( auto i{0U}; i<3U; i++ ) std::cout << gn[i] <<" ";
+     for ( auto i{0U}; i<3U; i++ ) cout << gn[i] <<" ";
      return stream;
  }
  
@@ -140,15 +142,15 @@ bool GridFace::operator==( const GridFace& gf )
         if( gf_num_nodes != num_nodes )
             return false;
 
-        std::set<csmp::Point<3U> > gf_pts;
+        set<csmp::Point<3U> > gf_pts;
         for( size_t nid=0;nid<gf_num_nodes; ++nid)
             gf_pts.insert( gf.GetNode( nid )->GetPoint() );
-        std::set<csmp::Point<3U> > pts;
+        set<csmp::Point<3U> > pts;
         for( size_t nid=0;nid<num_nodes; ++nid)
             pts.insert( GetNode( nid )->GetPoint() );
-        typename std::set<csmp::Point<3U> >::const_iterator gf_it = gf_pts.begin();
-        typename std::set<csmp::Point<3U> >::const_iterator it = pts.begin();
-        typename std::set<csmp::Point<3U> >::const_iterator itEnd( pts.end() );
+        typename set<csmp::Point<3U> >::const_iterator gf_it = gf_pts.begin();
+        typename set<csmp::Point<3U> >::const_iterator it = pts.begin();
+        typename set<csmp::Point<3U> >::const_iterator itEnd( pts.end() );
         for( ; it != itEnd; ++it, ++gf_it )
             if( *it != *gf_it )
                 return false;
@@ -251,15 +253,15 @@ bool GridElement::operator==( const GridElement& ge )
         if( gf_num_nodes != num_nodes )
             return false;
 
-        std::set<csmp::Point<3U> > gf_pts;
+        set<csmp::Point<3U> > gf_pts;
         for( size_t nid=0;nid<gf_num_nodes; ++nid)
             gf_pts.insert( ge.GetNode( nid )->GetPoint() );
-        std::set<csmp::Point<3U> > pts;
+        set<csmp::Point<3U> > pts;
         for( size_t nid=0;nid<num_nodes; ++nid)
             pts.insert( GetNode( nid )->GetPoint() );
-        typename std::set<csmp::Point<3U> >::const_iterator gf_it = gf_pts.begin();
-        typename std::set<csmp::Point<3U> >::const_iterator it = pts.begin();
-        typename std::set<csmp::Point<3U> >::const_iterator itEnd( pts.end() );
+        typename set<csmp::Point<3U> >::const_iterator gf_it = gf_pts.begin();
+        typename set<csmp::Point<3U> >::const_iterator it = pts.begin();
+        typename set<csmp::Point<3U> >::const_iterator itEnd( pts.end() );
         for( ; it != itEnd; ++it, ++gf_it )
             if( *it != *gf_it )
                 return false;
@@ -364,7 +366,7 @@ PolygonGrid::~PolygonGrid()
 
 GridNode* PolygonGrid::AddNode( GridNode& gn )
 {
-    typename std::deque<GridNode*>::iterator nit = find_if( nodes_.begin(), nodes_.end(), [&]( GridNode* n )->bool { return ( gn == *n ); } );
+    typename deque<GridNode*>::iterator nit = find_if( nodes_.begin(), nodes_.end(), [&]( GridNode* n )->bool { return ( gn == *n ); } );
     if( nit != nodes_.end() )
         return (*nit);
     gn.AssignIdx( nodes_.size() );
@@ -375,7 +377,7 @@ GridNode* PolygonGrid::AddNode( GridNode& gn )
 
 GridFace* PolygonGrid::AddFace( GridFace& gf )
 {
-    typename std::deque<GridFace*>::iterator nit = find_if( faces_.begin(), faces_.end(), [&]( GridFace* f )->bool { return ( gf == *f ); } );
+    typename deque<GridFace*>::iterator nit = find_if( faces_.begin(), faces_.end(), [&]( GridFace* f )->bool { return ( gf == *f ); } );
     if( nit != faces_.end() )
         return (*nit);
     gf.AssignIdx( faces_.size() );
@@ -386,7 +388,7 @@ GridFace* PolygonGrid::AddFace( GridFace& gf )
 
 GridElement* PolygonGrid::AddElement( GridElement& ge )
 {
-    typename std::deque<GridElement*>::iterator nit = find_if( elements_.begin(), elements_.end(), [&]( GridElement* e )->bool { return ( ge == *e ); } );
+    typename deque<GridElement*>::iterator nit = find_if( elements_.begin(), elements_.end(), [&]( GridElement* e )->bool { return ( ge == *e ); } );
     if( nit != elements_.end() )
         return (*nit);
     ge.AssignIdx( elements_.size() );
@@ -492,8 +494,8 @@ GridNode* PolygonGridManager::GetNode( const csmp::Point<3U>& pt )
 GridNode* PolygonGridManager::AddNode( const csmp::Point<3U>& pt )
 {
     const size_t nid( points_.size() );
-    std::pair<typename std::map<csmp::Point<3U>,size_t>::iterator,bool>
-            pit = points_.insert( std::make_pair( pt, nid ) );
+    pair<typename map<csmp::Point<3U>,size_t>::iterator,bool>
+            pit = points_.insert( make_pair( pt, nid ) );
   
     if( pit.second == true )
       {
@@ -509,8 +511,8 @@ template<uint32_t dim>
 GridNode* PolygonGridManager::AddNode( const csmp::Point<dim>& pt )
 {
     const size_t nid( points_.size() );
-    std::pair<typename std::map<csmp::Point<dim>,size_t>::iterator,bool>
-            pit = points_.insert( std::make_pair( pt, nid ) );
+    pair<typename map<csmp::Point<dim>,size_t>::iterator,bool>
+            pit = points_.insert( make_pair( pt, nid ) );
   
     if( pit.second == true )
       {
@@ -531,17 +533,17 @@ GridNode* PolygonGridManager::AddNode( const csmp::Point<dim>& pt )
 
 void PolygonGridManager::Out() const
  {
-    std::cout<<"\nPolygonGridManager::Out: points: "<< points_.size() <<", grid nodes: "<< grid_nodes_.size() <<"\n";
-    std::cout<<"\tpoints and their indices:";
+    cout<<"\nPolygonGridManager::Out: points: "<< points_.size() <<", grid nodes: "<< grid_nodes_.size() <<"\n";
+    cout<<"\tpoints and their indices:";
    
     for ( auto it=points_.begin(); it!=points_.end(); it++ )
-      std::cout << (*it).first <<", "<< (*it).second;
-    std::cout<<"\n";
+      cout << (*it).first <<", "<< (*it).second;
+    cout<<"\n";
 
-    std::cout <<"\n\tgrid nodes:\n";
-    for ( typename std::vector<GridNode*>::const_iterator it=grid_nodes_.begin(); it!=grid_nodes_.end(); ++it )
-      std::cout << *(*it) <<" ";
-    std::cout<<"\n";
+    cout <<"\n\tgrid nodes:\n";
+    for ( typename vector<GridNode*>::const_iterator it=grid_nodes_.begin(); it!=grid_nodes_.end(); ++it )
+      cout << *(*it) <<" ";
+    cout<<"\n";
 
  } // end Out
 

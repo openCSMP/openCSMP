@@ -51,7 +51,7 @@ void CornerPointGrid::AssignDimensions( size_t nx, size_t ny, size_t nz )
 void CornerPointGrid
 ::InitializeGridSpecs()
 {
-  std::cout << "InitializeGridSpecs\n";
+  cout << "InitializeGridSpecs\n";
   NX_x_NY_ = NX_ * NY_;
   elements_ = NX_x_NY_ * NZ_;
   if ( cell_activity_.empty() ) {
@@ -87,7 +87,7 @@ CornerPointGrid::CellActivity( size_t i, size_t j, size_t k )
 }
 
 
-std::vector<uint8_t>&
+vector<uint8_t>&
 CornerPointGrid::GetCellActivity()
 {
   return cell_activity_;
@@ -98,14 +98,14 @@ CornerPointGrid::GetCellActivity()
 /**
 Builds the pillars and columns.
 */
-void CornerPointGrid::ConstructPillarsAndColumns( const std::vector<double>& zcorn )
+void CornerPointGrid::ConstructPillarsAndColumns( const vector<double>& zcorn )
 {
   const size_t NXxNY = NX_ * NY_;
   size_t node_count = 0;
 
   {
     // 1. Build pillars
-    std::vector<double> zcoord;
+    vector<double> zcoord;
     zcoord.reserve( 4 * (NZ_ + 1) );
     for ( auto i = 0; i <= NX_; ++i )
     {
@@ -143,19 +143,19 @@ void CornerPointGrid::ConstructPillarsAndColumns( const std::vector<double>& zco
     }
   }
   ordinaryNodes_ = node_count;
-  std::cerr << " " << node_count << " unique nodes detected\n";
+  cerr << " " << node_count << " unique nodes detected\n";
 
   // 2. Build columns
   size_t cell_count = 0;
   size_t fully_degenerate_cells = 0;
   {
-    std::vector<ColumnCell> cells;
+    vector<ColumnCell> cells;
     cells.reserve( NZ_ );
     for ( auto i = 0; i < NX_; ++i )
     {
       for ( size_t j = 0; j < NY_; ++j )
       {
-        std::pair<size_t, size_t> index( i, j );
+        pair<size_t, size_t> index( i, j );
         Pillar& p0 = (*this)(i + 0, j + 0);
         Pillar& p1 = (*this)(i + 1, j + 0);
         Pillar& p2 = (*this)(i + 1, j + 1);
@@ -195,12 +195,12 @@ void CornerPointGrid::ConstructPillarsAndColumns( const std::vector<double>& zco
       }
     }
   }
-  std::cerr << " " << cell_count << " unique active cells detected\n";
+  cerr << " " << cell_count << " unique active cells detected\n";
   if ( fully_degenerate_cells > 0 ) {
-    std::cerr << " " << fully_degenerate_cells << " fully degenerate cells detected\n";
+    cerr << " " << fully_degenerate_cells << " fully degenerate cells detected\n";
   }
 
-  std::cerr << "Pillars and columns built\n";
+  cerr << "Pillars and columns built\n";
 
 } // end ConstructPillarsAndColumns
 
@@ -253,8 +253,8 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   generator_ = new CellGenerator( *this );
   generator_->ordinaryNodes.reserve( ordinaryNodes_ );
 
-  std::vector<Point<3U>> tp_pts;
-  std::vector<Point<3U>> bt_pts;
+  vector<Point<3U>> tp_pts;
+  vector<Point<3U>> bt_pts;
   for ( auto i = 0; i <= NX_; ++i ) {
     for ( size_t j = 0; j <= NY_; ++j ) {
       Pillar& pillar = (*this)(i, j);      
@@ -389,12 +389,12 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
     }
   }
 
-  std::cerr << "\n\n";
-  std::cerr << " removed invalid hexahedra: " << badHexahedra_ << '\n';
-  std::cerr << " removed invalid pyramids: " << badPyramids_ << '\n';
-  std::cerr << " removed invalid tetrahedra: " << badTetrahedra_ << '\n';
-  std::cerr << " removed invalid prisms: " << badPrisms_ << '\n';
-  std::cerr << " removed invalid lines: " << badLines_ << '\n';
+  cerr << "\n\n";
+  cerr << " removed invalid hexahedra: " << badHexahedra_ << '\n';
+  cerr << " removed invalid pyramids: " << badPyramids_ << '\n';
+  cerr << " removed invalid tetrahedra: " << badTetrahedra_ << '\n';
+  cerr << " removed invalid prisms: " << badPrisms_ << '\n';
+  cerr << " removed invalid lines: " << badLines_ << '\n';
 
   // 3. store node coordinates
   deque<double> x, y, z;
@@ -433,15 +433,15 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
     Point<3U> m_pt;
   };
   
-  vector<std::int8_t> pbflags( vset.Vertices(), 0 ); // boundary flags
+  vector<int8_t> pbflags( vset.Vertices(), 0 ); // boundary flags
   for ( auto i{0U}; i < vset.Vertices(); ++i )
     {
       vector<double> coord( 3U );
-      for ( size_t j{0U}; j<3U; ++j ) coord[j] = vset.P( j, i );
+      for ( auto j{0U}; j<3U; ++j ) coord[j] = vset.P( j, i );
       Point<3U> pt( coord );
-      if ( std::find_if( tp_pts.begin(), tp_pts.end(), isEqual( pt ) ) != tp_pts.end() )
+      if ( find_if( tp_pts.begin(), tp_pts.end(), isEqual( pt ) ) != tp_pts.end() )
         pbflags[i] = BOX_BOUNDARY::TOP;
-      else if ( std::find_if( bt_pts.begin(), bt_pts.end(), isEqual( pt ) ) != bt_pts.end() )
+      else if ( find_if( bt_pts.begin(), bt_pts.end(), isEqual( pt ) ) != bt_pts.end() )
         pbflags[i] = BOX_BOUNDARY::BOTTOM;
       else
         pbflags[i] = BOX_BOUNDARY::IRREGULAR;
@@ -468,7 +468,7 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
   size_t invalid_tets = 0;
   size_t invalid_pris = 0;
 
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( faceAboveIsQuad ) {
     if ( faceBeneathIsQuad ) {
@@ -1011,7 +1011,7 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell0001( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( generator_->ConstructPyramidOnFace( cell, 4, 5, 1, 0, generator_->getNodeID( cell, 3 ) ) ) {
     size_t eid = generator_->EmitPyramid( cell );
@@ -1039,7 +1039,7 @@ bool CornerPointGrid::ConstructEclipseCell0001( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell0010( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( generator_->ConstructPyramidOnFace( cell, 4, 5, 1, 0, generator_->getNodeID( cell, 2 ) ) ) {
     size_t eid = generator_->EmitPyramid( cell );
@@ -1078,7 +1078,7 @@ bool CornerPointGrid::ConstructEclipseCell0011( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell0100( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( generator_->ConstructPyramidOnFace( cell, 3, 7, 4, 0, generator_->getNodeID( cell, 1 ) ) ) {
     size_t eid = generator_->EmitPyramid( cell );
@@ -1120,7 +1120,7 @@ bool CornerPointGrid::ConstructEclipseCell0101( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell0110( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( generator_->ConstructPrism( cell, 0, 4, 1, 3, 7, 2 ) ) {
     size_t eid = generator_->EmitPrism( cell );
@@ -1142,7 +1142,7 @@ bool CornerPointGrid::ConstructEclipseCell0110( ColumnCell&  cell, size_t& i, si
 //Eclipse cell type: ECLIPSE_CELL_PYRAMID_0
 bool CornerPointGrid::ConstructEclipseCell0111( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( generator_->ConstructTetrahedronOnFace( cell, 7, 5, 4, generator_->getNodeID( cell, 0 ) ) ) {
     size_t eid = generator_->EmitTetrahedron( cell );
@@ -1163,7 +1163,7 @@ bool CornerPointGrid::ConstructEclipseCell0111( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell1000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( generator_->ConstructPyramidOnFace( cell, 5, 6, 2, 1, generator_->getNodeID( cell, 0 ) ) ) {
     size_t eid = generator_->EmitPyramid( cell );
@@ -1219,7 +1219,7 @@ bool CornerPointGrid::ConstructEclipseCell1010( ColumnCell&  cell, size_t& i, si
 //Eclipse cell type: ECLIPSE_CELL_PYRAMID_1
 bool CornerPointGrid::ConstructEclipseCell1011( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( generator_->ConstructTetrahedronOnFace( cell, 6, 5, 4, generator_->getNodeID( cell, 1 ) ) ) {
     size_t eid = generator_->EmitTetrahedron( cell );
@@ -1240,7 +1240,7 @@ bool CornerPointGrid::ConstructEclipseCell1011( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell1100( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( generator_->ConstructPrism( cell, 0, 3, 7, 1, 2, 6 ) ) {
     size_t eid = generator_->EmitPrism( cell );
@@ -1262,7 +1262,7 @@ bool CornerPointGrid::ConstructEclipseCell1100( ColumnCell&  cell, size_t& i, si
 //Eclipse cell type: ECLIPSE_CELL_PYRAMID_2
 bool CornerPointGrid::ConstructEclipseCell1101( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( generator_->ConstructTetrahedronOnFace( cell, 7, 6, 5, generator_->getNodeID( cell, 2 ) ) ) {
     size_t eid = generator_->EmitTetrahedron( cell );
@@ -1284,7 +1284,7 @@ bool CornerPointGrid::ConstructEclipseCell1101( ColumnCell&  cell, size_t& i, si
 //Eclipse cell type: ECLIPSE_CELL_PYRAMID_3
 bool CornerPointGrid::ConstructEclipseCell1110( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( generator_->ConstructTetrahedronOnFace( cell, 7, 6, 4, generator_->getNodeID( cell, 3 ) ) ) {
     size_t eid = generator_->EmitTetrahedron( cell );
@@ -1303,6 +1303,7 @@ bool CornerPointGrid::ConstructEclipseCell1110( ColumnCell&  cell, size_t& i, si
       //generator_->fem_types.pop_back();
       //--generator_->elementID;
     }
+    throw csmp::Exception( ERROR, "CornerPointGrid::ConstructEclipseCell1110(Pyramid)", "encountered invalid element(s)" );
     return false;
   }
 
@@ -1311,7 +1312,7 @@ bool CornerPointGrid::ConstructEclipseCell1110( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructLineElement( size_t& i, size_t& j, size_t& k, size_t& new_elemt_idx ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   auto it = columns_.find( make_pair( i, j ) );
   if ( it == columns_.end() ) return false;
@@ -1344,7 +1345,7 @@ bool CornerPointGrid::ConstructLineElement( size_t& i, size_t& j, size_t& k, siz
 
 bool CornerPointGrid::ConstructLineElement( ColumnCell& cell, size_t& i, size_t& j, size_t& k ) {
   size_t invalid_elements = 0;
-  std::vector<size_t> new_elements;
+  vector<size_t> new_elements;
 
   if ( generator_->ConstructLine( cell ) ) {
     size_t eid = generator_->EmitLine( cell );
@@ -1375,13 +1376,13 @@ The PolygonGridManager is used to construct the pillars.
 
 @todo regions are not recognised properly.
 */
-void CornerPointGrid::CreateModel( const std::string&     model_name,
+void CornerPointGrid::CreateModel( const string&     model_name,
                                    csmp::VSet<3U>&        vset,
                                    csmp::ModelTopology&   model_topology,
-                                   const std::vector<double>& zcorn,
-                                   std::set<std::string>& regions,
-                                   std::set<std::string>& faults,
-                                   std::set<std::string>&  wells,
+                                   const vector<double>& zcorn,
+                                   set<string>& regions,
+                                   set<string>& faults,
+                                   set<string>&  wells,
                                    bool tetra_mesh, bool exclude_inactive_cells )
 {
   // 1. Initialise grid specs
@@ -1403,14 +1404,14 @@ void CornerPointGrid::addElementToMap( size_t i, size_t j, size_t k, size_t elem
 
 template<class VarType>
 void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&             vset,
-                                           const std::vector<VarType>& prop_data,
-                                           const std::string&          prop_name,
+                                           const vector<VarType>& prop_data,
+                                           const string&          prop_name,
                                            const csmp::PLACEMENT&      prop_place ) const
 {
   /// correcting data cell id's due to existance of embedded cells
   VarType var;
   var = 0.;
-  std::vector<VarType> cell_data( vset.Elements(), var );
+  vector<VarType> cell_data( vset.Elements(), var );
   for ( auto& entry : elementMap ) {
     auto coord = entry.first;
     size_t idx = coord.i + coord.j * NX_ + coord.k * NX_x_NY_;
@@ -1418,7 +1419,7 @@ void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&             vset,
   }
   if ( prop_place == csmp::NODE ) {
     // Add nodal data to vset
-    std::vector<VarType> nodal_data;
+    vector<VarType> nodal_data;
     // TODO: why node property?
     extrapolateElementToNodeProperty<3U, VarType>( vset, cell_data, nodal_data );
     //csmp::FEM_Data<VarType> property_values( prop_place, nodal_data );
@@ -1440,11 +1441,11 @@ void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&             vset,
 
 } // end WritePropertyToVSet
 
-template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<ScalarVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<VectorVariable<3U> >&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<TensorVariable<3U> >&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<ArrayVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<FlaggedArrayVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
+template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const vector<ScalarVariable>&, const string&, const csmp::PLACEMENT& ) const;
+template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const vector<VectorVariable<3U> >&, const string&, const csmp::PLACEMENT& ) const;
+template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const vector<TensorVariable<3U> >&, const string&, const csmp::PLACEMENT& ) const;
+template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const vector<ArrayVariable>&, const string&, const csmp::PLACEMENT& ) const;
+template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const vector<FlaggedArrayVariable>&, const string&, const csmp::PLACEMENT& ) const;
 
 
 void CornerPointGrid::Resize( size_t i_pillar_max, size_t j_pillar_max )
@@ -1493,13 +1494,13 @@ size_t CellCenteredGrid::GetNumCells() const
 }
 
 
-std::vector<csmp::ScalarVariable>& CellCenteredGrid::GetCellDepths()
+vector<csmp::ScalarVariable>& CellCenteredGrid::GetCellDepths()
 {
   return tops_;
 }
 
 
-std::vector<ScalarVariable>& CellCenteredGrid::GetCellSizes( size_t i )
+vector<ScalarVariable>& CellCenteredGrid::GetCellSizes( size_t i )
 {
   if ( i == 0 )
     return dx_;

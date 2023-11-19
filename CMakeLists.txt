@@ -1,4 +1,4 @@
-project(csmp_api)
+project(open-csmp)
 
 cmake_minimum_required(VERSION 3.1)
 set(PACKAGE_NAME "csmp-api")

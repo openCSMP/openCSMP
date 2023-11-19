@@ -18,12 +18,12 @@ class ExtractTensorVariableRow : public Interrelation<dim> {
     Operand<dim>&        t;
     Operand<dim>&        v;
     TensorVariable<dim>  ts;
-    const size_t         row;
+    const uint32_t       row;
     
   public:
     ExtractTensorVariableRow( const PropertyDatabase<dim>& p,
                               const char* tens_var, const char* vector_var, 
-                              size_t r );
+                              uint32_t r );
                                     
     void Calculate();
      

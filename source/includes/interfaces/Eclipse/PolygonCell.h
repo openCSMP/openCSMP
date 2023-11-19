@@ -122,16 +122,16 @@ protected:
     std::vector<GridNode*>   extra_nodes_;
     std::vector<GridNode*>   nodes_;
     std::vector<GridNode*>   nodes_in_custom_order_;
-    std::vector<uint32_t>      custom_node_order_;
+    std::vector<size_t>      custom_node_order_;
 
     /// cells TODO: what is the physical meaning of this data structure?
     std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > elements_;
 
     /// faces
     size_t                             num_faces_;
-    std::vector<std::vector<uint32_t> >  face_nodes_;
-    std::vector<std::vector<uint32_t> >  face_nodes_in_custom_order_;
-    std::vector<uint32_t>                custom_face_order_;
+    std::vector<std::vector<size_t> >  face_nodes_;
+    std::vector<std::vector<size_t> >  face_nodes_in_custom_order_;
+    std::vector<size_t>                custom_face_order_;
 
     /// faces[i][j] is a 6 x 5 matrix of faces defined by face-type and corresponding node pointers as entries (type-value pairs)
     std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > > faces_;

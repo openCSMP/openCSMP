@@ -215,7 +215,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeEvent
     { 
         if((*nit)->Status(  this->key_sCO2 ) != DIRICH) {
             (*nit)->Store( this->key_EventIndex, makeScalar( (*nit)->Status(this->key_EventIndex), index) );//event index 
-            this->FullList.push_back( move( Event<dim>(*nit) ) );
+            this->FullList.push_back( std::move( Event<dim>(*nit) ) );
             auto event = &(this->FullList.back());
             ComputePressureGradientAndFlowVelocities(event);
             if(this->with_capillary_spreading_) ComputeSaturationGradient (event);
@@ -273,7 +273,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ReinitializeEve
     { 
         if((*nit)->Status(  this->key_sCO2 ) != DIRICH) {
             (*nit)->Store( this->key_EventIndex, makeScalar( (*nit)->Status(this->key_EventIndex), index) );//event index 
-            this->FullList.push_back( move( Event<dim>(*nit) ) );
+            this->FullList.push_back( std::move( Event<dim>(*nit) ) );
             auto event = &(this->FullList.back());
             ComputePressureGradientAndFlowVelocities(event);
             if(this->with_capillary_spreading_) ComputeSaturationGradient (event);

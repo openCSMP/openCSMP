@@ -8,9 +8,9 @@
 
 namespace csmp {
 
-template<uint32_t dim> class Visitor;
-template<uint32_t dim> class Element;
-template<uint32_t dim> class NodeManifold;
+template<uint32_t> class Visitor;
+template<uint32_t> class Element;
+template<uint32_t> class NodeManifold;
 class FiniteElement_TestData;
 
 /**

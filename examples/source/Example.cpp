@@ -75,7 +75,7 @@ string Example::GetTitle() const
 }
 
 /// return function
-size_t Example::GetDifficulty() const
+int Example::GetDifficulty() const
 {
   return difficulty_;
 }
@@ -87,7 +87,7 @@ string Example::GetCategory() const
 }
 
 /// set function, takes care that 0 < difficulty < 4
-void Example::SetDifficulty( const size_t& difficulty )
+void Example::SetDifficulty( const int& difficulty )
 {
   difficulty_ = difficulty;
   difficulty_ = difficulty_ < 1 ? 1 : difficulty_;

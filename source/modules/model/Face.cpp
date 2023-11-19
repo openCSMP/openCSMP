@@ -433,15 +433,15 @@ template<uint32_t dim>
 Face<dim>::Face( Face<dim>&& fc )
   : FiniteElementPolicy<dim,csmp::Face>(fc.FE()),
     FiniteVolumePolicy<dim,csmp::Face>(fc.FV()),
-    idx_(move(fc.idx_)),
-    inner_parent_face_id_(move(fc.inner_parent_face_id_)),
-    outer_parent_face_id_(move(fc.outer_parent_face_id_)),
-    innerParent_(move(fc.innerParent_)),
-    outerParent_(move(fc.outerParent_)),
-    node_connector_(move(fc.node_connector_)),
-    face_connector_(move(fc.face_connector_))
+    idx_(std::move(fc.idx_)),
+    inner_parent_face_id_(std::move(fc.inner_parent_face_id_)),
+    outer_parent_face_id_(std::move(fc.outer_parent_face_id_)),
+    innerParent_(std::move(fc.innerParent_)),
+    outerParent_(std::move(fc.outerParent_)),
+    node_connector_(std::move(fc.node_connector_)),
+    face_connector_(std::move(fc.face_connector_))
  {
-    this->LVS( move(fc.LVS()) );
+    this->LVS( std::move(fc.LVS()) );
     
 //    cerr <<"\nFace: called move constructor.";
  }
@@ -505,14 +505,14 @@ Face<dim>&  Face<dim>::operator=( Face<dim>&& fc )
     if ( &fc != this ) {
         FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
         FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
-        idx_                  = move( fc.idx_ );
-        inner_parent_face_id_ = move( fc.inner_parent_face_id_ );
-        outer_parent_face_id_ = move( fc.outer_parent_face_id_ );
-        innerParent_          = move( fc.innerParent_ );
-        outerParent_          = move( fc.outerParent_ );
-        face_connector_       = move(fc.face_connector_);
-        node_connector_       = move(fc.node_connector_);
-        this->LVS( move(fc.LVS()) );
+        idx_                  = std::move( fc.idx_ );
+        inner_parent_face_id_ = std::move( fc.inner_parent_face_id_ );
+        outer_parent_face_id_ = std::move( fc.outer_parent_face_id_ );
+        innerParent_          = std::move( fc.innerParent_ );
+        outerParent_          = std::move( fc.outerParent_ );
+        face_connector_       = std::move(fc.face_connector_);
+        node_connector_       = std::move(fc.node_connector_);
+        this->LVS( std::move(fc.LVS()) );
      }
     
 //    cerr <<"\nFace::operator=  called move-assignment operator.";

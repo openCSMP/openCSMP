@@ -400,7 +400,7 @@ size_t  findContiguousMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
            patch_name +="_";
            patch_name += to_string( cells_contiguous_subset.size() );
            patch_name +="cells";
-           mesh_patches.insert( make_pair( patch_name, move( vector<CELL<dim>*>{ cells_contiguous_subset.begin(),
+           mesh_patches.insert( make_pair( patch_name, std::move( vector<CELL<dim>*>{ cells_contiguous_subset.begin(),
                                                                                  cells_contiguous_subset.end() } ) ) );
            return 1U;
         }
@@ -430,7 +430,7 @@ size_t  findContiguousMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
 
                 pair<typename map<string,vector<CELL<dim>*> >::iterator,bool>
                   insertion = mesh_patches.insert( make_pair( patch_name,
-                                                   move( vector<CELL<dim>*>( cells_contiguous_subset.begin(),
+                                                   std::move( vector<CELL<dim>*>( cells_contiguous_subset.begin(),
                                                                              cells_contiguous_subset.end() ) ) ) );
                 if ( insertion.second == false ) {
                      csmp_error.Note( ERROR, "findContiguousMeshPatches:", patch_name,

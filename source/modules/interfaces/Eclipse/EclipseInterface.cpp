@@ -228,9 +228,9 @@ void EclipseInterface::WritePropertiesToVSet()
       {
         invalid_value_count++;
 
-        for ( size_t j = 0; j < 3; j++ )
+        for ( uint32_t j = 0u; j < 3; j++ )
         {
-          for ( size_t k = 0; k < 3; k++ )
+          for ( uint32_t k = 0u; k < 3; k++ )
           {
             if ( permxyz_[i]( j, k ) < min ) permxyz_[i]( j, k ) = min;
             if ( permxyz_[i]( j, k ) > max ) permxyz_[i]( j, k ) = max;
@@ -823,20 +823,20 @@ bool EclipseInterface::ReadTensorProperty( std::ifstream& ifs, char* text_line, 
 }
 
 
-void EclipseInterface::SaveVectorProperty( size_t component,
+void EclipseInterface::SaveVectorProperty( uint32_t component,
                                            const std::vector<csmp::ScalarVariable>& scalar_data,
                                            std::vector<csmp::VectorVariable<3U> >&  vector_data )
 {
   const size_t data_size( scalar_data.size() );
   if ( component == 0 )
     vector_data.resize( data_size, csmp::VectorVariable<3U>( csmp::PLAIN, 0.0 ) );
-  for ( auto i = 0; i < data_size; i++ )
-    for ( size_t j = component; j < 3U; j++ )
+  for ( auto i{0u}; i < data_size; i++ )
+    for ( uint32_t j = component; j < 3U; j++ )
       vector_data[i]( j ) = scalar_data[i]();
 }
 
 
-void EclipseInterface::SaveTensorProperty( size_t component,
+void EclipseInterface::SaveTensorProperty( uint32_t component,
                                            const std::vector<csmp::ScalarVariable>& scalar_data,
                                            std::vector<csmp::TensorVariable<3U> >&  tensor_data )
 {
@@ -844,7 +844,7 @@ void EclipseInterface::SaveTensorProperty( size_t component,
   if ( component == 0 )
     tensor_data.resize( data_size, csmp::TensorVariable<3U>( csmp::PLAIN, 0.0 ) );
   for ( auto i = 0; i < data_size; i++ )
-    for ( size_t j = component; j < 3U; j++ )
+    for ( uint32_t j = component; j < 3U; j++ )
       tensor_data[i]( j, j ) = scalar_data[i]();
 }
 
@@ -891,7 +891,7 @@ int readEclipseDimensions( size_t& NX, size_t& NY, size_t& NZ,
         }
         else
         {
-          for ( auto i = 0; i < num; i++ )
+          for ( auto i{0u}; i < num; i++ )
           {
             values.push_back( value );
             counter++;

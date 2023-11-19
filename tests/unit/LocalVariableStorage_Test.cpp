@@ -87,9 +87,9 @@ void LocalVariableStorage_Test::runTest()
   
     _test( e.Status(ks1) == s1.Flag() );
     _test( e.Status(ka1) == a1.Flag() );
-    for( size_t d(0); d < flaggedArrayLength; ++d )
+    for( uint32_t d(0); d < flaggedArrayLength; ++d )
         _test( e.Status(kfa1,d) == fa1.Flag(d) );
-    for( size_t d(0); d < dim; ++d )
+    for( uint32_t d(0); d < dim; ++d )
       {
         _test( e.Status( kv1, d ) == v1.Flag(d) );
         _test( e.Status( kt1, d ) == t1.Flag(d) );
@@ -97,9 +97,9 @@ void LocalVariableStorage_Test::runTest()
 
     e.Status(ks1, INIT_GUESS );
     e.Status(ka1, INIT_COND);
-    for( size_t d(0); d < flaggedArrayLength; ++d )
+    for( uint32_t d(0); d < flaggedArrayLength; ++d )
         e.Status(kfa1,d, FIELD_DATA);
-    for( size_t d(0); d < dim; ++d )
+    for( uint32_t d(0); d < dim; ++d )
       {
       e.Status( kv1, d, CONSTANT_FLUX );
       e.Status( kt1, d, PERIODIC );
@@ -107,9 +107,9 @@ void LocalVariableStorage_Test::runTest()
 
     _test( e.Status(ks1) == INIT_GUESS );
     _test( e.Status(ka1) == INIT_COND );
-    for( size_t d(0); d < flaggedArrayLength; ++d )
+    for( uint32_t d(0); d < flaggedArrayLength; ++d )
         _test( e.Status(kfa1,d) == FIELD_DATA );
-    for( size_t d(0); d < dim; ++d )
+    for( uint32_t d(0); d < dim; ++d )
       {
       _test( e.Status( kv1, d ) == CONSTANT_FLUX );
       _test( e.Status( kt1, d ) == PERIODIC );
@@ -382,9 +382,9 @@ void LocalVariableStorage_Test::run3D()
 
     _test( e.Status(ks1) == s1.Flag() );
     _test( e.Status(ka1) == a1.Flag() );
-    for( size_t d(0); d < flaggedArrayLength; ++d )
+    for( uint32_t d(0); d < flaggedArrayLength; ++d )
         _test( e.Status(kfa1,d) == fa1.Flag(d) );
-    for( size_t d(0); d < dim; ++d )
+    for( uint32_t d(0); d < dim; ++d )
       {
         _test( e.Status( kv1, d ) == v1.Flag(d) );
         _test( e.Status( kt1, d ) == t1.Flag(d) );
@@ -392,9 +392,9 @@ void LocalVariableStorage_Test::run3D()
 
     e.Status(ks1, INIT_GUESS );
     e.Status(ka1, INIT_COND );
-    for( size_t d(0); d < flaggedArrayLength; ++d )
+    for( uint32_t d(0); d < flaggedArrayLength; ++d )
         e.Status(kfa1,d, FIELD_DATA);
-    for( size_t d(0); d < dim; ++d )
+    for( uint32_t d(0); d < dim; ++d )
       {
       e.Status( kv1, d, CONSTANT_FLUX );
       e.Status( kt1, d, PERIODIC );
@@ -402,9 +402,9 @@ void LocalVariableStorage_Test::run3D()
 
     _test( e.Status(ks1) == INIT_GUESS );
     _test( e.Status(ka1) == INIT_COND );
-    for( size_t d(0); d < flaggedArrayLength; ++d )
+    for( uint32_t d(0); d < flaggedArrayLength; ++d )
         _test( e.Status(kfa1,d) == FIELD_DATA );
-    for( size_t d(0); d < dim; ++d )
+    for( uint32_t d(0); d < dim; ++d )
       {
       _test( e.Status( kv1, d ) == CONSTANT_FLUX );
       _test( e.Status( kt1, d ) == PERIODIC );
@@ -520,9 +520,9 @@ void LocalVariableStorage_Test::run3D_with_templatized_INDEX()
 
     _test( e.Status(ks1) == s1.Flag() );
     _test( e.Status(ka1) == a1.Flag() );
-    for( size_t d(0); d < flaggedArrayLength; ++d )
+    for( uint32_t d(0); d < flaggedArrayLength; ++d )
         _test( e.Status(kfa1,d) == fa1.Flag(d) );
-    for( size_t d(0); d < dim; ++d )
+    for( uint32_t d(0); d < dim; ++d )
       {
         _test( e.Status( kv1, d ) == v1.Flag(d) );
         _test( e.Status( kt1, d ) == t1.Flag(d) );
@@ -530,9 +530,9 @@ void LocalVariableStorage_Test::run3D_with_templatized_INDEX()
 
     e.Status(ks1, INIT_GUESS );
     e.Status(ka1, INIT_COND );
-    for( size_t d(0); d < flaggedArrayLength; ++d )
+    for( uint32_t d(0); d < flaggedArrayLength; ++d )
         e.Status(kfa1,d, FIELD_DATA);
-    for( size_t d(0); d < dim; ++d )
+    for( uint32_t d(0); d < dim; ++d )
       {
       e.Status( kv1, d, CONSTANT_FLUX );
       e.Status( kt1, d, PERIODIC );
@@ -540,9 +540,9 @@ void LocalVariableStorage_Test::run3D_with_templatized_INDEX()
 
     _test( e.Status(ks1) == INIT_GUESS );
     _test( e.Status(ka1) == INIT_COND );
-    for( size_t d(0); d < flaggedArrayLength; ++d )
+    for( uint32_t d(0); d < flaggedArrayLength; ++d )
         _test( e.Status(kfa1,d) == FIELD_DATA );
-    for( size_t d(0); d < dim; ++d )
+    for( uint32_t d(0); d < dim; ++d )
       {
       _test( e.Status( kv1, d ) == CONSTANT_FLUX );
       _test( e.Status( kt1, d ) == PERIODIC );

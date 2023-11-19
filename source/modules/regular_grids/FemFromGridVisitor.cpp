@@ -56,11 +56,11 @@ FemFromGridVisitor<dim>::~FemFromGridVisitor()
 
 template<uint32_t dim>
 void FemFromGridVisitor<dim>::MinMaxCoordinates( double& min_x, double& max_x, 
-                                                    double& min_y, double& max_y )
+                                                 double& min_y, double& max_y )
  {
     min_x = max_x = XY(0,0);
     min_y = max_y = XY(0,1);
-    for ( size_t i=1; i<XY.Rows(); i++ )
+    for ( uint32_t i=1u; i<XY.Rows(); i++ )
       {
          if ( XY(i,0) < min_x ) min_x = XY(i,0);
          if ( XY(i,0) > max_x ) max_x = XY(i,0);

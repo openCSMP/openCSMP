@@ -860,7 +860,7 @@ void SKM_RhinoSurfaceReader::MoveCoordinates( double x_move, double y_move, doub
     map<string,list<mjl::Triangle3D> >::iterator  oit;  
     list<mjl::Triangle3D>::iterator                            tit;
     mjl::Point3D                                               pt[3];
-    int32_t                                                     pid;
+    size_t                                                     pid;
     
     for ( oit = objects.begin(); oit!=objects.end(); oit++ )
       for ( tit=(*oit).second.begin(); tit!=(*oit).second.end(); tit++ )

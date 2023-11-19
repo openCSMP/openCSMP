@@ -57,30 +57,30 @@ class ExplicitNodeCenteredFiniteVolumeTransport : public NodeCenteredFiniteVolum
     
     /// single-phase transport (@todo NEEDS TO BECOME A VIRTUAL FUNCTION TEMPLATE)
     virtual double AdvectVariable( double time_interval,
-                                     double cfl_multiplication_factor, ///< ideally 0.1
-                                     bool apply_flux_balance_correction, ///< usually desirable
-                                     bool update_pore_volumes );         ///< normally not needed
+                                   double cfl_multiplication_factor, ///< ideally 0.1
+                                   bool apply_flux_balance_correction, ///< usually desirable
+                                   bool update_pore_volumes );         ///< normally not needed
 
     /// single-phase passive advection, does NOT return courant increment, single timestep calculation
     /// no checks are made for courant condition.  Assumes external checks.
     virtual void AdvectVariableSingleStep( double time_increment,
-                                      bool apply_flux_balance_correction,
-                                      bool update_pore_volumes);
+                                           bool apply_flux_balance_correction,
+                                           bool update_pore_volumes);
 
     /// results are stored back wherever flags are not DIRICH
-    double OutputResults(const PropertyDatabase<dim>&,
-                           const csmp::Index& adv_key,
-                           bool  show_range ,
-                           const size_t var_comp_nr=0) const;
+    double OutputResults( const PropertyDatabase<dim>&,
+                          const csmp::Index& adv_key,
+                          bool  show_range ,
+                          const uint32_t var_comp_nr=0) const;
 
 
   protected:
     virtual void AccumulateFluxUpwindProducts();
     /// as in base class but for a result vector
-    virtual void AssignFluxBoundaryConditions(const size_t var_comp_nr=0 );
+    virtual void AssignFluxBoundaryConditions( uint32_t var_comp_nr=0 );
     
     /// passive advection: gives transported variable at end of time_interval
-    virtual void ComposeSolution( double time_interval,const size_t var_comp_nr=0 );
+    virtual void ComposeSolution( double time_interval, uint32_t var_comp_nr=0 );
     
     STP<dim>             stencil_;
     std::vector<double>  RESULT;
@@ -425,7 +425,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryCondi
          Luat's fix 4/6/2020
 */
 template<uint32_t dim,template<uint32_t> class STP>
-void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryConditions(const size_t var_comp_nr)
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryConditions( uint32_t var_comp_nr)
   {
       double        inflow, flux_balance;
       const double  zero(0.);
@@ -664,13 +664,12 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable1stOrder(
                                                             double time_increment,
                                                             bool output_result_range )
 {
-    for (size_t ncom = 0 ; ncom< this->var_ncomponents_;ncom++){
+    for ( uint32_t ncom{0u}; ncom< this->var_ncomponents_; ncom++){
         if ( this->Verbose() ) std::cout<<" Advecting component (ENCFVT): "<< ncom <<std::endl;
         std::fill( RESULT.begin(), RESULT.end(), static_cast<double>(0.) );
         std::vector<FV_Parameter>::const_iterator  fvt = this->STENCIL_DATA.begin();
 
-        for ( typename std::vector<Element<dim>*>::const_iterator
-              eit=this->gref_.CellsBegin();
+        for ( auto eit=this->gref_.CellsBegin();
               eit!=this->gref_.CellsEnd(); eit++, fvt++ )
         {
             stencil_.eidx_ = (*eit)->Idx();
@@ -790,15 +789,14 @@ template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariable1stOrder( double time_increment,
                                                                                             bool output_result_range )
  {
-    for (size_t ncom = 0 ; ncom< this->var_ncomponents_;ncom++){
+    for ( uint32_t ncom{0u}; ncom<this->var_ncomponents_; ncom++ ){
         if (this->Verbose() ) std::cout<<" Advecting and diffusing component (ENCFVT): "<<ncom<<std::endl;
         std::fill( RESULT.begin(), RESULT.end(), static_cast<double>(0.) );
         // 0. diffusion is taken into account if the diffusion key in the base class is initialized
         //const bool with_diffusion( (this->dif_key_ == csmp::Index()) ? false : true );
         std::vector<FV_Parameter>::const_iterator  fvt(this->STENCIL_DATA.begin());
 
-        for ( typename std::vector<Element<dim>*>::const_iterator
-              eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
+        for ( auto eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
             // 1.0 initializing the stencil array index (needed for the limiter function)
             stencil_.AccumulateExplicitAdvectionDiffusionSolution1( (*fvt), *(*eit), RESULT, this->adv1_key_.type, ncom );
 
@@ -894,7 +892,7 @@ this is an explicit transport scheme.
 For the passive advection of tracers.  
 */
 template<uint32_t dim,template<uint32_t> class STP>
-void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ComposeSolution( double time_interval, const size_t var_comp_nr)
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ComposeSolution( double time_interval, uint32_t var_comp_nr )
 {
     if (this->adv1_key_.type == SCALAR){
         for ( size_t nidx=0U; nidx<this->gref_.Nodes(); nidx++ )
@@ -1023,9 +1021,9 @@ is returned. If errors occur at more than 2 per cent of the nodes, an
 */
 template<uint32_t dim,template<uint32_t> class STP>
 double ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( const PropertyDatabase<dim>& p,
-                                                                            const csmp::Index& adv_key,
-                                                                            bool show_range ,
-                                                                            const size_t var_comp_nr ) const
+                                                                          const csmp::Index& adv_key,
+                                                                          bool show_range ,
+                                                                          const uint32_t var_comp_nr ) const
 {
     double  rmin, rmax,
               amin = RESULT[0],

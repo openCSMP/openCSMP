@@ -68,7 +68,7 @@ class FractureMatrixUpscaled : public TwoPhaseModel<dim> {
     virtual void Initialize( const Element<dim>& e );
 
     virtual void InitializeForNode( const Element<dim>& e,
-                                    size_t node );
+                                    uint32_t node );
 
     void InitializeForSw( double sw );
 
@@ -91,7 +91,7 @@ class FractureMatrixUpscaled : public TwoPhaseModel<dim> {
     // capillary pressure derivatives (treat seff as for previous function)
     virtual double dpcds_Phase( ) const { std::cout <<"\ndpcds_Phase: not needed\n"; return 0.; };
 
-    virtual void Out( size_t phase ) const;
+    virtual void Out( int phase ) const;
 
 
   private:
@@ -101,7 +101,7 @@ class FractureMatrixUpscaled : public TwoPhaseModel<dim> {
 
     csmp::Index  pd_key_, lambda_key_, Af_key_, phim_key_, phif_key_,
                  qfqm_key_, flux_key_, r_key_, swi_key_;
-    double     Af_, pd_, lambda_, phim_, phif_, qfqm_,
+    double       Af_, pd_, lambda_, phim_, phif_, qfqm_,
                  qv_, radius_;
 
     ScalarVariable  swi_;

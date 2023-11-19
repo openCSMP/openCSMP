@@ -225,7 +225,7 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
          for ( auto i{0U}; i<(*it)->Nodes(); ++i ) {
               nodes[i] = (*it)->N(i)->Idx();
            }
-         plist_entries1.insert( move(nodes) );
+         plist_entries1.insert( std::move(nodes) );
       }
     set<vector<size_t> > plist_entries2;
     for ( auto it=domain2.CellsBegin(); it!=domain2.CellsEnd(); ++it ) {
@@ -235,7 +235,7 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
            }
 //cerr <<"\n"<< (*it)->Idx() <<": ";
 //out(nodes);
-         plist_entries2.insert( move(nodes) );
+         plist_entries2.insert( std::move(nodes) );
       }
     // comparing plists
     bool plists_are_the_same(true);
@@ -258,7 +258,7 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
            if ( (*it)->Neighbor(i) != nullptr ) {
                 nbors[i] = (*it)->Neighbor(i)->Idx();
              }
-         pfverts_entries1.insert( move(nbors) );
+         pfverts_entries1.insert( std::move(nbors) );
       }
     set<vector<int64_t> > pfverts_entries2;
     for ( auto it=domain2.CellsBegin(); it!=domain2.CellsEnd(); ++it ) {
@@ -267,7 +267,7 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
            if ( (*it)->Neighbor(i) != nullptr ) {
                 nbors[i] = (*it)->Neighbor(i)->Idx();
              }
-         pfverts_entries2.insert( move(nbors) );
+         pfverts_entries2.insert( std::move(nbors) );
       }
     // comparing neighbor connectivity lists
     bool pfverts_are_the_same(true);

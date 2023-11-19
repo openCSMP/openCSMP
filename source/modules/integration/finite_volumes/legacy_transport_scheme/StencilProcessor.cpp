@@ -111,7 +111,7 @@ template<uint32_t dim>
 void StencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
                                                   const Element<dim>& e,
                                                   const VARIABLE_TYPE& vt,
-                                                  const size_t var_comp_nr )
+                                                  uint32_t var_comp_nr )
  {
      eidx_ = e.Idx();
      sector_pore_volume_.resize(e.Nodes());
@@ -387,14 +387,14 @@ void  StencilProcessor<dim>::IsotropicallyLimitTransportProperties( const Elemen
 
 template<uint32_t dim>
 void  StencilProcessor<dim>::ApplyLeastSquareMethodToLimitTransportProperties( const Element<dim>& e,
-                                                                    const std::vector<std::pair<double,double> >& SMINMAX,
-                                                                    const csmp::Index& mass_center_key,
-                                                                    const csmp::Index& grad_psi_key,
-                                                                    const csmp::Index& grad_psi_limiter_key)
+                                                                              const std::vector<std::pair<double,double> >& SMINMAX,
+                                                                              const csmp::Index& mass_center_key,
+                                                                              const csmp::Index& grad_psi_key,
+                                                                              const csmp::Index& grad_psi_limiter_key)
  {
 
     eidx_ = e.Idx();
-    size_t  n_upstr, n_dnstr;
+    uint32_t n_upstr, n_dnstr;
     const double   zero(0.);
 
     for ( auto i{0U}; i<e.FV()->Facets(); i++ ){
@@ -471,7 +471,7 @@ void StencilProcessor<dim>::EvaluateThetaValues( const Element<dim>& e,
                                                     double time_increment,
                                                     bool  use_max_theta )
  {
-    size_t  n_upstr, n_dnstr; // upstream & downstream elements
+    uint32_t  n_upstr, n_dnstr; // upstream & downstream elements
     const double zero(0.);
     theta_.resize(e.FV()->Facets());
 
@@ -736,7 +736,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
     sector_pore_volume_.resize(e.Nodes());
     psi1_.resize(e.Nodes());
     // for all FV sectors = nodes = matrix columns
-    for ( size_t j{0U}; j<e.Nodes(); j++ )
+    for ( uint32_t j{0U}; j<e.Nodes(); j++ )
     {
         sector_pore_volume_[j] = param.SectorVolume(j);
         psi1_[j]               = e.N(j)->Read( adv1_key_ );
@@ -776,7 +776,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
         fill( dsdn_.begin(), dsdn_.end(), 0. );
         for ( auto j{0U}; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( size_t k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( uint32_t k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
         fill( dpcdsn_.begin(), dpcdsn_.end(), 0. );
@@ -1043,7 +1043,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
         }
 
         fill( dpcdsn_.begin(), dpcdsn_.end(), 0. );
-        for ( size_t j{0U}; j<e.Nodes(); j++ ) {
+        for ( uint32_t j{0U}; j<e.Nodes(); j++ ) {
              relperm.InitializeForNode( e, j );
              relperm.EffectiveSaturation();
              const double dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative over sn is needed

@@ -64,7 +64,7 @@ void DenseMatrix_Example::Run()
     c += b;
 
     // Output
-    for ( size_t i=0; i<N; i++ )
+    for ( uint32_t i=0; i<N; i++ )
       cout << "c = " << c(i,0) << endl;
 
     // or

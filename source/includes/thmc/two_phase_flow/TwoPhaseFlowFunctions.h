@@ -98,7 +98,7 @@ class TwoPhaseFlowFunctions {
     /// calculating the Shock velocity
     double ShockFrontVelocity( Element<dim>* const ) const ;
     
-    double dfds_Numerical(  Element<dim>* const, size_t phase, double delta_s = 0.001 ) const;
+    double dfds_Numerical(  Element<dim>* const, uint32_t phase, double delta_s = 0.001 ) const;
       
     double dfds_at_Numerical(  Element<dim>* const, double sw, double delta_s = 0.001 ) const;
       

@@ -248,11 +248,11 @@ private:
                                   const std::string& property_name,
                                   const ::csmp::PLACEMENT& place );
 
-  void SaveVectorProperty( size_t component,
+  void SaveVectorProperty( uint32_t component,
                            const std::vector<csmp::ScalarVariable>& scalar_data,
                            std::vector<::csmp::VectorVariable<3U> >&  vector_data );
 
-  void SaveTensorProperty( size_t component,
+  void SaveTensorProperty( uint32_t component,
                            const std::vector<csmp::ScalarVariable>& scalar_data,
                            std::vector<::csmp::TensorVariable<3U> >&  vector_data );
   void ClearBefore();

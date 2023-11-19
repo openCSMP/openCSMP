@@ -91,8 +91,8 @@ void CVFEM_PressureGradientVisitor<dim>::ComputeGradient( Element<dim>& e )
      {
      e.dN_AtIntegrationPoint( DERIV_, i, 1 );
 
-     for ( size_t in=0; in<e.Nodes(); in++ )
-       for ( size_t j{0U}; j<dim; j++ )
+     for ( uint32_t in{0u}; in<e.Nodes(); in++ )
+       for ( uint32_t j{0U}; j<dim; j++ )
 //          KgradP(j) += min(lp[i](),p[i]()) * -DERIV(j,i);
             KgradP_(j) += lp_[in]() * -DERIV_(j,in);
    }
@@ -105,8 +105,8 @@ void CVFEM_PressureGradientVisitor<dim>::ComputeGradient( Element<dim>& e )
     {
      e.dN_AtIntegrationPoint( DERIV_, i, 1 );
      
-     for ( size_t in=0; in<e.Nodes(); in++ )
-       for ( size_t j{0U}; j<dim; j++ )
+     for ( uint32_t in{0u}; in<e.Nodes(); in++ )
+       for ( uint32_t j{0U}; j<dim; j++ )
           KgradP_(j) += p_[in]() * -DERIV_(j,in);
     }
   KgradP_ /= static_cast<double>(e.IntegrationPoints());
