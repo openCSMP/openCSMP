@@ -3,7 +3,6 @@
 #include "Boundary.h"
 //#include "SplitBoundary.h"
 #include "VTU_Interface.h"
-#include "LinearSolver.h"
 #include "PDE_Integrator.h"
 #include "PT_op.h"
 #include "NumIntegral_BT_D_B_dV.h"
@@ -20,6 +19,15 @@
 #include "VTK_Interface.h"
 #include"ScalarVariable.h"
 #include "PropertyHandle.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
+#include "SAMG_Solver.h"
+#include "SAMG_Exception.h"
+#else
+#include "LinearSolver.h"
+#endif
+
 
 
 using namespace std;

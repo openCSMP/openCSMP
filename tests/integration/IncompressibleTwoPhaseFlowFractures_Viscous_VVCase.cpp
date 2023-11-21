@@ -1,9 +1,54 @@
 #include "IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.h"
-#include "Model.h"
-#include "SplitBoundary.h"
-#include "Boundary.h"
 #include "ModelComparator.h"
 #include "VSet.h"
+
+// File I/O and Initialization
+#include "Standard_IO_Handler.h"
+#include "InputDataManager.h"
+#include "PropertyHandle.h"
+#include "CSMP_highLevelUtilities.h"
+
+// Model construction
+#include "Model.h"
+#include "Region.h"
+#include "SplitBoundary.h"
+#include "Boundary.h"
+#include "ANSYS_Model2D.h"
+#include "ANSYS_Model3D.h"
+#include "MeshDiagnostics.h"
+
+// PDE operators & solvers
+#include "PDE_Integrator.h"
+#include "LinearSolver.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
+#include "SAMG_Solver.h"
+#include "SAMG_Exception.h"
+#else
+#include "LinearSolver.h"
+#endif
+
+#include "VelocityAndVolumeFlux.h"
+#include "SteadyStateDiffusor.h"
+#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_op_N_dV.h"
+
+//Two Phase Models
+#include "TwoPhaseModel.h"
+#include "BrooksCorey.h"
+#include "FourarLenormand.h"
+#include "LinearTwoPhaseModel.h"
+
+// Finite-Volume calculation tools
+#include "FiniteVolumeStencil.h"
+#include "StencilProcessor.h"
+#include "ExplicitStencilProcessor.h"
+#include "TwoPhaseExplicitNodeCenteredFVTransport.h"
+#include "TwoPhaseImplicitNodeCenteredFVTransport.h"
+
+// Output
+#include "VTU_Interface.h"
 
 
 using namespace std;

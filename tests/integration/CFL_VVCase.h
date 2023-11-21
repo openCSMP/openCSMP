@@ -1,12 +1,7 @@
 #ifndef CFL_TESTCASE_H
 #define CFL_TESTCASE_H
 
-
-#include <iostream>
-#include <iomanip>
-#include <limits>
 #include "Test.h"
-
 
 namespace csmp{
 

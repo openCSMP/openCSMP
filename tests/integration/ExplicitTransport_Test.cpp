@@ -14,8 +14,14 @@
 #include "VTK_Interface.h"
 #include "Index.h"
 #include "ANSYS_Model3D.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVEWR
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
+#else
+#include "LinearSolver.h"
+#endif
+
 #include "PDE_Integrator.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"

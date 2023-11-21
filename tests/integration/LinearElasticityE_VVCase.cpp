@@ -1,7 +1,15 @@
 #include "LinearElasticityE_VVCase.h"
 #include "Model1D.h"
 #include "VTU_Interface.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
+#include "SAMG_Exception.h"
+#else
+#include "LinearSolver.h"
+#endif
+
 #include "PDE_Integrator.h"
 #include "PT_op.h"
 #include "NumIntegral_BT_D_B_dV.h"

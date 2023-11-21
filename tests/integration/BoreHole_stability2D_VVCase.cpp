@@ -14,6 +14,15 @@
 #include "BoreHole_stability2D_VVCase.h"
 #include "Test.h"
 
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
+#include "SAMG_Solver.h"
+#include "SAMG_Exception.h"
+#else
+#include "LinearSolver.h"
+#endif
+
+
 using namespace std;
 
 

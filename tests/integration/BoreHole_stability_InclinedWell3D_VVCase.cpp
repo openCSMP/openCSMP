@@ -1,7 +1,13 @@
 #include "ANSYS_Model3D.h"
 #include "VTU_Interface.h"
-#include "LinearSolver.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
+#else
+#include "LinearSolver.h"
+#endif
+
 #include "PDE_Integrator.h"
 #include "PT_op.h"
 

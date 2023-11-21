@@ -1,9 +1,7 @@
 #ifndef FRACTURE_H
 #define FRACTURE_H
 
-#include "ANSYS_Model2D.h"
 #include "Point.h"
-#include "SAMG_Settings.h"
 #include "SplitBoundary.h"
 #include "Boundary.h"
 #include "FiniteElementPolicy.h"
@@ -34,7 +32,11 @@ enum TIP_TYPE { DC_TIP = 0, COHESIVE_TIP = 1, HF_TIP = 2, J_DRY_TIP = 3, J_WET_T
 
 
 
-namespace csmp{
+namespace csmp {
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+class SAMG_Settings;
+#endif
 
 /**
 
@@ -128,7 +130,9 @@ public:
 
 
     //Coupled HF Specific configurations
+#ifdef CSMP_WITH_SAMG_SOLVER
     void                                SetSolverSettings( SAMG_Settings& settings);
+#endif
 
     //Output
     void                                Out();

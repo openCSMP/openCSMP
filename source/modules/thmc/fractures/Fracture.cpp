@@ -1,21 +1,23 @@
-﻿#define _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include "Fracture.h"
 #include "Exception.h"
+#include "Model.h"
 #include <regex>
 
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Solver.h"
+#include "SAMG_Settings.h"
+#else
+#include "LinearSolver.h"
+#endif
 
 
 //need to provide and link GSL library if you want to use this functionality
 #define gsl_sf_hyperg_2F1(X,Y,Z,C) NAN;
 
 
-namespace csmp{
-
-/**
- * @brief Initialize
- * @param quarterPointsAtTip
- */
+namespace csmp {
 
 template<uint32_t dim>
 Fracture<dim>::Fracture(Model<dim>& model, std::string splitboundary, TIP_TYPE tip_type ):
@@ -372,7 +374,7 @@ std::map<Point<dim>, Node<dim>*> Fracture<dim>::NodeMap(INTERFACE_SIDE side){
   std::map<Point<dim>, Node<dim>*> nodemap;
   for ( typename std::vector<InterFace<dim>*>::const_iterator ifit = sb_ref_.CellsBegin();
         ifit != sb_ref_.CellsEnd(); ++ifit){
-    for (size_t n= 0; n < (*ifit)->FE()->Nodes(); ++n)
+    for (uint32_t n= 0u; n < (*ifit)->FE()->Nodes(); ++n)
       nodemap[(*ifit)->N(n,side)->Coordinate()] = (*ifit)->N(n,side) ;
   }
 
@@ -386,7 +388,7 @@ std::map<double, Node<dim>*> Fracture<dim>::NodeMap(INTERFACE_SIDE side, size_t 
   std::map<double, Node<dim>*> nodemap;
   for ( typename std::vector<InterFace<dim>*>::const_iterator ifit = sb_ref_.CellsBegin();
         ifit != sb_ref_.CellsEnd(); ++ifit){
-    for (size_t n= 0; n < (*ifit)->FE()->Nodes(); ++n)
+    for ( uint32_t n=0u; n < (*ifit)->FE()->Nodes(); ++n)
       nodemap[(*ifit)->N(n,side)->Coordinate()[xyz]] = (*ifit)->N(n,side) ;
   }
 
@@ -438,7 +440,7 @@ std::map<InterFace<dim>*, size_t> Fracture<dim>::FindInterFaceOfNode(Node<dim>* 
 
   std::map<InterFace<dim>*,size_t> InterFace_and_local_node_found;
   for (typename std::vector<InterFace<dim>*>::const_iterator f = f_begin; f != f_end; ++f){
-    for (size_t i = 0; i < (*f)->FE()->Nodes(); ++i){
+    for ( uint32_t i = 0u; i < (*f)->FE()->Nodes(); ++i){
       if ( (*f)->N(i,side) == n_ptr ){
         InterFace_and_local_node_found.insert( std::make_pair( *f, i) );
       }
@@ -751,7 +753,7 @@ void Fracture<dim>::AveragePropertyToMiddle( Index property, std::vector<InterFa
           interfaces[i]->NodePropertyVector(property, sc_vec_out, OUTSIDE);
 
           //assigning average of nodes on each side to interface
-          for (size_t n = 0; n < interfaces[i]->FE()->Nodes(); ++n){
+          for ( uint32_t n = 0u; n < interfaces[i]->FE()->Nodes(); ++n){
             assert(sc_vec_in[n].Flag() == sc_vec_out[n].Flag());
             interfaces[i]->N(n,MIDDLE)->Store( property, ScalarVariable(sc_vec_in[n].Flag(), 0.5* (sc_vec_in[n]() + sc_vec_out[n]() ) ));
           }
@@ -788,7 +790,7 @@ void Fracture<dim>::AveragePropertyToMiddle( Index property, std::vector<InterFa
           interfaces[i]->NodePropertyVector(property, vc_vec_in,  INSIDE);
           interfaces[i]->NodePropertyVector(property, vc_vec_out, OUTSIDE);
 
-          for (size_t n= 0; n < interfaces[i]->FE()->Nodes(); n++){
+          for ( uint32_t n=0u; n < interfaces[i]->FE()->Nodes(); n++){
             VectorVariable<dim> vc = vc_vec_in[n] + vc_vec_out[n] ;
             vc /= 2.0;
             interfaces[i]->N(n,MIDDLE)->Store(property, vc);
@@ -825,7 +827,7 @@ void Fracture<dim>::AveragePropertyToMiddle( Index property, std::vector<InterFa
 //This is correct if no existing aperture is already present.
 template<uint32_t dim>
 void Fracture<dim>::StoreDisplacementDifferenceAsAperture(const std::string displacement, const std::string aperture, INTERFACE_SIDE side ){
-  if ( !sb_ref_.CellVector().empty());
+  assert( !sb_ref_.CellVector().empty());
   if (side == MIDDLE and midregion_->NodeVector().empty() )
       throw csmp::Exception(ERROR, "Fracture<dim>::StoreDisplacementDifferenceAsAperture",
                             "Middle Region doesn not exist, Therefore cannot store aperture on MIDDLE" );
@@ -837,7 +839,7 @@ void Fracture<dim>::StoreDisplacementDifferenceAsAperture(const std::string disp
   counted_nodes.reserve( sb_ref_.Cells() );
 
   for ( InterFace<dim>* IF : sb_ref_.CellVector()  )
-      for (size_t i_n = 0; i_n < IF->FE()->Nodes(); i_n++){
+      for ( uint32_t i_n = 0u; i_n < IF->FE()->Nodes(); i_n++){
           if ( std::find(counted_nodes.begin(), counted_nodes.end(), IF->MatchingN(i_n,side) ) == counted_nodes.end() ){
 
               //taking node on either side
@@ -903,7 +905,7 @@ double Fracture<dim>::MaxPropertyValue(const char* property, INTERFACE_SIDE side
   if (side != MIDDLE){
     for (typename std::vector<InterFace<dim>*>::const_iterator if_it = sb_ref_.CellsBegin();
          if_it != sb_ref_.CellsEnd(); if_it++){
-      for (size_t i = 0; i < (*if_it)->FE()->Nodes(); i++){
+      for ( uint32_t i = 0u; i < (*if_it)->FE()->Nodes(); i++){
         mx_prop = std::max(mx_prop, (*if_it)->N(i,side)->Read(ap_key)); //taking maximum found
       }
     }
@@ -2046,9 +2048,11 @@ for (typename std::vector<Node<dim>*>::const_iterator iter = nodes_.begin(); ite
 
 #endif
 
+#ifdef CSMP_WITH_SAMG_SOLVER
 
 template<uint32_t dim>
-void Fracture<dim>::SetSolverSettings(SAMG_Settings& settings){
+void Fracture<dim>::SetSolverSettings(SAMG_Settings& settings)
+ {
 
 
   std::cout << "\nsetSolverSettings";
@@ -2157,8 +2161,11 @@ void Fracture<dim>::SetSolverSettings(SAMG_Settings& settings){
                       6 Cluster coarsening & multi-pass interpolation.*/
   settings.Set_ncycle(20000);
 
-
 } // end of SetSettings()
+
+#endif
+
+
 
 
 template<uint32_t dim>

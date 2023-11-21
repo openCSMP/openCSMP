@@ -1,14 +1,25 @@
 #include "NimbleRegion_Test.h"
 
+#include "PropertyDatabase.h"
+#include "NimbleRegion.h"
+#include "Region.h"
+
 // FE algorithm
 #include "PDE_Integrator.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
+#include "SAMG_Exception.h"
+#else
+#include "LinearSolver.h"
+#endif
+
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_dNT_dN_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "compute2PhaseMobilityAtBaryCenter.h"
-
 
 // FV algorithms
 #include "TwoPhaseExplicitNodeCenteredFVTransport.h"

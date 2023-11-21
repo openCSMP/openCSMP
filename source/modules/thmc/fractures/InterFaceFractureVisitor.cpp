@@ -1,4 +1,4 @@
-﻿#include "InterFaceFractureVisitor.h"
+#include "InterFaceFractureVisitor.h"
 #include "Model.h"
 #include "InterFace.h"
 #include "Exception.h"
@@ -94,7 +94,7 @@ void InterFaceFractureVisitor<dim>::Visit( InterFace<dim>* f )
 
   if ( !calculate_conductivity_ ){    //Just calculate aperture
 
-    for (size_t i = 0; i < f->FE()->Nodes() ; ++i){
+    for ( uint32_t i = 0u; i < f->FE()->Nodes() ; ++i){
       //Calculate aperture based on displacement
       double aperture         = nrml.DotProduct(disp_plus[i] - disp_minus[i]);
       //get node for storage
@@ -106,7 +106,7 @@ void InterFaceFractureVisitor<dim>::Visit( InterFace<dim>* f )
   } else {      //Calculate both aperture and conductivity
 
       ScalarVariable viscosity;
-      for (size_t i = 0; i < f->FE()->Nodes() ; ++i){
+      for ( uint32_t i = 0u; i < f->FE()->Nodes() ; ++i){
         //Calculate aperture based on displacement
         double aperture         = nrml.DotProduct(disp_plus[i] - disp_minus[i]);
         //Store aperture on side

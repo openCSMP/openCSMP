@@ -1,5 +1,23 @@
 #include "IncompressibleSinglePhaseFlowTensorPerm2DFEM_VVCase.h"
 #include "ModelComparator.h"
+
+#include "ANSYS_Model2D.h"
+#include "InputDataManager.h"
+#include "VTU_Interface.h"
+#include "LinearSolver.h"
+#include "PDE_Integrator.h"
+#include "PointSource_rhsop.h"
+#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_op_N_dV.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
+#include "SAMG_Solver.h"
+#else
+#include "LinearSolver.h"
+#endif
+
+
 using namespace std;
 
 

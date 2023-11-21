@@ -4,7 +4,6 @@
 #include "ModelTime.h"
 #include "SparseMatrix.h"
 #include "CompressedRowMatrix.h"
-#include "SAMG_Solver.h"
 
 using namespace std;
 
