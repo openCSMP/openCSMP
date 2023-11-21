@@ -47,8 +47,8 @@ class Polygon {
     void          OutputCoordinatesTo( std::list<mjl::Point>& ) const;
 
   private:
-    mutable Vertex* v_;
-    size_t  size_;
+    mutable Vertex* v_ = nullptr;
+    long    size_ = 0;
     
     void Resize(); 
 };      
@@ -63,7 +63,7 @@ int closestToPolygonCmp( const mjl::Point& a, const mjl::Point& b );
 // member functions
 
 inline Polygon::Polygon()
- : v_(0), size_(0)
+ : v_(0), size_(0u)
   {
   }
 

@@ -11,8 +11,10 @@ Polygon::Polygon( list<mjl::Point>::const_iterator first,
  {
     v_ = new Vertex( *first++ );
  
-    while ( first != last )
-      v_ = v_->Insert( new Vertex( *first++ ) );
+    while ( first != last ) {
+         v_ = v_->Insert( new Vertex( *first++ ) );
+         size_++;
+      }
     v_ = v_->Cw();
  }  
 
@@ -24,7 +26,7 @@ Polygon&  Polygon::operator=( const Polygon& p )
  {
     if ( &p != this ) {
          size_ = p.size_;
-         if ( size_ == 0U ) v_ = 0;
+         if ( size_ == 0 ) v_ = 0;
          else {
               v_ = new Vertex( p.Point() );
               for ( unsigned int i=1U; i<size_; i++ ) {
@@ -66,7 +68,7 @@ void Polygon::Erase()
          delete v_;
       }
       
-    size_=0u;
+    size_=0;
     v_=0;
  }
  
@@ -74,7 +76,7 @@ void Polygon::Erase()
 
 void Polygon::Resize()
  { 
-    if ( v_ == 0 ) size_ = 0U;
+    if ( v_ == 0 ) size_ = 0;
     else {
          Vertex* v = v_->Cw();
          for ( size_=1U; v!=v_; ++size_ )
