@@ -35,8 +35,7 @@ size_t ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes( 
   
     std::cout << "\nExperimentalSaturationFunctions::InitialiseReservoirRockTypes: reading data from file: '"<< rt_file_name <<"' ...\n";
     
-    std::ifstream rt_file;
-    rt_file.open(rt_file_name);
+    std::ifstream rt_file(rt_file_name);
     
     if ( !rt_file.is_open() )
       throw csmp::Exception( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes", "input file not found." );
@@ -50,12 +49,11 @@ size_t ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes( 
 
     for ( int rocktype=0; rocktype < number_of_tables; rocktype++ )
       {
-   /* TODO: rocktype number is not read but inferred from the number of tables read!
-          size_t rocktype;
-          rt_file >> rocktype; // check that this is indeed a rocktype number
-          assert( rocktype < number_of_tables );
-          std::cout << "\nReading data table for RRT: " << rocktype << "\n";
-  */
+          uint32_t n_rocktype;
+          rt_file >> n_rocktype; // check that this is indeed a rocktype number
+          assert( n_rocktype < number_of_tables );
+          std::cout << "\nReading data table for RRT: " << n_rocktype << "\n";
+
           uint32_t number_of_entries{0U};
           rt_file >> number_of_entries;
           
@@ -112,7 +110,7 @@ size_t ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes( 
                 if(!snr_found && kro_value == 0.0) {snr = 1.0 - sw_value; snr_found = true;}
             }
 
-          std::cout << "swr = " <<swr<<", snr = "<<snr<<endl;
+          std::cout << "\nswr = " <<swr<<", snr = "<<snr<<endl;
           std::cout << "\n";
 
           input_sw_[rocktype] = sw;
@@ -125,10 +123,11 @@ size_t ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes( 
 
           kr1_[rocktype] = kr1_spline;
           kr2_[rocktype] = kr2_spline;
-          pc_[rocktype] = pc_spline;
+          pc_[rocktype]  = pc_spline;
           swr_[rocktype] = swr;
           snr_[rocktype] = snr;
-       }
+          
+       } // end for rocktypes
 
   //Out();
   // limiting the rocktype number range in the property database to the actual maximum value

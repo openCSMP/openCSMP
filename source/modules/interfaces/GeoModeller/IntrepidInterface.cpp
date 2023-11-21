@@ -349,11 +349,11 @@ Model<3U>* IntrepidInterface::Read(const char* filename, const char* element_var
 void IntrepidInterface::RepairElementOrientations( VSet<3U>& vset ) const
  {
      cout <<"nIntrepidInterface::RepairElementOrientations: checking the right-hand-rule numbering of the tetrahedral elements...\n";
-     LinearTetrahedron  tet;
-     vector<uint32_t>     ids;
-     size_t             repaired_elmts(0U);
+     LinearTetrahedron tet;
+     vector<uint32_t>  ids;
+     size_t            repaired_elmts(0U);
    
-     for ( size_t elmt=0; elmt<vset.Elements(); ++elmt )
+     for ( size_t elmt=0u; elmt<vset.Elements(); ++elmt )
        if ( vset.ElementType(elmt) == ISOPARAMETRIC_LINEAR_TETRAHEDRON )
          {
             // initialising a tetrahedral element
@@ -369,6 +369,7 @@ void IntrepidInterface::RepairElementOrientations( VSet<3U>& vset ) const
             if ( tet.Volume() < 0. ) {
                 tet.CounterClockwiseNodes( ids );
                 // reassigning the nodes to the plist in opposite order (first getting the global node numbers
+                // TODO: global node number is stored, but might exceed range of uint32_t
                 for ( auto it=ids.begin(); it!=ids.end(); ++it ) (*it) = vset.Plist( elmt, (*it) );
                 size_t counter(0U);
                 for ( vector<int64_t>::iterator nit=vset.PlistBegin(elmt); nit!=vset.PlistEnd(elmt); ++nit )
