@@ -854,9 +854,8 @@ void EclipseInterface::AssignGridDimensions()
 }
 
 
-int readEclipseDimensions( size_t& NX, size_t& NY, size_t& NZ,
-                           std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
-                           )
+int readEclipseDimensions( uint32_t& NX, uint32_t& NY, uint32_t& NZ,
+                           std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
   csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
@@ -868,7 +867,7 @@ int readEclipseDimensions( size_t& NX, size_t& NY, size_t& NZ,
   bool        endOfblock( false );
   size_t      counter( 0U );
   size_t      num;
-  size_t      value;
+  uint32_t    value;
   bool        default_value;
   std::vector<uint32_t> values;
 
@@ -881,21 +880,21 @@ int readEclipseDimensions( size_t& NX, size_t& NY, size_t& NZ,
     {
       token = strtok( text_line, delims );
       do {
-        if ( !readEclipseValue<size_t>( std::string( token ), default_value, num, value ) )
-        {
-          std::cout << "\n" << token << std::endl;
-          csmp_error.Note( csmp::ERROR,
-                             "readEclipseDimension:",
-                             "value cannot be read!" );
-          return 0;
-        }
+        if ( !readEclipseValue<uint32_t>( std::string( token ), default_value, num, value ) )
+          {
+            std::cout << "\n" << token << std::endl;
+            csmp_error.Note( csmp::ERROR,
+                               "readEclipseDimension:",
+                               "value cannot be read!" );
+            return 0;
+          }
         else
         {
-          for ( auto i{0u}; i < num; i++ )
-          {
-            values.push_back( value );
-            counter++;
-          }
+          for ( size_t i{0u}; i < num; i++ )
+            {
+              values.push_back( value );
+              counter++;
+            }
         }
         token = strtok( NULL, delims );
         endOfblock = isEclipseEndOfBlock( token );
@@ -930,9 +929,8 @@ int readEclipseDimensions( size_t& NX, size_t& NY, size_t& NZ,
   return 1;
 }
 
-int readEclipseGridSpecs( size_t& NX, size_t& NY, size_t& NZ,
-                          std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
-                          )
+int readEclipseGridSpecs( uint32_t& NX, uint32_t& NY, uint32_t& NZ,
+                          std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
   csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
@@ -944,7 +942,7 @@ int readEclipseGridSpecs( size_t& NX, size_t& NY, size_t& NZ,
   bool        endOfblock( false );
   size_t      counter( 0U );
   size_t      num;
-  size_t      value;
+  uint32_t    value;
   bool        default_value;
   std::vector<uint32_t> values;
 
@@ -957,7 +955,7 @@ int readEclipseGridSpecs( size_t& NX, size_t& NY, size_t& NZ,
     {
       token = strtok( text_line, delims );
       do {
-        if ( !readEclipseValue<size_t>( std::string( token ), default_value, num, value ) )
+        if ( !readEclipseValue<uint32_t>( std::string( token ), default_value, num, value ) )
         {
           std::cout << "\n" << token << std::endl;
           csmp_error.Note( csmp::ERROR,
@@ -1023,7 +1021,7 @@ x(3,1)top   y(3,1)top   z(3,1)top   x(3,1)btm   y(3,1)btm   z(3,1)btm
 x(NX+1,NY+1)top   y(NX+1,NY+1)top   z(NX+1,NY+1)top
 x(NX+1,NY+1)btm   y(NX+1,NY+1)btm   z(NX+1,NY+1)btm\
 */
-int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
+int readEclipsePillarCoordinates( uint32_t& NX, uint32_t& NY,
                                   CornerPointGrid& grid, /* matrix of Pillars=cells? */
                                   std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                   )
@@ -1192,8 +1190,7 @@ z(1,1,2)top,NW    z(1,1,2)top,NE    z(2,1,2)top,NW    z(2,1,2)top,NE   ... z(NX,
 .
 z(1,NY,NZ)btm,SW  z(1,NY,NZ)btm,SE  z(2,NY,NZ)btm,SW  z(2,NY,NZ)btm,SE ... z(NX,NY,NZ)btm,SW  z(NX,NY,NZ)btm,SE
 */
-int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
-                             CornerPointGrid& grid,
+int readEclipseCornerDepths( uint32_t NX, uint32_t NY, uint32_t& NZ, CornerPointGrid& grid,
                              std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
   csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -1218,8 +1215,9 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
   size_t cycle( 0 );
   /// 8 points of hexahedron ( TNW, TNE, TSW, TSE, BNW, BNE, BSE, BSW )
   csmp::Point<3U> pt( 0.0 );
-  size_t idx( 0 ), idy( 0 ), idz( 0 );
-  size_t pidx( 0 ), pidy( 0 );
+  size_t idx( 0 );
+  uint32_t idy( 0 ), idz( 0 );
+  uint32_t pidx( 0 ), pidy( 0 );
   size_t east_west_position( 0 );
   bool same_line( false );
   do {
@@ -1368,9 +1366,9 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
   const size_t num_points_in_z_direction_internal_pillars( 8 * NZ );
   const size_t num_points_in_z_direction_boundary_pillars( 4 * NZ );
   const size_t num_points_in_z_direction_corner_pillars( 2 * NZ );
-  for ( auto i = 1; i<NX; ++i )
+  for ( uint32_t i = 1u; i<NX; ++i )
   {
-    for ( size_t j = 1; j<NY; ++j )
+    for ( uint32_t j = 1u; j<NY; ++j )
     {
       if ( grid( i, j ).GetNumPoints() != num_points_in_z_direction_internal_pillars )
       {
@@ -1404,7 +1402,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
       return 0;
     }
   }
-  for ( size_t j = 1; j<NY; ++j )
+  for ( uint32_t j = 1u; j<NY; ++j )
   {
     if ( grid( 0, j ).GetNumPoints() != num_points_in_z_direction_boundary_pillars ||
          grid( NX, j ).GetNumPoints() != num_points_in_z_direction_boundary_pillars )
@@ -1766,7 +1764,7 @@ information about the completion.
 
 Top and bottom of completion; open or closed etc.
 */
-int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
+int readEclipseWellCompletionsData( uint32_t NX, uint32_t NY, uint32_t NZ,
                                     std::map<std::string, EclipseWell>& well_data,
                                     std::map<std::string, EclipseWellPath>& well_path,
                                     std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
@@ -1896,7 +1894,7 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
 
 /**
 */
-int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
+int readEclipseFaultData( uint32_t NX, uint32_t NY, uint32_t NZ,
                           std::map<std::string, EclipseFault>& fault_data,
                           std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
@@ -2029,7 +2027,7 @@ int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
 /**
 Reads property multipliers that allow users to treat the fault thickness.
 */
-int readEclipseFaultTransmissibilityMultipliers( size_t NX, size_t NY, size_t NZ,
+int readEclipseFaultTransmissibilityMultipliers( uint32_t NX, uint32_t NY, uint32_t NZ,
                                                  std::map<std::string, double>& multflt,
                                                  std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                                  )
@@ -2790,16 +2788,16 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
   if ( firstLine == 0 || firstLine == 2 )
     return firstLine;
 
-  const size_t i_stride( NX_ + 1 );
-  const size_t j_stride( NY_ + 1 );
+  const uint32_t i_stride( NX_ + 1 );
+  const uint32_t j_stride( NY_ + 1 );
 
   grid_.Resize( i_stride, j_stride );
 
   // keeping j constant i go over the i's
-  for ( size_t j{0U}; j<j_stride; j++ )
+  for ( uint32_t j{0U}; j<j_stride; j++ )
   {
     // reading the pillar coordinates
-    for ( auto i{0U}; i<i_stride; i++ )
+    for ( uint32_t i{0U}; i<i_stride; i++ )
     {
       // read pillar top
       double pillar_top_x = atof( popToken( ifs, text_line, line_length ) );
@@ -3088,11 +3086,11 @@ void EclipseInterface::AddWell( const std::string& well_name, const Point<3U>& w
   std::set<std::string> well_fem_types;
   const csmp::CSMP_FEM_TYPE edge_fem_type( csmp::ISOPARAMETRIC_LINEAR_BAR );
 
-  size_t i( well_start_point[0] ), j( well_start_point[1] ), kt( well_start_point[2] ), kb( well_end_point[2] );
+  uint32_t i( well_start_point[0] ), j( well_start_point[1] ), kt( well_start_point[2] ), kb( well_end_point[2] );
   std::cout << "\nEclipseInterface::AddWell: '" << well_name << ": " << i << ", " << j << ", " << kt << "~" << kb << std::endl;
 
   bool valid_well( false );
-  for ( size_t k = kt; k < kb; k++ ) {
+  for ( uint32_t k = kt; k < kb; k++ ) {
     size_t well_elmt( 0U );
     if ( grid_.ConstructLineElement( i, j, k, well_elmt ) ) {
       well_elmts.push_back( well_elmt );
@@ -3126,7 +3124,7 @@ EclipseInterface::IJKMap()
 // WELLS
 /// add well path based on symmetry assumption ( neighbouring cell defines the direction )
 /// by default well is assumed to be vertical
-void addWellPath( size_t NX, size_t NY, size_t NZ,
+void addWellPath( uint32_t NX, uint32_t NY, uint32_t NZ,
                   const std::string& well_name,
                   const std::vector<ijk>& cell_ids,
                   std::map<std::string, EclipseWellPath>& well_path )

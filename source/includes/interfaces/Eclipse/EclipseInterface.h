@@ -187,7 +187,7 @@ public:
   /// ReadCornerDepths -> Read_ZCORN
   bool Read_ZCORN( std::ifstream& ifs, char* text_line, size_t line_length );
 
-  std::multimap<ijk, size_t>& IJKMap();
+  std::multimap<ijk,size_t>&  IJKMap();
 
 
 private:
@@ -278,16 +278,16 @@ private:
   std::set<std::string>       wells_;
 
   // temporal grid data
-  size_t                      NX_;
-  size_t                      NY_;
-  size_t                      NZ_;
-  std::vector<double>       zcorn_;
+  uint32_t                    NX_;
+  uint32_t                    NY_;
+  uint32_t                    NZ_;
+  std::vector<double>         zcorn_;
   CornerPointGrid             grid_;
   CellCenteredGrid            block_grid_;
 
 #if 0
   // local mesh block
-  std::vector<uint32_t>         box_;
+  std::vector<uint32_t>       box_;
 #endif
 
   // properties data
@@ -489,18 +489,18 @@ template<class VarType>
 bool readEclipseValue( const std::string& text_line, bool& default_value, size_t& num, VarType& value );
 
 // reading specific block's of data
-int readEclipseDimensions( size_t& NX, size_t& NY, size_t& NZ,
+int readEclipseDimensions( uint32_t& NX, uint32_t& NY, uint32_t& NZ,
                            std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
-int readEclipseGridSpecs( size_t& NX, size_t& NY, size_t& NZ,
+int readEclipseGridSpecs( uint32_t& NX, uint32_t& NY, uint32_t& NZ,
                           std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
-int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
+int readEclipsePillarCoordinates( uint32_t& NX, uint32_t& NY,
                                   CornerPointGrid& grid,
                                   std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                   );
 
-int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
+int readEclipseCornerDepths( uint32_t NX, uint32_t NY, uint32_t& NZ,
                              CornerPointGrid& grid,
                              std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                              );
@@ -517,30 +517,30 @@ int readEclipseWellSpecs( std::map<std::string, EclipseWell> &well_data,
                           std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                           );
 
-int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
+int readEclipseWellCompletionsData( uint32_t NX, uint32_t NY, uint32_t NZ,
                                     std::map<std::string, EclipseWell>& well_data,
                                     std::map<std::string, EclipseWellPath>& well_path,
                                     std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                     );
 
-int readEclipseExplicitFaceWellCompletionsData( size_t NX, size_t NY, size_t NZ,
+int readEclipseExplicitFaceWellCompletionsData( uint32_t NX, uint32_t NY, uint32_t NZ,
                                                 std::map<std::string, EclipseWell>& well_data,
                                                 std::map<std::string, EclipseWellPath>& well_path,
                                                 std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                                 );
 
-int readEclipseExplicitNodeWellCompletionsData( size_t NX, size_t NY, size_t NZ,
+int readEclipseExplicitNodeWellCompletionsData( uint32_t NX, uint32_t NY, uint32_t NZ,
                                                 std::map<std::string, EclipseWell>& well_data,
                                                 std::map<std::string, EclipseWellPath>& well_path,
                                                 std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                                 );
 
-int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
+int readEclipseFaultData( uint32_t NX, uint32_t NY, uint32_t NZ,
                           std::map<std::string, EclipseFault>& faults_data,
                           std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                           );
 
-int readEclipseFaultTransmissibilityMultipliers( size_t NX, size_t NY, size_t NZ,
+int readEclipseFaultTransmissibilityMultipliers( uint32_t NX, uint32_t NY, uint32_t NZ,
                                                  std::map<std::string, double>& multflt,
                                                  std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                                  );
@@ -554,7 +554,7 @@ int skipEclipseBlock( std::ifstream& ifs, char* text_line, size_t line_length, b
 void removeSymbolsFromString( std::string &str, const char* symbolsToRemove );
 
 
-void addWellPath( size_t NX, size_t NY, size_t NZ,
+void addWellPath( uint32_t NX, uint32_t NY, uint32_t NZ,
                   const std::string& well_name,
                   const std::vector<ijk>& cell_ids,
                   std::map<std::string, EclipseWellPath>& well_path );
