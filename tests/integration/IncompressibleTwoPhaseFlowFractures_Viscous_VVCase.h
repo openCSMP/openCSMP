@@ -12,6 +12,11 @@ template<uint32_t> class NodeCenteredFiniteVolumeTransport;
 template<uint32_t> class TwoPhaseModel;
 template<uint32_t,template<uint32_t> class> class PDE_Integrator;
 
+#ifdef CSMP_WITH_SAMG_SOLVER
+class SAMG_Settings;
+class SAMG_Solver;
+#endif
+
 template<uint32_t dim>
 class IncompressibleTwoPhaseFlowFractures_Viscous_VVCase : public Test {
   public:
@@ -105,12 +110,12 @@ class IncompressibleTwoPhaseFlowFractures_Viscous_VVCase : public Test {
 
     // Simulation Objects
     NodeCenteredFiniteVolumeTransport<dim>*  tpncfvt_;
-    #ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings steady_state_pressure_solver_settings_;
-    #else
-    /// add extra functionality for alternative solver if needed
-    #endif
-    PDE_Integrator<dim,Element>* steady_state_pressure_solver_;
+    
+#ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Settings* steady_state_pressure_solver_settings_ = nullptr;
+    SAMG_Solver*   solver_ = nullptr;
+#endif
+    PDE_Integrator<dim,Element>* steady_state_pressure_solver_ = nullptr;
 
     // Velocity Computations
     void UpdateSaturations(TwoPhaseModel<dim>& saturationFunctions );

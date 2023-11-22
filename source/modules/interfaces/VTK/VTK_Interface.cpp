@@ -392,9 +392,9 @@ template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::str
 template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,uint32_t,bool);
 template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::string&,const std::string&,uint32_t,bool);
 
-template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&, const std::string&, const std::string&, uint64_t, bool);
-template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&, const std::string&, const std::string&, uint64_t, bool);
-template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&, const std::string&, const std::string&, uint64_t, bool);
+template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&, const std::string&, const std::string&, int64_t, bool);
+template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&, const std::string&, const std::string&, int64_t, bool);
+template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&, const std::string&, const std::string&, int64_t, bool);
 
 template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::string&,const std::string&,double,bool);
 template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,double,bool);

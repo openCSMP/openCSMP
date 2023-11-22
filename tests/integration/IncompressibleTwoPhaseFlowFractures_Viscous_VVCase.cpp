@@ -158,6 +158,10 @@ IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::~IncompressibleTwoPhase
     delete model_;
     delete relperm_model_;
     delete tpncfvt_;
+#ifdef CSMP_WITH_SAMG_SOLVER
+    delete steady_state_pressure_solver_settings_;
+    delete solver_;
+#endif
     delete steady_state_pressure_solver_;
 }
 
@@ -562,8 +566,9 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
     }else{
 
 #ifdef CSMP_WITH_SAMG_SOLVER
-        SAMG_Solver solver(&steady_state_pressure_solver_settings_);
-        steady_state_pressure_solver_ = new PDE_Integrator<dim,Element>( solver );
+        steady_state_pressure_solver_settings_ = new SAMG_Settings;
+        solver_ = new SAMG_Solver(&steady_state_pressure_solver_settings_);
+        steady_state_pressure_solver_ = new PDE_Integrator<dim,Element>( solver_ );
 
         // Solver Settings
 
@@ -604,8 +609,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
         steady_state_pressure_solver_settings_.Set_itypu(1);
 
       #else
-        CSMP_DEFAULT_LINEAR_SOLVER solver;
-        steady_state_pressure_solver_ = new PDE_Integrator<dim,Element>( solver );
+        steady_state_pressure_solver_ = new PDE_Integrator<dim,Element>;
       #endif
     }
 
