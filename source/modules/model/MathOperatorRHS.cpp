@@ -377,7 +377,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-uint32_t MathOperatorRHS<dim,CELL>::TestOperandOffset() const
+size_t MathOperatorRHS<dim,CELL>::TestOperandOffset() const
   {
     return top.second;
   }

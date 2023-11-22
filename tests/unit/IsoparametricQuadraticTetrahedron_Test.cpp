@@ -199,8 +199,8 @@ void IsoparametricQuadraticTetrahedron_Test::run()
         cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Element coordinate matrix:"<< endl;
         XY.Out();
         // nodes
-        vector<uint32_t>  NN(element_.Nodes());
-        for ( auto i{0}; i<NN.size(); ++i ) NN[i] = element_.N(i)->Idx();
+        vector<size_t>  NN(element_.Nodes());
+        for ( auto i{0u}; i<NN.size(); ++i ) NN[i] = element_.N(i)->Idx();
         //cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Node number vector (element):"<< endl;
         //out(NN);
         // dummy data (nodes 1-10 translating integers to numbers)

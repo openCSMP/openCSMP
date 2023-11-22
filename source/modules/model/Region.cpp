@@ -1908,7 +1908,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
   return true;
 
 } // CreateBetween
-
+*/
 
 
 
@@ -1916,6 +1916,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
 
 
 /**
+
 Forms the union of group a and group b and returns it into the result
 group 'res'.
 

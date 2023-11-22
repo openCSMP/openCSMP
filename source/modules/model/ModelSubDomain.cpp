@@ -2277,7 +2277,7 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
              for ( typename vector<CELL<dim>*>::iterator
                it=cell_vec_.begin(); it!=cell_vec_.end(); it++ )
                for ( auto i{0U}; i<(*it)->Facets(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
@@ -2285,7 +2285,7 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
              for ( typename vector<CELL<dim>*>::iterator
                it=cell_vec_.begin(); it!=cell_vec_.end(); it++ )
                for ( auto i{0U}; i<(*it)->Sectors(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
@@ -2311,14 +2311,14 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
                      prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
              for ( auto it=PerimeterCellsBegin(); it!=cell_vec_.end(); it++ )
                for ( auto i{0U}; i<(*it)->Facets(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
              for ( auto it=PerimeterCellsBegin(); it!=cell_vec_.end(); it++ )
                for ( auto i{0U}; i<(*it)->Sectors(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
@@ -2343,14 +2343,14 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
                      prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
              for ( auto it=CellsBegin(); it!=PerimeterCellsBegin(); it++ )
                for ( auto i{0U}; i<(*it)->Facets(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
              for ( auto it=CellsBegin(); it!=PerimeterCellsBegin(); it++ )
                for ( auto i{0U}; i<(*it)->Sectors(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface

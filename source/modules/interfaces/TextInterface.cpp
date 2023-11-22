@@ -520,7 +520,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                 for ( auto i{0U}; i<(*eit)->FV()->Facets(); ++i )
                 {
                   // printing the element id first
-                  fprintf( fp, "%u\t", static_cast<size_t>((*eit)->Idx()) );
+                  fprintf( fp, "%ul\t", static_cast<size_t>((*eit)->Idx()) );
                   
                   // printing the facet integration point locations in global coordinates
                   for ( uint32_t j=1U; j<(*eit)->FV()->FacetPoints(i); ++j ) {

@@ -1288,8 +1288,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_at(
 template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityPerpendicularToLaminations( Element<dim>* const e ) const
 {
-    bool is_composite = IsComposite(e);
-    assert( is_composite );
+    assert( IsComposite(e) );
     
     double L_low = GetLYLow(e);
     double L_high = GetLYHigh(e);
@@ -1306,8 +1305,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityPerpe
 template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityParallelToLaminations( Element<dim>* const e ) const
 {
-    bool is_composite = IsComposite(e);
-    assert( is_composite );
+    assert( IsComposite(e) );
     
     double L_low = GetLYLow(e);
     double L_high = GetLYHigh(e);
@@ -1323,8 +1321,7 @@ template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityInFlowDirection( Element<dim>* const e,
                                                                                             const TensorVariable<dim>& KK) const
 {
-    bool is_composite = IsComposite(e);
-    assert( is_composite );
+    assert( IsComposite(e) );
     assert( KK(0,0) > 0. );
     assert( KK(1,1) > 0. );
     if(dim==3U) assert( KK(2,2) > 0. );
@@ -1378,8 +1375,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::K_reduction_in_fl
 template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw( Element<dim>* const e ) const
 {
-    bool is_composite = IsComposite(e);
-    if ( !is_composite ) {
+    if ( !IsComposite(e) ) {
         double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
         return GetKrw(e, Sw); // krw_VG( Sw_, m_VG_ );
     }
@@ -1408,8 +1404,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw( Element<dim>
 template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_at( Element<dim>* const e, double Sw ) const
 {
-    bool is_composite = IsComposite(e);
-    if ( !is_composite ) {
+    if ( !IsComposite(e) ) {
         return GetKrw(e, Sw); // krw_VG( Sw_, m_VG_ );
     }
     

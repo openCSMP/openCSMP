@@ -64,7 +64,7 @@ void writeVariableIf( CELL<dim>* ptr,
  {
     VectorVariable<dim> vc;
     ptr->Read( idx, vc );
-    for ( auto i{0}; i<dim; i++ )
+    for ( auto i{0u}; i<dim; i++ )
       // the component gets overwritten
       if ( ptr->Status(idx,i) != dont_overwrite ) {
            vc.Flag(i) = var.Flag(i);
@@ -167,7 +167,7 @@ void writeVariableIf( CELL<dim>* ptr,
  {
     VectorVariable<dim> vc;
     ptr->Read( ip, idx, vc );
-    for ( auto i{0}; i<dim; i++ )
+    for ( auto i{0u}; i<dim; i++ )
       // the component gets overwritten
       if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
            vc.Flag(i) = var.Flag(i);
@@ -192,10 +192,10 @@ void writeVariableIf( CELL<dim>* ptr,
  {
     TensorVariable<dim> ts;
     ptr->Read( ip, idx, ts );
-    for ( auto i{0}; i<dim; i++ )
+    for ( uint32_t i{0u}; i<dim; i++ )
       if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
            ts.Flag(i) = var.Flag(i);
-           for ( size_t j{0U}; j<dim; j++ )
+           for ( uint32_t j{0U}; j<dim; j++ )
              ts(i,j) = var(i,j);
         }
     ptr->Store( ip, idx, ts );
@@ -212,7 +212,7 @@ void writeVariableIf( CELL<dim>* ptr,
  {
     FlaggedArrayVariable fa( var.Size() );
     ptr->Read( ip, idx, fa );
-    for ( auto i{0}; i<dim; i++ )
+    for ( uint32_t i{0u}; i<dim; i++ )
       // the component gets overwritten
       if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
            fa.Flag(i) = var.Flag(i);
@@ -276,7 +276,7 @@ void writeVariableIf( CELL<dim>* ptr,
  {
     VectorVariable<dim> vc;
     ptr->Read( sector_or_facet, ip, idx, vc );
-    for ( auto i{0}; i<dim; i++ )
+    for ( auto i{0u}; i<dim; i++ )
       // the component gets overwritten
       if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
            vc.Flag(i) = var.Flag(i);
@@ -302,7 +302,7 @@ void writeVariableIf( CELL<dim>* ptr,
  {
     TensorVariable<dim> ts;
     ptr->Read( sector_or_facet, ip, idx, ts );
-    for ( auto i{0}; i<dim; i++ )
+    for ( auto i{0u}; i<dim; i++ )
       if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
            ts.Flag(i) = var.Flag(i);
            for ( uint32_t j{0U}; j<dim; j++ )
@@ -323,7 +323,7 @@ void writeVariableIf( CELL<dim>* ptr,
  {
     FlaggedArrayVariable fa( var.Size() );
     ptr->Read( sector_or_facet, ip, idx, fa );
-    for ( auto i{0}; i<dim; i++ )
+    for ( auto i{0u}; i<dim; i++ )
       // the component gets overwritten
       if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
            fa.Flag(i) = var.Flag(i);

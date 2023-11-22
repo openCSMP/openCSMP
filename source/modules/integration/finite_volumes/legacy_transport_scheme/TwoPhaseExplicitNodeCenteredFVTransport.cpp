@@ -803,9 +803,9 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
 
                       // now the saturation dependent properties are computed
                       // for all FACETS per SECTOR surrounding the finite volume at the boundary
-                      for ( auto i{0U}; i<e->FV()->FacetsPerSector(pnid); i++ )
+                      for ( auto l{0U}; l<e->FV()->FacetsPerSector(pnid); ++l )
                         {
-                           auto     iFacet( e->FV()->FacetSurroundingSector(pnid,i) );
+                           auto     iFacet( e->FV()->FacetSurroundingSector(pnid,l) );
                            uint32_t inside_node,outside_node;
                            e->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );
 

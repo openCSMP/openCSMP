@@ -674,7 +674,7 @@ static pair<Element<3U>*,bool>  EvaluateBarycentricCoordinates( Element<3U>* ele
   if(pos_position.size() == nodes){
     return_vals = make_pair(element,true);
   }else{
-    next_element = element->Neighbor(distance(coordinates.begin(),min_element(coordinates.begin(),coordinates.end())));
+    next_element = element->Neighbor( static_cast<uint32_t>(distance(coordinates.begin(),min_element(coordinates.begin(),coordinates.end()))));
     return_vals = make_pair(next_element, false);
   }
   return return_vals;
@@ -775,14 +775,14 @@ static Element<3U>* FindPointIn3DVolumetricRegion(csmp::Point<3U> pXYZ, const Re
       //cout<<"Barycentric Coordinate: "<<p->first<<endl;
     }
     if (pos_position.size() == 4){
-      uint32_t n_assign = distance(RESULT.begin(), max_element (RESULT.begin(),RESULT.end()));
-      node = element->N(n_assign);
+      auto n_assign = distance(RESULT.begin(), max_element (RESULT.begin(),RESULT.end()));
+      node = element->N( static_cast<uint32_t>(n_assign) );
       return_vals = make_pair(element,node);
       //cout << "point found!"<<endl;
       stop = true;
     }
     else{
-      next_element = element->Neighbor( distance(RESULT.begin(), min_element (RESULT.begin(),RESULT.end())) );
+      next_element = element->Neighbor( static_cast<uint32_t>(distance(RESULT.begin(), min_element (RESULT.begin(),RESULT.end()))) );
       
       if(!next_element){
         return_vals = make_pair(element,node);

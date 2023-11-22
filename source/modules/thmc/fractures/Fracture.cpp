@@ -867,7 +867,7 @@ double Fracture<dim>::DistanceFromTip(std::map<Point<dim>, Node<dim>*>& nodemap,
   switch (side){
     case RIGHT: {
         double lengthfromtip = 0.0;
-        for (typename std::map< Point<dim>,Node<dim>* >::iterator i_n = nodemap.find(N->Coordinate()); i_n != --(nodemap.end()) ; 0){
+        for ( auto i_n = nodemap.find(N->Coordinate()); i_n != --(nodemap.end()); 0 ){
             auto i_n_old = i_n++;                                         //assign old value and then iterate
             assert(i_n->first == i_n->second->Coordinate());
             lengthfromtip += i_n_old->first.DistanceTo(i_n->first);       //add distance between each Node
@@ -877,7 +877,7 @@ double Fracture<dim>::DistanceFromTip(std::map<Point<dim>, Node<dim>*>& nodemap,
       break;
     case LEFT: {
         double lengthfromtip = 0.0;
-        for (typename std::map< Point<dim>,Node<dim>* >::iterator i_n = nodemap.find(N->Coordinate()); i_n != ++(nodemap.begin()) ; 0){
+        for ( auto i_n = nodemap.find(N->Coordinate()); i_n != ++(nodemap.begin()); 0 ){
             auto i_n_old = i_n--;                                         //assign old value and then iterate
             assert(i_n->first == i_n->second->Coordinate());
 
@@ -1115,7 +1115,7 @@ double Fracture<dim>::AnalyticalPressure(double t, double x){
     //double Pi_0_G   = 0.5450; //garagash approximation
 
     double b01 = 0.475449, b02 = -0.061178, b03 = 0.066322;
-    double b11 = 0.170654, b12 = 0.017132 , b13 = -0.039015, b14 = -0.045476;
+    double b11 = 0.170654, b12 = 0.017132,  b13 = -0.039015, b14 = -0.045476;
     double c11 = 0.36133,  c12 = -1.63867,  c13 = -0.638673;
 
 

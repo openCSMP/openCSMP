@@ -105,11 +105,11 @@ public:
 	}
 
 
-	void setIJ(size_t i, size_t j) {
-		p0 = &grid(i + 0, j + 0);
-		p1 = &grid(i + 1, j + 0);
-		p2 = &grid(i + 1, j + 1);
-		p3 = &grid(i + 0, j + 1);
+	void setIJ(uint32_t i, uint32_t j) {
+		p0 = &grid(i + 0u, j + 0u);
+		p1 = &grid(i + 1u, j + 0u);
+		p2 = &grid(i + 1u, j + 1u);
+		p3 = &grid(i + 0u, j + 1u);
 	}
 
 

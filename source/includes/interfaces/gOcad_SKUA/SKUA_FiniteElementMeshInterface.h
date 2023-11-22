@@ -348,7 +348,7 @@ class SKUA_FiniteElementMeshInterface {
     //          region name   type of elements
     std::multimap<std::string,std::string>           object_specs_;
     //          region name   element ids
-    std::multimap<std::string,std::vector<uint32_t> >  object_elements_;
+    std::multimap<std::string,std::vector<size_t> >  object_elements_;
     bool  isoparametric_;
     bool  extra_checks_on_binary_file_ = true;
 };

@@ -214,7 +214,7 @@ bool PropertyAtPointVisitor<dim>::isCloseToBarycenter( const vector<double> curr
 
     double distance(0.0);
     double max_distance(0.0);
-    for ( size_t i{0U}; i<e->Nodes(); i++ )
+    for ( uint32_t i{0U}; i<e->Nodes(); i++ )
     {
         distance = 0.0;
         for ( auto j{0U}; j<dim; j++ )
@@ -310,8 +310,8 @@ bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double>
         //
         //go through the neighbouring elements of element e unless target is found
         //
-        set<uint32_t> listOfCheckedElements;  // set of previously checked elements for a given point
-        typename set<uint32_t>::iterator itChd;
+        set<size_t> listOfCheckedElements;  // set of previously checked elements for a given point
+        typename set<size_t>::iterator itChd;
         VectorVariable<dim> current_bc;
         typename vector<double>::const_iterator Nmin;
         typename vector<double>::const_iterator Nmax;
@@ -338,7 +338,7 @@ bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double>
 
             if (debug_)
             {
-                if( dim == 2 )
+                if( dim == 2u )
                     std::cout<<"Point: x="<<currXyz[0]<<"; y="<<currXyz[1]<<"; z="<<currXyz[2]<<std::endl;
                 else
                     std::cout<<"Point: x="<<currXyz[0]<<"; y="<<currXyz[1]<<std::endl;
@@ -569,10 +569,10 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
                     if (prop_idx_.place == NODE)
                     {
                         TargetElement_->NodePropertyVector( prop_idx_, NPA_ );
-                        for(size_t i{0U};i<dim;i++)
+                        for( uint32_t i{0U};i<dim;i++)
                         {
                             propA_[itX->first](i)=0.0;
-                            for ( size_t j{0U}; j<TargetElement_->Nodes(); j++ )
+                            for ( uint32_t j{0U}; j<TargetElement_->Nodes(); j++ )
                                 propA_[itX->first](i)+=NI_[j] * NPA_[j](i);
                         }
                     }else if (prop_idx_.place == ELEMENT)
@@ -583,10 +583,10 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
                     if (prop_idx_.place == NODE)
                     {
                         TargetElement_->NodePropertyVector( prop_idx_, NPFA_ );
-                        for(size_t i{0U};i<dim;i++)
+                        for( uint32_t i{0U};i<dim;i++)
                         {
                             propA_[itX->first](i)=0.0;
-                            for ( size_t j{0U}; j<TargetElement_->Nodes(); j++ )
+                            for ( uint32_t j{0U}; j<TargetElement_->Nodes(); j++ )
                                 propFA_[itX->first](i)+=NI_[j] * NPFA_[j](i);
                         }
                     }else if (prop_idx_.place == ELEMENT)

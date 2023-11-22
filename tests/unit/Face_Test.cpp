@@ -20,7 +20,7 @@ namespace csmp
       VectorVariable<dim> faceUN( PLAIN, 0. ), faceToInner( PLAIN, 0. );
       f.UnitNormal(faceUN);
       const Point<dim> bcFace( f.BaryCenter() ), bcInner( f.Parent(INSIDE)->BaryCenter() );
-      for( size_t d(0); d < dim; ++d )
+      for( uint32_t d(0u); d < dim; ++d )
         faceToInner(d) = bcInner[d] - bcFace[d];
       if( dotProduct(faceToInner,faceUN) > 0. )
         return false;

@@ -1054,7 +1054,7 @@ void VTK_Interface<dim>::PointBasedTopology( const Region<dim>& sgref,
          node_nums[ nodes ] = pt;
          pentry[0] = nodes++;
          // inserting new element id and single-element vector<double> into plist
-        auto pit = plist.insert( make_pair( (*lit), pentry ) );
+         auto pit = plist.insert( make_pair( (*lit), pentry ) );
          assert( pit.second == true );
       }   
 

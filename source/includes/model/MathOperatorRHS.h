@@ -93,7 +93,7 @@ class MathOperatorRHS {
     VARIABLE_TYPE TestOperandType()             const;
     PLACEMENT     TestOperandPlacement()        const;
     uint32_t      TestOperandDataDepth()        const;
-    uint32_t      TestOperandOffset()           const;
+    size_t        TestOperandOffset()           const;
     void          TestOperandOffset( size_t );
 
     /// Accumulation Process Settings

@@ -126,7 +126,7 @@ struct EclipseFault
     fault.reserve( count );
   }
 
-  void Add( size_t i, size_t j, size_t k, ::csmp::CORNER_POINT_CELL_FACE_INDEX face )
+  void Add( uint32_t i, uint32_t j, uint32_t k, ::csmp::CORNER_POINT_CELL_FACE_INDEX face )
   {
     fault.emplace_back( std::make_pair( ijk( i, j, j ), face ) );
   }

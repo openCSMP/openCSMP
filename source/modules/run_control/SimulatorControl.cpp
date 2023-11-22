@@ -655,7 +655,7 @@ void SimulatorControl<dim>::ManageWellRates()
                 counter++;
             }
             cout<<" "<<counter<<". Quit well rate manager."<<endl;
-            int32_t regn=this->GetSS()->GetWells().size()+2;
+            long regn=this->GetSS()->GetWells().size()+2;
             while ( regn < 1 || regn > this->GetSS()->GetWells().size() ){
                 cout<<" Please select a well to which you would like to assign a rate, or "<<this->GetSS()->GetWells().size()+1<<" to quit."<<endl;
                 regn=GetIntegerInput();
@@ -946,7 +946,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
         Index avkey=this->GetSS()->GetModel()->Database().StorageKey("output times");
         this->GetSS()->GetModel()->Read(avkey,av);
         cout<<" Reading "<<av.Size()<<" Output times..."<<endl;
-        for (auto i = 0 ; i < av.Size();i++)
+        for ( uint32_t i = 0u ; i < av.Size();i++)
             if (!isnan(av(i))){
                 cout<<" "<<i<<" time: "<<av(i)<<endl;
                 this->RunSettings().AddOutputTime(av(i));
@@ -960,7 +960,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
         Index avkey=this->GetSS()->GetModel()->Database().StorageKey("monitor times");
         this->GetSS()->GetModel()->Read(avkey,av);
         cout<<" Reading "<<av.Size()<<" Monitoring times..."<<endl;
-        for (auto i = 0 ; i < av.Size();i++)
+        for (auto i = 0u; i < av.Size();i++)
             if (!isnan(av(i)))
                 this->RunSettings().AddMonitorTime(av(i));
         this->GetSS()->GetModel()->DeleteProperty("monitor times");
@@ -972,11 +972,11 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
     size_t nmon = std::distance(this->RunSettings().MonitorTimesBegin(),this->RunSettings().MonitorTimesEnd());
 
     SimulatorSetupParameter sp;
-    sp.name="output times";        sp.notation="OT";   sp.unit="s";    sp.type=ARRAY; sp.min= 0.00E00; sp.max=1.00E+50; sp.placement=MODEL;   sp.usage="computed";sp.vsize=nout;
+    sp.name="output times";        sp.notation="OT";   sp.unit="s";    sp.type=ARRAY; sp.min= 0.00E00; sp.max=1.00E+50; sp.placement=MODEL;   sp.usage="computed";sp.vsize=static_cast<uint32_t>(nout);
     this->GetSS()->GetModel()->CreateProperty(sp.name.c_str(),sp.notation.c_str(),sp.unit.c_str(),sp.type,sp.placement,sp.vsize,sp.min,sp.max,sp.usage);
     sp.key=this->GetSS()->GetModel()->Database().StorageKey(sp.name.c_str());
     this->GetSS()->GetParameterList().push_back(sp);
-    sp.name="monitor times";       sp.notation="MONT"; sp.unit="s";    sp.type=ARRAY; sp.min= 0.00E00; sp.max=1.00E+50; sp.placement=MODEL;   sp.usage="computed";sp.vsize=nmon;
+    sp.name="monitor times";       sp.notation="MONT"; sp.unit="s";    sp.type=ARRAY; sp.min= 0.00E00; sp.max=1.00E+50; sp.placement=MODEL;   sp.usage="computed";sp.vsize=static_cast<uint32_t>(nmon);
     this->GetSS()->GetModel()->CreateProperty(sp.name.c_str(),sp.notation.c_str(),sp.unit.c_str(),sp.type,sp.placement,sp.vsize,sp.min,sp.max,sp.usage);
     sp.key=this->GetSS()->GetModel()->Database().StorageKey(sp.name.c_str());
     this->GetSS()->GetParameterList().push_back(sp);

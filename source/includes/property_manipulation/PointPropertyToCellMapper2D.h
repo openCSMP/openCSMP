@@ -39,7 +39,8 @@ class PointPropertyToCellMapper2D {
     void MapPointDataToElements( Model<2>&, std::string target_region, std::string target_variable );
      
     /// Interpolates the values of the target variable, to the points stored in the DataTable, storing them in there provided that the target variable is defined in the table
-    void MapNodeToPointData( Model<2>&, std::string target_region, std::string target_variable );
+    // void MapNodeToPointData( Model<2>&, std::string target_region, std::string target_variable );
+    void MapNodeToPointData( Model<2>&, std::string target_variable );
     
     /// writes point dataset to a CSV file
     void OutputPointDataToCSV_File( std::string file_name, std::string target_variable ) const;

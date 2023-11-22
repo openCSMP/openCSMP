@@ -71,7 +71,7 @@ void TestSuite::run()
     int   status;
     char* realname;
     reset();
-    for (auto i = 0; i < m_tests.size(); ++i)
+    for ( int i = 0; i < m_tests.size(); ++i)
     {
         assert(m_tests[i]);
         if (m_tests[i]->hasName())

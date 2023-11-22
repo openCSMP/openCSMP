@@ -319,7 +319,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs()
 Removes named Region object and (optionally) its elements and nodes.
 
 @param  regionName The name of the region object which shall be removed.
-@param  delete_elmts_and_update_connectivity  gets MeshManager to delete elements and nodes and rebuilt local connectivity.
+@param  erase_elmts_and_update_connectivity  gets MeshManager to delete elements and nodes and rebuilt local connectivity.
 
 @note If the region which shall be removed does not exist, the method reports a warning.
 

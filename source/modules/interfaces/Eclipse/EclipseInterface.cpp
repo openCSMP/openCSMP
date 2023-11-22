@@ -1032,12 +1032,12 @@ int readEclipsePillarCoordinates( uint32_t& NX, uint32_t& NY,
 
   char* token( 0 );
   const char*  delims = " ,:,\t,\n,\r";
-  size_t idx( 0 );
-  size_t idy( 0 );
-  size_t cycle( 0 );
-  size_t position( 0 );
-  size_t direction( 0 );
-  csmp::Point<3u> pillar_coord[2];
+  uint32_t idx{0u};
+  uint32_t idy{0u};
+  uint32_t cycle{0u};
+  uint32_t position{0u};
+  uint32_t direction{0u};
+  csmp::Point<3u> pillar_coord[2u];
 
   std::string message;
   bool same_line( false );
@@ -1215,10 +1215,10 @@ int readEclipseCornerDepths( uint32_t NX, uint32_t NY, uint32_t& NZ, CornerPoint
   size_t cycle( 0 );
   /// 8 points of hexahedron ( TNW, TNE, TSW, TSE, BNW, BNE, BSE, BSW )
   csmp::Point<3U> pt( 0.0 );
-  size_t idx( 0 );
-  uint32_t idy( 0 ), idz( 0 );
-  uint32_t pidx( 0 ), pidy( 0 );
-  size_t east_west_position( 0 );
+  uint32_t idx{0u};
+  uint32_t idy{0u}, idz{0u};
+  uint32_t pidx{0u}, pidy{0u};
+  size_t east_west_position{0u};
   bool same_line( false );
   do {
     same_line = false;
@@ -1999,9 +1999,9 @@ int readEclipseFaultData( uint32_t NX, uint32_t NY, uint32_t NZ,
       fault.fault.reserve( (index_range[1] - index_range[0] + 1)
                            * (index_range[3] - index_range[2] + 1)
                            * (index_range[5] - index_range[4] + 1) );
-      for ( auto i = index_range[0]; i <= index_range[1]; ++i )
-        for ( size_t j = index_range[2]; j <= index_range[3]; ++j )
-          for ( size_t k = index_range[4]; k <= index_range[5]; ++k )
+      for ( uint32_t i = index_range[0]; i <= index_range[1]; ++i )
+        for ( uint32_t j = index_range[2]; j <= index_range[3]; ++j )
+          for ( uint32_t k = index_range[4]; k <= index_range[5]; ++k )
           {
             fault.Add( i, j, k, facemap[face] );
           }
