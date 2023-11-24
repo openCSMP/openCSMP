@@ -1,18 +1,11 @@
 #ifndef CGNS_MODEL_H
 #define CGNS_MODEL_H
 
-#include "CGNS_Interface.h"
 #include "Model.h"
-
-#include "ModelTopology.h"
-#include "ModelTime.h"
-
-#include "Exception.h"
-
-#include <string>
 
 namespace csmp 
 {
+  class CGNS_Interface;
 
   template<uint32_t dim>
   class CGNS_Model : public Model<dim>

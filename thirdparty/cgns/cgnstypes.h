@@ -41,10 +41,10 @@
 #ifdef _WIN32
 # define CG_LONG_T __int64
 #else
-# define CG_LONG_T @CGLONGT@
+#define CG_LONG_T @CGLONGT@
 #endif
 
-#if CG_BUILD_HDF5
+#ifdef CG_BUILD_HDF5
 
 /* ----------------------------------------------------------------
  * convert between HDF5 and ADF ids
@@ -69,31 +69,30 @@
 
 #define  CG_HAVE_STAT64_STRUCT @HAVE_STAT64_STRUCT@
 
-#if CG_BUILD_LEGACY
-# define CG_SIZEOF_SIZE    32
-# define CG_SIZE_DATATYPE "I4"
-# define cgerr_t  int
-# define cgint_t  int
-# define cgsize_t int
-# define cgid_t   double
-#else
-# if CG_BUILD_64BIT
-#  define CG_SIZEOF_SIZE    64
-#  define CG_SIZE_DATATYPE "I8"
+#ifdef CG_BUILD_LEGACY
+#define CG_SIZEOF_SIZE    32
+#define CG_SIZE_DATATYPE "I4"
+#define cgerr_t  int
+#define cgint_t  int
+#define cgsize_t int
+#define cgid_t   double
+#elif
+#ifdef CG_BUILD_64BIT
+#define CG_SIZEOF_SIZE    64
+#define CG_SIZE_DATATYPE "I8"
    typedef CG_LONG_T cgsize_t;
-# else
-#  define CG_SIZEOF_SIZE    32
-#  define CG_SIZE_DATATYPE "I4"
+#else
+#define CG_SIZEOF_SIZE    32
+#define CG_SIZE_DATATYPE "I4"
    typedef int cgsize_t;
-# endif
+#endif
   typedef int cgerr_t;
   typedef int cgint_t;
   typedef double cgid_t;
-#endif
 
 /* Define an int type that is interoperabable with Fortran's INTEGER */
 #define FORTRAN_DEFAULT_INTEGER_C_INT64_T @FORTRAN_DEFAULT_INTEGER_C_INT64_T@
-#if FORTRAN_DEFAULT_INTEGER_C_INT64_T == 1
+#ifdef FORTRAN_DEFAULT_INTEGER_C_INT64_T
   typedef CG_LONG_T cgint_f;
 #else
   typedef int cgint_f;
@@ -103,4 +102,5 @@
 typedef CG_LONG_T cglong_t;
 typedef unsigned CG_LONG_T cgulong_t;
 
+#endif
 #endif

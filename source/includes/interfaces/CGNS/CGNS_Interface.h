@@ -76,8 +76,8 @@ private:
 
     /// element specs
     bool  isoparametric_;
-    CGNS_ElementSpecifications         elmt_specs_;
-    using CSMP_ElementSpecifications   csmp_elmt_specs_;  ///< this is a static object
+    CGNS_ElementSpecifications  elmt_specs_;
+    using csmp_elmt_specs_ = CSMP_ElementSpecifications;  ///< this is a static object
     size_t global_eid_;
     //             element nodes       element type  element id
     std::map<std::vector<uint32_t>,std::pair<size_t,size_t> > element_ids_;

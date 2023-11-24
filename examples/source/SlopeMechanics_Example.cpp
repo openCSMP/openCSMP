@@ -15,7 +15,10 @@
 #include "Face.h"
 #include "NumIntegral_NT_op_N_dS.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
+#else
+#include "LinearSolver.h"
 #endif
 
 #include "InputDataManager.h"
@@ -27,8 +30,6 @@
 #include "CSMP_highLevelUtilities.h"
 #include "ComputationalSettings.h"
 #include "IAPWS_H2OPropertiesVisitor.h"
-#include "SAMG_Settings.h"
-#include "SAMG_Solver.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "PT_op.h"
 #include "NumIntegral_BT_D_B_dV.h"
