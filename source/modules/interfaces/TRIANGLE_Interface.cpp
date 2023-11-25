@@ -732,32 +732,35 @@ void TRIANGLE_Interface::FlagBoundaryNodesAccordingTo( int fvert, int8_t bflag_i
     else if ( bflag_int == BACK_OUTSIDE )   bflag = BACK;
  
     // 2. Flagging the nodes
+    bool search_error{false};
     if ( fvert == 0U ) {
          auto bit=bflags.find(nds[1]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
          bit=bflags.find(nds[2]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
       }
     else if ( fvert == 1U ) {
          auto bit=bflags.find(nds[2]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
          bit=bflags.find(nds[0]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
       }
     else if ( fvert == 2U ) {
          auto bit=bflags.find(nds[0]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
          bit=bflags.find(nds[1]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
       }
-    
- } // end FlagBoundaryNodesAccordingTo                                       
+    if ( search_error == true )
+      throw csmp::Exception( ERROR, "", "could not identify the BOX_BOUNDARY flags of the nodes looking at the boundary map ");
+      
+ } // end FlagBoundaryNodesAccordingTo
 
 
 

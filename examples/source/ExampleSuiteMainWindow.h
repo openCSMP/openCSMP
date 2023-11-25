@@ -4,9 +4,9 @@
 #include "ExampleSuiteMainWindow.h"
 #include "ExampleSuite.h"
 
-// TODO: these needs the QT library, perhaps combine with our GUI
+#ifdef QT_WIDGETS_LIB // this code needs the QT library
 
-namespace PL{
+namespace PL {
 
 class ExampleSuiteMainWindow : public QMainWindow
 {
@@ -47,5 +47,7 @@ class ExampleSuiteMainWindow : public QMainWindow
 };
 
 } // PL
+
+#endif // if CSMP is compiled together with QT and its widget library
 
 #endif // CSMP_EXAMPLE_SUITE_MAIN_WINDOW_H

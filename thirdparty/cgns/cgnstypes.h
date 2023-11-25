@@ -39,7 +39,7 @@
 
 #define CG_MAX_INT32 0x7FFFFFFF
 #ifdef _WIN32
-# define CG_LONG_T __int64
+#define CG_LONG_T __int64
 #else
 #define CG_LONG_T @CGLONGT@
 #endif
