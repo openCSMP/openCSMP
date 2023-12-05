@@ -96,3 +96,7 @@ build/
 
 # CLion IDE project files
 .idea/
+
+#build directory 
+thebuild/
+

@@ -567,46 +567,46 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
 
 #ifdef CSMP_WITH_SAMG_SOLVER
         steady_state_pressure_solver_settings_ = new SAMG_Settings;
-        solver_ = new SAMG_Solver(&steady_state_pressure_solver_settings_);
-        steady_state_pressure_solver_ = new PDE_Integrator<dim,Element>( solver_ );
+        solver_ = new SAMG_Solver(steady_state_pressure_solver_settings_);
+        steady_state_pressure_solver_ = new PDE_Integrator<dim,Element>( *solver_ );
 
         // Solver Settings
 
         // Select SAMG instance
-        steady_state_pressure_solver_settings_.SetSolverInstance(0);
+        steady_state_pressure_solver_settings_->SetSolverInstance(0);
         // Re-use solver setup from previous timestep, without internal checks forcing a new setup when required
         // iswit(4) is required for first call (without purging memory) to store previous SAMG setup information
-        steady_state_pressure_solver_settings_.Set_iswit(4);
+        steady_state_pressure_solver_settings_->Set_iswit(4);
 
-        steady_state_pressure_solver_settings_.Set_ncgtyp(5);
+        steady_state_pressure_solver_settings_->Set_ncgtyp(5);
 
         // nxtyp: 1,2=ILU, 0,5 = Gauss Seidel
         if( dim!=1 )
-            steady_state_pressure_solver_settings_.Set_nxtyp(0);
+            steady_state_pressure_solver_settings_->Set_nxtyp(0);
         else
-            steady_state_pressure_solver_settings_.Set_nxtyp(1);
+            steady_state_pressure_solver_settings_->Set_nxtyp(1);
 
-        steady_state_pressure_solver_settings_.Set_ndefault(40);
+        steady_state_pressure_solver_settings_->Set_ndefault(40);
 
-        steady_state_pressure_solver_settings_.Set_iout1(0);
-        steady_state_pressure_solver_settings_.Set_iout2(0);
+        steady_state_pressure_solver_settings_->Set_iout1(0);
+        steady_state_pressure_solver_settings_->Set_iout2(0);
 
         // SAMG solution criterion
-        steady_state_pressure_solver_settings_.Set_eps(0.);
-        steady_state_pressure_solver_settings_.Set_rel_eps(1.E-10);
+        steady_state_pressure_solver_settings_->Set_eps(0.);
+        steady_state_pressure_solver_settings_->Set_rel_eps(1.E-10);
 
         // Agressive first level coarsening nredlev(1) for decreased setup time and reduced no. of cycles
         //samg_settings.Set_nred(1);
 
         // Pre-adjust SAMG coarse matrix size relative to original size, based on solver output
-        steady_state_pressure_solver_settings_.Set_a_cmplx(2);
+        steady_state_pressure_solver_settings_->Set_a_cmplx(2);
 
         // Pre-adjust SAMG mesh complexity, based on solver output
-        steady_state_pressure_solver_settings_.Set_g_cmplx(1.5);
-        steady_state_pressure_solver_settings_.Set_w_avrge(2);
+        steady_state_pressure_solver_settings_->Set_g_cmplx(1.5);
+        steady_state_pressure_solver_settings_->Set_w_avrge(2);
 
         // First approximation u=0
-        steady_state_pressure_solver_settings_.Set_itypu(1);
+        steady_state_pressure_solver_settings_->Set_itypu(1);
 
       #else
         steady_state_pressure_solver_ = new PDE_Integrator<dim,Element>;

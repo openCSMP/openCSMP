@@ -380,9 +380,10 @@ template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::str
 template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,int,bool);
 template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::string&,const std::string&,int,bool);
 
-template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::string&,const std::string&,long,bool);
-template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,long,bool);
-template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::string&,const std::string&,long,bool);
+//E.P Eliminated, we are already instatiating type Long below with int64_t
+//template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::string&,const std::string&,long,bool);
+//template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,long,bool);
+//template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::string&,const std::string&,long,bool);
 
 template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::string&,const std::string&,unsigned long,bool);
 template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,unsigned long,bool);
