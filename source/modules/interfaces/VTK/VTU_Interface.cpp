@@ -1113,7 +1113,7 @@ void VTU_Interface<dim>
     string stringNumber;
     string stringCache;
     string vtuFileName;
-    for( size_t index=0; index<files; ++index )
+    for( size_t index=0u; index<files; ++index )
     {
         stringNumber = number_to_string( index );
         vtuFileName  = fileNames[index];

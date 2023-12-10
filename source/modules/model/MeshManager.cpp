@@ -6861,6 +6861,30 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
 // ============================================================================================
 
 
+template<uint32_t dim>
+set<uint32_t> MeshManager<dim>::OrderOfShapeFunctions() const
+ {
+    if ( elements_.empty() )
+      throw csmp::Exception( ERROR, "MeshManager<dim>::OrderOfShapeFunctions", "'elements_' container is empty." );
+
+    // order of the interpolation functions of the elements, faces and interfaces used in the mesh
+    set<uint32_t>  shape_function_orders;
+    
+    for ( const auto& it : elements_ )
+      shape_function_orders.insert( it.FE()->Interpolation() );
+
+    if ( !faces_.empty() )
+      for ( const auto& it : faces_ )
+        shape_function_orders.insert( it.FE()->Interpolation() );
+
+    if ( !interfaces_.empty() )
+      for ( const auto& it : interfaces_ )
+        shape_function_orders.insert( it.FE()->Interpolation() );
+
+    return shape_function_orders;
+ }
+ 
+
 /**
     Performs a node-to-node, breadth-first traversal to identify whether the model consists  of disconnected mesh patches.
  */

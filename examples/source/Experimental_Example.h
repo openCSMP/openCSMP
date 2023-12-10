@@ -15,14 +15,15 @@ namespace csmp {
 
 template<uint32_t> class Model;
 
-/* ORIGINAL
+
 class  Experimental_Example : public Example {
 public:
   virtual void Run();
   virtual void Specifications();
 };
-*/
 
+
+/*
 class  Experimental_Example : public Example {
 public:
     virtual void Run();
@@ -45,7 +46,7 @@ private:
         Model<3U>& mdl, bool with_gravity, bool with_tensor_k
     ) const;
 };
-
+*/
 
 
 } // csmp

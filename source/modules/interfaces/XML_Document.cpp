@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-namespace csmp{
+namespace csmp {
 
 
 /// default constructor

@@ -194,7 +194,7 @@ class Model : public RegionInterface<dim, Model>,
 public:
   // class Model is not copy constructable
 
-  /// constructs model with subdomains (Region, Boundary, SplitBoundary), variables file name is "*-variables.txt" where * is the name of the model
+  /// constructs model with subdomains (Region, Boundary, SplitBoundary), variables file name with extension "*-variables.txt" where * is the name of the model
   Model( ModelTopology&, VSet<dim>&, const char* var_file, bool treat_domains_as_regions_and_use_regions_file_if_any );
 
   /// Reconstructor:  reads model from set of CSMP's native binary files

@@ -41,13 +41,13 @@ class IsoparametricLinearPrism : public FiniteElement {
     virtual void        JacobianAtIntegrationPoint( uint32_t ip );
     virtual void        JacobianAt( const std::vector<double>& rst );
 
-    virtual double    dN( DenseMatrix<DM_MIN>& dn, const std::vector<double>& xyz  );
+    virtual double      dN( DenseMatrix<DM_MIN>& dn, const std::vector<double>& xyz  );
     virtual void        dN( DenseMatrix<DM_MIN>& DN6 );
-    virtual double    dN_AtNode( DenseMatrix<DM_MIN>& M, uint32_t node );
-    virtual double    dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, uint32_t gauss_point );
-    virtual double    dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
+    virtual double      dN_AtNode( DenseMatrix<DM_MIN>& M, uint32_t node );
+    virtual double      dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, uint32_t gauss_point );
+    virtual double      dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
 
-    virtual double    WeightAtIntegrationPoint( uint32_t i ) const;
+    virtual double      WeightAtIntegrationPoint( uint32_t i ) const;
     virtual void        IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
 
     virtual void        ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,

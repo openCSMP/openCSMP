@@ -58,6 +58,7 @@ bool FiniteElementPolicy<dim,CELL>::IsEquidimensional() const
 template<uint32_t dim, template<uint32_t> class CELL>
 bool FiniteElementPolicy<dim,CELL>::IsLine() const
   {
+    if constexpr ( dim == 1U ) return true;
     assert( fptr_ != nullptr );
     return fptr_->IsLine();
   }
@@ -72,6 +73,7 @@ bool FiniteElementPolicy<dim,CELL>::IsSurface() const
 template<uint32_t dim, template<uint32_t> class CELL>
 bool FiniteElementPolicy<dim,CELL>::IsVolume() const
   {
+    if constexpr ( dim != 3U ) return false;
     assert( fptr_ != nullptr );
     return fptr_->IsVolume();
   }

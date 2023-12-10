@@ -1,11 +1,11 @@
 
-To run the examples, please copy the 'example_inputs/' directory to a location outside of the open-csmp source diectory, and set it as your working directory.
+To run the OpenCSMP examples, please copy the 'example_inputs/' directory to a location outside of the open-csmp source directory (source code), and set it as the working directory of your IDE.
 
-This input directory contains all default input files required by the examples, in its 3 sub directories:
+example_inputs/ contains all the default input files required by the examples. Look at its 3 sub directories:
 
-	- 'input_meshes/' contains mesh files that can be read by Open-CSMP interfaces;
+	- 'input_meshes/' contains mesh files that can be read by OpenCSMP interfaces;
 
-	- 'csmp_native_format_models/' contains Open-CSMP native format binary files, that most examples start with;
+	- 'csmp_native_format_models/' contains OpenCSMP native format binary files, that most examples start with;
 
 	- 'variables_and_configuration_files/' contains the variables and configuration files.
 

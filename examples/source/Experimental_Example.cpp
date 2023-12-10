@@ -35,6 +35,10 @@
 #include "VTK_Interface.h"
 #include "VTU_Interface.h"
 
+#include "UG4_UGX_FileExport.h"
+#include "vsetMakers.h"
+
+
 using namespace std;
 
 namespace csmp {
@@ -54,7 +58,33 @@ void Experimental_Example::Specifications()
 
 
 
+void Experimental_Example::Run()
+ {
+    VSet<2U> mesh;
+    ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( mesh );
+    const bool treat_domains_as_regions{true};
+    Model<2U> model( topo, mesh, "CSMP-variables.txt", treat_domains_as_regions );
 
+    // intialising the variables 'element variable' and 'element vector'
+    //model.InputPropertyValue( "element variable", makeScalar(ANY,1.0) );
+    model.InputPropertyValue( "element vector", makeVector(ANY,ANY,1.0,2.0) );
+
+    VTU_Interface<2U>  vtu(model);
+    list<string> output_props{ "node number", "element number", "element variable" };
+    vtu.OutputDataToVTU( "test_Create_MeshPatchWithLineElements_VSet", output_props, "Model", static_cast<int>(0) );
+    
+    // OUTPUTS MODEL TO UG (name will be the model name)
+    UG4_UGX_FileExport<2U> ug4_exporter( model );
+    ug4_exporter.Write_UGX_FileASCII( model, model.Name() );
+
+    cout << endl << endl << "Run() finished." << endl;
+}
+
+
+
+
+
+#if 0
 /**
      ANLOR bubble migration example
 */
@@ -82,6 +112,11 @@ void Experimental_Example::Run() {
 
 // loads CSMP native model
     Model<3U>  model( model_name, variable_file );
+    
+    // OUTPUTS MODEL TO UG (name will be the model name)
+    UG4_UGX_FileExport<3U> ug4_exporter( model );
+    ug4_exporter.Write_UGX_FileASCII( model, "test_model" );
+    
     RunSimulation( model );
 
     cout << endl << endl << "Run finished" << endl;
@@ -1044,7 +1079,7 @@ void computeSpillPointSaturation( Model<dim>& model, const std::string& region_n
 */
 
 
-
+#endif
 
 
 
