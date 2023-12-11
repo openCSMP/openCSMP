@@ -65,7 +65,7 @@ void Experimental_Example::Run()
     // ------------------------------------------
     VSet<2U> mesh;
     ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( mesh );
-    const bool treat_domains_as_regions{true};
+    const bool treat_domains_as_regions{true}; // model does not contain any Face objects!
     Model<2U> model2D( topo, mesh, "CSMP-variables.txt", treat_domains_as_regions );
 
     // intialising the variables 'element variable' and 'element vector'
