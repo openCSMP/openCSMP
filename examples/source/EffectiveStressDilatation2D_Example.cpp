@@ -102,9 +102,6 @@ void EffectiveStressDilatation2D_Example::Run()
   // MODEL CREATION & PROPERTY ASSIGNMENT
   // ___________________________________________________________________________
   
-  // name of input file set
-  const char* bin_file="fractured_slate";
-
   /*
   // 1.0 create an input interface for ANSYS 2D meshes
   // ---------------------------------------------------------------------------
@@ -142,7 +139,7 @@ void EffectiveStressDilatation2D_Example::Run()
   cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'fractured_slate':"<<endl;
   cin.ignore();
   getline(cin, model_name);
-  if (model_name.length() == 0) model_name = "fractured_slate";
+  if (model_name.length() == 0) model_name = "fractured_slate"; // Guenther's test model
 
   //find the name of current example source file
   string file_name = GetExampleFileName(__FILE__);
@@ -250,7 +247,7 @@ void EffectiveStressDilatation2D_Example::Run()
          well.Accept(well_influx);
          cout <<"\nRun: Cumulative flux into the well (t="<< model_time <<"): "<< well_influx.InFlux() <<" (m3).\n";
          cumulative_production = well_influx.InFlux() * time_increment;
-         vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", static_cast<uint32_t>(rint(model_time/time_unit)) );
+         vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", static_cast<unsigned long>(rint(model_time/time_unit)) );
          time_increment *= 1.2;
       }
   

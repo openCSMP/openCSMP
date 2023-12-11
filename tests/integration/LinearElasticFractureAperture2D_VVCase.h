@@ -1,13 +1,10 @@
 #ifndef LINEAR_ELASTIC_FRACTURE_APERTURE_2D_VVCASE_H
 #define LINEAR_ELASTIC_FRACTURE_APERTURE_2D_VVCASE_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
-#include "stdlib.h"
-#include "vector"
-#include "SAMG_Settings.h"
 
-namespace csmp
-  {
+namespace csmp {
 
   class LinearElasticFractureAperture2D_VVCase: public Test
     {
@@ -19,8 +16,6 @@ namespace csmp
 
       template<typename T>
       void WriteSolutionToFile( std::vector<std::vector<T>> data, std::string name);
-
-      void SetSettings( SAMG_Settings& settings);
 
   private:
       double min_avg_error_ = 10.0;

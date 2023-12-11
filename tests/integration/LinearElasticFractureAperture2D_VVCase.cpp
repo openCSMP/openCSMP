@@ -1,15 +1,20 @@
 #include "LinearElasticFractureAperture2D_VVCase.h"
 #include "ANSYS_Model2D.h"
 #include "VTU_Interface.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVEWR
+#include "SAMG_Settings.h"
+#include "SAMG_Solver.h"
+#else
 #include "LinearSolver.h"
+#endif
+
 #include "PDE_Integrator.h"
 #include "NumIntegral_BT_D_B_dV.h"
 #include "ExtractTensorVariableComponent.h"
 #include "NumIntegral_PT_op_dS.h"
 #include "ModelSubDomain.h"
 #include "Fracture.h"
-#include <stdio.h>
-#include <cmath>
 #include "StressesAndStrains.h"
 #include "InterFaceFractureVisitor.h"
 
@@ -133,7 +138,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
 
 
     // Model Boundary Conditions:
-    Node<dim> *cornerNodeLeftBottom, *cornerNodeRightBottom;
+    Node<dim> *cornerNodeLeftBottom(nullptr), *cornerNodeRightBottom(nullptr);
     for (vector<Node<dim>*>::const_iterator node (model.Region("Model").NodesBegin()); node != model.Region("Model").NodesEnd(); ++node )
     {
         if ( (*node)->AtBoundary() == CNR1 ) cornerNodeLeftBottom  = (*node);
@@ -172,12 +177,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
     /// Elasticity Equations
     ///==================================================================
     // setting up integrator
-    SAMG_Settings settings;
-    //myFracture.SetSolverSettings(settings);
-    //settings.Set_ncycle(1000); // Depending on the type of problem, it may take many iterations to converge for anisotropic cases.
-    //settings.Set_nxtyp(2);
     EigenSolver eigenSolver;
-    //SAMG_Solver samgSolver(settings);
     PDE_Integrator<dim,Element> deformation (eigenSolver);
 
     // Adding stiffness to the LHS list:
@@ -291,7 +291,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
 
 
 
-
+#if 0
 void LinearElasticFractureAperture2D_VVCase::SetSettings(SAMG_Settings& settings)
 {
 
@@ -400,9 +400,8 @@ void LinearElasticFractureAperture2D_VVCase::SetSettings(SAMG_Settings& settings
                       5 Cluster coarsening & piecewise constant interpolation.
                       6 Cluster coarsening & multi-pass interpolation.*/
   settings.Set_ncycle(10000);
-
 }
-
+#endif
 
 
 

@@ -1,9 +1,8 @@
 #ifndef LINEAR_ELASTIC_ISOTROPIC_DEFORMATION_2D_VV_CASE_H
 #define LINEAR_ELASTIC_ISOTROPIC_DEFORMATION_2D_VV_CASE_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
-#include "ANSYS_Model2D.h"
-//#include "ExternalLoad.h"
 
 namespace csmp
   {

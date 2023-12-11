@@ -96,8 +96,8 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForDiscontiguousModel()
        }
   
      if ( verbose_ ) {
-          vtk_output.OutputDataToVTK( model, "test-evar", "element variable", 0U );
-          vtk_output.OutputDataToVTK( model, "test-nvar", "nodal variable", 0U );
+          vtk_output.OutputDataToVTK( model, "test-evar", "element variable", 0 );
+          vtk_output.OutputDataToVTK( model, "test-nvar", "nodal variable", 0 );
           // output of perimeter elements to VTK (whole perimenter gets identified)
           outputRegionBoundaryToVTK( model, "Model", "model-boundary" );
        }
@@ -192,8 +192,8 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
        }
   
      if ( verbose_ ) {
-          vtk_output.OutputDataToVTK( model, "test-evar", "element variable", 0U );
-          vtk_output.OutputDataToVTK( model, "test-nvar", "nodal variable", 0U );
+          vtk_output.OutputDataToVTK( model, "test-evar", "element variable", 0 );
+          vtk_output.OutputDataToVTK( model, "test-nvar", "nodal variable", 0 );
           // output of perimeter elements to VTK (whole perimenter gets identified)
           outputRegionBoundaryToVTK( model, "Model", "model-boundary" );
        }
@@ -221,7 +221,7 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
            (*eit).second.first->Store( evar_key, makeScalar(PLAIN,7.) );
         }
 // ERROR: some INSIDE elements appear on the outside
-      vtk_output.OutputDataToVTK(model, "high-vals-next-to-interface", "element variable", 1U );
+      vtk_output.OutputDataToVTK(model, "high-vals-next-to-interface", "element variable", 1 );
 
 
    // 2. build CSMP SplitBoundary
@@ -279,7 +279,7 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
           cout <<"\nrun: saving region: "<< (*rit).first <<"\n";
           pair<int32_t,int32_t> region_shape = (*rit).second.SpatialDimensions();
           if ( region_shape.first == 1 and region_shape.second == 3 )
-            vtk_output.OutputDataToVTK( model, (*rit).first, filename, string("nodal variable"), 2U );
+            vtk_output.OutputDataToVTK( model, (*rit).first, filename, string("nodal variable"), 2 );
           }
      }
   
@@ -296,7 +296,7 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
              cout <<"\nrun: saving region: "<< (*rit).first <<"\n";
              pair<int32_t,int32_t> region_shape = (*rit).second.SpatialDimensions();
              if ( region_shape.first == 1 and region_shape.second == 3 )
-               vtk_output.OutputDataToVTK( model, (*rit).first, filename, string("nodal variable"), 2U );
+               vtk_output.OutputDataToVTK( model, (*rit).first, filename, string("nodal variable"), 2 );
           }
      }
      

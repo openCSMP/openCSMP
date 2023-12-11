@@ -80,7 +80,7 @@ void SplitBoundaryPressureDiffusion_Test::run()
 
     VTK_Interface<3U>  vtk_output;
     vtk_output.OutputDataToVTK( *model_ptr_, "model_perm", "permeability", 0 );
-    vtk_output.OutputDataToVTK( *model_ptr_, fracture_name_, string("model_perm"), string("permeability"), 0U );
+    vtk_output.OutputDataToVTK( *model_ptr_, fracture_name_, string("model_perm"), string("permeability"), 0 );
 
     // assigning initial uniform fluid pressure of 10 MPa
     const double initial_fluid_pressure{ 1.0e7 };
@@ -188,9 +188,9 @@ void SplitBoundaryPressureDiffusion_Test::run()
 
     // 4. Transient loop: Compute fluid pressure during each time-step and output the results for each time step
     // ---------------------------------------------------------------------------------------------------------
-    const double maxtime{ 365. * 86400. }; // 1 year
-    double       time_increment{ 0.5 }; // seconds
-    uint32_t     timestep{ 1U };
+    const double  maxtime{ 365. * 86400. }; // 1 year
+    double        time_increment{ 0.5 }; // seconds
+    unsigned long timestep{ 1U };
     // iout: for the transient loop, the screen output from SAMG solver is reduced
     #ifdef USE_SAMG_SOLVER
     settings.Set_iout1( 0 );

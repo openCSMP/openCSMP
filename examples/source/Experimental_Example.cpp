@@ -35,6 +35,7 @@
 #include "VTK_Interface.h"
 #include "VTU_Interface.h"
 
+#include "ANSYS_Model3D.h"
 #include "UG4_UGX_FileExport.h"
 #include "vsetMakers.h"
 
@@ -60,22 +61,34 @@ void Experimental_Example::Specifications()
 
 void Experimental_Example::Run()
  {
+    // 2D Test case without SplitBoundary objects
+    // ------------------------------------------
     VSet<2U> mesh;
     ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( mesh );
     const bool treat_domains_as_regions{true};
-    Model<2U> model( topo, mesh, "CSMP-variables.txt", treat_domains_as_regions );
+    Model<2U> model2D( topo, mesh, "CSMP-variables.txt", treat_domains_as_regions );
 
     // intialising the variables 'element variable' and 'element vector'
     //model.InputPropertyValue( "element variable", makeScalar(ANY,1.0) );
-    model.InputPropertyValue( "element vector", makeVector(ANY,ANY,1.0,2.0) );
+    model2D.InputPropertyValue( "element vector", makeVector(ANY,ANY,1.0,2.0) );
 
-    VTU_Interface<2U>  vtu(model);
+    VTU_Interface<2U>  vtu(model2D);
     list<string> output_props{ "node number", "element number", "element variable" };
     vtu.OutputDataToVTU( "test_Create_MeshPatchWithLineElements_VSet", output_props, "Model", static_cast<int>(0) );
     
     // OUTPUTS MODEL TO UG (name will be the model name)
-    UG4_UGX_FileExport<2U> ug4_exporter( model );
-    ug4_exporter.Write_UGX_FileASCII( model, model.Name() );
+    UG4_UGX_FileExport<2U> ug4_exporter2D( model2D );
+    ug4_exporter2D.Write_UGX_FileASCII( model2D, model2D.Name() );
+    
+    // 3D 'prism_mesh' testcase
+    // ------------------------
+    ANSYS_Model3D  model3D( "prism_test", "CSMP-variables.txt",
+                             false, /* irregular_mesh */
+                             true   /* binary_file */
+                          );
+  
+    UG4_UGX_FileExport<3U> ug4_exporter3D( model3D );
+    ug4_exporter3D.Write_UGX_FileASCII( model3D, model3D.Name() );
 
     cout << endl << endl << "Run() finished." << endl;
 }
