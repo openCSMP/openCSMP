@@ -376,7 +376,7 @@ pair<CELL_SHAPE,bool>  ModelSubDomain<dim,CELL>::SingleCellShapeDomain() const
     if ( !single_elmt_domain ) return make_pair( static_cast<CELL_SHAPE>(UNSPECIFIED), single_elmt_domain );
     
     // cell shape
-    switch ( cell_dim.first ) {
+    switch ( cell_dim.second ) {
         case 1:
           return make_pair( LINE, single_elmt_domain );
         case 2:

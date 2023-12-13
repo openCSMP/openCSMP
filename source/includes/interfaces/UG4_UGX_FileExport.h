@@ -144,9 +144,13 @@ class UG4_UGX_FileExport {
     UG4_UGX_FileExport( const UG4_UGX_FileExport& ) = delete;
     
     /// Loops over the unique regions in the model to make a vector of  the unique edges (node-iD pairs) in the model (corner nodes only)
-    size_t CollectEdges( const Model<dim>&, std::vector<std::pair<size_t,size_t>>& edges );
-    size_t CollectFaces( const Model<dim>&, std::vector<std::set<size_t>>& faces );
-    size_t CollectVolumes( const Model<dim>&, std::vector<std::set<size_t>>& volumes );
+    size_t CollectEdges( const Model<dim>& );
+    
+    /// creates two sorted vectors for triangular and quadrilateral elements, respectively
+    size_t CollectFaces( const Model<dim>& );
+    
+    /// creates sorted vectors for tetra, hexa, prism, and pyramid elements
+    size_t CollectVolumes( const Model<dim>& );
     
     // SUBSET mapping
     /// Finds the ID numbers of the edges in the global edge vector inside of the region
@@ -157,24 +161,13 @@ class UG4_UGX_FileExport {
     size_t CollectEdgesInBoundary( const Boundary<dim>&, std::vector<size_t>& region_edges ) const;
     size_t CollectFacesInBoundary( const Boundary<dim>&, std::vector<size_t>& region_faces ) const;
     
-    // NOTE: split boundaries may need special recording as there is no corresponding feature in UGX
-    
-    /// writes the cell idx of surface elements (first triangles, then quadrilaterals) in the order in which they should appear in the attachment vector
-    void CellIdxInFaceAttachmentsOrder( const Model<dim>&, std::vector<size_t>& cell_idx_in_attachment_order ) const;
-
-    /// writes the cell idx of volume elements (tets, hexa, prims, pyra) in the order in which they should appear in the attachment vector
-    void CellIdxInVolumeAttachmentsOrder( const Model<dim>&, std::vector<size_t>& cell_idx_in_attachment_order ) const;
-
-    /// numbers elements in the convention adopted by the UGX format: edges (0..n-1), triangles + quadrilaterals (0..n-1), tetrahedra..pyra (0..n-1); @note this is needed for property attachments
-    void NumberElementsForUGX( const Model<dim>& ) const;
-    
     // helpers
-    bool HasTriangles() const { return (trias_ > 0); }
-    bool HasQuadrilaterals() const { return (quads_ > 0); }
-    bool HasTetrahedra() const { return (tets_ > 0); }
-    bool HasHexahedra() const { return (hexes_ > 0); }
-    bool HasPrisms() const { return (prisms_ > 0); }
-    bool HasPyramids() const { return (pyras_ > 0); }
+    bool HasTriangles() const      { return !tria_faces_.empty(); }
+    bool HasQuadrilaterals() const { return !quad_faces_.empty(); }
+    bool HasTetrahedra() const     { return !tetra_volumes_.empty(); }
+    bool HasHexahedra() const      { return !hexa_volumes_.empty(); }
+    bool HasPrisms() const         { return !prism_volumes_.empty(); }
+    bool HasPyramids() const       { return !pyra_volumes_.empty(); }
     
     // translation of CSMP variable types to UG variable types
     std::string UG_VariableType( const csmp::Index& ) const;
@@ -183,11 +176,13 @@ class UG4_UGX_FileExport {
     // UG also does not require that nodes, edges, faces and volumes are listed in any particular numbering sense.
     // Thus, sorting allows to use them as search keys.
     // Note also that the UGX format only supports elements with linear shape functions, higher-order elements are created inside of UG
-    std::vector<std::pair<size_t,size_t>>  edges_;    ///< global node IDs defining the edge end-points
-    std::vector<std::set<size_t>>          faces_,    ///< quads and triangles
-                                           volumes_;  ///< volumetric elements present only in 3D models
-  
-    size_t trias_, quads_, tets_, hexes_, prisms_, pyras_; ///< recorded when file is first read
+    std::vector<std::pair<size_t,size_t>>            edges_;          ///< global node IDs defining the edge end-points (one array because all edges have the same size
+    std::vector<std::pair<std::set<size_t>,size_t>>  tria_faces_,     ///< faces = triangles  + quadrilaterals, numbered continuously from 0..faces-1, second number is CSMP idx
+                                                     quad_faces_,
+                                                     tetra_volumes_,  ///< volumes = tets + hexa + prism + pyra, numbered continuously
+                                                     hexa_volumes_,
+                                                     prism_volumes_,
+                                                     pyra_volumes_;  ///< volumetric elements present only in 3D models
   
     // printing of region=subset ids (0..n-1) which requires searching the edges, faces, and volumes vectors
     bool with_region_edge_output_   = true;

@@ -66,7 +66,7 @@ void Experimental_Example::Run()
     VSet<2U> mesh;
     ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( mesh );
     const bool treat_domains_as_regions{true}; // model does not contain any Face objects!
-    Model<2U> model2D( topo, mesh, "CSMP-variables.txt", treat_domains_as_regions );
+    Model<2U> model2D( topo, mesh, "UG4_UGX_FileExport-variables.txt", treat_domains_as_regions );
 
     // intialising the variables 'element variable' and 'element vector'
     //model.InputPropertyValue( "element variable", makeScalar(ANY,1.0) );
@@ -82,10 +82,21 @@ void Experimental_Example::Run()
     
     // 3D 'prism_mesh' testcase
     // ------------------------
-    ANSYS_Model3D  model3D( "prism_test", "CSMP-variables.txt",
+    ANSYS_Model3D  model3D( "prism_test", "UG4_UGX_FileExport-variables.txt",
                              false, /* irregular_mesh */
                              true   /* binary_file */
                           );
+    printRangeOfVariable( model3D, "element number" );
+    printRangeOfVariable( model3D, "face number" );
+    printRangeOfVariable( model3D, "node number" );
+    
+    // assigning the number of nodes to 'element variable' so that this array can be tested for correctness
+    Region<3U>& model_domain = model3D.Region("Model");
+    const csmp::Index evar_key = model3D.Database().StorageKey("element variable");
+    for ( auto& it : model_domain.CellVector() )
+      it->Store( evar_key, makeScalar(ANY,it->Nodes()) );
+      
+    model3D.InputPropertyValue( "element vector", makeVector(ANY,ANY,ANY,1.,2.,3.) );
   
     UG4_UGX_FileExport<3U> ug4_exporter3D( model3D );
     ug4_exporter3D.Write_UGX_FileASCII( model3D, model3D.Name() );
