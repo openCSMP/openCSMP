@@ -836,6 +836,8 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumes( const Model<dim>& model )
            for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
            tetra_volumes_.push_back( make_pair( global_node_numbers, it->Idx() ) );
         }
+    sort( tetra_volumes_.begin(), tetra_volumes_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
+    
     // hexahedra
     for ( const auto& it : model_domain.CellVector() )
       if ( it->IsVolume() && isHexahedral( it->FE_Type() ) ) {
@@ -844,6 +846,8 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumes( const Model<dim>& model )
            for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
            hexa_volumes_.push_back( make_pair( global_node_numbers, it->Idx() ) );
         }
+    sort( hexa_volumes_.begin(), hexa_volumes_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
+
     // prisms
     for ( const auto& it : model_domain.CellVector() )
       if ( it->IsVolume() && isPrism( it->FE_Type() ) ) {
@@ -852,6 +856,8 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumes( const Model<dim>& model )
            for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
            prism_volumes_.push_back( make_pair( global_node_numbers, it->Idx() ) );
         }
+    sort( prism_volumes_.begin(), prism_volumes_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
+
     // pyramids
     for ( const auto& it : model_domain.CellVector() )
       if ( it->IsVolume() && isPyramid( it->FE_Type() ) ) {
@@ -860,6 +866,7 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumes( const Model<dim>& model )
            for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
            pyra_volumes_.push_back( make_pair( global_node_numbers, it->Idx() ) );
         }
+    sort( pyra_volumes_.begin(), pyra_volumes_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
 
     // TODO: sorting to match order in volumes_?
 
@@ -1107,7 +1114,8 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumesInRegion( const Region<dim>& domai
            set<size_t> global_node_numbers;
            for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
            // searching for the element IDx in the global volumes vector
-           const auto elmt_it = lower_bound( tetra_volumes_.begin(), tetra_volumes_.end(), make_pair( global_node_numbers, it->Idx() ) );
+           const auto elmt_it = lower_bound( tetra_volumes_.begin(), tetra_volumes_.end(), make_pair( global_node_numbers, it->Idx() ),
+                                             [](auto &left, auto &right) { return left.first < right.first; } );
            if ( elmt_it != tetra_volumes_.end() )
              region_volumes.push_back( distance(tetra_volumes_.begin(),elmt_it) );
         }
@@ -1120,9 +1128,10 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumesInRegion( const Region<dim>& domai
            set<size_t> global_node_numbers;
            for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
            // searching for the element IDx in the global volumes vector
-           const auto elmt_it = lower_bound( hexa_volumes_.begin(), hexa_volumes_.end(), make_pair( global_node_numbers, it->Idx() ) );
+           const auto elmt_it = lower_bound( hexa_volumes_.begin(), hexa_volumes_.end(), make_pair( global_node_numbers, it->Idx() ),
+                                             [](auto &left, auto &right) { return left.first < right.first; } );
            if ( elmt_it != hexa_volumes_.end() )
-             region_volumes.push_back( distance(hexa_volumes_.begin(),elmt_it) + region_volumes.size() );
+             region_volumes.push_back( distance(hexa_volumes_.begin(),elmt_it) + tetra_volumes_.size() );
         }
     // prism elements
     for ( const auto& it : domain.CellVector() )
@@ -1133,9 +1142,10 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumesInRegion( const Region<dim>& domai
            set<size_t> global_node_numbers;
            for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
            // searching for the element IDx in the global volumes vector
-           const auto elmt_it = lower_bound( prism_volumes_.begin(), prism_volumes_.end(), make_pair( global_node_numbers, it->Idx() ) );
+           const auto elmt_it = lower_bound( prism_volumes_.begin(), prism_volumes_.end(), make_pair( global_node_numbers, it->Idx() ),
+                                             [](auto &left, auto &right) { return left.first < right.first; } );
            if ( elmt_it != prism_volumes_.end() )
-             region_volumes.push_back( distance(prism_volumes_.begin(),elmt_it) + region_volumes.size() );
+             region_volumes.push_back( distance(prism_volumes_.begin(),elmt_it) + tetra_volumes_.size() +  hexa_volumes_.size() );
         }
     // pyramids
     for ( const auto& it : domain.CellVector() )
@@ -1146,9 +1156,10 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumesInRegion( const Region<dim>& domai
            set<size_t> global_node_numbers;
            for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
            // searching for the element IDx in the global volumes vector
-           const auto elmt_it = lower_bound( pyra_volumes_.begin(), pyra_volumes_.end(), make_pair( global_node_numbers, it->Idx() ) );
+           const auto elmt_it = lower_bound( pyra_volumes_.begin(), pyra_volumes_.end(), make_pair( global_node_numbers, it->Idx() ),
+                                             [](auto &left, auto &right) { return left.first < right.first; } );
            if ( elmt_it != pyra_volumes_.end() )
-             region_volumes.push_back( distance(pyra_volumes_.begin(),elmt_it) + region_volumes.size() );
+             region_volumes.push_back( distance(pyra_volumes_.begin(),elmt_it) + tetra_volumes_.size() +  hexa_volumes_.size() + prism_volumes_.size() );
         }
 
     // no duplicates contained here and no sorting needed because order does not matter
