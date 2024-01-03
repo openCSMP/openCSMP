@@ -18,6 +18,7 @@ std::tuple<float,float,float,float,std::string> goodColour( int id );
 template<uint32_t> class Model;
 template<uint32_t> class Region;
 template<uint32_t> class Boundary;
+template<uint32_t> class MeshManager;
 
 // TODO: write functions that output edge nodes as pointer vectors
 // TODO: make sure that methods work for quadratic element meshes
@@ -35,6 +36,29 @@ Some enumerations in grid/grid_base_objects.h
 To assign properties to the grid, attachment traits are used.
 These are: vertex, edge, face and volume.
 
+@attention Design choices had to be made to crerate the additional edge and face data
+that UG4 needs for during the output:
+
+Importantly, CSMP models store edges and faces only if these are needed as lower-dimensional entities
+for computations (well and fracture modelling, assignment of boundary condtions etc.). In UG4 they are always
+needed and their numbering must be unique.
+
+The choice made for the implementation of this CSMP-UG4 interface is that those edges and faces that
+are  present in the CSMP model  are later identified in the edges and faces vectors created for UG.
+What is output is the "model domain" plus the faces (and interfaces) touching it.
+Their 'idx' is mapped that of the edge and faces created for UG.
+
+Region and Boundary output enlists all the nodes, edges and faces that belong to these,
+although UG4 only wants them to be listed once. Here, the feature in Promesh which eliminates
+excess edges and faces is relied upon.
+
+@attention properties are no associated with regions but communicated as node, edge, face and volume attachments.
+Since the CSMP model only contains property values for those elements, faces, interfaces and nodes
+present in there, no-data values are printed for all the other ones needed by UG.
+
+@section Example
+
+One of the UGX files from the examples directorty ofg UG4.
 @Code
 
 <?xml version="1.0" encoding="utf-8"?>
@@ -137,7 +161,7 @@ class UG4_UGX_FileExport {
     explicit UG4_UGX_FileExport( const Model<dim>& );
 
     /// filename without extension which will be appended
-    bool Write_UGX_FileASCII( const Model<dim>&, const std::string& file_name ) const;
+    bool Write_UGX_FileASCII( const Model<dim>&, const std::string& file_name );
 
   private:
     UG4_UGX_FileExport() = delete;
@@ -148,6 +172,11 @@ class UG4_UGX_FileExport {
     
     /// creates two sorted vectors for triangular and quadrilateral elements, respectively
     size_t CollectFaces( const Model<dim>& );
+    
+    /// establishes faces in between volumetric cells (3D only)
+    size_t CollectFacesFromVolumes( const Model<dim>&,
+                                    std::map<std::set<size_t>,std::set<std::pair<size_t,uint32_t>>>&  tria_faces,
+                                    std::map<std::set<size_t>,std::set<std::pair<size_t,uint32_t>>>&  quad_faces ) const;
     
     /// creates sorted vectors for tetra, hexa, prism, and pyramid elements
     size_t CollectVolumes( const Model<dim>& );
@@ -169,6 +198,17 @@ class UG4_UGX_FileExport {
     bool HasPrisms() const         { return !prism_volumes_.empty(); }
     bool HasPyramids() const       { return !pyra_volumes_.empty(); }
     
+    /// returns CSMP line element/face/interface  idx if it exists or UNSPECIFIED if not
+    long EquivalentEdgeInCSMP( size_t ug_idx ) const;
+
+    /// returns CSMP line element/face/interface  idx if it exists or UNSPECIFIED if not
+    long EquivalentFaceInCSMP( size_t ug_idx ) const;
+    
+    ///
+    void WriteFaceVariableValue( std::ofstream&, const csmp::Index&, const MeshManager<dim>&, size_t ug_cell_idx, bool& print_whitespace ) const;
+    ///
+    void WriteVolumeVariableValue( std::ofstream&, const csmp::Index&, const MeshManager<dim>&, size_t ug_cell_idx, bool& print_whitespace ) const;
+
     // translation of CSMP variable types to UG variable types
     std::string UG_VariableType( const csmp::Index& ) const;
         
@@ -176,13 +216,22 @@ class UG4_UGX_FileExport {
     // UG also does not require that nodes, edges, faces and volumes are listed in any particular numbering sense.
     // Thus, sorting allows to use them as search keys.
     // Note also that the UGX format only supports elements with linear shape functions, higher-order elements are created inside of UG
-    std::vector<std::pair<size_t,size_t>>            edges_;          ///< global node IDs defining the edge end-points (one array because all edges have the same size
-    std::vector<std::pair<std::set<size_t>,size_t>>  tria_faces_,     ///< faces = triangles  + quadrilaterals, numbered continuously from 0..faces-1, second number is CSMP idx
-                                                     quad_faces_,
-                                                     tetra_volumes_,  ///< volumes = tets + hexa + prism + pyra, numbered continuously
+    // global node ids, followed by element ID of edge
+    std::vector<std::pair<size_t,size_t>> edges_; ///< global edge end-node IDs for all edges in the model as needed by UG (n...total)
+    //     csmp-idx, edge-#
+    std::map<size_t,size_t>  csmp_edges_, csmp_edges_inverted_; ///< mapping between CSMP element/face IDs and edge number in UG
+
+    std::vector<std::pair<std::set<size_t>,std::array<size_t,3>>>  tria_faces_; ///< triangle faces numbered continuously from 0..faces-1, second original node order
+    std::vector<std::pair<std::set<size_t>,std::array<size_t,4>>>  quad_faces_;
+                                                     
+    std::vector<std::pair<std::set<size_t>,size_t>>  tetra_volumes_,     ///< volumes = tets + hexa + prism + pyra, numbered continuously
                                                      hexa_volumes_,
                                                      prism_volumes_,
-                                                     pyra_volumes_;  ///< volumetric elements present only in 3D models
+                                                     pyra_volumes_;      ///< volumetric elements present only in 3D models
+    //     csmp-idx,ug-id
+    std::map<size_t,size_t> csmp_faces_, csmp_faces_inverted_;           ///< mapping between CSMP element/face IDs and face-number in UG
+  
+    std::vector<bool> edges_in_csmp_, faces_in_csmp_; ///<  vectors that can be queried before a search of a CSMP object is carried out to see whether it exists at all
   
     // printing of region=subset ids (0..n-1) which requires searching the edges, faces, and volumes vectors
     bool with_region_edge_output_   = true;

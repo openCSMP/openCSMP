@@ -71,6 +71,10 @@ void Experimental_Example::Run()
     // intialising the variables 'element variable' and 'element vector'
     //model.InputPropertyValue( "element variable", makeScalar(ANY,1.0) );
     model2D.InputPropertyValue( "element vector", makeVector(ANY,ANY,1.0,2.0) );
+    
+    // forcing the creation of another unique region called quadrilaterals because Promesh does not show properties
+    const bool unique_region{ true };
+    model2D.FormRegionFrom( "quads", "element variable", 3.5, 5.0, unique_region );
 
     VTU_Interface<2U>  vtu(model2D);
     list<string> output_props{ "node number", "element number", "element variable" };
@@ -79,6 +83,7 @@ void Experimental_Example::Run()
     // OUTPUTS MODEL TO UG (name will be the model name)
     UG4_UGX_FileExport<2U> ug4_exporter2D( model2D );
     ug4_exporter2D.Write_UGX_FileASCII( model2D, model2D.Name() );
+    
     
     // 3D 'prism_mesh' testcase
     // ------------------------

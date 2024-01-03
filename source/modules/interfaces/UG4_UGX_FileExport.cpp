@@ -58,26 +58,14 @@ UG4_UGX_FileExport<dim>::UG4_UGX_FileExport( const Model<dim>& model )
                        "UG4 - ugx format only supports output of straight-sided elements (shape-function order = 1; nothing was output");
          return;
       }
-    
-    // number nodes and elements globally in consecutive order
-    model.Region("Model").UpdateMemberIndexes();
-
-    cout<<"\nUG4_UGX_FileExport(ctor): collecting node numbers of cell edges into sorted 'edges_' vector...";
-    size_t n_edges = CollectEdges( model );
-    assert( n_edges > model.Mesh().Elements() );
-    cout <<"  done: "<< n_edges <<" unique edges found."<<endl;
-    
-    cout<<"\nUG4_UGX_FileExport(ctor): collecting node numbers of cell faces into sorted 'faces_' vector...";
-    size_t n_faces = CollectFaces( model );
-    assert( n_faces > 0U );
-    cout <<"  done: "<< n_faces <<" unique element faces found."<<endl;
-
-    if constexpr( dim == 3U ) {
-        cout<<"\nUG4_UGX_FileExport(ctor): collecting node numbers of cells into sorted 'volumes_' vector...";
-        size_t n_volumes = CollectVolumes( model );
-        assert( n_volumes > 0U && n_volumes <= model.Mesh().Elements() );
-        cout <<"  done: "<< n_volumes <<" unique element IDs found."<<endl;
-      }
+        
+    // number nodes and elements and faces globally in consecutive order
+    const Region<dim>& model_domain = model.Region("Model");
+    model_domain.UpdateMemberIndexes();
+    size_t counter{ model_domain.Cells() };
+    // number faces and interfaces consecutively in the order in which they are stored in the MeshManager
+    for ( auto it=model.Mesh().FacesBegin(); it!=model.Mesh().FacesEnd(); ++it ) { (*it).Idx( counter++ ); }
+    for ( auto it=model.Mesh().InterFacesBegin(); it!=model.Mesh().InterFacesEnd(); ++it ) { (*it).Idx( counter++ ); }
  
  } // end constructor
   
@@ -90,23 +78,82 @@ UG4_UGX_FileExport<dim>::UG4_UGX_FileExport( const Model<dim>& model )
        if ( idx == numeric_limits<size_t>::max() ) return false;
        return true;
     }
- 
+
+
+/**
+      Finds corresponding CSMP line element or returns UNSPECIFIED
+*/
+template<uint32_t dim>
+long UG4_UGX_FileExport<dim>::EquivalentEdgeInCSMP( size_t ug_idx ) const {
+     const auto map_it = csmp_edges_inverted_.find( ug_idx );
+     if ( map_it == csmp_edges_inverted_.end() ) return UNSPECIFIED;
+     return (*map_it).second;
+  }
+
+/**
+      Finds corresponding CSMP line element or returns UNSPECIFIED
+*/
+template<uint32_t dim>
+long UG4_UGX_FileExport<dim>::EquivalentFaceInCSMP( size_t ug_idx ) const {
+     const auto map_it = csmp_faces_inverted_.find( ug_idx );
+     if ( map_it == csmp_faces_inverted_.end() ) return UNSPECIFIED;
+     return (*map_it).second;
+  }
+
+
  
  
  /**
           Writes the global node numbers of the elements, faces, and interfaces in counter-clockwise order.
           
           @attention function only generates output for elements, faces or interfaces that are present in CSMP
+          
+          Element<dim>* eptr = &(*next(mesh.ElementsBegin(),idx));
  */
- template<uint32_t dim,template<uint32_t> class CELL>
- static void writeNodeIndices( ofstream& ofs, const ModelSubDomain<dim,CELL>& subdomain, size_t cell_idx, bool& print_whitespace ) {
-     if ( equivalentEntityInCSMP(cell_idx) )
-     for ( uint32_t i{0U}; i<subdomain.E(cell_idx)->Nodes(); ++i ) {
-         if ( print_whitespace ) ofs <<" ";
-         else print_whitespace = true;
-         ofs << subdomain.E(cell_idx)->N(i)->Idx();
-      }
-  }
+ template<uint32_t dim>
+ static void writeNodeIndices( ofstream& ofs, const MeshManager<dim>& mesh, size_t cell_idx, bool& print_whitespace ) {
+     if ( cell_idx < mesh.Elements() )
+       for ( uint32_t i{0U}; i<(*next(mesh.ElementsBegin(),cell_idx)).Nodes(); ++i ) {
+           if ( print_whitespace ) ofs <<" ";
+           else print_whitespace = true;
+           ofs << (*next(mesh.ElementsBegin(),cell_idx)).N(i)->Idx();
+        }
+     else if ( cell_idx < mesh.Elements()+mesh.Faces() )
+       for ( uint32_t i{0U}; i<(*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Nodes(); ++i ) {
+           if ( print_whitespace ) ofs <<" ";
+           else print_whitespace = true;
+           ofs << (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).N(i)->Idx();
+        }
+     else if ( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() )
+       for ( uint32_t i{0U}; i<(*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Nodes(); ++i ) {
+           if ( print_whitespace ) ofs <<" ";
+           else print_whitespace = true;
+           ofs << (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).N(i)->Idx();
+        }
+     else {
+       if ( !equivalentEntityInCSMP(cell_idx) )
+         ErrorHandler::Instance().Note( ERROR, "writeNodeIndices", "cell index greater than size_t::max");
+       else
+         ErrorHandler::Instance().Note( ERROR, "writeNodeIndices", "cell index out of range");
+       }
+       
+  } // end writeNodeIndices
+
+
+
+// NEW REVISION
+ template<size_t n_nodes>
+ static void writeNodeIndices( ofstream& ofs, const array<size_t,n_nodes>& nids, bool& print_whitespace )
+  {
+     for ( const auto& nid : nids ) {
+           if ( print_whitespace ) ofs <<" ";
+           else print_whitespace = true;
+           ofs << nid;
+        }
+       
+  } // end writeNodeIndices
+
+
 
  
  
@@ -149,30 +196,65 @@ static void writeNoDataValue( ofstream& ofs, const csmp::Index& var_key, uint32_
     
     @param ofs  output textfile stream UTF-8 on linux
     @param var_key variable accessor in CSMP
-    @param subdomain Region, Boundary, or SplitBoundary which contains the variable values of interest stored on Element, Face or InterFace, respectively.
-    @param cell_idx continous numbering of elements, faces and interfaces in CSMP
+    @param mesh MeshManager which contains the variable values of interest stored on Element, Face or InterFace, respectively.
+    @param ug_cell_idx continous numbering of faces in CSMP
     @param print_whitespace to avoid printing blanks at the  beginning of attachment arrays
     
       @attention method has to switch print_whitespace on
 */
-template<uint32_t dim,template<uint32_t> class CELL>
-static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
-                                    const ModelSubDomain<dim,CELL>& subdomain, size_t cell_idx, bool& print_whitespace )
+template<uint32_t dim>
+void UG4_UGX_FileExport<dim>::WriteFaceVariableValue( ofstream& ofs, const csmp::Index& var_key,
+                                                      const MeshManager<dim>& mesh, size_t ug_cell_idx,
+                                                      bool& print_whitespace ) const
  {
     csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
+    
+    const long cell_idx = EquivalentFaceInCSMP( ug_cell_idx );
 
-    if ( equivalentEntityInCSMP(cell_idx) ) {
+    if ( cell_idx != UNSPECIFIED ) {
         // there no cell index was recorded for the face the no data values is writen
         switch(var_key.type) {
             case SCALAR: {
-                   if ( !print_whitespace ) ofs << scientific << subdomain.E(cell_idx)->Read(var_key);
-                   else ofs <<" "<< scientific << subdomain.E(cell_idx)->Read(var_key);
+                   double sc;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             sc = (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             sc = (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             sc = (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key);
+                          break;
+                        default:
+                             sc = -numeric_limits<float>::max(); // no-data value
+                     }
+                   if ( !print_whitespace ) ofs << scientific << sc;
+                   else ofs <<" "<< scientific << sc;
                    print_whitespace = true;
                 }
               break;
             case VECTOR: {
                    VectorVariable<dim> vc;
-                   subdomain.E(cell_idx)->Read(var_key,vc);
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,vc);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,vc);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,vc);
+                          break;
+                        default:
+                             vc = -numeric_limits<float>::max(); // no-data value
+                     }
                    for ( uint32_t i{0u}; i<dim; ++i ) {
                          if ( print_whitespace ) ofs <<" ";
                          else print_whitespace = true;
@@ -182,7 +264,229 @@ static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
               break;
             case TENSOR: {
                    TensorVariable<dim> ts;
-                   subdomain.E(cell_idx)->Read(var_key,ts);
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,ts);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,ts);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,ts);
+                          break;
+                        default:
+                             ts = -numeric_limits<float>::max(); // no-data value
+                     }
+                   for ( uint32_t i{0u}; i<dim; ++i )
+                     for ( uint32_t j{0u}; j<dim; ++j ) {
+                           if ( print_whitespace ) ofs <<" ";
+                           else print_whitespace = true;
+                           ofs << scientific << ts(i,j);
+                       }
+                }
+              break;
+            default: {
+                 cerr <<"\nvariable of type "<< parseType( var_key.type ) << endl;
+                 csmp_err.Note( ERROR, "WriteFaceVariableValue", "type of variable has no equivalent representation in UG4");
+              }
+          }
+      }
+    else writeNoDataValue( ofs, var_key, dim, print_whitespace );
+         
+} // end WriteFaceVariableValue
+  
+
+
+
+
+template<uint32_t dim>
+void UG4_UGX_FileExport<dim>::WriteVolumeVariableValue( ofstream& ofs, const csmp::Index& var_key,
+                                                        const MeshManager<dim>& mesh, size_t ug_cell_idx,
+                                                        bool& print_whitespace ) const
+ {
+    csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
+    
+    const long cell_idx = EquivalentFaceInCSMP( ug_cell_idx );
+
+    if ( cell_idx != UNSPECIFIED ) {
+        // there no cell index was recorded for the face the no data values is writen
+        switch(var_key.type) {
+            case SCALAR: {
+                   double sc;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             sc = (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             sc = (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             sc = (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key);
+                          break;
+                        default:
+                             sc = -numeric_limits<float>::max(); // no-data value
+                     }
+                   if ( !print_whitespace ) ofs << scientific << sc;
+                   else ofs <<" "<< scientific << sc;
+                   print_whitespace = true;
+                }
+              break;
+            case VECTOR: {
+                   VectorVariable<dim> vc;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,vc);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,vc);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,vc);
+                          break;
+                        default:
+                             vc = -numeric_limits<float>::max(); // no-data value
+                     }
+                   for ( uint32_t i{0u}; i<dim; ++i ) {
+                         if ( print_whitespace ) ofs <<" ";
+                         else print_whitespace = true;
+                         ofs << scientific << vc[i];
+                     }
+                }
+              break;
+            case TENSOR: {
+                   TensorVariable<dim> ts;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,ts);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,ts);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,ts);
+                          break;
+                        default:
+                             ts = -numeric_limits<float>::max(); // no-data value
+                     }
+                   for ( uint32_t i{0u}; i<dim; ++i )
+                     for ( uint32_t j{0u}; j<dim; ++j ) {
+                           if ( print_whitespace ) ofs <<" ";
+                           else print_whitespace = true;
+                           ofs << scientific << ts(i,j);
+                       }
+                }
+              break;
+            default: {
+                 cerr <<"\nvariable of type "<< parseType( var_key.type ) << endl;
+                 csmp_err.Note( ERROR, "WriteVolumeVariableValue", "type of variable has no equivalent representation in UG4");
+              }
+          }
+      }
+    else writeNoDataValue( ofs, var_key, dim, print_whitespace );
+         
+} // end WriteVolumeVariableValue
+
+
+
+#if 0
+/**
+    For cell-based variables (Element, Face, InterFace), writes its value, considering SCALAR, VECTOR and TENSOR variables and printing no_data values as appropriate
+    
+    @param ofs  output textfile stream UTF-8 on linux
+    @param var_key variable accessor in CSMP
+    @param mesh MeshManager which contains the variable values of interest stored on Element, Face or InterFace, respectively.
+    @param cell_idx continous numbering of elements, faces and interfaces in CSMP
+    @param print_whitespace to avoid printing blanks at the  beginning of attachment arrays
+    
+      @attention method has to switch print_whitespace on
+*/
+template<uint32_t dim>
+static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
+                                    const MeshManager<dim>& mesh, size_t cell_idx, bool& print_whitespace )
+ {
+    csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
+
+    if ( equivalentEntityInCSMP(cell_idx) ) {
+        // there no cell index was recorded for the face the no data values is writen
+        switch(var_key.type) {
+            case SCALAR: {
+                   double sc;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             sc = (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             sc = (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             sc = (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key);
+                          break;
+                        default:
+                             sc = -numeric_limits<float>::max(); // no-data value
+                     }
+                   if ( !print_whitespace ) ofs << scientific << sc;
+                   else ofs <<" "<< scientific << sc;
+                   print_whitespace = true;
+                }
+              break;
+            case VECTOR: {
+                   VectorVariable<dim> vc;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,vc);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,vc);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,vc);
+                          break;
+                        default:
+                             vc = -numeric_limits<float>::max(); // no-data value
+                     }
+                   for ( uint32_t i{0u}; i<dim; ++i ) {
+                         if ( print_whitespace ) ofs <<" ";
+                         else print_whitespace = true;
+                         ofs << scientific << vc[i];
+                     }
+                }
+              break;
+            case TENSOR: {
+                   TensorVariable<dim> ts;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,ts);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,ts);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,ts);
+                          break;
+                        default:
+                             ts = -numeric_limits<float>::max(); // no-data value
+                     }
                    for ( uint32_t i{0u}; i<dim; ++i )
                      for ( uint32_t j{0u}; j<dim; ++j ) {
                            if ( print_whitespace ) ofs <<" ";
@@ -200,9 +504,12 @@ static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
     else writeNoDataValue( ofs, var_key, dim, print_whitespace );
          
 } // end writeVariableValue
-  
-//template void writeCellVariableValue<2,Element>( ostream&, const csmp::Index&, ModelSubDomain<2,Element>&, size_t, bool );
-  
+#endif
+
+
+
+
+
   
  
  
@@ -242,7 +549,41 @@ static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
         
    } // end uniqueRegionsOrderedByDimensionality
  
- 
+
+
+
+
+ template<uint32_t dim>
+ static void boundariesOrderedByDimensionality( const Model<dim>& model, list<string>& unique_regions_ordered ) {
+      csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
+      
+      // key value pairs of highest-dim / region name
+      multimap<int,string, greater<int> >  ordered_regions;
+      
+      // examining the unique regions
+      for ( auto rit=model.BoundariesBegin(); rit!=model.BoundariesEnd(); ++rit )
+        {
+           pair<CELL_SHAPE,bool> cell_characteristics = (*rit).second.SingleCellShapeDomain();
+           // of this region consists of only a single element type (line, volume, surface) it is elible for output to UG
+           if ( cell_characteristics.second ) {
+                ordered_regions.insert( make_pair( cell_characteristics.first, (*rit).first ) );
+             }
+           else csmp_err.Note( ERROR, "boundariesOrderedByDimensionality", (*rit).first,
+                              "unique csmp::Boundary is multi-dimensional and is therefore not output as a subset to UG" );
+        }
+      
+      // output
+      if ( !unique_regions_ordered.empty() ) unique_regions_ordered.clear();
+      if ( ordered_regions.empty() )
+        csmp_err.Note( ERROR, "boundariesOrderedByDimensionality", "no unique boundaries found that are eligible for output to UG" );
+      for ( const auto& it : ordered_regions )
+        unique_regions_ordered.push_back( it.second );
+        
+   } // end boundariesOrderedByDimensionality
+   
+   
+
+
  
  
 /**
@@ -274,11 +615,30 @@ static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
     
 */
 template<uint32_t dim>
-bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, const std::string& file_name ) const
+bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, const std::string& file_name )
  {
     csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
     ofstream ofs( (file_name + ".ugx").c_str() );
     
+    // 0. Creating the datastructures required by UG4
+    // ----------------------------------------------
+    cout<<"\nUG4_UGX_FileExport(ctor): collecting node numbers of cell edges into sorted 'edges_' vector...";
+    size_t n_edges = CollectEdges( model );
+    assert( n_edges > model.Mesh().Elements() );
+    cout <<"  done: "<< n_edges <<" unique edges found."<<endl;
+    
+    cout<<"\nUG4_UGX_FileExport(ctor): collecting node numbers of cell faces into sorted 'faces_' vector...";
+    size_t n_faces = CollectFaces( model );
+    assert( n_faces > 0U );
+    cout <<"  done: "<< n_faces <<" unique element faces found."<<endl;
+
+    if constexpr( dim == 3U ) {
+        cout<<"\nUG4_UGX_FileExport(ctor): collecting node numbers of cells into sorted 'volumes_' vector...";
+        size_t n_volumes = CollectVolumes( model );
+        assert( n_volumes > 0U && n_volumes <= model.Mesh().Elements() );
+        cout <<"  done: "<< n_volumes <<" unique element IDs found."<<endl;
+      }
+
     // 1. File header
     // --------------
     ofs <<"<?xml version=\"1.0\" encoding=\"utf-8\"?>"<< endl;
@@ -314,88 +674,58 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
           ofs << it.first <<" "<< it.second;
       }
     ofs <<"</edges>"<< endl;
-    
+        
     // 4. Faces (triangles first and then quadrilaterals)
     // ---------------------------------------------------
-    // (the numbering is implicit to the order printed here and must be followed by the property attachments)
-    ofs <<"\t<triangles>";
+    // (consecutively numbered across the different element types)
+    // (the numbering is implicit to the order printed here and must be followed by the property attachments as well)
+    // 4.1 triangles that were already present in CSMP model
     // printing the nodes
     if ( HasTriangles() ) {
+        ofs <<"\t<triangles>";
         print_whitespace = false;
-        for ( const auto& it : tria_faces_ ) {
-//             for ( const auto nid : it.first ) {
-//                  if ( print_whitespace ) ofs <<" ";
-//                  else print_whitespace = true;
-//                  ofs << model_domain.N(nid)->Idx();
-//               }
-             // print node numbers in csmp order, but only for elements, faces, interfaces present in csmp mesh
-             writeNodeIndices( ofs, model_domain, it.second, print_whitespace );
-          }
+        for ( const auto& it : tria_faces_ )
+          // print node numbers in csmp order, but only for elements, faces, interfaces present in csmp mesh
+          writeNodeIndices( ofs, it.second, print_whitespace );
         ofs <<"</triangles>"<< endl;
       }
-    // quads
+
+    // 4.2 Quadrilateral faces already present in CSMP model
     if ( HasQuadrilaterals() ) {
         ofs <<"\t<quadrilaterals>";
         print_whitespace = false;
         for ( const auto& it : quad_faces_ ) {
-//             for ( const auto nid : it.first ) {
-//                  if ( print_whitespace ) ofs <<" ";
-//                  else print_whitespace = true;
-//                  ofs << model_domain.N(nid)->Idx();
-//               }
              // print node numbers in csmp order, but only for elements, faces, interfaces present in csmp mesh
-             writeNodeIndices( ofs, model_domain, it.second, print_whitespace );
+             writeNodeIndices( ofs, it.second, print_whitespace );
           }
         ofs <<"</quadrilaterals>"<< endl;
       }
-   
-    // 5. Volumes (tet, hex, prism, pyra, octa)
-    // ----------------------------------------
-    if constexpr( dim == 3U ) {
-        if ( HasTetrahedra() ) {
-            print_whitespace = false;
-            ofs <<"\t<tetrahedrons>";
-            for ( const auto& it : tetra_volumes_ ) {
-                 // print node numbers in csmp order, but only for elements, faces, interfaces present in csmp mesh
-                 writeNodeIndices( ofs, model_domain, it.second, print_whitespace );
-              }
-             ofs <<"</tetrahedrons>"<< endl;
-          }
-        // hexa
-        if ( HasHexahedra() ) {
-            print_whitespace = false;
-            ofs <<"\t<hexahedrons>";
-            for ( const auto& it : hexa_volumes_ ) {
-                 // print node numbers in csmp order, but only for elements, faces, interfaces present in csmp mesh
-                 writeNodeIndices( ofs, model_domain, it.second, print_whitespace );
-              }
-            ofs <<"</hexahedrons>"<< endl;
-          }
+
+
+    // 5. Volumes
+    // ----------
+    // (consecutively numbered across the different element types)
+    // tetrahedra
+    if constexpr ( dim == 3U ) {
+        print_whitespace = false;
+        for ( const auto& it : tetra_volumes_ )
+          writeNodeIndices( ofs, model.Mesh(), it.second, print_whitespace );
+        // hexahedra
+        print_whitespace = false;
+        for ( const auto& it : hexa_volumes_ )
+          writeNodeIndices( ofs, model.Mesh(), it.second, print_whitespace );
         // prisms
-        if ( HasPrisms() ) {
-            print_whitespace = false;
-            ofs <<"\t<prisms>";
-            for ( const auto& it : prism_volumes_ ) {
-                 // print node numbers in csmp order, but only for elements, faces, interfaces present in csmp mesh
-                 writeNodeIndices( ofs, model_domain, it.second, print_whitespace );
-              }
-            ofs <<"</prisms>"<< endl;
-          }
+        print_whitespace = false;
+        for ( const auto& it : prism_volumes_ )
+          writeNodeIndices( ofs, model.Mesh(), it.second, print_whitespace );
         // pyramids
-        if ( HasPyramids() ) {
-            print_whitespace = false;
-            ofs <<"\t<pyramids>";
-            for ( const auto& it : pyra_volumes_ ) {
-                 // print node numbers in csmp order, but only for elements, faces, interfaces present in csmp mesh
-                 writeNodeIndices( ofs, model_domain, it.second, print_whitespace );
-              }
-            ofs <<"</pyramids>"<< endl;
-          }
+        print_whitespace = false;
+        for ( const auto& it : pyra_volumes_ )
+          writeNodeIndices( ofs, model.Mesh(), it.second, print_whitespace );
+        // octahedra
       }
-      
-    // TODO: any 'vertex_attachment' properties should go here
-    // TODO: any 'edge_attachment' properties should go here
     
+      
     // 6. Property value attachments (cell properties only)
     // ----------------------------------------------------
     // (passOn="1" means that variable will be mapped to finer grids)
@@ -407,6 +737,9 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
     size_t n_variables = model.Database().ListVariables( ELEMENT, output_props );
     assert( n_variables >= 1 );
     
+    // TODO: any 'vertex_attachment' properties should go here
+    // TODO: write out    6.0 Edge attachments    for properties stored on line elements
+    
     // 6.1 face attachments (first triangles, then quadrilaterals)
     // -----------------------------------------------------------
     for ( const auto& pit : output_props ) {
@@ -414,29 +747,57 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
          // skipping variable types that are not supported by UG
          if ( var_key.type == ARRAY || var_key.type == FLAGGEDARRAY )
            continue;
-         ofs <<"\t<face_attachment name=\""<< pit <<"\" type=\""<< UG_VariableType(var_key) <<"\" ";
-         ofs <<"passOn=\"1\" global=\"1\">";
+         // when faces are equidimensional CSMP elements
+         // --------------------------------------------
+         if constexpr ( dim == 2U ) {
+             ofs <<"\t<face_attachment name=\""<< pit <<"\" type=\""<< UG_VariableType(var_key) <<"\" ";
+             ofs <<"passOn=\"1\" global=\"1\">";
 
-         // 0. TODO: line element (edge) attachments
+             // 6.1 triangle element/face attachments
+             // -------------------------------------
+             print_whitespace = false;
+             size_t n_ug_face{ 0U };
+             for ( const auto& idx : tria_faces_ )
+               WriteFaceVariableValue( ofs, var_key, model.Mesh(), n_ug_face++, print_whitespace );
 
-         // 1. triangle element/face attachments
-         // ------------------------------------
-         print_whitespace = false;
-         for ( const auto& idx : tria_faces_ )
-           writeCellVariableValue( ofs, var_key, model_domain, idx.second, print_whitespace );
+             // 6.2 quadrilateral element/face attachments
+             // ------------------------------------------
+             for ( const auto& idx : quad_faces_ )
+               WriteFaceVariableValue( ofs, var_key, model.Mesh(), n_ug_face++, print_whitespace );
 
-         // 2. quadrilateral element/face attachments
-         // -----------------------------------------
-         for ( const auto& idx : quad_faces_ )
-           writeCellVariableValue( ofs, var_key, model_domain, idx.second, print_whitespace );
+             ofs <<"</face_attachment>"<< endl;
+           }
+         // when faces are Face or InterFace objects or lower-dimensional elements in CSMP
+         // ------------------------------------------------------------------------------
+         else if constexpr ( dim == 3U ) {
+              // only variables placed on the Face will be considered for now
+              if ( var_key.place != FACE )
+                continue;
+             ofs <<"\t<face_attachment name=\""<< pit <<"\" type=\""<< UG_VariableType(var_key) <<"\" ";
+             ofs <<"passOn=\"1\" global=\"1\">";
 
-         ofs <<"</face_attachment>"<< endl;
+             // 6.1 triangle element/face attachments
+             // -------------------------------------
+             print_whitespace = false;
+             size_t n_ug_face{ 0U };
+             for ( const auto& idx : tria_faces_ )
+               WriteFaceVariableValue( ofs, var_key, model.Mesh(), n_ug_face++, print_whitespace );
+
+             // 6.2 quadrilateral element/face attachments
+             // ------------------------------------------
+             for ( const auto& idx : quad_faces_ )
+               WriteFaceVariableValue( ofs, var_key, model.Mesh(), n_ug_face++, print_whitespace );
+
+             ofs <<"</face_attachment>"<< endl;
+
+           } // end 3D
          
       } // end for output properties
 
 
     // 6.2 volume attachments
     // ----------------------
+    // (the assumption here is that the CSMP model contains exactly the same volumetric elements as the UG model)
     if constexpr ( dim == 3U )
       {
          for ( const auto& pit : output_props ) {
@@ -444,27 +805,31 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
               // skipping variable types that are not supported by UG
               if ( var_key.type == ARRAY || var_key.type == FLAGGEDARRAY )
                 continue;
+              // only variables placed on the Element will be considered for now
+              if ( var_key.place != ELEMENT )
+                continue;
               ofs <<"\t<volume_attachment name=\""<< pit <<"\" type=\""<< UG_VariableType(var_key);
               ofs <<"\" passOn=\"1\" global=\"1\">";
 
               // 1. property attachments to tetrahedra
+              size_t n_ug_elmt{ 0U };
               print_whitespace = false;
               for ( const auto& idx : tetra_volumes_ )
-                writeCellVariableValue( ofs, var_key, model_domain, idx.second, print_whitespace );
+                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), n_ug_elmt++, print_whitespace );
 
                // 2. property attachments to hexahedra
               for ( const auto& idx : hexa_volumes_ )
-                writeCellVariableValue( ofs, var_key, model_domain, idx.second, print_whitespace );
+                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), n_ug_elmt++, print_whitespace );
 
                // 3. property attachments to prism elements
               for ( const auto& idx : prism_volumes_ )
-                writeCellVariableValue( ofs, var_key, model_domain, idx.second, print_whitespace );
+                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), n_ug_elmt++, print_whitespace );
 
                // 4. property attachments to pyramid elements
               for ( const auto& idx : pyra_volumes_ )
-                writeCellVariableValue( ofs, var_key, model_domain, idx.second, print_whitespace );
+                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), n_ug_elmt++, print_whitespace );
 
-             ofs <<"</volume_attachment>"<< endl;
+              ofs <<"</volume_attachment>"<< endl;
               
            } // output properties
       } // 3D
@@ -498,7 +863,6 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
              ofs <<"\t\t<subset name=\""<< rit <<"\" color=\"";
              ofs << get<0>(rgba) <<" "<< get<1>(rgba) <<" "<< get<2>(rgba) <<" "<< get<3>(rgba);
              ofs <<"\" state=\""<< domain_index <<"\">"<< endl;
-             // looping over the element edges, collecting their global node IDs into unique sets that will be stored in 'edges'
              ofs <<"\t\t\t<vertices>";
              print_whitespace = false;
              for ( const auto& nit : subdomain.NodeVector() ) {
@@ -514,7 +878,7 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
              if ( with_region_edge_output_ ) {
                  print_whitespace = false;
                  // compiling the edges that form part of the region
-                 size_t n_edges = CollectEdgesInRegion( subdomain, ugx_id_numbers );
+                 n_edges = CollectEdgesInRegion( subdomain, ugx_id_numbers );
                  if ( n_edges > 0 ) {
                      ofs <<"\t\t\t<edges>";
                      // printing only the IDs of global edges if they belong to this unique region
@@ -530,7 +894,7 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
              // faces (triangles first, then quads, all numbered continuously)
              print_whitespace = false;
              if ( with_region_face_output_ ) {
-                 size_t n_faces = CollectFacesInRegion( subdomain, ugx_id_numbers );
+                 n_faces = CollectFacesInRegion( subdomain, ugx_id_numbers );
                  if ( n_faces > 0 ) {
                      ofs <<"\t\t\t<faces>";
                      // printing the IDs of all  faces that belong to this unique region
@@ -568,13 +932,83 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
         
       } // end: loop over eligible regions
       
-    // TODO: Missing BOUNDARIES (Face collections)
+      
+    // CSMP MODEL BOUNDARIES
+    // ---------------------
+    list<string>  boundaries_ordered_by_dimensionality;
+    boundariesOrderedByDimensionality( model, boundaries_ordered_by_dimensionality );
+    if ( !boundaries_ordered_by_dimensionality.empty() )
+      {
+        ofs <<"\t<subset_handler name=\"Boundaries\">"<< endl;
+        // model geometry-defining region by region
+        for ( const auto& bit : boundaries_ordered_by_dimensionality )
+          {
+             const Boundary<dim>& subdomain = model.Boundary(bit);
+             // resetting the colour that the subset will be visualised with in PROMESH
+             if ( colour == 10 ) colour = 9;
+             const size_t domain_index{ subdomain.DomainIndex() };
+             const auto   rgba = goodColour( colour );
+             ofs <<"\t\t<subset name=\""<< bit <<"\" color=\"";
+             ofs << get<0>(rgba) <<" "<< get<1>(rgba) <<" "<< get<2>(rgba) <<" "<< get<3>(rgba);
+             ofs <<"\" state=\""<< domain_index <<"\">"<< endl;
+             ofs <<"\t\t\t<vertices>";
+             print_whitespace = false;
+             for ( const auto& nit : subdomain.NodeVector() ) {
+                  if ( print_whitespace ) ofs <<" ";
+                  else print_whitespace = true;
+                  ofs << nit->Idx();
+               }
+             ofs <<"</vertices>"<< endl;
+             
+            vector<size_t> ugx_id_numbers;
+
+            // edges
+             if ( with_region_edge_output_ ) {
+                 print_whitespace = false;
+                 // compiling the edges that form part of the region
+                 size_t n_edges = CollectEdgesInBoundary( subdomain, ugx_id_numbers );
+                 if ( n_edges > 0 ) {
+                     ofs <<"\t\t\t<edges>";
+                     // printing only the IDs of global edges if they belong to this unique region
+                     for ( const auto& it : ugx_id_numbers ) {
+                          if ( print_whitespace ) ofs <<" ";
+                          else print_whitespace = true;
+                          ofs << it;
+                       }
+                     ofs <<"</edges>"<< endl;
+                   }
+               }
+             
+             // faces (triangles first, then quads, all numbered continuously)
+             print_whitespace = false;
+             if constexpr ( dim == 3U ) {
+                 if ( with_region_face_output_ ) {
+                     size_t n_faces = CollectFacesInBoundary( subdomain, ugx_id_numbers );
+                     if ( n_faces > 0 ) {
+                         ofs <<"\t\t\t<faces>";
+                         // printing the IDs of all  faces that belong to this unique region
+                         for ( const auto& it : ugx_id_numbers ) {
+                              if ( print_whitespace ) ofs <<" ";
+                              else print_whitespace = true;
+                              ofs << it;
+                           }
+                         ofs <<"</faces>"<< endl;
+                       }
+                   }
+               }
+  
+             ofs <<"\t\t</subset>"<< endl;
+             colour++;
+         }
+          
+         // closing the subset section
+        ofs <<"\t</subset_handler>"<< endl;
+        
+      } // end: loop over eligible boundaries
+      
+      
     // TODO: Missing SPLITBOUNDARIES ( InterFace collections)
 
-
-    // considering the boundaries as subsets as well (this could be a separate subset handler)
-    // TODO: loop over the outer model boundaries
-    
     // END
     // --------------------------------------
     // closing the grid specification section
@@ -592,11 +1026,15 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
   
   
 /**
-    Loops over model, making a vector of  the unique edges (node-iD pairs) in the model (corner nodes only).
+    Loops over region "Model", making a vector of  unique edges (node-iD pairs) storing their corner nodes only.
    
-    The elimination of duplicates and the sorting of the edges vector guarantees that the edges are always in the same order.
+    Elimination of duplicates and the sorting of the edges vector guarantees that the edges are always in the same order.
+    The mapping between the UG4 edge IDs and CSMP line elements co-inciding with UG4 edges is created after the
+    sorting and elimination of duplicates.
     
-    @param model is used for data collection but not modified.
+    @param model is used for data collection but not modified
+    
+    @todo deal with potential Edge objects in 3D models
 */
 template<uint32_t dim>
 size_t UG4_UGX_FileExport<dim>::CollectEdges( const Model<dim>& model )
@@ -610,42 +1048,100 @@ size_t UG4_UGX_FileExport<dim>::CollectEdges( const Model<dim>& model )
          edges_.reserve( model.Mesh().Elements() * 4U ); // approximate guess of the number of edges
       }
     
-    // going over the unique regions in alphabetical order, tagging the edges found within them with region ids
     const Region<dim>& model_domain(model.Region("Model"));
     vector<uint32_t> snids;
-    // looping over the element edges, collecting their global node IDs into unique sets that will be stored in 'edges'
-    for ( const auto& it : model_domain.CellVector() ) {
-      for ( uint32_t segm_id{0U}; segm_id<it->Segments(); ++segm_id ) {
-             it->FE()->NodesOfSegment( segm_id, snids );
-             assert( snids.size() == 2U );
-             // getting the global node IDs
-             pair<size_t,size_t> global_node_numbers{ it->N(snids[0])->Idx(), it->N(snids[1])->Idx() };
-             // sorting the global node IDS in ascending order
-             if ( global_node_numbers.first > global_node_numbers.second )
-               swap(global_node_numbers.first,global_node_numbers.second);
-             // inserting the edge node ids into the edges vector
-             edges_.push_back( global_node_numbers );
-          }
+    // looping over all equidimensional element edges in the Model,
+    // collecting their global node IDs into unique pairs that will be stored in 'edges' vector as search keys
+    if constexpr ( dim == 2U ) {
+        for ( const auto& it : model_domain.CellVector() )
+          if ( it->IsSurface() ) {
+              for ( uint32_t segm_id{0U}; segm_id<it->Segments(); ++segm_id ) {
+                     it->FE()->NodesOfSegment( segm_id, snids );
+                     assert( snids.size() == 2U );
+                     // getting the global node IDs
+                     pair<size_t,size_t> global_node_numbers{ it->N(snids[0])->Idx(), it->N(snids[1])->Idx() };
+                     // sorting the global node IDS in ascending order
+                     if ( global_node_numbers.first > global_node_numbers.second )
+                       swap(global_node_numbers.first,global_node_numbers.second);
+                     // inserting the edge node ids into the edges vector
+                     edges_.push_back( global_node_numbers );
+                  }
+            }
       }
- 
+    else if constexpr ( dim == 3U ) {
+        for ( const auto& it : model_domain.CellVector() )
+          if ( it->Volume() ) {
+              for ( uint32_t segm_id{0U}; segm_id<it->Segments(); ++segm_id ) {
+                     it->FE()->NodesOfSegment( segm_id, snids );
+                     assert( snids.size() == 2U );
+                     // getting the global node IDs
+                     pair<size_t,size_t> global_node_numbers{ it->N(snids[0])->Idx(), it->N(snids[1])->Idx() };
+                     // sorting the global node IDS in ascending order
+                     if ( global_node_numbers.first > global_node_numbers.second )
+                       swap(global_node_numbers.first,global_node_numbers.second);
+                     // inserting the edge node ids into the edges vector
+                     edges_.push_back( global_node_numbers );
+                  }
+            }
+      }
+      
     // sorting and eliminating duplicate edges from the edges_ vector
     // --------------------------------------------------------------
-    // (using lambda function to search only the first pair in the pair-value pair)
-//    sort( edges_.begin(), edges_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
     sort( edges_.begin(), edges_.end() );
-//    edges_.erase( unique( edges_.begin(), edges_.end(), [](auto &left, auto &right) { return left.first == right.first; } ), edges_.end() );
     edges_.erase( unique( edges_.begin(), edges_.end() ), edges_.end() );
+    
+    // singling out the edges which are also contained in the CSMP model
+    // -----------------------------------------------------------------
+    for ( const auto& it : model_domain.CellVector() )
+      if ( it->IsLine() ) {
+           // create search key
+           pair<size_t,size_t> global_node_numbers{ it->N(0U)->Idx(), it->N(1U)->Idx() };
+           // sort global node IDS in ascending order
+           if ( global_node_numbers.first > global_node_numbers.second )
+             swap(global_node_numbers.first,global_node_numbers.second);
+             
+           // search edge which must be contained in edge vector; recording its offset from origin in map
+           const auto edge_it = lower_bound( edges_.begin(), edges_.end(), global_node_numbers );
+           assert( edge_it != edges_.end() );
+           // CSMP element idx, edge # in UG
+           csmp_edges_.insert( make_pair( it->Idx(), distance(edges_.begin(), edge_it) ) );
+       }
+       
+    // creating inverse map of csmp edges
+    // ----------------------------------
+    for ( const auto& it : csmp_edges_ )
+      // edge_id, csmp_idx
+      csmp_edges_inverted_.insert( make_pair( it.second, it.first ) );
+
+    // finding those edges that have a representation in the CSMP model
+    // ----------------------------------------------------------------
+    if ( edges_in_csmp_.empty() ) edges_in_csmp_.clear();
+    edges_in_csmp_.resize( edges_.size(), false );
+    // initialising the vector
+    for ( const auto& it : csmp_edges_ )
+      edges_in_csmp_[ it.second ] = true;
 
     return edges_.size();
     
  } // end CollectEdges
  
- 
+
+// FOR EDGES with element ID stored within them
+// (using lambda function to search only the first pair in the pair-value pair)
+//    sort( edges_.begin(), edges_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
+//    edges_.erase( unique( edges_.begin(), edges_.end(), [](auto &left, auto &right) { return left.first == right.first; } ), edges_.end() );
 
  
  
-/**
-     @attention order of nodes in 'faces' does not matter, only the global ID numbers are required by UG4
+ 
+ 
+ 
+ 
+ /**
+     This method collects all potential faces in the model into a face array: triangles first, quadrilaterals next.
+     For UG faces that correspond to surface elements in CSMP model, their ID is recorded in a map for later retrieval.
+
+     @attention Order of nodes in 'faces' does not matter, only the global ID numbers are required by UG4
      @attention 'faces' related to CSMP boundaries must not be collected extra at this stage because they are already included since they match up with the element faces
 */
 template<uint32_t dim>
@@ -653,7 +1149,7 @@ size_t UG4_UGX_FileExport<dim>::CollectFaces( const Model<dim>& model )
  {
     csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
     
-    // making sure that the vector is empty and resizing it
+    // emptying and resizing vectors
     if ( !tria_faces_.empty() ) {
          csmp_err.Note( WARNING, "UG4_UGX_FileExport<dim>::CollectFaces", "supplied 'triangular faces' vector not empty; deleting previous content" );
          tria_faces_.clear();
@@ -669,126 +1165,238 @@ size_t UG4_UGX_FileExport<dim>::CollectFaces( const Model<dim>& model )
 
     // in 2D, triangular and quadrilateral elements make up the faces
     // --------------------------------------------------------------
-    for ( const auto& it : model_domain.CellVector() )
-        // triangular elements
-        if ( it->IsSurface() ) {
-             if ( isTriangular( it->FE_Type() ) )
-              {
-                 vector<uint32_t>  fnids;
-                 it->FE()->CornerNodes( fnids );
-                 // getting the global node IDs
-                 set<size_t> global_node_numbers;
-                 for ( const auto& id : fnids ) global_node_numbers.insert( it->N(id)->Idx() );
-                 tria_faces_.push_back( make_pair( global_node_numbers, it->Idx() ) );
-              }
-            // quadrilaterals
-            else if ( isQuadrilateral( it->FE_Type() ) )
-              {
-                 vector<uint32_t>  fnids;
-                 it->FE()->CornerNodes( fnids );
-                 set<size_t> global_node_numbers;
-                 for ( const auto& id : fnids ) global_node_numbers.insert( it->N(id)->Idx() );
-                 quad_faces_.push_back( make_pair( global_node_numbers, it->Idx() ) );
-              }
-            else
-              csmp_err.Note( WARNING, "UG4_UGX_FileExport<dim>::CollectFaces", "surface face type could not be identified" );
-         }
-
-    // three-dimensional models (now the faces of volume elements make up the faces)
-    // -----------------------------------------------------------------------------
-    // (at this point, the faces defined in the CSMP model are already collected)
-    if constexpr ( dim == 3U ) {
-        // csmp::Boundary: consist of triangular and quadrilateral faces in 3D models
-        // --------------------------------------------------------------------------
-        for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit ) {
-              // triangular elements
-              if ( isTriangular( (*fit).FE_Type() ) )
-                {
-                   vector<uint32_t>  fnids;
-                   (*fit).FE()->CornerNodes( fnids );
-                   // getting the global node IDs
-                   set<size_t> global_node_numbers;
-                   for ( const auto& id : fnids ) global_node_numbers.insert( (*fit).N(id)->Idx() );
-                   tria_faces_.push_back( make_pair( global_node_numbers, (*fit).Idx() ) );
-                }
-              // quadrilaterals
-              else if ( isQuadrilateral( (*fit).FE_Type() ) )
-                {
-                   vector<uint32_t>  fnids;
-                   (*fit).FE()->CornerNodes( fnids );
-                   set<size_t> global_node_numbers;
-                   for ( const auto& id : fnids ) global_node_numbers.insert( (*fit).N(id)->Idx() );
-                   quad_faces_.push_back( make_pair( global_node_numbers, (*fit).Idx() ) );
-                }
-            }
-        // TODO: include split boundaries here
-    
-        // creating faces between volumetric elements
-        // ------------------------------------------
-        // (these have no equivalent in CSMP and their IDs are therefore set to ~UINTMAX)
-        // tetrahedra first
+    // (NB: these faces will be unique and already have a number in the CSMP mesh.
+    //      therefore they can be printed with correct orientation and associated properties)
+    if constexpr ( dim == 2U )
+      {
+        for ( const auto& it : model_domain.CellVector() )
+            if ( it->IsSurface() ) {
+                 // triangular elements
+                 if ( isTriangular( it->FE_Type() ) )
+                  {
+                     // getting the global node IDs
+                     set<size_t> search_key;
+                     array<size_t,3U> global_node_numbers;
+                     for ( uint32_t i{0U}; i<3U; ++i ) {
+                           global_node_numbers[i] = it->N(i)->Idx();
+                           search_key.insert( global_node_numbers[i] );
+                       }
+                     tria_faces_.push_back( make_pair( search_key, global_node_numbers ) );
+                  }
+                // quadrilaterals
+                else if ( isQuadrilateral( it->FE_Type() ) )
+                  {
+                     set<size_t> search_key;
+                     array<size_t,4U> global_node_numbers;
+                     for ( uint32_t i{0U}; i<4U; ++i ) {
+                           global_node_numbers[i] = it->N(i)->Idx();
+                           search_key.insert( global_node_numbers[i] );
+                       }
+                     quad_faces_.push_back( make_pair( search_key, global_node_numbers ) );
+                  }
+                else
+                  csmp_err.Note( WARNING, "UG4_UGX_FileExport<dim>::CollectFaces", "surface face type could not be identified" );
+             }
+      } // end 2D
+  
+  
+    // in 3D, faces are generated from the faces of the volumetric elements in the mesh
+    // --------------------------------------------------------------------------------
+    if constexpr ( dim == 3U )
+      {
+        // ----------------------
+        // triangular faces
+        // ----------------------
+        // tetrahedra
         for ( const auto& it : model_domain.CellVector() )
           if ( it->IsVolume() && isTetrahedral( it->FE_Type() ) ) {
                for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
-                    // getting the global node IDs
-                    set<size_t> global_node_numbers;
-                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
-                    // inserting the global face node ids into the faces vector
-                    tria_faces_.push_back( make_pair( global_node_numbers, numeric_limits<size_t>::max() ) );
+                    // getting the global node IDs to form a search key
+                    set<size_t> search_key;
+                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) search_key.insert( nit->Idx() );
+                    // getting the node IDs in their correct order
+                    array<size_t,3U> global_node_numbers;
+                    uint32_t n_node{ 0U };
+                    for ( const auto& nid : it->FE()->CornerNodesOfFace(face_id) )
+                      global_node_numbers[n_node++] = it->N(nid)->Idx();
+                    // inserting the face into the face vector
+                    tria_faces_.push_back( make_pair( search_key, global_node_numbers ) );
                  }
             }
-        // hexahedra second
-        for ( const auto& it : model_domain.CellVector() )
-          if ( it->IsVolume() && isHexahedral( it->FE_Type() ) ) {
-               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
-                    set<size_t> global_node_numbers;
-                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
-                    quad_faces_.push_back( make_pair( global_node_numbers, numeric_limits<size_t>::max() ) );
-                 }
-            }
-        // prism third
+        // prisms
         for ( const auto& it : model_domain.CellVector() )
           if ( it->IsVolume() && isPrism( it->FE_Type() ) ) {
                for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
-                    set<size_t> global_node_numbers;
-                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
-                    // dealing with quad and tria faces
-                    if ( isTriangular(it->FE()->ElementTypeOfFace(face_id)) )
-                      tria_faces_.push_back( make_pair( global_node_numbers, numeric_limits<size_t>::max() ) );
-                    else
-                      quad_faces_.push_back( make_pair( global_node_numbers, numeric_limits<size_t>::max() ) );
+                    set<size_t> search_key;
+                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) search_key.insert( nit->Idx() );
+                    // dealing with triangular faces
+                    if ( isTriangular(it->FE()->ElementTypeOfFace(face_id)) ) {
+                         // getting the node IDs in their correct order
+                         array<size_t,3U> global_node_numbers;
+                         uint32_t n_node{ 0U };
+                         for ( const auto& nid : it->FE()->CornerNodesOfFace(face_id) )
+                           global_node_numbers[n_node++] = it->N(nid)->Idx();
+                         tria_faces_.push_back( make_pair( search_key, global_node_numbers ) );
+                      }
                  }
             }
         // pyramids fourth
         for ( const auto& it : model_domain.CellVector() )
           if ( it->IsVolume() && isPyramid( it->FE_Type() ) ) {
                for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
-                    set<size_t> global_node_numbers;
-                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
-                    if ( isTriangular(it->FE()->ElementTypeOfFace(face_id)) )
-                      tria_faces_.push_back( make_pair( global_node_numbers, numeric_limits<size_t>::max() ) );
-                    else
-                      quad_faces_.push_back( make_pair( global_node_numbers, numeric_limits<size_t>::max() ) );
+                    set<size_t> search_key;
+                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) search_key.insert( nit->Idx() );
+                    if ( isTriangular(it->FE()->ElementTypeOfFace(face_id)) ) {
+                         array<size_t,3U> global_node_numbers;
+                         uint32_t n_node{ 0U };
+                         for ( const auto& nid : it->FE()->CornerNodesOfFace(face_id) )
+                           global_node_numbers[n_node++] = it->N(nid)->Idx();
+                         tria_faces_.push_back( make_pair( search_key, global_node_numbers ) );
+                      }
                  }
             }
          // no octahedra in CSMP
-      } // end 3d
 
-    // sorting and eliminating duplicate faces from the vectors
+        // ------------------------
+        // quadrilateral faces
+        // ------------------------
+        // hexahedra
+        for ( const auto& it : model_domain.CellVector() )
+          if ( it->IsVolume() && isHexahedral( it->FE_Type() ) ) {
+               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
+                    set<size_t> search_key;
+                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) search_key.insert( nit->Idx() );
+                    array<size_t,4U> global_node_numbers;
+                    uint32_t n_node{ 0U };
+                    for ( const auto& nid : it->FE()->CornerNodesOfFace(face_id) )
+                      global_node_numbers[n_node++] = it->N(nid)->Idx();
+                    quad_faces_.push_back( make_pair( search_key, global_node_numbers ) );
+                 }
+            }
+        // prisms
+        for ( const auto& it : model_domain.CellVector() )
+          if ( it->IsVolume() && isPrism( it->FE_Type() ) ) {
+               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
+                    set<size_t> search_key;
+                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) search_key.insert( nit->Idx() );
+                    // dealing with quad and tria faces
+                    if ( isQuadrilateral(it->FE()->ElementTypeOfFace(face_id)) ) {
+                         array<size_t,4U> global_node_numbers;
+                         uint32_t n_node{ 0U };
+                         for ( const auto& nid : it->FE()->CornerNodesOfFace(face_id) )
+                           global_node_numbers[n_node++] = it->N(nid)->Idx();
+                         quad_faces_.push_back( make_pair( search_key, global_node_numbers ) );
+                      }
+                 }
+            }
+        // pyramids fourth
+        for ( const auto& it : model_domain.CellVector() )
+          if ( it->IsVolume() && isPyramid( it->FE_Type() ) ) {
+               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
+                    set<size_t> search_key;
+                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) search_key.insert( nit->Idx() );
+                    if ( isQuadrilateral(it->FE()->ElementTypeOfFace(face_id)) ) {
+                         array<size_t,4U> global_node_numbers;
+                         uint32_t n_node{ 0U };
+                         for ( const auto& nid : it->FE()->CornerNodesOfFace(face_id) )
+                           global_node_numbers[n_node++] = it->N(nid)->Idx();
+                         quad_faces_.push_back( make_pair( search_key, global_node_numbers ) );
+                      }
+                 }
+            }
+
+      } // end 3D
+
+    // sorting and eliminating duplicate faces from the faces vectors
+    // --------------------------------------------------------------
     // (lambda function to search only the first pair in the pair-value pair)
     sort( tria_faces_.begin(), tria_faces_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
     // eliminating duplicate faces
     tria_faces_.erase( unique( tria_faces_.begin(), tria_faces_.end(), [](auto &left, auto &right) { return left.first == right.first; } ), tria_faces_.end() );
-    //                                                                                                                 ^^^
     sort( quad_faces_.begin(), quad_faces_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
     quad_faces_.erase( unique( quad_faces_.begin(), quad_faces_.end(), [](auto &left, auto &right) { return left.first == right.first; } ), quad_faces_.end() );
+
+
+    // finding those faces that have a representation in the CSMP model
+    // ----------------------------------------------------------------
+    for ( auto it=model.Mesh().ElementsBegin(); it!=model.Mesh().ElementsEnd(); ++it )
+      if ( (*it).IsSurface() ) {
+           // create search key from sorted global node Idx
+           set<size_t> global_node_numbers;
+           // searching for face if it is triangular
+           if ( isTriangular((*it).FE_Type()) ) {
+                for ( uint32_t i{0U}; i<3U; ++i ) global_node_numbers.insert( (*it).N(i)->Idx() );
+                // search face within tria_faces_ vector; recording its offset from origin in map
+                const auto face_it = lower_bound( tria_faces_.begin(), tria_faces_.end(),
+                                                  make_pair( global_node_numbers, array<size_t,3>{} ),
+                                                  [](auto &left, auto &right) { return left.first < right.first; } );
+                assert( face_it != tria_faces_.end() );
+                // CSMP element idx, face # in UG
+                csmp_faces_.insert( make_pair( (*it).Idx(), distance(tria_faces_.begin(), face_it) ) );
+             }
+           else { // quadrilateral
+                for ( uint32_t i{0U}; i<4U; ++i ) global_node_numbers.insert( (*it).N(i)->Idx() );
+                const auto face_it = lower_bound( quad_faces_.begin(), quad_faces_.end(),
+                                                  make_pair( global_node_numbers, array<size_t,4>{} ),
+                                                  [](auto &left, auto &right) { return left.first < right.first; } );
+                assert( face_it != quad_faces_.end() );
+                // CSMP element idx, face # in UG
+                csmp_faces_.insert( make_pair( (*it).Idx(), distance(quad_faces_.begin(), face_it) + tria_faces_.size() ) );
+             }
+       }
+       
+    if constexpr( dim == 3U ) {
+        for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit )
+          if ( (*fit).IsSurface() ) {
+               // create search key from sorted global node Idx
+               set<size_t> global_node_numbers;
+               // searching for face if it is triangular
+               if ( isTriangular((*fit).FE_Type()) ) {
+                    for ( uint32_t i{0U}; i<3U; ++i ) global_node_numbers.insert( (*fit).N(i)->Idx() );
+                    // search face within tria_faces_ vector; if found its offset from origin is stored in map
+                    const auto face_it = lower_bound( tria_faces_.begin(), tria_faces_.end(),
+                                                      make_pair( global_node_numbers, array<size_t,3>{} ),
+                                                      [](auto &left, auto &right) { return left.first < right.first; } );
+                    assert( face_it != tria_faces_.end() );
+                    // CSMP element idx, face # in UG
+                    csmp_faces_.insert( make_pair( (*fit).Idx(), distance(tria_faces_.begin(), face_it) ) );
+                 }
+               else { // quadrilateral
+                    for ( uint32_t i{0U}; i<4U; ++i ) global_node_numbers.insert( (*fit).N(i)->Idx() );
+                    const auto face_it = lower_bound( quad_faces_.begin(), quad_faces_.end(),
+                                                      make_pair( global_node_numbers, array<size_t,4>{} ),
+                                                      [](auto &left, auto &right) { return left.first < right.first; } );
+                    assert( face_it != quad_faces_.end() );
+                    // CSMP element idx, face # in UG
+                    csmp_faces_.insert( make_pair( (*fit).Idx(), distance(quad_faces_.begin(), face_it) + tria_faces_.size() ) );
+                 }
+           }
+       } // end 3D
+
+    // creating inverse map of csmp edges
+    // ----------------------------------
+    for ( const auto& it : csmp_faces_ )
+      // face_id, csmp_idx
+      csmp_faces_inverted_.insert( make_pair( it.second, it.first ) );
+
+    // creating vector (0..faces-1) that indicates whether a face has a csmp equivalent
+    // --------------------------------------------------------------------------------
+    if ( faces_in_csmp_.empty() ) faces_in_csmp_.clear();
+    faces_in_csmp_.resize( tria_faces_.size() + quad_faces_.size(), false );
+    // initialising the vector
+    for ( const auto& it : csmp_faces_ )
+      faces_in_csmp_[ it.second ] = true;
 
     return tria_faces_.size() + quad_faces_.size();
     
  } // end CollectFaces
- 
- 
 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  
@@ -827,13 +1435,12 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumes( const Model<dim>& model )
     const Region<dim>& model_domain(model.Region("Model"));
 
     // looping over the element edges, collecting their global node IDs into unique sets that will be stored in 'edges'
-    vector<uint32_t> cnids;
+    // assumption: the first set of nodes in the element are the corner nodes
     // tetrahedra first
     for ( const auto& it : model_domain.CellVector() )
       if ( it->IsVolume() && isTetrahedral( it->FE_Type() ) ) {
-           it->FE()->CornerNodes(cnids);
            set<size_t> global_node_numbers;
-           for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
+           for ( uint32_t i{0U}; i<4U; ++i ) global_node_numbers.insert( it->N(i)->Idx() );
            tetra_volumes_.push_back( make_pair( global_node_numbers, it->Idx() ) );
         }
     sort( tetra_volumes_.begin(), tetra_volumes_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
@@ -841,9 +1448,8 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumes( const Model<dim>& model )
     // hexahedra
     for ( const auto& it : model_domain.CellVector() )
       if ( it->IsVolume() && isHexahedral( it->FE_Type() ) ) {
-           it->FE()->CornerNodes(cnids);
            set<size_t> global_node_numbers;
-           for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
+           for ( uint32_t i{0U}; i<8U; ++i ) global_node_numbers.insert( it->N(i)->Idx() );
            hexa_volumes_.push_back( make_pair( global_node_numbers, it->Idx() ) );
         }
     sort( hexa_volumes_.begin(), hexa_volumes_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
@@ -851,9 +1457,8 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumes( const Model<dim>& model )
     // prisms
     for ( const auto& it : model_domain.CellVector() )
       if ( it->IsVolume() && isPrism( it->FE_Type() ) ) {
-           it->FE()->CornerNodes(cnids);
            set<size_t> global_node_numbers;
-           for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
+           for ( uint32_t i{0U}; i<6U; ++i ) global_node_numbers.insert( it->N(i)->Idx() );
            prism_volumes_.push_back( make_pair( global_node_numbers, it->Idx() ) );
         }
     sort( prism_volumes_.begin(), prism_volumes_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
@@ -861,9 +1466,8 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumes( const Model<dim>& model )
     // pyramids
     for ( const auto& it : model_domain.CellVector() )
       if ( it->IsVolume() && isPyramid( it->FE_Type() ) ) {
-           it->FE()->CornerNodes(cnids);
            set<size_t> global_node_numbers;
-           for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
+           for ( uint32_t i{0U}; i<5U; ++i ) global_node_numbers.insert( it->N(i)->Idx() );
            pyra_volumes_.push_back( make_pair( global_node_numbers, it->Idx() ) );
         }
     sort( pyra_volumes_.begin(), pyra_volumes_.end(), [](auto &left, auto &right) { return left.first < right.first; } );
@@ -889,7 +1493,7 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumes( const Model<dim>& model )
       @return number of unique edges in the region
 */
 template<uint32_t dim>
-size_t UG4_UGX_FileExport<dim>::CollectEdgesInRegion( const Region<dim>& domain, std::vector<size_t>& region_edges ) const
+size_t UG4_UGX_FileExport<dim>::CollectEdgesInRegion( const Region<dim>& domain, vector<size_t>& region_edges ) const
  {
     if ( !region_edges.empty() ) region_edges.clear();
  
@@ -908,6 +1512,7 @@ size_t UG4_UGX_FileExport<dim>::CollectEdgesInRegion( const Region<dim>& domain,
              if ( edge_it != edges_.end() )
                // NB: ptrdiff_t might be better in region_edges than size_t
                region_edges.push_back( distance( edges_.begin(), edge_it ) );
+             assert( edge_it != edges_.end() );
           }
       }
  
@@ -934,22 +1539,23 @@ size_t UG4_UGX_FileExport<dim>::CollectFacesInRegion( const Region<dim>& domain,
     // TRIANGULAR FACES first
     // ----------------------
     // looping over the elements of the model, collecting their global node IDs into unique sets that will be stored in 'faces'
-    // dealing with all the triangular faces first
-    vector<uint32_t> cnids;
-    for ( const auto& it : domain.CellVector() )
-      if ( it->IsSurface() && isTriangular( it->FE_Type() ) )
-        {
-            // for the elements in the region
-            it->FE()->CornerNodes(cnids);
-            set<size_t> global_node_numbers;
-            for ( const auto& id : cnids ) global_node_numbers.insert( it->N(id)->Idx() );
-            // finding their position in the global 'faces_' vector
-            const auto face_it = lower_bound( tria_faces_.begin(), tria_faces_.end(), make_pair( global_node_numbers, it->Idx() ),
-                                              [](auto &left, auto &right) { return left.first < right.first; }  );
-            if ( face_it != tria_faces_.end() )
-              region_faces.push_back( distance( tria_faces_.begin(), face_it ) );
-         }
-
+    if constexpr ( dim == 2U ) {
+        vector<uint32_t> cnids;
+        for ( const auto& it : domain.CellVector() )
+          if ( it->IsSurface() && isTriangular( it->FE_Type() ) )
+            {
+                // for the elements in the region
+                set<size_t> search_key;
+                for ( uint32_t i{0U}; i<3U; ++i ) search_key.insert( it->N(i)->Idx() );
+                // finding their position in the global 'faces_' vector
+                const auto face_it = lower_bound( tria_faces_.begin(), tria_faces_.end(),
+                                                  make_pair( search_key, array<size_t,3>{} ),
+                                                  [](auto &left, auto &right) { return left.first < right.first; }  );
+                if ( face_it != tria_faces_.end() )
+                  region_faces.push_back( distance( tria_faces_.begin(), face_it ) );
+             }
+      }
+      
     // adding the triangular faces that exist between the volumetric elements in 3D
     if constexpr ( dim == 3U ) {
         // tetrahedra
@@ -968,6 +1574,7 @@ size_t UG4_UGX_FileExport<dim>::CollectFacesInRegion( const Region<dim>& domain,
                        region_faces.push_back( distance( tria_faces_.begin(), face_it ) );
                  }
             }
+        // hexahedra (no triangular faces here)
         // prisms
         for ( const auto& it : domain.CellVector() )
           if ( it->IsVolume() && isPrism( it->FE_Type() ) ) {
@@ -1010,16 +1617,18 @@ size_t UG4_UGX_FileExport<dim>::CollectFacesInRegion( const Region<dim>& domain,
     // QUADRILATERAL FACES
     // -------------------
     // order is important because tria_faces_ needs to be established before quadrilaterals are accumulated
-    for ( const auto& it : domain.CellVector() )
-      if ( it->IsSurface() && isQuadrilateral( it->FE_Type() ) ) {
-          it->FE()->CornerNodes(cnids);
-          set<size_t> global_node_numbers;
-          for ( const auto& id : cnids ) global_node_numbers.insert( it->N(id)->Idx() );
-          const auto face_it = lower_bound( quad_faces_.begin(), quad_faces_.end(), make_pair( global_node_numbers, it->Idx() ),
-                                            [](auto &left, auto &right) { return left.first < right.first; }  );
-          if ( face_it != quad_faces_.end() )
-          region_faces.push_back( distance( quad_faces_.begin(), face_it ) + tria_faces_.size() );
-       }
+    if constexpr( dim == 2U ) {
+        for ( const auto& it : domain.CellVector() )
+          if ( it->IsSurface() && isQuadrilateral( it->FE_Type() ) ) {
+              set<size_t> search_key;
+              for ( uint32_t i{0U}; i<4U; ++i ) search_key.insert( it->N(i)->Idx() );
+              const auto face_it = lower_bound( quad_faces_.begin(), quad_faces_.end(),
+                                                make_pair( search_key, array<size_t,4>{} ),
+                                                [](auto &left, auto &right) { return left.first < right.first; }  );
+              if ( face_it != quad_faces_.end() )
+                 region_faces.push_back( distance( quad_faces_.begin(), face_it ) + tria_faces_.size() );
+           }
+       } // end 2D
 
     // adding the quadrilateral faces that exist between the volumetric elements in 3D
     if constexpr ( dim == 3U ) {
@@ -1081,8 +1690,8 @@ size_t UG4_UGX_FileExport<dim>::CollectFacesInRegion( const Region<dim>& domain,
     if constexpr ( dim == 3U ) {
         sort( region_faces.begin(), region_faces.end() );
         region_faces.erase( unique( region_faces.begin(), region_faces.end() ), region_faces.end() );
+        region_faces.shrink_to_fit();
       }
-    region_faces.shrink_to_fit();
 
     return region_faces.size();
 
@@ -1104,15 +1713,13 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumesInRegion( const Region<dim>& domai
     if ( !region_volumes.empty() ) region_volumes.clear();
 
     // looping over the element edges, collecting their global node IDs into unique sets that will be stored in 'edges'
-    vector<uint32_t> cnids;
     // tetrahedral elements
     for ( const auto& it : domain.CellVector() )
       if ( it->IsVolume() && isTetrahedral( it->FE_Type() ) )
         {
-           it->FE()->CornerNodes(cnids);
            // getting the global node IDs
            set<size_t> global_node_numbers;
-           for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
+           for ( uint32_t i{0U}; i<4U; ++i ) global_node_numbers.insert( it->N(i)->Idx() );
            // searching for the element IDx in the global volumes vector
            const auto elmt_it = lower_bound( tetra_volumes_.begin(), tetra_volumes_.end(), make_pair( global_node_numbers, it->Idx() ),
                                              [](auto &left, auto &right) { return left.first < right.first; } );
@@ -1123,10 +1730,9 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumesInRegion( const Region<dim>& domai
     for ( const auto& it : domain.CellVector() )
       if ( it->IsVolume() && isHexahedral( it->FE_Type() ) )
         {
-           it->FE()->CornerNodes(cnids);
            // getting the global node IDs
            set<size_t> global_node_numbers;
-           for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
+           for ( uint32_t i{0U}; i<8U; ++i ) global_node_numbers.insert( it->N(i)->Idx() );
            // searching for the element IDx in the global volumes vector
            const auto elmt_it = lower_bound( hexa_volumes_.begin(), hexa_volumes_.end(), make_pair( global_node_numbers, it->Idx() ),
                                              [](auto &left, auto &right) { return left.first < right.first; } );
@@ -1137,10 +1743,9 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumesInRegion( const Region<dim>& domai
     for ( const auto& it : domain.CellVector() )
       if ( it->IsVolume() && isPrism( it->FE_Type() ) )
         {
-           it->FE()->CornerNodes(cnids);
            // getting the global node IDs
            set<size_t> global_node_numbers;
-           for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
+           for ( uint32_t i{0U}; i<6U; ++i ) global_node_numbers.insert( it->N(i)->Idx() );
            // searching for the element IDx in the global volumes vector
            const auto elmt_it = lower_bound( prism_volumes_.begin(), prism_volumes_.end(), make_pair( global_node_numbers, it->Idx() ),
                                              [](auto &left, auto &right) { return left.first < right.first; } );
@@ -1151,10 +1756,9 @@ size_t UG4_UGX_FileExport<dim>::CollectVolumesInRegion( const Region<dim>& domai
     for ( const auto& it : domain.CellVector() )
       if ( it->IsVolume() && isPyramid( it->FE_Type() ) )
         {
-           it->FE()->CornerNodes(cnids);
            // getting the global node IDs
            set<size_t> global_node_numbers;
-           for ( const auto& nit : cnids ) global_node_numbers.insert( it->N(nit)->Idx() );
+           for ( uint32_t i{0U}; i<5U; ++i ) global_node_numbers.insert( it->N(i)->Idx() );
            // searching for the element IDx in the global volumes vector
            const auto elmt_it = lower_bound( pyra_volumes_.begin(), pyra_volumes_.end(), make_pair( global_node_numbers, it->Idx() ),
                                              [](auto &left, auto &right) { return left.first < right.first; } );
@@ -1179,7 +1783,7 @@ template<uint32_t dim>
 size_t UG4_UGX_FileExport<dim>::CollectEdgesInBoundary( const Boundary<dim>& domain, std::vector<size_t>& boundary_edges ) const
  {
     if ( !boundary_edges.empty() ) boundary_edges.clear();
- 
+    
     vector<uint32_t> snids;
     for ( const auto& it : domain.CellVector() ) {
       for ( uint32_t segm_id{0U}; segm_id<it->FE()->Segments(); ++segm_id ) {
@@ -1191,7 +1795,6 @@ size_t UG4_UGX_FileExport<dim>::CollectEdgesInBoundary( const Boundary<dim>& dom
              if ( global_node_numbers.first > global_node_numbers.second )
                swap(global_node_numbers.first,global_node_numbers.second);
              // finding the edge in global edges_ vector and measuring its distance from the beginning of it = ID
-//             const auto edge_it = lower_bound( edges_.begin(), edges_.end(), make_pair( global_node_numbers, it->Idx() ) );
              const auto edge_it = lower_bound( edges_.begin(), edges_.end(), global_node_numbers );
              if ( edge_it != edges_.end() )
                // NB: ptrdiff_t might be better in region_edges than size_t
@@ -1209,6 +1812,26 @@ size_t UG4_UGX_FileExport<dim>::CollectEdgesInBoundary( const Boundary<dim>& dom
  } // end CollectEdgesInBoundary
 
 
+/* TO SEARCH FOR SPECIFIC EDGES
+    if constexpr( dim == 2U ) {
+        for ( const auto& it : domain.CellVector() )
+          if ( it->IsLine() ) {
+               // making a search key for the face from the global node IDs
+               pair<size_t,size_t> search_key{ it->N(0U)->Idx(), it->N(1U)->Idx() };
+               if ( search_key.first > search_key.second ) swap( search_key.first, search_key.second );
+               // searching the face in the faces_ vector
+               const auto edge_it = lower_bound( edges_.begin(), edges_.end(), search_key );
+               if ( edge_it != edges_.end() )
+               boundary_edges.push_back( distance( edges_.begin(), edge_it ) );
+            }
+      }
+*/
+
+
+
+
+
+
 
 
 
@@ -1223,35 +1846,31 @@ size_t UG4_UGX_FileExport<dim>::CollectFacesInBoundary( const Boundary<dim>& dom
     
     // boundary consists of triangular and quadrilateral faces these are unique
     // triangular faces first
-    for ( const auto& it : domain.CellVector() ) {
-        for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id )
-          {
-             // getting the global node IDs
-             set<size_t> global_node_numbers;
-             for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
-             // distinguishing triangular from quadrilateral faces
-             if ( isTriangular(it->FE()->ElementTypeOfFace(face_id)) ) {
-                  const auto face_it = lower_bound( tria_faces_.begin(), tria_faces_.end(), make_pair( global_node_numbers, it->Idx() ) );
-                  if ( face_it != tria_faces_.end() )
-                  boundary_faces.push_back( distance( tria_faces_.begin(), face_it ) );
-               }
-           }
-      }
+    for ( const auto& it : domain.CellVector() )
+      if ( it->IsSurface() && isTriangular( it->FE_Type() ) ) {
+           // making a search key for the face from the global node IDs
+           set<size_t> search_key;
+           for ( uint32_t i{0U}; i<3U; ++i ) search_key.insert( it->N(i)->Idx() );
+           // searching the face in the faces_ vector
+           const auto face_it = lower_bound( tria_faces_.begin(), tria_faces_.end(),
+                                             make_pair( search_key, array<size_t,3>{} ),
+                                             [](auto &left, auto &right) { return left.first < right.first; } );
+           if ( face_it != tria_faces_.end() )
+           boundary_faces.push_back( distance( tria_faces_.begin(), face_it ) );
+        }
+      
     // quadrilaterals
-    for ( const auto& it : domain.CellVector() ) {
-        for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id )
-          {
-             // getting the global node IDs
-             set<size_t> global_node_numbers;
-             for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
-             // distinguishing triangular from quadrilateral faces
-             if ( isQuadrilateral(it->FE()->ElementTypeOfFace(face_id)) ) {
-                  const auto face_it = lower_bound( quad_faces_.begin(), quad_faces_.end(), make_pair( global_node_numbers, it->Idx() ) );
-                  if ( face_it != quad_faces_.end() )
-                  boundary_faces.push_back( distance( quad_faces_.begin(), face_it ) + boundary_faces.size() );
-               }
-           }
-      }
+    for ( const auto& it : domain.CellVector() )
+      if ( it->IsSurface() && isQuadrilateral( it->FE_Type() ) ) {
+           set<size_t> search_key;
+           for ( uint32_t i{0U}; i<4U; ++i ) search_key.insert( it->N(i)->Idx() );
+           // searching the face in the faces_ vector
+           const auto face_it = lower_bound( quad_faces_.begin(), quad_faces_.end(),
+                                             make_pair( search_key, array<size_t,4>{} ),
+                                             [](auto &left, auto &right) { return left.first < right.first; } );
+           if ( face_it != quad_faces_.end() )
+           boundary_faces.push_back( distance( quad_faces_.begin(), face_it ) + tria_faces_.size() );
+        }
 
     boundary_faces.shrink_to_fit();
 
@@ -1294,6 +1913,131 @@ string UG4_UGX_FileExport<dim>::UG_VariableType( const csmp::Index& index ) cons
     return "UNDEFINED";
       
  } // end
+
+
+
+// --------------------------------------------------------------------------
+//
+//     NOT CURRENTLY USED
+//
+// --------------------------------------------------------------------------
+
+
+
+
+/**
+    Creating faces between volumetric elements and ordering them.  Each face will only be contained once, but together
+    with the numbers of the volumetric elements that border it, and the numbers of their faces that are adjacent to this face.
+
+    Method needs to be called after, the faces defined in the CSMP model have already been collected.
+    
+    @param tria_faces key=global_node_idx, value=elmt_idx & face_number from which the face info came from
+    @param quad_faces key=global_node_idx, value=elmt_idx & face_number from which the face info came from
+
+*/
+template<uint32_t dim>
+size_t UG4_UGX_FileExport<dim>::CollectFacesFromVolumes( const Model<dim>& model,
+                                                         map<set<size_t>,set<pair<size_t,uint32_t>>>&  tria_faces,
+                                                         map<set<size_t>,set<pair<size_t,uint32_t>>>&  quad_faces ) const
+  {
+     // key=global_node_idx, value=elmt_idx & face_number from which the face info came from
+     //map<set<size_t>,set<pair<size_t,uint32_t>>>  tria_faces, quad_faces;
+  
+     const Region<dim>& model_domain = model.Region("Model");
+        // tetrahedra first
+        for ( const auto& it : model_domain.CellVector() )
+          if ( it->IsVolume() && isTetrahedral( it->FE_Type() ) ) {
+               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
+                    // getting the global node IDs (but in the order of the sorted pointers, only for creating unique keys)
+                    set<size_t> global_node_numbers;
+                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
+                    assert( *max_element(global_node_numbers.begin(),global_node_numbers.end()) < model_domain.Nodes() );
+                    // inserting the global face node ids into the faces vector
+                    auto face_it = tria_faces.insert( make_pair( global_node_numbers,
+                                                                 set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
+                    // if the face is already in there the ID of the current element is added to the value container
+                    if ( face_it.second == false )
+                      (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
+                 }
+            }
+        // hexahedra second
+        for ( const auto& it : model_domain.CellVector() )
+          if ( it->IsVolume() && isHexahedral( it->FE_Type() ) ) {
+               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
+                    set<size_t> global_node_numbers;
+                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
+                    assert( *max_element(global_node_numbers.begin(),global_node_numbers.end()) < model_domain.Nodes() );
+                    auto face_it = quad_faces.insert( make_pair( global_node_numbers,
+                                                                 set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
+                    // if the face is already in there the ID of the current element is added to the value container
+                    if ( face_it.second == false )
+                      (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
+                 }
+            }
+        // prism third
+        for ( const auto& it : model_domain.CellVector() )
+          if ( it->IsVolume() && isPrism( it->FE_Type() ) ) {
+               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
+                    set<size_t> global_node_numbers;
+                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
+                    assert( *max_element(global_node_numbers.begin(),global_node_numbers.end()) < model_domain.Nodes() );
+                    // dealing with quad and tria faces
+                    if ( isTriangular(it->FE()->ElementTypeOfFace(face_id)) ) {
+                         auto face_it = tria_faces.insert( make_pair( global_node_numbers,
+                                                                      set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
+                         if ( face_it.second == false )
+                           (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
+                      }
+                    else {
+                         auto face_it = quad_faces.insert( make_pair( global_node_numbers,
+                                                                      set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
+                         if ( face_it.second == false )
+                           (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
+                      }
+                 }
+            }
+        // pyramids fourth
+        for ( const auto& it : model_domain.CellVector() )
+          if ( it->IsVolume() && isPyramid( it->FE_Type() ) ) {
+               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
+                    set<size_t> global_node_numbers;
+                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
+                    assert( *max_element(global_node_numbers.begin(),global_node_numbers.end()) < model_domain.Nodes() );
+                    if ( isTriangular(it->FE()->ElementTypeOfFace(face_id)) ) {
+                         auto face_it = tria_faces.insert( make_pair( global_node_numbers,
+                                                                      set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
+                         if ( face_it.second == false )
+                           (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
+                      }
+                    else {
+                         auto face_it = quad_faces.insert( make_pair( global_node_numbers,
+                                                                      set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
+                         if ( face_it.second == false )
+                           (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
+                      }
+                 }
+            }
+         // no octahedra in CSMP
+         
+    // TODO: deleting triangle and quadrilateral faces which were already present in CSMP model
+    for ( const auto& fit : tria_faces_ )
+      // erasing the faces from the map
+      if ( tria_faces.find(fit.first) != tria_faces.end() )
+        tria_faces.erase( fit.first );
+
+    for ( const auto& fit : quad_faces_ )
+      // erasing the faces from the map
+      if ( quad_faces.find(fit.first) != quad_faces.end() )
+        quad_faces.erase( fit.first );
+
+    // now the values are transferred to global arrays using the global idx of the first element
+    return tria_faces.size() + quad_faces.size();
+
+ } // end CollectFacesFromVolumes
+ 
+ 
+ 
+
 
 
 template class UG4_UGX_FileExport<2U>;

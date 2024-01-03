@@ -800,7 +800,7 @@ set<Node<dim>*>  FiniteElementPolicy<dim,CELL>::CornerNodesOfFace( uint32_t face
     const CELL<dim>* const eptr( static_cast<const CELL<dim>* const>(this) );
 
     set<Node<dim>*>  temp;
-    for ( auto nit : fptr_->CornerNodesOfFace(face_id) ) {
+    for ( const auto& nit : fptr_->CornerNodesOfFace(face_id) ) {
          assert( eptr->N(nit) != nullptr );
          temp.insert( eptr->N(nit) );
       }
@@ -822,7 +822,7 @@ set<Node<dim>*> FiniteElementPolicy<dim,CELL>::CornerNodesConnectedTo( uint32_t 
     const CELL<dim>* const eptr( static_cast<const CELL<dim>* const>(this) );
 
     set<Node<dim>*>  temp;
-    for ( auto nit : fptr_->NodesConnectedTo(node_id) ) {
+    for ( const auto& nit : fptr_->NodesConnectedTo(node_id) ) {
          assert( eptr->N(nit) != nullptr );
          temp.insert( eptr->N(nit) );
       }

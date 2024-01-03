@@ -20,13 +20,14 @@ template<uint32_t> class Visitor;
 class FiniteElementManager;
 template<uint32_t> class FiniteVolumeStencilManager;
 
-/*
+/**
     Line "face" that knows its surface Face neighbors.
     Supports computations on the boundaries of 3D models.
     Variable placement is FACE.
     Can be a manifold.
     
     @todo design issue: edges should only exist only in 3D models because, only there, they can have Face neighbors.
+    @todo remove templatisation, making this a 3D only entity
 */
 template<uint32_t dim>
 class Edge : public FiniteElementPolicy<dim,Edge>,
