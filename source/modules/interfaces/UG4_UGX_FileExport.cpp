@@ -71,15 +71,6 @@ UG4_UGX_FileExport<dim>::UG4_UGX_FileExport( const Model<dim>& model )
   
   
   
-  /**
-      For the allocatio of no-data values (which will be set to negative float max)
-  */
-  static bool equivalentEntityInCSMP( size_t idx ) {
-       if ( idx == numeric_limits<size_t>::max() ) return false;
-       return true;
-    }
-
-
 /**
       Finds corresponding CSMP line element or returns UNSPECIFIED
 */
@@ -102,46 +93,10 @@ long UG4_UGX_FileExport<dim>::EquivalentFaceInCSMP( size_t ug_idx ) const {
 
 
  
- 
  /**
-          Writes the global node numbers of the elements, faces, and interfaces in counter-clockwise order.
-          
-          @attention function only generates output for elements, faces or interfaces that are present in CSMP
-          
-          Element<dim>* eptr = &(*next(mesh.ElementsBegin(),idx));
+     Writes the CSMP global node indices (0..nodes-1) in their correct cell order to the output stream.
+     The indices are read from the supplied array nids.
  */
- template<uint32_t dim>
- static void writeNodeIndices( ofstream& ofs, const MeshManager<dim>& mesh, size_t cell_idx, bool& print_whitespace ) {
-     if ( cell_idx < mesh.Elements() )
-       for ( uint32_t i{0U}; i<(*next(mesh.ElementsBegin(),cell_idx)).Nodes(); ++i ) {
-           if ( print_whitespace ) ofs <<" ";
-           else print_whitespace = true;
-           ofs << (*next(mesh.ElementsBegin(),cell_idx)).N(i)->Idx();
-        }
-     else if ( cell_idx < mesh.Elements()+mesh.Faces() )
-       for ( uint32_t i{0U}; i<(*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Nodes(); ++i ) {
-           if ( print_whitespace ) ofs <<" ";
-           else print_whitespace = true;
-           ofs << (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).N(i)->Idx();
-        }
-     else if ( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() )
-       for ( uint32_t i{0U}; i<(*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Nodes(); ++i ) {
-           if ( print_whitespace ) ofs <<" ";
-           else print_whitespace = true;
-           ofs << (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).N(i)->Idx();
-        }
-     else {
-       if ( !equivalentEntityInCSMP(cell_idx) )
-         ErrorHandler::Instance().Note( ERROR, "writeNodeIndices", "cell index greater than size_t::max");
-       else
-         ErrorHandler::Instance().Note( ERROR, "writeNodeIndices", "cell index out of range");
-       }
-       
-  } // end writeNodeIndices
-
-
-
-// NEW REVISION
  template<size_t n_nodes>
  static void writeNodeIndices( ofstream& ofs, const array<size_t,n_nodes>& nids, bool& print_whitespace )
   {
@@ -151,17 +106,33 @@ long UG4_UGX_FileExport<dim>::EquivalentFaceInCSMP( size_t ug_idx ) const {
            ofs << nid;
         }
        
-  } // end writeNodeIndices
+  } // end writeNodeIndices (array version)
 
+
+/**
+  Taking the indexing from the model domain the node indices are written to file.
+*/
+template<uint32_t dim>
+static void writeNodeIndices( ofstream& ofs, const Region<dim>& domain, size_t vol_elmt_idx, bool& print_whitespace )
+  {
+     assert( vol_elmt_idx < domain.Cells() );
+     assert( domain.E(vol_elmt_idx)->IsVolume() );
+     
+     for ( uint32_t i{0U}; i<domain.E(vol_elmt_idx)->Nodes(); ++i ) {
+           if ( print_whitespace ) ofs <<" ";
+           else print_whitespace = true;
+           ofs << domain.E(vol_elmt_idx)->N(i)->Idx();
+        }
+       
+  } // end writeNodeIndices ("Model" region version)
 
 
  
  
  /**
-            Writes corresponding number of no-data values to file
+      Where there is no property value, the no-data value will be written to file.
  */
 static void writeNoDataValue( ofstream& ofs, const csmp::Index& var_key, uint32_t dim, bool omit_1st_whitespace ) {
-      // where there is no property value, the no-data value will be written to file
       constexpr double no_data_value{ -numeric_limits<float>::max() };
       assert( ofs.is_open() );
       assert( var_key.type != ARRAY && var_key.type != FLAGGEDARRAY );
@@ -190,9 +161,165 @@ static void writeNoDataValue( ofstream& ofs, const csmp::Index& var_key, uint32_
       ofs.precision(prec);
    }
    
-   
+
+
+template<uint32_t dim>
+void UG4_UGX_FileExport<dim>::WriteVertexVariableValue( ofstream& ofs, const csmp::Index& var_key,
+                                                        const Region<dim>& domain, size_t cell_idx,
+                                                        bool& print_whitespace ) const
+ {
+    csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
+
+    if ( var_key.place != NODE ) {
+        // there no cell index was recorded for the face the no data values is writen
+        switch(var_key.type) {
+            case SCALAR: {
+                   double sc;
+                   switch(var_key.place) {
+                        case NODE:
+                             assert( cell_idx < domain.Nodes() );
+                             sc = domain.N(cell_idx)->Read(var_key);
+                          break;
+                        default:
+                             sc = -numeric_limits<float>::max(); // no-data value
+                     }
+                   if ( !print_whitespace ) ofs << scientific << sc;
+                   else ofs <<" "<< scientific << sc;
+                   print_whitespace = true;
+                }
+              break;
+            case VECTOR: {
+                   VectorVariable<dim> vc;
+                   switch(var_key.place) {
+                        case NODE:
+                             assert( cell_idx < domain.Nodes() );
+                             domain.N(cell_idx)->Read(var_key,vc);
+                          break;
+                        default:
+                             vc = -numeric_limits<float>::max(); // no-data value
+                     }
+                   for ( uint32_t i{0u}; i<dim; ++i ) {
+                         if ( print_whitespace ) ofs <<" ";
+                         else print_whitespace = true;
+                         ofs << scientific << vc[i];
+                     }
+                }
+              break;
+            case TENSOR: {
+                   TensorVariable<dim> ts;
+                   switch(var_key.place) {
+                        case NODE:
+                             assert( cell_idx < domain.Nodes() );
+                             domain.N(cell_idx)->Read(var_key,ts);
+                          break;
+                        default:
+                             ts = -numeric_limits<float>::max(); // no-data value
+                     }
+                   for ( uint32_t i{0u}; i<dim; ++i )
+                     for ( uint32_t j{0u}; j<dim; ++j ) {
+                           if ( print_whitespace ) ofs <<" ";
+                           else print_whitespace = true;
+                           ofs << scientific << ts(i,j);
+                       }
+                }
+              break;
+            default: {
+                 cerr <<"\nvariable of type "<< parseType( var_key.type ) << endl;
+                 csmp_err.Note( ERROR, "WriteFaceVariableValue", "type of variable has no equivalent representation in UG4");
+              }
+          }
+      }
+    else writeNoDataValue( ofs, var_key, dim, print_whitespace );
+    
+ } // end WriteVertexVariableValue
+
+
+
+
+
+template<uint32_t dim>
+void UG4_UGX_FileExport<dim>::WriteEdgeVariableValue( ofstream& ofs, const csmp::Index& var_key,
+                                                      const Region<dim>& domain, size_t cell_idx,
+                                                      bool& print_whitespace ) const
+ {
+    csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
+    
+    if ( !domain.E(cell_idx)->IsLine() ) {
+         csmp_err.Note( ERROR, "UG4_UGX_FileExport<dim>::WriteEdgeVariableValue",
+                        "Attempt to apply method to an non-line element; Nothing was done");
+         return;
+      }
+    
+     if ( var_key.place == ELEMENT ) {
+        // there no cell index was recorded for the face the no data values is writen
+        switch(var_key.type) {
+            case SCALAR: {
+                   double sc;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < domain.Cells() );
+                             sc = domain.E(cell_idx)->Read(var_key);
+                          break;
+                        default:
+                             sc = -numeric_limits<float>::max(); // no-data value
+                     }
+                   if ( !print_whitespace ) ofs << scientific << sc;
+                   else ofs <<" "<< scientific << sc;
+                   print_whitespace = true;
+                }
+              break;
+            case VECTOR: {
+                   VectorVariable<dim> vc;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < domain.Cells() );
+                             domain.E(cell_idx)->Read(var_key,vc);
+                          break;
+                        default:
+                             vc = -numeric_limits<float>::max(); // no-data value
+                     }
+                   for ( uint32_t i{0u}; i<dim; ++i ) {
+                         if ( print_whitespace ) ofs <<" ";
+                         else print_whitespace = true;
+                         ofs << scientific << vc[i];
+                     }
+                }
+              break;
+            case TENSOR: {
+                   TensorVariable<dim> ts;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < domain.Cells() );
+                             domain.E(cell_idx)->Read(var_key,ts);
+                          break;
+                        default:
+                             ts = -numeric_limits<float>::max(); // no-data value
+                     }
+                   for ( uint32_t i{0u}; i<dim; ++i )
+                     for ( uint32_t j{0u}; j<dim; ++j ) {
+                           if ( print_whitespace ) ofs <<" ";
+                           else print_whitespace = true;
+                           ofs << scientific << ts(i,j);
+                       }
+                }
+              break;
+            default: {
+                 cerr <<"\nvariable of type "<< parseType( var_key.type ) << endl;
+                 csmp_err.Note( ERROR, "WriteEdgeVariableValue", "type of variable has no equivalent representation in UG4");
+              }
+          }
+      }
+    else writeNoDataValue( ofs, var_key, dim, print_whitespace );
+         
+} // end WriteEdgeVariableValue
+
+
+
+
+
 /**
-    For cell-based variables (Element, Face, InterFace), writes its value, considering SCALAR, VECTOR and TENSOR variables and printing no_data values as appropriate
+    For cell-based variables (Element, Face, InterFace), writes its value, considering SCALAR, VECTOR and TENSOR variables and printing no_data values as appropriate.
+    The variable placement in the CSMP Index is the one which will be considered.
     
     @param ofs  output textfile stream UTF-8 on linux
     @param var_key variable accessor in CSMP
@@ -301,7 +428,10 @@ void UG4_UGX_FileExport<dim>::WriteFaceVariableValue( ofstream& ofs, const csmp:
 
 
 
-
+/**
+    Same as previous method, but for volumetric 3D elements only.
+    @attention method assumes that there is an exact match between CSMP volume cell index and UG volume index.
+*/
 template<uint32_t dim>
 void UG4_UGX_FileExport<dim>::WriteVolumeVariableValue( ofstream& ofs, const csmp::Index& var_key,
                                                         const MeshManager<dim>& mesh, size_t ug_cell_idx,
@@ -309,9 +439,9 @@ void UG4_UGX_FileExport<dim>::WriteVolumeVariableValue( ofstream& ofs, const csm
  {
     csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
     
-    const long cell_idx = EquivalentFaceInCSMP( ug_cell_idx );
+    const long cell_idx = ug_cell_idx;
 
-    if ( cell_idx != UNSPECIFIED ) {
+    if ( cell_idx != UNSPECIFIED && var_key.place == ELEMENT ) {
         // there no cell index was recorded for the face the no data values is writen
         switch(var_key.type) {
             case SCALAR: {
@@ -320,14 +450,6 @@ void UG4_UGX_FileExport<dim>::WriteVolumeVariableValue( ofstream& ofs, const csm
                         case ELEMENT:
                              assert( cell_idx < mesh.Elements() );
                              sc = (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key);
-                          break;
-                        case FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
-                             sc = (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key);
-                          break;
-                        case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             sc = (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key);
                           break;
                         default:
                              sc = -numeric_limits<float>::max(); // no-data value
@@ -343,14 +465,6 @@ void UG4_UGX_FileExport<dim>::WriteVolumeVariableValue( ofstream& ofs, const csm
                         case ELEMENT:
                              assert( cell_idx < mesh.Elements() );
                              (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,vc);
-                          break;
-                        case FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
-                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,vc);
-                          break;
-                        case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,vc);
                           break;
                         default:
                              vc = -numeric_limits<float>::max(); // no-data value
@@ -368,14 +482,6 @@ void UG4_UGX_FileExport<dim>::WriteVolumeVariableValue( ofstream& ofs, const csm
                         case ELEMENT:
                              assert( cell_idx < mesh.Elements() );
                              (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,ts);
-                          break;
-                        case FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
-                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,ts);
-                          break;
-                        case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,ts);
                           break;
                         default:
                              ts = -numeric_limits<float>::max(); // no-data value
@@ -397,115 +503,6 @@ void UG4_UGX_FileExport<dim>::WriteVolumeVariableValue( ofstream& ofs, const csm
     else writeNoDataValue( ofs, var_key, dim, print_whitespace );
          
 } // end WriteVolumeVariableValue
-
-
-
-#if 0
-/**
-    For cell-based variables (Element, Face, InterFace), writes its value, considering SCALAR, VECTOR and TENSOR variables and printing no_data values as appropriate
-    
-    @param ofs  output textfile stream UTF-8 on linux
-    @param var_key variable accessor in CSMP
-    @param mesh MeshManager which contains the variable values of interest stored on Element, Face or InterFace, respectively.
-    @param cell_idx continous numbering of elements, faces and interfaces in CSMP
-    @param print_whitespace to avoid printing blanks at the  beginning of attachment arrays
-    
-      @attention method has to switch print_whitespace on
-*/
-template<uint32_t dim>
-static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
-                                    const MeshManager<dim>& mesh, size_t cell_idx, bool& print_whitespace )
- {
-    csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
-
-    if ( equivalentEntityInCSMP(cell_idx) ) {
-        // there no cell index was recorded for the face the no data values is writen
-        switch(var_key.type) {
-            case SCALAR: {
-                   double sc;
-                   switch(var_key.place) {
-                        case ELEMENT:
-                             assert( cell_idx < mesh.Elements() );
-                             sc = (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key);
-                          break;
-                        case FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
-                             sc = (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key);
-                          break;
-                        case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             sc = (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key);
-                          break;
-                        default:
-                             sc = -numeric_limits<float>::max(); // no-data value
-                     }
-                   if ( !print_whitespace ) ofs << scientific << sc;
-                   else ofs <<" "<< scientific << sc;
-                   print_whitespace = true;
-                }
-              break;
-            case VECTOR: {
-                   VectorVariable<dim> vc;
-                   switch(var_key.place) {
-                        case ELEMENT:
-                             assert( cell_idx < mesh.Elements() );
-                             (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,vc);
-                          break;
-                        case FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
-                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,vc);
-                          break;
-                        case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,vc);
-                          break;
-                        default:
-                             vc = -numeric_limits<float>::max(); // no-data value
-                     }
-                   for ( uint32_t i{0u}; i<dim; ++i ) {
-                         if ( print_whitespace ) ofs <<" ";
-                         else print_whitespace = true;
-                         ofs << scientific << vc[i];
-                     }
-                }
-              break;
-            case TENSOR: {
-                   TensorVariable<dim> ts;
-                   switch(var_key.place) {
-                        case ELEMENT:
-                             assert( cell_idx < mesh.Elements() );
-                             (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,ts);
-                          break;
-                        case FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
-                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,ts);
-                          break;
-                        case INTER_FACE:
-                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
-                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,ts);
-                          break;
-                        default:
-                             ts = -numeric_limits<float>::max(); // no-data value
-                     }
-                   for ( uint32_t i{0u}; i<dim; ++i )
-                     for ( uint32_t j{0u}; j<dim; ++j ) {
-                           if ( print_whitespace ) ofs <<" ";
-                           else print_whitespace = true;
-                           ofs << scientific << ts(i,j);
-                       }
-                }
-              break;
-            default: {
-                 cerr <<"\nvariable of type "<< parseType( var_key.type ) << endl;
-                 csmp_err.Note( ERROR, "writeCellVariableValue", "type of variable has no equivalent representation in UG4");
-              }
-          }
-      }
-    else writeNoDataValue( ofs, var_key, dim, print_whitespace );
-         
-} // end writeVariableValue
-#endif
-
 
 
 
@@ -554,11 +551,11 @@ static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
 
 
  template<uint32_t dim>
- static void boundariesOrderedByDimensionality( const Model<dim>& model, list<string>& unique_regions_ordered ) {
+ static void boundariesOrderedByDimensionality( const Model<dim>& model, list<string>& boundaries_ordered_by_dim ) {
       csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
       
       // key value pairs of highest-dim / region name
-      multimap<int,string, greater<int> >  ordered_regions;
+      multimap<int,string, greater<int> >  ordered_boundaries;
       
       // examining the unique regions
       for ( auto rit=model.BoundariesBegin(); rit!=model.BoundariesEnd(); ++rit )
@@ -566,18 +563,18 @@ static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
            pair<CELL_SHAPE,bool> cell_characteristics = (*rit).second.SingleCellShapeDomain();
            // of this region consists of only a single element type (line, volume, surface) it is elible for output to UG
            if ( cell_characteristics.second ) {
-                ordered_regions.insert( make_pair( cell_characteristics.first, (*rit).first ) );
+                ordered_boundaries.insert( make_pair( cell_characteristics.first, (*rit).first ) );
              }
            else csmp_err.Note( ERROR, "boundariesOrderedByDimensionality", (*rit).first,
                               "unique csmp::Boundary is multi-dimensional and is therefore not output as a subset to UG" );
         }
       
       // output
-      if ( !unique_regions_ordered.empty() ) unique_regions_ordered.clear();
-      if ( ordered_regions.empty() )
+      if ( !boundaries_ordered_by_dim.empty() ) boundaries_ordered_by_dim.clear();
+      if ( ordered_boundaries.empty() )
         csmp_err.Note( ERROR, "boundariesOrderedByDimensionality", "no unique boundaries found that are eligible for output to UG" );
-      for ( const auto& it : ordered_regions )
-        unique_regions_ordered.push_back( it.second );
+      for ( const auto& it : ordered_boundaries )
+        boundaries_ordered_by_dim.push_back( it.second );
         
    } // end boundariesOrderedByDimensionality
    
@@ -617,7 +614,7 @@ static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
 template<uint32_t dim>
 bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, const std::string& file_name )
  {
-    csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
+    //csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
     ofstream ofs( (file_name + ".ugx").c_str() );
     
     // 0. Creating the datastructures required by UG4
@@ -705,23 +702,39 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
     // 5. Volumes
     // ----------
     // (consecutively numbered across the different element types)
-    // tetrahedra
     if constexpr ( dim == 3U ) {
-        print_whitespace = false;
-        for ( const auto& it : tetra_volumes_ )
-          writeNodeIndices( ofs, model.Mesh(), it.second, print_whitespace );
+        // tetrahedra
+        if ( !tetra_volumes_.empty() ) {
+             ofs <<"\t<tetrahedrons>";
+             print_whitespace = false;
+             for ( const auto& it : tetra_volumes_ )
+               writeNodeIndices( ofs, model_domain, it.second, print_whitespace );
+             ofs <<"</tetrahedrons>"<< endl;
+          }
         // hexahedra
-        print_whitespace = false;
-        for ( const auto& it : hexa_volumes_ )
-          writeNodeIndices( ofs, model.Mesh(), it.second, print_whitespace );
+        if ( !hexa_volumes_.empty() ) {
+             ofs <<"\t<hexahedrons>";
+             print_whitespace = false;
+             for ( const auto& it : hexa_volumes_ )
+               writeNodeIndices( ofs, model_domain, it.second, print_whitespace );
+             ofs <<"</hexahedrons>"<< endl;
+          }
         // prisms
-        print_whitespace = false;
-        for ( const auto& it : prism_volumes_ )
-          writeNodeIndices( ofs, model.Mesh(), it.second, print_whitespace );
+        if ( !prism_volumes_.empty() ) {
+             ofs <<"\t<prisms>";
+             print_whitespace = false;
+             for ( const auto& it : prism_volumes_ )
+               writeNodeIndices( ofs, model_domain, it.second, print_whitespace );
+             ofs <<"</prisms>"<< endl;
+          }
         // pyramids
-        print_whitespace = false;
-        for ( const auto& it : pyra_volumes_ )
-          writeNodeIndices( ofs, model.Mesh(), it.second, print_whitespace );
+        if ( !pyra_volumes_.empty() ) {
+             ofs <<"\t<pyramids>";
+             print_whitespace = false;
+             for ( const auto& it : pyra_volumes_ )
+               writeNodeIndices( ofs, model_domain, it.second, print_whitespace );
+             ofs <<"</pyramids>"<< endl;
+          }
         // octahedra
       }
     
@@ -737,65 +750,82 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
     size_t n_variables = model.Database().ListVariables( ELEMENT, output_props );
     assert( n_variables >= 1 );
     
-    // TODO: any 'vertex_attachment' properties should go here
-    // TODO: write out    6.0 Edge attachments    for properties stored on line elements
+    // 6.0 vertex attachments (assuming csmp nodes are equivalent to UG vertices)
+    // --------------------------------------------------------------------------
+    for ( const auto& pit : output_props ) {
+         const csmp::Index var_key = model.Database().StorageKey(pit.c_str());
+         // skipping variable types that are not supported by UG
+         if ( var_key.type == ARRAY || var_key.type == FLAGGEDARRAY )
+           continue;
+         if ( var_key.place != NODE )
+           continue;
+         // vertex = node properties
+         // ------------------------
+             ofs <<"\t<vertex_attachment name=\""<< pit <<"\" type=\""<< UG_VariableType(var_key) <<"\" ";
+             ofs <<"passOn=\"1\" global=\"1\">";
+             print_whitespace = false;
+             for ( size_t n{0U}; n<model.Mesh().Nodes(); ++n )
+               WriteVertexVariableValue( ofs, var_key, model_domain, n++, print_whitespace );
+             ofs <<"</vertex_attachment>"<< endl;
+      }
+      
+    // 6.1 edge attachments: CSMP line elements with element properties
+    // ----------------------------------------------------------------
+    // (no-data values are written everywhere else)
+    for ( const auto& pit : output_props ) {
+         const csmp::Index var_key = model.Database().StorageKey(pit.c_str());
+         // skipping variable types that are not supported by UG
+         if ( var_key.type == ARRAY || var_key.type == FLAGGEDARRAY )
+           continue;
+         if ( var_key.place != ELEMENT )
+           continue;
+         ofs <<"\t<edge_attachment name=\""<< pit <<"\" type=\""<< UG_VariableType(var_key) <<"\" ";
+         ofs <<"passOn=\"1\" global=\"1\">";
+         print_whitespace = false;
+         for ( size_t i{0U}; i<edges_.size(); i++ ) {
+              const auto matching_edge = csmp_edges_inverted_.find(i);
+              if ( matching_edge != csmp_edges_inverted_.end() )
+                WriteEdgeVariableValue( ofs, var_key, model_domain, (*matching_edge).second, print_whitespace );
+              else {
+                   writeNoDataValue( ofs, var_key, dim, !print_whitespace );
+                   print_whitespace = true;
+                }
+           }
+         ofs <<"</edge_attachment>"<< endl;
+     }
     
-    // 6.1 face attachments (first triangles, then quadrilaterals)
+    // 6.2 face attachments (first triangles, then quadrilaterals)
     // -----------------------------------------------------------
     for ( const auto& pit : output_props ) {
          const csmp::Index var_key = model.Database().StorageKey(pit.c_str());
          // skipping variable types that are not supported by UG
          if ( var_key.type == ARRAY || var_key.type == FLAGGEDARRAY )
            continue;
-         // when faces are equidimensional CSMP elements
-         // --------------------------------------------
-         if constexpr ( dim == 2U ) {
-             ofs <<"\t<face_attachment name=\""<< pit <<"\" type=\""<< UG_VariableType(var_key) <<"\" ";
-             ofs <<"passOn=\"1\" global=\"1\">";
+         if constexpr ( dim == 3U )
+           // In 3D, only variables placed on the Face will be considered
+           if ( var_key.place != FACE )
+             continue;
 
-             // 6.1 triangle element/face attachments
-             // -------------------------------------
-             print_whitespace = false;
-             size_t n_ug_face{ 0U };
-             for ( const auto& idx : tria_faces_ )
-               WriteFaceVariableValue( ofs, var_key, model.Mesh(), n_ug_face++, print_whitespace );
+         ofs <<"\t<face_attachment name=\""<< pit <<"\" type=\""<< UG_VariableType(var_key) <<"\" ";
+         ofs <<"passOn=\"1\" global=\"1\">";
 
-             // 6.2 quadrilateral element/face attachments
-             // ------------------------------------------
-             for ( const auto& idx : quad_faces_ )
-               WriteFaceVariableValue( ofs, var_key, model.Mesh(), n_ug_face++, print_whitespace );
+         // 6.1 triangle element/face attachments
+         // -------------------------------------
+         print_whitespace = false;
+         for ( size_t n_ug_face{0U}; n_ug_face<tria_faces_.size(); ++n_ug_face )
+           WriteFaceVariableValue( ofs, var_key, model.Mesh(), n_ug_face, print_whitespace );
 
-             ofs <<"</face_attachment>"<< endl;
-           }
-         // when faces are Face or InterFace objects or lower-dimensional elements in CSMP
-         // ------------------------------------------------------------------------------
-         else if constexpr ( dim == 3U ) {
-              // only variables placed on the Face will be considered for now
-              if ( var_key.place != FACE )
-                continue;
-             ofs <<"\t<face_attachment name=\""<< pit <<"\" type=\""<< UG_VariableType(var_key) <<"\" ";
-             ofs <<"passOn=\"1\" global=\"1\">";
+         // 6.2 quadrilateral element/face attachments
+         // ------------------------------------------
+         for ( size_t n_ug_face{0U}; n_ug_face<quad_faces_.size(); ++n_ug_face )
+           WriteFaceVariableValue( ofs, var_key, model.Mesh(), n_ug_face + tria_faces_.size(), print_whitespace );
 
-             // 6.1 triangle element/face attachments
-             // -------------------------------------
-             print_whitespace = false;
-             size_t n_ug_face{ 0U };
-             for ( const auto& idx : tria_faces_ )
-               WriteFaceVariableValue( ofs, var_key, model.Mesh(), n_ug_face++, print_whitespace );
+         ofs <<"</face_attachment>"<< endl;
 
-             // 6.2 quadrilateral element/face attachments
-             // ------------------------------------------
-             for ( const auto& idx : quad_faces_ )
-               WriteFaceVariableValue( ofs, var_key, model.Mesh(), n_ug_face++, print_whitespace );
-
-             ofs <<"</face_attachment>"<< endl;
-
-           } // end 3D
-         
       } // end for output properties
 
 
-    // 6.2 volume attachments
+    // 6.3 volume attachments
     // ----------------------
     // (the assumption here is that the CSMP model contains exactly the same volumetric elements as the UG model)
     if constexpr ( dim == 3U )
@@ -812,22 +842,21 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
               ofs <<"\" passOn=\"1\" global=\"1\">";
 
               // 1. property attachments to tetrahedra
-              size_t n_ug_elmt{ 0U };
               print_whitespace = false;
               for ( const auto& idx : tetra_volumes_ )
-                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), n_ug_elmt++, print_whitespace );
+                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), idx.second, print_whitespace );
 
                // 2. property attachments to hexahedra
               for ( const auto& idx : hexa_volumes_ )
-                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), n_ug_elmt++, print_whitespace );
+                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), idx.second, print_whitespace );
 
                // 3. property attachments to prism elements
               for ( const auto& idx : prism_volumes_ )
-                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), n_ug_elmt++, print_whitespace );
+                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), idx.second, print_whitespace );
 
                // 4. property attachments to pyramid elements
               for ( const auto& idx : pyra_volumes_ )
-                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), n_ug_elmt++, print_whitespace );
+                WriteVolumeVariableValue( ofs, var_key, model.Mesh(), idx.second, print_whitespace );
 
               ofs <<"</volume_attachment>"<< endl;
               
@@ -919,7 +948,7 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
                               else print_whitespace = true;
                               ofs << it;
                            }
-                         ofs <<" </volumes>"<< endl;
+                         ofs <<"</volumes>"<< endl;
                        }
                    }
                }
@@ -963,10 +992,10 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
             vector<size_t> ugx_id_numbers;
 
             // edges
-             if ( with_region_edge_output_ ) {
+             if ( with_boundary_edge_output_ ) {
                  print_whitespace = false;
                  // compiling the edges that form part of the region
-                 size_t n_edges = CollectEdgesInBoundary( subdomain, ugx_id_numbers );
+                 size_t n_bedges = CollectEdgesInBoundary( subdomain, ugx_id_numbers );
                  if ( n_edges > 0 ) {
                      ofs <<"\t\t\t<edges>";
                      // printing only the IDs of global edges if they belong to this unique region
@@ -982,8 +1011,8 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
              // faces (triangles first, then quads, all numbered continuously)
              print_whitespace = false;
              if constexpr ( dim == 3U ) {
-                 if ( with_region_face_output_ ) {
-                     size_t n_faces = CollectFacesInBoundary( subdomain, ugx_id_numbers );
+                 if ( with_boundary_face_output_ ) {
+                     size_t n_bfaces = CollectFacesInBoundary( subdomain, ugx_id_numbers );
                      if ( n_faces > 0 ) {
                          ofs <<"\t\t\t<faces>";
                          // printing the IDs of all  faces that belong to this unique region
@@ -1922,122 +1951,159 @@ string UG4_UGX_FileExport<dim>::UG_VariableType( const csmp::Index& index ) cons
 //
 // --------------------------------------------------------------------------
 
+  /**
+      For the allocatio of no-data values (which will be set to negative float max)
+  */
+  static bool equivalentEntityInCSMP( size_t idx ) {
+       if ( idx == numeric_limits<size_t>::max() ) return false;
+       return true;
+    }
+
+
+
+ /**
+          Writes the global node numbers of the elements, faces, and interfaces in counter-clockwise order.
+          
+          @attention function only generates output for elements, faces or interfaces that are present in CSMP
+          
+          Element<dim>* eptr = &(*next(mesh.ElementsBegin(),idx));
+          
+          NOT USED 
+ */
+ template<uint32_t dim>
+ static void writeNodeIndices( ofstream& ofs, const MeshManager<dim>& mesh, size_t cell_idx, bool& print_whitespace ) {
+     if ( cell_idx < mesh.Elements() )
+       for ( uint32_t i{0U}; i<(*next(mesh.ElementsBegin(),cell_idx)).Nodes(); ++i ) {
+           if ( print_whitespace ) ofs <<" ";
+           else print_whitespace = true;
+           ofs << (*next(mesh.ElementsBegin(),cell_idx)).N(i)->Idx();
+        }
+     else if ( cell_idx < mesh.Elements()+mesh.Faces() )
+       for ( uint32_t i{0U}; i<(*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Nodes(); ++i ) {
+           if ( print_whitespace ) ofs <<" ";
+           else print_whitespace = true;
+           ofs << (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).N(i)->Idx();
+        }
+     else if ( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() )
+       for ( uint32_t i{0U}; i<(*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Nodes(); ++i ) {
+           if ( print_whitespace ) ofs <<" ";
+           else print_whitespace = true;
+           ofs << (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).N(i)->Idx();
+        }
+     else {
+       if ( !equivalentEntityInCSMP(cell_idx) )
+         ErrorHandler::Instance().Note( ERROR, "writeNodeIndices", "cell index greater than size_t::max");
+       else
+         ErrorHandler::Instance().Note( ERROR, "writeNodeIndices", "cell index out of range");
+       }
+       
+  } // end writeNodeIndices
 
 
 
 /**
-    Creating faces between volumetric elements and ordering them.  Each face will only be contained once, but together
-    with the numbers of the volumetric elements that border it, and the numbers of their faces that are adjacent to this face.
-
-    Method needs to be called after, the faces defined in the CSMP model have already been collected.
+    For cell-based variables (Element, Face, InterFace), writes its value, considering SCALAR, VECTOR and TENSOR variables and printing no_data values as appropriate
     
-    @param tria_faces key=global_node_idx, value=elmt_idx & face_number from which the face info came from
-    @param quad_faces key=global_node_idx, value=elmt_idx & face_number from which the face info came from
-
+    @param ofs  output textfile stream UTF-8 on linux
+    @param var_key variable accessor in CSMP
+    @param mesh MeshManager which contains the variable values of interest stored on Element, Face or InterFace, respectively.
+    @param cell_idx continous numbering of elements, faces and interfaces in CSMP
+    @param print_whitespace to avoid printing blanks at the  beginning of attachment arrays
+    
+      @attention method has to switch print_whitespace on
 */
 template<uint32_t dim>
-size_t UG4_UGX_FileExport<dim>::CollectFacesFromVolumes( const Model<dim>& model,
-                                                         map<set<size_t>,set<pair<size_t,uint32_t>>>&  tria_faces,
-                                                         map<set<size_t>,set<pair<size_t,uint32_t>>>&  quad_faces ) const
-  {
-     // key=global_node_idx, value=elmt_idx & face_number from which the face info came from
-     //map<set<size_t>,set<pair<size_t,uint32_t>>>  tria_faces, quad_faces;
-  
-     const Region<dim>& model_domain = model.Region("Model");
-        // tetrahedra first
-        for ( const auto& it : model_domain.CellVector() )
-          if ( it->IsVolume() && isTetrahedral( it->FE_Type() ) ) {
-               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
-                    // getting the global node IDs (but in the order of the sorted pointers, only for creating unique keys)
-                    set<size_t> global_node_numbers;
-                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
-                    assert( *max_element(global_node_numbers.begin(),global_node_numbers.end()) < model_domain.Nodes() );
-                    // inserting the global face node ids into the faces vector
-                    auto face_it = tria_faces.insert( make_pair( global_node_numbers,
-                                                                 set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
-                    // if the face is already in there the ID of the current element is added to the value container
-                    if ( face_it.second == false )
-                      (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
-                 }
-            }
-        // hexahedra second
-        for ( const auto& it : model_domain.CellVector() )
-          if ( it->IsVolume() && isHexahedral( it->FE_Type() ) ) {
-               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
-                    set<size_t> global_node_numbers;
-                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
-                    assert( *max_element(global_node_numbers.begin(),global_node_numbers.end()) < model_domain.Nodes() );
-                    auto face_it = quad_faces.insert( make_pair( global_node_numbers,
-                                                                 set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
-                    // if the face is already in there the ID of the current element is added to the value container
-                    if ( face_it.second == false )
-                      (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
-                 }
-            }
-        // prism third
-        for ( const auto& it : model_domain.CellVector() )
-          if ( it->IsVolume() && isPrism( it->FE_Type() ) ) {
-               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
-                    set<size_t> global_node_numbers;
-                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
-                    assert( *max_element(global_node_numbers.begin(),global_node_numbers.end()) < model_domain.Nodes() );
-                    // dealing with quad and tria faces
-                    if ( isTriangular(it->FE()->ElementTypeOfFace(face_id)) ) {
-                         auto face_it = tria_faces.insert( make_pair( global_node_numbers,
-                                                                      set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
-                         if ( face_it.second == false )
-                           (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
-                      }
-                    else {
-                         auto face_it = quad_faces.insert( make_pair( global_node_numbers,
-                                                                      set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
-                         if ( face_it.second == false )
-                           (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
-                      }
-                 }
-            }
-        // pyramids fourth
-        for ( const auto& it : model_domain.CellVector() )
-          if ( it->IsVolume() && isPyramid( it->FE_Type() ) ) {
-               for ( uint32_t face_id{0U}; face_id<it->Faces(); ++face_id ) {
-                    set<size_t> global_node_numbers;
-                    for ( const auto& nit : it->CornerNodesOfFace(face_id) ) global_node_numbers.insert( nit->Idx() );
-                    assert( *max_element(global_node_numbers.begin(),global_node_numbers.end()) < model_domain.Nodes() );
-                    if ( isTriangular(it->FE()->ElementTypeOfFace(face_id)) ) {
-                         auto face_it = tria_faces.insert( make_pair( global_node_numbers,
-                                                                      set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
-                         if ( face_it.second == false )
-                           (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
-                      }
-                    else {
-                         auto face_it = quad_faces.insert( make_pair( global_node_numbers,
-                                                                      set<pair<size_t,uint32_t>>{ {it->Idx(),face_id} } ) );
-                         if ( face_it.second == false )
-                           (*face_it.first).second.insert( make_pair( it->Idx(), face_id ) );
-                      }
-                 }
-            }
-         // no octahedra in CSMP
+static void writeCellVariableValue( ofstream& ofs, const csmp::Index& var_key,
+                                    const MeshManager<dim>& mesh, size_t cell_idx, bool& print_whitespace )
+ {
+    csmp::ErrorHandler& csmp_err( ErrorHandler::Instance() );
+
+    if ( equivalentEntityInCSMP(cell_idx) ) {
+        // there no cell index was recorded for the face the no data values is writen
+        switch(var_key.type) {
+            case SCALAR: {
+                   double sc;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             sc = (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             sc = (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             sc = (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key);
+                          break;
+                        default:
+                             sc = -numeric_limits<float>::max(); // no-data value
+                     }
+                   if ( !print_whitespace ) ofs << scientific << sc;
+                   else ofs <<" "<< scientific << sc;
+                   print_whitespace = true;
+                }
+              break;
+            case VECTOR: {
+                   VectorVariable<dim> vc;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,vc);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,vc);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,vc);
+                          break;
+                        default:
+                             vc = -numeric_limits<float>::max(); // no-data value
+                     }
+                   for ( uint32_t i{0u}; i<dim; ++i ) {
+                         if ( print_whitespace ) ofs <<" ";
+                         else print_whitespace = true;
+                         ofs << scientific << vc[i];
+                     }
+                }
+              break;
+            case TENSOR: {
+                   TensorVariable<dim> ts;
+                   switch(var_key.place) {
+                        case ELEMENT:
+                             assert( cell_idx < mesh.Elements() );
+                             (*next(mesh.ElementsBegin(),cell_idx)).Read(var_key,ts);
+                          break;
+                        case FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces() );
+                             (*next(mesh.FacesBegin(),cell_idx-mesh.Elements())).Read(var_key,ts);
+                          break;
+                        case INTER_FACE:
+                             assert( cell_idx < mesh.Elements()+mesh.Faces()+mesh.InterFaces() );
+                             (*next(mesh.InterFacesBegin(),cell_idx-mesh.Elements()-mesh.Faces())).Read(var_key,ts);
+                          break;
+                        default:
+                             ts = -numeric_limits<float>::max(); // no-data value
+                     }
+                   for ( uint32_t i{0u}; i<dim; ++i )
+                     for ( uint32_t j{0u}; j<dim; ++j ) {
+                           if ( print_whitespace ) ofs <<" ";
+                           else print_whitespace = true;
+                           ofs << scientific << ts(i,j);
+                       }
+                }
+              break;
+            default: {
+                 cerr <<"\nvariable of type "<< parseType( var_key.type ) << endl;
+                 csmp_err.Note( ERROR, "writeCellVariableValue", "type of variable has no equivalent representation in UG4");
+              }
+          }
+      }
+    else writeNoDataValue( ofs, var_key, dim, print_whitespace );
          
-    // TODO: deleting triangle and quadrilateral faces which were already present in CSMP model
-    for ( const auto& fit : tria_faces_ )
-      // erasing the faces from the map
-      if ( tria_faces.find(fit.first) != tria_faces.end() )
-        tria_faces.erase( fit.first );
-
-    for ( const auto& fit : quad_faces_ )
-      // erasing the faces from the map
-      if ( quad_faces.find(fit.first) != quad_faces.end() )
-        quad_faces.erase( fit.first );
-
-    // now the values are transferred to global arrays using the global idx of the first element
-    return tria_faces.size() + quad_faces.size();
-
- } // end CollectFacesFromVolumes
- 
- 
- 
-
+} // end writeVariableValue
 
 
 template class UG4_UGX_FileExport<2U>;

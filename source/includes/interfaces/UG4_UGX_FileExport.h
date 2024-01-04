@@ -173,11 +173,6 @@ class UG4_UGX_FileExport {
     /// creates two sorted vectors for triangular and quadrilateral elements, respectively
     size_t CollectFaces( const Model<dim>& );
     
-    /// establishes faces in between volumetric cells (3D only)
-    size_t CollectFacesFromVolumes( const Model<dim>&,
-                                    std::map<std::set<size_t>,std::set<std::pair<size_t,uint32_t>>>&  tria_faces,
-                                    std::map<std::set<size_t>,std::set<std::pair<size_t,uint32_t>>>&  quad_faces ) const;
-    
     /// creates sorted vectors for tetra, hexa, prism, and pyramid elements
     size_t CollectVolumes( const Model<dim>& );
     
@@ -204,6 +199,10 @@ class UG4_UGX_FileExport {
     /// returns CSMP line element/face/interface  idx if it exists or UNSPECIFIED if not
     long EquivalentFaceInCSMP( size_t ug_idx ) const;
     
+    /// using the node numbering in the region 'Model' the property values at the vertices are written out
+    void WriteVertexVariableValue( std::ofstream&, const csmp::Index&, const Region<dim>&, size_t ug_cell_idx, bool& print_whitespace ) const;
+
+    void WriteEdgeVariableValue( std::ofstream&, const csmp::Index&, const Region<dim>&, size_t ug_cell_idx, bool& print_whitespace ) const;
     ///
     void WriteFaceVariableValue( std::ofstream&, const csmp::Index&, const MeshManager<dim>&, size_t ug_cell_idx, bool& print_whitespace ) const;
     ///
@@ -237,6 +236,9 @@ class UG4_UGX_FileExport {
     bool with_region_edge_output_   = true;
     bool with_region_face_output_   = true;
     bool with_region_volume_output_ = true;
+
+    bool with_boundary_edge_output_   = true;
+    bool with_boundary_face_output_   = true;
 };
 
 
