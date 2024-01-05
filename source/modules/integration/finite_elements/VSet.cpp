@@ -578,13 +578,12 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double& time )
 template<uint32_t dim>
 bool  VSet<dim>::InputFrom( const char* bin_file, double& time, const set<string>& subset_variables )
 {
-	char file_name[NAME_STRING];
-	strcpy(file_name, bin_file);
+	string  file_name{ bin_file };
 	size_t  records(0);
 	string  dname;
 
 	// 1. opening the file
-	fstream fp(file_name, ios::in | ios::binary);
+	fstream fp(file_name.c_str(), ios::in | ios::binary);
 	if (!fp.is_open()) {
 		cout << "\nVSet<dim>::InputFrom: File: " << file_name;
 		cout << " could not be opened" << endl;

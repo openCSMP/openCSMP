@@ -721,14 +721,16 @@ is unable to open the variable database input text file.
 template<uint32_t dim>
 void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_textfile, bool echo_to_screen )
   {
-     ifstream  ifs( property_database_textfile );
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+     ifstream       ifs( property_database_textfile );
      
-     if ( !ifs.is_open() )
-       throw csmp::Exception( ERROR, "PropertyDatabase<dim>::TextToBinaryFile",
-                              property_database_textfile, "could not be opened; nothing was done" );
-
+     if ( !ifs.is_open() ) {
+           csmp_error.Note( ERROR, "PropertyDatabase<dim>::TextToBinaryFile",
+                            property_database_textfile, "could not be opened; nothing was done" );
+           return;
+        }
      if ( !propList_.empty() ) {
-          cout <<"\nPropertyDatabase::TextToBinaryFile: property list was not empty; zapping it."<< endl;
+          cout <<"\nPropertyDatabase::TextToBinaryFile: property list was not empty; overwriting this list."<< endl;
           propList_.erase( propList_.begin(), propList_.end() );
        }  
        
@@ -778,10 +780,14 @@ void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_text
           propertyIter++;
           // physically realistic minimum and maximum values
           double vmin( atof( (*propertyIter++).c_str() ) ), 
-                   vmax( atof( (*propertyIter++).c_str() ) );
+                 vmax( atof( (*propertyIter++).c_str() ) );
           //cout<<"property name: "<< new_param.name<<endl;
-          assert( vmin <= vmax );
-          assert( vmin >= -1e50 and vmax <= 1e50 );
+          if ( vmin >= vmax )
+            csmp_error.Note( ERROR, "PropertyDatabase<dim>::TextToBinaryFile",
+                             new_param.name, "range minimum < maximum or the two are equal; please fix" );
+          if ( vmin <= -1e50 || vmax >= 1e50 )
+            csmp_error.Note( ERROR, "PropertyDatabase<dim>::TextToBinaryFile",
+                             new_param.name, "vmin < -1e50 or vmax > 1e50. These are not physically meaningful values; please fix" );
           new_param.min = vmin;
           new_param.max = vmax;
 

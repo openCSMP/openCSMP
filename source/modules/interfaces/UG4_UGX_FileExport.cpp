@@ -572,7 +572,7 @@ void UG4_UGX_FileExport<dim>::WriteVolumeVariableValue( ofstream& ofs, const csm
       // output
       if ( !boundaries_ordered_by_dim.empty() ) boundaries_ordered_by_dim.clear();
       if ( ordered_boundaries.empty() )
-        csmp_err.Note( ERROR, "boundariesOrderedByDimensionality", "no unique boundaries found that are eligible for output to UG" );
+        csmp_err.Note( WARNING, "boundariesOrderedByDimensionality", "no unique boundaries found that are eligible for output to UG" );
       for ( const auto& it : ordered_boundaries )
         boundaries_ordered_by_dim.push_back( it.second );
         
