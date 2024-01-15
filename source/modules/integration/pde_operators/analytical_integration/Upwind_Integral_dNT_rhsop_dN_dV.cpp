@@ -8,18 +8,19 @@ using namespace std;
 
 namespace csmp {
 
-
-// * basic and test variable exchanged so that the line is indicated by the basic variable (as it is
-// * for the lhs operators)
-template<uint32_t dim,class CELL>
+/**
+    basic and test variable exchanged so that the line is indicated by the basic variable (as it is
+    for the lhs operators)
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
 Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::Upwind_Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& pref,
-                                                                          const char* oper,
-                                                                          const char* basic,
-                                                                          const char* test,
-                                                                          const char* upwind,
-                                                                          const char* trigger,
-                                                                          const double prefactor)
-  : MathOperatorRHS<dim>(pref,oper,basic),
+                                                                            const char* oper,
+                                                                            const char* basic,
+                                                                            const char* test,
+                                                                            const char* upwind,
+                                                                            const char* trigger,
+                                                                            const double prefactor )
+  : MathOperatorRHS<dim,CELL>(pref,oper,basic),
     DN(3,3),
     DNT(3,3),
     basic_(pref.Parameter(test)),
@@ -35,19 +36,19 @@ Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::Upwind_Integral_dNT_rhsop_dN_dV( cons
     name += trigger;
     char * cname = new char[name.length()+1];
     strcpy(cname, name.c_str());
-    MathOperatorRHS<dim>::Name(cname, oper, basic );
+    MathOperatorRHS<dim,CELL>::Name(cname, oper, basic );
 
     if ( basic_.key.place != NODE || basic_.key.type != SCALAR )
       throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV<dim>::(constructor)",
                    basic, "Basic variable must be a scalar property placed on the node." );
 
-    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != ELEMENT || 
-         MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT || 
+         MathOperatorRHS<dim,CELL>::MaterialOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV<dim>::(constructor)", 
                    oper, "Operand must be a scalar property placed on the element." );
 
-    if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
-         MathOperatorRHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorRHS<dim,CELL>::TestOperandPlacement() != NODE || 
+         MathOperatorRHS<dim,CELL>::TestOperandType() != SCALAR )
        throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV<dim>::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
      
@@ -62,14 +63,18 @@ Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::Upwind_Integral_dNT_rhsop_dN_dV( cons
 
 
 
-template<uint32_t dim,class CELL>
-void Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL& e )
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
 
     // reading operand
-    MathOperatorRHS<dim>::GetOperands(e);
+    MathOperatorRHS<dim,CELL>::GetOperands(e);
      
     // basic, upwind and trigger
     e.NodePropertyVector(basic_.key, basic_var_);
@@ -79,21 +84,26 @@ void Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL& e )
 
 
 
-template<uint32_t dim,class CELL>
-void Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 {
-    MathOperatorRHS<dim>::RHS.resize(e.Nodes());
-    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0.0 );
+    MathOperatorRHS<dim,CELL>::RHS.resize(e.Nodes());
+    fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0.0 );
 
     // consistent formulation
-    if ( !MathOperatorRHS<dim>::LumpedFormulation() ) {
+    if ( !MathOperatorRHS<dim,CELL>::LumpedFormulation() ) {
       e.dN( DN );
       // transpose the shape function derivative matrix
       DNT.Resize(e.Nodes(),dim); 
       DN.Transposed( DNT );
     
       // calculate the element contribution to RHS (E_OP is the Basic Operand)
-      DNT *= MathOperatorRHS<dim>::MTRL[0];
+      DNT *= MathOperatorRHS<dim,CELL>::MTRL[0];
       DNT *= DN;
       
       
@@ -110,32 +120,33 @@ void Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::ComputeContribution( const CELL&
           }
       }
     
-      for (auto i = 0; i < e.Nodes(); ++i) {
+      for ( auto i{0U}; i < e.Nodes(); ++i ) {
           DNT(i, i) = -DNT.RowSum(i);
       }
       
       // the matrix is contracted into a vector by multiplying with the basis vector
-      for (auto i = 0; i < e.Nodes(); ++i) 
-        for (auto j = 0; j < e.Nodes(); ++j) 
-          MathOperatorRHS<dim>::RHS[i] += DNT(i,j) * basic_var_[j]();
+      for (auto i{0U}; i < e.Nodes(); ++i)
+        for (auto j{0U}; j < e.Nodes(); ++j)
+          MathOperatorRHS<dim,CELL>::RHS[i] += DNT(i,j) * basic_var_[j]();
           
       // scaling with prefactor
       for (auto i = 0; i < e.Nodes(); ++i)
-        MathOperatorRHS<dim>::RHS[i] *= e.Volume() * prefactor_;
+        MathOperatorRHS<dim,CELL>::RHS[i] *= e.Volume() * prefactor_;
     }
     // lumped formulation  
     else {
       throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV::(ComputeContribution)",
-                      "", "Lumped formulation not allowed for this operator"); 
+                             "Lumped formulation not allowed for this operator"); 
     }
-} // end ComputeContribution 
+} // end ComputeContribution
 
-template class Upwind_Integral_dNT_rhsop_dN_dV<1U,Element<1U> >;
-template class Upwind_Integral_dNT_rhsop_dN_dV<2U,Element<2U> >;
-template class Upwind_Integral_dNT_rhsop_dN_dV<3U,Element<3U> >;
 
-template class Upwind_Integral_dNT_rhsop_dN_dV<1U,Face<1U> >;
-template class Upwind_Integral_dNT_rhsop_dN_dV<2U,Face<2U> >;
-template class Upwind_Integral_dNT_rhsop_dN_dV<3U,Face<3U> >;
+template class Upwind_Integral_dNT_rhsop_dN_dV<1U,Element>;
+template class Upwind_Integral_dNT_rhsop_dN_dV<2U,Element>;
+template class Upwind_Integral_dNT_rhsop_dN_dV<3U,Element>;
+
+template class Upwind_Integral_dNT_rhsop_dN_dV<1U,Face>;
+template class Upwind_Integral_dNT_rhsop_dN_dV<2U,Face>;
+template class Upwind_Integral_dNT_rhsop_dN_dV<3U,Face>;
 
 } // csmp

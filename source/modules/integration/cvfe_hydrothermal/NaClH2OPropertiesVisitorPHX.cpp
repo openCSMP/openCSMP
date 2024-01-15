@@ -14,7 +14,7 @@ namespace csmp
   template<uint32_t dim>
   NaClH2OPropertiesVisitorPHX<dim>::NaClH2OPropertiesVisitorPHX( Model<dim>& model )
   //
-#include "NaClH2OPropertiesVisitorPHX_initializer_list.hpp"
+#include "NaClH2OPropertiesVisitorPHX_initializer_list.h"
   //
   {
     const PropertyDatabase<dim>& pref = model.Database();

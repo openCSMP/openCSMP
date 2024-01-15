@@ -22,14 +22,15 @@ void Visitor_Example::Specifications()
   AddAuthor( "Shaho" );
   AddDescription( "source in: Visitor_Example.cpp" );
   AddDescription( "application and implementation of csmp::Visitor" );
-  AddRequirement( "LeftRight .asc,.dat,-regions.txt" );
-  AddRequirement( "VisitorExample-var.txt" );
+  AddRequirement( "LeftRight (CSMP binary files)" );
+  AddRequirement( "variable file (VisitorExample-var.txt)" );
 }
 
 
 
 void Visitor_Example::Run()
 {
+  /*
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
 
@@ -47,7 +48,21 @@ void Visitor_Example::Run()
 
   const bool get_domain_info_from_regions_file{true};
   Model<2U> reservoir_model( mesh_topology, mesh_container, "VisitorExample-var.txt", get_domain_info_from_regions_file );
+  */
 
+  string model_name;
+  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'LeftRight':"<<endl;
+  cin.ignore();
+  getline(cin, model_name);
+  if (model_name.length() == 0) model_name = "LeftRight";
+
+  //find the name of current example source file
+  string file_name = GetExampleFileName(__FILE__);
+  string variable_file = "VisitorExample-var.txt";
+  //create of directory with current example name, go into this directory, and copy input files into it.
+  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+  //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model<2U>  reservoir_model(model_name, variable_file);
 
   PressureSaturationInitializer<2U> pressure_saturation_initializer ( reservoir_model,
                                                                       "saturation water", "saturation oil",
@@ -63,6 +78,8 @@ void Visitor_Example::Run()
   vtk_output.OutputDataToVTK( reservoir_model, "water-pressure", "water pressure", 0 );
   vtk_output.OutputDataToVTK( reservoir_model, "saturation-oil", "saturation oil", 0 );
   vtk_output.OutputDataToVTK( reservoir_model, "saturation-water", "saturation water", 0 );
+
+  fs::current_path("../../example_inputs/");
   
 } // Run()
 

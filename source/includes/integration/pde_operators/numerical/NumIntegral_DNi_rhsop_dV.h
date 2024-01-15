@@ -19,19 +19,19 @@ std::string parse( SPATIAL_DERIVATIVE );
     @note created to compute a grad P right-handside for a 2-step Stokes
     lubrication solver.
 */
-template<uint32_t dim, class CELL=Element<dim> >
-class NumIntegral_DNi_rhsop_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL>
+class NumIntegral_DNi_rhsop_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_DNi_rhsop_dV( const PropertyDatabase<dim>& pref,
+    NumIntegral_DNi_rhsop_dV( const PropertyDatabase<dim>&,
                               const char* oper,
                               const char* test );
     
     virtual ~NumIntegral_DNi_rhsop_dV();
   
     /// reads the operand values from the nodes and stores them in a vector
-    virtual void GetOperands( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
   
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
   
     /// to chose the spatial derivate direction of interest; default is Y-axis
     void SpatialDerivative( SPATIAL_DERIVATIVE );

@@ -114,6 +114,7 @@ Region<dim>&  RegionInterface<dim, REGION_COMPLEX>::Region( const string& region
   if ( iter != uniqueRegionMap_.end() )
     return (*iter).second;
 
+  // see whether this is perhaps a non-unique region
   iter = regionMap_.find( region_name );
 
   if ( iter != regionMap_.end() )
@@ -168,7 +169,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::HasValidModelRegion() const
     if ( !this->ContainsRegion("Model") ) return false;
     
     // is it contiguous?
-    if ( !this->Region("Model").IsContiguous() ) return false;
+    //if ( !this->Region("Model").IsContiguous() ) return false;
     
     return true;
  }
@@ -345,7 +346,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
     
   if ( erase_elmts_and_update_connectivity && !IsUnique(regionName) ) {
        csmp_error.Note( ERROR, "RegionsInterface<dim,Model>::RemoveRegion",
-                          regionName, "is potentially overlapping other regions; case not handled yet" );
+                          regionName, "is potentially overlapping other regions; this case is not handled yet" );
        return;
     }
 
@@ -354,7 +355,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
 
   if ( erase_elmts_and_update_connectivity )
     // getting the mesh manager to delete elements and nodes and fix up the connectivity
-    regionComplex.Mesh().DeleteAndRepairConnnectivity( region.CellVector().begin(), region.CellVector().end() );
+    regionComplex.Mesh().DeleteCellsAndRepairConnnectivity( region.CellVector().begin(), region.CellVector().end() );
 
   // finding the region in the corresponding map
   typename map<string, csmp::Region<dim> >::iterator
@@ -1130,7 +1131,7 @@ template<template<uint32_t> class ElementComp>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* newRegionName, ElementComp<dim> const& elementComp, const char* hostRegion )
   {
     static_cast<REGION_COMPLEX<dim>*>(this)->UpdateIndices();
-    csmp::Region<dim> const& rref( this->Region( hostRegion ) );
+    csmp::Region<dim>& rref( this->Region( hostRegion ) );
     rref.UpdateMemberIndexes();
     vector<uint32_t> elementIds;
     elementIds.reserve( rref.Elements() );
@@ -1722,7 +1723,6 @@ NB: The new region will not be unique.
 
 @attention since this region will be a copy of an existing one, it will be non-unique
 
-TODO: check whether this copying process is as fast as could be.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void  RegionInterface<dim, REGION_COMPLEX>::CopyRegion( const char* existing_region, const char* new_copied_region, bool unique_region )
@@ -1740,13 +1740,13 @@ void  RegionInterface<dim, REGION_COMPLEX>::CopyRegion( const char* existing_reg
     cout << output_region << endl;
   }
 
-  const csmp::Region<dim>&  gr_ref( Region( existing_region ) );
+  const csmp::Region<dim>&  gr_ref{ Region( existing_region ) };
 
   // irrespective of whether the original region was unique or non-unique its copy
   // will not be unique because it overlaps with the original region
   pair<typename map<string, csmp::Region<dim> >::iterator, bool>
     it = (unique_region) ? uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( gr_ref ) ) ) :
-    regionMap_.insert( make_pair( output_region, csmp::Region<dim>( gr_ref ) ) );
+    regionMap_.insert( make_pair( output_region, move( csmp::Region<dim>( gr_ref ) ) ) );
   if ( !it.second )
     throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::CopyRegion",
                            "region to copy to- could not be formed",
@@ -2392,7 +2392,7 @@ Moves region to from the unique- to the non-unique regions map.
 non unique.
 
 @author SKM
-@date 30/3/2016
+@date 30/3/2016, 26/9/2022
 @test OK
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
@@ -2412,9 +2412,8 @@ bool RegionInterface<dim, REGION_COMPLEX>::MoveToNonUniqueRegions( const char* u
   }
 
   // performing the move
-  typename map<string, csmp::Region<dim> >::iterator  iterRegion( uniqueRegionMap_.find( string( unique_region ) ) );
-  regionMap_.insert( make_pair( (*iterRegion).first, move( (*iterRegion).second ) ) );
-  uniqueRegionMap_.erase( string( unique_region ) );
+  auto region_handle = uniqueRegionMap_.extract( unique_region );
+  regionMap_.insert( move(region_handle) );
 
   return true;
 
@@ -2424,7 +2423,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::MoveToNonUniqueRegions( const char* u
 
 /**
 Numbers the unique regions of the models, labeling their elements with the region number
-as "region identifier".
+as "region identifier". If the supplied variable does not exist, it is created by this method.
 
 @param region_identifier scalar element property the unique value of which shall be used to distinguish the unique regions
 @param region_names vector of region names to retrieve them from the integer keys
@@ -2445,9 +2444,10 @@ size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelUniqueRegions( const c
                           region_identifier, "this property must be a scalar placed on the element." );
     }
   else
-    regionComplex.CreateProperty( region_identifier, "none", SCALAR, ELEMENT );
+    regionComplex.CreateProperty( region_identifier, "rid", "uint", SCALAR, ELEMENT );
 
   // counting the regions and initialising them with the unique identifiers
+  region_names.clear();
   region_names.resize( UniqueRegions() );
   size_t regions{ 0U };
   for ( auto it = UniqueRegionsBegin(); it != UniqueRegionsEnd(); it++ ) {
@@ -2466,6 +2466,26 @@ size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelUniqueRegions( const c
 
 
 
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
+bool RegionInterface<dim, REGION_COMPLEX>::CheckRegionIdentifierIsUpToDate( const char* region_identifier )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  REGION_COMPLEX<dim>& regionComplex( static_cast<REGION_COMPLEX<dim>& >(*this) );
+
+  //if region_identifier not yet defined
+  if (regionComplex.Database().IsDefined( region_identifier ) == false )
+    return false;
+
+  //if region_identifier is defined, we need to check its values are up to date with the number of regions in the model
+  ScalarVariable highest_material_id;
+  (*(uniqueRegionMap_.rbegin()->second.CellsBegin()))->Read( regionComplex.Database().StorageKey( region_identifier), highest_material_id );
+
+  //Highest material id should be smaller than the number of regions by 1
+  bool approximatelyEqual = std::fabs(  static_cast<double>(this->UniqueRegions()) -  highest_material_id() - 1 ) < 0.1 ;
+
+  return  approximatelyEqual;
+}
 
 
 
@@ -2580,9 +2600,11 @@ void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
      // 3. unique regions: only get modified if they have been ScheduledForRebuilt()
      // ----------------------------------------------------------------------------
      for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit )
-       if ( (*rit).second.NeedsRebuilt() )
+       if ( (*rit).second.NeedsRebuilt() ){
          // assuming the the element neighbor connectivity was updated before by the MeshManager
          (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
+        std::cout << "Rebuilt Subdomain " << (*rit).first << " -> element and node vector now up to date" << std::endl;
+       }
        
  } // end UpdateRegions
 
@@ -2600,11 +2622,11 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
           cout <<"\t\t"<< (*rit).first;
           cout <<" "<< (*rit).second.Cells() <<" elements,";
           pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
-          if ( rdim.second == 3 )
+          if ( rdim.second == 3U )
             cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
-          else if ( rdim.second == 2 )
+          else if ( rdim.second == 2U )
             cout <<" surface area (m2): "<< (*rit).second.Volume() <<", perimeter length (m): "<< (*rit).second.SurfaceArea();
-          else if ( rdim.second == 1 )
+          else if ( rdim.second == 1U )
             cout <<" length (m): "<< (*rit).second.Volume();
           cout <<", range of element spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << endl;
        }
@@ -2613,11 +2635,11 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
           cout <<"\t\t"<< (*rit).first;
           cout <<" "<< (*rit).second.Cells() <<" elements,";
           pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
-          if ( rdim.second == 3 )
+          if ( rdim.second == 3U )
             cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
-          else if ( rdim.second == 2 )
+          else if ( rdim.second == 2U )
             cout <<" surface area (m2): "<< (*rit).second.Volume() <<", perimeter length (m): "<< (*rit).second.SurfaceArea();
-          else if ( rdim.second == 1 )
+          else if ( rdim.second == 1U )
             cout <<" length (m): "<< (*rit).second.Volume();
           cout <<", range of element spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << endl;
        }

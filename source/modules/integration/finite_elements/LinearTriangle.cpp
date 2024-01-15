@@ -191,6 +191,7 @@ LinearTriangle::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids )
 For this element, the faces are numbered such that face 0 lies opposite of 
 node 0, face 1 node 1 etc.
 */
+/*
 void LinearTriangle::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
     fnids.resize(2);
@@ -212,6 +213,21 @@ void LinearTriangle::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids
       }
     else
     std::cerr <<"\nLinearTriangle::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
+ }
+*/
+
+
+
+
+vector<uint32_t>  LinearTriangle::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{1,2};
+        case 1: return vector<uint32_t>{2,0};
+        case 2: return vector<uint32_t>{0,1};
+      }
+    cerr <<"\nLinearTriangle::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
  }
 
 
@@ -244,6 +260,7 @@ std::vector<uint32_t>  LinearTriangle::NodesConnectedTo( uint32_t node_id ) cons
 
 
 /// The linear triangle is numbered counter-clockwise by default.
+/*
 void LinearTriangle::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
@@ -251,6 +268,7 @@ void LinearTriangle::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
     ids[1] = 1;
     ids[2] = 2;
  }
+*/
 
 /// clearly all nodes are corner nodes
 void LinearTriangle::CornerNodes( std::vector<uint32_t>& ids ) const
@@ -348,7 +366,7 @@ void LinearTriangle::N_AtBaryCenter( std::vector<double>& IPOL )
 
 
 
-
+/*
 void  LinearTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes, 
                                                   vector<uint32_t>& fnids )
  {
@@ -382,7 +400,7 @@ void  LinearTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes
        }
 
  } // end ConsecutiveNodesAtBoundary
-
+*/
 
 
 

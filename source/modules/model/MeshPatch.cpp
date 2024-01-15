@@ -143,10 +143,8 @@ size_t MeshPatch<dim>::BuildInterveningPatch( const vector<pair<pair<Element<dim
          // 2. connecting nodes
          // -------------------
          Element<dim>& elmt = (*eit);
-         vector<uint32_t> fnids;
-         elmt.FE()->NodesOfFace( it.first.second, fnids );
          uint32_t nd_count{0U};
-         for ( auto i : fnids )
+         for ( const auto& i : elmt.FE()->NodesOfFace( it.first.second ) )
            elmt.Assign( nd_count++, it.first.first->N(i) );
       }
       
@@ -204,9 +202,7 @@ size_t MeshPatch<dim>::BuildInterveningPatch( const vector<pair<pair<Element<dim
   for ( const auto& it : elements_ )
     for ( auto i{0U}; i<it.Neighbors(); i++ )
       if ( it.Neighbor(i) == nullptr ) {
-           vector<uint32_t> fnids;
-           it.FE()->NodesOfFace( i, fnids );
-           for ( auto j : fnids )
+           for ( const auto& j : it.FE()->NodesOfFace(i) )
              perimeter_node_ptrs.push_back( it.N(j) );
         }
         
@@ -228,7 +224,8 @@ size_t MeshPatch<dim>::BuildInterveningPatch( const vector<pair<pair<Element<dim
                    (*inserted.first).second = &(*nodes_.insert( Node<dim>( nodes_.size(),
                                                                            it.N(i)->Coordinate(),
                                                                            LocalVariables(),
-                                                                           it.N(i)->AtBoundary() ) ));
+                                                                           it.N(i)->AtBoundary(),
+                                                                           it.N(i)->Attribute() ) ));
           }
       // 2.2 replacing the existing nodes with the new locally stored ones
       // (can't be done in one loop as it would confuse old and new nodes)

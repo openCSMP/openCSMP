@@ -7,6 +7,8 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /** @brief Assignment of scalar nodal (Neumann) source or sink terms.
 
     This operator applies (absolute) nodal source terms to the LHS matrix diagonal as they are.
@@ -20,12 +22,15 @@ namespace csmp {
 @author Stephan K. Matthai
 
 */      
-template<uint32_t dim,class CELL=Element<dim> >
-class PointSource_lhsop : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class PointSource_lhsop : public MathOperatorLHS<dim,CELL> {
   public:
     PointSource_lhsop( const PropertyDatabase<dim>&, const char* nodal_src, const char* basic, const char* test );
-    virtual void GetOperands( CELL& );
-    virtual void ComputeContribution( CELL& );
+    virtual ~PointSource_lhsop() {}
+    
+    virtual void GetOperands( const CELL<dim>& ) override;
+    virtual void ComputeContribution( const CELL<dim>& ) override;
+    
     virtual PointSource_lhsop<dim,CELL>* clone() const { return new PointSource_lhsop<dim,CELL> (*this); }
   private:
     std::vector<ScalarVariable>  SRC_;

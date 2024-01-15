@@ -81,8 +81,8 @@ void SimulatorSetup<dim>::LoadControlSimulatorSetupParameters()
 }
 
 template<uint32_t dim>
-void SimulatorSetup<dim>::CreateAllProperties(){
-
+void SimulatorSetup<dim>::CreateAllProperties()
+  {
     // This function creates properties in the model assuming that, if restart is not an active option, the model is completely empty.
     // NEVERTHELESS, for safety, IsDefined and other precautions are left in place with our without restart.
 
@@ -108,18 +108,19 @@ void SimulatorSetup<dim>::CreateAllProperties(){
     }
 
     //Go through all existing variables in the model, and load the sizes of arrays and flagged arrays.
-    for (auto lit = this->GetParameterList().begin(); lit!= this->GetParameterList().end(); lit++){
+    for (auto lit = this->GetParameterList().begin(); lit!= this->GetParameterList().end(); lit++)
+      {
         SimulatorSetupParameter& p(*lit);
 
         if (!this->Database().IsDefined(p.name.c_str())) {
             if (this->Verbose()) cout<<" creating property for :"<<p.name<<" vmin:"<<p.min<<" vmax:"<<p.max<<endl;
-            this->GetModel()->CreateProperty(p.name.c_str(),p.unit.c_str(),p.type,p.placement,p.vsize,p.min,p.max,p.usage);
+            this->GetModel()->CreateProperty(p.name.c_str(),p.notation.c_str(),p.unit.c_str(),p.type,p.placement,p.vsize,p.min,p.max,p.usage);
             p.key=this->Database().StorageKey(p.name.c_str());
         }
         else{
             if (p.usage=="computed" && !this->Restart()) {
                 this->GetModel()->Database().DeleteProperty(p.name.c_str());
-                this->GetModel()->CreateProperty(p.name.c_str(),p.unit.c_str(),p.type,p.placement,p.vsize,p.min,p.max,p.usage);
+                this->GetModel()->CreateProperty(p.name.c_str(),p.notation.c_str(),p.unit.c_str(),p.type,p.placement,p.vsize,p.min,p.max,p.usage);
                 p.key=this->Database().StorageKey(p.name.c_str());
             }
             else {
@@ -178,7 +179,7 @@ template<uint32_t dim>
 void SimulatorSetup<dim>::AddPreExistingModelVariables()
 {
     map<string,csmp::Index> pre_existing_props_in_model;
-    this->GetModel()->Database().ListProperties(pre_existing_props_in_model);
+    this->GetModel()->Database().ListVariables(pre_existing_props_in_model);
     for (map<string,csmp::Index>::iterator peim_it = pre_existing_props_in_model.begin(); peim_it != pre_existing_props_in_model.end();peim_it++){
         SimulatorSetupParameter p;
         double min,max;
@@ -1122,7 +1123,7 @@ void SimulatorSetup<dim>::AddLegacy_FE_Integrator(std::string name)
         SAMG_Solver* sol = new SAMG_Solver();
         name_samgsolver_[name]=sol;
         solver_settings_[name]=dynamic_cast<SAMG_Settings*>(sol->GetSolverSettings());
-        PDE_Integrator<dim,Region>* pint=new PDE_Integrator<dim,Region>(*sol);
+        PDE_Integrator<dim,Element>* pint=new PDE_Integrator<dim,Element>(*sol);
         legacy_FE_integrators_[sol]=pint;
     }
 }
@@ -1133,7 +1134,7 @@ void SimulatorSetup<dim>::DeleteLegacy_FE_Integrator(std::string name)
     if (solver_settings_.find(name)!=solver_settings_.end())
     {
         SAMG_Solver* sol = name_samgsolver_[name];
-        PDE_Integrator<dim,Region>* pint=GetLegacy_FE_Integrator(name);
+        PDE_Integrator<dim,Element>* pint=GetLegacy_FE_Integrator(name);
         //auto isol=name_samgsolver_.find(name);
         auto iset=solver_settings_.find(name);
         //auto iint=legacy_FE_integrators_.find(name_samgsolver_[name]);
@@ -1255,7 +1256,7 @@ FEFV_Algorithm<dim>* SimulatorSetup<dim>::GetDESCompatibleIntegrator(SAMG_Solver
 */
 
 template<uint32_t dim>
-PDE_Integrator<dim,Region>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(SAMG_Solver* samg)
+PDE_Integrator<dim,Element>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(SAMG_Solver* samg)
 {
     if (legacy_FE_integrators_.find(samg)==legacy_FE_integrators_.end()){
         cout<<"SimulatorSetup<dim>::GetLegacy_FE_Integrator. Did not find a solver integrator for this SAMG Solver entry."<<endl;
@@ -1299,7 +1300,7 @@ FEFV_Algorithm<dim>* SimulatorSetup<dim>::GetDESCompatibleIntegrator(string name
 */
 
 template<uint32_t dim>
-PDE_Integrator<dim,Region>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(string name)
+PDE_Integrator<dim,Element>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(string name)
 {
     if (name_samgsolver_.find(name)==name_samgsolver_.end())
     {

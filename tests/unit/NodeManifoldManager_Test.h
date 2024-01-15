@@ -15,8 +15,6 @@ namespace csmp {
   class NodeManifoldManager_Test : public Test
   {
     public:
-      explicit NodeManifoldManager_Test( bool verbose=false ) : verbose_(verbose) {}
-    
       virtual void run();
 
       //template<uint32_t dim>
@@ -50,10 +48,8 @@ namespace csmp {
                          const std::vector<std::string>& fractures );               
       
 
-
-
       private:
-        const bool verbose_;
+        static const bool verbose_ = true;
   };
 
   } // csmp

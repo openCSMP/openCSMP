@@ -32,10 +32,11 @@ class Box_Test : public Test
     bool TestConsistencyOfBoxFlaggingWithBoundaryIdentification();
   
     /// testing the normals of the volumetric elements and the boundary faces
-    void TestWhetherSimplexNormalsAreOutwardPointing();
+    void TestWhetherElementNormalsAreOutwardPointing();
 
   private:
     std::string model_name_;
+    static const bool verbose_ = true;
 };
 
 } // csmp

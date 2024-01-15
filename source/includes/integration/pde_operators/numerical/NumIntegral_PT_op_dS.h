@@ -3,9 +3,10 @@
 
 #include "CSMP_definitions.h"
 #include "MathOperatorRHS.h"
-#include "Operand.h"
 
 namespace csmp {
+
+template<uint32_t> class Face;
   
 /** Scalars, or vectors acting on model boundary surfaces as tractions/stresses
 
@@ -20,11 +21,13 @@ towards inside of boundary.
 
 */
 template<uint32_t dim>
-class NumIntegral_PT_op_dS : public MathOperatorRHS<dim> {
+class NumIntegral_PT_op_dS : public MathOperatorRHS<dim,Face> {
   public:
     NumIntegral_PT_op_dS( const PropertyDatabase<dim>& p, 
                           const char* oper,    // VECTOR/SCALAR variable on FACE   
                           const char* test );  // VECTOR variable on NODE
+                          
+    virtual ~NumIntegral_PT_op_dS() {}
     
     virtual void GetOperands( const Face<dim>& );
     virtual void ComputeContribution( const Face<dim>& );

@@ -1,17 +1,17 @@
 #ifndef Upwind_Integral_dNT_op_dN_dV_h
 #define Upwind_Integral_dNT_op_dN_dV_h
 
-#include "CSMP_definitions.h"
 #include "MathOperatorLHS.h"
-#include "DenseMatrix.h"
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /// Known as: element conductance matrix or K div^2 P
-template<uint32_t dim,class CELL=Element<dim> >
-class Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim,CELL> {
   public:
-    Upwind_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
+    Upwind_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>&,
                            		  const char* oper,
                            		  const char* basic,
                            		  const char* test,
@@ -19,8 +19,8 @@ class Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
                            		  const char* trigger,
                            		  const double prefactor = 1. );
     
-    void ComputeContribution( const CELL& );
-    void GetOperands( const CELL& );
+    void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& );
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT;

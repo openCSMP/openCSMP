@@ -485,7 +485,7 @@ size_t  ModelTopology::FiniteElementTypes( set<int32_t>& etypes ) const
 
 
 
-/** Cheanges the element type from CSMP_Type as specified in ANSYS_ElementSpecifications
+/** Cheanges the element type from CSMP_Type as specified in CSMP_ElementSpecifications
     to user defined type.
 
 @section arguments Input Arguments
@@ -603,6 +603,8 @@ void  ModelTopology::EliminateCellTypes( const list<string>& etypes )
     for ( auto lit=etypes.begin(); lit!=etypes.end(); lit++ )
       EliminateCellType( (*lit).c_str() );
  }
+
+
 
 /** Removes all line elements from the current model.
 
@@ -1566,6 +1568,24 @@ void ModelTopology::DomainNames( vector<string>& region_names ) const
 	for ( auto it : model_domains_ ) region_names.push_back( it.first );
 }
 
+
+
+/** changes the name of a domain in the most efficient way; reports whether operation was successful
+ */
+bool ModelTopology::ChangeDomainName( const std::string& old_name, const std::string& new_name )
+ {
+    // getting a handle to the existing key
+    auto domainHandler  = model_domains_.extract(old_name);
+    // if empty handed
+    if ( domainHandler.empty() ) return false;
+    // else the record is renamed and re-inserted (moved)
+    domainHandler.key() = new_name;
+    model_domains_.insert( move(domainHandler) );
+    
+    return true; // success
+ }
+
+
 /*
     Domain properties
 */
@@ -2353,7 +2373,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
        for ( bit=CellsOfDomainBegin(it.c_str());
              bit!=CellsOfDomainEnd(it.c_str()); bit++ )
          for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
-           nodes_irregular.push_back( (*bit) );
+           nodes_irregular.push_back( (*nit) );
 
      // making these containers unique
      sort( nodes_bottom.begin(), nodes_bottom.end() );
@@ -2377,11 +2397,11 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
      // zapping all previous box boundary flags
      for ( auto abit=vset.BFlagsBegin(); abit!= vset.BFlagsEnd(); ++abit ) (*abit) = NOT;
      // (starting with the least specific regions so that their corners are overwritten by box boundary flags)
-     for ( auto nit : nodes_irregular ) vset.AddBFlag( nit, IRREGULAR );
-     for ( auto nit : nodes_bottom ) vset.AddBFlag( nit, BOTTOM );
-     for ( auto nit : nodes_right ) vset.AddBFlag( nit, RIGHT );
-     for ( auto nit : nodes_top ) vset.AddBFlag( nit, TOP );
-     for ( auto nit : nodes_left ) vset.AddBFlag( nit, LEFT );
+     for ( auto nit : nodes_irregular ) vset.BFlag( nit, IRREGULAR );
+     for ( auto nit : nodes_bottom ) vset.BFlag( nit, BOTTOM );
+     for ( auto nit : nodes_right ) vset.BFlag( nit, RIGHT );
+     for ( auto nit : nodes_top ) vset.BFlag( nit, TOP );
+     for ( auto nit : nodes_left ) vset.BFlag( nit, LEFT );
 
 
      // 3. finding the corners of a box-shaped model, if any
@@ -2393,7 +2413,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.AddBFlag( cnr[0], CNR1 );
+          vset.BFlag( cnr[0], CNR1 );
        }
 
      if ( !nodes_right.empty() && !nodes_bottom.empty() ) {
@@ -2403,7 +2423,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.AddBFlag( cnr[0], CNR2 );
+          vset.BFlag( cnr[0], CNR2 );
        }
 
      if ( !nodes_right.empty() && !nodes_top.empty() ) {
@@ -2413,7 +2433,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.AddBFlag( cnr[0], CNR3 );
+          vset.BFlag( cnr[0], CNR3 );
        }
 
      if ( !nodes_left.empty() && !nodes_top.empty() ) {
@@ -2423,7 +2443,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.AddBFlag( cnr[0], CNR4 );
+          vset.BFlag( cnr[0], CNR4 );
        }
 
      // 4. potential corners with an irregular boundary
@@ -2437,7 +2457,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                                 nodes_left.begin(), nodes_left.end(),
                                 back_inserter( cnr ) );
              
-              vset.AddBFlag( cnr[0], CNR4 );
+              vset.BFlag( cnr[0], CNR4 );
            }
          if ( !nodes_right.empty() ) {
               vector<int64_t> cnr;
@@ -2445,7 +2465,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                                 nodes_right.begin(), nodes_right.end(),
                                 back_inserter( cnr ) );
              
-              vset.AddBFlag( cnr[0], CNR3 );
+              vset.BFlag( cnr[0], CNR3 );
            }
        }
 
@@ -2457,7 +2477,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                                 nodes_left.begin(), nodes_left.end(),
                                 back_inserter( cnr ) );
              
-              vset.AddBFlag( cnr[0], CNR1 );
+              vset.BFlag( cnr[0], CNR1 );
            }
          if ( !nodes_right.empty() ) {
               vector<int64_t> cnr;
@@ -2465,7 +2485,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                                 nodes_right.begin(), nodes_right.end(),
                                 back_inserter( cnr ) );
              
-              vset.AddBFlag( cnr[0], CNR2 );
+              vset.BFlag( cnr[0], CNR2 );
            }
        }
 
@@ -2535,7 +2555,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( const VS
  }
  
  
- 
+
  
  
  
@@ -2553,9 +2573,9 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
           const string region_name{ it.first };
           if ( region_name.find("BOUNDARY") != string::npos ||
                region_name.find("IRREGULAR") != string::npos ) {
-               // if it is a lower dimensional region
                const auto etype = it.second.first.begin(); // .first.begin());
-               if ( isLineElement( parseFiniteElementType(*etype) ) == true )
+               // if it is a lower dimensional region
+               if ( !isVolumeElement( parseFiniteElementType(*etype) ) == true )
                  boundary_regions.insert( region_name );
             }
        }
@@ -2569,34 +2589,34 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
                     back_bottom, back_left, back_top, back_right,
                     top_left, top_right, irregular;
 
-     for ( auto it=CellsOfDomainBegin("BOTTOM");
-           it!=CellsOfDomainEnd("BOTTOM"); it++ ) {
+     auto end_it{ CellsOfDomainEnd("BOTTOM") };
+     for ( auto it=CellsOfDomainBegin("BOTTOM"); it!=end_it; it++ ) {
            // accessing contiguous ranges of element ID's with it->size_t
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              bottom.push_back( (*vit) );
        }
-     for ( auto it=CellsOfDomainBegin("LEFT");
-           it!=CellsOfDomainEnd("LEFT"); it++ ) {
+     end_it = CellsOfDomainEnd("LEFT");
+     for ( auto it=CellsOfDomainBegin("LEFT"); it!=end_it; it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              left.push_back( (*vit) );
        }
-     for ( auto it=CellsOfDomainBegin("RIGHT");
-           it!=CellsOfDomainEnd("RIGHT"); it++ ) {
+     end_it = CellsOfDomainEnd("RIGHT");
+     for ( auto it=CellsOfDomainBegin("RIGHT"); it!=end_it; it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              right.push_back( (*vit) );
        }
-     for ( auto it=CellsOfDomainBegin("TOP");
-           it!=CellsOfDomainEnd("TOP"); it++ ) {
+     end_it = CellsOfDomainEnd("TOP");
+     for ( auto it=CellsOfDomainBegin("TOP"); it!=end_it; it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              top.push_back( (*vit) );
        }
-     for ( auto it=CellsOfDomainBegin("FRONT");
-           it!=CellsOfDomainEnd("FRONT"); it++ ) {
+     end_it = CellsOfDomainEnd("FRONT");
+     for ( auto it=CellsOfDomainBegin("FRONT"); it!=end_it; it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              front.push_back( (*vit) );
        }
-     for ( auto it=CellsOfDomainBegin("BACK");
-           it!=CellsOfDomainEnd("BACK"); it++ ) {
+     end_it = CellsOfDomainEnd("BACK");
+     for ( auto it=CellsOfDomainBegin("BACK"); it!=end_it; it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              back.push_back( (*vit) );
        }
@@ -2604,7 +2624,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
        for ( auto bit=CellsOfDomainBegin(it.c_str());
              bit!=CellsOfDomainEnd(it.c_str()); bit++ )
          for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
-           irregular.push_back( (*bit) );
+           irregular.push_back( (*nit) );      //E.P BUG Fix - Changed to nit , since before it was passing bit which is an Element ID!! (You want to pass the node ID's)
 
      // making these containers unique
      sort( bottom.begin(), bottom.end() );
@@ -2684,26 +2704,26 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
      // zapping all previous box boundary flags
      for ( auto bit=vset.BFlagsBegin(); bit!= vset.BFlagsEnd(); ++bit ) (*bit) = NOT;
      // assigning "IRREGULAR","BOTTOM","LEFT","RIGHT","TOP","FRONT","BACK"
-     for ( auto& it : irregular ) vset.AddBFlag( it, IRREGULAR_OUTSIDE );
-     for ( auto& it : bottom ) vset.AddBFlag( it, BOTTOM_OUTSIDE );
-     for ( auto& it : left ) vset.AddBFlag( it, LEFT_OUTSIDE );
-     for ( auto& it : right ) vset.AddBFlag( it, RIGHT_OUTSIDE );
-     for ( auto& it : top ) vset.AddBFlag( it, TOP_OUTSIDE );
-     for ( auto& it : front ) vset.AddBFlag( it, FRONT_OUTSIDE );
-     for ( auto& it : back ) vset.AddBFlag( it, BACK_OUTSIDE );
+     for ( auto& it : irregular ) vset.BFlag( it, IRREGULAR_OUTSIDE );
+     for ( auto& it : bottom ) vset.BFlag( it, BOTTOM_OUTSIDE );
+     for ( auto& it : left ) vset.BFlag( it, LEFT_OUTSIDE );
+     for ( auto& it : right ) vset.BFlag( it, RIGHT_OUTSIDE );
+     for ( auto& it : top ) vset.BFlag( it, TOP_OUTSIDE );
+     for ( auto& it : front ) vset.BFlag( it, FRONT_OUTSIDE );
+     for ( auto& it : back ) vset.BFlag( it, BACK_OUTSIDE );
      // edges
-     for ( auto& it : back_bottom ) vset.AddBFlag( it, BACK_BOTTOM );
-     for ( auto& it : back_right ) vset.AddBFlag( it, BACK_RIGHT );
-     for ( auto& it : back_top ) vset.AddBFlag( it, BACK_TOP );
-     for ( auto& it : back_left ) vset.AddBFlag( it, BACK_LEFT );
-     for ( auto& it : bottom_left ) vset.AddBFlag( it, BOTTOM_LEFT );
-     for ( auto& it : bottom_right ) vset.AddBFlag( it, BOTTOM_RIGHT );
-     for ( auto& it : top_right ) vset.AddBFlag( it, TOP_RIGHT );
-     for ( auto& it : top_left ) vset.AddBFlag( it, TOP_LEFT );
-     for ( auto& it : front_bottom ) vset.AddBFlag( it, FRONT_BOTTOM );
-     for ( auto& it : front_right ) vset.AddBFlag( it, FRONT_RIGHT );
-     for ( auto& it : front_top ) vset.AddBFlag( it, FRONT_TOP );
-     for ( auto& it : front_left ) vset.AddBFlag( it, FRONT_LEFT );
+     for ( auto& it : back_bottom ) vset.BFlag( it, BACK_BOTTOM );
+     for ( auto& it : back_right ) vset.BFlag( it, BACK_RIGHT );
+     for ( auto& it : back_top ) vset.BFlag( it, BACK_TOP );
+     for ( auto& it : back_left ) vset.BFlag( it, BACK_LEFT );
+     for ( auto& it : bottom_left ) vset.BFlag( it, BOTTOM_LEFT );
+     for ( auto& it : bottom_right ) vset.BFlag( it, BOTTOM_RIGHT );
+     for ( auto& it : top_right ) vset.BFlag( it, TOP_RIGHT );
+     for ( auto& it : top_left ) vset.BFlag( it, TOP_LEFT );
+     for ( auto& it : front_bottom ) vset.BFlag( it, FRONT_BOTTOM );
+     for ( auto& it : front_right ) vset.BFlag( it, FRONT_RIGHT );
+     for ( auto& it : front_top ) vset.BFlag( it, FRONT_TOP );
+     for ( auto& it : front_left ) vset.BFlag( it, FRONT_LEFT );
 
      // Flagging the corner nodes
 
@@ -2718,7 +2738,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
        if ( corner.empty() )
          throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
                                                              "CNR1 could not be identified");
-       else vset.AddBFlag( (*corner.begin()), CNR_MIN );
+       else vset.BFlag( (*corner.begin()), CNR_MIN );
      }
      
      // CNR2
@@ -2730,7 +2750,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
        if ( corner.empty() )
          throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
                                                              "CNR2 could not be identified");
-       else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXX );
+       else vset.BFlag( (*corner.begin()), CNR_MIN_MAXX );
      }
      // CNR3
      {
@@ -2741,7 +2761,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
        if ( corner.empty() )
          throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
                                                              "CNR3 could not be identified");
-       else vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXX );
+       else vset.BFlag( (*corner.begin()), CNR_MAX_MAXX );
      }
      // CNR4
      {
@@ -2752,7 +2772,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
        if ( corner.empty() )
          throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
                                                              "CNR4 could not be identified");
-       else vset.AddBFlag( (*corner.begin()), CNR_MAX_MINXZ );
+       else vset.BFlag( (*corner.begin()), CNR_MAX_MINXZ );
      }
      // The Z axis (forward) facing plane of the model
      // CNR5
@@ -2764,7 +2784,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
        if ( corner.empty() )
          throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
                                                              "CNR5 could not be identified");
-       else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXZ );
+       else vset.BFlag( (*corner.begin()), CNR_MIN_MAXZ );
      }
      // CNR6
      {
@@ -2775,7 +2795,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
        if ( corner.empty() )
          throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
                                                              "CNR6 could not be identified");
-       else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXXZ );
+       else vset.BFlag( (*corner.begin()), CNR_MIN_MAXXZ );
      }
      // CNR7
      {
@@ -2786,7 +2806,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
        if ( corner.empty() )
          throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryDomains",
                                                              "CNR7 could not be identified");
-       else vset.AddBFlag( (*corner.begin()), CNR_MAX );
+       else vset.BFlag( (*corner.begin()), CNR_MAX );
      }
      // CNR8
      {
@@ -2797,7 +2817,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
        if ( corner.empty() )
          throw csmp::Exception( ERROR, "ModelTopology::FlagNodesUsingBoundaryDomains",
                                                              "CNR8 could not be identified");
-       else vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXZ );
+       else vset.BFlag( (*corner.begin()), CNR_MAX_MAXZ );
      }
 
      if ( csmp_error.Verbose() ) {
@@ -2818,7 +2838,117 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
 //    }
 //cerr << endl << endl;
 
- 
 
+
+
+
+
+/**
+
+Finds all lower dimensional elements, and sets their nodes to Bflag INTERNAL
+If poly-element regions exists, then these are ignored.
+
+The method ignores regions on Box Boundaries (including IRREGULAR)
+
+*/
+bool ModelTopology::FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<2U>& vset ) const
+ {
+    std::deque<size_t> internal_nodes;
+
+    // getting the lower_dim regions which have line elements
+    for ( auto it=model_domains_.begin(); it!=model_domains_.end(); it++ ){
+      if ( !isDiagnosticBoxBoundaryClassifier( (*it).first ) ) //only if we are not on a boundary
+        if ( (*it).second.first.size() == 1U && fem_specs::LineElement( (*(*it).second.first.begin()) ) )  //
+          {
+              cout <<"\nModelTopology::FoundLowerDimensionalRegion: ";
+              cout <<" Setting nodes of elements of type '"<< (*(*it).second.first.begin()) <<" from region '"<< (*it).first;
+              cout <<"' from model topology '"<< model_name_ <<"'"<< endl;
+
+              //save all node id's
+              for (auto eid : (*it).second.second ){
+                for ( auto vit=vset.PlistBegin(eid); vit!=vset.PlistEnd(eid); vit++ ){
+                  //adding nodes of element with id "eid" to deque
+                  internal_nodes.push_back(*vit);
+                }
+              }
+          }
+    }
+
+    sort( internal_nodes.begin(), internal_nodes.end() );
+    internal_nodes.erase( unique( internal_nodes.begin(), internal_nodes.end() ), internal_nodes.end() );
+
+    //setting nodes boundary flags to internal
+    for ( auto& it : internal_nodes ) vset.BFlag( it, INTERNAL );
+
+    return true;
+
+
+ } // end FlagNodesOnLowerDimensionalElementsAsINTERNAL
+
+
+
+/**
+
+Finds all lower dimensional elements, and sets their nodes to Bflag INTERNAL
+If poly-element regions exists, then these are ignored.
+
+The method ignores regions on Box Boundaries (including IRREGULAR)
+
+*/
+bool ModelTopology::FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<3U>& vset ) const
+ {
+    std::deque<size_t> internal_nodes;
+
+    // getting the lower_dim regions which have line elements
+    for ( auto it=model_domains_.begin(); it!=model_domains_.end(); it++ ){
+      if (  !isDiagnosticBoxBoundaryClassifier( (*it).first ) ) //only if we are NOT on a boundary
+        if ( (*it).second.first.size() == 1U && (fem_specs::LineElement( (*(*it).second.first.begin()) ) || fem_specs::SurfaceElement( (*(*it).second.first.begin()) ) ) )  // take line and surface elements
+          {
+              cout <<"\nModelTopology::FoundLowerDimensionalRegion: ";
+              cout <<" Setting nodes of elements of type '"<< (*(*it).second.first.begin()) <<" from region '"<< (*it).first;
+              cout <<"' from model topology '"<< model_name_ <<"'"<< endl;
+
+              //save all node id's
+              for (auto eid : (*it).second.second ){
+                for ( auto vit=vset.PlistBegin(eid); vit!=vset.PlistEnd(eid); vit++ ){
+                  //adding nodes of element with id "eid" to deque
+                  internal_nodes.push_back(*vit);
+                }
+              }
+          }
+    }
+
+    sort( internal_nodes.begin(), internal_nodes.end() );
+    internal_nodes.erase( unique( internal_nodes.begin(), internal_nodes.end() ), internal_nodes.end() );
+
+    //setting nodes boundary flags to internal
+    for ( auto& it : internal_nodes ) vset.BFlag( it, INTERNAL );
+
+    return true;
+
+
+ } // end FlagNodesOnLowerDimensionalElementsAsINTERNAL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
  } // end namespace csmp
 

@@ -23,7 +23,7 @@ template<uint32_t dim>
 class ThermalVisitor : public Visitor<dim>
 {
   public:
-      ThermalVisitor(Model<dim>& model , std::vector<std::string> *to_initialize_keys =NULL);
+      ThermalVisitor(Model<dim>& model , std::vector<std::string> *to_initialize_keys =NULL );
 
       ThermalVisitor( Model<dim>& model,
                       Index nCPT_key,

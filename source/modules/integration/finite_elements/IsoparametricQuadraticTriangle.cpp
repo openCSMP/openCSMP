@@ -486,6 +486,7 @@ When boundary conditions shall be applied it is necessary to determine
 the properties associated with the nodes of that element face.
 
 */
+/*
 void IsoparametricQuadraticTriangle::NodesOfFace( uint32_t face_id,
                                                   std::vector<uint32_t>& fnids ) const
  {
@@ -512,7 +513,18 @@ void IsoparametricQuadraticTriangle::NodesOfFace( uint32_t face_id,
     else
     std::cerr <<"\nIsoparametricQuadraticTriangle::NodesOfFace: Erratic input face ID: "<< face_id << std::endl;
  }
+*/
 
+vector<uint32_t>  IsoparametricQuadraticTriangle::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{1,2,4};
+        case 1: return vector<uint32_t>{2,0,5};
+        case 2: return vector<uint32_t>{0,1,3};
+      }
+    cerr <<"\nIsoparametricQuadraticTriangle::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
@@ -609,7 +621,7 @@ void  IsoparametricQuadraticTriangle::MidSideNodes( std::vector<uint32_t>& ids )
  }
 
 
-
+/*
 void  IsoparametricQuadraticTriangle::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
@@ -620,6 +632,8 @@ void  IsoparametricQuadraticTriangle::CounterClockwiseNodes( std::vector<uint32_
     ids[4] = 2;
     ids[5] = 5;
  }
+*/
+
 
 double IsoparametricQuadraticTriangle::WeightAtIntegrationPoint( uint32_t i ) const { return W[i]; }
 
@@ -1478,6 +1492,7 @@ the FiniteElement knows in which order these appear.
 To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 */
+/*
 void  IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
                                                                   vector<uint32_t>& fnids )
  {
@@ -1509,7 +1524,7 @@ void  IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary( const vector<u
        }
 
  } // end ConsecutiveNodesAtBoundary
-
+*/
 
 
 
@@ -1798,33 +1813,25 @@ Method assumes that the triangle is planar. For the case that the
 triangle is warped, normals must be calculated for each integration
 point.
 */
-void IsoparametricQuadraticTriangle::UnitNormal( std::vector<double>& vc ) const
+vector<double> IsoparametricQuadraticTriangle::UnitNormal() const
  {
-    // normal only exists in 3D
-    vc.resize(3U);
+    if ( dim == 2U ) return vector<double>{ 0., 0., 1. };
 
-    if ( dim == 2U ) {
-         vc[0] = vc[1] = static_cast<double>(0.0);
-         vc[2] = static_cast<double>(1.0);
-         return;
-      }
-
-    double X12 = XY(1,0) - XY(0,0), // X
-              X31 = XY(0,0) - XY(2,0),
-              Y12 = XY(1,1) - XY(0,1), // Y
-              Y31 = XY(0,1) - XY(2,1),
-              Z12 = XY(1,2) - XY(0,2), // Z
-              Z31 = XY(0,2) - XY(2,2);
+    const double  X12 = XY(1,0) - XY(0,0), // X
+                  X31 = XY(0,0) - XY(2,0),
+                  Y12 = XY(1,1) - XY(0,1), // Y
+                  Y31 = XY(0,1) - XY(2,1),
+                  Z12 = XY(1,2) - XY(0,2), // Z
+                  Z31 = XY(0,2) - XY(2,2);
 
   // normal to triangle (but not unit normal!)
-    vc[0]  = -Y12*Z31 + Z12*Y31;
-    vc[1]  = -Z12*X31 + X12*Z31;
-    vc[2]  = -X12*Y31 + Y12*X31;
+    vector<double> vc{ -Y12*Z31 + Z12*Y31, -Z12*X31 + X12*Z31, -X12*Y31 + Y12*X31 };
     // normalization to unit length
     double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
     vc[0] /= length;
     vc[1] /= length;
     vc[2] /= length;
+    return vc;
  }
 
 

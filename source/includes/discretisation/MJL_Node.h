@@ -16,8 +16,8 @@ class Node {
     void  Splice( Node* );
 
   protected:
-    Node* next_;
-    Node* prev_;
+    Node* next_ = nullptr;
+    Node* prev_ = nullptr;
 };
 
 

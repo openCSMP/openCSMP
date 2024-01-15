@@ -1,5 +1,8 @@
 #include "MJL_Polygon.h"
 
+#include <iostream>
+#include <fstream>
+
 using namespace std;
 
 namespace mjl {
@@ -8,11 +11,12 @@ namespace mjl {
 // points in list should be unique and in clockwise order
 Polygon::Polygon( list<mjl::Point>::const_iterator first, 
                   list<mjl::Point>::const_iterator last )
+ : size_(distance(first,last))
  {
-    v_ = new Vertex( *first++ );
+    v_ = new mjl::Vertex( *first++ );
  
     while ( first != last )
-      v_ = v_->Insert( new Vertex( *first++ ) );
+      v_ = v_->Insert( new mjl::Vertex( *first++ ) );
     v_ = v_->Cw();
  }  
 
@@ -26,10 +30,10 @@ Polygon&  Polygon::operator=( const Polygon& p )
          size_ = p.size_;
          if ( size_ == 0U ) v_ = 0;
          else {
-              v_ = new Vertex( p.Point() );
+              v_ = new mjl::Vertex( p.Point() );
               for ( unsigned int i=1U; i<size_; i++ ) {
                    p.Advance( CLOCKWISE );
-                   v_ = v_->Insert( new Vertex( p.Point() ) );
+                   v_ = v_->Insert( new mjl::Vertex( p.Point() ) );
                 }
            }
          p.Advance( CLOCKWISE );
@@ -43,7 +47,7 @@ Polygon&  Polygon::operator=( const Polygon& p )
 Polygon::~Polygon()
  {
     if ( v_ ) {
-         Vertex* w = v_->Cw();
+         mjl::Vertex* w = v_->Cw();
          
          while( v_ != w ) {
               delete w->Remove();
@@ -57,7 +61,7 @@ Polygon::~Polygon()
 void Polygon::Erase()
  {
     if ( v_ ) {
-         Vertex* w = v_->Cw();
+         mjl::Vertex* w = v_->Cw();
          
          while( v_ != w ) {
               delete w->Remove();
@@ -74,9 +78,9 @@ void Polygon::Erase()
 
 void Polygon::Resize()
  { 
-    if ( v_ == 0 ) size_ = 0U;
+    if ( v_ == nullptr ) size_ = 0U;
     else {
-         Vertex* v = v_->Cw();
+         mjl::Vertex* v = v_->Cw();
          for ( size_=1U; v!=v_; ++size_ )
            v = v->Cw();
       }
@@ -96,6 +100,55 @@ void Polygon::BoundingRectangle( mjl::Point& cnr_min, mjl::Point& cnr_max ) cons
       }
  }
 
+
+// IsPositivelyOriented()
+// ----------------------
+//   returns true if the polygon is numbered in a counter-clockwise
+//   fashion.
+//    a
+//   /      a(clockwise), p=curr point, b(counter-clockwise)
+//  p - b
+//
+// tested: O.K.
+bool Polygon::IsPositivelyOriented() const
+ {
+    mjl::Edge  e;
+    double     angle{0.};
+
+    for ( size_t i=0u, angle=0.; i<size_; i++ )
+      {
+         // getting edge (if pos. counter-clockwise) and point clockwise
+         mjl::Point a = Cw()->Point();
+         mjl::Point b = Ccw()->Point();
+         // must be backwards (see MJL definition p. 120, fig. 5.12)
+         e.Set(b,a);
+         angle += signedAngle(V()->Point(),e);
+         Advance( CLOCKWISE );
+      }
+//    cout <<"\nMJL_Polygon::IsPositivelyOriented: summed angle: "<< angle << endl;
+      
+    if ( angle >= 0. ) return true;
+    return false;
+     
+ } // end IsPositivelyOriented
+ 
+
+
+
+
+// OrientPositively()
+// ------------------
+//   if the Polygon is not built in a counter-clockwise order
+//   of points, the order is reversed to make the Polygon
+//   positively oriented (compare MJL p. 71).
+// tested:
+ void Polygon::OrientPositively()
+  {
+     if ( !IsPositivelyOriented() ) Revert();
+     
+  } // end OrientPositively
+ 
+ 
 
 
 
@@ -162,10 +215,10 @@ void Polygon::Revert()
     
     list<mjl::Point>::const_iterator it=points.begin();
 
-    v_ = new Vertex( (*it++) );
+    v_ = new mjl::Vertex( (*it++) );
  
     while ( it != points.end() )
-      v_ = v_->Insert( new Vertex( (*it++) ) );
+      v_ = v_->Insert( new mjl::Vertex( (*it++) ) );
     v_ = v_->Cw();
     
     size_ = points.size();
@@ -173,9 +226,9 @@ void Polygon::Revert()
 
 
 
-Vertex*  Polygon::LeastVertex( int (*cmp)( const mjl::Point& a, const mjl::Point& b ) ) // p.87
+mjl::Vertex*  Polygon::LeastVertex( int (*cmp)( const mjl::Point& a, const mjl::Point& b ) ) // p.87
  {
-    Vertex* bestV = V();
+    mjl::Vertex* bestV = V();
     
     Advance(CLOCKWISE);
     for ( int i=1; i<static_cast<int>(size_); i++, Advance(CLOCKWISE) )
@@ -198,6 +251,7 @@ void  Polygon::CenterOfGravity( double& x, double& y ) const
           x += v_->Point()[0];
           y += v_->Point()[1];
        }
+     assert( size_ != 0u );
      x /= static_cast<double>(size_);
      y /= static_cast<double>(size_);
 
@@ -274,7 +328,7 @@ bool Polygon::CheckAngles( double min_angle_permitted ) const
 
 mjl::Point  Polygon::InsidePointSA() // uses signed angle > and returns edge midpoint 
  {
-    Vertex* curr = V();
+    mjl::Vertex* curr = V();
 
     // always go one step back so that all vertices are tested
     for ( unsigned int i=0; i<size_; Advance(CLOCKWISE), i++ )

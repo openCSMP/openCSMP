@@ -16,7 +16,7 @@ template<uint32_t> class StressesAndStrains;
 
 /// 3D stress & strain are output as tensor variables
 template<>
-class StressesAndStrains<3U> : public MathOperatorLHS<3U> {
+class StressesAndStrains<3U> : public MathOperatorLHS<3U,Element> {
   public:
     /// 3D constructor: note that - in contrast with civil engineering - in geomechanics compressive stresses are positive
     StressesAndStrains( const Model<3U>&, 

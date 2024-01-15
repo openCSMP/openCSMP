@@ -221,21 +221,20 @@ void Boundary_Test::CheckFaceUnitNormalOrientation( const Boundary<dim>& boundar
 */
 void Boundary_Test::UnitNormalTest3D()
  {
-// TODO: create a FiniteVolumePolicy_Test
      // ------------------------------------------------------------
      // 1. building model from ANSYS data files
      // ------------------------------------------------------------
-      string  model_name("prism_test");
-      // TODO: UnitNormalTest does not require any variables; remove property file
-      ANSYS_Model3D  model( model_name.c_str(), "example25.txt");
+      const string  model_name("prism_test");
+      ANSYS_Model3D model( model_name.c_str(), "Minimum-variables.txt");
 
      // ------------------------------------------------------------
-     // 2. looping over all highest-dimensional elements
+     // 2. looping over all elements
      //    testing whether normals are aligned with vectors
      //    between barycenter and face barycenters
      // ------------------------------------------------------------
-     std::vector<double> unrml;
+     vector<double> unrml;
      const Region<3U>& model_domain(model.Region("Model"));
+     model_domain.UpdateMemberIndexes();
      if ( verbose_ ) cout <<"\nElement_Test::UnitNormalTest: testing normal directions...\n";
      for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it )
        {
@@ -245,6 +244,7 @@ void Boundary_Test::UnitNormalTest3D()
                // constructing a vector from element to face barycenter
                Point<3U> fbctr((*it)->FaceBaryCenter( face ));
                Point<3U> outward_vec(fbctr - bctr);
+               _test( outward_vec.Length() > numeric_limits<double>::epsilon() * 10. );
                // testing that the face unit normal is aligned with the outward
                // pointing vector
                (*it)->UnitNormalToFace( face, unrml );
@@ -252,6 +252,11 @@ void Boundary_Test::UnitNormalTest3D()
                // the normals are aligned if dotproduct is positive
                double dotproduct = dotProduct( outward_vec, unitnormal );
                _test( dotproduct > 0. );
+// debugging
+if ( dotproduct < 0. ) {
+     cerr <<"\n"<< parseFiniteElementType( (*it)->FE_Type() ) <<", face: "<< face;
+     cerr <<" ("<< parseFiniteElementType( (*it)->FE()->ElementTypeOfFace(face) ) <<"), dotproduct: "<< dotproduct <<" ";
+  }
                if ( verbose_ and dotproduct < 0. ) {
                     cerr <<"\nunit normal to face "<< face <<" is inward pointing:";
                     (*it)->Out();
@@ -366,15 +371,18 @@ void Boundary_Test::runLegacy()
     CheckFaceUnitNormalOrientation( model2.Boundary("BOTTOM") );
     Index eKey2( model2.Database().StorageKey( "element variable" ) );
     ElementNodes( model2.Region( "Model" ) );
-    VTU_Interface<2> vtu2( model2 ); 
+    const size_t n_unique_regions{ model2.UniqueRegions() };
 
-    pair<set<string>,bool>  result3 = model2.CreateInternalBoundaryFrom( "FRACTURE1" ); //, IRREGULAR, true );
+    pair<set<string>,bool>  result3 = model2.CreateInternalBoundaryFrom( "FRACTURE1" ); 
     _test( result3.first.size() == 1 );
     Boundary<2>& fracture1( model2.Boundary(*result3.first.begin()) );
     CheckFaceNeighbors(fracture1);
     CheckFaceUnitNormalOrientation( fracture1 );
     CheckNodeFlags( fracture1, IRREGULAR );
     CheckNodeParents( fracture1 );
+    // has the unique region been correctly deleted?
+    _test( model2.UniqueRegions() < n_unique_regions );
+    
     pair<set<string>,bool>  result4 = model2.CreateInternalBoundaryFrom( "FRACTURE2" );
     Boundary<2>& fracture2( model2.Boundary(*result4.first.begin()) );
     CheckFaceNeighbors(fracture2);

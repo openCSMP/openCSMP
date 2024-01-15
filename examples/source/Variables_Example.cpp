@@ -20,7 +20,7 @@ void Variables_Example::Specifications()
     AddDescription( "source in: Variables_Example.cpp" );
     AddDescription( "basic operations with csmp variables" );
     AddRequirement( "input model: 'FracBox'");
-    AddRequirement( "VariablesTutorial.txt");
+    AddRequirement( "variable file (VariablesTutorial.txt)");
   }
 
 
@@ -28,15 +28,26 @@ void Variables_Example::Run()
   {
     // creating a model from an ANSYS mesh and inserting a  split boundary
     const size_t D(3);
-    ANSYS_Model3D model( "FracBox", "VariablesTutorial.txt", true ); 
+    //ANSYS_Model3D model( "FracBox", "VariablesTutorial.txt", true );
+
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'FracBox':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "FracBox";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "VariablesTutorial.txt";
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<3U>  model(model_name, variable_file);
     
-    pair<set<string>,bool> boundary_patches = model.CreateInternalBoundaryFrom( "FRACTURE" );  
+    pair<set<string>,bool> boundary_patches = model.CreateSplitBoundaryFrom( "FRACTURE" );
     assert( boundary_patches.second == true );
     assert( boundary_patches.first.size() == 1 );
     const string boundary_name = (*boundary_patches.first.begin());
-    Boundary<D>& fractureBoundary = model.Boundary( boundary_name.c_str() ); 
-    pair<string,bool> split_boundary = model.CreateSplitBoundaryFrom( fractureBoundary );
-    assert( split_boundary.second == true );
     
     // having a look at which regions and boundaries we have at the moment
     model.RegionsOut();
@@ -77,24 +88,27 @@ void Variables_Example::Run()
     arrayVariablePlain.Resize( modelArrayVariable.Size() );
     model.Read( modelArrayKey, arrayVariablePlain );
     
-    for( size_t i(0); i < arrayVariablePlain.Size(); ++i )
+    for( auto i(0U); i < arrayVariablePlain.Size(); ++i )
       arrayVariablePlain(i) = double(i)*1.2;
 
     model.Store( modelArrayKey, arrayVariablePlain );
 
 
+    /*
     // model subdomains (regions, boundaries, splitboundaries...)
     Region<D>& fracture = model.Region("FRACTURE");
     fracture.Store( regionScalarKey, scalarVariable );
     fracture.Read( regionScalarKey, scalarVariablePlain );
     cout << "\nRegion scalar: " << scalarVariablePlain << endl;
+    */
 
     Boundary<D>& boundary = model.Boundary("BOUNDARY1");
     boundary.Store( boundaryVectorKey, vectorVariable );
     boundary.Read( boundaryVectorKey, vectorVariablePlain );
     cout << "\nBoundary vector: " << vectorVariablePlain << endl;
 
-    SplitBoundary<D>& splitboundary = model.SplitBoundary( split_boundary.first.c_str() );
+    // SKM fix: this does not test all the split-boundary patches that were created
+    SplitBoundary<D>& splitboundary = model.SplitBoundary( (*boundary_patches.first.begin()).c_str() );
     splitboundary.Store( splitBoundaryVectorKey, vectorVariable );
     splitboundary.Read( splitBoundaryVectorKey, vectorVariablePlain );
     cout << "\nSplitBoundary scalar: " << vectorVariablePlain << endl;
@@ -143,9 +157,9 @@ void Variables_Example::Run()
       }
 
     // adding a property at runtime
-    model.CreateProperty( "new element scalar", "X", SCALAR, ELEMENT );
+    model.CreateProperty( "new element scalar", "nes", "X", SCALAR, ELEMENT );
     model.InputPropertyValue( "new element scalar",  makeScalar( PLAIN, 1. ) );
-    fracture.InputPropertyValue( "new element scalar",  makeScalar( PLAIN, 2. ) );
+    //fracture.InputPropertyValue( "new element scalar",  makeScalar( PLAIN, 2. ) );
 
     for( auto bit( model.BoundariesBegin() ); bit != model.BoundariesEnd(); ++bit )
       for( auto fit( bit->second.CellsBegin() ); fit != bit->second.CellsEnd(); ++fit )
@@ -158,7 +172,7 @@ void Variables_Example::Run()
     outputProps.push_back("element scalar");
     outputProps.push_back("new element scalar");
     vtu.OutputDataToVTU( "VTU1", outputProps, "Model", static_cast<int>(0) );
-    vtu.OutputDataToVTU( "VTU1", outputProps, fracture, static_cast<int>(0) );
+    //vtu.OutputDataToVTU( "VTU1", outputProps, fracture, static_cast<int>(0) );
     vtu.OutputDataToVTU( "VTU1", "face scalar", model.Boundary("BOUNDARY1"), static_cast<int>(0) );
     vtu.OutputDataToVTU( "VTU1", "face scalar", model.Boundary("BOUNDARY2"), static_cast<int>(0) );
     vtu.OutputDataToVTU( "VTU1", "face scalar", model.Boundary("BOUNDARY3"), static_cast<int>(0) );
@@ -168,15 +182,15 @@ void Variables_Example::Run()
 
 
     // displace nodes of splitboudnaries
-    SplitBoundary<D>& fractureSplitBoundary = model.SplitBoundary( "SPLITBOUNDARY_FRACTURE" );
-    const vector<InterFace<D>*>::const_iterator elementsEnd( fractureSplitBoundary.CellsEnd() );
-    for( vector<InterFace<D>*>::const_iterator it( fractureSplitBoundary.CellsBegin() ); it != elementsEnd; ++it )
+    //SplitBoundary<D>& fractureSplitBoundary = model.SplitBoundary( "SPLITBOUNDARY_FRACTURE" );
+    SplitBoundary<D>& fractureSplitBoundary = model.SplitBoundary( boundary_name);
+    const auto elementsEnd( fractureSplitBoundary.CellsEnd() );
+    for( auto it( fractureSplitBoundary.CellsBegin() ); it != elementsEnd; ++it )
       {
         ScalarVariable volume( PLAIN, (*it)->InnerParent()->Volume() );
         (*it)->Store( interfaceScalarKey, volume );
         (*it)->N(0)->z( (*it)->N(0)->z() + 0.3 );
       }
-
 
     // output
     vtu.DeleteConnectivity();
@@ -184,6 +198,9 @@ void Variables_Example::Run()
     vtu.OutputDataToVTU( "VTU2", "interface scalar", fractureSplitBoundary, static_cast<int>(0) );
 
     cout << "\nDone...\n";
+
+    fs::current_path("../../example_inputs/");
+
  } // Run()
 
 } // csmp

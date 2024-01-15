@@ -583,15 +583,15 @@ bool consistencyCheckNeighborVersusPerimeterFaces( const Model<3U>& model )
    
     for ( auto e=model_domain.InteriorCells(); e<model_domain.Cells(); ++e )
      {
-         const size_t expected_perimeter_faces(model_domain.PerimeterFaces(e));
-         size_t       perimeter_faces(0U);
+         const auto expected_perimeter_faces{ model_domain.PerimeterFaces(e) };
+         uint32_t   perimeter_faces(0U);
          
-         for ( size_t j=0U; j<model_domain.E(e)->Neighbors(); ++j )
+         for ( uint32_t j{0U}; j<model_domain.E(e)->Neighbors(); ++j )
            // if there is no neighbor, there should be a boundary face corresponding to this
            if ( model_domain.E(e)->Neighbor(j) == nullptr )
              {
                 // checking the perimeter face information
-                size_t face = model_domain.PerimeterFace( e, perimeter_faces );
+                uint32_t face = model_domain.PerimeterFace( e, perimeter_faces );
                 if ( j != face )
                   consistency_check_failures++;
                 perimeter_faces++;

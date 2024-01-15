@@ -25,9 +25,9 @@ class DESAdvectionDiffusion {
     void AdvectVariable_DES_serial( double model_time );
     void AdvectVariable_DES_parallel ( double model_time, size_t num_threads ); 
     void AdvectVariable_TDS_serial( double time_interval );
-    void AdvectVariable_TDS_parallel ( double time_interval, size_t num_threads );     
+    void AdvectVariable_TDS_parallel ( double time_interval, size_t num_threads );
     
-    virtual ~DESAdvectionDiffusion() {}
+    ~DESAdvectionDiffusion();
     
     typedef ajb::detail::FibonacciHeap_Node<double,size_t> Heap_Node;
 
@@ -48,8 +48,14 @@ class DESAdvectionDiffusion {
     double upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
     double CFL_multiplier_, PEP_multiplier_;
     bool tensor_k_= false;
-    std::vector<Event<dim>*> PEPList, FullList;
-    std::vector<Heap_Node*> HeapNodeFullList; 
+    //FullList contains all event objects
+    std::vector<Event<dim>> FullList;
+    //PEPList contains only pointers to active events, including both executed events and updated events
+    //execution of an event performs both Update() and Synchronization(); update of an event only performs Update()
+    std::vector<Event<dim>*> PEPList;
+    //HeapNodeFullList contains pointers to all heap nodes
+    //std::vector<Heap_Node*> HeapNodeFullList;
+    //EventHeap only contains the heap nodes that coactive events
     ajb::FibonacciHeap<double,size_t> EventHeap;
     size_t	rate_count_;
     size_t	update_count_;
@@ -61,11 +67,11 @@ class DESAdvectionDiffusion {
     csmp::INDEX<VECTOR,FACET_INTEGRATION_POINT> key_fn; 
     csmp::INDEX<VECTOR,ELEMENT> key_V;
     
-    // time_key - an ArrayVariable key for DES releated variables:
+    // time_key - an ArrayVariable key for DES related variables:
     // [0] current time stamp
     // [1] scheduled time stamp
     // [2] CFL time increment
-    // [3] target time increment
+    // [3] target time increment (CFL * cfl_multiplier)
     // [4] cumulative change of solution
     // [5] target change of solution
     csmp::INDEX<ARRAY,NODE> key_time;

@@ -36,7 +36,7 @@ StressesAndStrains<3U>::StressesAndStrains( const Model<3U>& sg,
                                             bool  principal_vectors,
                                             bool extrapolate_results_to_nodes,
                                             bool geomechanics )
-  : MathOperatorLHS<3U>(sg.Database(),oper,basic,test),
+  : MathOperatorLHS<3U,Element>(sg.Database(),oper,basic,test),
     strain_key_(sg.Database().StorageKey("strain")),
     stress_key_(sg.Database().StorageKey("stress")),
     DISPL_(3*3,1), 
@@ -57,7 +57,7 @@ StressesAndStrains<3U>::StressesAndStrains( const Model<3U>& sg,
     geomechanics_conventions_(geomechanics),
     verbose_(false)
  {
-    MathOperatorLHS<3U>::Name("StressesAndStrains", oper, basic, test );
+    MathOperatorLHS<3U,Element>::Name("StressesAndStrains", oper, basic, test );
 
     // testing the Operands 
     if ( strain_key_.type != TENSOR ) 
@@ -69,22 +69,22 @@ StressesAndStrains<3U>::StressesAndStrains( const Model<3U>& sg,
                      "'stress' must be a tensor property." );
 
     // displacement
-    if ( MathOperatorLHS<3U>::TestOperandPlacement() != NODE || 
-         MathOperatorLHS<3U>::TestOperandType() != VECTOR )
+    if ( MathOperatorLHS<3U,Element>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<3U,Element>::TestOperandType() != VECTOR )
     throw csmp::Exception( ERROR, "StressesAndStrains<3D>::(constructor)", 
                     test, "Operand 'displacement' must be a vector property placed on the nodes." );
 
     // Young's modulus
-    if ( (MathOperatorLHS<3U>::MaterialOperandPlacement() != ELEMENT &&
-          MathOperatorLHS<3U>::MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT) ||
-         MathOperatorLHS<3U>::MaterialOperandType() != SCALAR )
+    if ( (MathOperatorLHS<3U,Element>::MaterialOperandPlacement() != ELEMENT &&
+          MathOperatorLHS<3U,Element>::MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT) ||
+         MathOperatorLHS<3U,Element>::MaterialOperandType() != SCALAR )
     throw csmp::Exception( ERROR, "StressesAndStrains<3D>::(constructor)", 
                     oper, "Operand 'Young's modulus' must be a scalar property placed on the constraint points or element." );
 
     // Poisson's ratio
-    if ( (MathOperatorLHS<3U>::BasicOperandPlacement() != ELEMENT &&
-          MathOperatorLHS<3U>::BasicOperandPlacement() != ELEMENT_INTEGRATION_POINT) ||
-         MathOperatorLHS<3U>::BasicOperandType() != SCALAR )
+    if ( (MathOperatorLHS<3U,Element>::BasicOperandPlacement() != ELEMENT &&
+          MathOperatorLHS<3U,Element>::BasicOperandPlacement() != ELEMENT_INTEGRATION_POINT) ||
+         MathOperatorLHS<3U,Element>::BasicOperandType() != SCALAR )
     throw csmp::Exception( ERROR, "StressesAndStrains<3D>::(constructor)", 
                     basic, "Basic Operand 'Poisson's ratio' must be a scalar property placed on the constraint points or element." );
 
@@ -139,8 +139,8 @@ StressesAndStrains<3U>::StressesAndStrains( const Model<3U>& sg,
      }
 
     // setting how many times the PDE operator shall be applied during post-processing
-    if ( extrapolate_results_to_nodes ) MathOperatorLHS<3U>::ApplicationCycles(2);
-    else MathOperatorLHS<3U>::ApplicationCycles(1);
+    if ( extrapolate_results_to_nodes ) MathOperatorLHS<3U,Element>::ApplicationCycles(2);
+    else MathOperatorLHS<3U,Element>::ApplicationCycles(1);
     
  } // end 3D constructor
 
@@ -209,12 +209,12 @@ can be retrieved.
 */
 void StressesAndStrains<3U>::GetOperands( const Element<3U>& e )
 {
-    if ( MathOperatorLHS<3U>::ApplicationCycle() == 1 )
+    if ( MathOperatorLHS<3U,Element>::ApplicationCycle() == 1 )
       {
          // 1. For strain computation at integration points from nodal displacements
          // ------------------------------------------------------------------------
          // read nodal displacements
-         e.NodePropertyVector( MathOperatorLHS<3U>::TestOperandKey(), NVAR_ );
+         e.NodePropertyVector( MathOperatorLHS<3U,Element>::TestOperandKey(), NVAR_ );
     
          // 2. Subtracting mean displacement to remove translation & rotation effects
          // ------------------------------------------------------------------------
@@ -241,18 +241,18 @@ void StressesAndStrains<3U>::GetOperands( const Element<3U>& e )
         // 4. For stress computation from strains at integration points
         // ------------------------------------------------------------
         // getting Young's modulus and Poisson's ratio 
-        if ( MathOperatorLHS<3U>::MaterialOperandPlacement() == ELEMENT ) {
+        if ( MathOperatorLHS<3U,Element>::MaterialOperandPlacement() == ELEMENT ) {
              youngs_.resize(1U);
-             e.Read( MathOperatorLHS<3U>::MaterialOperandKey(),  youngs_[0] );
+             e.Read( MathOperatorLHS<3U,Element>::MaterialOperandKey(),  youngs_[0] );
           }
         // it must be a constraint-point property  
-        else e.IntegrationPointPropertyVector( MathOperatorLHS<3U>::MaterialOperandKey(), youngs_ );
+        else e.IntegrationPointPropertyVector( MathOperatorLHS<3U,Element>::MaterialOperandKey(), youngs_ );
         
-        if ( MathOperatorLHS<3U>::BasicOperandPlacement() == ELEMENT ) {
+        if ( MathOperatorLHS<3U,Element>::BasicOperandPlacement() == ELEMENT ) {
              pratio_.resize(1U);
-             e.Read( MathOperatorLHS<3U>::BasicOperandKey(),  pratio_[0] );
+             e.Read( MathOperatorLHS<3U,Element>::BasicOperandKey(),  pratio_[0] );
           }
-        else e.IntegrationPointPropertyVector( MathOperatorLHS<3U>::BasicOperandKey(), pratio_ );
+        else e.IntegrationPointPropertyVector( MathOperatorLHS<3U,Element>::BasicOperandKey(), pratio_ );
 
         // computing the stiffness matrix for the respective element
         stiffnessMatrix( youngs_, pratio_, STIFF_ );
@@ -296,7 +296,7 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
    //    displacements and the interpolation function derivative matrices
    //    at the integration points
    // -------------------------------------------------------------------
-   if ( MathOperatorLHS<3U>::ApplicationCycle() == 1 ) {
+   if ( MathOperatorLHS<3U,Element>::ApplicationCycle() == 1 ) {
         if ( verbose_ )
           cout <<"\n\nStressesAndStrains<3U>::ComputeContribution: Element: "<< e.Idx() << endl; 
 
@@ -316,7 +316,7 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
              EGP_ *= DISPL_;
 
              // compute {sigma} = [E]([B]{d})
-             if ( MathOperatorLHS<3U>::MaterialOperandPlacement() == ELEMENT ) 
+             if ( MathOperatorLHS<3U,Element>::MaterialOperandPlacement() == ELEMENT )
                SGP_ = STIFF_[0];
              else // a separate stiffness matrix is defined at each integration point
                SGP_ = STIFF_[i];
@@ -350,7 +350,7 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
         //     storing them in temporary vectors for later node
         //     averaging.
         // --------------------------------------------------------
-        if ( MathOperatorLHS<3U>::ApplicationCycles() == 2 ) {
+        if ( MathOperatorLHS<3U,Element>::ApplicationCycles() == 2 ) {
              // nodal components
              NSTRAIN_.resize( e.Nodes() * components_ );
              NSTRESS_.resize( e.Nodes() * components_ );
@@ -378,7 +378,7 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
    //    values of the different elements stored in the nodal lists are now
    //    averaged and stored in a vector for output.
    //    -------------------------------------------
-   if ( MathOperatorLHS<3U>::ApplicationCycle() == 2 ) {
+   if ( MathOperatorLHS<3U,Element>::ApplicationCycle() == 2 ) {
         STRAIN_.Resize(components_,e.Nodes());
         STRESS_.Resize(components_,e.Nodes());
 
@@ -572,7 +572,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
     // NODE OUTPUT
     // -----------
     // only once the strains and stresses have been computed, these can be output to Model<3U> 
-    if ( MathOperatorLHS<3U>::ApplicationCycle() == 2 ) 
+    if ( MathOperatorLHS<3U,Element>::ApplicationCycle() == 2 ) 
       {
          for ( auto i{0}; i<e.Nodes(); i++ )
            // doing this operation only once per node

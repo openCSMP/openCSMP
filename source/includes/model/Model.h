@@ -200,6 +200,9 @@ public:
   /// Reconstructor:  reads model from set of CSMP's native binary files
   explicit Model( const std::string& binaryFiles );
 
+  /// Reconstructor:  reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model( const std::string& binaryFiles, const std::string& variable_txt_file );
+
   /// Reconstructor: reads model from set of CSMP's native binary file, but only reading the specified subset of variables
   Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables );
 
@@ -226,6 +229,9 @@ public:
 
   /// read-only access to the finite element types that are needed to support the current mesh
   const  FiniteElementManager&  FE_Manager() const;
+  
+  /// prompts the finite volume manager to connect the elements and faces with finite volume stencils 
+  void InstantiateFiniteVolumes();
 
   PLACEMENT Placement() const { return MODEL; }
 
@@ -259,9 +265,9 @@ public:
   // ------------------------------------------------------------------------
 
   /// inserts (if new) variable into the database and creates storage for it on the entities where it shall be discretized
-  csmp::Index  CreateProperty( const char* new_prop, const char* unit,
+  csmp::Index  CreateProperty( const char* new_prop, const char* notation, const char* unit,
                                VARIABLE_TYPE type = SCALAR, PLACEMENT place = NODE,
-                               size_t vsize = 1, double vmin = -1.0e+30, double vmax = 1.0e+30,
+                               uint32_t vsize = 1, double vmin = -1.0e+30, double vmax = 1.0e+30,
                                std::string usage = "???" );
 
   /// deletes property from the database and the distributed containers all across the model
@@ -347,14 +353,12 @@ public:
   void Accept( csmp::Visitor<dim>& );
 
   /// application of integration scheme to model, subregions thereof or boundary or split-boundary objects
-  void Apply( PDE_Integrator<dim, csmp::Region>&, bool debug = false );
-  void Apply( PDE_Integrator<dim, csmp::Boundary>&, bool debug = false );
-  void Apply( PDE_Integrator<dim, csmp::SplitBoundary>&, bool debug = false );
+  void Apply( PDE_Integrator<dim,Element>&, bool debug = false );
+  void Apply( PDE_Integrator<dim,Face>&, bool debug = false );
 
   /// application of integration scheme to a particular region, boundary of split-boundary identified by name
-  void Apply( PDE_Integrator<dim, csmp::Region>&, const char* region_name, bool debug = false );
-  void Apply( PDE_Integrator<dim, csmp::Boundary>&, const std::string& boundary_name, bool debug = false );
-  void Apply( PDE_Integrator<dim, csmp::SplitBoundary>&, const std::string& splitboundary_name, bool debug = false );
+  void Apply( PDE_Integrator<dim,Element>&, const char* region_name, bool debug = false );
+  void Apply( PDE_Integrator<dim,Face>&, const std::string& boundary_name, bool debug = false );
 
   // ----------------------------------------
   // Screen output
@@ -369,7 +373,7 @@ public:
   void Out() const;
 
   void Verbose( bool verbose );
-  bool Verbose();
+  bool Verbose() const;
 
 protected:
 
@@ -411,7 +415,7 @@ private:
   std::string            model_name_;       ///< name of simulation model
   PropertyDatabase<dim>  database_;         ///< where variable specifications are stored
   MeshManager<dim>       mesh_manager_;     ///< stores mesh: all Node, Element, Face, InterFace objects
-  bool                   verbose_;          ///< for detailed screen output todo: replace with global verbose singleton
+  bool                   verbose_ = false;  ///< for detailed screen output todo: replace with global verbose singleton
 };
 
 // SUPPORTING FUNCTIONS

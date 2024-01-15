@@ -32,7 +32,7 @@ void Tutorial4_Example::Specifications()
 {
   SetTitle( "Tutorial 4: Stokes lubrication equation" );
   SetDifficulty( 3 );
-  SetCategory( "Simulation of Physical Processes" );
+  SetCategory( "Tutorials (composite functionality)" );
   AddAuthor( "Sebastian Geiger" );
   AddDescription( "A CSMP main file that uses an solves the coupled Stokes equation in a 2D geometry representing" );
   AddDescription( "pores and grains in a carbonate rock. The solution of the Stokes equation provides the pressure" );
@@ -45,22 +45,22 @@ void Tutorial4_Example::Specifications()
 } // Initialize()
 
 
-// *************************************************************************************************
-//
-// Stokes (lubrication) equation (no inertia, incompressible, viscous flow)
-//
-// A CSMP main file that uses an solves the coupled Stokes equation in a 2D geometry representing
-// pores and grains in a carbonate rock. The solution of the Stokes equation provides the pressure
-// and velocity fields inside the connected pore scale. Note that special SAMG settings are needed
-// for solving the Stokes equation using a standard FE method. Furthermore, a stabilisation parameter
-// is introduced to allow the discretisation of velocity and pressure in the Stokes equation using
-// the same FE basis functions.
-//
-// For details on the numerical scheme see Zaretskiy, Geiger, Sorbie and Foerster
-// Advanced in Water Resources (2010), doi:10.1016/j.advwatres.2010.08.008
-//
-// *************************************************************************************************
 
+/**
+
+Stokes (lubrication) equation (no inertia, incompressible, viscous flow)
+
+A CSMP main file that uses an solves the coupled Stokes equation in a 2D geometry representing
+pores and grains in a carbonate rock. The solution of the Stokes equation provides the pressure
+and velocity fields inside the connected pore scale. Note that special SAMG settings are needed
+for solving the Stokes equation using a standard FE method. Furthermore, a stabilisation parameter
+is introduced to allow the discretisation of velocity and pressure in the Stokes equation using
+the same FE basis functions.
+
+For details on the numerical scheme see Zaretskiy, Geiger, Sorbie and Foerster
+Advanced in Water Resources (2010), doi:10.1016/j.advwatres.2010.08.008
+
+*/
 void Tutorial4_Example::Run()
 {
     // ----------------------------------------------------------------------------------
@@ -68,6 +68,7 @@ void Tutorial4_Example::Run()
     // ----------------------------------------------------------------------------------
     clock_t start(clock()); // record the CPU time
 
+    /*
     string input_file;
     cout<< "\nTutorial4_Example: Please enter the name of input mesh ( default: pores ): ";
     cin >> input_file;
@@ -76,6 +77,25 @@ void Tutorial4_Example::Run()
     // 1.0 Build the CSMP Model
     // ------------------------------
     ANSYS_Model2D model( input_file.c_str(), "stokes_variables.txt" );
+    */
+
+    // ------------------------------------------------------------
+    // 1.0 Load CSMP native format model
+    // ------------------------------------------------------------
+    string input_file;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'pores':"<<endl;
+    cin.ignore();
+    getline(cin, input_file);
+    if (input_file.length() == 0) input_file = "pores";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "stokes_variables.txt";
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, input_file, variable_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<2U>  model(input_file, variable_file);
+
     const PropertyDatabase<2U>&  p_ref = model.Database();
     Region<2U>&                  r_ref = model.Region("PORES"); // reference to PORE region where calculations are performed
     scaleRegion(model, 20000.0); // scale the model size by 1/value
@@ -105,7 +125,7 @@ void Tutorial4_Example::Run()
     model.InputBoundaryValue( BOTTOM, "nodal velocity y", makeScalar(DIRICH,0.0) );
 
     // Dirichlet (no-slip) conditions for velocity at boundaries of mineral grains
-    model.Region("GRAINS").ChangePropertyStatus( "nodal velocity x", DIRICH);
+    model.Region("GRAINS").ChangePropertyStatus( "nodal velocity x", DIRICH );
     model.Region("GRAINS").ChangePropertyStatus( "nodal velocity y", DIRICH );
 
     // Neumann condition for traction term. This uses a work around to translate the flux
@@ -145,10 +165,10 @@ void Tutorial4_Example::Run()
 
     // FE algorithm with specialised SAMG settings
     SAMG_Solver  samg_solver(&settings);
-    PDE_Integrator<2U,Region>  stokes_flow(samg_solver);
+    PDE_Integrator<2U,Element>  stokes_flow(samg_solver);
 #else
     CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-    PDE_Integrator<2U,Region>  stokes_flow(linear_solver);
+    PDE_Integrator<2U,Element>  stokes_flow(linear_solver);
 #endif
 
     // Stokes lubrication equation
@@ -230,6 +250,8 @@ void Tutorial4_Example::Run()
     // terminate
     cerr <<"\n\nmain: That's it, run completed successfully..."<< endl;
 
+    fs::current_path("../../example_inputs/");
+
 } // Run()
 
 
@@ -245,8 +267,8 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
   // backup the fluxes that are orginally assigned in a temporary variable
   std::string         temp_flux("flux");
 
-  if( !mdl.Database().IsDefined(temp_flux.c_str()) )
-      mdl.CreateProperty( temp_flux.c_str(), "X",SCALAR, NODE );
+  if ( !mdl.Database().IsDefined(temp_flux.c_str()) )
+    mdl.CreateProperty( temp_flux.c_str(), "Q", "m3/s", SCALAR, NODE );
   mdl.CopyReplace( flux, temp_flux.c_str() );
 
   // define variables needed to compute the length of the FE edges that lie at the boundary
@@ -269,7 +291,7 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
         area /= static_cast<double>(2); // 2 nodes per triangle or quadrilateral
 
         // second loop to calculate and scale nodal flux
-        for ( size_t i=0; i<(*eit)->Nodes(); i++ ) {
+        for ( auto i{0U}; i<(*eit)->Nodes(); i++ ) {
               // read existing flux at node i
               double tf  = (*eit)->N( i )->Read( tf_key );
               // read existing source at node i

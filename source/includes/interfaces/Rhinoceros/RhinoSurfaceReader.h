@@ -1,7 +1,6 @@
 #ifndef CSMP_RHINO_SURFACE_READER_H
 #define CSMP_RHINO_SURFACE_READER_H
 
-#include "CSMP_definitions.h"
 #include "MJL_geometry.h"
 #include "MJL_Point3D.h"
 #include "MJL_Triangle3D.h"
@@ -19,13 +18,13 @@ template<uint32_t> class VSet;
      @author S. K. Matthai
      @date 2002
 */
-class SKM_RhinoSurfaceReader {
+class RhinoSurfaceReader {
    public:
-     SKM_RhinoSurfaceReader();
-     SKM_RhinoSurfaceReader( const char* raw_file );
-     SKM_RhinoSurfaceReader( const SKM_RhinoSurfaceReader& );
-     ~SKM_RhinoSurfaceReader();
-     SKM_RhinoSurfaceReader& operator=( const SKM_RhinoSurfaceReader& );
+     RhinoSurfaceReader();
+     RhinoSurfaceReader( const char* raw_file );
+     RhinoSurfaceReader( const RhinoSurfaceReader& );
+     ~RhinoSurfaceReader();
+     RhinoSurfaceReader& operator=( const RhinoSurfaceReader& );
      
      /// conversion of triangulated surface object 'obj' into polygonal data set stored in NCSA VSet format
      void OutputObjectTo( const char* obj, VSet<3U>& ) const;

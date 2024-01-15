@@ -1,0 +1,57 @@
+PropertyStorage_test 
+--------------------
+
+model: PropertyStorage_test
+
+- variables per Node=8, ConstraintPoint=5, Face=5, Element=8
+- where 5 variables are present these are: 2 scalars, 2 vectors, 1 tensor
+- where 8 variables are present these are: 5 scalars, 2 vectors, 1 tensor
+- see variables file 'PropertyStorage_test1.txt'
+
+Results
+=======
+
+1. Memory Requirements
+----------------------
+
+Size of model 'PropertyStorage_test': 
+
+- with conventional storage before revision:
+
+- with conventional storage:
+  - with permeability only:     28,512k bytes
+  - with all test variables:   117,904k bytes
+
+- with local storage: 
+  - with permeability only:     29,396k bytes
+  - with all test variables:   132,432k bytes
+
+
+2. Speed
+--------
+
+Mix of read write operations on SuperGroup and group,
+main programme file:
+
+'PropertyStorage_test_main.cpp'
+
+
+Executable with debugger information (Debug version):
+
+- with conventional storage: 16 secs
+
+- with local storage: 
+
+
+Executable without debugger information (Release Version):
+
+- with conventional storage:
+
+- with local storage: 
+
+
+Miscalleaneous
+--------------
+- maybe test the speed of changing the numbers of variables as well
+
+

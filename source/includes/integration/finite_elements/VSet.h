@@ -78,9 +78,17 @@ class VSet : public VData {
     void AddBFlags( typename std::vector<std::int8_t>::const_iterator first,
                     typename std::vector<std::int8_t>::const_iterator last );
 
+    /// adds boundary representation geometry identifiers for the nodes to the VSet
+    void AddBREP_Flags( typename std::vector<std::int8_t>::const_iterator first,
+                        typename std::vector<std::int8_t>::const_iterator last );
+
     /// rocktype identifiers for elements only
     void AddPmtrl( typename std::vector<int32_t>::const_iterator first,
                    typename std::vector<int32_t>::const_iterator last );
+                   
+    /// adds node-manifold information to the VSet
+    void AddPmanifold( VData::manifoldContainer::const_iterator first,
+                       VData::manifoldContainer::const_iterator last );
   
     /// checks whether the VSet contains any distributed variable values stored in PropertyData objects
     bool  DataEmpty() const;

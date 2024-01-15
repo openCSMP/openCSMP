@@ -66,7 +66,7 @@ inline Vertex* Vertex::Neighbor( ORIENTATION rotation ) const
  
 inline mjl::Point Vertex::Point() const
  {
-    return static_cast<mjl::Point>(*this);
+    return *this;
  }
  
  
@@ -87,8 +87,6 @@ inline void  Vertex::Splice( Vertex* b )
     Node::Splice(b);
  }
  
- 
-
 } // end namespace mjl
 
 

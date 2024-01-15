@@ -35,13 +35,12 @@ void DESAdvectionDiffusion3D_Example::Specifications()
   {
     SetTitle( "3D Passive advection of concentration using DES (discrete event simulation)");
     SetDifficulty( 3 );
-    SetCategory( "Numerical Methods" );
+    SetCategory( "Simulation of Physical Processes" );
     AddAuthor( "Qi Shao" );
     AddDescription( "3D passive tracer advection by both discrete event simulation (DES) and time-driven simulation (TDS)." );
     AddDescription( "Their outputs are written to VTK files and and their efficiency are compared." );
     AddRequirement( "source files: 'DESAdvectionDiffusion3D_Example.cpp' and '*.h'" );
-    AddRequirement( "fracs4: files .dat, .asc, -regions.txt, -configuration.txt.");
-    AddRequirement( "variables(DES_variables.txt)" );
+    AddRequirement( "fracs4 (CSMP native binary files), frac4-configuration.txt, DES_variables.txt");
   }
 
 
@@ -49,19 +48,27 @@ void DESAdvectionDiffusion3D_Example::Specifications()
     3D passive tracer advection via CSMP's DES transport method 
     combining finite elements (for pressure) with finite volumes (for advection of concentration profile)
 
-    Use models 'fracs4' (.dat, .asc, -regions.txt, -configuration.txt)
-    as input file suites.
+    Use model 'fracs4' (CSMP native binary files, frac4-configuration.txt, DES_variables.txt) as input file suites.
 */
 void DESAdvectionDiffusion3D_Example::Run()
 {
  // ------------------------------------------------------------
- // 1. building model from ANSYS data files
+ // 1. Load CSMP native format model
  // ------------------------------------------------------------
-  string  model_name;
-  cerr <<"\nmain: Enter name of 'ANSYS TETRA' input file (binary): ";
-  cin >> model_name;
+  string model_name;
+  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'fracs4':"<<endl;
+  cin.ignore();
+  getline(cin, model_name);
+  if (model_name.length() == 0) model_name = "fracs4";
 
-  ANSYS_Model3D  model3D( model_name.c_str(), "DES_variables.txt");
+  //find the name of current example source file
+  string file_name = GetExampleFileName(__FILE__);
+  string variable_file = "DES_variables.txt";
+  string config_file = "fracs4(DES_tracer)";
+  //create of directory with current example name, go into this directory, and copy input files into it.
+  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+  //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model<3U>  model3D(model_name, variable_file);
   printModelDimensions( model3D, true );
 
 
@@ -85,7 +92,7 @@ void DESAdvectionDiffusion3D_Example::Run()
   // the boolean variables determine which blocks in the input file shall be read
     ComputationalSettings  run_settings;
     model_configuration.ConfigureFromFile( model3D,
-                                           model_name.c_str(),
+                                           config_file.c_str(),
                                            false, 
                                            true,   // 2) default prop.values
                                            true,   // 3) group prop.values
@@ -121,11 +128,11 @@ void DESAdvectionDiffusion3D_Example::Run()
  // -----------------------------------------------------------------------
  // 5. computing a steady-state fluid pressure distribution in the model
  // -----------------------------------------------------------------------
-  SteadyStateDiffusor<3U,Region> steady_state_pressure( model3D,
+  SteadyStateDiffusor<3U,Element> steady_state_pressure( model3D,
                                                         "conductivity", "fluid pressure",
                                                         "fluid volume source" );
   // postprocessing of pressure gradients and flow velocities
-  VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model3D, "conductivity", "porosity", "fluid pressure" );
+  VelocityAndVolumeFlux<3U>  postpro0( model3D, "conductivity", "porosity", "fluid pressure" );
   steady_state_pressure.AddPostProcess( &postpro0 );
 
   // the calculation of fluid pressure
@@ -202,6 +209,8 @@ void DESAdvectionDiffusion3D_Example::Run()
    
 
    cerr <<"\nmain: That's it."<< endl;
+
+   fs::current_path("../../example_inputs/");
 
 } // end Run
 

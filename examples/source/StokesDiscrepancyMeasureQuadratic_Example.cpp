@@ -8,7 +8,7 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
-#include "CSMP_highLevelUtilities.h"
+#include "LinearSolver.h"
 
 #include "ANSYS_Interface.h"
 #include "ModelTopology.h"
@@ -32,11 +32,11 @@ void StokesDiscrepancyMeasureQuadratic_Example::Specifications()
 {
   SetTitle( "Stokes discrepancy measure quadratic" );
   SetDifficulty( 2 );
-  SetCategory( "Simulation of Physical Processes" );
+  SetCategory( "Numerical Methods" );
   AddAuthor( "SKM" );
   AddDescription( "source in: StokeDiscrepancyMeasureQuadratic_Example.cpp" );
-  AddDescription( "calculates the difference between taking the laplacian" );
-  AddRequirement( "one_sphere_0.45_tetra" );
+  AddDescription( "calculates the difference between taking the laplacian of the Darcy velocity when taking a parabolic scalar field as an operator and the Stokes flow approximation." );
+  AddRequirement( "one_sphere_0.45_tetra(csmp binary files, -configuration.txt), pore_flow_quadratic-variables.txt" );
 } // Initialize()
 
 
@@ -54,6 +54,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
   //ostream &cout = *GetStream();
 
     const size_t   dim(3U);
+    /*
     const string   model_name("one_sphere_0.45_tetra");
 
     // read ANSYS model data and build model
@@ -79,6 +80,22 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
     VSetConverter<3U>().ConvertLinearToQuadraticTetrahedra( vset );
 
     Model<3U>  model( mesh_topology, vset, "pore_flow_quadratic-variables", true );
+    */
+
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model one_sphere_0.45_tetra':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "one_sphere_0.45_tetra";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "pore_flow_quadratic-variables.txt";
+    string config_file = model_name;
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<3U>  model(model_name, variable_file);
 
     printModelDimensions( model, true );
 
@@ -103,17 +120,17 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       settings.Set_nxtyp(0);
       settings.Set_ncgtyp(5);
       settings.Set_ndefault(40);
-      PDE_Integrator<dim,Region>  parabolic_profile( solver );
+      PDE_Integrator<dim,Element>  parabolic_profile( solver );
       #else
       CSMP_DEFAULT_LINEAR_SOLVER solver;
-      PDE_Integrator<dim,Region>  parabolic_profile( solver );
+      PDE_Integrator<dim,Element>  parabolic_profile( solver );
       #endif
 
       // the maximum computed 'parabolic function' value is equivalent to the pore radius of the corresponding pore space segment
       // laplacian matrix [L] on the left-hand side
-      NumIntegral_dNT_dN_dV<dim,Element<dim> >   laplacian( model.Database(), "parabolic function", "parabolic function" );
+      NumIntegral_dNT_dN_dV<dim>   laplacian( model.Database(), "parabolic function", "parabolic function" );
       // source vector {q} on the right-hand side = 1
-      NumIntegral_NT_op_N_dV<dim,Element<dim> >  rhs( model.Database(), "source term", "parabolic function" );
+      NumIntegral_NT_op_N_dV<dim>  rhs( model.Database(), "source term", "parabolic function" );
       parabolic_profile.Add( &laplacian );
       parabolic_profile.Add( &rhs );
 
@@ -162,14 +179,14 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
    // -----------------------------------------------------------------------
 #ifdef CSMP_WITH_SAMG_SOLVER
       SAMG_Solver  samg_solver(&settings);
-      PDE_Integrator<dim,Region>  steady_state_pressure( samg_solver );
+      PDE_Integrator<dim,Element>  steady_state_pressure( samg_solver );
 #else
-      PDE_Integrator<dim,Region>  steady_state_pressure( solver );
+      PDE_Integrator<dim,Element>  steady_state_pressure( solver );
 #endif
 
-      NumIntegral_dNT_op_dN_dV<dim,Element<dim> >  flow_resistance( model.Database(), "element parabolic function", "fluid pressure", "fluid pressure" );
+      NumIntegral_dNT_op_dN_dV<dim>  flow_resistance( model.Database(), "element parabolic function", "fluid pressure", "fluid pressure" );
       // source vector {q} on the right-hand side = 0
-      NumIntegral_NT_op_N_dV<dim,Element<dim> >    fsrc( model.Database(), "fluid volume source", "fluid pressure" );
+      NumIntegral_NT_op_N_dV<dim>    fsrc( model.Database(), "fluid volume source", "fluid pressure" );
       steady_state_pressure.Add( &flow_resistance );
       steady_state_pressure.Add( &fsrc );
 
@@ -271,6 +288,8 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       printRangeOfVariable( model, channel_region.c_str(), "Stokes Discrepancy Measure" );
       vtk_output.OutputDataToVTK( model, "Stokes-discrepancy-vector", "Stokes Discrepancy vector", 1 );
       vtk_output.OutputDataToVTK( model, "Stokes-discrepancy-measure", "Stokes Discrepancy Measure", 1 );
+
+      fs::current_path("../../example_inputs/");
 
 } // Run()
 

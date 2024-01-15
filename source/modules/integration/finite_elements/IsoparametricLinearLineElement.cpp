@@ -228,6 +228,8 @@ void IsoparametricLinearLineElement::NodesOfSegment( uint32_t segm_id, std::vect
  }
 
 
+
+
 /**
     Method returns into its argument vector the local node number of either of its 2 faces located at its nodes.
     Conventions: 
@@ -235,6 +237,7 @@ void IsoparametricLinearLineElement::NodesOfSegment( uint32_t segm_id, std::vect
        - node 0 corresponds to first face 0 opposite to it
        - node 1 corresponds to second face 1 opposite to node 1
 */
+/*
 void  IsoparametricLinearLineElement::NodesOfFace( uint32_t face_id,
                                                    vector<uint32_t>& fnids ) const
  {
@@ -242,7 +245,12 @@ void  IsoparametricLinearLineElement::NodesOfFace( uint32_t face_id,
     fnids.resize(1U);
     fnids[0] = (face_id == 1U) ? 0U : 1U;
  }
+*/
 
+
+vector<uint32_t>  IsoparametricLinearLineElement::NodesOfFace( uint32_t face_id ) const {
+    return (face_id == 1U) ? vector<uint32_t>{0U} : vector<uint32_t>{1U};
+ }
 
 
 vector<uint32_t>  IsoparametricLinearLineElement::CornerNodesOfFace( uint32_t face_id ) const
@@ -722,18 +730,13 @@ double IsoparametricLinearLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DN 
     here the normal is calculated using the derivative of the shape function at the middle node
     the normal is the 90o counter-clockwise rotated origin to destination vector.
 */
-void  IsoparametricLinearLineElement::UnitNormal( vector<double>& vc ) const
+vector<double>  IsoparametricLinearLineElement::UnitNormal() const
  {
-    if ( dim == 1 ) {
-         const double vc0(1.);
-         vc.resize(1U);
-         vc[0] = vc0;
-         return;
-      }
+    if ( dim == 1U ) return vector<double>{ 1. };
 
     const double rAtBaryCenter(0.0);
     // dx = (N1'x1 + N2'x2 + N3'x3) dr
-    if ( dim == 2 ) {
+    if ( dim == 2U ) {
          // finding tangent at mid-point node
          dNr( rAtBaryCenter, DNR );
          const double vc0 = JacobianFor( DNR, 0 ); // dx
@@ -743,29 +746,22 @@ void  IsoparametricLinearLineElement::UnitNormal( vector<double>& vc ) const
          // rotating tangent edge clockwise to find normal to face
          normal.Rot();
          normal.NormalizeTo( 1. );
-         vc.resize(2U);
-         // flipping normal so that it will be outward pointing 
-         vc[0] = -normal.Destination()[0];
-         vc[1] = -normal.Destination()[1];
-         return;
+         // flipping normal so that it will be outward pointing
+         return vector<double>{ -normal.Destination()[0], -normal.Destination()[1] };
       }
 
-    if ( dim == 3 ) {
-         // using slope at mid-point node
-         dNr( rAtBaryCenter, DNR );
-         double vc0 = JacobianFor( DNR, 0 ); // dx
-         double vc1 = JacobianFor( DNR, 1 ); // dy
-         double vc2 = JacobianFor( DNR, 2 ); // dz
-         const double sum = vc0 + vc1 + vc2;
-         // normalizing the normal
-         vc0 /= sum;
-         vc1 /= sum;
-         vc2 /= sum;
-         vc.resize(3U);
-         vc[0] = vc0; // dx
-         vc[1] = vc1; // dy
-         vc[2] = vc2; // dz
-      }
+    //if ( dim == 3U ) {
+     // using slope at mid-point node
+     dNr( rAtBaryCenter, DNR );
+     double vc0 = JacobianFor( DNR, 0 ); // dx
+     double vc1 = JacobianFor( DNR, 1 ); // dy
+     double vc2 = JacobianFor( DNR, 2 ); // dz
+     const double sum = vc0 + vc1 + vc2;
+     // normalizing the normal
+     vc0 /= sum;
+     vc1 /= sum;
+     vc2 /= sum;
+     return vector<double>{ vc0, vc1, vc2 }; // dx, dy, dz
 
  } // end UnitNormal
 
@@ -977,6 +973,7 @@ void  IsoparametricLinearLineElement::IntegrationPoint( uint32_t i,
 
 
 // tested OK1
+/*
 void  IsoparametricLinearLineElement::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
                                                                   vector<uint32_t>& fnids )
  {
@@ -989,6 +986,7 @@ void  IsoparametricLinearLineElement::ConsecutiveNodesAtBoundary( const vector<u
        }
 
  } // end ConsecutiveNodesAtBoundary
+*/
 
 
 

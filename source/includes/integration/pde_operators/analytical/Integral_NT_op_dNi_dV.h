@@ -4,20 +4,23 @@
 #include "MathOperatorRHS.h"
 
 namespace csmp {
+
+template<uint32_t> class Element;
+
 /**
 @author S.K. Matthaei
 @author S. Roberts
 @date 1999 */
 
 /// buoyancy for instance
-template<uint32_t dim,class CELL=Element<dim> >
-class Integral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class Integral_NT_op_dNi_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    Integral_NT_op_dNi_dV( const PropertyDatabase<dim>& p, 
+    Integral_NT_op_dNi_dV( const PropertyDatabase<dim>&, 
                            const char* oper, const char* mtrl, const char* test );
     
-    virtual void GetOperands( const CELL& );
-    virtual void ComputeContribution( const CELL& );
+    virtual void GetOperands( const CELL<dim>& ) override;
+    virtual void ComputeContribution( const CELL<dim>& ) override;
     
     /// the space dimension of the partial derivative which shall be considered
     void SpatialDerivative( uint32_t xyz=2 );

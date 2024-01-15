@@ -1,0 +1,3 @@
+name	MParameter	unit	index	min.	max.	place
+									
+permeability	k	m2	1	-1.00E+50	1.00E+50	element

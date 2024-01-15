@@ -1,0 +1,9 @@
+SplitBoundary test model, presumably from Edward Pezzuli, 2019
+no properties
+FRACTURE_SURFACE
+FRACS
+MATRIX
+LEFT
+RIGHT
+TOP
+BOTTOM

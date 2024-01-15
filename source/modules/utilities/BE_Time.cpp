@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstring>
 #include <cstdlib>
 #include "BE_Time.h"
 

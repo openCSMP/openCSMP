@@ -1,0 +1,289 @@
+ErrorHandler (Destructor): logfile: Runtime messages in chronological sequence 
+(if this starts with an info or a warning, there were no errors):
+Wed Oct 12 14:06:34 2022
+: ModelSubdomain<dim,CELL>::PartitionCellVector: Warning: Model, subdomain contains lower-dimensional cells detached from higher dimensional domain; these will be treated as boundary.
+
+ErrorHandler (Destructor): logfile: CSMP WARNING messages in sequence of occurrence:
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+EigenSolver::SolveMatrixEquation: default setting is a direct solver and system has more than 20k DOF; solution may take time, consider using iterative solver
+ModelSubdomain<dim,CELL>::PartitionCellVector:: Model, subdomain contains lower-dimensional cells detached from higher dimensional domain; these will be treated as boundary.
+ModelSubdomain<dim,CELL>::PartitionCellVector:: Model, subdomain contains lower-dimensional cells detached from higher dimensional domain; these will be treated as boundary.
+ModelSubdomain<dim,CELL>::PartitionCellVector:: Model, subdomain contains lower-dimensional cells detached from higher dimensional domain; these will be treated as boundary.
+ModelSubdomain<dim,CELL>::PartitionCellVector:: Model, subdomain contains lower-dimensional cells detached from higher dimensional domain; these will be treated as boundary.
+ModelSubdomain<dim,CELL>::PartitionCellVector:: Model, subdomain contains lower-dimensional cells detached from higher dimensional domain; these will be treated as boundary.
+PropertyDatabase<dim>::AddProperty:: notation of stored variables in not unique
+PropertyDatabase<dim>::AddProperty:: notation of stored variables in not unique
+PropertyDatabase<dim>::AddProperty:: notation of stored variables in not unique
+PropertyDatabase<dim>::AddProperty:: notation of stored variables in not unique
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+consistencyCheck: manifold type possible incorrect, resetting.
+
+ErrorHandler (Destructor): logfile: CSMP INFO messages in sequence of occurrence:
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.

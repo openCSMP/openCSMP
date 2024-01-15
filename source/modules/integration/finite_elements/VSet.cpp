@@ -303,6 +303,27 @@ void VSet<dim>::AddBFlags( typename vector<std::int8_t>::const_iterator first,
 
 
 
+    /// adds boundary representation geometry identifiers for the nodes to the VSet
+template<uint32_t dim>
+void VSet<dim>::AddBREP_Flags( typename std::vector<std::int8_t>::const_iterator first,
+                               typename std::vector<std::int8_t>::const_iterator last )
+ {
+    assert( distance(first,last) == Vertices() );
+    
+    ResizeBREP_Flags();
+    auto bit{ BREP_FlagsBegin() };
+	  while ( first != last ) {
+        (*bit) = (*first);
+        first++;
+        bit++;
+      }
+
+ } // end AddBREP_Flags
+
+
+
+
+
 /**
        Material ID identifiers need to be provided for all elements, boundaries and split boundaries.
 */
@@ -324,6 +345,19 @@ std::vector<int32_t>::const_iterator VSet<dim>::PmtrlBegin() const
 template<uint32_t dim>
 std::vector<int32_t>::const_iterator VSet<dim>::PmtrlEnd() const
  { return pmtrl_.end(); }
+
+
+
+
+    /// adds node-manifold information to the VSet
+template<uint32_t dim>
+void VSet<dim>::AddPmanifold( VData::manifoldContainer::const_iterator first,
+                              VData::manifoldContainer::const_iterator last )
+ {
+    AddNodeManifolds( first, last );
+ }
+  
+
 
 
 
@@ -534,7 +568,12 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double& time )
 
 
 /**
-Key method for recovery of a model from binary file. It can load only a subset of variables if neccesary.
+    Key method for recovery of a model from binary file, which can load only a subset of the stored variables if neccesary.
+    If the supplied subset of variables is empty, all the variables stored in the file are read.
+    
+    @param bin_file set of binary files which contain the discretised properties (VSet), mesh (VData), the model, its regions, boudaries and split boundaries
+    @param time snapshot in time which the current model represents
+    @param subset_variables of the overall number of variables that are stored in the VSet
 */
 template<uint32_t dim>
 bool  VSet<dim>::InputFrom( const char* bin_file, double& time, const set<string>& subset_variables )
@@ -909,7 +948,7 @@ void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
 	for ( const auto& o_n : o_n_node_ids )
     n_o_node_ids[o_n.second] = o_n.first;
   
-  // material indentifiers
+  // material identifiers
   vector<int32_t> new_pmtrl;
   new_pmtrl.reserve( n_o_elmt_ids.size() );
   for ( auto id : n_o_elmt_ids )

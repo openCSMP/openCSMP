@@ -94,9 +94,27 @@
 
 #include "VSet_TestCase.h"
 
+//E.P Unit Tests Working
+#include "InterFace_Test.h"
+#include "SplitBoundary_Test.h"
+#include "SplitBoundaryInterface_Test.h"
+
+//E.P Integration Tests Working
+#include "LinearElasticFractureAperture2D_VVCase.h"
+#include "LinearElasticIsotropicDeformation2D_VVCase.h"
+
 //variable placement tests
 //#include "Placement_Test_2D.h"
 //#include "Placement_Test_3D.h"
+
+//pressure diffusion
+#include "DirichletPressureBoxModel_VVCase.h"
+
+//finite volumes
+#include "GenericFiniteVolumeTransport_Test.h"
+#include "ExplicitAdvection2D_VVCase.h"
+#include "Geothermal_pseudo1D_VVCase.h"
+
 
 
 using namespace std;
@@ -105,7 +123,7 @@ using namespace csmp;
 TEST_CASE("Development tests", "[Dev]") {
   // Operand_Test test;
   // PropertyAtPointVisitor_Test test(true);
-    ModelSubDomain_Test test;
+    //ModelSubDomain_Test test;
     // Vset_TestCase test;
     // GenericFiniteVolumeTransport_Test test;
   //FiniteVolumeTransportBasics_Test test;
@@ -113,7 +131,47 @@ TEST_CASE("Development tests", "[Dev]") {
     // ANSYS_SplitBoundaryMatch_Test  skm_test;
     //Placement_Test_2D test; 
     //Placement_Test_3D test;
-  test.run();
+
+  InterFace_Test test00;
+  SplitBoundary_Test test01;
+  SplitBoundaryInterface_Test<2U> test02;
+  SplitBoundaryInterface_Test<3U> test03;
+  test00.run();
+  test01.run();
+  test02.run();
+  test03.run();
+
+
+  GenericFiniteVolumeTransport_Test test0;     //broken - no Finite volume defined
+  //test.run();
+  //test2.run();
+
+  //DirichletPressureBoxModel_VVCase test1;     //need files DirichletPressureBoxModel_VVCase
+  //test1.run();
+
+
+  //Geothermal_pseudo1D_VVCase test3("2000x1000_mesh");
+  //test3.run();
+
+
+  ///Elasticity Benchmarks
+  LinearElasticIsotropicDeformation2D_VVCase elasticity("");
+  elasticity.run();
+
+  LinearElasticFractureAperture2D_VVCase i_test("InternalBoundary_test");
+  i_test.run();
+
+  LinearElasticFractureAperture2D_VVCase ii_test("InternalCrack_tri_lin_02");
+  //ii_test.run();
+
+  LinearElasticFractureAperture2D_VVCase iii_test("InternalCrack_tri_lin_01");
+  //iii_test.run();
+
+  LinearElasticFractureAperture2D_VVCase iv_test("InternalCrack_tri_lin_005");
+  //iv_test.run();
+
+
+
 
  //   ANSYS_Model2D_Test test;
  //   test.run();

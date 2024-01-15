@@ -8,30 +8,33 @@ using namespace std;
 namespace csmp {
 
 /** Accumulates the conductance matrix of the interpolation function
-derivatives.  
+    derivatives.
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 Integral_dNT_op_dN_dV<dim,CELL>::Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
-                                                      const char*             oper, 
-                                                      const char*             basic, 
-                                                      const char*             test ) 
-  : MathOperatorLHS<dim>(pref,oper,basic,test),
+                                                        const char*             oper,
+                                                        const char*             basic,
+                                                        const char*             test )
+  : MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
     DN(2,3), DNT(3,2)
 {
-    MathOperatorLHS<dim>::Name("Integral_dNT_op_dN_dV", oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("Integral_dNT_op_dN_dV", oper, basic, test );
 
     // testing the Operands 
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT && MathOperatorLHS<dim>::MaterialOperandPlacement() != REGION )
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT &&
+         MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != REGION )
     throw csmp::Exception( ERROR, "Integral_dNT_op_dN_dV::(constructor)", 
-                    oper, "Operand must be placed on the element or group.");
+                           oper, "Operand must be placed on the element or group.");
 
-    if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
     throw csmp::Exception( ERROR, "Integral_dNT_op_dN_dV::(constructor)", 
-                    test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
+                           test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
     throw csmp::Exception( ERROR, "Integral_dNT_op_dN_dV::(constructor)", 
-                    test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
+                           test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
 }
 
 
@@ -45,8 +48,8 @@ Integral_dNT_op_dN_dV<dim,CELL>::Integral_dNT_op_dN_dV( const PropertyDatabase<d
 
 A reference to the current Element.  
 */
-template<uint32_t dim,class CELL>
-void Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -57,25 +60,25 @@ void Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
     DN.Transposed( DNT );
 
     // calculate the element contribution to LHS (E_OP is the Basic Operand)
-    DNT *= MathOperatorLHS<dim>::MTRL[0];
+    DNT *= MathOperatorLHS<dim,CELL>::MTRL[0];
     DNT *= DN;
     // assigning element contribution
-    MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
-    MathOperatorLHS<dim>::LHS = DNT;
+    MathOperatorLHS<dim,CELL>::LHS.Resize(e.Nodes(),e.Nodes());
+    MathOperatorLHS<dim,CELL>::LHS = DNT;
     // analytical integration over area / volume for linear triangle 
     // and tetrahedron elements, respectively
-    MathOperatorLHS<dim>::LHS *= e.Volume();
+    MathOperatorLHS<dim,CELL>::LHS *= e.Volume();
 
 } // end ComputeContribution
 
 
 
-template class Integral_dNT_op_dN_dV<1U,Element<1U> >;
-template class Integral_dNT_op_dN_dV<2U,Element<2U> >;
-template class Integral_dNT_op_dN_dV<3U,Element<3U> >;
+template class Integral_dNT_op_dN_dV<1U,Element>;
+template class Integral_dNT_op_dN_dV<2U,Element>;
+template class Integral_dNT_op_dN_dV<3U,Element>;
 
-template class Integral_dNT_op_dN_dV<1U,Face<1U> >;
-template class Integral_dNT_op_dN_dV<2U,Face<2U> >;
-template class Integral_dNT_op_dN_dV<3U,Face<3U> >;
+template class Integral_dNT_op_dN_dV<1U,Face>;
+template class Integral_dNT_op_dN_dV<2U,Face>;
+template class Integral_dNT_op_dN_dV<3U,Face>;
 
 } // csmp

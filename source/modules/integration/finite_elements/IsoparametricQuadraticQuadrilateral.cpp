@@ -128,9 +128,8 @@ The local node numbers are returned into the integer vector 'fnids'.
 When boundary conditions shall be applied it is necessary to determine
 the properties associated with the nodes of that element face.
 */
-void
-IsoparametricQuadraticQuadrilateral::NodesOfFace( uint32_t face_id,
-                                                  vector<uint32_t>& fnids ) const
+/*
+void IsoparametricQuadraticQuadrilateral::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
  {
     fnids.resize(3);
 
@@ -162,7 +161,21 @@ IsoparametricQuadraticQuadrilateral::NodesOfFace( uint32_t face_id,
     else
     std::cerr <<"\nIsoparametricQuadraticQuadrilateral::NodesOfFace: Erratic input face ID: "<< face_id << std::endl;
  }
+*/
 
+
+
+vector<uint32_t>  IsoparametricQuadraticQuadrilateral::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{0,1,4};
+        case 1: return vector<uint32_t>{1,2,5};
+        case 2: return vector<uint32_t>{2,3,6};
+        case 3: return vector<uint32_t>{3,0,7};
+      }
+    cerr <<"\nIsoparametricQuadraticQuadrilateral::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 vector<uint32_t>  IsoparametricQuadraticQuadrilateral::CornerNodesOfFace( uint32_t face_id ) const
@@ -265,6 +278,8 @@ void  IsoparametricQuadraticQuadrilateral::MidSideNodes( std::vector<uint32_t>& 
     ids[3] = 7;
  }
 
+
+/*
 void  IsoparametricQuadraticQuadrilateral::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
@@ -278,6 +293,8 @@ void  IsoparametricQuadraticQuadrilateral::CounterClockwiseNodes( std::vector<ui
     ids[7] = 7;
     ids[8] = 8;
  }
+*/
+
 
 CSMP_FEM_TYPE IsoparametricQuadraticQuadrilateral::ElementTypeOfFace( uint32_t ) const
  {
@@ -1445,8 +1462,8 @@ integrals.
 
 @todo (3) Check index of bnodes
 */
-void
-IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary(
+/*
+void IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary(
                                             const vector<uint32_t>& bnodes,
                                             vector<uint32_t>& fnids )
  {
@@ -1483,12 +1500,13 @@ IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary(
       }
 
  } // end ConsecutiveNodesAtBoundary
+*/
 
 
-void
-IsoparametricQuadraticQuadrilateral::OutputNodeDataToVTK( const char* file_name,
-                                       const char* var_name,
-                                       DenseMatrix<DM_MIN>& DATA ) const
+
+void IsoparametricQuadraticQuadrilateral::OutputNodeDataToVTK( const char* file_name,
+                                                               const char* var_name,
+                                                               DenseMatrix<DM_MIN>& DATA ) const
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );
@@ -1712,34 +1730,25 @@ Method assumes that the quad is planar. For the case that the
 quad is warped, normals must be calculated for each integration
 point.
 */
-void
-IsoparametricQuadraticQuadrilateral::UnitNormal( std::vector<double>& vc ) const
+vector<double> IsoparametricQuadraticQuadrilateral::UnitNormal() const
  {
-    // normal only exists in 3D
-    vc.resize(3);
+    if ( dim == 2U ) return vector<double>{ 0., 0., 1. };
 
-    if ( dim == 2 ) {
-         vc[0] = vc[1] = static_cast<double>(0.0);
-         vc[2] = static_cast<double>(1.0);
-         return;
-      }
-
-    double X12 = XY(1,0) - XY(0,0), // X
-              X31 = XY(0,0) - XY(2,0),
-              Y12 = XY(1,1) - XY(0,1), // Y
-              Y31 = XY(0,1) - XY(2,1),
-              Z12 = XY(1,2) - XY(0,2), // Z
-              Z31 = XY(0,2) - XY(2,2);
+    const double  X12 = XY(1,0) - XY(0,0), // X
+                  X31 = XY(0,0) - XY(2,0),
+                  Y12 = XY(1,1) - XY(0,1), // Y
+                  Y31 = XY(0,1) - XY(2,1),
+                  Z12 = XY(1,2) - XY(0,2), // Z
+                  Z31 = XY(0,2) - XY(2,2);
 
     // normal to quad
-    vc[0]  = -Y12*Z31 + Z12*Y31;
-    vc[1]  = -Z12*X31 + X12*Z31;
-    vc[2]  = -X12*Y31 + Y12*X31;
+    vector<double> vc{ -Y12*Z31 + Z12*Y31, -Z12*X31 + X12*Z31, -X12*Y31 + Y12*X31 };
     // normalization to unit length
     double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
     vc[0] /= length;
     vc[1] /= length;
     vc[2] /= length;
+    return vc;
  }
 
 

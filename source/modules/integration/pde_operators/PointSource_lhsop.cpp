@@ -1,32 +1,30 @@
 #include "PointSource_lhsop.h"
-#include "InterFace.h"
 #include "ErrorHandler.h"
 #include "Node.h"
 #include "Element.h"
 #include "Face.h"
-#include "InterFace.h"
-
 
 using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
-PointSource_lhsop<dim,CELL>::PointSource_lhsop( const PropertyDatabase<dim>& pref, const char* oper, const char* basic, const char* test )
-  : MathOperatorLHS<dim>(pref,oper,basic,test),
+template<uint32_t dim, template<uint32_t> class CELL>
+PointSource_lhsop<dim,CELL>::PointSource_lhsop( const PropertyDatabase<dim>& pref,
+                                                const char* oper, const char* basic, const char* test )
+  : MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
     SRC_(8)
  {
-    MathOperatorLHS<dim>::Name("PointSource_lhsop", oper, test );
+    MathOperatorLHS<dim,CELL>::Name("PointSource_lhsop", oper, test );
  
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
  
-     if ( MathOperatorLHS<dim>::TestOperandType() != SCALAR ||
-          MathOperatorLHS<dim>::TestOperandPlacement() != NODE )
+     if ( MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR ||
+          MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE )
        csmp_error.Note( ERROR, "MathOperatorLHS->PointSource_lhsop<dim>::(constructor)",
                           test, "must be a scalar variable placed on the node" ); 
                           
-     if ( MathOperatorLHS<dim>::MaterialOperandType() != SCALAR ||
-          MathOperatorLHS<dim>::MaterialOperandPlacement() != NODE )
+     if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() != SCALAR ||
+          MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != NODE )
        csmp_error.Note( ERROR, "MathOperatorLHS->PointSource_lhsop<dim>::(constructor)",
                           oper, "must be a scalar variable placed on the node" ); 
  }
@@ -35,10 +33,10 @@ PointSource_lhsop<dim,CELL>::PointSource_lhsop( const PropertyDatabase<dim>& pre
 
 
 /// reads the values of basic operand from element nodes
-template<uint32_t dim,class CELL>
-void PointSource_lhsop<dim,CELL>::GetOperands( CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void PointSource_lhsop<dim,CELL>::GetOperands( const CELL<dim>& e )
    { 
-      e.NodePropertyVector( MathOperatorLHS<dim>::MaterialOperandKey(), SRC_ );
+      e.NodePropertyVector( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), SRC_ );
        
       // taking into account that the point source contributes to several elements
       for ( auto i{0}; i<e.Nodes(); i++ )
@@ -59,27 +57,23 @@ of of them. This is already done in the GetOperands() method.
 
 @param e The current element from which the nodal values are accumulated.
 */
-template<uint32_t dim,class CELL>
-void PointSource_lhsop<dim,CELL>::ComputeContribution( CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void PointSource_lhsop<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 {
-   MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
-   MathOperatorLHS<dim>::LHS.Zero();
+   MathOperatorLHS<dim,CELL>::LHS.Resize( e.Nodes(), e.Nodes() );
+   MathOperatorLHS<dim,CELL>::LHS.Zero();
    for ( auto i{0}; i<e.Nodes(); i++ )
-     MathOperatorLHS<dim>::LHS(i,i) = SRC_[i]();
+     MathOperatorLHS<dim,CELL>::LHS(i,i) = SRC_[i]();
      
 } // end ComputeContribution
 
 
-template class PointSource_lhsop<1U,Element<1U> >;
-template class PointSource_lhsop<2U,Element<2U> >;
-template class PointSource_lhsop<3U,Element<3U> >;
+template class PointSource_lhsop<1U>;
+template class PointSource_lhsop<2U>;
+template class PointSource_lhsop<3U>;
 
-template class PointSource_lhsop<1U,Face<1U> >;
-template class PointSource_lhsop<2U,Face<2U> >;
-template class PointSource_lhsop<3U,Face<3U> >;
-
-template class PointSource_lhsop<1U,InterFace<1U> >;
-template class PointSource_lhsop<2U,InterFace<2U> >;
-template class PointSource_lhsop<3U,InterFace<3U> >;
+template class PointSource_lhsop<1U,Face>;
+template class PointSource_lhsop<2U,Face>;
+template class PointSource_lhsop<3U,Face>;
 
 } // csmp

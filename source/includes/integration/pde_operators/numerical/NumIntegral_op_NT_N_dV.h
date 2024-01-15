@@ -7,19 +7,22 @@
 
 namespace csmp {
 
-/**
-@author S.K. Matthaei
-@author S. Geiger
-@date 2000 */
+template<uint32_t> class Element;
 
-/// "mass matrix", "fluid sources or sinks", or "capacitance matrix" for constant coefficients
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_op_NT_N_dV : public MathOperatorRHS<dim> {
+/**  "mass matrix", "fluid sources or sinks", or "capacitance matrix" for constant coefficients
+
+@author S.K. Matthai
+@author S. Geiger
+@date 2000
+
+*/
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_op_NT_N_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_op_NT_N_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_op_NT_N_dV( const PropertyDatabase<dim>&,
                             const char* oper, const char* test );
 
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
   private:
     uint32_t  nodal_degrees_of_freedom;

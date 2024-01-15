@@ -57,21 +57,21 @@ class ExplicitNodeCenteredFiniteVolumeTransport : public NodeCenteredFiniteVolum
     
     /// single-phase transport (@todo NEEDS TO BECOME A VIRTUAL FUNCTION TEMPLATE)
     virtual double AdvectVariable( double time_interval,
-                                     double cfl_multiplication_factor, ///< ideally 0.1
-                                     bool apply_flux_balance_correction, ///< usually desirable
-                                     bool update_pore_volumes );         ///< normally not needed
+                                   double cfl_multiplication_factor, ///< ideally 0.1
+                                   bool apply_flux_balance_correction, ///< usually desirable
+                                   bool update_pore_volumes );         ///< normally not needed
 
     /// single-phase passive advection, does NOT return courant increment, single timestep calculation
     /// no checks are made for courant condition.  Assumes external checks.
     virtual void AdvectVariableSingleStep( double time_increment,
-                                      bool apply_flux_balance_correction,
-                                      bool update_pore_volumes);
+                                            bool apply_flux_balance_correction,
+                                            bool update_pore_volumes);
 
     /// results are stored back wherever flags are not DIRICH
     double OutputResults(const PropertyDatabase<dim>&,
-                           const csmp::Index& adv_key,
-                           bool  show_range ,
-                           const size_t var_comp_nr=0) const;
+                         const csmp::Index& adv_key,
+                         bool  show_range ,
+                         const uint32_t var_comp_nr=0u ) const;
 
 
   protected:
@@ -80,7 +80,7 @@ class ExplicitNodeCenteredFiniteVolumeTransport : public NodeCenteredFiniteVolum
     virtual void AssignFluxBoundaryConditions(const size_t var_comp_nr=0 );
     
     /// passive advection: gives transported variable at end of time_interval
-    virtual void ComposeSolution( double time_interval,const size_t var_comp_nr=0 );
+    virtual void ComposeSolution( double time_interval, uint32_t var_comp_nr=0u );
     
     STP<dim>             stencil_;
     std::vector<double>  RESULT;
@@ -894,7 +894,7 @@ this is an explicit transport scheme.
 For the passive advection of tracers.  
 */
 template<uint32_t dim,template<uint32_t> class STP>
-void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ComposeSolution( double time_interval, const size_t var_comp_nr)
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ComposeSolution( double time_interval, uint32_t var_comp_nr )
 {
     if (this->adv1_key_.type == SCALAR){
         for ( size_t nidx=0U; nidx<this->gref_.Nodes(); nidx++ )
@@ -1023,9 +1023,9 @@ is returned. If errors occur at more than 2 per cent of the nodes, an
 */
 template<uint32_t dim,template<uint32_t> class STP>
 double ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( const PropertyDatabase<dim>& p,
-                                                                            const csmp::Index& adv_key,
-                                                                            bool show_range ,
-                                                                            const size_t var_comp_nr ) const
+                                                                          const csmp::Index& adv_key,
+                                                                          bool show_range,
+                                                                          uint32_t var_comp_nr ) const
 {
     double  rmin, rmax,
               amin = RESULT[0],

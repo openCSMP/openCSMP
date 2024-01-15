@@ -6,6 +6,7 @@
 #include "vsetMakers.h"
 
 #include "ANSYS_Model2D.h"
+#include "ANSYS_Interface.h"
 #include "VTU_Interface.h"
 #include "DenseMatrix.h"
 #include "plf_colony.h"
@@ -13,50 +14,6 @@
 using namespace std;
 
 namespace csmp {
-
-// for model building from ANSYS
- static void create_ANSYS2D_Model( bool reconstruct_from_file )
- {
-    string model2d_name_ = "box2d_fault";
-    string varFileName = "CSMP-variables.txt";
-    Model<2>* model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
-
-    // ansys 2d model - contiguous
-    cout << "\n------------------------------------------";
-    cout << "\nMeshManager_Test: ANSYS model 'box2d_fault'";
-    cout << "\n------------------------------------------";
-    cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
-    set<Element<2>*> elements;
-    cout << "\nInterconnected elements: " << findContiguousMeshPatch<2,Element>( &(*model2d_->Mesh().ElementsBegin()), elements ) << "\n";
-    cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-    std::map<std::string,std::vector<Element<2U>*> > patch_map;
-    cout << "\nElement Groups: " << findContiguousMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
-    cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-    std::map<std::string,std::vector<Face<2U>*> >  face_map;
-    cout << "\nFace Groups: " << findContiguousMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
-    cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-    std::map<std::string,std::vector<InterFace<2U>*> >  iface_map;
-    cout << "\nInterface Groups: " << findContiguousMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
-    
-    if (reconstruct_from_file) {
-        model2d_->OutputToBinaryFile(model2d_name_.c_str());
-        delete model2d_;
-        model2d_ = new Model<2U>(model2d_name_);
-        MeshManager<2>& mesh(model2d_->Mesh());
-        cout << "\nNodes: " << mesh.Nodes() << "\n";
-        cout << "\nNode Groups: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
-        cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-        cout << "\nElement Groups: " << findContiguousMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
-        cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-        cout << "\nFace Groups: " << findContiguousMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map ) << "\n";
-        cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-        cout << "\nInterface Groups: " << findContiguousMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map ) << "\n";
-      }
-      
- } // end create_ANSYS2D_Model
- 
- 
- 
 
 /**
     Using a whole suite of 2D Ansys models with boundaries and even split  boundaries being created :
@@ -68,6 +25,8 @@ namespace csmp {
 void ANSYS_Model2D_Test::run()
   {
     const bool verbose(false);
+    
+    Test_ANSYS_ModelConstructionAndSaving2D();
     
     ANSYS_Model2D model( "BoxHalfs2D", "CSMP-variables.txt" );
     Region<2>& rref( model.Region( "Model" ) );
@@ -206,6 +165,128 @@ void ANSYS_Model2D_Test::run()
     Test_CreateSplitBoundariesBetweenUniqueRegions();
   }
 */
+
+
+// for model building from ANSYS
+ static void create_ANSYS2D_Model( bool reconstruct_from_file )
+ {
+    string model2d_name_ = "box2d_fault";
+    string varFileName = "CSMP-variables.txt";
+    Model<2>* model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
+
+    // ansys 2d model - contiguous
+    cout << "\n------------------------------------------";
+    cout << "\nMeshManager_Test: ANSYS model 'box2d_fault'";
+    cout << "\n------------------------------------------";
+    cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
+    set<Element<2>*> elements;
+    cout << "\nInterconnected elements: " << findContiguousMeshPatch<2,Element>( &(*model2d_->Mesh().ElementsBegin()), elements ) << "\n";
+    cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+    std::map<std::string,std::vector<Element<2U>*> > patch_map;
+    cout << "\nElement Groups: " << findContiguousMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
+    cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
+    std::map<std::string,std::vector<Face<2U>*> >  face_map;
+    cout << "\nFace Groups: " << findContiguousMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+    cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
+    std::map<std::string,std::vector<InterFace<2U>*> >  iface_map;
+    cout << "\nInterface Groups: " << findContiguousMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+    
+    if (reconstruct_from_file) {
+        model2d_->OutputToBinaryFile(model2d_name_.c_str());
+        delete model2d_;
+        model2d_ = new Model<2U>(model2d_name_);
+        MeshManager<2>& mesh(model2d_->Mesh());
+        cout << "\nNodes: " << mesh.Nodes() << "\n";
+        cout << "\nNode Groups: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
+        cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+        cout << "\nElement Groups: " << findContiguousMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
+        cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
+        cout << "\nFace Groups: " << findContiguousMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map ) << "\n";
+        cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
+        cout << "\nInterface Groups: " << findContiguousMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map ) << "\n";
+      }
+      
+ } // end create_ANSYS2D_Model
+
+ 
+ 
+ 
+ 
+ 
+void ANSYS_Model2D_Test::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& input_file_name )
+  {
+    enum{DIM=2U};
+    if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
+    
+    // read ANSYS model data and build model
+    ANSYS_Interface mesh_interface(true); // true = isoparametric elements
+    ModelTopology   mesh_topology(true);
+    VSet<DIM>       vset;
+
+    const bool binary_file( true ), recreate_bflags(true);
+    mesh_interface.Read_ANSYS_Mesh( input_file_name.c_str(), vset, mesh_topology, binary_file, recreate_bflags );
+    // for ( auto i{0}; i<vset.BFlags(); ++i )
+    //  cout <<" "<< static_cast<int>(vset.BoundaryFlag(i) );
+    //cout << endl;
+
+    // keep all mesh regions from topology and vset
+    // calls CheckTopology and re-numbers nodes counter-clockwise if necessary
+    mesh_topology.ReduceToDomains( input_file_name.c_str() );
+    map<size_t,size_t>  old_and_new_elmtids;
+    mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
+    vset.ReduceTo( old_and_new_elmtids );
+    old_and_new_elmtids.clear();
+    _test( mesh_topology.Cells() == vset.Elements() );
+    
+    // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
+    vset.RemovePfverts();
+    vset.EstablishElementConnectivity2D();
+    
+    // testing whether connectivity of the boundary faces has been achieved
+    // looping over element faces that have a neighbor, reporting those where both nodes are at the boundary
+    auto dodgy_neighbors{0};
+    for ( size_t eidx{0}; eidx < vset.Elements(); ++eidx ) {
+        CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( vset.ElementType(eidx) );
+        // faces=neighbors
+        uint32_t face{0U};
+        for ( auto nbor=vset.PfvertsBegin(eidx); nbor!=vset.PfvertsEnd(eidx); ++nbor, ++face )
+          if ( isTriangularElement(etype) && (*nbor) >= 0 ) {
+             // face 0
+             if ( face == 0 && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT ) {
+                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *nbor;
+                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
+                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
+                  cerr << endl;
+                  dodgy_neighbors++;
+               }
+             if ( face == 1 && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT ) {
+                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *nbor;
+                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
+                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
+                  cerr << endl;
+                  dodgy_neighbors++;
+               }
+             if ( face == 2 && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT ) {
+                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *nbor;
+                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
+                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
+                  cerr << endl;
+                  dodgy_neighbors++;
+               }
+          }
+      }
+    _test( dodgy_neighbors == 0 );
+
+    // build model from mesh
+    const bool get_domain_info_from_regions_file{true};
+    Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", get_domain_info_from_regions_file );
+    printModelDimensions( model, true );
+    
+    // saving model to binary
+    model.OutputToBinaryFile( string( string(model.Name()) + "Vset_TestCase" ).c_str() );
+    
+  } // end Test_ANSYS_ModelConstructionAndSaving2D
+ 
  
  
  
@@ -224,8 +305,7 @@ void ANSYS_Model2D_Test::Test_printLineElementRegion()
       VSet<2U>      vset;
       ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
       Model<2U>     model( topo, vset, "CSMP-1phase-variables.txt", true );
-       
-      // works fine
+
       const bool renumber_nodes{false};
       _test( printLineElementRegion( model, "FRAC1", renumber_nodes ) == 3 );
       _test( printLineElementRegion( model, "FRAC2", renumber_nodes ) == 3 );

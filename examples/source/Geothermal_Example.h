@@ -19,6 +19,7 @@ class Geothermal_Example : public Example {
       void ComputeMassConductivity ( Model<DIM>& );
       void OutputToVTU( Model<DIM>&, std::string model_name, const std::list<std::string>& props, size_t timestep ) const;
       bool Compare( Model<DIM>&, const std::string& file ) const;
+      void ComputeMassGravityTerm (Model<DIM>&);
 };
 
 

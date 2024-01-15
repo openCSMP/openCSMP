@@ -17,4 +17,4 @@ class PDE_Integrator_Transient_Test : public Test {
 
 } // end namespace csmp
 
-#endif ?* CSMP_PDE_INTEGRATOR_TRANSIENT_TEST_H */
+#endif /* CSMP_PDE_INTEGRATOR_TRANSIENT_TEST_H */

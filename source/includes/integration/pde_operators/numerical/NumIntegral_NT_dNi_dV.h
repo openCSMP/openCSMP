@@ -16,8 +16,8 @@ enum SPATIAL_DERIVATIVE { X_DIRECTION=0, Y_DIRECTION=1, Z_DIRECTION=2 };
  
     @remarks refactored by SKM 19/1/2015
 */
-template<uint32_t dim, class CELL=Element<dim> >
-class NumIntegral_NT_dNi_dV : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_NT_dNi_dV : public MathOperatorLHS<dim,CELL> {
   public:
     NumIntegral_NT_dNi_dV( const PropertyDatabase<dim>&,
                            /* no operand in this pde operator */
@@ -27,10 +27,10 @@ class NumIntegral_NT_dNi_dV : public MathOperatorLHS<dim> {
     virtual ~NumIntegral_NT_dNi_dV();
   
     /// does nothing since there are no operands to read
-    virtual void GetOperands( const CELL& ) {}
+    virtual void GetOperands( const CELL<dim>& ) {}
   
     /// calculates the required finite element integral
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
   
     /// to chose the spatial derivate direction of interest; default is Y-axis
     void SpatialDerivative( SPATIAL_DERIVATIVE );

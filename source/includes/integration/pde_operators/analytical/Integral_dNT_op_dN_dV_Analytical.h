@@ -1,19 +1,20 @@
 #ifndef Integral_dNT_op_dN_dV_ANALYTICAL_h
 #define Integral_dNT_op_dN_dV_ANALYTICAL_h
 
-#include "CSMP_definitions.h"
 #include "MathOperatorLHS.h"
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 	/// Known as: element conductance matrix or K div^2 P
-	template<uint32_t dim, class CELL = Element<dim> >
-	class Integral_dNT_op_dN_dV_Analytical : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class Integral_dNT_op_dN_dV_Analytical : public MathOperatorLHS<dim,CELL> {
 	public:
-		Integral_dNT_op_dN_dV_Analytical( const PropertyDatabase<dim>& pref,
+		Integral_dNT_op_dN_dV_Analytical( const PropertyDatabase<dim>&,
 			                                const char* oper, const char* basic, const char* test);
 
-		virtual void ComputeContribution( const CELL& e);
+		virtual void ComputeContribution( const CELL<dim>& );
     
 		virtual Integral_dNT_op_dN_dV_Analytical<dim, CELL>* clone() const { return new Integral_dNT_op_dN_dV_Analytical<dim, CELL>(*this); }
 	};

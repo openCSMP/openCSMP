@@ -13,29 +13,29 @@ The Operand which is used here can be both, an element or a nodal variable
 which is then interpolated to the integration points to obtain the 
 integral properties.  
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::CVFE_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
-                                                                   TwoPhaseModel<dim>&   kri,
-                                                                   const char*           oper, 
-                                                                   const char*           basic, 
-                                                                   const char*           test ) 
-  : MathOperatorLHS<dim>(pref,oper,basic,test),
+                                                                        TwoPhaseModel<dim>&   kri,
+                                                                        const char*           oper,
+                                                                        const char*           basic,
+                                                                        const char*           test )
+  : MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
     kri_(kri),
     DN_(dim,3U), FN_(0,dim), LK_(dim,dim)
 {
-    MathOperatorLHS<dim>::Name("CVFE_NumIntegral_dNT_op_dN_dV", oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("CVFE_NumIntegral_dNT_op_dN_dV", oper, basic, test );
     
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT )
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT )
       throw csmp::Exception( ERROR, "CVFE_NumIntegral_dNT_op_dN_dV<dim>::(constructor)", 
                       basic, "Operand must be a placed on the integration points." );
 
-    if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || 
-         MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "CVFE_NumIntegral_dNT_op_dN_dV<dim>::(constructor)", 
                       basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
-         MathOperatorLHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "CVFE_NumIntegral_dNT_op_dN_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
@@ -49,8 +49,8 @@ CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::CVFE_NumIntegral_dNT_op_dN_dV( const Pr
 Compute "total mobility - permeability products at FV integration points, 
 storing the results in the material matrices of the base class.  
 */
-template<uint32_t dim,class CELL>
-void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::GetOperands( CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::GetOperands( CELL<dim>& e )
  {
     // initialising the material constants of the relperm model
     kri_.Initialize(e);
@@ -92,12 +92,12 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::GetOperands( CELL& e )
 
 /** Laplacian operator of shape function derivatives squared.
 */
-template<uint32_t dim,class CELL>
-void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL<dim>& e )
  {
     // initialize output matrix
-    MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
-    MathOperatorLHS<dim>::LHS.Zero();
+    MathOperatorLHS<dim,CELL>::LHS.Resize( e.Nodes(), e.Nodes() );
+    MathOperatorLHS<dim,CELL>::LHS.Zero();
 
     const double fv_integration_weight(1./e.FV()->Facets());
 
@@ -111,7 +111,7 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
          Point<dim> rst  = e.FV()->FacetIntegrationPoint( i, 0U );
          double   detJ = (e).dN_At( rst, DN_ );
 
-         LK_ = MathOperatorLHS<dim>::MTRL[i] * DN_;
+         LK_ = MathOperatorLHS<dim,CELL>::MTRL[i] * DN_;
 
          Point<dim>  fn = (e).FacetNormal(i);
          fn *= detJ * fv_integration_weight * (e).FacetArea(i);
@@ -122,15 +122,15 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
               // 1. fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
               //    (outside node = upstream)
               // -------------------------------------------------------------------------------------------------
-              MathOperatorLHS<dim>::LHS(inside_node,outside_node) = FN_(0U,0U);  // incoming flux
+              MathOperatorLHS<dim,CELL>::LHS(inside_node,outside_node) = FN_(0U,0U);  // incoming flux
               
               // 2. outgoing fluxes are added to the matrix diagonal
               // ---------------------------------------------------
-              MathOperatorLHS<dim>::LHS(outside_node,inside_node) = -FN_(0U,0U); // outgoing flux
+              MathOperatorLHS<dim,CELL>::LHS(outside_node,inside_node) = -FN_(0U,0U); // outgoing flux
            } 
          else {
-              MathOperatorLHS<dim>::LHS(inside_node,outside_node) = -FN_(0U,0U);  // outgoing flux
-              MathOperatorLHS<dim>::LHS(outside_node,inside_node) =  FN_(0U,0U);  // incoming flux
+              MathOperatorLHS<dim,CELL>::LHS(inside_node,outside_node) = -FN_(0U,0U);  // outgoing flux
+              MathOperatorLHS<dim,CELL>::LHS(outside_node,inside_node) =  FN_(0U,0U);  // incoming flux
            }
       }
 
@@ -145,13 +145,15 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
 //     cout <<"\nCVFE_NumIntegral_dNT_op_dN_dV: zero element in diagonal of element matrix."; 
 
 
-template class CVFE_NumIntegral_dNT_op_dN_dV<1U,Element<1U> >;
-template class CVFE_NumIntegral_dNT_op_dN_dV<2U,Element<2U> >;
-template class CVFE_NumIntegral_dNT_op_dN_dV<3U,Element<3U> >;
+template class CVFE_NumIntegral_dNT_op_dN_dV<1U>;
+template class CVFE_NumIntegral_dNT_op_dN_dV<2U>;
+template class CVFE_NumIntegral_dNT_op_dN_dV<3U>;
 
-//template class CVFE_NumIntegral_dNT_op_dN_dV<1U,Face<1U> >;
-//template class CVFE_NumIntegral_dNT_op_dN_dV<2U,Face<2U> >;
-//template class CVFE_NumIntegral_dNT_op_dN_dV<3U,Face<3U> >;
+/* TODO: port this code so that it also works for Face
+template class CVFE_NumIntegral_dNT_op_dN_dV<1U,Face>;
+template class CVFE_NumIntegral_dNT_op_dN_dV<2U,Face>;
+template class CVFE_NumIntegral_dNT_op_dN_dV<3U,Face>;
+*/
 
 } // csmp
 

@@ -1,12 +1,10 @@
 #ifndef CSMP_DENSE_MATRIX_H
 #define CSMP_DENSE_MATRIX_H
 
-#define USED_TOGETHER_WITH_CSMP
-
 #include <stdexcept>
 #include <typeinfo>
-#include "CSMP_definitions.h"
-#ifdef USED_TOGETHER_WITH_CSMP
+#include <array>
+#ifdef DENSE_MATRIX_USED_TOGETHER_WITH_CSMP
 #include "Point.h"
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
@@ -105,7 +103,7 @@ class DenseMatrix {
     void In();
     void Out( long digits=5L ) const;
 
-#ifdef USED_TOGETHER_WITH_CSMP
+#ifdef DENSE_MATRIX_USED_TOGETHER_WITH_CSMP
     /// assignment of point coordinates to matrix rows or columns
     void AssignRow( uint32_t i, const Point<1U>& );
     void AssignRow( uint32_t i, const Point<2U>& );
@@ -171,6 +169,11 @@ class DenseMatrix {
 };
 
 // associated operators
+
+/// comparitor of elements using compareFloats
+template<uint32_t mn_max>
+bool operator==( const DenseMatrix<mn_max>&, const DenseMatrix<mn_max>& );
+
 
 template<uint32_t mn_max>
 DenseMatrix<mn_max>  operator+( const DenseMatrix<mn_max>& a, 

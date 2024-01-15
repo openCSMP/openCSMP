@@ -108,7 +108,7 @@ void IncompressibleSinglePhaseFlowFEM_VVCase::run()
   #else
   CSMP_DEFAULT_LINEAR_SOLVER solver;
   #endif
-  PDE_Integrator<DIM,Region> pressure_diffusion(solver);
+  PDE_Integrator<DIM,Element> pressure_diffusion(solver);
 
   /*some old code
   NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  steady_conductance( p_ref, "conductivity", "hydrostatic pressure", "hydrostatic pressure" );
@@ -116,11 +116,11 @@ void IncompressibleSinglePhaseFlowFEM_VVCase::run()
   NumIntegral_NT_op_N_dV<DIM,Element<DIM> >    fluid_src( p_ref,  "fluid volume source", "hydrostatic pressure" );
   */
 
-  NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> > stiffness( model.Database(), "mobility", "fluid pressure",  "fluid pressure");
+  NumIntegral_dNT_op_dN_dV<DIM> stiffness( model.Database(), "mobility", "fluid pressure",  "fluid pressure");
   printRangeOfVariable(model,"fluid pressure");
   printRangeOfVariable(model,"fluid volume source");
   printRangeOfVariable(model,"mobility");
-  NumIntegral_NT_op_N_dV<DIM,Element<DIM> > fluid_src( model.Database(),  "fluid volume source", "fluid pressure" );
+  NumIntegral_NT_op_N_dV<DIM> fluid_src( model.Database(),  "fluid volume source", "fluid pressure" );
   //Assemble the integrator
   pressure_diffusion.Add( &stiffness );
   pressure_diffusion.Add( &fluid_src );

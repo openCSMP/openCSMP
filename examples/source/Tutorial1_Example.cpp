@@ -9,6 +9,7 @@
 
 // the FE algorithm
 #include "PDE_Integrator.h"
+#include "LinearSolver.h"
 
 // PDE operators building the FE algorithm
 #include "Integral_NT_op_N_dV.h"
@@ -32,7 +33,7 @@ void Tutorial1_Example::Specifications()
 {
   SetTitle( "Tutorial 1: Transient fluid-pressure diffusion" );
   SetDifficulty( 3 );
-  SetCategory( "Simulation of Physical Processes" );
+  SetCategory( "Tutorials (composite functionality)" );
   AddAuthor( "Sebastian Geiger" );
   AddDescription( "A transient pressure diffusion equation solved using a fully" );
   AddDescription( "implicit FE discretisation. A simple triangular FE mesh is generated automatically in CSMP" );
@@ -76,6 +77,7 @@ void Tutorial1_Example::Run()
     double& model_time( ModelTime::Instance().modelTime );
     model_time =  0.; // time
 
+    /*
     // -----------------------------------------------------------------------
     // 1.0 Build the CSMP Model from a simple color-coded text input file
     //     that generates a uniform triangular FE mesh. The function
@@ -86,6 +88,25 @@ void Tutorial1_Example::Run()
     // txt file defines the physical variables to be used in the simulation
     VSet<2U>   vset=readTextPixelData();
     Model<2U>  model( vset, "tutorial1_variables.txt" );
+    */
+
+    // ------------------------------------------------------------
+    // 1.0 Load CSMP native format model
+    // ------------------------------------------------------------
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'tutorial1_input':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "tutorial1_input";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "tutorial1_variables.txt";
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<2U>  model(model_name, variable_file);
+
     const PropertyDatabase<2>& p_ref(model.Database());  // constant reference to the property database
 
     // give the model dimensions
@@ -146,25 +167,25 @@ void Tutorial1_Example::Run()
     // ------------------------------------------------------------------------------------------
 
     // create the CSMP FE Algorithm with SAMG solver to invert linear system
-#ifdef CSMP_WITH_SAMG_SOLVER
+#ifdef USE_SAMG_SOLVER
     SAMG_Solver  samg_solver;
-    PDE_Integrator<2U,Region>  fluid_pressure(samg_solver);
+    PDE_Integrator<2U,Element>  fluid_pressure(samg_solver);
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-    PDE_Integrator<2U,Region>  fluid_pressure(linear_solver);
+    EigenSolver  linear_solver;
+    PDE_Integrator<2U,Element>  fluid_pressure(linear_solver);
 #endif
 
     // LHS stiffness matrix                              operand         basis function    test function
-    Integral_dNT_op_dN_dV<2U,Element<2U> >  stiffness_matrix( p_ref, "conductivity", "fluid pressure", "fluid pressure" );
+    Integral_dNT_op_dN_dV<2U>  stiffness_matrix( p_ref, "conductivity", "fluid pressure", "fluid pressure" );
 
     // LHS mass matrix
-    Integral_NT_lhsop_N_dV<2U,Element<2U> > mass_matrix_lhs( p_ref, "compressibility", "fluid pressure", "fluid pressure" );
+    Integral_NT_lhsop_N_dV<2U> mass_matrix_lhs( p_ref, "compressibility", "fluid pressure", "fluid pressure" );
 
     // RHS mass vector
-    Integral_NT_op_N_dV<2U,Element<2U> >    mass_matrix_rhs( p_ref, "compressibility", "fluid pressure" );
+    Integral_NT_op_N_dV<2U>    mass_matrix_rhs( p_ref, "compressibility", "fluid pressure" );
 
     // RHS mass vector for integrating source term
-    Integral_NT_op_N_dV<2U,Element<2U> >    source_term( p_ref, "fluid volume source", "fluid pressure" );
+    Integral_NT_op_N_dV<2U>    source_term( p_ref, "fluid volume source", "fluid pressure" );
 
     // mass matrices for dp/dt term must be divided by time increment
     mass_matrix_lhs.MultiplyWithTimeIncrement(true);
@@ -179,7 +200,7 @@ void Tutorial1_Example::Run()
     source_term.AddAccumulateLater();
 
     // define a post-processing step that computes the velocity in each finite element by solving Darcy's law
-    VelocityAndVolumeFlux<2U,Element<2U> >     velo( model, "conductivity", "porosity", "fluid pressure", true ); // true = extrapolate element velocities to nodes
+    VelocityAndVolumeFlux<2U> velo( model, "conductivity", "porosity", "fluid pressure", true ); // true = extrapolate element velocities to nodes
 
     // now add each FE operation (i.e., PDE Operator) to the FE algorithm
     fluid_pressure.Add( &stiffness_matrix );
@@ -255,6 +276,8 @@ void Tutorial1_Example::Run()
 
     // terminate
     cout <<"\nmain: That's it..."<< endl;
+
+    fs::current_path("../../example_inputs/");
 
 } // Run
 

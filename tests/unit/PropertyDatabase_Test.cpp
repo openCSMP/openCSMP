@@ -48,7 +48,7 @@ void PropertyDatabase_Test::UnitTest( const csmp::Index& idx, const char* unit)
 */
 void PropertyDatabase_Test::AddPropertyTest()
 {        
-    csmp::Index idx = pdb->AddProperty("test variable","m s-1",VECTOR,REGION);
+    csmp::Index idx = pdb->AddProperty("test variable", "v", "m s-1",VECTOR,REGION);
     this->UnitTest(idx,"m s-1");
     this->NameTest(idx,"test variable");
     _test(strcmp(csmp::parsePlacement(idx.place).c_str(),"REGION")==0); //Tests if the placement is REGION
@@ -61,7 +61,7 @@ void PropertyDatabase_Test::AddPropertyTest()
     _test(strcmp(csmp::parseType(idx.type).c_str(),"SCALAR")!=0);
 
     csmp::Index idx2;
-    idx2=pdb->AddProperty("test variable 2","m s",SCALAR,ELEMENT);
+    idx2=pdb->AddProperty("test variable 2", "dist", "m s",SCALAR,ELEMENT);
     this->UnitTest(idx2,"m s");
     this->NameTest(idx2,"test variable 2");
     double mintest(0.),maxtest(0.);
@@ -128,7 +128,7 @@ void PropertyDatabase_Test::DeletePropertyTest()
 void PropertyDatabase_Test::VariablesElementTest(size_t e)
 {
     _test(pdb->VariableCount(ELEMENT)==e);
-    csmp::Index idx=pdb->AddProperty("test variable 3","m s-1",VECTOR,ELEMENT);
+    csmp::Index idx=pdb->AddProperty("test variable 3", "tv", "m s-1",VECTOR,ELEMENT);
     _test(pdb->VariableCount(ELEMENT)==(e+1));
     const char* pName = pdb->Name(idx);
     pdb->DeleteProperty(pName);
@@ -140,7 +140,7 @@ void PropertyDatabase_Test::VariablesBoundaryTest(size_t b)
 {
     _test(pdb->VariableCount(BOUNDARY)==b);
 
-    csmp::Index idx=pdb->AddProperty("test variable 3","m s-1",VECTOR,BOUNDARY);
+    csmp::Index idx=pdb->AddProperty("test variable 3", "tv_", "m s-1",VECTOR,BOUNDARY);
     _test(pdb->VariableCount(BOUNDARY)==(b+1));
     pdb->DeleteProperty(pdb->Name(idx));
     _test(pdb->VariableCount(BOUNDARY)==b);
@@ -150,7 +150,7 @@ void PropertyDatabase_Test::VariablesBoundaryTest(size_t b)
 void PropertyDatabase_Test::VariablesNodeTest(size_t n)
 {
     _test(pdb->VariableCount(NODE)==n);
-    csmp::Index idx=pdb->AddProperty("test variable 3","m s-1",VECTOR,NODE);
+    csmp::Index idx=pdb->AddProperty("test variable 3", "tv3__", "m s-1",VECTOR,NODE);
     _test(pdb->VariableCount(NODE)==(n+1));
     pdb->DeleteProperty(pdb->Name(idx));
     _test(pdb->VariableCount(NODE)==n);
@@ -167,7 +167,7 @@ void PropertyDatabase_Test::VariablesFaceTest(size_t f)
 {
     _test(pdb->VariableCount(FACE)==f);
 
-    csmp::Index idx=pdb->AddProperty("test variable 3","m s-1",VECTOR,FACE);
+    csmp::Index idx=pdb->AddProperty("test variable 3","tv3___", "m s-1",VECTOR,FACE);
     _test(pdb->VariableCount(FACE)==(f+1));
     pdb->DeleteProperty(pdb->Name(idx));
     _test(pdb->VariableCount(FACE)==f);
@@ -184,7 +184,7 @@ void PropertyDatabase_Test::VariablesModelTest(size_t v)
 {
     _test(pdb->VariableCount(MODEL)==v);
 
-    csmp::Index idx=pdb->AddProperty("test variable 3","m s-1",VECTOR,MODEL);
+    csmp::Index idx=pdb->AddProperty("test variable 3","tv3____", "m s-1",VECTOR,MODEL);
     _test(pdb->VariableCount(MODEL)==(v+1));
     pdb->DeleteProperty(pdb->Name(idx));
     _test(pdb->VariableCount(MODEL)==v);
@@ -192,13 +192,13 @@ void PropertyDatabase_Test::VariablesModelTest(size_t v)
 
 void PropertyDatabase_Test::SubsetVariablesTest()
 {
-  PropertyDatabase<3> restored_pdb( "CSMP-variables-vsTestLocked.txt" );
-  restored_pdb.BinaryOut( "CSMP-variables-vsTestLocked.dat" );
-  _test( restored_pdb.VariableCount() == 51 );
+  PropertyDatabase<3> restored_pdb( "PropertyDatabase_Test-variables.txt" );
+  restored_pdb.BinaryOut( "PropertyDatabase_Test-variables.dat" );
+  _test( restored_pdb.VariableCount() == 53 ); // +2 node and elmt number
 
   set<string> subset_variables;
   map<string, csmp::Index> props;
-  restored_pdb.ListProperties( props );
+  restored_pdb.ListVariables( props );
 
   size_t subset_size = 0;
   for ( auto& prop : props ) {
@@ -207,7 +207,7 @@ void PropertyDatabase_Test::SubsetVariablesTest()
     subset_size++;
   }
 
-  PropertyDatabase<3> pdb_subset( "CSMP-variables-vsTestLocked.dat", subset_variables );  
+  PropertyDatabase<3> pdb_subset( "PropertyDatabase_Test-variables.dat", subset_variables );  
   _test( pdb_subset.VariableCount() == subset_variables.size() );
 }
 
@@ -237,7 +237,7 @@ void PropertyDatabase_Test::run()
 
 void PropertyDatabase_Test::FromFile()
 {
-  PropertyDatabase<3> restored_pdb("CSMP-variables-vsTestLocked.txt");
+  PropertyDatabase<3> restored_pdb("PropertyDatabase_Test-variables.txt");
 }
 
 }

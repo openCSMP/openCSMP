@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-//#define CATCH_CONFIG_RUNNER
+#define CATCH_CONFIG_RUNNER
 //#define RUNNING_UNDER_CATCH
 // read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/ tutorial how to use with XCode
 
@@ -170,11 +170,11 @@ int main()
   {
   const bool verbose(false);
 
-  const bool test_fundamentals(false),
+  const bool test_fundamentals(true),
              test_interdependent1(false),
              test_interdependent2(false),
              test_composite(false),
-             test_refactoring(true),
+             test_refactoring(false),
              test_new_developments(false),
              test_interfaces{false};
 
@@ -360,7 +360,8 @@ int main()
       interdependent2.addTest( new PropertyHandle_Test() );       // XCode OK (SKM)
       
       // model subdomains
-      interdependent2.addTest(new SplitBoundaryInterface_Test());
+      interdependent2.addTest(new SplitBoundaryInterface_Test<2U>());
+      interdependent2.addTest(new SplitBoundaryInterface_Test<3U>());
       interdependent2.addTest(new SplitBoundary_Test());
       
       // interfaces

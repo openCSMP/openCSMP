@@ -5,27 +5,30 @@
 #include "MathOperatorRHS.h"
 
 namespace csmp {
+
+template<uint32_t> class Element;
+
 /**
 @author S.K. Matthaei
 @author S. Roberts
 @date 1999 */
 
 /// for instance for calculation of hydrostatic gradient
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_DNT_v_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL>
+class NumIntegral_DNT_v_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_DNT_v_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_DNT_v_dV( const PropertyDatabase<dim>&, 
                           const char* oper,                  // e.g., Darcy velocity
                           const char* r_factor,
                           const char* dens,                  // e.g., fluid density
                           const char* test );                // e.g., streaming potential
     
-    virtual void GetOperands( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
 
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
   
   private:
-    std::vector<double>         IPOL;
+    std::vector<double>           IPOL;
     DenseMatrix<DM_MIN>           DN, DNT, OPMAT;
     Index                         rho_key,   rfac_key;
     ScalarVariable                rfac;

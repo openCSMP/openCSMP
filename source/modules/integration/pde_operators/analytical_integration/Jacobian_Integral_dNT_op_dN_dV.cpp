@@ -14,18 +14,18 @@ namespace csmp {
 The upwinding is based on the basic operand (which will be the pressure)
 variable.
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::Jacobian_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
-                                                            				const char* oper, 
-                                                            				const char* basic, 
-                                                            				const char* test,
-                                                            				const char* test_orig,
-                                                            				const char* lambda,
-                                                            				const char* d_lambda,
-                                                            				const double delta,
-                                                            				const double prefactor)
+                                                                          const char* oper,
+                                                                          const char* basic,
+                                                                          const char* test,
+                                                                          const char* test_orig,
+                                                                          const char* lambda,
+                                                                          const char* d_lambda,
+                                                                          const double delta,
+                                                                          const double prefactor )
  
-  : MathOperatorLHS<dim>(pref,oper,basic,test),
+  : MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
     DN(2,3),
     DNT(3,2),
     test_orig_(pref.StorageKey(test_orig)),
@@ -38,26 +38,32 @@ Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::Jacobian_Integral_dNT_op_dN_dV( const 
     name += lambda;
     char* cname = new char[name.length()+1];
     strcpy(cname, name.c_str());
-    MathOperatorLHS<dim>::Name(cname, oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name(cname, oper, basic, test );
 
     // testing the Operands 
     // * Add tests for new operands
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT && MathOperatorLHS<dim>::MaterialOperandPlacement() != REGION )
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT &&
+         MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != REGION )
       throw csmp::Exception( ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
-                    oper, "Operand must be placed on the element or group.");
+                             oper, "Operand must be placed on the element or group.");
 
-    if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
-                    test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
+                             test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
-                    test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
+                             test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
     
     if (lambda_.place != NODE || lambda_.type != SCALAR)
       throw csmp::Exception( ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
-                    lambda, "Jacobian_Upwind variable must be a scalar property placed on the nodes.");
+                             lambda, "Jacobian_Upwind variable must be a scalar property placed on the nodes.");
 }
+
+
+
 
 
 /**
@@ -71,13 +77,13 @@ Operand is.
 When the property is an element property, it will be put into the
 first vector entry MTRL[0]. Else, 
 */
-template<uint32_t dim,class CELL>
-void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
 
-    MathOperatorLHS<dim>::GetOperands(e);
+    MathOperatorLHS<dim,CELL>::GetOperands(e);
         
     if (lambda_.place == NODE && lambda_.type == SCALAR) {
       e.NodePropertyVector( lambda_, el_lambda);
@@ -95,8 +101,8 @@ void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL& e )
 
 
 /// @todo (3) Compute Jacobian
-template<uint32_t dim,class CELL>
-void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     e.dN( DN );
     // transpose the shape function derivative matrix
@@ -104,7 +110,7 @@ void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& 
     DN.Transposed( DNT );
     
     // calculate the element contribution to LHS (E_OP is the Basic Operand)
-    DNT *= MathOperatorLHS<dim>::MTRL[0];
+    DNT *= MathOperatorLHS<dim,CELL>::MTRL[0];
     DNT *= DN;
     
     // Assemble solution in DN
@@ -112,18 +118,18 @@ void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& 
     res_.Fill(0.0);
   
     const double global_factor = prefactor_ * e.Volume() / (delta_ * static_cast<double>(e.Nodes()) );
-    for (size_t j = 0; j < e.Nodes(); ++j) {
+    for ( auto j{0U}; j < e.Nodes(); ++j) {
       const double j_factor = el_d_lambda[j]() - el_lambda[j]();
-      for (auto i = 0; i < e.Nodes(); ++i) {
-        for (size_t k = 0; k < e.Nodes(); ++k) {
+      for (auto i{0U}; i < e.Nodes(); ++i) {
+        for (auto k{0U}; k < e.Nodes(); ++k) {
           res_(i, j) += DNT(i, k) * el_test_orig[k]() * j_factor * global_factor;
         }
       }
     }
     
     // assigning element contribution
-    MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
-    MathOperatorLHS<dim>::LHS = res_;
+    MathOperatorLHS<dim,CELL>::LHS.Resize(e.Nodes(),e.Nodes());
+    MathOperatorLHS<dim,CELL>::LHS = res_;
       
   
  //cout <<"\nElement: "<< e.Idx();
@@ -133,11 +139,10 @@ void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& 
 
 
 
-template class Jacobian_Integral_dNT_op_dN_dV<2U,Element<2U> >;
-template class Jacobian_Integral_dNT_op_dN_dV<3U,Element<3U> >;
+template class Jacobian_Integral_dNT_op_dN_dV<2U,Element>;
+template class Jacobian_Integral_dNT_op_dN_dV<3U,Element>;
 
-
-template class Jacobian_Integral_dNT_op_dN_dV<2U,Face<2U> >;
-template class Jacobian_Integral_dNT_op_dN_dV<3U,Face<3U> >;
+template class Jacobian_Integral_dNT_op_dN_dV<2U,Face>;
+template class Jacobian_Integral_dNT_op_dN_dV<3U,Face>;
 
 } // csmp

@@ -214,12 +214,27 @@ void IsoparametricQuadraticLineElement::NodesOfSegment( uint32_t segm_id, std::v
     Method returns into its argument vector the local node number of either of its 2 faces located at its nodes.
     Convention: face 0 has only one node which is the first node of the element and face 1 contains the second node.
 */
-void  IsoparametricQuadraticLineElement::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
+/*
+void  IsoparametricQuadraticLineElement::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
  {
     assert( face_id <= 1U );
     fnids.resize(1U);
     fnids[0] = (face_id == 1U) ? 0U : 1U;
  }
+*/
+
+
+vector<uint32_t>  IsoparametricQuadraticLineElement::NodesOfFace( uint32_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<uint32_t>{1};
+        case 1: return vector<uint32_t>{0};
+        default:
+          cerr <<"\nIsoparametricQuadraticLineElement::NodesOfFace: node "<< node_id <<" does not exist.";
+      }
+    return vector<uint32_t>{};
+  }
 
 
 vector<uint32_t>  IsoparametricQuadraticLineElement::CornerNodesOfFace( uint32_t face_id ) const
@@ -554,42 +569,34 @@ double IsoparametricQuadraticLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& 
 
 /// here the normal is calculated using the derivative of the shape function
 /// at the middle node
-void  IsoparametricQuadraticLineElement::UnitNormal( vector<double>& vc ) const
+vector<double>  IsoparametricQuadraticLineElement::UnitNormal() const
  {
-    if ( dim == 1 ) {
-         vc[0] = 1.;
-         return;
-      }
+    if ( dim == 1U ) return vector<double>{ 1 };
     
     // dx = (N1'x1 + N2'x2 + N3'x3) dr
-    if ( dim == 2 ) {
+    if ( dim == 2U ) {
          // finding tangent at mid-point node
          dNr( NX[2], DNR );
-         vc[0] = JacobianFor( DNR, 0 ); // dx
-         vc[1] = JacobianFor( DNR, 1 ); // dy
-         mjl::Edge  normal( mjl::Point(0.,0.), mjl::Point(vc[0],vc[1]) ); 
+         const double vc0 = JacobianFor( DNR, 0 ); // dx
+         const double vc1 = JacobianFor( DNR, 1 ); // dy
+         mjl::Edge  normal( mjl::Point(0.,0.), mjl::Point(vc0,vc1) ); 
          // rotating tangent edge counter-clockwise to find normal to face
          normal.Rot();
          normal.NormalizeTo( 1. );
-         vc[0] = normal.Destination()[0];
-         vc[1] = normal.Destination()[1];
-         return;
+         return vector<double>{ normal.Destination()[0], normal.Destination()[1] };
       }
 
-    if ( dim == 3 ) {
-         // using slope at mid-point node
-         dNr( NX[2], DNR );
-         vc[0] = JacobianFor( DNR, 0 ); // dx
-         vc[1] = JacobianFor( DNR, 1 ); // dy
-         vc[2] = JacobianFor( DNR, 2 ); // dz
-         double sum = vc[0] + vc[1] + vc[2];
-         // normalizing the normal
-         vc[0] /= sum;
-         vc[1] /= sum;
-         vc[2] /= sum;
-         cerr <<"\nIsoparametricQuadraticLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
-         return;
-      }
+    // if ( dim == 3 ) {
+     // using slope at mid-point node
+     dNr( NX[2], DNR );
+     vector<double> vc{ JacobianFor( DNR, 0 ), JacobianFor( DNR, 1 ), JacobianFor( DNR, 2 ) }; // dx dy dz
+     double sum = vc[0] + vc[1] + vc[2];
+     // normalizing the normal
+     vc[0] /= sum;
+     vc[1] /= sum;
+     vc[2] /= sum;
+     cerr <<"\nIsoparametricQuadraticLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
+     return vc;
 
  } // end UnitNormal
 
@@ -713,9 +720,9 @@ void  IsoparametricQuadraticLineElement::IntegrationPoint( uint32_t i, vector<do
 
 
 
-
+/*
 void  IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
-                                                        vector<uint32_t>& fnids )
+                                                                     vector<uint32_t>& fnids )
  {
     fnids.resize(bnodes.size());
 
@@ -739,7 +746,7 @@ void  IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary( const vecto
        }
             
  } // end ConsecutiveNodesAtBoundary
-
+*/
 
 
 

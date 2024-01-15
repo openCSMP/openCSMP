@@ -1,20 +1,15 @@
 #ifndef CSMP_ITERATIVE_INTEGRATOR_H
 #define CSMP_ITERATIVE_INTEGRATOR_H
 
-#include "CSMP_definitions.h"
 #include "PDE_Integrator.h"
 
-#ifdef CSMP_WITH_SAMG_SOLVER
-namespace csmp {
-  class SAMG_Settings;
-}
-#endif
-
 namespace csmp {
 
+template<uint32_t> class Element;
 template<uint32_t> class Interrelation;
 template<uint32_t> class Visitor;
 template<uint32_t> class Model;
+class SAMG_Settings;
 
 /**
  
@@ -41,8 +36,8 @@ Models, Visitors and Interrelations. Calculations on single Region
 objects is not supported.  
 
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-class IterativeIntegrator : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
+template<uint32_t dim,template<uint32_t> class CELLTYPE=Element>
+class IterativeIntegrator : public PDE_Integrator<dim,CELLTYPE> {
   public:
     IterativeIntegrator();
     
@@ -54,13 +49,13 @@ class IterativeIntegrator : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
     void AddPostProcess( Interrelation<dim>* );
     void AddPostProcess( Visitor<dim>* );
     
-    virtual void SetupEquations( COMPUTATION_DOMAIN<dim>& );
+    virtual void SetupEquations( ModelSubDomain<dim,CELLTYPE>& );
     virtual double  Residual();
-    virtual void SolveEquations( COMPUTATION_DOMAIN<dim>& );
-    void ApplyPostProcesses( COMPUTATION_DOMAIN<dim>& );
+    virtual void SolveEquations( ModelSubDomain<dim,CELLTYPE>& );
+    void ApplyPostProcesses( ModelSubDomain<dim,CELLTYPE>& );
 
 #ifdef CSMP_WITH_SAMG_SOLVER
-    virtual size_t Iterations( COMPUTATION_DOMAIN<dim>& );
+    virtual size_t Iterations( ModelSubDomain<dim,CELLTYPE>& );
 #else
     /// add extra functionality for alternative solver if needed
 #endif

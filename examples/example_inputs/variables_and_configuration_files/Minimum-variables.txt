@@ -1,0 +1,3 @@
+name	MParameter	unit	index	min.	max.	place	usage
+element number		Ne	none	1	0	10000000000	ELEMENT	computed
+node number	Nn	int	1	0	10000000000	NODE	computed

@@ -316,7 +316,7 @@ size_t countAndLabelRegions( Model<dim>& model, const char* region_identifier, s
     // setting element variable up to identify all unique regions - uniquely
     const string rvariable(region_identifier);
     if ( !model.Database().IsDefined(rvariable.c_str()) )
-       model.CreateProperty( rvariable.c_str(), "X", SCALAR, ELEMENT );
+       model.CreateProperty( rvariable.c_str(), "rid", "none", SCALAR, ELEMENT );
    
     // counting the regions and initialising them with the unique identifiers
     region_names.resize(model.UniqueRegions());
@@ -530,7 +530,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     csmp::Index mtrl_key = model.Database().StorageKey(diagnostic_elmt_variable);
    
     if ( !model.Database().IsDefined(patch_variable) )
-      model.CreateProperty( patch_variable, "node", SCALAR, ELEMENT );
+      model.CreateProperty( patch_variable, "pvar", "node", SCALAR, ELEMENT );
     // patch-discerning variable
     csmp::Index pvar_key = model.Database().StorageKey(patch_variable);
    
@@ -612,8 +612,6 @@ for ( auto it=patch_simplexes.begin(); it!=patch_simplexes.end(); ++it) {
     return patches.size();
    
  } // end labelRegionPatches
-
-
 
 
 

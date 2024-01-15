@@ -56,10 +56,7 @@ class SplitBoundaryInterface {
     size_t SeparateUniqueRegionsBySplitBoundaries();
     
     /// creation of one or multiple SplitBoundaries from a lower dimensional region 
-    std::pair<std::set<std::string>,bool>  CreateSplitBoundaryFrom( const char* dim_1_region );
-
-    /// one-to-one conversion of a model Boundary into a SplitBoundary, non-constant because Boundary gets removed
-    std::pair<std::string,bool>  CreateSplitBoundaryFrom( Boundary<dim>& );
+    std::pair<std::set<std::string>,bool>  CreateSplitBoundaryFrom( const char* dim_1_region);
 
     /// creates SplitBoundary between non-overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes
     std::pair<std::string,bool>  CreateSplitBoundaryBetween( const char* region1, const char* region2 );
@@ -71,13 +68,15 @@ class SplitBoundaryInterface {
     std::set<std::string>  InsertLowerDimensionalRegionsIntoSplitBoundaries( int32_t material_id_for_new_elements );
 
     /// Creates a single lower-dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful
-    bool  SingleRegionFromAllSplitBoundaries( const char* name_of_new_region );
+    //bool  SingleRegionFromAllSplitBoundaries( const char* name_of_new_region );
 
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
     void RemoveSplitBoundary( const char* split_boundary, bool erase_interfaces );
 
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
     void RemoveSplitBoundary( csmp::SplitBoundary<dim>&, bool erase_interfaces );
+
+    std::string MergeSplitBoundaries( const char* new_sb_name, std::set<std::string> splitboundaries);
 
     // -----------------------------------------------------------
     // Input/output

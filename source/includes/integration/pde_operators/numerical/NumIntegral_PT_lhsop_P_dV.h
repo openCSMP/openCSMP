@@ -7,21 +7,25 @@
 
 
 namespace csmp {
+
 /**
+
+Vector solution variable: "mass matrix" for vector dependent variables
+
 @author S.K. Matthaei
 @author S. Geiger
-@date 2000 */
+@date 2000
 
-/// vector solution variable: "mass matrix" for vector dependent variables
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_PT_lhsop_P_dV : public MathOperatorLHS<dim> {
+*/
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_PT_lhsop_P_dV : public MathOperatorLHS<dim,CELL> {
   public:
-    NumIntegral_PT_lhsop_P_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_PT_lhsop_P_dV( const PropertyDatabase<dim>&, 
                                const char* oper, const char* oper2, 
                                const char* basic, const char* test );
     
-    virtual void GetOperands( const CELL& );
-    virtual void ComputeContribution( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
+    virtual void ComputeContribution( const CELL<dim>& );
 
   private:
     uint32_t            nodal_degrees_of_freedom;

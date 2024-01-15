@@ -1,0 +1,8 @@
+CSMP test model
+no properties
+MATRIX
+FRACTURE
+LEFT
+RIGHT
+TOP
+BOTTOM

@@ -106,23 +106,26 @@ public:
   bool             operator!=( const ScalarVariable& ) const;
 
   /// assignment as an lvalue
-  double&        operator()( void );
-  double         operator()( void ) const;
+  double&          operator()( void );
+  double           operator()( void ) const;
 
   /// tests whether the variable value lies within the given bounds
   bool             IsWithinRange( double vmin, double vmax ) const;
+  
+  /// tests whether variable contains NaN value(s)
+  bool             Has_NaN_Values() const { return std::isnan(data_); }
 
   /// universal way of assigning values to all CSMP variable types
-  void             Component( size_t, double val ) { data_ = val; }
+  void             Component( uint32_t, double val ) { data_ = val; }
 
   /// universal accessor of CSMP variable values which works for all variable types
-  double         Component( size_t ) const { return data_; }
+  double           Component( uint32_t ) const { return data_; }
 
   /// returns size = number of components of the variable (=1 for scalar)
-  size_t           Size() const;
+  uint32_t         Size() const;
 
   /// value assignment to scalar: cannot resize, but assigns user-defined or default value
-  void             Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
+  void             Resize( uint32_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
 
   /// assigment: status of variable which determines how it is used in computations
   VARIABLE_FLAG&   Flag();

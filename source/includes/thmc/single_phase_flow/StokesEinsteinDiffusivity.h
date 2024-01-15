@@ -1,5 +1,5 @@
-#ifndef STOKES_EINSTEIN_DIFFUSIVITY_H
-#define STOKES_EINSTEIN_DIFFUSIVITY_H
+#ifndef CSMP_STOKES_EINSTEIN_DIFFUSIVITY_H
+#define CSMP_STOKES_EINSTEIN_DIFFUSIVITY_H
 
 #include "Interrelation.h"
 
@@ -28,5 +28,5 @@ class StokesEinsteinDiffusivity : public Interrelation<dim> {
 
 } // csmp
 
-#endif
+#endif // CSMP_STOKES_EINSTEIN_DIFFUSIVITY_H
 

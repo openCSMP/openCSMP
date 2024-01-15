@@ -168,11 +168,11 @@ template<uint32_t dim>
 class PropertyHandle {
   public:
     PropertyHandle( Model<dim>& sg, const char* var_name,
-                    VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, size_t vsize=1U );
+                    VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, uint32_t vsize=1U );
 
     PropertyHandle( Model<dim>& sg, const char* target_group, 
                     const char* var_name,
-                    VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, size_t vsize=1U );
+                    VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, uint32_t vsize=1U );
 
     PropertyHandle( const PropertyHandle& op ); 
 

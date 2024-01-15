@@ -20,31 +20,31 @@ class Edge {
     void       Move( double dx, double dy );
     void       Scale( double xfac, double yfac );
     void       NormalizeTo( double n );
-    bool       IfCloserThanMerge( double tolerance, mjl::Point& p );
+    bool       IfCloserThanMerge( double tolerance, mjl::Point& );
 
-    bool       operator==( const mjl::Edge& m ) const;
-    bool       operator!=( const mjl::Edge& m ) const;
-    bool       operator<( const mjl::Edge& m )  const;
+    bool       operator==( const mjl::Edge& ) const;
+    bool       operator!=( const mjl::Edge& ) const;
+    bool       operator<( const mjl::Edge& )  const;
 
     mjl::Point Point( double t ) const;  // gives xy-coordinates of parametric value t along line
     double     Y( double x ) const;      // gives y-coordinate for an x-coordinate along infinite line
     mjl::Point Origin() const;
     mjl::Point Destination() const;
-    void       MidPoint( mjl::Point& mp ) const;
+    void       MidPoint( mjl::Point& ) const;
     mjl::Point MidPoint() const;
     bool       IsVertical() const;
     double     Slope() const;
-    double     DistanceFrom( const mjl::Point& p ) const;
+    double     DistanceFrom( const mjl::Point& ) const;
     double     Length() const;
     
-    LOCATION      Classify( const mjl::Point& p ) const;
-    INTERSECTION  Intersect( const Edge& m, double& d ) const;
-    INTERSECTION  Cross( const Edge& m, double& d ) const;
-    INTERSECTION  CrossingPoint( double tolerance, const Edge& f, mjl::Point& p ) const;
-    INTERSECTION  SKM_CrossingPoint( double tolerance, const Edge& f, mjl::Point& p ) const;
-    EDGE_CLASSIFICATION  Type( const mjl::Point& p ) const;
-    double  AngleTo( const Edge& v ) const;
-    double  DotProduct( const mjl::Point& p, const mjl::Point& q ) const;
+    LOCATION      Classify( const mjl::Point& ) const;
+    INTERSECTION  Intersect( const Edge&, double& ) const;
+    INTERSECTION  Cross( const Edge&, double& ) const;
+    INTERSECTION  CrossingPoint( double tolerance, const Edge&, mjl::Point& ) const;
+    INTERSECTION  SKM_CrossingPoint( double tolerance, const Edge&, mjl::Point& ) const;
+    EDGE_CLASSIFICATION  Type( const mjl::Point& ) const;
+    double  AngleTo( const Edge& ) const;
+    double  DotProduct( const mjl::Point&, const mjl::Point& ) const;
 
     void Out() const;
     

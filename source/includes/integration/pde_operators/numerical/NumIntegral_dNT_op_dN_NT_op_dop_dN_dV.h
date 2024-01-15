@@ -8,10 +8,10 @@
 namespace csmp {
 
 /// advection-dispersion matrices @note v-term is calculated from 'grad' dop x op multiplier
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim,CELL> {
   public:
-    NumIntegral_dNT_op_dN_NT_op_dop_dN_dV( const PropertyDatabase<dim>& pref, 
+    NumIntegral_dNT_op_dN_NT_op_dop_dN_dV( const PropertyDatabase<dim>&,
                                           const char* grad_prop,        // e.g., for calc. of v
                                           const char* eprop,            // e.g., property for multiplication with grad
                                           const char* emultiplier,      // e.g., property for multiplication with eprop
@@ -19,7 +19,7 @@ class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim> {
                                           const char* basic,            // e.g., fluid pressure
                                           const char* test );           // e.g., fluid pressure
                         
-    NumIntegral_dNT_op_dN_NT_op_dop_dN_dV( const PropertyDatabase<dim>& pref, 
+    NumIntegral_dNT_op_dN_NT_op_dop_dN_dV( const PropertyDatabase<dim>&, 
                                            const char* grad_prop,       // e.g., fluid pressure
                                            const char* eprop,           // e.g., conductivity
                                            const char* emultiplier,     // e.g., property for multiplication with eprop
@@ -28,8 +28,8 @@ class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim> {
                                            const char* basic,           // e.g., temperature
                                            const char* test );          // e.g., temperature
     
-    virtual void GetOperands( const CELL& );
-    virtual void ComputeContribution( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
     void SpatialDerivative( uint32_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
 

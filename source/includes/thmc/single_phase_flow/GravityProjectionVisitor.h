@@ -2,56 +2,50 @@
 #define GRAVITY_PROJECTION_VISITOR_H
 
 #include "Visitor.h"
-
-#include <iostream>
-#include "CSMP_definitions.h"
-
-#include "Model.h"
-
-#include "ScalarVariable.h"
 #include "VectorVariable.h"
-#include "TensorVariable.h"
 
-namespace csmp{
+namespace csmp {
 
+template<uint32_t> class Model;
+
+/**
+       TODO: Who? - What for?
+*/
 template<uint32_t dim>
 class GravityProjectionVisitor : public Visitor<dim>
-{
+  {
+    public:
 
-  public:
+      GravityProjectionVisitor(  Model<dim>&,
+                                 const Index& prop_idx,
+                                 const Index& result_idx,
+                                 VectorVariable<dim>& );
 
-    GravityProjectionVisitor(  Model<dim>& model,
-                               const Index& prop_idx,
-                               const Index& result_idx,
-                               VectorVariable<dim> vec );
+      virtual ~GravityProjectionVisitor();
 
+      virtual void Visit(Element<dim>* element);
+      virtual void Visit(Model<dim>* model);
+      virtual void Visit(Region<dim>* model);
 
-    virtual ~GravityProjectionVisitor();
+      /// Get Result
+      Index Get_PropertyIndex();
+      Index Get_ResultIndex();
+      void  Get_Result( Element<dim>* eptr, VectorVariable<dim>& result );
 
-    virtual void Visit(Element<dim>* element);
-    virtual void Visit(Model<dim>* model);
-    virtual void Visit(Region<dim>* model);
+    private:
 
-    /// Get Result
-    Index Get_PropertyIndex();
-    Index Get_ResultIndex();
-    void  Get_Result( Element<dim>* eptr, VectorVariable<dim>& result );
+      /// Property indices
+      Index               prop_idx_;
+      Index               result_idx_;
 
-  private:
+      /// Temporary data
+      VectorVariable<dim> vec_;
+      VectorVariable<dim> proj_;
 
-    /// Property indices
-    Index               prop_idx_;
-    Index               result_idx_;
-
-    /// Temporary data
-    VectorVariable<dim> vec_;
-    VectorVariable<dim> proj_;
-
-    /// Flags
-    bool                const_vec_;
-    bool                debug_;
-
-};
+      /// Flags
+      bool                const_vec_;
+      bool                debug_;
+  };
 
 } //csmp
 

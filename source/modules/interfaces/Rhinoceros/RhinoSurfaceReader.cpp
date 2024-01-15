@@ -1,37 +1,38 @@
 #include "RhinoSurfaceReader.h"
 #include "LinearTriangle3D.h"
-#include "Box.h"
 #include "VSet.h"
+#include "Box.h"
+#include <fstream>
 
 using namespace std;
 
 
 namespace csmp {
 
-SKM_RhinoSurfaceReader::SKM_RhinoSurfaceReader()
+RhinoSurfaceReader::RhinoSurfaceReader()
  {
  }
  
  
-SKM_RhinoSurfaceReader::SKM_RhinoSurfaceReader( const char* raw_file )
+RhinoSurfaceReader::RhinoSurfaceReader( const char* raw_file )
  {
     InitializeFrom( raw_file, false );
  }
  
  
-SKM_RhinoSurfaceReader::SKM_RhinoSurfaceReader( const SKM_RhinoSurfaceReader& r )
+RhinoSurfaceReader::RhinoSurfaceReader( const RhinoSurfaceReader& r )
  {
     *this = r;
  }
  
 
 
-SKM_RhinoSurfaceReader::~SKM_RhinoSurfaceReader()
+RhinoSurfaceReader::~RhinoSurfaceReader()
  {
  }
  
  
-SKM_RhinoSurfaceReader&  SKM_RhinoSurfaceReader::operator=( const SKM_RhinoSurfaceReader& r )
+RhinoSurfaceReader&  RhinoSurfaceReader::operator=( const RhinoSurfaceReader& r )
  {
     if ( &r != this ) objects = r.objects;
     return *this;
@@ -39,7 +40,7 @@ SKM_RhinoSurfaceReader&  SKM_RhinoSurfaceReader::operator=( const SKM_RhinoSurfa
 
 
 
-bool SKM_RhinoSurfaceReader::InitializeFrom( const char* raw_file, bool erase_old )
+bool RhinoSurfaceReader::InitializeFrom( const char* raw_file, bool erase_old )
  {
     // access Rhino ".raw" file
     char                   fname[200], intext[1000];
@@ -47,8 +48,8 @@ bool SKM_RhinoSurfaceReader::InitializeFrom( const char* raw_file, bool erase_ol
     char*                  token;
     mjl::Point3D           p1, p2, p3;
     list<mjl::Triangle3D>  triangles;
-    double               x, y, z;
-    int64_t                  triangle_counter(0);
+    double                 x, y, z;
+    int64_t                triangle_counter(0);
     string                 oname;
     
     strcpy( fname, raw_file );
@@ -58,7 +59,7 @@ bool SKM_RhinoSurfaceReader::InitializeFrom( const char* raw_file, bool erase_ol
     
     if ( erase_old )
       {
-         cout <<"\nSKM_RhinoSurfaceReader::InitializeFrom: ";
+         cout <<"\nRhinoSurfaceReader::InitializeFrom: ";
          cout <<"Erasing old objects before reading new ones."<< endl;
          EraseObjects();
       }
@@ -134,10 +135,10 @@ bool SKM_RhinoSurfaceReader::InitializeFrom( const char* raw_file, bool erase_ol
     
     // 4. reporting the outcome of the reading
     if ( objects.empty() )
-      cout <<"\nSKM_RhinoSurfaceReader::InitializeFrom: File: "<< fname <<" No objects were read.";
+      cout <<"\nRhinoSurfaceReader::InitializeFrom: File: "<< fname <<" No objects were read.";
     else
       {
-         cout <<"\nSKM_RhinoSurfaceReader::InitializeFrom: File: "<< fname <<" read successfully.";   
+         cout <<"\nRhinoSurfaceReader::InitializeFrom: File: "<< fname <<" read successfully.";
          cout <<"\n\tread "<< objects.size() <<" objects with following names and numbers of triangles:\n";
          for ( map<string,list<mjl::Triangle3D> >::const_iterator
                it=objects.begin(); it!=objects.end(); it++ )
@@ -152,7 +153,7 @@ bool SKM_RhinoSurfaceReader::InitializeFrom( const char* raw_file, bool erase_ol
 
 
 
-void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
+void RhinoSurfaceReader::ObjectToPData( const string& obj_name,
                                             map<size_t,mjl::Point3D>&  points,
                                             map<size_t,vector<int64_t> >& plist,
                                             size_t poffset ) const
@@ -160,11 +161,11 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
      // finding the desired object in the map 
      map<string,list<mjl::Triangle3D> >::const_iterator it = objects.find(obj_name);  
      if ( it == objects.end() ) {
-          cout <<"\nSKM_RhinoSurfaceReader::ObjectToPData: Object could not be found. ";
+          cout <<"\nRhinoSurfaceReader::ObjectToPData: Object could not be found. ";
           cout <<"Nothing was done."<< endl;
           return;
       }
-    cout <<"\nSKM_RhinoSurfaceReader::ObjectToPData: Converting object: "<< (*it).first << endl;  
+    cout <<"\nRhinoSurfaceReader::ObjectToPData: Converting object: "<< (*it).first << endl;
     // zapping the supplied maps
     points.erase( points.begin(), points.end() );
     plist.erase( plist.begin(), plist.end() ); 
@@ -234,7 +235,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
               // -------------------------------------
               if ( (cit=pxyz_ids.find( key )) == pxyz_ids.end() )
                 {
-                   cout <<"\nSKM_RhinoSurfaceReader::ObjectToPData: ";
+                   cout <<"\nRhinoSurfaceReader::ObjectToPData: ";
                    cout <<" Unable to find a vertex for the key: "<< key << endl;
                    cout <<"\nTerminating execution of ObjectToPData()." << endl;
                    return;
@@ -252,7 +253,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
 
 
 
-void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<int64_t> >& plist,
+void RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<int64_t> >& plist,
                                                   map<size_t,vector<int64_t> >& pfverts,
                                                   vector<std::int8_t>& pbflags ) const
  {
@@ -318,17 +319,17 @@ void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<int64_
 
 
 
-size_t  SKM_RhinoSurfaceReader::SelectAndDescribeObjects( list<pair<string,string> >& selections,
-                                                          bool erase_list_before ) const
+size_t  RhinoSurfaceReader::SelectAndDescribeObjects( list<pair<string,string> >& selections,
+                                                      bool erase_list_before ) const
  {
     if ( objects.empty() )
       {
-         cout <<"\nSKM_RhinoSurfaceReader::SelectObjects: Error: No objects to select from."<< endl;
+         cout <<"\nRhinoSurfaceReader::SelectObjects: Error: No objects to select from."<< endl;
          return 0;
       }
     if ( erase_list_before ) selections.erase( selections.begin(), selections.end() );
  
-    cout <<"\nSKM_RhinoSurfaceReader::SelectObjects: Please select objects from listing: "<< endl;
+    cout <<"\nRhinoSurfaceReader::SelectObjects: Please select objects from listing: "<< endl;
     // looping throug the objects and writing them to the output file
     map<string,list<mjl::Triangle3D> >::const_iterator  it;
     int answ(0);
@@ -392,7 +393,7 @@ Creates a map of unique points in the object, labeled (keys) by their point
 number. A map is also created which contains entries of the node numbers
 which make up each triangle.   
 */
-bool SKM_RhinoSurfaceReader::PopObject( const char *obj_name,
+bool RhinoSurfaceReader::PopObject( const char *obj_name,
                                         map<size_t,mjl::Point3D >&  points,
                                         map<size_t,vector<int64_t> >& plist,
                                         size_t poffset ) const
@@ -412,7 +413,7 @@ Puts a header into the GoCad TSurf file. This header specifies the
 defaults for the colors and properties with which the surface will
 be drawn.  
 */
-void SKM_RhinoSurfaceReader::WriteGocadHeader( const char* surf_name, 
+void RhinoSurfaceReader::WriteGocadHeader( const char* surf_name,
                                                const char* GEOLOGICAL_TYPE, 
                                                ofstream& ofs ) const
  {
@@ -472,10 +473,10 @@ void SKM_RhinoSurfaceReader::WriteGocadHeader( const char* surf_name,
 
 
 // output object to VSet
-void SKM_RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) const
+void RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) const
  {
     if ( objects.empty() ) {
-         cerr <<"\nSKM_RhinoSurfaceReader::OutputObjectTo: No objects are present.";
+         cerr <<"\nRhinoSurfaceReader::OutputObjectTo: No objects are present.";
          return;
       }
    
@@ -483,7 +484,7 @@ void SKM_RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) c
     string  object(obj);
     map<string,list<mjl::Triangle3D> >::const_iterator  it=objects.find( object );
     if ( it == objects.end() ) {
-         cerr <<"\nSKM_RhinoSurfaceReader::OutputObjectTo: Desired object could not be found."<< endl;
+         cerr <<"\nRhinoSurfaceReader::OutputObjectTo: Desired object could not be found."<< endl;
          return;
       }  
 
@@ -543,7 +544,7 @@ void SKM_RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) c
 Not necessarily recommended since GoCad often has difficulties in reading
 individual surfaces.  
  */
-void SKM_RhinoSurfaceReader::WriteObjectsToTSurf( const char* tsurf_file, 
+void RhinoSurfaceReader::WriteObjectsToTSurf( const char* tsurf_file,
                                                   const char* GEOLOGICAL_TYPE ) const
  {
    ofstream  ofs;
@@ -554,14 +555,14 @@ void SKM_RhinoSurfaceReader::WriteObjectsToTSurf( const char* tsurf_file,
    ofs.open ( file, ios::out|ios::trunc );
    if ( !ofs )
      {
-         cout <<"\nSKM_RhinoSurfaceReader::WriteObjectsToTSurf: "; 
+         cout <<"\nRhinoSurfaceReader::WriteObjectsToTSurf: ";
          cout <<"Output file could not be opened"<< endl;
          return;
       }
 
    if ( objects.empty() )
      {
-        cout <<"\nSKM_RhinoSurfaceReader::WriteObjectsToTSurf: No objects are present.";
+        cout <<"\nRhinoSurfaceReader::WriteObjectsToTSurf: No objects are present.";
         return;
      }
    
@@ -579,7 +580,7 @@ void SKM_RhinoSurfaceReader::WriteObjectsToTSurf( const char* tsurf_file,
   ofs <<"END" << endl;
     
   ofs.close();
-  cout <<"\nSKM_RhinoSurfaceReader::WriteObjectsToTSurf: "<< file <<" written successfully"<< endl;
+  cout <<"\nRhinoSurfaceReader::WriteObjectsToTSurf: "<< file <<" written successfully"<< endl;
 }  
         
 
@@ -595,11 +596,11 @@ supplied file name. A hyphen is put between the filename and the
 object name.  
 
 */
-void  SKM_RhinoSurfaceReader::WriteSelectedObjectsToTSurf( const char* tsurf_file ) const    
+void  RhinoSurfaceReader::WriteSelectedObjectsToTSurf( const char* tsurf_file ) const
  {
    if ( objects.empty() )
      {
-        cout <<"\nSKM_RhinoSurfaceReader::WriteSelectedObjectsToTSurf: No objects are present.";
+        cout <<"\nRhinoSurfaceReader::WriteSelectedObjectsToTSurf: No objects are present.";
         return;
      }
    
@@ -627,7 +628,7 @@ void  SKM_RhinoSurfaceReader::WriteSelectedObjectsToTSurf( const char* tsurf_fil
        ofs.open ( file, ios::out|ios::trunc );
        if ( !ofs )
          {
-             cout <<"\nSKM_RhinoSurfaceReader::WriteSelectedObjectsToTSurf: "; 
+             cout <<"\nRhinoSurfaceReader::WriteSelectedObjectsToTSurf: ";
              cout <<"Output file could not be opened"<< endl;
              return;
          }
@@ -644,7 +645,7 @@ void  SKM_RhinoSurfaceReader::WriteSelectedObjectsToTSurf( const char* tsurf_fil
        ofs.close();
     }  
     
-  cout <<"\nSKM_RhinoSurfaceReader::WriteSelectedObjectsToTSurf: '"<< tsurf_file;
+  cout <<"\nRhinoSurfaceReader::WriteSelectedObjectsToTSurf: '"<< tsurf_file;
   cout <<"' file series written successfully"<< endl;
   
  } // end WriteSelectedObjectsToTSurf  
@@ -658,7 +659,7 @@ void  SKM_RhinoSurfaceReader::WriteSelectedObjectsToTSurf( const char* tsurf_fil
 with it.  
 
 */
-void SKM_RhinoSurfaceReader::WriteObjectToTSurf( const char* obj, ofstream& ofs ) const
+void RhinoSurfaceReader::WriteObjectToTSurf( const char* obj, ofstream& ofs ) const
  {
     assert( ofs.is_open() );
  
@@ -699,14 +700,14 @@ void SKM_RhinoSurfaceReader::WriteObjectToTSurf( const char* obj, ofstream& ofs 
 
 
 
-size_t SKM_RhinoSurfaceReader::Objects() const
+size_t RhinoSurfaceReader::Objects() const
   { return objects.size(); }
   
 
 
 
 
-void SKM_RhinoSurfaceReader::EraseObjects() 
+void RhinoSurfaceReader::EraseObjects()
   { objects.erase( objects.begin(), objects.end() ); }            
 
 
@@ -730,17 +731,17 @@ To adapt surface data to another frame of reference.
 If the axes do not exist (are below 0 or greater than 2) the method
 will quit emitting a message. 
 */
-void SKM_RhinoSurfaceReader::ExchangeCoordinateAxes( int axis_a, int axis_b )
+void RhinoSurfaceReader::ExchangeCoordinateAxes( int axis_a, int axis_b )
  {
     if ( objects.empty() )
       {
-         cout <<"\nSKM_RhinoSurfaceReader::ExchangeCoordinateAxes: No object data are present. ";
+         cout <<"\nRhinoSurfaceReader::ExchangeCoordinateAxes: No object data are present. ";
          cout <<"Nothing was done..."<< endl;
          return;
       }
     if ( axis_a < 0 || axis_a > 2 || axis_b < 0 || axis_b > 2 )
       {
-         cout <<"\nSKM_RhinoSurfaceReader::ExchangeCoordinateAxes: Target axis does not exist: ";
+         cout <<"\nRhinoSurfaceReader::ExchangeCoordinateAxes: Target axis does not exist: ";
          cout << axis_a <<" or "<< axis_b << endl;
          return;
       }
@@ -795,11 +796,11 @@ To scale an object for a new frame of reference.
 
 Nothing is done if no objects are present. 
  */
-void SKM_RhinoSurfaceReader::ScaleCoordinates( double x_fac, double y_fac, double z_fac )
+void RhinoSurfaceReader::ScaleCoordinates( double x_fac, double y_fac, double z_fac )
  {
     if ( objects.empty() )
       {
-         cout <<"\nSKM_RhinoSurfaceReader::ScaleCoordinates: No object data are present. ";
+         cout <<"\nRhinoSurfaceReader::ScaleCoordinates: No object data are present. ";
          cout <<"Nothing was done..."<< endl;
          return;
       }
@@ -847,11 +848,11 @@ To transform the stored surfaces to another space position.
 
 If no objects are stored, Nothing is done.  
 */
-void SKM_RhinoSurfaceReader::MoveCoordinates( double x_move, double y_move, double z_move )
+void RhinoSurfaceReader::MoveCoordinates( double x_move, double y_move, double z_move )
  {
     if ( objects.empty() )
       {
-         cout <<"\nSKM_RhinoSurfaceReader::MoveCoordinates: No object data are present. ";
+         cout <<"\nRhinoSurfaceReader::MoveCoordinates: No object data are present. ";
          cout <<"Nothing was done..."<< endl;
          return;
       }

@@ -4,6 +4,8 @@
 #include "GenericSingleton.h"
 #include "Exception.h"
 #include "BE_Time.h"
+#include <string>
+#include <map>
 
 namespace csmp {
 
@@ -201,7 +203,7 @@ class ErrorHandler : public GenericSingleton<ErrorHandler> {
 
   private:
 
-    BE_Time            timer_;        ///< to measure time level (replace by C++11 time facilities
+    BE_Time            timer_;        ///< for the reporting of errors using time formatted to ascii strings
     CSMP_OUTPUT_LEVEL  verbose_;      ///< CSMP_OUTPUT_LEVEL stored as a short enumeration (see csmp::Exception)
     long               errors_;       ///< errors incurred where something actually went wrong as opposed to a problem with- or without consequences
     long               warnings_;     ///< problems incurred

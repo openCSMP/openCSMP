@@ -92,12 +92,12 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
       SAMG_Settings settings;
       settings.Set_napproach(2);
       SAMG_Solver solver(&settings);
-      PDE_Integrator<2U,Region> deformation( solver );
+      PDE_Integrator<2U,Element> deformation( solver );
       #else
       CSMP_DEFAULT_LINEAR_SOLVER solver;
-      PDE_Integrator<2U,Region> deformation( solver );
+      PDE_Integrator<2U,Element> deformation( solver );
       #endif
-      PT_op<2U,Element<2U> > bforces( model.Database(), "force", "displacement" );
+      PT_op<2U> bforces( model.Database(), "force", "displacement" );
       NumIntegral_BT_D_B_dV<2U> stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
 
       NumIntegral_PT_op_dV<2U>  AppliedStress( model.Database(), "Neumann stress", "displacement");

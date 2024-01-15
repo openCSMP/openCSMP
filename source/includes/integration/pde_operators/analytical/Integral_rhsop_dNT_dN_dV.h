@@ -1,30 +1,31 @@
 #ifndef INTEGRAL_RHSOP_DNT_DN_DV_H
 #define INTEGRAL_RHSOP_DNT_DN_DV_H
 
-#include "CSMP_definitions.h"
 #include "MathOperatorRHS.h"
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /// Known as: streaming potential source term
-template<uint32_t dim, class CELL=Element<dim>, typename var=ScalarVariable >
-class Integral_rhsop_dNT_dN_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element, typename var=ScalarVariable>
+class Integral_rhsop_dNT_dN_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    Integral_rhsop_dNT_dN_dV( const PropertyDatabase<dim>& pref, 
+    Integral_rhsop_dNT_dN_dV( const PropertyDatabase<dim>&,
                               const char* oper,
                               const char* basis,
                               const char* test,
                               double prefactor=1. );
 
-    virtual void GetOperands( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
     
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
 
   private:
     DenseMatrix<DM_MIN> DN, DNT;
     Parameter           basic_;
     std::vector<var>    basic_var_;
-    const double      prefactor_;
+    const double        prefactor_;
 };
 
 

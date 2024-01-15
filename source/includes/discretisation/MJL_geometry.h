@@ -1,13 +1,15 @@
 #ifndef MJL_GEOMETRY_H
 #define MJL_GEOMETRY_H
 
-#include "CSMP_definitions.h"
+#include <iostream>
+#include <vector>
+#include <map>
+#include <list>
+#include <cmath>
 
 namespace mjl {
 
 /// @file CSMP_definitions.h
-
-
 
 #ifndef DBL_MAX
 #define DBL_MAX  1.7976931348623157E+308  /* max decimal value of a "double"*/

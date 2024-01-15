@@ -4,35 +4,37 @@
 #include "MJL_Vertex.h"
 #include "MJL_Edge.h"
 
+#include <list>
+
 namespace mjl {
 
 class Polygon {
   public: // points // should be unique and ordered clockwise
     Polygon( std::list<mjl::Point>::const_iterator, 
              std::list<mjl::Point>::const_iterator );  
-    explicit Polygon( Vertex* );
+    explicit Polygon( mjl::Vertex* );
     Polygon();
     Polygon( const Polygon& );
     virtual ~Polygon();
     Polygon&      operator=( const Polygon& p ); 
-    Vertex*       SetV( Vertex* );
-    Vertex*       V() const;
+    mjl::Vertex*  SetV( mjl::Vertex* );
+    mjl::Vertex*  V() const;
     size_t        Size() const;
     bool          Empty() const;
     mjl::Point    Point() const;
     mjl::Edge     Edge() const;
-    Vertex*       Cw() const;
-    Vertex*       Ccw() const;
-    Vertex*       Neighbor( ORIENTATION );
-    Vertex*       Advance( ORIENTATION );
-    const Vertex* Advance( ORIENTATION ) const;
-    Vertex*       Insert( const mjl::Point& );
+    mjl::Vertex*  Cw() const;
+    mjl::Vertex*  Ccw() const;
+    mjl::Vertex*  Neighbor( ORIENTATION );
+    mjl::Vertex*  Advance( ORIENTATION );
+    const mjl::Vertex* Advance( ORIENTATION ) const;
+    mjl::Vertex*  Insert( const mjl::Point& );
     void          Erase();
     void          Remove();
     void          Revert(); ///< rebuilds itself in reverse order
-    Polygon*      Split( Vertex* );
+    Polygon*      Split( mjl::Vertex* );
                   // MJL, p.87
-    Vertex*       LeastVertex( int (*cmp)( const mjl::Point& a, const mjl::Point& b ) ); 
+    mjl::Vertex*  LeastVertex( int (*cmp )( const mjl::Point& a, const mjl::Point& b ) );
     mjl::Point    CenterOfGravity() const;
     void          CenterOfGravity( double&, double& ) const;
     double        Perimeter() const;
@@ -42,12 +44,15 @@ class Polygon {
     void          Move( double dx, double dy );
     void          BoundingRectangle( mjl::Point& cnr_min, mjl::Point& cnr_max ) const;
 
+    bool          IsPositivelyOriented() const;
+    void          OrientPositively();
+
     void          Out() const;
     void          Out( const char* ) const;
     void          OutputCoordinatesTo( std::list<mjl::Point>& ) const;
 
   private:
-    mutable Vertex* v_;
+    mutable mjl::Vertex* v_;
     size_t  size_;
     
     void Resize(); 
@@ -82,7 +87,7 @@ inline Polygon::Polygon( Vertex* v )
   }
 
 
-inline Vertex* Polygon::V() const
+inline mjl::Vertex* Polygon::V() const
  {
     return v_;
  }
@@ -109,48 +114,48 @@ inline Edge  Polygon::Edge() const
  
  
 /// @return vertex successor
-inline Vertex* Polygon::Cw() const
+inline mjl::Vertex* Polygon::Cw() const
  {
     return v_->Cw();
  }
 
 
 /// @return predecessor of vertex
-inline Vertex* Polygon::Ccw() const
+inline mjl::Vertex* Polygon::Ccw() const
  {
     return v_->Ccw();
  }
  
  
-inline Vertex* Polygon::Neighbor( ORIENTATION rotation )
+inline mjl::Vertex* Polygon::Neighbor( ORIENTATION rotation )
  {
     return v_->Neighbor( rotation );
  }
  
  
-inline Vertex* Polygon::Advance( ORIENTATION rotation )
+inline mjl::Vertex* Polygon::Advance( ORIENTATION rotation )
  {
     return v_ = v_->Neighbor( rotation );
  }
 
-inline const Vertex* Polygon::Advance( ORIENTATION rotation ) const
+inline const mjl::Vertex* Polygon::Advance( ORIENTATION rotation ) const
  {
     return v_ = v_->Neighbor( rotation );
  }
 
 
 
-inline Vertex* Polygon::SetV( Vertex* v )
+inline mjl::Vertex* Polygon::SetV( Vertex* v )
  {
     return v_ = v;
  }
 
 
 
-inline Vertex* Polygon::Insert( const mjl::Point& p )
+inline mjl::Vertex* Polygon::Insert( const mjl::Point& p )
  {
-    if ( size_++ == 0U ) v_ = new Vertex(p);
-    else v_ = v_->Insert( new Vertex(p) );
+    if ( size_++ == 0U ) v_ = new mjl::Vertex(p);
+    else v_ = v_->Insert( new mjl::Vertex(p) );
     
     return v_;
  }
@@ -158,16 +163,16 @@ inline Vertex* Polygon::Insert( const mjl::Point& p )
 
 inline void Polygon::Remove()
  {
-    Vertex* v = v_;
+    mjl::Vertex* v = v_;
     v_ = (--size_ == 0U) ? 0 : v_->Ccw();
     delete v->Remove(); 
  }
  
  
 
-inline Polygon*  Polygon::Split( Vertex* b )
+inline Polygon*  Polygon::Split( mjl::Vertex* b )
  {
-    Vertex* bp = v_->Split(b);
+    mjl::Vertex* bp = v_->Split(b);
     Resize();
     return new Polygon(bp);
  }
@@ -182,6 +187,8 @@ inline mjl::Point Polygon::CenterOfGravity() const
  {
      double x, y;
      CenterOfGravity( x, y );
+     assert( !isnan(x) );
+     assert( !isnan(y) );
      return mjl::Point( x, y );
  }
 

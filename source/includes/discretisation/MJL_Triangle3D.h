@@ -3,6 +3,7 @@
 
 #include "MJL_Point3D.h"
 #include "MJL_Edge3D.h"
+#include <vector>
 
 namespace mjl {
 
@@ -33,7 +34,7 @@ class Triangle3D {
     Point3D     operator[]( int i ) const;
     Edge3D      boundingBox()       const { return boundingBox_; };
     Point3D     n()                 const { return n_; };
-    void        UnitNormal( Edge3D& e ) const; 
+    void        UnitNormal( Edge3D& ) const; 
     void        UnitNormal( std::vector<double>& vec ) const;
     int         Classify( const Point3D& p ) const;
     int         FacingDirection() const;

@@ -1,5 +1,6 @@
 #include "MJL_Triangle3D.h"
 #include "MJL_Edge3D.h"
+#include <iostream>
 
 using namespace std;
 

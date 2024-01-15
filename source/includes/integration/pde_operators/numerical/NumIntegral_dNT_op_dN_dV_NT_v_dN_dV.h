@@ -8,10 +8,10 @@
 namespace csmp {
 
 /// advection-dispersion matrices @note v-term is calculated from 'grad' test operand x multiplier)
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV : public MathOperatorLHS<dim,CELL> {
   public:
-    NumIntegral_dNT_op_dN_dV_NT_v_dN_dV( const PropertyDatabase<dim>& pref, 
+    NumIntegral_dNT_op_dN_dV_NT_v_dN_dV( const PropertyDatabase<dim>&,
                                           const char* emultiplier,      // element v multiplier
                                           const char* nmultiplier,      // nodal v multiplier
                                           const char* grad_prop,        // e.g., for calc. of v
@@ -19,7 +19,7 @@ class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV : public MathOperatorLHS<dim> {
                                           const char* basic,            // e.g., fluid pressure
                                           const char* test );           // e.g., fluid pressure
                         
-    NumIntegral_dNT_op_dN_dV_NT_v_dN_dV( const PropertyDatabase<dim>& pref, 
+    NumIntegral_dNT_op_dN_dV_NT_v_dN_dV( const PropertyDatabase<dim>&, 
                                           const char* emultiplier,      // element v multiplier
                                           const char* nmultiplier,      // nodal v multiplier
                                           const char* grad_prop,        // e.g., for calc. of v
@@ -28,13 +28,13 @@ class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV : public MathOperatorLHS<dim> {
                                           const char* basic,            // e.g., fluid pressure
                                           const char* test );           // e.g., fluid pressure
     
-    virtual void GetOperands( const CELL& );
-    virtual void ComputeContribution( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
     void SpatialDerivative( uint32_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
 
   private:
-    void ReadElementMultiplier( const CELL&, DenseMatrix<DM_MIN>& MULT );
+    void ReadElementMultiplier( const CELL<dim>&, DenseMatrix<DM_MIN>& MULT );
     
     DenseMatrix<DM_MIN>  DN, DNT, // derivatives of basis functions
                                 VIP,     // 'v' (velocity) vector<double> variable

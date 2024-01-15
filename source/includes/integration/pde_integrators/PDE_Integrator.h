@@ -1,29 +1,9 @@
 #ifndef CSMP_PDE_INTEGRATOR_H
 #define CSMP_PDE_INTEGRATOR_H
 
-#include "ErrorHandler.h"
-
 #include "CSMP_definitions.h"
-#include "LinearSolver.h"
-
-#include "Index.h"
-#include "Parameter.h"
-
-#include "DenseMatrix.h"
 #include "SparseMatrix.h"
 
-#include "ScalarVariable.h"
-#include "VectorVariable.h"
-#include "TensorVariable.h"
-#include "ArrayVariable.h"
-#include "FlaggedArrayVariable.h"
-
-#include "Node.h"
-#include "Element.h"
-#include "Face.h"
-#include "InterFace.h"
-
-#include "ModelSubDomain.h"
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
@@ -31,14 +11,13 @@
 #include "MathOperatorRHS.h"
 #include "MathOperatorLHS.h"
 
-#include <string>
-#include <iostream>
-#include <cassert>
-
 namespace csmp {
 
-template<uint32_t> class Model;
-template<uint32_t> class Boundary;
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
+template<uint32_t> class NimbleRegion;
+class Solver;
 
 class PDE_Integrator_Test;
 
@@ -270,10 +249,9 @@ done in the following example:
 @endcode
 
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class CELLTYPE=Element>
 class PDE_Integrator {
   public:
-
     typedef typename std::map<Parameter,size_t>::const_iterator operandsConstIterator; ///< constant iterator over solution variables
     typedef typename std::map<Parameter,size_t>::iterator       operandsIterator;      ///< iterator over solution variables
 
@@ -288,20 +266,20 @@ class PDE_Integrator {
     PDE_Integrator& operator=( const PDE_Integrator& ) = delete;
 
     /// add desired integral terms (pde operators) to the left-hand side matrix of the algebraic system of equations
-    void          Add( MathOperatorLHS<dim>* );
+    void          Add( MathOperatorLHS<dim,CELLTYPE>* );
 
     /// add desired integral terms (pde operators) to the right-hand side vector of the algebraic system of equations
-    void          Add( MathOperatorRHS<dim>* );
+    void          Add( MathOperatorRHS<dim,CELLTYPE>* );
   
+    /// adds math operators that will be applied in a second loop after the matrix has been inverted
+    void          AddPostProcess( MathOperatorLHS<dim,CELLTYPE>* );
+
     /// adds integral terms on the boundary of the computational domain if any
-    void          AddBoundaryIntegral( MathOperatorRHS<dim>* );
+    void          AddBoundaryIntegral( MathOperatorRHS<dim,Face>* );
 
     /// for the computation of fluxes across internal split boundaries
-    void          AddSplitBoundaryIntegral( MathOperatorRHS<dim>* );
-    void          AddSplitBoundaryIntegral( MathOperatorLHS<dim>* );
-
-    /// adds math operators that will be applied in a second loop after the matrix has been inverted
-    void          AddPostProcess( MathOperatorLHS<dim>* );
+    void          AddSplitBoundaryIntegral( MathOperatorRHS<dim,InterFace>* );
+    void          AddSplitBoundaryIntegral( MathOperatorLHS<dim,InterFace>* );
 
     /// sets the time-increment for- and triggers a transient calculation (use 1/t if problem has been set up that way)
     void          TimeIncrement( double dt );
@@ -309,11 +287,11 @@ class PDE_Integrator {
     /// returns whether a finite-difference time increment has been set
     bool          Transient() const;
   
-    /// accumulates, assembles and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file; uses node numbering
-    void          IntegrateOver( COMPUTATION_DOMAIN<dim>&, bool debug=false );
-  
-    /// simultaneously considers potential Boundary objects sharing nodes with the model subdomain on which the solution is obtained; uses node numbering
-    void          IntegrateOver( Model<dim>&, COMPUTATION_DOMAIN<dim>&, bool debug=false );
+    /// accumulates, assembles, and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file; uses node numbering
+    void          IntegrateOver( ModelSubDomain<dim,CELLTYPE>&, bool debug=false );
+
+    /// also considers  "dS" pde operators from Boundary or SplitBoundary objects if these share nodes with domain on which the solution is obtained
+    void          IntegrateOver( Model<dim>&, ModelSubDomain<dim,CELLTYPE>&, bool debug=false );
 
     /// switch to another solver deleting any dynamically allocated solver that was associated with integrator
     void          SetSolver( Solver& );
@@ -354,57 +332,68 @@ class PDE_Integrator {
 
   protected:
 
-    /// checks whether (returns true) any Boundary object in the model is a surface of the computational domain
-    bool IdentifySharedBoundaries( const Model<dim>&, const COMPUTATION_DOMAIN<dim>&, std::list<std::string>& shared_boundaries );
+    /// checks whether any Boundary object in the model is a surface of the computational domain
+    std::list<std::string> IdentifySharedBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&);
   
+    /// checks whether any SplitBoundary object in the model has higher-dim elements on either side the computational domain
+    std::list<std::string> IdentifySharedSplitBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&);
+
+
     /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved
-    virtual void  EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& );
+    virtual void  EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& );
 
     /// for the elimination of Dirichlet constraints from the solution matrix; called after EstablishMatrixSetup but before accumulation
-    void  ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
+    void  ReduceSystemSizeEliminatingEssentialConditions( const ModelSubDomain<dim,CELLTYPE>& , size_t total_degrees_of_freedom);
   
     /// in time-dependent calculations this method assigns initial conditions to the RHS; uses node numbering
-    virtual void  AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& );
+    virtual void  AssignInitialConditions( const ModelSubDomain<dim,CELLTYPE>& );
 
     /// modifies right-hand vector; adding Dirichlet condition terms that were elimitated before
-    virtual void  AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
+    virtual void  AssignEssentialConditions( const ModelSubDomain<dim,CELLTYPE>& );
 
     /// accumulates finite element integrals into solution matrix and right-hand side; uses node numbering
-    virtual void  Accumulate( const COMPUTATION_DOMAIN<dim>& );
+    virtual void  Accumulate( const ModelSubDomain<dim,CELLTYPE>& );
+
+    /// accumulates finite element integrals for Faces into right-hand side for boundaries provided; uses node numbering
+    virtual void AccumulateBoundaries(  Model<dim>& , ModelSubDomain<dim,CELLTYPE>&, std::list<std::string> shared_boundaries );
+
+    /// accumulates finite element integrals into solution matrix and right-hand side for all splitboundaries provided; uses node numbering
+    virtual void AccumulateSplitBoundaries( Model<dim>&, ModelSubDomain<dim,CELLTYPE>&, std::list<std::string> shared_splitboundaries);
 
     /// accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
-    virtual void  AccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const Boundary<dim>& );
+  // TODO: refactor: rename methods Accumulate and LateAccumulate and let overloading take care of name resolution
+    virtual void  AccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const Boundary<dim>& );
     
     /// accumulation of Robin-type boundary conditions to SplitBoundary interfaces
-    virtual void  AccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const SplitBoundary<dim>& );
+    virtual void  AccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const SplitBoundary<dim>& );
 
     /// accumulates finite-element integrals to matrix and vector after the corresponding entries were already multiplied with the initial conditions; uses node numbering
-    virtual void  LateAccumulate( const COMPUTATION_DOMAIN<dim>& );
+    virtual void  LateAccumulate( const ModelSubDomain<dim,CELLTYPE>& );
 
     /// late accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
-    virtual void  LateAccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const Boundary<dim>& );
-    virtual void  LateAccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const SplitBoundary<dim>& );
+    virtual void  LateAccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const Boundary<dim>& );
+    virtual void  LateAccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const SplitBoundary<dim>& );
     
     /// couples domains separated by SplitBoundaries using the information from NodeManifolds
-    void CoupleDomainsAcrossSplitBoudary( COMPUTATION_DOMAIN<dim>& );
+    void CoupleDomainsAcrossSplitBoundary( ModelSubDomain<dim,CELLTYPE>& );
 
     /// calls connected solver object to find x in G x = rh problem
     virtual void  Solve();
 
     /// allows to apply pde operators to post-process the newly computed solution
-    virtual void  PostProcess( COMPUTATION_DOMAIN<dim>& );
+    virtual void  PostProcess( ModelSubDomain<dim,CELLTYPE>& );
 
     /// transfers the results stored in solution vector onto the nodes of the computational domain; uses node numbering
-    virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );
+    virtual void  OutputResults( ModelSubDomain<dim,CELLTYPE>& );
 
-    std::map<std::string,MathOperatorLHS<dim>*>  lhs_operators_;           ///< stencils for lefthand solution matrix
-    std::map<std::string,MathOperatorRHS<dim>*>  rhs_operators_;           ///< stencils for righthand vector
-    std::map<std::string,MathOperatorRHS<dim>*>  rhs_boundary_operators_;  ///< surface integrals for accumulation over boundary
-    std::map<std::string,MathOperatorLHS<dim>*>  lhs_split_boundary_operators_;  ///< implicit integral coupling terms for SplitBoundary
-    std::map<std::string,MathOperatorRHS<dim>*>  rhs_split_boundary_operators_;  ///< explicit integral coupling terms for SplitBoundary
-    std::map<std::string,MathOperatorLHS<dim>*>  postpro_operators_;       ///< post-processing: Darcy velocities, stresses from strains etc.
-    std::map<Parameter,size_t>                   basic_operands_;
-    std::map<Parameter,size_t>                   test_operands_;           ///< dependent variables in the solved system of equations
+    std::map<std::string,MathOperatorLHS<dim,CELLTYPE>*>  lhs_operators_;           ///< stencils for lefthand solution matrix
+    std::map<std::string,MathOperatorRHS<dim,CELLTYPE>*>  rhs_operators_;           ///< stencils for righthand vector
+    std::map<std::string,MathOperatorLHS<dim,CELLTYPE>*>  postpro_operators_;       ///< post-processing: Darcy velocities, stresses from strains etc.
+    std::map<std::string,MathOperatorRHS<dim,Face>*>      rhs_boundary_operators_;  ///< surface integrals for accumulation over boundary
+    std::map<std::string,MathOperatorLHS<dim,InterFace>*> lhs_split_boundary_operators_;  ///< implicit integral coupling terms for SplitBoundary
+    std::map<std::string,MathOperatorRHS<dim,InterFace>*> rhs_split_boundary_operators_;  ///< explicit integral coupling terms for SplitBoundary
+    std::map<Parameter,size_t>                            basic_operands_;
+    std::map<Parameter,size_t>                            test_operands_;           ///< dependent variables in the solved system of equations
 
     SparseMatrix          G_;           ///< solution matrix
     std::vector<double>   rh_;          ///< righthand vector

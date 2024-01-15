@@ -16,8 +16,99 @@
 
 namespace csmp {
 
+/** Tests the functionality of the base class of Region, Boundary and SplitBoundary
+    Only tests selected less frequently used, less obvious functionality that requires testing.
+    Functions involving variables require testing in 2 and 3D.
+    
+        /// deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells
+@todo    void RebuildSubDomainAfterChangeOfCellVector();
+    
+    /// rebuilds subdomain on the basis of the cells that will be selected according to the supplied property constraints
+    void UpdateCellMembershipApplyingConstraints( typename std::vector<CELL<dim>*>::const_iterator master_domain_start,
+                                                  typename std::vector<CELL<dim>*>::const_iterator master_domain_end,
+                                                  const PropertyConstraints& );
+
+    /// removes any cells or node pointers that were set to zero elsewhere; returns number of cells removed
+    size_t RemoveNullPointerCells();
+    
+    /// reference counting-based unique domain identifier  (0..n-1)
+    size_t DomainIndex() const;
+
+    bool IsContiguous() const;
+
+    std::pair<CELL_SHAPE,bool>  SingleCellShapeDomain() const;
+
+    /// output coordinates to user-defined vector variable [x1,y1,z1,...xn,yn,zn]
+    void AssignNodeCoordinatesTo( const char* vector_prop );
+  
+    /// assigment of coordinate component 'x','y','z' to scalar variable of choice
+    void AssignNodeCoordinatesTo( const char* scalar_prop, char coord );
+
+    /// characteristics like 'length', 'area', 'volume' , 'aspect ratio', 'inner radius' are assigned to user-defined variable
+    void AssignCellCharacteristicsTo( const char* characteristic, const char* var );
+    
+    template<typename Var>
+    void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
+
+    /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
+    template<typename Var>
+    void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
+
+    /// changes the flag of the scalar variable 'property' to new value; applied either in the entire subdomain or its interior or perimeter
+    void ChangePropertyStatus( const char* property,
+                               VARIABLE_FLAG new_status_of_scalar,
+                               SUBDOMAIN_PART=COMPLETE );
+
+    /// changes the flag of the scalar variable 'property' to new value if the scalar variable is withing the specified range
+    void ChangePropertyStatusWhere( const char* property,
+                                    VARIABLE_FLAG new_status_of_scalar,
+                                    double min_value_to_change,
+                                    double max_value_to_change );
+
+    /// changes the flags of the vector variable 'property' to new value; applied either in the entire subdomain or its interior or perimeter
+    void ChangePropertyStatus( const char* property,
+                               const std::vector<VARIABLE_FLAG>& new_status,
+                               SUBDOMAIN_PART=COMPLETE );
+
+    /// changes the flag of the vector variable 'property' to new value if the scalar variable is withing the specified range
+    void ChangePropertyStatusWhere( const char* property,
+                                    const std::vector<VARIABLE_FLAG>& new_status,
+                                    double min_value_to_change,
+                                    double max_value_to_change );
+
+    /// changes the flag of a particular variable component to new value; applied either in the entire subdomain or its interior or perimeter
+    void ChangePropertyStatus( const char* property,
+                               uint32_t component,
+                               VARIABLE_FLAG new_status,
+                               SUBDOMAIN_PART=COMPLETE );
+
+    /// changes the flag of a particular variable component to new value if the scalar variable is withing the specified range
+    void ChangePropertyStatusWhere( const char* property,
+                                    uint32_t component,
+                                    VARIABLE_FLAG new_status,
+                                    double min_value_to_change,
+                                    double max_value_to_change );
+
+    /// by default (i=0) returns status of scalar variable or first component of a vector or tensor variable; if i>0 flag of corresponding component is returned
+    VARIABLE_FLAG  PropertyStatus( const char* variable, SUBDOMAIN_PART flag=COMPLETE , uint32_t i=0 ) const;
+
+    void InterpolateNodeToCellProperty( const char* nprop, const char* eprop );
+    void InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* eprop );
+    void InterpolateIntegrationPointToCellProperty( const char* cprop, const char* eprop );
+    void ExtrapolateCellToIntegrationPointProperty( const char* eprop, const char* cprop );
+    void ExtrapolateCellToFacetIntegrationPointProperty( const char* eprop, const char* fipprop );
+    void ExtrapolateCellToNodeProperty( const char* eprop, const char* nprop, bool by_distance=true );
+    void ExtrapolateIntegrationPointToNodeProperty( const char* cprop, const char* nprop );
+
+    /// arithmetic (number as opposed to volume weighted) average
+    double Average( const char* property ) const;
+    bool   CopyGradientOfProperty_A_To_B( const char* node_prop, const char* cell_prop );
+    void   CopyReplace( const char* from, const char* to );
+
+*/
 class ModelSubDomain_Test : public Test {
   public:
+  
     virtual void run();
 
     /// tests method that creates neighbor connectivity inside of CSMP
@@ -29,209 +120,6 @@ class ModelSubDomain_Test : public Test {
                                  const ModelSubDomain<dim,simplicial_complex>&,
                                  bool verbose );
 };
-
-
-
-
-/** compares node locations and connectivity
-    - uses point locations for node comparison
-
-*/
-template<uint32_t dim,template<uint32_t> class simplicial_complex>
-bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simplicial_complex>& domain1,
-                                                  const ModelSubDomain<dim,simplicial_complex>& domain2,
-                                                  bool verbose )
- {
-    // domain names
-    if ( domain1.Name() != domain2.Name() ) {
-         if ( verbose )
-           std::cerr <<"\ncompareModelSubdomains: names mismatch: "<< domain1.Name() <<" vs. "<< domain2.Name() <<"\n";
-         //return false;
-      }
-    _test( domain1.Name() == domain2.Name() );
-   
-    // 1. nodes
-    // --------
-    // number of nodes
-    if ( domain1.Nodes() != domain2.Nodes() ) {
-         if ( verbose )
-           std::cerr <<"\ncompareModelSubdomains: node numbers do not match: "<< domain1.Nodes() <<" vs "<< domain2.Nodes() <<"\n";
-         //return false;
-      }
-    _test( domain1.Nodes() == domain2.Nodes() );
-   
-    // interior nodes
-    if ( domain1.InteriorNodes() != domain2.InteriorNodes() ) {
-         if ( verbose ) {
-              std::cerr <<"\ncompareModelSubdomains: number of interior nodes does not match: "<< domain1.InteriorNodes() <<" vs "<< domain2.InteriorNodes() <<"\n";
-              std::cerr <<"\tinterior nodes domain 1 vs domain 2:\n";
-              for ( auto nit=domain1.NodesBegin(); nit!=domain1.PerimeterNodesBegin(); ++nit )
-                std::cerr << (*nit)->Idx() <<" ";
-              std::cerr << std::endl;
-              for ( auto nit=domain2.NodesBegin(); nit!=domain2.PerimeterNodesBegin(); ++nit )
-                std::cerr << (*nit)->Idx() <<" ";
-              std::cerr << std::endl;
-           }
-         //return false;
-      }
-    _test( domain1.InteriorNodes() == domain2.InteriorNodes() );
-   
-    // node coordinates (sorted ranges of points have to be created)
-    // ranges for domain 1
-    std::set<Point<dim> >  interior_points1;
-    for ( auto nit=domain1.NodesBegin(); nit!=domain1.PerimeterNodesBegin(); ++nit )
-      interior_points1.insert( (*nit)->Coordinate() );
-    std::set<Point<dim> >  perimeter_points1;
-    for ( auto nit=domain1.PerimeterNodesBegin(); nit!=domain1.NodesEnd(); ++nit )
-      interior_points1.insert( (*nit)->Coordinate() );
-    // ranges for domain 2
-    std::set<Point<dim> >  interior_points2;
-    for ( auto nit=domain2.NodesBegin(); nit!=domain2.PerimeterNodesBegin(); ++nit )
-      interior_points2.insert( (*nit)->Coordinate() );
-    std::set<Point<dim> >  perimeter_points2;
-    for ( auto nit=domain2.PerimeterNodesBegin(); nit!=domain2.NodesEnd(); ++nit )
-      interior_points2.insert( (*nit)->Coordinate() );
-    // comparisons
-    if ( interior_points1 != interior_points2 ) {
-         if ( verbose )
-           std::cerr <<"\ncompareModelSubdomains: locations of interior points do not match.\n";
-         //return false;
-      }
-    _test( interior_points1 == interior_points2 );
-
-    if ( perimeter_points1 != perimeter_points2 ) {
-         if ( verbose )
-           std::cerr <<"\ncompareModelSubdomains: locations of perimeter points do not match.\n";
-         //return false;
-      }
-    _test( perimeter_points1 == perimeter_points2 );
-   
-    interior_points1.clear();
-    interior_points2.clear();
-    perimeter_points1.clear();
-    perimeter_points2.clear();
-
-    // node boundary flags
-    // (creating maps where the nodes are ordered by their location because
-    //  they do not necessarily have the same number)
-    std::map<Point<dim>,BOX_BOUNDARY>  boundary_flags1;
-    for ( auto nit=domain1.NodesBegin(); nit!=domain1.NodesEnd(); ++nit )
-      boundary_flags1.insert( std::make_pair( (*nit)->Coordinate(), (*nit)->AtBoundary() ) );
-    //
-    std::map<Point<dim>,BOX_BOUNDARY>  boundary_flags2;
-    for ( auto nit=domain2.NodesBegin(); nit!=domain2.NodesEnd(); ++nit )
-      boundary_flags1.insert( std::make_pair( (*nit)->Coordinate(), (*nit)->AtBoundary() ) );
-    //
-    // may fail due to tolerance differences in point classification _test( boundary_flags1.size() == boundary_flags2.size() );
-    int node_flag_mismatches(0);
-    auto nit2=boundary_flags2.begin();
-    for ( auto nit1=boundary_flags1.begin(); (nit1!=boundary_flags1.end() && nit2!=boundary_flags2.end()); ++nit1, ++nit2 )
-      if ( (*nit1).second != (*nit2).second ) {
-            std::cerr <<"\n\t"<< parseBoundary((*nit1).second) <<" vs "<< parseBoundary((*nit2).second);
-            node_flag_mismatches++;
-        }
-    if ( node_flag_mismatches > 0 ) {
-          std::cerr <<"\ncompareModelSubdomains: the BOX_BOUNDARY flags of the domains do not match.\n";
-          //return false;
-      }
-    _test( node_flag_mismatches == 0 );
-    boundary_flags1.clear();
-    boundary_flags2.clear();
-
-   
-    // 2. elements, i.e. connectivity
-    // ------------------------------
-    // number of elements
-    if ( domain1.Cells() != domain2.Cells() ) {
-         if ( verbose )
-           std::cerr <<"\ncompareModelSubdomains: number of elements does not match.\n";
-         //return false;
-      }
-    _test( domain1.Cells() == domain2.Cells() );
-   
-    // number of interior elements
-    if ( domain1.PerimeterCells() != domain2.PerimeterCells() ) {
-         if ( verbose )
-           std::cerr <<"\ncompareModelSubdomains: mismatch in number of perimeter elements.\n";
-         //return false;
-      }
-    _test( domain1.PerimeterCells() == domain2.PerimeterCells() );
-   
-    // are the interior elements the same ?
-    std::set<size_t>  interior_elmts1, interior_elmts2;
-    for ( auto it=domain1.CellsBegin(); it!=domain1.PerimeterCellsBegin(); ++it ) interior_elmts1.insert( (*it)->Idx() );
-    for ( auto it=domain2.CellsBegin(); it!=domain2.PerimeterCellsBegin(); ++it ) interior_elmts2.insert( (*it)->Idx() );
-    _test( interior_elmts1 == interior_elmts2 );   
-   
-    // element connectivity (not assuming that elements are in same order)
-    std::set<std::vector<size_t> > plist_entries1;
-    for ( auto it=domain1.CellsBegin(); it!=domain1.CellsEnd(); ++it ) {
-         std::vector<size_t> nodes( (*it)->Nodes() );
-         for ( auto i{0U}; i<(*it)->Nodes(); ++i ) {
-              nodes[i] = (*it)->N(i)->Idx();
-           }
-         plist_entries1.insert( move(nodes) );
-      }
-    std::set<std::vector<size_t> > plist_entries2;
-    for ( auto it=domain2.CellsBegin(); it!=domain2.CellsEnd(); ++it ) {
-         std::vector<size_t> nodes( (*it)->Nodes() );
-         for ( auto i{0U}; i<(*it)->Nodes(); ++i ) {
-              nodes[i] = (*it)->N(i)->Idx();
-           }
-//std::cerr <<"\n"<< (*it)->Idx() <<": ";
-//out(nodes);
-         plist_entries2.insert( move(nodes) );
-      }
-    // comparing plists
-    bool plists_are_the_same(true);
-    if ( plist_entries1 != plist_entries2 ) {
-         if ( verbose )
-           std::cerr <<"\ncompareModelSubdomains: (plist) mismatch in element-to-node connectivity.\n";
-         plists_are_the_same = false;
-         //return false;
-      }
-    _test( plists_are_the_same );
-
-    plist_entries1.clear();
-    plist_entries2.clear();
-   
-    // comparing the element neighbor connectivity
-    std::set<std::vector<uint32_t> > pfverts_entries1;
-    for ( auto it=domain1.CellsBegin(); it!=domain1.CellsEnd(); ++it ) {
-         std::vector<uint32_t> nbors( (*it)->Neighbors(),0 );
-         for ( auto i{0}; i<(*it)->Neighbors(); ++i )
-           if ( (*it)->Neighbor(i) != nullptr ) {
-                nbors[i] = (*it)->Neighbor(i)->Idx();
-             }
-         pfverts_entries1.insert( move(nbors) );
-      }
-    std::set<std::vector<uint32_t> > pfverts_entries2;
-    for ( auto it=domain2.CellsBegin(); it!=domain2.CellsEnd(); ++it ) {
-         std::vector<uint32_t> nbors( (*it)->Neighbors(),0 );
-         for ( auto i{0}; i<(*it)->Neighbors(); ++i )
-           if ( (*it)->Neighbor(i) != nullptr ) {
-                nbors[i] = (*it)->Neighbor(i)->Idx();
-             }
-         pfverts_entries2.insert( move(nbors) );
-      }
-    // comparing neighbor connectivity lists
-    bool pfverts_are_the_same(true);
-    if ( pfverts_entries1 != pfverts_entries2 ) {
-         if ( verbose )
-           std::cerr <<"\ncompareModelSubdomains: (pfverts) mismatch in element to neighbor-element connectivity.\n";
-         pfverts_are_the_same = false;
-         //return false;
-      }
-    _test( pfverts_are_the_same );
-
-    plist_entries1.clear();
-    plist_entries2.clear();
-   
-    // all comparisons passed - domains have same nodes and elements.
-    return true;
-   
- } // end compareModelSubdomains
-
 
 } // end csmp
 

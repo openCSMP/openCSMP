@@ -1,6 +1,7 @@
 #include "ThermalVisitor.h"
 #include "Model.h"
 #include "Region.h"
+#include "Face.h"
 
 using namespace std;
 
@@ -305,9 +306,18 @@ void ThermalVisitor<dim>::SetInitialProperties(Model<dim>* model)
 
 } // end SetInitialProperties
 
+
+
 template class ThermalVisitor<1>;
 template class ThermalVisitor<2>;
 template class ThermalVisitor<3>;
+
+/* TODO: convert into template so that visitor can be applied to Faces
+template<uint32_t dim, template<uint32_t> class CELL>
+template class ThermalVisitor<1,Face>;
+template class ThermalVisitor<2,Face>;
+template class ThermalVisitor<3,Face>;
+*/
 
 } // end csmp
 

@@ -6,19 +6,26 @@
 #include "Operand.h"
 
 namespace csmp {
-/**
-@author S.K. Matthaei
-@author S. Geiger
-@date 2000 */
 
-/// vector solution variable: "mass matrix" for computation of vector properties (2-3DOF) and constant coefficients
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_op_PT_P_dV : public MathOperatorRHS<dim> {
+template<uint32_t> class Element;
+
+/**
+vector solution variable: "mass matrix" for computation of vector properties (2-3DOF) and constant coefficients
+
+@author S.K. Matthai
+@author S. Geiger
+@date 2000
+
+*/
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_op_PT_P_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_op_PT_P_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_op_PT_P_dV( const PropertyDatabase<dim>&, 
                             const char* oper, const char* test );
-    
-    virtual void ComputeContribution( const CELL& );
+
+    virtual ~NumIntegral_op_PT_P_dV() {}
+
+    virtual void ComputeContribution( const CELL<dim>& );
 
   private:
     uint32_t  nodal_degrees_of_freedom;

@@ -58,9 +58,6 @@ Element<dim>::Element( csmp::FiniteElement* f,
     node_connector_( f->Nodes(), nullptr )
 {
    assert( f != nullptr );
-   // currently we only have FV stencils for linear isoparametric elements
-   if ( this->UsesLocalCoordinates() && this->Interpolation() == 1 )
-     assert( fvs != nullptr );
 }
 
 
@@ -80,8 +77,6 @@ Element<dim>::Element( csmp::FiniteElement* f,
 {
   assert( f != nullptr );
   if ( this->UsesLocalCoordinates() ) {
-       // currently we only have FV stencils for linear isoparametric elements
-       if ( this->Interpolation() == 1 ) assert( fvs != nullptr );
        this->ResizePropertyStorage( ep, cp );
     }
   else
@@ -111,8 +106,6 @@ Element<dim>::Element( size_t idx,
 {
   assert( f != nullptr );
   if ( this->UsesLocalCoordinates() ) {
-       // currently we only have FV stencils for linear isoparametric elements
-       if ( this->Interpolation() == 1 ) assert( s != nullptr );
        this->ResizePropertyStorage( ep, cp );
     }
   else
@@ -637,7 +630,7 @@ Point<dim>  Element<dim>::BaryCenter() const
 {
   Point<dim>  pt( N( 0U )->Coordinate() );
   const auto  n_nodes( Nodes() );
-  for ( auto i = 1U; i<n_nodes; ++i )
+  for ( auto i{1U}; i<n_nodes; ++i )
     pt += N( i )->Coordinate();
 
   return pt / static_cast<double>(Nodes());
@@ -757,7 +750,7 @@ void Element<dim>::Out() const
   if ( this->IsLine() )    cout << "line element";
   else if ( this->IsSurface() ) cout << "surface element";
   else if ( this->IsVolume() )  cout << "volume element";
-  cout <<"\n";
+  cout <<")\n";
 
   cout << "\n\tconnected nodes (indices : boundary flags):  ";
   string str("undefined");
@@ -768,15 +761,15 @@ void Element<dim>::Out() const
   cout << endl;
 
   cout << "\n\tconnected neighbors (finite element types : boundary flags):\n";
-  for ( auto i{0U}; i<this->Neighbors(); i++ )
-    if ( Neighbor( i ) != nullptr ) {
-      cout << "\t\t" << Neighbor( i )->Idx() << ": ";
-      cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
-      str = parseBoundary( Neighbor( i )->AtBoundary(i) );
-      cout << str << endl;
-    }
-    else cout << "\t\tnone.\n";
-
+  for ( auto i{0U}; i<this->Neighbors(); i++ ) {
+        if ( Neighbor( i ) != nullptr ) {
+            cout << "\t\t"<<"elmt "<< Neighbor( i )->Idx() << ": ";
+            cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << " ";
+          }
+        else cout << "\t\tnone ("<< parseBoundary( AtBoundary(i) ) <<").";
+        cout << endl;
+     }
+     
     // barycentre
     Point<dim>  pt( this->BaryCenter() );
     if ( dim == 1U )

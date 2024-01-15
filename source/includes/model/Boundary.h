@@ -65,9 +65,6 @@ class Boundary : public ModelSubDomain<dim, Face>,
                  public LocalVariableStorage<dim, Boundary>
  {
   public:
-    // ------------------------------------------------
-    // construction of boundaries from scratch
-    // ------------------------------------------------
     Boundary() = delete; ///< there is no sensible default contruction
 
     /// constructor: creating boundary from supplied vector of faces
@@ -91,11 +88,6 @@ class Boundary : public ModelSubDomain<dim, Face>,
     /// methods required for the LocalVariableStorage
     virtual PLACEMENT Placement() const { return BOUNDARY; }
     virtual bool      ValidVariable( const char* variableName ) const;
-
-
-    // ------------------------------------------------
-    // reconstruction of boundaries that existed before
-    // ------------------------------------------------
 
     /// RECONSTRUCTOR of boundary from index data stored in SubDomainInfo (call only prior to deleting anythin from colonies)
     Boundary( const PropertyDatabase<dim>&,

@@ -3,6 +3,7 @@
 
 #include "Box.h"
 #include "Point.h"
+#include "CSMP_global_enumerations.h"
 #include "LocalVariableStorage.h"
 
 namespace csmp {
@@ -46,7 +47,7 @@ class Node : public LocalVariableStorage<dim,Node> {
   public:
     Node();
     /// custom constructor used when model is reconstructed from binary file
-    Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
+    Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT, TOPOTYPE = MESH_VERTEX );
     ~Node();
     /// constructs Node with same idx, position, property values, and pointer connections as the argument Node
     Node( const Node& );
@@ -59,6 +60,13 @@ class Node : public LocalVariableStorage<dim,Node> {
 
     /// Local variable storage interface
     PLACEMENT Placement() const { return NODE; }
+    
+    /// if node is part of line elements (2D) or surface elements (3D), method returns a unit normal that represents the average of the normals of the connected elements
+    bool UnitNormal( Point<dim>& unrml ) const;
+    
+    /// which geometric part of the discretisation of the initial boundary representation (BREP) of the model geometry the node belongs to
+    TOPOTYPE Attribute() const { return BREP_entity_; }
+    void Attribute( TOPOTYPE geom_feature ) { BREP_entity_ = geom_feature; }
 
 
     // node to parent element connectivity (sorted vector that is searchable)
@@ -171,6 +179,7 @@ class Node : public LocalVariableStorage<dim,Node> {
     NodeManifold<dim>*             manifold_ = nullptr;       ///< node manifold pointer
     std::vector<ONE_BYTE_NUMBER>   parent_node_indexes_;      ///< local parent node number (0...nodes-1)
     BOX_BOUNDARY                   at_boundary_;              ///< which model boundary the Node is on
+    TOPOTYPE                       BREP_entity_;              ///< the topologic feature of the boundary representation that the node belongs to
     
     friend class FiniteElement_TestData; // for testing
     friend std::istream& operator >> ( std::istream&, FiniteElement_TestData& );
@@ -188,6 +197,14 @@ std::pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename std
 template<uint32_t dim>
 std::pair<Element<dim>*,size_t>  parentElement( typename std::vector<Node<dim>*>::const_iterator first,
                                                 typename std::vector<Node<dim>*>::const_iterator last );
+
+/// for a node that lies on an internal surface, method reports which of volumetric parent elements lie on the inside and which on the outside of this surface; throws if assumptions are not met
+template<uint32_t dim>
+std::pair<std::vector<Element<dim>*>,std::vector<Element<dim>*>>  parentElementsAdjacentTo( const Node<dim>* const low_dim_node );
+
+/// determines role of Node (simple mesh node vs. geometric constraint), using BOX_BOUNDARY flagging and parent element connectivity,
+template<uint32_t dim>
+TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<dim>* const );
 
 /// prints Idx and boundary flag values of the nodes that this node is connected with
 template<uint32_t dim>

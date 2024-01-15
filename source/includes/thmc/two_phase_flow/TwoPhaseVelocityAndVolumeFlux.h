@@ -7,7 +7,7 @@
 
 namespace csmp {
 
-template<uint32_t> class MathOperatorLHS;
+template<uint32_t,template<uint32_t> class> class MathOperatorLHS;
 template<uint32_t> class Element;
 template<uint32_t> class Node;
 template<uint32_t> class Face;
@@ -17,10 +17,9 @@ template<uint32_t> class TwoPhaseModel;
 
 /// flow "velocity" & "volume flux" are output as vector<double> and scalar variables, respecitively
 /// upon request these properties are extrapolated to the nodes and averaged between adjacent elements
-template<uint32_t dim,class CELL=Element<dim> >
-class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL>
+class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim,CELL> {
   public:
-
     TwoPhaseVelocityAndVolumeFlux( const Model<dim>&,
                            TwoPhaseModel<dim>& satfunc,
                            const char* oper,                // conductivity
@@ -46,17 +45,19 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
                            const char* nodal_volume_flux    = "nodal volume flux",
                            const char* nodal_velocity_nw    = "nodal velocity oil",
                            const char* nodal_velocity_w     = "nodal velocity water");
+                           
+    virtual ~TwoPhaseVelocityAndVolumeFlux() {}
     
     void Verbose( bool stdoutput );
 
-    virtual void GetOperands( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
 
     /// {V} = [grad P]{k}
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
 
     virtual void ComputeContribution( const Node<dim>& );
 
-    virtual void WriteOperands( CELL& );
+    virtual void WriteOperands( CELL<dim>& );
 
     
   private:
@@ -67,7 +68,7 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     void TestRangeOfOutputVariables() const;
 
     // Compute Gravity Term and Total mobility
-    void ComputeTotalMobilityRelativeDensityAndGravityTerm( CELL& );
+    void ComputeTotalMobilityRelativeDensityAndGravityTerm( CELL<dim>& );
 
     bool                            verbose_,
                                     nodal_averaging_,

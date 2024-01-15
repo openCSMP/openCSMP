@@ -3,6 +3,7 @@
 
 #include "Test.h"
 #include "SplitBoundary.h"
+#include "SplitBoundaryInterface_Test.h"
 
 namespace csmp {
 
@@ -26,22 +27,28 @@ namespace csmp {
   class SplitBoundary_Test : public Test
     {
     public:
-      explicit SplitBoundary_Test( bool verbose=false ) : verbose_(verbose) {}
+      SplitBoundary_Test() {}
     
       virtual void run();
       
-      // TESTING of public methods in the order in which they appear in SplitBoundary
+      // TESTING of public methods - Top ones are implemented
       // ----------------------------------------------------------------------------
       // SplitBoundary creation gets tested by SplitBoundaryInterface_Test
+       
+      /// initialises 2022 SKUA model with properties from binary version of VSet
+      void Test_InitialiseSKUA_Model();
         
-      bool Test_InputNodePropertyValue();
+      /// tests that all properties are properly added to nodes on split boundary
+      bool Test_InputNodePropertyValue(const char* mesh_file);
 
+      /// integrates the property over the boundary line or surface
+      bool Test_Area_and_SurfaceIntegral(const char* mesh_file);
+
+
+      // TODO - ALl tests below are still to be done
       /// returns location of split boundary relative to adjacent region
       bool Test_FacingDirection();
 
-      /// output length(2D) or area(3d) of the split boundary=lower dimensional region; middle refers to bisector if nodes are displaced
-      bool Test_Area();
-      
       /// outputs length of perimeter curve of a 3D split boundary; no meaning in 1 or 2D models
       bool Test_PerimeterCalculation();
       
@@ -51,9 +58,7 @@ namespace csmp {
       /// do all interfaces have higher dimensional neighbors
       bool Test_HigherDimensionalNeighbors();
     
-      /// do correspoding nodes coincide
-      bool Test_NodeCorrespondance();
-      
+
       bool Test_Manifolds();
       
       /// is there only a single node along the perimeter of a split boundary
@@ -92,7 +97,7 @@ namespace csmp {
                                            const std::set<std::string>& interface_basic_set,
                                            std::set<std::string>& interface_sets );
       private:
-        const bool verbose_;
+        static const bool verbose_ = true;
   };
 
   } // csmp

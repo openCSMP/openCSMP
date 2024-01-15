@@ -2,7 +2,7 @@
 #define BRUCE_ECKEL_TIMER_UTILITY_H
 
 #include <ctime>
-#include "CSMP_definitions.h"
+#include <cstring>
 
 /** Bruce Eckel's Time class from "Thinking in C++" p. 314
 */

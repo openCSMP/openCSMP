@@ -1,4 +1,5 @@
 #include "MJL_Edge.h"
+#include <iostream>
 
 using namespace std;
 
@@ -136,7 +137,7 @@ INTERSECTION  Edge::SKM_CrossingPoint( double tolerance, const Edge& f, mjl::Poi
 
 
 /// see "Mathematische Formeln" p. 170, Schnittwinkel...
-inline double Edge::AngleTo( const Edge& v ) const 
+double Edge::AngleTo( const Edge& v ) const 
  {
     mjl::Point  a = dest_   - org_;
     mjl::Point  b = v.dest_ - v.org_;

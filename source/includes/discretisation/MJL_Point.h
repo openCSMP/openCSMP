@@ -112,9 +112,9 @@ inline  Point&  Point::operator/=( const Point& p )
     return *this;
  }    
 
-inline  Point::Point( const Point& p )  
+inline  Point::Point( const Point& p )
+ : x_(p.x_), y_(p.y_)
  { 
-    *this = p; 
  }
 
 

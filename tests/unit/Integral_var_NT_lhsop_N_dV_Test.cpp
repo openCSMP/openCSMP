@@ -41,7 +41,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
 
   void Integral_var_NT_lhsop_N_dV_Test::valueTest() {
     // create object
-    Integral_var_NT_lhsop_N_dV<2U,Element<2U> > integral(sg_->Database(),
+    Integral_var_NT_lhsop_N_dV<2U> integral(sg_->Database(),
                                                      "diffusivity",
                                                      "fluid pressure",
                                                      "fluid pressure",
@@ -115,13 +115,13 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
   }
 
   void Integral_var_NT_lhsop_N_dV_Test::compareTest(bool lumped) {
-    Integral_var_NT_lhsop_N_dV<2U,Element<2U> > integral(sg_->Database(),
+    Integral_var_NT_lhsop_N_dV<2U> integral(sg_->Database(),
                                             "diffusivity",
                                             "fluid pressure",
                                             "fluid pressure",
                                             "nodal fluid volume source");
     integral.LumpedFormulation(lumped);
-    Integral_NT_lhsop_N_dV<2U,Element<2U> > simple(sg_->Database(),
+    Integral_NT_lhsop_N_dV<2U> simple(sg_->Database(),
                                       "diffusivity",
                                       "fluid pressure",
                                       "fluid pressure");
@@ -156,7 +156,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
   }
 
   void Integral_var_NT_lhsop_N_dV_Test::lumpedTest() {
-    Integral_var_NT_lhsop_N_dV<2U,Element<2U> > lumped(sg_->Database(),
+    Integral_var_NT_lhsop_N_dV<2U> lumped(sg_->Database(),
                                                    "diffusivity",
                                                    "fluid pressure",
                                                    "fluid pressure",
@@ -202,13 +202,13 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
 
   void Integral_var_NT_lhsop_N_dV_Test::rowSumTest() {
     // create object
-    Integral_var_NT_lhsop_N_dV<2U,Element<2U> > lumped(sg_->Database(),
+    Integral_var_NT_lhsop_N_dV<2U> lumped(sg_->Database(),
                                                    "diffusivity",
                                                    "fluid pressure",
                                                    "fluid pressure",
                                                    "nodal fluid volume source");
     lumped.LumpedFormulation(true);
-    Integral_var_NT_lhsop_N_dV<2U,Element<2U> > consistent(sg_->Database(),
+    Integral_var_NT_lhsop_N_dV<2U> consistent(sg_->Database(),
                                                        "diffusivity",
                                                        "fluid pressure",
                                                        "fluid pressure",

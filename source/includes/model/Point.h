@@ -51,10 +51,10 @@ class Point {
     Point& operator/=( double );
   
     /// accessor and mutator of point (0=x coordinate, 1=y...)
-    double& operator[]( uint32_t);
+    double& operator[]( uint32_t );
   
     /// accessor of point (0=x coordinate, 1=y...)
-    const double& operator[]( uint32_t) const;
+    const double& operator[]( uint32_t ) const;
   
     /// compares points using epsilon from numeric_limits
     bool operator==( const Point& ) const;
@@ -229,12 +229,12 @@ class Point<2U> {
     void   Set( double, double );
     double Length() const;
     double SquaredLength() const;
-    void     NormalizeLengthTo( double len=1. );
+    void   NormalizeLengthTo( double len=1. );
     double DistanceTo( const Point& ) const;
-    bool     CoincidesWithWithinTolerance( const Point&, double tolerance=1.0e-5 ) const;
-    bool     IsBetween( const Point& pt1, const Point& pt2 );
+    bool   CoincidesWithWithinTolerance( const Point&, double tolerance=1.0e-5 ) const;
+    bool   IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double> Coordinates() const;
-    void     Out() const;
+    void   Out() const;
   
     friend Point<2U> operator-( double, const Point<2U>& );
     friend Point<2U> operator+( double, const Point<2U>& );
@@ -279,20 +279,20 @@ class Point<3U> {
     Point<3U>& operator/=( double );
     double&  operator[]( uint32_t);
     const double&  operator[]( uint32_t) const;
-    bool     operator==( const Point<3U>& ) const;
-    bool     operator!=( const Point<3U>& ) const;
-    bool     operator<( const Point<3U>& ) const;
-    bool     operator>( const Point<3U>& ) const;
-    void     Set( const std::vector<double>& );
-    void     Set( double, double, double );
+    bool   operator==( const Point<3U>& ) const;
+    bool   operator!=( const Point<3U>& ) const;
+    bool   operator<( const Point<3U>& ) const;
+    bool   operator>( const Point<3U>& ) const;
+    void   Set( const std::vector<double>& );
+    void   Set( double, double, double );
     double Length() const;
     double SquaredLength() const;
-    void     NormalizeLengthTo( double len=1. );
+    void   NormalizeLengthTo( double len=1. );
     double DistanceTo( const Point& ) const;
-    bool     CoincidesWithWithinTolerance( const Point&, double tolerance=1.0e-5 ) const;
-    bool     IsBetween( const Point& pt1, const Point& pt2 );
+    bool   CoincidesWithWithinTolerance( const Point&, double tolerance=1.0e-5 ) const;
+    bool   IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double> Coordinates() const;
-    void                  Out() const;
+    void   Out() const;
  
     friend Point<3U> operator-( double, const Point<3U>& );
     friend Point<3U> operator+( double, const Point<3U>& );

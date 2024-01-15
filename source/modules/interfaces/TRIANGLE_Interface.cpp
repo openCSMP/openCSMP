@@ -123,7 +123,7 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
                                        IsoparametricLinearTriangle().Neighbors(),
                                        IsoparametricLinearTriangle().ElementType(), x.size(), plist.size() );
     vset.AddXYZ( x, y, z );
-    for ( const auto& b : bflags ) vset.AddBFlag( b.first, b.second );
+    for ( const auto& b : bflags ) vset.BFlag( b.first, b.second );
     vset.AddPlist( plist.begin(), plist.end() );
     vset.AddPfverts( pfverts.begin(), pfverts.end() );
     vset.AddData( "permeability", mesh_regions );
@@ -246,7 +246,7 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
     // 7. Putting results into the VSet
     // ------------------------------------
     vset.AddXYZ( x, y, z );
-    for ( const auto& b : bflags ) vset.AddBFlag( b.first, b.second );
+    for ( const auto& b : bflags ) vset.BFlag( b.first, b.second );
     vset.AddPlist( plist.begin(), plist.end() );
     vset.AddPfverts( pfverts.begin(), pfverts.end() );
     vset.AddData( "permeability", mesh_regions );
@@ -272,11 +272,11 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
 
 
 void TRIANGLE_Interface::CheckTriangleOutput( const char*  file, 
-                                         size_t&   nodes_per_element,
-                                         size_t&  nodes, 
-                                         size_t&  elements,
-                                         int&   node_attributes,
-                                         int&   elmt_attributes )
+                                              size_t&   nodes_per_element,
+                                              size_t&  nodes,
+                                              size_t&  elements,
+                                              int&   node_attributes,
+                                              int&   elmt_attributes )
  {
     char fnode[200], fele[200], fedge[200];
     strcpy( fnode, file );

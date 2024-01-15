@@ -1,23 +1,51 @@
-README.txt
+README.txt - Welcome to Open Source version of the Complex Systems Modelling Platform (CSMP++)
+(last updated SKM 31/1/2022)
 
-Welcome to CSMP++
+Organisation of this repository:
+- source/include        header files from the API library
+- source/modules        source files
+- tests/unit            unit tests illutrating the functionality of classes and functions (there are data & fixture directories to get necessary inputs)
+- tests/integration     tests demonstrating the functionality of classes working together
+- examples              START HERE - use data/fixtures as inputs; when comfortable, start with ExperimentalExamnple.cpp to create your own
+- doc                   documentation : CSMP User Guide, FEM_conventions etc.
+
+Remarks:
+- In most the compilation unit (*.h (declarations) and *.cpp files (definitions)) has the same name as the class
+- explicit template instantiation is used to keep the template definitions in the .cpp files 
+
+Issues:
+- have a look at the trackers in Trello: https://trello.com/invite/b/Tcpg8IpD/1fb97a2da7c35fa3349f388915b20098/csmp-development
+- https://trello.com/invite/b/WvR3rTvV/8bd188de9876be7443a7751053b54750/csmp-current-issues
 
 Please start with the source code of the examples which required data from the respective /data
 directory.
 
-How the libraries were compiled (S.K.M., 8-3-2017), define DEBUG for the debug
-and NDEBUG for the release editions. Note that the debug version contains many assert
-statements that will safe-guard you in the development of new code.
-These are not contained in the release version.
+Compile the libraries in versions for debugging and running the code. 
+For the former define DEBUG and NDEBUG for the release version. 
+Note that the debug version contains many assert
+statements that will safe-guard you when developing new code, highlighting when assumptions 
+made in the design of CSMP are violated.
+These are not contained in the release version, which merely error handles the contained 
+and throws csmp::Exception and standard exception objects.
+
+Compilation with the commercial Algebraic Multigrid Solver for Systems (SAMG), Fraunhofer Gesellschaft, Germany,
+Provide the compiler with the flags
+
+-DCSMP_WITH_SAMG_SOLVER -DSAMG_MULTIPLE_INSTANCES -DSAMG_UNIX_LINUX -DSAMG_LCASE_USCORE
+
+Compilation on different platforms:
+- tracking C++17 standard
+- compiles with CLang, GNU, Intel C++, MS Vis Studio
 
 Apple:
 ======
 
--DCSMP_WITH_SAMG_SOLVER
- -DSAMG_MULTIPLE_INSTANCES -DSAMG_UNIX_LINUX -DSAMG_LCASE_USCORE -DPYRAMID_TRIANGULAR_FACETS
+ -DPYRAMID_TRIANGULAR_FACETS
 -march=core2 \
 -std=c++14
  -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal
+
+ XCode - see csmp-api-library/development/XCode-creating-CSMP-examples-project.pdf
 
 for debug add: -O0
 for release add: -O3

@@ -1,5 +1,6 @@
 #include "ErrorHandler.h"
-#include "license.h"
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -19,12 +20,6 @@ it is called before the simulation enters main().
 ErrorHandler::ErrorHandler()
    : verbose_(VERBOSE), errors_(0), warnings_(0), total_(0), error_limit_(10000)
  {
-    if ( !(aus.duration==0) and aus.secs_remaining <= 0 ) {
-         cerr <<"\n\nErrorHandler: CSMP++ "<< parse(aus.duration);
-         cerr <<" license has expired since "<< -aus.secs_remaining <<" secs.";
-         cerr <<" Contact: 'stephan.matthai@unimelb.edu.au' for an extension.\n";
-         terminate();
-      }
  }
  
 
@@ -61,8 +56,7 @@ ErrorHandler::~ErrorHandler()
            }
          ofs << "ErrorHandler (Destructor): logfile: Runtime messages in chronological sequence " << endl;
          ofs <<"(if this starts with an info or a warning, there were no errors):"<< endl;
-         for ( map<string,string>::const_iterator
-               err_it=error_sequence_.begin(); err_it!=error_sequence_.end(); err_it++ )
+         for ( auto err_it=error_sequence_.begin(); err_it!=error_sequence_.end(); err_it++ )
            ofs << (*err_it).first <<": "<< (*err_it).second << endl;
           
          if ( !merrors_.empty() ) {

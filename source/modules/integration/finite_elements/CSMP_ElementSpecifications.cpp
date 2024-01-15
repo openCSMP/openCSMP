@@ -99,6 +99,7 @@ bool CSMP_ElementSpecifications::UsesLocalCoordinates( int8_t etype )
     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ) return true;
     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return true;
     // quadratic elements
+    if ( etype == ISOPARAMETRIC_QUADRATIC_BAR ) return true;
     if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ) return true;
     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return true;
     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) return true;

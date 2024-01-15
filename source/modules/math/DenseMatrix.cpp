@@ -1,5 +1,10 @@
 #include "DenseMatrix.h"
+#include "compareFloats.h"
+#include <cmath>
+#include <vector>
 #include <algorithm>
+#include <iostream>
+
 
 // #define CSMP_DENSE_MATRIX_DEBUG // uncomment this to invoke debugging
 
@@ -345,7 +350,7 @@ double   DenseMatrix<mn_max>::ColSum( uint32_t col ) const
 
 // POINT
 
-#ifdef USED_TOGETHER_WITH_CSMP
+#ifdef DENSE_MATRIX_USED_TOGETHER_WITH_CSMP
 
 // AssignRow
 // ---------------------------------------
@@ -1045,7 +1050,7 @@ DenseMatrix<mn_max>&
     return *this = move(temp);
  }
 
-#endif // USED_TOGETHER WITH CSMP
+#endif // DENSE_MATRIX_USED_TOGETHER_WITH_CSMP
 
 
 
@@ -1601,10 +1606,23 @@ void DenseMatrix<mn_max>::Out( long digits ) const
 
 
 // ------------------------------------------------------------------------------
-// template instantiations
+// template instantiations, specialisations and overloaded operators
 // ------------------------------------------------------------------------------
 
 template class DenseMatrix<DM3>;
+
+template<>
+bool operator==( const DenseMatrix<DM_MIN>& MA, const DenseMatrix<DM_MIN>& MB )
+ {
+    assert( MA.Rows() == MB.Rows() );
+    assert( MA.Cols() == MB.Cols() );
+    for ( auto i{0U}; i<MA.Rows(); i++ )
+      for ( auto j{0U}; j<MA.Cols(); j++ )
+        if ( essentiallyEqual( MA(i,j), MB(i,j) ) == false ) return false;
+         
+    return true;
+ }
+
 
 template DenseMatrix<DM3>  operator+( 
                       const DenseMatrix<DM3>& a, 

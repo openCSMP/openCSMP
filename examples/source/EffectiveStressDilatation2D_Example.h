@@ -15,7 +15,7 @@
 namespace csmp {
 
 template<uint32_t> class Model;
-template<uint32_t> class Region;
+template<uint32_t> class Element;
 template<uint32_t,template<uint32_t> class> class PDE_Integrator;
 
 /// gas flow into a horizontal well drilled into overpressured "shale" layer
@@ -29,7 +29,7 @@ class  EffectiveStressDilatation2D_Example : public Example {
     void ComputeTransientFluidPressure( Model<2U>&, double time_increment );
     void ComputeTransientFluidPressure( Model<2U>&, const char* split_boundary_name, double time_increment );
 
-    PDE_Integrator<2U,Region>*  fluid_pressure_;
+    PDE_Integrator<2U,Element>*  fluid_pressure_ = nullptr;
     bool  verbose_;
 };
 
