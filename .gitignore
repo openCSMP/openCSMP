@@ -99,4 +99,5 @@ build/
 
 #build directory 
 thebuild/
+thebuild_dbg/
 
