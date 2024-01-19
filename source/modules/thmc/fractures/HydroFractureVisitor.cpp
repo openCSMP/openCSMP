@@ -98,9 +98,10 @@ template<uint32_t dim>
 void HydroFractureVisitor<dim>::Visit( Element<dim>* n )   
   { 
      // 1. test whether at least one element node is overpressured
-     for ( over_pressured=false, i=0; i<n->Nodes(); i++ ) 
+     uint32_t i=0u;
+     for ( over_pressured=false; i<n->Nodes(); i++ )
        {
-          (n->N(i))->Read( Pe_key, Pe );
+          n->N(i)->Read( Pe_key, Pe );
           pres[i] = Pe();
           if ( Pe() > 0.0 ) over_pressured = true;
        }

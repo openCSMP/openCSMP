@@ -22,15 +22,16 @@ template<uint32_t dim>
 class SourceVisitor : public Visitor<dim>
 {
 public:
-    SourceVisitor( Model<dim>& model , std::vector<std::string> *to_initialize_keys =NULL);
-    SourceVisitor(Model<dim>& model,
+    SourceVisitor( Model<dim>&, std::vector<std::string>* to_initialize_keys = nullptr );
+    SourceVisitor( Model<dim>&,
                    Index porosityKey,
                    Index densityDiffKey,
                    Index nfvsKey,
                    Index thicknessKey);
     ~SourceVisitor();
-    virtual void Visit(Element<dim>* e);
-    virtual void Visit(Model<dim>* model);
+    
+    virtual void Visit( Element<dim>* );
+    virtual void Visit( Model<dim>* );
 
 private:
     SourceVisitor();

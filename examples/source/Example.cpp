@@ -1,18 +1,12 @@
-
-#include <iostream>
-#include <cstdlib>
-#include <typeinfo>
+#include "Example.h"
 
 #ifdef __GNUC__
 #include "cxxabi.h"
 #endif
 
-#include "Example.h"
-
-
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 /// base class constructor, sets ostream for example output
 Example::Example( ostream *ostream )

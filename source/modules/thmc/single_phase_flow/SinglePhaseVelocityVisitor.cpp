@@ -4,9 +4,6 @@
 #include "CSMP_mathUtilities.h"
 #include "IsoparametricLinearTetrahedron.h"
 #include "CSMP_physical_constants.h"
-#if defined(_OPENMP )
-#include "omp.h"
-#endif
 #include "Exception.h"
 #include "ErrorHandler.h"
 
@@ -14,8 +11,8 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim>
-SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
+template<uint32_t dim, template<uint32_t> class CELL>
+SinglePhaseVelocityVisitor<dim,CELL>::SinglePhaseVelocityVisitor(Model<dim>& model,
                                                             const char* porosity,
                                                             const char* conductivity,
                                                             const char* fluid_density,
@@ -123,17 +120,15 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
         }
     }
 
+    const Region<dim>& domain = model.Region("Model");
+
     // Check if there are LDE's present
     bool volume_elements_present(false);
-    for ( auto e = model.Region("Model").CellsBegin() ; e != model.Region("Model").CellsEnd(); e++ ){
+    for ( auto e = domain.CellsBegin(); e != domain.CellsEnd(); e++ )
+      if ( (*e)->IsVolume() )
+        volume_elements_present=true;
 
-        if ((*e)->IsVolume()){
-            volume_elements_present=true;
-        }
-
-    }
-//    model.Region("Model").E
-    for ( auto e = model.Region("Model").CellsBegin() ; e != model.Region("Model").CellsEnd(); e++ ){
+    for ( auto e = domain.CellsBegin() ; e != domain.CellsEnd(); e++ ){
 
         if ((dim == 2 && (*e)->IsLine()) || (dim == 3 && (*e)->IsSurface() && volume_elements_present))
         {
@@ -142,65 +137,17 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
         }
     }
 
-#if defined(_OPENMP )
-    femgrs_.resize(omp_get_max_threads());
-#pragma omp parallel
-    {
-        size_t tid = omp_get_thread_num();
-        femgrs_[tid].InitializeElements(dim,model.FE_Manager().InterpolationOrder(),true);
-    }
-#endif
 } // end constructor
 
 
 
-template<uint32_t dim>
-void SinglePhaseVelocityVisitor<dim>::Visit(Model<dim>* model)
-{
-    if (this->Verbose()) cout <<" SinglePhaseVelocityVisitor<dim>::Visit(Model<dim>*)"<<endl;
-#if defined(_OPENMP )
-    this->Visit(&(model->Region("Model")));
-#endif
-}
 
 
 
 
-template<uint32_t dim>
-void SinglePhaseVelocityVisitor<dim>::Visit(Region<dim>* region)
-{
-    if (this->Verbose()) cout <<" SinglePhaseVelocityVisitor<dim>::Visit(Region<dim>*) : "<<region->Name()<<endl;
 
-#if defined(_OPENMP )
-#pragma omp parallel
-    {
-        size_t tid=omp_get_thread_num();
-        Element<dim>* ep;
-//        FiniteElement* fe_tmp;
-#pragma omp for
-        for ( long int e= 0 ; e < region->Cells(); e++ ){
-            ep = region->E(e);
-            FiniteElement* fe_tmp=ep->FE();
-            // change pointer here
-            ep->Assign(femgrs_[tid].E(ep->FE_Type()));
-            this->ComputeContribution(ep);
-            // put it back here
-            ep->Assign(fe_tmp);
-        }
-    }
-#endif
-}
-
-template<uint32_t dim>
-void SinglePhaseVelocityVisitor<dim>::Visit(Element<dim>* e)
-{
-#if !defined(_OPENMP)
-    this->ComputeContribution(e);
-#endif
-}
-
-template<uint32_t dim>
-void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
+template<uint32_t dim, template<uint32_t> class CELL>
+void SinglePhaseVelocityVisitor<dim,CELL>::Visit( CELL<dim>* e )
 {
     std::vector<ScalarVariable >           PF, RHO;
     std::vector<DenseMatrix<DM_MIN> >      MTRL(1);// fluid pressure
@@ -330,15 +277,16 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
     }
 }
 
-template<uint32_t dim>
-SinglePhaseVelocityVisitor<dim>::~SinglePhaseVelocityVisitor()
-{}
 
-template class SinglePhaseVelocityVisitor<1U>;
-template class SinglePhaseVelocityVisitor<2U>;
-template class SinglePhaseVelocityVisitor<3U>;
+template class SinglePhaseVelocityVisitor<1U,Element>;
+template class SinglePhaseVelocityVisitor<2U,Element>;
+template class SinglePhaseVelocityVisitor<3U,Element>;
 
-} // csp
+template class SinglePhaseVelocityVisitor<1U,Face>;
+template class SinglePhaseVelocityVisitor<2U,Face>;
+template class SinglePhaseVelocityVisitor<3U,Face>;
+
+} // csmp
 
 
 

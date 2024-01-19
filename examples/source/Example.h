@@ -1,18 +1,12 @@
 #ifndef EXAMPLE_H
 #define EXAMPLE_H
 
-//#define USE_SAMG_SOLVER
-
-#include <string>
-#include <list>
 #include "CSMP_definitions.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
 
-#include "EigenSolver.h"
-
-namespace csmp{
+namespace csmp {
 
 class ExampleSuite;
 

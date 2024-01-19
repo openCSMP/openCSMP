@@ -4,23 +4,20 @@
 #include "TwoPhaseModel.h"
 #include "ScalarVariable.h"
 #include "CSMP_physical_constants.h"
-#if defined(_OPENMP )
-#include "omp.h"
-#endif
 
 using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim>
-ComputeSinglePhaseGravityTermVisitor<dim>::ComputeSinglePhaseGravityTermVisitor(Model<dim>& model,
+template<uint32_t dim, template<uint32_t> class CELL>
+ComputeSinglePhaseGravityTermVisitor<dim,CELL>::ComputeSinglePhaseGravityTermVisitor(Model<dim>& model,
                                                                                 const char* permeabilityTag,
                                                                                 const char* viscosityTag,
                                                                                 const char* densityTag ,
                                                                                 const char* gravityVectorTag,
                                                                                 const char* model_gravity_vector,
                                                                                 const char* densityTag2) // this is meant to post multiply the gravity term if provided.
-    : Visitor<dim>( MODEL, ELEMENT ), model_( model ),
+    : Visitor<dim>( MODEL, ELEMENT ),
       gravityVectorKey_ (model.Database().StorageKey( gravityVectorTag ) ),
       permeabilityKey_( model.Database().StorageKey( permeabilityTag ) ),
       viscosityKey_ ( model.Database().StorageKey( viscosityTag ) ),
@@ -29,70 +26,30 @@ ComputeSinglePhaseGravityTermVisitor<dim>::ComputeSinglePhaseGravityTermVisitor(
       gravitational_acceleration_(ACC_GRAVITY)
 {
     model.Read(model.Database().StorageKey(model_gravity_vector),gravity_unit_vector_);
-
-#if defined(_OPENMP )
-    this->femgrs_.resize(omp_get_max_threads());
-    for (long int tid = 0 ; tid < omp_get_max_threads();tid ++)
-        this->femgrs_[tid].InitializeElements(dim,model.FE_Manager().InterpolationOrder(),true);
-#endif
+    
+    // adjusting application target if necessary
+    if constexpr ( TypeMatchesVariablePlacement<CELL,FACE>::value )
+      this->ApplicationTarget( FACE );
+    else if constexpr ( TypeMatchesVariablePlacement<CELL,INTER_FACE>::value )
+      this->ApplicationTarget( INTER_FACE );
 }
 
-template<uint32_t dim>
-void ComputeSinglePhaseGravityTermVisitor<dim>::Visit( Model<dim>* m ){
-    if (this->Verbose()) cout <<" ComputeSinglePhaseGravityTermVisitor<dim>::Visit(Model<dim>*)"<<endl;
-#if defined(_OPENMP )
-    this->Visit(&(m->Region("Model")));
-#endif
-}
 
-template<uint32_t dim>
-void ComputeSinglePhaseGravityTermVisitor<dim>::Visit(Region<dim>* region ){
-    if (this->Verbose()) cout <<" ComputeSinglePhaseGravityTermVisitor<dim>::Visit(Region<dim>*) : "<<region->Name()<<endl;
-
-#if defined(_OPENMP )
-#pragma omp parallel
-    {
-        Element<dim>* ep;
-        FiniteElement* fe_tmp;
-        size_t tid=omp_get_thread_num();
-#pragma omp for
-        for ( long int e= 0 ; e < region->Cells(); e++ ){
-            ep = region->E(e);
-            fe_tmp=ep->FE();
-            // change pointer here
-            ep->Assign(femgrs_[tid].E(ep->FE_Type()));
-            this->ComputeContribution(ep);
-            // put it back here
-            ep->Assign(fe_tmp);
-        }
-    }
-#endif
-}
-
-template<uint32_t dim>
-void ComputeSinglePhaseGravityTermVisitor<dim>::Visit( Element<dim>* element )
+template<uint32_t dim, template<uint32_t> class CELL>
+void ComputeSinglePhaseGravityTermVisitor<dim,CELL>::Visit( CELL<dim>* cell )
 {
-#if !defined(_OPENMP)
-    this->ComputeContribution(element);
-#endif
-}
-
-template<uint32_t dim>
-void ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element )
-{
-
     ScalarVariable mu, rho;
     double gravityTerm;
     VectorVariable<dim> gravityVector;
     
-    if( element->FE()->IsLine() && (dim == 2 || dim ==3))
+    if ( cell->IsLine() && dim != 2u )
     {
         //! projection of a gravity vector (e.g. (0,-1,0) ) onto a vector r(r[0],r[1],r[2])
         //! r is a vector from one node to the other of the line element.
         //! (where |r|=1)
         //! We then perform the projection of the gravity vector on the line element
 
-        Point<dim> line_vector( element->N(0)->Coordinate() - element->N(1)->Coordinate() );
+        Point<dim> line_vector( cell->N(0)->Coordinate() - cell->N(1)->Coordinate() );
         line_vector.NormalizeLengthTo(1.);
         VectorVariable<dim> projection = gravity_unit_vector_.ProjectOnto(line_vector.Coordinates());
 
@@ -100,14 +57,14 @@ void ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution( Element<dim
             gravityVector(j) = projection[j];
 
     }
-    else if( element->FE()->IsSurface() && dim ==3)
+    else if( cell->IsSurface() && dim == 3u )
     {
         //! projection of vector g(0,-1, 0) onto a surface with a normal vector n(n[0], n[1], n[2])
         //! (where |n|=1) is equal to
         //! n x (n x g) = (n, g) n - g = -n[1] n - g
         //! This code obviously assumes all nodes of the element are co-planar
-        Point<dim> line_vector1( element->N(0)->Coordinate() - element->N(1)->Coordinate() );
-        Point<dim> line_vector2( element->N(1)->Coordinate() - element->N(2)->Coordinate() );
+        Point<dim> line_vector1( cell->N(0)->Coordinate() - cell->N(1)->Coordinate() );
+        Point<dim> line_vector2( cell->N(1)->Coordinate() - cell->N(2)->Coordinate() );
 
         Point<dim> surface_normal( crossProduct( line_vector1,line_vector2) );
         surface_normal.NormalizeLengthTo (1.);
@@ -128,43 +85,47 @@ void ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution( Element<dim
     // k/mu * rho * g
     // if densityTag2 is supplied, then that variable will be multiplied (e.g. rho*k/mu * rho * g )
 
-    gravityTerm =  element->Read( permeabilityKey_ ) * gravitational_acceleration_;
+    gravityTerm =  cell->Read( permeabilityKey_ ) * gravitational_acceleration_;
     // loop over element integration points
     if (gravityVectorKey_.place==ELEMENT_INTEGRATION_POINT){
-        for (uint32_t ip=0U;ip<element->IntegrationPoints (); ++ip)
+        for (uint32_t ip=0U;ip<cell->IntegrationPoints (); ++ip)
         {
-            element->PropertyValueAtIntegrationPoint( densityKey_, ip, rho );
-            element->PropertyValueAtIntegrationPoint( viscosityKey_, ip, mu );
-            element->Store( ip, gravityVectorKey_, gravityVector*rho()*gravityTerm/mu() );
+            cell->PropertyValueAtIntegrationPoint( densityKey_, ip, rho );
+            cell->PropertyValueAtIntegrationPoint( viscosityKey_, ip, mu );
+            cell->Store( ip, gravityVectorKey_, gravityVector*rho()*gravityTerm/mu() );
         }
         if (densityKey2_!=csmp::Index())
-            for (uint32_t ip=0U;ip<element->IntegrationPoints (); ++ip)
+            for (uint32_t ip=0U;ip<cell->IntegrationPoints (); ++ip)
             {
-                element->Read( ip, gravityVectorKey_, gravityVector);
-                element->PropertyValueAtIntegrationPoint( densityKey2_, ip, rho );
-                element->Store( ip, gravityVectorKey_, gravityVector*rho());
+                cell->Read( ip, gravityVectorKey_, gravityVector);
+                cell->PropertyValueAtIntegrationPoint( densityKey2_, ip, rho );
+                cell->Store( ip, gravityVectorKey_, gravityVector*rho());
             }
     }
     else if (gravityVectorKey_.place == ELEMENT){
-        element->PropertyValueAtBaryCenter( densityKey_, rho );
-        element->PropertyValueAtBaryCenter( viscosityKey_, mu );
-        element->Store( gravityVectorKey_, gravityVector*rho()*gravityTerm/mu() );
+        cell->PropertyValueAtBaryCenter( densityKey_, rho );
+        cell->PropertyValueAtBaryCenter( viscosityKey_, mu );
+        cell->Store( gravityVectorKey_, gravityVector*rho()*gravityTerm/mu() );
 
         if (densityKey2_!=csmp::Index()){
-            element->Read( gravityVectorKey_, gravityVector);
-            element->PropertyValueAtBaryCenter( densityKey2_, rho );
-            element->Store( gravityVectorKey_, gravityVector*rho());
+            cell->Read( gravityVectorKey_, gravityVector);
+            cell->PropertyValueAtBaryCenter( densityKey2_, rho );
+            cell->Store( gravityVectorKey_, gravityVector*rho());
         }
     }
     else {
         throw csmp::Exception(FATAL_ERROR,"ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution",
                               " Placement of the gravity term vector is not supported",parsePlacement(gravityVectorKey_.place).c_str());
     }
-//    cin.get();
 }
 
-template class ComputeSinglePhaseGravityTermVisitor<3>;
-template class ComputeSinglePhaseGravityTermVisitor<2>;
-template class ComputeSinglePhaseGravityTermVisitor<1>;
+
+template class ComputeSinglePhaseGravityTermVisitor<3,Element>;
+template class ComputeSinglePhaseGravityTermVisitor<2,Element>;
+template class ComputeSinglePhaseGravityTermVisitor<1,Element>;
+
+template class ComputeSinglePhaseGravityTermVisitor<3,Face>;
+template class ComputeSinglePhaseGravityTermVisitor<2,Face>;
+template class ComputeSinglePhaseGravityTermVisitor<1,Face>;
 
 } //csmp

@@ -5,10 +5,16 @@
 
 namespace csmp {
 
+/**
+
+@class IsoparametricLinearPrism  IsoparametricLinearPrism "finite_elements/IsoparametricLinearPrism.h"
+@date 1998
+@author S.K. Matthai
+@author Stephen G. Roberts
+
+*/
 class IsoparametricLinearPrism : public FiniteElement {
-
   public:
-
     explicit IsoparametricLinearPrism( uint32_t integrationPoints = 6 /* 1 or 6*/ );
     ~IsoparametricLinearPrism();
 
@@ -85,7 +91,7 @@ class IsoparametricLinearPrism : public FiniteElement {
   private:
 
     std::vector<double>   W;
-    DenseMatrix<DM_MIN>     DN,NXYZ,IP;
+    DenseMatrix<DM_MIN>   NXYZ, IP;
 
     double AreaOfBase (
                        std::vector<double> &Vertice1XYZ,
@@ -100,14 +106,6 @@ class IsoparametricLinearPrism : public FiniteElement {
     void ParametricToPhysical( std::vector<double> &rst, std::vector<double> &xyz );
     void PhysicalToParametric( std::vector<double>& rst,const std::vector<double>& xyz );
 };
-
-/**
-
-@class IsoparametricLinearPrism  IsoparametricLinearPrism "finite_elements/IsoparametricLinearPrism.h"
-@date 1998
-@author S.K. Matthai
-@author Stephen G. Roberts */
-
 
 } // end namespace csmp
 

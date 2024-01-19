@@ -14,8 +14,8 @@ class GroundwaterDarcyVelocity : public Interrelation<dim> {
     ScalarVariable       hcond;
     
   public:
-    GroundwaterDarcyVelocity( const PropertyDatabase<dim>& p );
-    ~GroundwaterDarcyVelocity() {};
+    GroundwaterDarcyVelocity( const PropertyDatabase<dim>& );
+    ~GroundwaterDarcyVelocity() {}
     void Calculate();
 };
 

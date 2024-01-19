@@ -125,7 +125,7 @@ int CVFEM_1D_VVCase::CalculateSteadyStatePressure ()
        it != modelElementsEnd; ++it )
   {
     k() = (*it)->Read(k_key);
-    for (size_t ip=0;ip<(*it)->IntegrationPoints (); ++ip)
+    for ( uint32_t ip{0u}; ip<(*it)->IntegrationPoints(); ++ip )
     {
       (*it)->PropertyValueAtIntegrationPoint( rho_key, ip, rho );
       (*it)->PropertyValueAtIntegrationPoint( mu_key, ip, mu );
@@ -143,7 +143,7 @@ int CVFEM_1D_VVCase::CalculateSteadyStatePressure ()
   for( typename vector<Element<dim>*>::const_iterator it( model->Region("Model").CellsBegin() );
        it != modelElementsEnd; ++it )
   {
-    for (size_t ip=0;ip<(*it)->IntegrationPoints (); ++ip)
+    for ( uint32_t ip{0u}; ip<(*it)->IntegrationPoints(); ++ip )
     {
       (*it)->Read(ip, gravity_key, gravityVector);
       (*it)->PropertyValueAtIntegrationPoint( rho_key, ip, rho );
@@ -206,6 +206,7 @@ int CVFEM_1D_VVCase::InitializeFluidPropertiesLinearPressure()
   csmp::Index   wt_key(model->Database().StorageKey("salinity"));
 
   double p_bottom, p_top, p_diff, ymax;
+  p_bottom = p_top = p_diff = ymax = std::numeric_limits<double>::quiet_NaN();
 
   const typename vector<Node<dim>*>::const_iterator modelNodesEnd( model->Region("Model").NodesEnd() );
   for( typename vector<Node<dim>*>::const_iterator it( model->Region("Model").NodesBegin() );

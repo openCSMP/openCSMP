@@ -2,7 +2,6 @@
 #define CSMP_VELOCITY_AND_VOLUME_FLUX_VISITOR_H
 
 #include "Visitor.h"
-#include "FiniteElementManager.h"
 
 namespace csmp {
 
@@ -23,7 +22,7 @@ template<uint32_t> class Model;
 ///
 /// -- Julian M. 26-09-2015
 
-template<uint32_t dim>
+template<uint32_t dim, template<uint32_t> class CELL>
 class SinglePhaseVelocityVisitor : public Visitor<dim> {
   public:
 
@@ -40,13 +39,10 @@ class SinglePhaseVelocityVisitor : public Visitor<dim> {
                                const char* nodal_pore_velocity = NULL,
                                const char* nodal_volume_flux = NULL);
 
-    ~SinglePhaseVelocityVisitor();
+    ~SinglePhaseVelocityVisitor() {}
 
-    virtual void Visit(Element<dim>* e);
-    void ComputeContribution(Element<dim>* e);
-    virtual void Visit(Region<dim>* region);
-    virtual void Visit(Model<dim>* model);
-    
+    virtual void Visit( CELL<dim>* );
+
   private:
     const size_t components_;
 
@@ -54,15 +50,11 @@ class SinglePhaseVelocityVisitor : public Visitor<dim> {
                 velo_key_, ivelo_key_, nvelo_key_, nivelo_key_,
                 flux_key_, nflux_key_;
 
-    VectorVariable<dim>           gravity_unit_vector_;
-    bool                          with_gravity_;
-    double                      gravitational_acceleration_;
-    uint32_t                        application_cycle_;
+    VectorVariable<dim>       gravity_unit_vector_;
+    bool                      with_gravity_;
+    double                    gravitational_acceleration_;
+    uint32_t                  application_cycle_;
     std::pair<double,double>  minmaxV_, minmaxF_;
-
-#if defined(_OPENMP )
-    std::vector<FiniteElementManager> femgrs_; // one manager per thread
-#endif
 };
 
 } // csmp

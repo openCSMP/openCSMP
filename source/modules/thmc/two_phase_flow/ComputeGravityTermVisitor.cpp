@@ -3,13 +3,10 @@
 #include "Region.h"
 #include "TwoPhaseModel.h"
 #include "ScalarVariable.h"
-#if defined(_OPENMP )
-#include "omp.h"
-#endif
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 template<uint32_t dim>
 ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor( Model<dim>& model,
@@ -24,11 +21,6 @@ ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor( Model<dim>& model,
       singlePhaseDensityKey_( ),
       gravityAcc_( 9.80665 )
 {
-#if defined(_OPENMP )
-    this->femgrs_.resize(omp_get_max_threads());
-    for (long int tid = 0 ; tid < omp_get_max_threads();tid ++)
-        this->femgrs_[tid].InitializeElements(dim,model.FE_Manager().InterpolationOrder(),true);
-#endif
 }
 
 template<uint32_t dim>
@@ -45,12 +37,9 @@ ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor( Model<dim>& model,
       singlePhaseDensityKey_( model.Database().StorageKey( densityTag ) ),
       gravityAcc_( 9.80665 )
 {
-#if defined(_OPENMP )
-    this->femgrs_.resize(omp_get_max_threads());
-    for (long int tid = 0 ; tid < omp_get_max_threads();tid ++)
-        this->femgrs_[tid].InitializeElements(dim,model.FE_Manager().InterpolationOrder(),true);
-#endif
 }
+
+
 
 template<uint32_t dim>
 ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor(Model<dim>& model,
@@ -66,55 +55,11 @@ ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor(Model<dim>& model,
       singlePhaseDensityKey_( density ),
       gravityAcc_( 9.80665 )
 {
-#if defined(_OPENMP )
-    this->femgrs_.resize(omp_get_max_threads());
-    for (long int tid = 0 ; tid < omp_get_max_threads();tid ++)
-        this->femgrs_[tid].InitializeElements(dim,model.FE_Manager().InterpolationOrder(),true);
-#endif
 }
 
-template<uint32_t dim>
-void ComputeGravityTermVisitor<dim>::Visit( Model<dim>* m ){
-    if (this->Verbose()) cout <<" ComputeGravityTermVisitor<dim>::Visit(Model<dim>*)"<<endl;
-#if defined(_OPENMP )
-    this->Visit(&(m->Region("Model")));
-#endif
-}
-
-template<uint32_t dim>
-void ComputeGravityTermVisitor<dim>::Visit(Region<dim>* region ){
-    if (this->Verbose()) cout <<" ComputeGravityTermVisitor<dim>::Visit(Region<dim>*) : "<<region->Name()<<endl;
-
-#if defined(_OPENMP )
-#pragma omp parallel
-    {
-        Element<dim>* ep;
-        FiniteElement* fe_tmp;
-        size_t tid=omp_get_thread_num();
-#pragma omp for
-        for ( long int e= 0 ; e < region->Cells(); e++ ){
-            ep = region->E(e);
-            fe_tmp=ep->FE();
-            // change pointer here
-            ep->Assign(femgrs_[tid].E(ep->FE_Type()));
-            this->ComputeContribution(ep);
-            // put it back here
-            ep->Assign(fe_tmp);
-        }
-    }
-#endif
-}
 
 template<uint32_t dim>
 void ComputeGravityTermVisitor<dim>::Visit( Element<dim>* element )
-{
-#if !defined(_OPENMP)
-    this->ComputeContribution(element);
-#endif
-}
-
-template<uint32_t dim>
-void ComputeGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element )
 {
     //! two cases are currently supported by the code
     //! 1) twophase with gravity on the ELEMENT
@@ -126,11 +71,6 @@ void ComputeGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element 
     
     if (saturationFunctions_ != NULL)
     {
-#if defined(_OPENMP )
-        ErrorHandler& error_handler (ErrorHandler::Instance());
-        string errmsg="Unfortunately two-phase functions are not yet Openmp-ized.";
-        error_handler.Note(FATAL_ERROR,"ComputeGravityTermVisitor<dim>::ComputeContribution(element)",errmsg);
-#endif
       saturationFunctions_->Initialize( *element );
       saturationFunctions_->InitializeForBaryCenter( *element);
       saturationFunctions_->EffectiveSaturation();
@@ -209,6 +149,7 @@ void ComputeGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element 
       element->Store( gravityVectorKey_, gravityVector * gravityTerm );
 
 }
+
 
 template class ComputeGravityTermVisitor<3>;
 template class ComputeGravityTermVisitor<2>;

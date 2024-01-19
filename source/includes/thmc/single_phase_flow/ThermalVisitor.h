@@ -23,7 +23,7 @@ template<uint32_t dim>
 class ThermalVisitor : public Visitor<dim>
 {
   public:
-      ThermalVisitor(Model<dim>& model , std::vector<std::string> *to_initialize_keys =NULL );
+      ThermalVisitor( Model<dim>&, std::vector<std::string>* to_initialize_keys = nullptr );
 
       ThermalVisitor( Model<dim>& model,
                       Index nCPT_key,
@@ -49,9 +49,10 @@ class ThermalVisitor : public Visitor<dim>
           
       ~ThermalVisitor();
       void SetInitialProperties(Model<dim> *model);
-	  void ApplyTemperatureBoundaryConditionsToTransportedVariables(); 
-      virtual void Visit(Node<dim>* n);  
-      virtual void Visit(Model<dim>* n);  
+	    void ApplyTemperatureBoundaryConditionsToTransportedVariables();
+      
+      virtual void Visit(Node<dim>* );
+      virtual void Visit(Model<dim>* );
 
  private:
       ThermalVisitor();
@@ -104,7 +105,7 @@ class ThermalVisitor : public Visitor<dim>
                       beta_fluid_key_,
                       beta_tot_key_;
 
-      double        pore_volume,
+      double          pore_volume,
                       rock_volume,
                       dhCl_,
                       dT; 

@@ -23,14 +23,14 @@ class GravityProjectionVisitor : public Visitor<dim>
 
       virtual ~GravityProjectionVisitor();
 
-      virtual void Visit(Element<dim>* element);
-      virtual void Visit(Model<dim>* model);
-      virtual void Visit(Region<dim>* model);
+      virtual void Visit(Element<dim>* );
+      virtual void Visit(Model<dim>* );
+      virtual void Visit(Region<dim>* );
 
       /// Get Result
       Index Get_PropertyIndex();
       Index Get_ResultIndex();
-      void  Get_Result( Element<dim>* eptr, VectorVariable<dim>& result );
+      void  Get_Result( Element<dim>*, VectorVariable<dim>& result );
 
     private:
 

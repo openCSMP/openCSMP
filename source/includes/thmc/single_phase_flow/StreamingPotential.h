@@ -32,7 +32,7 @@ class PotentialSource : public Interrelation<dim> {
     ScalarVariable  temp1, temp2;
     
   public:
-    PotentialSource( const PropertyDatabase<dim>& p );
+    PotentialSource( const PropertyDatabase<dim>& );
     ~PotentialSource() {};
     void Calculate();
 };

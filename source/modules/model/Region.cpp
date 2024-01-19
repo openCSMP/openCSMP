@@ -1545,7 +1545,8 @@ size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
 
   // creating the element vector for the region
   this->cell_vec_.reserve( element_ids.size() );
-  for ( auto& idx : element_ids ) {
+  for ( const auto& idx : element_ids ) {
+       assert( idx < mesh.Elements() );
        Element<dim>* eptr = &(*next(mesh.ElementsBegin(),idx));
        assert( eptr != nullptr );
        assert( eptr->Idx() == idx );
@@ -1556,7 +1557,7 @@ size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   if ( this->node_vec_.empty() ) this->node_vec_.clear();
   this->node_vec_.reserve( element_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
   // filling the vector
-  for ( auto& it : this->cell_vec_ ) {
+  for ( const auto& it : this->cell_vec_ ) {
        const size_t n_nodes{it->Nodes()};
        for ( auto i{0U}; i<n_nodes; ++i ) {
             assert( it->N(i) != nullptr );

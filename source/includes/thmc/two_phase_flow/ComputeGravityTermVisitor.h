@@ -2,13 +2,10 @@
 #define COMPUTEGRAVITYTERMVISITOR_H
 
 #include "Visitor.h"
-#include "FiniteElementManager.h"
+#include "Index.h"
+ 
+namespace csmp {
 
-namespace csmp{
-
-struct Index;
-class ScalarVariable;
-template<uint32_t> class VectorVariable;
 template<uint32_t> class Model;
 template<uint32_t> class TwoPhaseModel;
 
@@ -35,21 +32,13 @@ class ComputeGravityTermVisitor : public Visitor<dim>
 
     virtual ~ComputeGravityTermVisitor() {}
 
-    virtual void Visit(Element<dim>* element);
-    void ComputeContribution(Element<dim>* element);
-    virtual void Visit(Model<dim>* model);
-    virtual void Visit(Region<dim>* region);
+    virtual void Visit( Element<dim>* element);
 
   private:
     Model<dim>& model_;
     TwoPhaseModel<dim>* saturationFunctions_;
     Index permeabilityKey_, singlePhaseViscosityKey_, singlePhaseDensityKey_, gravityVectorKey_;
     const double gravityAcc_;
-
-#if defined(_OPENMP )
-    std::vector<FiniteElementManager> femgrs_; // one manager per thread
-#endif
-
 };
 
 } //csmp
