@@ -308,8 +308,8 @@ void SlopeMechanics_Example::Run()
     dilatationInducedChangeInPorePressure( model );
     printRangeOfVariable( model, "fluid pressure" );
   
-    SinglePhaseVelocityVisitor<DIM>  velo( model, "porosity", "conductivity",
-                                          "fluid density", "fluid pressure", "total velocity" );
+    SinglePhaseVelocityVisitor<DIM,Element>  velo( model, "porosity", "conductivity",
+                                                          "fluid density", "fluid pressure", "total velocity" );
     model.Accept( velo );
     printRangeOfVariable( model, "total velocity" );
 

@@ -79,12 +79,12 @@ class Visitor {
     virtual void Visit( SplitBoundary<dim>* );
     virtual void Visit( Element<dim>* ); 
     virtual void Visit( Face<dim>* );
-    virtual void Visit( Edge<dim>* );
     virtual void Visit( InterFace<dim>* );
-    virtual void Visit( Node<dim>* );   
+    virtual void Visit( Edge<dim>* );
+    virtual void Visit( Node<dim>* );
 
-    bool Verbose(){return this->verbose_;}
-    void Verbose(bool verbose){this->verbose_=verbose;}
+    bool Verbose() {return this->verbose_;}
+    void Verbose(bool verbose) {this->verbose_=verbose;}
 
   protected:
     PLACEMENT    application_level_;

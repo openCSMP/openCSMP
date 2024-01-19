@@ -28,11 +28,11 @@ chosen. The variable names which are hardwired into this math operator
 are:
 
 @code
-"velocity"              element     vector
-"pore velocity"			element		vector
-"volume flux"           element		scalar
-"nodal velocity"        node        vector
-"nodal pore velocity"	node        vector
+"velocity"            element   vector
+"pore velocity"			  element		vector
+"volume flux"         element		scalar
+"nodal velocity"      node      vector
+"nodal pore velocity"	node      vector
 "nodal volume flux"		element		scalar
 @endcode
  

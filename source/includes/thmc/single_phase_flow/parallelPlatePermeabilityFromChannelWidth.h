@@ -19,7 +19,7 @@ where a is the channel width.
 
 */
 template<uint32_t dim>
-void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg, 
+void parallelPlatePermeabilityFromChannelWidth( Model<dim>&, 
                                                 const char* channel_region,
                                                 const char* channel_width="channel width",
                                                 double minimum_channel_width=1.0e-9 /* 10 Angstroem */ );

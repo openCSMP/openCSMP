@@ -1154,8 +1154,7 @@ DenseMatrix<mn_max> DenseMatrix<mn_max>::operator-(
 // operator*  matrix multiplication
 // ---------------------------------------
 template<uint32_t mn_max>
-DenseMatrix<mn_max>  DenseMatrix<mn_max>::operator*(
-                                             const DenseMatrix<mn_max>& mat ) const
+DenseMatrix<mn_max>  DenseMatrix<mn_max>::operator*( const DenseMatrix<mn_max>& mat ) const
  {
     if ( cols != mat.rows ) {
          cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*: Matrices cannot be multiplied "; 

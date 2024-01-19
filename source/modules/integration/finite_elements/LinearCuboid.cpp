@@ -215,8 +215,9 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 
 void LinearCuboid::dN_Partial_At(vector<double>& DN, const vector<double>& xyz, uint32_t partial )
 	{
-		const double vol = Volume(), sgn[] = { 1.,-1.,-1.,1.,1.,-1.,-1.,1. };
-		const uint32_t ind[] = { 6,7,4,5,2,3,0,1 };
+		const double     vol = Volume();
+    constexpr double sgn[] = { 1.,-1.,-1.,1.,1.,-1.,-1.,1. };
+		constexpr uint32_t ind[] = { 6,7,4,5,2,3,0,1 };
 		switch (partial) {
 			case 0:	for (auto k = 0; k < 8; ++k)
 						DN[k] = sgn[k] * (xyz[1] - XY(ind[k], 1))*(xyz[2] - XY(ind[k], 2)) / vol;

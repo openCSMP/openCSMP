@@ -291,7 +291,7 @@ void ANSYS_Model2D_Test::Test_ANSYS_ModelConstructionAndSaving2D( const std::str
  
  
  
-       // using line element VSet
+// using line element VSet and "CSMP-variables.txt"
 void ANSYS_Model2D_Test::Test_printLineElementRegion()
  {
     if ( verbose_ ) {
@@ -304,7 +304,7 @@ void ANSYS_Model2D_Test::Test_printLineElementRegion()
     {
       VSet<2U>      vset;
       ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
-      Model<2U>     model( topo, vset, "CSMP-1phase-variables.txt", true );
+      Model<2U>     model( topo, vset, "CSMP-variables.txt", true );
 
       const bool renumber_nodes{false};
       _test( printLineElementRegion( model, "FRAC1", renumber_nodes ) == 3 );
@@ -317,7 +317,7 @@ void ANSYS_Model2D_Test::Test_printLineElementRegion()
       VSet<2U>      vset;
       ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
       vset.EstablishElementConnectivity2D(); // also deals with line-element orientations
-      Model<2U>     model( topo, vset, "CSMP-1phase-variables.txt", true );
+      Model<2U>     model( topo, vset, "CSMP-variables.txt", true );
        
       const bool renumber_nodes{false};
       _test( printLineElementRegion( model, "FRAC1", renumber_nodes ) == 3 );

@@ -12,7 +12,7 @@ template<uint32_t> class VectorVariable;
 template<uint32_t> class Model;
 template<uint32_t> class TwoPhaseModel;
 
-template<uint32_t dim>
+template<uint32_t dim, template<uint32_t> class CELL=Element>
 class ComputeSinglePhaseGravityTermVisitor : public Visitor<dim>
 {
   public:
@@ -22,25 +22,16 @@ class ComputeSinglePhaseGravityTermVisitor : public Visitor<dim>
                                          const char* densityTag ,
                                          const char* gravityVectorTag,
                                          const char* model_gravity_vector,
-                                         const char *densityTag2 = NULL); // this is meant to post multiply the gravity term if provided.
+                                         const char *densityTag2 = NULL); // post multiplies gravity term if provided
 
     virtual ~ComputeSinglePhaseGravityTermVisitor() {}
 
-    virtual void Visit(Element<dim>* element);
-    void ComputeContribution(Element<dim>* element);
-    virtual void Visit(Model<dim>* model);
-    virtual void Visit(Region<dim>* region);
+    virtual void Visit(CELL<dim>* );
 
   private:
-    Model<dim>& model_;
-    VectorVariable<dim>           gravity_unit_vector_;
-    Index permeabilityKey_, viscosityKey_, densityKey_,densityKey2_, gravityVectorKey_;
-    const double gravitational_acceleration_;
-
-#if defined(_OPENMP )
-    std::vector<FiniteElementManager> femgrs_; // one manager per thread
-#endif
-
+    VectorVariable<dim>  gravity_unit_vector_;
+    Index                permeabilityKey_, viscosityKey_, densityKey_,densityKey2_, gravityVectorKey_;
+    const double         gravitational_acceleration_;
 };
 
 } //csmp

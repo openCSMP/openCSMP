@@ -83,8 +83,8 @@ class ExplicitNodeCenteredFiniteVolumeTransport : public NodeCenteredFiniteVolum
     
     STP<dim>             stencil_;
     std::vector<double>  RESULT;
-#if defined(_OPENMP )
 
+#if defined(_OPENMP )
     std::vector<STP<dim>* >  thread_stencil_processor_;
 #endif
 
@@ -328,6 +328,7 @@ ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ExplicitNodeCenteredFiniteVo
    stencil_(this->adv1_key_, this->vel_key_, this->diff_key_),
    RESULT(this->gref_.Nodes())
  {
+ 
 #if defined(_OPENMP )
     this->thread_stencil_processor_.reserve(omp_get_max_threads());
     for (size_t tid = 0 ; tid < omp_get_max_threads();tid ++)

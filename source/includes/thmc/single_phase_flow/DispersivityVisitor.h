@@ -25,7 +25,7 @@ class DispersivityVisitor : public Visitor< dim> {
                  
     virtual ~DispersivityVisitor();
     
-    virtual void Visit(Element< dim>* n);   
+    virtual void Visit( Element<dim>* );   
     
   private:
     

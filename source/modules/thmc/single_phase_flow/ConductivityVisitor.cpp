@@ -6,15 +6,11 @@
 #include "VectorVariable.h"
 #include "ErrorHandler.h"
 
-#if defined(_OPENMP )
-#include "omp.h"
-#endif
-
-namespace csmp{
+namespace csmp {
 
 
-template<uint32_t dim>
-ConductivityVisitor<dim>::ConductivityVisitor(Model<dim>& model,
+template<uint32_t dim, template<uint32_t> class CELL>
+ConductivityVisitor<dim,CELL>::ConductivityVisitor(Model<dim>& model,
                                               const char* specific_saturated_hydraulic_conductivity, // this is without mult. by density
                                               const char* permeability,
                                               const char* viscosity,
@@ -50,101 +46,46 @@ ConductivityVisitor<dim>::ConductivityVisitor(Model<dim>& model,
     if ( sshdKey_ != csmp::Index() && sshdKey_.place != ELEMENT )
         throw csmp::Exception( ERROR, "ConductivityVisitor", specific_saturated_hydraulic_diffusivity, " must be an element property." );
 
-#if defined(_OPENMP )
-    thread_result_.resize(omp_get_max_threads());
-    femgrs_.resize(omp_get_max_threads());
-#pragma omp parallel
-    {
-        size_t tid = omp_get_thread_num();
-        femgrs_[tid].InitializeElements(dim,model.FE_Manager().InterpolationOrder(),true);
-    }
-#endif
-}
-
-template<uint32_t dim>
-void ConductivityVisitor<dim>::Visit( Model<dim>* m ){
-#if defined(_OPENMP )
-    this->Visit(&m->Region("Model"));
-#endif
-}
-
-template<uint32_t dim>
-void ConductivityVisitor<dim>::Visit(Region<dim>* region ){
-#if defined(_OPENMP )
-#pragma omp parallel
-    {
-        size_t tid=omp_get_thread_num();
-        Element<dim>* ep;
-#pragma omp for
-        for ( long int e= 0 ; e < region->Cells(); e++ ){
-            ep = region->E(e);
-            FiniteElement* fe_tmp=ep->FE();
-            // change pointer here
-            ep->Assign(femgrs_[tid].E(ep->FE_Type()));
-            this->ComputeContribution(ep);
-            // put it back here
-            ep->Assign(fe_tmp);
-        }
-    }
-
-#endif
 }
 
 
-template<uint32_t dim>
-void ConductivityVisitor<dim>::Visit( Element<dim>* element )
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void ConductivityVisitor<dim,CELL>::Visit( CELL<dim>* cell )
 {
-#if !defined(_OPENMP)
     // first we calculate sshc
-    element->PropertyValueAtBaryCenter( muKey_, result );
-    result = element->Read( kKey_ ) / result();
-    element->Store( sshcKey_, result );
+    cell->PropertyValueAtBaryCenter( muKey_, result );
+    result = cell->Read( kKey_ ) / result();
+    cell->Store( sshcKey_, result );
 
     // if key exists, calculate sshd
     if (sshdKey_!=csmp::Index()){
         resultd = result;
-        resultd /= element->Read(phiKey_);
-        resultd /= element->Read(ctKey_);
-        element->Store( sshdKey_, resultd);
+        resultd /= cell->Read(phiKey_);
+        resultd /= cell->Read(ctKey_);
+        cell->Store( sshdKey_, resultd);
     }
 
     // if key exists, calculate shc
     if (shcKey_!=csmp::Index()){
-        result=result* element->Read(rhoKey_);
-        element->Store( shcKey_, result );
+        result=result* cell->Read(rhoKey_);
+        cell->Store( shcKey_, result );
     }
-#endif
-}
-
-template<uint32_t dim>
-void ConductivityVisitor<dim>::ComputeContribution( Element<dim>* element )
-{
-#if defined(_OPENMP )
-    // first we calculate sshc
-    element->PropertyValueAtBaryCenter( muKey_, thread_result_[omp_get_thread_num()] );
-    thread_result_[omp_get_thread_num()] = element->Read( kKey_ ) / thread_result_[omp_get_thread_num()]();
-    element->Store( sshcKey_, thread_result_[omp_get_thread_num()] );
-
-    // if key exists, calculate sshd
-    if (sshdKey_!=csmp::Index()){
-        result = thread_result_[omp_get_thread_num()];
-        result /= element->Read(phiKey_);
-        result /= element->Read(ctKey_);
-        element->Store( sshdKey_, result );
-    }
-
-    // if key exists, calculate shc
-    if (shcKey_!=csmp::Index()){
-        thread_result_[omp_get_thread_num()]=thread_result_[omp_get_thread_num()]* element->Read(rhoKey_);
-        element->Store( shcKey_, thread_result_[omp_get_thread_num()] );
-    }
-#endif
 }
 
 
-template class ConductivityVisitor<1>;
-template class ConductivityVisitor<2>;
-template class ConductivityVisitor<3>;
+template class ConductivityVisitor<1,Element>;
+template class ConductivityVisitor<2,Element>;
+template class ConductivityVisitor<3,Element>;
 
-}
+template class ConductivityVisitor<1,Face>;
+template class ConductivityVisitor<2,Face>;
+template class ConductivityVisitor<3,Face>;
+
+template class ConductivityVisitor<1,InterFace>;
+template class ConductivityVisitor<2,InterFace>;
+template class ConductivityVisitor<3,InterFace>;
+
+} // end csmp
 

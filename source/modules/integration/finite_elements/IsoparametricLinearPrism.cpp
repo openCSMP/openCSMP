@@ -664,7 +664,7 @@ matrix M of dimensions rows = spatial dimensions x columns = nodes.
 second method argument.
 */
 double
-IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN2,
+IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN,
                               const vector<double>& xyz  )
   {
 
@@ -680,19 +680,19 @@ IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN2,
     Jacobian( DNR, DNS, DNT );
     double detJ = JacobianInverse();
 
-    DN2.Resize(dim,dim);
-    DN2  = JINV;
+    DN.Resize(dim,dim);
+    DN = JINV;
 
-//    DenseMatrix<DM_MIN> DN(dim,npe);
-    dN(DN);
+    DenseMatrix<DM_MIN> DN2(dim,npe);
+    dN(DN2);
 
-    DN2*=DN;
+    DN *= DN2;
 
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
     cout<<" IsoparametricLinearPrism::dN  For given xyz=("<<xyz[0]<<","<<xyz[1]<<","<<xyz[2]<<"), rst=("<<
     rst[0]<<","<<rst[1]<<","<<rst[2]<<")"<<endl;
     cout<<" IsoparametricLinearPrism::dN  Matrix DN2: "<<endl;
-    DN2.Out();
+    DN.Out();
     getchar();
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
 

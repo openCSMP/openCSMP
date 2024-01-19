@@ -20,8 +20,8 @@ class HydroFractureVisitor : public Visitor<dim> {
     explicit HydroFractureVisitor( Model<dim>& sg );
     virtual ~HydroFractureVisitor();
 
-    virtual void Visit(Element<dim>* );   
-    virtual void Visit(Model<dim>* ); 
+    virtual void Visit( Element<dim>* );
+    virtual void Visit( Model<dim>* );
     
     void    HydroFracturedElements( std::vector<uint32_t>& ) const;
 
@@ -29,13 +29,12 @@ class HydroFractureVisitor : public Visitor<dim> {
      const PropertyDatabase<dim>&  pref;
      BoolVector               fractured;
      csmp::Index              Pe_key, S_key, K_key, V_key; 
-     double                 q, dp;
+     double                   q, dp;
      ScalarVariable           K, Kf, Pe, Pf, S;
      VectorVariable<dim>      V, dPdxy;
      bool                     over_pressured;
-     uint32_t                   i;
-     const double           GRAD_LIMIT, K_LIMIT;
-     std::vector<double>    pres;
+     const double             GRAD_LIMIT, K_LIMIT;
+     std::vector<double>      pres;
 };
 
 } // csmp
