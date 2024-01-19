@@ -1,12 +1,21 @@
 #include "Geothermal_2D_VVCase.h"
+#include "Model.h"
+#include "Boundary.h"
+//#include "SplitBoundary.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
+#include "SAMG_Solver.h"
+#include "SAMG_Exception.h"
+#else
+#include "LinearSolver.h"
+#endif
 
 using namespace std;
 
+namespace csmp {
 
-namespace csmp
-{
-
-  Geothermal_2D_VVCase::Geothermal_2D_VVCase(const char* prefix)
+Geothermal_2D_VVCase::Geothermal_2D_VVCase(const char* prefix)
   {
     this->setName("Geothermal_2D_VVCase");
     prefix_=prefix;
@@ -22,13 +31,15 @@ Criterion:
 =================================
 */
 
-  void Geothermal_2D_VVCase::outputToVTU( Model<3U>& model,std::string model_name, const list<string>& props, size_t timestep )
+void Geothermal_2D_VVCase::outputToVTU( Model<3U>& model,std::string model_name, const list<string>& props, size_t timestep )
   {
       static VTU_Interface<3U> vtu(model);
       vtu.OutputDataToVTU( ( string(model_name) + "_Properties" ).c_str(), props, model.Region("Model"), timestep);
   }
 
-  void Geothermal_2D_VVCase::ComputeMassConductivity (Model<3U>& model)
+
+
+void Geothermal_2D_VVCase::ComputeMassConductivity (Model<3U>& model)
   {
       PropertyHandle<3U> rho_ph ( model, "density liquid", SCALAR, NODE );
       PropertyHandle<3U> kappa_ph ( model, "conductivity", SCALAR, ELEMENT );
@@ -42,7 +53,8 @@ Criterion:
       lambda_ph *= kappa_ph;
   }
 
-  void Geothermal_2D_VVCase::ComputeMassGravityTerm (Model<3U>& model)
+
+void Geothermal_2D_VVCase::ComputeMassGravityTerm (Model<3U>& model)
   {
       ComputeGravityTermVisitor<3U> gravity_visitor ( model, "gravity term", "permeability", 
                                                        "fluid viscosity", "density liquid" );
@@ -57,10 +69,9 @@ Criterion:
       
       const vector<Element< 3U>*>::const_iterator modelElementsEnd( model.Region("Model").CellsEnd() );
       
-      for( vector<Element<3U>*>::const_iterator it( model.Region("Model").CellsBegin() ); 
-           it != modelElementsEnd; ++it )
+      for( auto it( model.Region("Model").CellsBegin() ); it != modelElementsEnd; ++it )
       {
-        for (size_t ip=0;ip<(*it)->IntegrationPoints (); ++ip)
+        for ( auto ip{0U}; ip<(*it)->IntegrationPoints (); ++ip)
         {
           (*it)->Read(ip, gravityVectorKey, gravityVector);
           (*it)->PropertyValueAtIntegrationPoint( fluidDensityKey, ip, rho );

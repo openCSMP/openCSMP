@@ -2,6 +2,7 @@
 #include "Element.h"
 #include "Face.h"
 #include "InterFace.h"
+#include "Edge.h"
 
 namespace csmp {
 
@@ -630,5 +631,6 @@ Point<2U>  FiniteVolumePolicy<2U,CELL>::ParametricFacetNormal( uint32_t iFacet )
 template class FiniteVolumePolicy<2U,Element>;
 template class FiniteVolumePolicy<2U,Face>;
 template class FiniteVolumePolicy<2U,InterFace>;
+template class FiniteVolumePolicy<2U,Edge>;
 
 } // end namespace csmp

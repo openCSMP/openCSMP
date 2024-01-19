@@ -78,13 +78,13 @@ template<uint32_t> class PropertyDatabase;
                      double defaultValue=std::numeric_limits<double>::quiet_NaN(),
                      VARIABLE_FLAG flag = ANY );
       
-      explicit ArrayVariable( unsigned int arraySize,
-                              double defaultValue = 0.,
-                              VARIABLE_FLAG flag = ANY );
+      ArrayVariable( uint32_t arraySize,
+                     double defaultValue = 0.,
+                     VARIABLE_FLAG flag = ANY );
       
-      explicit ArrayVariable( const Index& arrayKey,
-                              double defaultValue = 0.,
-                              VARIABLE_FLAG flag = ANY );
+      ArrayVariable( const Index& arrayKey,
+                     double defaultValue = 0.,
+                     VARIABLE_FLAG flag = ANY );
       
       ArrayVariable( const ArrayVariable& );
 

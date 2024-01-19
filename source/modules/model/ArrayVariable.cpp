@@ -29,7 +29,7 @@ ArrayVariable::ArrayVariable()
     {
     }
 
-ArrayVariable::ArrayVariable( unsigned int arraySize, double defaultValue, VARIABLE_FLAG flag )
+ArrayVariable::ArrayVariable( uint32_t arraySize, double defaultValue, VARIABLE_FLAG flag )
     : flag_(flag), data_( arraySize, defaultValue )
     {
     }
@@ -526,7 +526,7 @@ ArrayVariable::ArrayContainer::const_iterator ArrayVariable::End() const
 ostream&  operator<<( ostream& stream, const ArrayVariable& o )
   {
     stream << "Flag: " << parseStatus(o.Flag()) << " Size: " << o.Size();
-    for (size_t i(0); i < o.Size(); ++i )
+    for ( uint32_t i{0U}; i < o.Size(); ++i )
       stream << endl << o[i];
 
     return stream;

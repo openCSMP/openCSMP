@@ -15,7 +15,7 @@ public:
                              const csmp::Index& adv_rhs_key, 
                              const csmp::Index& velo_key );
 
-  virtual void InitializeFirstOrder( const FV_Parameter& param, const Element<dim>& e, const VARIABLE_TYPE &vt=SCALAR, const size_t var_comp_nr=0 );
+  virtual void InitializeFirstOrder( const FV_Parameter& param, const Element<dim>& e, const VARIABLE_TYPE &vt=SCALAR, uint32_t var_comp_nr=0 );
   
   csmp::Index adv_rhs_key_;
 

@@ -766,8 +766,8 @@ void readPropertyValue( ArrayVariable& av )
   char*        token( 0 );
   const char*  delims = " ,:,\t,\n,\r";
 
-  size_t i;
-  const size_t depth( av.Size() );
+  uint32_t i;
+  const uint32_t depth( av.Size() );
   for ( i = 0; i < depth; ++i )
   {
     token = strtok( NULL, delims );
@@ -775,7 +775,7 @@ void readPropertyValue( ArrayVariable& av )
       av( i ) = atof( token );
     else if ( i != 0 )
     {
-      for ( size_t j = i; j < depth; j++ )
+      for ( uint32_t j = i; j < depth; j++ )
         av( j ) = av( i - 1 );
       break;
     }
@@ -791,6 +791,7 @@ void readPropertyValue( ArrayVariable& av )
                            "Property value could not be read properly" );
   }
 }
+
 
 void readPropertyValue( FlaggedArrayVariable& fv )
 {
@@ -2133,8 +2134,8 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
 
       // 3b. property value
       const VARIABLE_TYPE  prop_type = sg.Database().Type( prop_name.c_str() );
-      size_t  length = sg.Database().Components( prop_name.c_str() );
-      string  unit( " [" ); unit += sg.Database().Unit( prop_name.c_str() ); unit += "] ";
+      uint32_t length = sg.Database().Components( prop_name.c_str() );
+      string   unit( " [" ); unit += sg.Database().Unit( prop_name.c_str() ); unit += "] ";
 
       // overwrite protection flag
       const VARIABLE_FLAG do_not_overwrite = parseStatus( prop_flag.c_str() );
@@ -2670,7 +2671,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
 
       // 3b. property value
       VARIABLE_TYPE  prop_type = model.Database().Type( prop_name.c_str() );
-      size_t  length = model.Database().Components( prop_name.c_str() );
+      uint32_t  length = model.Database().Components( prop_name.c_str() );
       string  unit( " [" ); unit += model.Database().Unit( prop_name.c_str() ); unit += "] ";
 
       if ( prop_type == SCALAR )
@@ -2909,8 +2910,8 @@ bool readRegionPropertyValues( Model<dim>& model,
 
       // 3. property value
       VARIABLE_TYPE  prop_type = model.Database().Type( prop_name.c_str() );
-      size_t  length = model.Database().Components( prop_name.c_str() );
-      string  unit( " [" ); unit += model.Database().Unit( prop_name.c_str() ); unit += "] ";
+      uint32_t length = model.Database().Components( prop_name.c_str() );
+      string   unit( " [" ); unit += model.Database().Unit( prop_name.c_str() ); unit += "] ";
 
       if ( prop_type == SCALAR ) {
         ScalarVariable sc;
@@ -3128,7 +3129,7 @@ bool readDefaultPropertyValues( Model<dim>& model,
       string         prop_name = strtok( text_line, delims );
       string         property( " '" ); property += prop_name; property += "' ";
       VARIABLE_TYPE  prop_type = model.Database().Type( prop_name.c_str() );
-      size_t         length = model.Database().Components( prop_name.c_str() );
+      uint32_t       length = model.Database().Components( prop_name.c_str() );
       string         unit( " [" ); unit += model.Database().Unit( prop_name.c_str() ); unit += "] ";
 
       cout.setf( ios::scientific, ios::floatfield );

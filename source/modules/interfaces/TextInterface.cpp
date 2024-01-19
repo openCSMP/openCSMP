@@ -84,7 +84,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                 case ARRAY: {
                      ArrayVariable ary;
                      sg.Read( prop_key, ary );
-                     for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                     for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                      fprintf( fp, "\n");
                   }
                   break;
@@ -228,7 +228,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                     case ARRAY: {
                          ArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
@@ -274,7 +274,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                     case ARRAY: {
                          ArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
@@ -520,7 +520,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                 for ( auto i{0U}; i<(*eit)->FV()->Facets(); ++i )
                 {
                   // printing the element id first
-                  fprintf( fp, "%u\t", static_cast<size_t>((*eit)->Idx()) );
+                  fprintf( fp, "%ul\t", static_cast<size_t>((*eit)->Idx()) );
                   
                   // printing the facet integration point locations in global coordinates
                   for ( uint32_t j=1U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
@@ -1038,7 +1038,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
     // the timestep is appended to the name of the file that is created
     strcpy( fname, file_name );
 
-    sprintf( step, "%ld", timestep );
+    snprintf( step, sizeof(step), "%ld", timestep );
     strcat( fname, step );
 
     // outputting to text file

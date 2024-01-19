@@ -23,7 +23,7 @@ namespace csmp {
     Checks the dip angle of the face normal; if the normal is close to horizontal
     the function returns true because the face is subvertical.
 */
-inline bool isSubvertical( const Element<2U>* const eptr, size_t face )
+inline bool isSubvertical( const Element<2U>* const eptr, uint32_t face )
  {
     assert( eptr != nullptr );
     assert( face < eptr->Faces() );
@@ -45,7 +45,7 @@ inline bool isSubvertical( const Element<2U>* const eptr, size_t face )
  } // end isSubvertical (2D)
  
  
- inline bool isSubvertical( const Element<3U>* const eptr, size_t face )
+ inline bool isSubvertical( const Element<3U>* const eptr, uint32_t face )
  {
     assert( eptr != nullptr );
     assert( face < eptr->Faces() );

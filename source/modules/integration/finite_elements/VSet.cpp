@@ -482,7 +482,7 @@ template<uint32_t dim>
 bool  VSet<dim>::OutputTo( const char* bin_file, double time ) const
 {
 	char file_name[200], num[20];
-	sprintf(num, "%lf", time);
+  snprintf( num, sizeof(num), "%lf", time );
 	strcpy(file_name, bin_file);
 	size_t  records(0);
 
@@ -578,13 +578,12 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double& time )
 template<uint32_t dim>
 bool  VSet<dim>::InputFrom( const char* bin_file, double& time, const set<string>& subset_variables )
 {
-	char file_name[NAME_STRING];
-	strcpy(file_name, bin_file);
+	string  file_name{ bin_file };
 	size_t  records(0);
 	string  dname;
 
 	// 1. opening the file
-	fstream fp(file_name, ios::in | ios::binary);
+	fstream fp(file_name.c_str(), ios::in | ios::binary);
 	if (!fp.is_open()) {
 		cout << "\nVSet<dim>::InputFrom: File: " << file_name;
 		cout << " could not be opened" << endl;
@@ -684,14 +683,14 @@ template<uint32_t dim>
 bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double time, size_t first_outerhalo) const
 {
 	char file_name[200], num[20];
-	sprintf(num, "%lf", time);
+  snprintf( num, sizeof(num), "%lf", time );
 	strcpy(file_name, bin_file);
 	char heading[200];
 	strcpy(heading, "VSet<dim>::OutputTo: Binary version of VSet: ");
 	strcat(heading, bin_file);
 	strcat(heading, " saved at time: ");
 	strcat(heading, num);
-	sprintf(num, "%lu", first_outerhalo );
+  snprintf( num, sizeof(num), "%lu", first_outerhalo );
 	strcat(heading, ", first outerhalo: ");
 	strcat(heading, num);
 

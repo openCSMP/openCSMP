@@ -3,15 +3,13 @@
 
 #include "MathOperatorLHS.h"
 #include "Index.h"
+#include "InterFace.h"
 
 namespace csmp {
 
 class FiniteElement;
 template<uint32_t> class Model;
-
-double diffusion1D( double val_farfield, double diffusivity, double x, double t );
-double flux1DAtX0( double val_farfield, double diffusivity, double t, double transfer_coefficient );
-
+template<uint32_t> class InterFace;
 
 /**
        Use to apply a Robin type (flux) boundary condition coupling the sides of the Interface with a lower-dimensional
@@ -46,11 +44,25 @@ class NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region : public MathOperatorLHS
     
     virtual NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>* clone() const override
       { return new NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>(*this); }
+      
+    void ResetMinMaxTransferTerms() {
+         transfer_min_ =  1e30;
+         transfer_max_ = -1e30;
+      }
+
+  private:
+      // for the computation of fluxes from the 1D analytic solution
+      double Diffusion1D( double val_farfield, double diffusivity, double x, double t );
+      double Grad_Var_AtX0( double val_farfield, double diffusivity, double t );
+      double Flux1DAtX0( double val_farfield, double diffusivity, double t, double conductivity );
 
   private:
       csmp::INDEX<SCALAR,ELEMENT>  diffusivity_key_;  ///< test function key (in base class)
       std::vector<double>    transfer_coefficients_;  ///< as computed from delta t and delta test-function operand value at the nodes
       double  delta_t_;                               ///< current time increment (between t0 and t + delta t)
+      double  transfer_min_                =  1e30;
+      double  transfer_max_                = -1e30;
+      const bool  order1_FD_approximation_ = true;
 };
 
 } // csmp

@@ -50,8 +50,8 @@ void InputDataManager_Test::run()
       const csmp::Index nv_key=model.Database().StorageKey("nodal velocity");
     
       // testing the first element and some interior nodes of the respective model regions
-      const Region<3U> matrix_domain(model.Region("MATRIX"));
-      const Region<3U> fracture_domain(model.Region("FRAC_VOLUMES"));
+      const Region<3U>& matrix_domain(model.Region("MATRIX"));
+      const Region<3U>& fracture_domain(model.Region("FRAC_VOLUMES"));
       // testing
       const double tolerance(1.0e-10);
       // scalars

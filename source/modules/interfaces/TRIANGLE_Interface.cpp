@@ -5,6 +5,7 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 #include "PropertyData.h"
+#include "compareFloats.h"
 
 using namespace std;
 
@@ -89,7 +90,7 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
     SplitSingleCornerElements( plist, pfverts, evalues );
 
     // 4. BOX_BOUNDARY flags are identified 
-    // -----------------------------------
+    // ------------------------------------
     FlagBoundaryElements( pfverts, plist, x, y );
     FlagBoundaryNodes( pfverts, plist, bflags );
     FlagCornerNodes( bflags, x, y, z );
@@ -123,13 +124,15 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
                                        IsoparametricLinearTriangle().Neighbors(),
                                        IsoparametricLinearTriangle().ElementType(), x.size(), plist.size() );
     vset.AddXYZ( x, y, z );
-    for ( const auto& b : bflags ) vset.BFlag( b.first, b.second );
+    //                             convert bflag numbering to 0..n-1 range
+    for ( const auto& b : bflags ) vset.BFlag( b.first-1U, b.second );
     vset.AddPlist( plist.begin(), plist.end() );
     vset.AddPfverts( pfverts.begin(), pfverts.end() );
     vset.AddData( "permeability", mesh_regions );
     
     // 7. Checking the VSet
     // --------------------
+    // decrements element and node numbers in plist and pfverts only
     vset.EstablishZeroBasedNumbering();
     
     // SKM_FIX because neighbor information seems corrupt
@@ -672,21 +675,16 @@ Private method used by ReadTriangle2DMesh().
 Nodes are flagged according to their parent faces across which the face-
 vert vectors point. Thus, nodes 2,3 correspond to facevert 1, nodes 3,1
 to facevert 2, and nodes 1,2 to facevert 3. The method does not identify
-corner points of the model. This task is left to CSMP.  
+corner points of the model. This task is left to FlagCornerNodes().
 */
 void TRIANGLE_Interface::FlagBoundaryNodes( map<size_t,vector<int64_t> >& pfverts,
                                             map<size_t,vector<int64_t> >& plist,
                                             map<size_t,int8_t>& bflags )
  {
-    // flag of program 'triangle' for boundary node
-    map<size_t,vector<int64_t> >::iterator  pit;
-    map<size_t,vector<int64_t> >::iterator  it;
-    map<size_t,int64_t>::iterator           bit;
-    
     assert( !bflags.empty() );
 
-    for ( it=pfverts.begin(), pit=plist.begin(); it!=pfverts.end(); it++, pit++ ) 
-      for ( auto n=0; n<(*it).second.size(); n++ ) 
+    for ( auto it=pfverts.begin(), pit=plist.begin(); it!=pfverts.end(); it++, pit++ )
+      for ( uint32_t n{0U}; n<(*it).second.size(); n++ )
         {
            // if an element face is at the model boundary
            // -------------------------------------------
@@ -734,32 +732,35 @@ void TRIANGLE_Interface::FlagBoundaryNodesAccordingTo( int fvert, int8_t bflag_i
     else if ( bflag_int == BACK_OUTSIDE )   bflag = BACK;
  
     // 2. Flagging the nodes
+    bool search_error{false};
     if ( fvert == 0U ) {
          auto bit=bflags.find(nds[1]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
          bit=bflags.find(nds[2]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
       }
     else if ( fvert == 1U ) {
          auto bit=bflags.find(nds[2]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
          bit=bflags.find(nds[0]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
       }
     else if ( fvert == 2U ) {
          auto bit=bflags.find(nds[0]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
          bit=bflags.find(nds[1]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         if ( bit != bflags.end() ) (*bit).second = bflag;
+         else search_error = true;
       }
-    
- } // end FlagBoundaryNodesAccordingTo                                       
+    if ( search_error == true )
+      throw csmp::Exception( ERROR, "", "could not identify the BOX_BOUNDARY flags of the nodes looking at the boundary map ");
+      
+ } // end FlagBoundaryNodesAccordingTo
 
 
 
@@ -1171,26 +1172,27 @@ void TRIANGLE_Interface::FlagCornerNodes( map<size_t,int8_t>& bflags,
                                    ymax = max_element( y.begin(), y.end() ),
                                    zmin = min_element( z.begin(), z.end() ),
                                    zmax = max_element( z.begin(), z.end() );
+                                   
+     assert( approximatelyEqual( *zmin, *zmax ) );
       
-     size_t n_node(0U);
-     for ( auto it=bflags.begin(); it!=bflags.end(); it++, n_node++ )
+     for ( auto& it : bflags )
        {
-          if ( x[ n_node ] == *xmin && y[ n_node ] == *ymin && z[ n_node ] == *zmin )
-            (*it).second = CNR_MIN;
-          if ( x[ n_node ] == *xmax && y[ n_node ] == *ymax && z[ n_node ] == *zmax )
-            (*it).second = CNR_MAX;
-          if ( x[ n_node ] == *xmax && y[ n_node ] == *ymin && z[ n_node ] == *zmin )
-            (*it).second = CNR_MIN_MAXX;
-          if ( x[ n_node ] == *xmax && y[ n_node ] == *ymin && z[ n_node ] == *zmax )
-            (*it).second = CNR_MIN_MAXXZ;
-          if ( x[ n_node ] == *xmin && y[ n_node ] == *ymin && z[ n_node ] == *zmax )
-            (*it).second = CNR_MIN_MAXZ;
-          if ( x[ n_node ] == *xmin && y[ n_node ] == *ymax && z[ n_node ] == *zmin )
-            (*it).second = CNR_MAX_MINXZ;
-          if ( x[ n_node ] == *xmax && y[ n_node ] == *ymax && z[ n_node ] == *zmin )
-            (*it).second = CNR_MAX_MAXX;
-          if ( x[ n_node ] == *xmin && y[ n_node ] == *ymax && z[ n_node ] == *zmax )
-            (*it).second = CNR_MAX_MAXZ;
+          if ( approximatelyEqual( x[ it.first ], *xmin ) && approximatelyEqual( y[ it.first ], *ymin ) )
+            it.second = CNR_MIN;
+          if ( approximatelyEqual( x[ it.first ], *xmax ) && approximatelyEqual( y[ it.first ], *ymax ) )
+            it.second = CNR_MAX;
+          if ( approximatelyEqual( x[ it.first ], *xmax ) && approximatelyEqual( y[ it.first ], *ymin ) )
+            it.second = CNR_MIN_MAXX;
+          if ( approximatelyEqual( x[ it.first ], *xmax ) && approximatelyEqual( y[ it.first ], *ymin ) )
+            it.second = CNR_MIN_MAXXZ;
+          if ( approximatelyEqual( x[ it.first ], *xmin ) && approximatelyEqual( y[ it.first ], *ymin ) )
+            it.second = CNR_MIN_MAXZ;
+          if ( approximatelyEqual( x[ it.first ], *xmin ) && approximatelyEqual( y[ it.first ], *ymax ) )
+            it.second = CNR_MAX_MINXZ;
+          if ( approximatelyEqual( x[ it.first ], *xmax ) && approximatelyEqual( y[ it.first ], *ymax ) )
+            it.second = CNR_MAX_MAXX;
+          if ( approximatelyEqual( x[ it.first ], *xmin ) && approximatelyEqual( y[ it.first ], *ymax ) )
+            it.second = CNR_MAX_MAXZ;
        }    
  
  } // end FlagCornerNodes  

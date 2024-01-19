@@ -32,7 +32,7 @@ ExplicitMassBasedTransport<dim,STP>::ExplicitMassBasedTransport(const char* grou
 } // end constructor (solute transport-only)
 
 template<uint32_t dim,template<uint32_t> class STP>
-void ExplicitMassBasedTransport<dim,STP>::AssignFluxBoundaryConditions(const size_t var_comp_nr)
+void ExplicitMassBasedTransport<dim,STP>::AssignFluxBoundaryConditions( uint32_t var_comp_nr )
 {
     /// unneccessary for compressible flow(??) (there needs to be a better comment here! julian, july 2014)
     double        inflow, flux_balance;
@@ -60,8 +60,7 @@ void ExplicitMassBasedTransport<dim,STP>::AssignFluxBoundaryConditions(const siz
 //            }
         }
     else if (this->adv1_key_.type == ARRAY)
-        for ( typename std::vector<Node<dim>*>::const_iterator
-              nit=this->gref_.PerimeterNodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
+        for ( auto nit=this->gref_.PerimeterNodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
         {
 //            if ((*nit)->Status(this->adv1_key_)!=DIRICH) {
                 ArrayVariable av;
@@ -202,7 +201,7 @@ void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProductsOMP(vector
 } // end AccumulateFluxUpwindProductsOMP
 
 template<uint32_t dim,template<uint32_t> class STP>
-void ExplicitMassBasedTransport<dim,STP>::ComposeSolution(double time_interval , const size_t var_comp_nr)
+void ExplicitMassBasedTransport<dim,STP>::ComposeSolution(double time_interval, uint32_t var_comp_nr )
 {
     if (this->adv1_key_.type == SCALAR)
         for ( size_t nidx=0U; nidx<this->gref_.Nodes(); nidx++ )
@@ -264,7 +263,7 @@ template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
         double time_increment, bool output_result_range )
 {
-    for (size_t ncom = 0 ; ncom < this->var_ncomponents_;ncom++){
+    for ( uint32_t ncom{0u}; ncom < this->var_ncomponents_;ncom++){
         if (this->Verbose()) cout<<" Advecting component (mass based): "<<ncom<<" time increment used: "<<time_increment<<endl;
         std::fill( this->RESULT.begin(), this->RESULT.end(), static_cast<double>(0.) );
 
@@ -345,11 +344,11 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
         //     - a single loop over all nodes is required
         //     - this steps also considers in and outflow of finite volume cells
         //     - (distributed) sources and sinks will be considered in the future
-        this->ComposeSolution( time_increment ,ncom);
+        this->ComposeSolution( time_increment,ncom);
 
 
         // 5. Saving the computed new saturations at the FV centers
-        this->OutputResults( this->pref_, this->adv1_key_, output_result_range ,ncom);
+        this->OutputResults( this->pref_, this->adv1_key_, output_result_range,ncom);
     }
 
 

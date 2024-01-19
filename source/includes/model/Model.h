@@ -194,7 +194,7 @@ class Model : public RegionInterface<dim, Model>,
 public:
   // class Model is not copy constructable
 
-  /// constructs model with subdomains (Region, Boundary, SplitBoundary), variables file name is "*-variables.txt" where * is the name of the model
+  /// constructs model with subdomains (Region, Boundary, SplitBoundary), variables file name with extension "*-variables.txt" where * is the name of the model
   Model( ModelTopology&, VSet<dim>&, const char* var_file, bool treat_domains_as_regions_and_use_regions_file_if_any );
 
   /// Reconstructor:  reads model from set of CSMP's native binary files
@@ -241,7 +241,7 @@ public:
   // -----------------------------------------------
 
   /// writes entire model with associated properties to disk; non-constant because this involves region creation; not const because mesh is updated
-  void OutputToBinaryFile( const char* );
+  void OutputToBinaryFile( const char* ); // not const, because cells might get reshuffled
 
   /// reads model written by OutputToBinaryFile() including all associated properties; if subset of variables is not empty only these will be read
   void InputFromBinaryFile( const char* model_name, const std::set<std::string>& subset_variables );
@@ -437,25 +437,25 @@ Point<dim>  centerOfGravity( const Model<dim>& );
 /// prints range to screen; returns either min(arg=false) or maximum variable value (default)
 template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
-                                const char* var, bool print_maximum = true );
+                              const char* var, bool print_maximum = true );
 
 /// prints range of target variable in model to screen and logs it to IO handler
 template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
-                                Standard_IO_Handler& io, const char* var,
-                                bool max_instead_of_min = true );
+                              Standard_IO_Handler& io, const char* var,
+                              bool max_instead_of_min = true );
 
 /// prints range of target variable within specific model subdomain
 template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
-                                const char* group, const char* var, bool max_or_min = true );
+                              const char* region, const char* var, bool max_or_min = true );
 
 /// prints range of target variable within specific model subdomain and logs it to IO handler
 template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
-                                Standard_IO_Handler&,
-                                const char* group, const char* var,
-                                bool max_instead_of_min = true );
+                              Standard_IO_Handler&,
+                              const char* group, const char* var,
+                              bool max_instead_of_min = true );
 
 /// prints min/max values stored in supplied vector
 void printRangeOf( const std::vector<std::pair<double, double> >& );

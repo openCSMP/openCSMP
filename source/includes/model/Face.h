@@ -194,9 +194,6 @@ class Face : public FiniteElementPolicy<dim,Face>,
     uint32_t       InnerParentFaceID() const;
     uint32_t       OuterParentFaceID() const;
     uint32_t       ParentFaceID( INTERFACE_SIDE side ) const;
-  
-    /// returns the number of the desired node in the inner parent element of the Face
-    size_t         ParentNodeNumber( size_t n_local ) const;
 
     // ------------------------------------------------------------------------
     //  Face geometry operations

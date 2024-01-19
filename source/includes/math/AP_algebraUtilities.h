@@ -142,7 +142,7 @@ namespace csmp {
    */
   //binary predicate for the larger magnitude of vectors
   template <class fT>
-  struct greater_fabs : std::binary_function<fT,double,bool>
+  struct greater_fabs
   {
     bool operator()(const fT& x, const fT& y) const {return static_cast<bool>(std::fabs(x) > std::fabs(y));}
   };

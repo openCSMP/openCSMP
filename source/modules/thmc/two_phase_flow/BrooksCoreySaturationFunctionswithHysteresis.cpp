@@ -137,11 +137,12 @@ BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( const Eleme
    This function set the parameters for the Imbibitions of Drainage curves
    
    */
-  template<uint32_t dim, template<uint32_t> class USER>
-  void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::SetBrooksCoreyCurvesParameters( const Element<dim>* const e, std::array<double, 2>& a,std::array<double, 2>& c ) const {
-  
-  
-  e->Read(User()->key_kri_param,ac_params_) ;
+template<uint32_t dim, template<uint32_t> class USER>
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::SetBrooksCoreyCurvesParameters( const Element<dim>* const e,
+                                                                                              std::array<double, 2>& a,
+                                                                                              std::array<double, 2>& c ) const
+ {
+  e->Read(User()->key_kri_param,ac_params_);
   
   TWO_PHASE_FLOW_PROCESS ProcessPath = FlowProcess(e);
   
@@ -159,10 +160,12 @@ BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( const Eleme
       c[H2O] =  ac_params_[CWI];
       c[CO2] =  ac_params_[COI];
       break;
+      
+    default:
+      throw csmp::Exception( ERROR, "BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::SetBrooksCoreyCurvesParameters", "displacement mechanism not known");
+  }
 
-  }
-  
-  }
+} // end
   
   
   

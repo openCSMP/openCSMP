@@ -2,9 +2,6 @@
 #define NIMBLE_REGION_TEST_H
 
 #include "Test.h"
-#include "PropertyDatabase.h"
-#include "NimbleRegion.h"
-#include "Region.h"
 
 namespace csmp {
 

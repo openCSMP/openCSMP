@@ -66,14 +66,14 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const ModelSubDomain& ed )
 /// move constructor; @attention remove verbose output after testing
 template<uint32_t dim, template<uint32_t> class CELL>
 ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
- : pref_( move(ed.pref_) ),
-   cell_vec_( move(ed.cell_vec_) ),
-   node_vec_( move(ed.node_vec_) ),
-   first_bd_node_( move(ed.first_bd_node_) ),
-   bd_face_vec_( move(ed.bd_face_vec_) ),
-   subdomain_name_( move(ed.subdomain_name_) ),
-   rebuilt_needed_(move(ed.rebuilt_needed_) ),
-   domain_idx_( move(ed.domain_idx_) ) // since argument object gets destroyed there is no incrementation of domain_idx_
+ : pref_( std::move(ed.pref_) ),
+   cell_vec_( std::move(ed.cell_vec_) ),
+   node_vec_( std::move(ed.node_vec_) ),
+   first_bd_node_( std::move(ed.first_bd_node_) ),
+   bd_face_vec_( std::move(ed.bd_face_vec_) ),
+   subdomain_name_( std::move(ed.subdomain_name_) ),
+   rebuilt_needed_(std::move(ed.rebuilt_needed_) ),
+   domain_idx_( std::move(ed.domain_idx_) ) // since argument object gets destroyed there is no incrementation of domain_idx_
  {
     domain_count_++; // needed because when destructor is called on 'ed' the object count will be decremented!
     if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called move constructor.\n";
@@ -112,13 +112,13 @@ template<uint32_t dim, template<uint32_t> class CELL>
 ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( ModelSubDomain&& ed )
  {
      if ( &ed != this ) {
-         cell_vec_       = move( ed.cell_vec_ );
-         node_vec_       = move( ed.node_vec_ );
-         first_bd_node_  = move( ed.first_bd_node_ );
-         domain_idx_     = move( ed.domain_idx_ );
-         bd_face_vec_    = move( ed.bd_face_vec_ );
-         subdomain_name_ = move( ed.subdomain_name_ );
-         rebuilt_needed_ = move( ed.rebuilt_needed_ );
+         cell_vec_       = std::move( ed.cell_vec_ );
+         node_vec_       = std::move( ed.node_vec_ );
+         first_bd_node_  = std::move( ed.first_bd_node_ );
+         domain_idx_     = std::move( ed.domain_idx_ );
+         bd_face_vec_    = std::move( ed.bd_face_vec_ );
+         subdomain_name_ = std::move( ed.subdomain_name_ );
+         rebuilt_needed_ = std::move( ed.rebuilt_needed_ );
          if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called move assignment operator.\n";
        }
      return *this;
@@ -376,7 +376,7 @@ pair<CELL_SHAPE,bool>  ModelSubDomain<dim,CELL>::SingleCellShapeDomain() const
     if ( !single_elmt_domain ) return make_pair( static_cast<CELL_SHAPE>(UNSPECIFIED), single_elmt_domain );
     
     // cell shape
-    switch ( cell_dim.first ) {
+    switch ( cell_dim.second ) {
         case 1:
           return make_pair( LINE, single_elmt_domain );
         case 2:
@@ -872,7 +872,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
           temp.push_back( nit );
         // now the temporary vector is assigned to the permanent one
         assert( temp.size() == node_vec_.size() );
-        node_vec_ = move( temp );
+        node_vec_ = std::move( temp );
         node_vec_.shrink_to_fit();
         
         assert( first_bd_node_ <= node_vec_.size() );
@@ -893,7 +893,10 @@ cout.flush();
 
 
 /**
-    Uses vector to create unique node vector.
+    Uses vector to create unique node vector by pushing back all node of the elements including duplicates,
+    then sorting it and eliminating the duplicates.
+    
+    TODO: speed critical function. Perhaps refactor with unordered set as intermediate container for unique nodes because there will be so many duplicates.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
@@ -2274,7 +2277,7 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
              for ( typename vector<CELL<dim>*>::iterator
                it=cell_vec_.begin(); it!=cell_vec_.end(); it++ )
                for ( auto i{0U}; i<(*it)->Facets(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
@@ -2282,7 +2285,7 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
              for ( typename vector<CELL<dim>*>::iterator
                it=cell_vec_.begin(); it!=cell_vec_.end(); it++ )
                for ( auto i{0U}; i<(*it)->Sectors(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
@@ -2308,14 +2311,14 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
                      prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
              for ( auto it=PerimeterCellsBegin(); it!=cell_vec_.end(); it++ )
                for ( auto i{0U}; i<(*it)->Facets(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
              for ( auto it=PerimeterCellsBegin(); it!=cell_vec_.end(); it++ )
                for ( auto i{0U}; i<(*it)->Sectors(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
@@ -2340,14 +2343,14 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
                      prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
              for ( auto it=CellsBegin(); it!=PerimeterCellsBegin(); it++ )
                for ( auto i{0U}; i<(*it)->Facets(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerFacet(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
              for ( auto it=CellsBegin(); it!=PerimeterCellsBegin(); it++ )
                for ( auto i{0U}; i<(*it)->Sectors(); i++ )
-                 for ( size_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
+                 for ( uint32_t j{0U}; j<(*it)->IntegrationPointsPerSector(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface

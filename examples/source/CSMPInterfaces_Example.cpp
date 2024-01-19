@@ -45,7 +45,7 @@ void CSMPInterfaces_Example::Run()
   //set working directory to 'input_meshes/'
   if(!fs::is_directory("input_meshes")) {
     string message("\nCSMPInterfaces_Example::Run(): 'input_meshes/' directory does not exists in current working directory: ");
-    message += fs::current_path();
+    message += (fs::current_path()).string();
     message += ", please ensure the working directory is set correctly (refer to open-csmp/examples/README.txt)";
     throw std::runtime_error(message);
   } else fs::current_path("input_meshes");
@@ -551,7 +551,7 @@ void CSMPInterfaces_Example::BuildFromSKUAModel(const string& model_name) {
   const string variables_file = "SKUA_model-variables.txt";
   if (!fs::exists(variables_file)) {
     string error_message = "\n\nError: file '";
-    string path = fs::current_path();
+    string path = (fs::current_path()).string();
     error_message += (variables_file + "' does not exist in directory " + path);
     error_message += (", example cannot run, please check.\n");
     throw std::runtime_error(error_message);
@@ -618,17 +618,17 @@ void CSMPInterfaces_Example::BuildFromEclipseModel(const string& model_name) {
   auto&  model_domain(modelOut.Region("Model"));
   modelOut.Region("Model").UpdateMemberIndexes();
 
-  // 3. eliminating any potentially disfunctional elements / cells from the model
+  // 3. eliminating any potentially dysfunctional elements / cells from the model
   // ----------------------------------------------------------------------------
   // elements that have a negative Jacobian determinant are assumed to be degenerate and flagged for deletion
-  vector<uint32_t> degenerate_elements;
+  vector<size_t> degenerate_elements;
   int volume_e_removed(0U), surface_e_removed(0U), line_e_removed(0U);
   for (auto it = model_domain.CellsBegin(); it != model_domain.CellsEnd(); ++it) {
     // find broken elements
     // (an element is regarded as broken if the determinant of its Jacobian inverse is negative at least
     //  at one of the integration points
     bool broken_elmt(false);
-    for (size_t ipoint = 0U; ipoint<(*it)->IntegrationPoints(); ++ipoint)
+    for (uint32_t ipoint = 0U; ipoint<(*it)->IntegrationPoints(); ++ipoint)
       if ((*it)->det_JINV_AtIntegrationPoint(ipoint) <= 0.) {
         broken_elmt = true;
         break;
@@ -688,7 +688,7 @@ void CSMPInterfaces_Example::BuildFromGeoModellerModel(const string& model_name)
 void CSMPInterfaces_Example::BuildFromRhinoModel(const string& model_name) {
   cout<<"\nStart building Rhino model '"<<model_name<<"'..."<<endl;
   //  reading in '.raw' meshes that were written to file as labeledentities
-  SKM_RhinoSurfaceReader  rhino_surface( model_name.c_str() );
+  RhinoSurfaceReader  rhino_surface( model_name.c_str() );
 
   VSet<3U>  mesh_container;
   rhino_surface.OutputObjectTo( "fault1", mesh_container );

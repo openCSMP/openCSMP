@@ -1536,7 +1536,7 @@ void IsoparametricQuadraticTetrahedron::OutputNodeDataToVTK( const char* file_na
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );
-     sprintf( elmt, "%lu", CurrentID() );
+     snprintf( elmt, sizeof(elmt), "%lu", CurrentID() );
      strcat( outfile, elmt );
      strcat( outfile, ".vtk" );
 

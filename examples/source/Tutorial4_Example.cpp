@@ -2,6 +2,7 @@
 
 // CSMP model
 #include "ANSYS_Model2D.h"
+#include "Boundary.h"
 
 // FE algorithm
 #include "PDE_Integrator.h"
@@ -67,17 +68,6 @@ void Tutorial4_Example::Run()
     // 0.0 Set variables used throughout the simulation
     // ----------------------------------------------------------------------------------
     clock_t start(clock()); // record the CPU time
-
-    /*
-    string input_file;
-    cout<< "\nTutorial4_Example: Please enter the name of input mesh ( default: pores ): ";
-    cin >> input_file;
-
-    // ------------------------------
-    // 1.0 Build the CSMP Model
-    // ------------------------------
-    ANSYS_Model2D model( input_file.c_str(), "stokes_variables.txt" );
-    */
 
     // ------------------------------------------------------------
     // 1.0 Load CSMP native format model
@@ -151,7 +141,6 @@ void Tutorial4_Example::Run()
 #ifdef CSMP_WITH_SAMG_SOLVER
     // custom SAMG settings for multi-variable solution as identified by Malte Foerster
     SAMG_Settings settings;
-
     // nsolve
     settings.Set_napproach(3); // interpolation seperate for each unknown
     settings.Set_nxtyp(1);     // ILU relaxation
@@ -223,7 +212,7 @@ void Tutorial4_Example::Run()
     stokes_flow.Add( &dummy );
 
     // solve the Stokes equation and release memory
-    stokes_flow.IntegrateOver( r_ref );
+    stokes_flow.IntegrateOver( model, r_ref );
     stokes_flow.Reset();
 
     // output resulting variable ranges

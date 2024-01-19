@@ -83,8 +83,8 @@ void MathOperatorLHS_Test::MathOperatorLHS_CopyCtor()
     bool add_accumulate_later = false;
     bool lump_matrices = true;
     bool time_multiply = true;
-    size_t application_cycles = 5U;
-    size_t application_cycle = 3U;
+    uint32_t application_cycles = 5U;
+    uint32_t application_cycle = 3U;
     double factor = 1.75;
     size_t basic_offset = 2U;
     size_t test_offset = 4U;
@@ -142,8 +142,8 @@ void MathOperatorLHS_Test::MathOperatorLHS_Equal()
     bool add_accumulate_later = false;
     bool lump_matrices = true;
     bool time_multiply = true;
-    size_t application_cycles = 5U;
-    size_t application_cycle = 3U;
+    uint32_t application_cycles = 5U;
+    uint32_t application_cycle = 3U;
     double factor = 1.75;
     size_t basic_offset = 2U;
     size_t test_offset = 4U;
@@ -394,7 +394,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_ApplicationCycles()
     string op("permeability");
     string bop("fluid pressure");
     string top("hydrostatic pressure");
-    size_t application_cycles = 5U;
+    uint32_t application_cycles = 5U;
     
     NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
 
@@ -412,7 +412,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_ApplicationCycle()
     string op("permeability");
     string bop("fluid pressure");
     string top("hydrostatic pressure");
-    size_t application_cycle = 3U;
+    uint32_t application_cycle = 3U;
     
     NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     

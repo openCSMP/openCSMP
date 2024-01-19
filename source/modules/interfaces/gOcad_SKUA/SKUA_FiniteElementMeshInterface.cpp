@@ -535,14 +535,14 @@ Used by the public interfaces of the class.
 */
 bool SKUA_FiniteElementMeshInterface::ReadRegionsAndElementTypesASCII( ifstream& ifs )
  {
-    char                       text_line[INFO_STRING];
-    const char* const          delims =" ,\t,:,\n,\r";
-    string                object_name;
-    string                elmt_specifier;
-    int32_t                      n_regions(0), region(0);
-    size_t                     n, n_elements;
-    int32_t                      material;
-    vector<uint32_t>        empty_list;
+    char            text_line[INFO_STRING];
+    const char* const delims =" ,\t,:,\n,\r";
+    string           object_name;
+    string           elmt_specifier;
+    int32_t          n_regions(0), region(0);
+    size_t           n, n_elements;
+    int32_t          material;
+    vector<size_t>   empty_list;
     set<string>      excluded_elmts;
     
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
@@ -634,7 +634,7 @@ bool SKUA_FiniteElementMeshInterface::ReadRegionsAndElementTypesASCII( ifstream&
                // 3.6 adding region and filling the elements into a list 
                //     If the region does already exist a new name is created using the element                   
                else { 
-                    multimap<string,vector<uint32_t> >::iterator
+                    multimap<string,vector<size_t> >::iterator
                     rit = object_elements_.insert( make_pair(object_name,empty_list) );
                     (*rit).second.reserve( n_elements );
                     for ( size_t i{0U}; i<n_elements; i++ ) {
@@ -649,7 +649,7 @@ bool SKUA_FiniteElementMeshInterface::ReadRegionsAndElementTypesASCII( ifstream&
        } 
 
     // final checks   
-    multimap<string,vector<uint32_t> >:: const_iterator it2(object_elements_.begin());
+    multimap<string,vector<size_t> >:: const_iterator it2(object_elements_.begin());
     if ( !object_specs_.empty() ) {
         if( csmp_error.Verbose() )
         {
@@ -959,8 +959,8 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    map<size_t,vector<uint32_t> >  plist;
-    size_t                       total_items;
+    map<size_t,vector<int64_t> >  plist;
+    size_t                        total_items;
         
     // reading number of data identifiers in the record
     ifs >> total_items;
@@ -990,7 +990,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
 
     // testing whether the nodes are numbered consecutively from 0..n-1
     if ( test_for_consecutive_node_numbering ) {
-         set<uint32_t> node_ids;
+         set<size_t> node_ids;
          for ( deque<vector<int64_t> >::const_iterator it=file_records.begin(); it!=file_records.end(); ++it )
            for ( vector<int64_t>::const_iterator nit=(*it).begin(); nit!=(*it).end(); ++nit )
              node_ids.insert( (*nit) );

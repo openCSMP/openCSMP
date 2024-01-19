@@ -30,7 +30,7 @@ namespace csmp
 
       element->Read( fracPcGradientKey_, fracPcGradient_ );
 
-      for( size_t xyz = 0; xyz < dim; ++xyz )
+      for( uint32_t xyz = 0u; xyz < dim; ++xyz )
         fracPcGradient_(xyz) *= element->Read(fracPermKey_) * saturationfunctions_->MobilityPhase(1);
 
       element->Store( fracPcGradientTermKey_, fracPcGradient_ );

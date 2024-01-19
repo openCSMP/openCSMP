@@ -115,17 +115,17 @@ class HeterogeneityAndRateAwareSaturationFunctions {
         double Bcp( Element<dim>* const e ) const;
         double Bcp_low( Element<dim>* const e ) const;
         VectorVariable<dim> InitializeVelocity( Element<dim>* const e ) const;
-        double krw_parallel( Element<dim>* const e, size_t direction ) const;
+        double krw_parallel( Element<dim>* const e, int direction ) const;
         double krw_crossflow( Element<dim>* const e ) const;
-        double krw_parallel_at( Element<dim>* const e, double Sw, size_t direction ) const;
+        double krw_parallel_at( Element<dim>* const e, double Sw, int direction ) const;
         double krw_crossflow_at( Element<dim>* const e, double Sw  ) const;
         double PermeabilityPerpendicularToLaminations( Element<dim>* const e ) const;
         double PermeabilityParallelToLaminations( Element<dim>* const e ) const;
         double PermeabilityInFlowDirection( Element<dim>* const e, const TensorVariable<dim>& KK) const;
         double K_reduction_in_flow_direction( Element<dim>* const e ) const;
-        double krn_parallel( Element<dim>* const e, size_t direction ) const;
+        double krn_parallel( Element<dim>* const e, int direction ) const;
         double krn_crossflow( Element<dim>* const e ) const;
-        double krn_parallel_at( Element<dim>* const e, double Sw, size_t direction ) const;
+        double krn_parallel_at( Element<dim>* const e, double Sw, int direction ) const;
         double krn_crossflow_at( Element<dim>* const e, double Sw ) const;
         
         void WriteRelativePermeabilityTable (const char* filename, long RT, Element<dim>* const e);

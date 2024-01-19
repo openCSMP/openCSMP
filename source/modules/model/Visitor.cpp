@@ -104,6 +104,15 @@ void Visitor<dim>::Visit( Face<dim>* f )
     cerr << endl;
  }
 
+
+template<uint32_t dim>
+void Visitor<dim>::Visit( Edge<dim>* f )
+ {
+    cerr <<"\nVisitor::Visit(Edge<3U>*): Method not implemented in the subclass of the Visitor class that you are using.";
+    cerr << endl;
+ }
+
+
 template<uint32_t dim>
 void Visitor<dim>::Visit( InterFace<dim>* )
  {

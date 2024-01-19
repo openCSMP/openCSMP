@@ -1,5 +1,6 @@
 #include "Standard_IO_Handler.h"
 
+
 using namespace std;
 
 namespace csmp {
@@ -36,20 +37,26 @@ Standard_IO_Handler::~Standard_IO_Handler()
 @param question Question to be asked
 @returns true if user replies 'yes'
 */
-bool Standard_IO_Handler::YesNo( const string& question )
+bool Standard_IO_Handler::YesNo( const string& question, const char* help_message )
   {
     bool  answer = false;
     char  choice;
     
+    const char* help = help_message == nullptr ? default_help_.c_str() : help_message;
     /* USER YES/NO PROMPT */
-    quest : { cout<<"\n\n"<< question << " [y/n] ";
+    quest : { cout << endl; // make sure cout buffer is flushed before printing question
+              cout << "\n"<< question << " [y/n/?] ";
               cin >> choice;
               int i = choice;
-              if      ( i == 121 ) answer = true;
-              else if ( i == 110 ) answer = false;
+              if      ( i == 89 || i == 121 ) answer = true;  // Y || y
+              else if ( i == 78 || i == 110 ) answer = false; // F || f
+              else if ( i == 63 ) // ?
+                {
+                   cout << help << endl;
+                   goto quest;
+                }
               else
                 {
-                   cin >> choice;
                    goto quest; 
                 }
             } // END QUESTION
@@ -147,7 +154,7 @@ double Standard_IO_Handler::RecordChoice( const char* question )
 
     string  communication(question);
     char    num[50];
-    sprintf( num, "%lf", result );
+    snprintf( num, sizeof(num), "%lf", result );
     communication += " -> ";
     communication += num;
     input_output.push_back(communication);
@@ -173,7 +180,7 @@ long Standard_IO_Handler::RecordIntChoice( const char* question )
 
     string  communication(question);
     char    num[50];
-    sprintf( num, "%ld", result );
+    snprintf( num, sizeof(num), "%lu", result );
     communication += " -> ";
     communication += num;
     input_output.push_back(communication);
@@ -210,7 +217,7 @@ bool Standard_IO_Handler::RecordLogicalChoice( const char* question )
 /** Records literal user choice to the protocol cache
 
 @param question The question that is to be prompted
-@return The user's response
+@return The user's response, up to the first white space
 
 */
 string Standard_IO_Handler::RecordLiteralChoice( const char* question )
@@ -226,6 +233,28 @@ string Standard_IO_Handler::RecordLiteralChoice( const char* question )
     
     return result;
  }                               
+
+
+/** Records literal user choice to the protocol cache
+
+@param question The question that is to be prompted
+@return The user's response, including white spaces, up to carriage return
+
+*/
+string Standard_IO_Handler::RecordMultipleLiteralChoice( const char* question )
+ {
+    cout <<"\n"<< question <<" ";
+    string result;
+    cin.ignore( 256, '\n' ); // required to get rid of '\n' in buffer when user pressed 'enter' key
+    getline( cin, result );
+
+    string  communication(question);
+    communication += " answer -> ";
+    communication += result;
+    input_output.push_back(communication);
+
+    return result;
+ }
 
 
 /** Records argument to the protocol cache
@@ -266,6 +295,15 @@ void Standard_IO_Handler::Out() const
     ofs.precision(prec);
  }
 
+
+
+
+/** Changes default help message for this handler
+
+*/
+void Standard_IO_Handler::SetDefaultHelp( const string& default_help ) {
+    default_help_ = default_help;
+}
 
 } // end namespace csmp
 

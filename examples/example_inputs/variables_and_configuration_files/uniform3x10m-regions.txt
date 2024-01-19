@@ -1,0 +1,8 @@
+uniform3x10m-regions.txt
+no properties
+ROCK
+INLET
+LEFT
+RIGHT
+TOP
+BOTTOM

@@ -810,8 +810,8 @@ void InterFace_Test::Assign_tests_linear_3D(){
   ConstructInterFaceIngredients_3D(e1, e2, n0, n1, n2, n3, n4, n5, n6, n7, e_nb_in1, e_nb_in2, e_nb_ou1, e_nb_ou2);
 
   //Knowledge of face ID
-  size_t faceID_of_e1 = 3;
-  size_t faceID_of_e2 = 3;
+  uint32_t faceID_of_e1 = 3;
+  uint32_t faceID_of_e2 = 3;
 
 
   //Testing unit normals of linear tetrahedron face

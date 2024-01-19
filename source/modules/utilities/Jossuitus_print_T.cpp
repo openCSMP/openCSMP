@@ -6,7 +6,7 @@
 - separated by spaces
  */
 template <class T>
-inline void PRINT_ELEMENTS (const T& coll, const char* optcstr="")
+void PRINT_ELEMENTS (const T& coll, const char* optcstr="")
 {
     std::cout << optcstr;
     for ( typename T::const_iterator 

@@ -1113,7 +1113,7 @@ void VTU_Interface<dim>
     string stringNumber;
     string stringCache;
     string vtuFileName;
-    for( size_t index=0; index<files; ++index )
+    for( size_t index=0u; index<files; ++index )
     {
         stringNumber = number_to_string( index );
         vtuFileName  = fileNames[index];
@@ -2278,7 +2278,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
     string variableName;
     string prefix;
     ArrayVariable arrayVariable;
-    for( size_t component=0; component<key.dataDepth; component++)
+    for( uint32_t component=0; component<key.dataDepth; component++)
     {
         arrayTitle = "DataArray type=\"Float64\" Name=\"";
         variableName = model_.Database().Name( key );
@@ -2655,7 +2655,7 @@ void VTU_Interface<dim>::WriteElementDataArrayScalarArray( const Index& key, XML
   string variableName;
   string prefix;
   ArrayVariable arrayVariable;
-  for( size_t component=0; component<key.dataDepth; component++)
+  for( uint32_t component=0u; component<key.dataDepth; component++ )
   {
       arrayTitle = "DataArray type=\"Float64\" Name=\"";
       variableName = model_.Database().Name( key );

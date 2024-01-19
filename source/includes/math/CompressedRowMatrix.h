@@ -52,7 +52,7 @@ class CompressedRowMatrix {
     CompressedRowMatrix& operator=( CompressedRowMatrix&& ) noexcept ;
 
     /// standard accessor of matrix elements (asserts i,j in debug mode)
-    double  operator()( size_t, size_t ) const;
+    double  operator()( uint32_t, uint32_t ) const;
 
     /// range-checked accessor for matrix elements
     double  At( uint32_t, uint32_t ) const;
@@ -71,9 +71,10 @@ class CompressedRowMatrix {
     void Initialize( const csmp::SparseMatrix& );
     void InitializePointBased( const SparseMatrix&, size_t nsys );
 
-    size_t Rows() const;
-    size_t Cols() const;
-    /// total number of available storage sites for non-zero matrix elements
+    uint32_t Rows() const;
+    uint32_t Cols() const;
+    size_t TotalExistingEntries() const { return ja.size(); }
+  /// total number of available storage sites for non-zero matrix elements
     size_t NonZeroEntries() const;
 
     /// this function erases all elements in ia, ja and a
@@ -105,6 +106,7 @@ class CompressedRowMatrix {
 
     friend class EigenSolver;
     friend class SAMG_Solver;
+    friend class CompressedRowMatrix_Test;
 };
 
 /// to print the vector of diagonal elements in the matrix

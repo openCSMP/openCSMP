@@ -56,7 +56,7 @@ void ModelANSYS_Example::CopyInputFiles(std::string& model_name, std::string& va
   fs::current_path(example_name);
 
   //copy ANSYS model files into working directory
-  string input_directory = fs::current_path().parent_path().parent_path();
+  string input_directory = (fs::current_path().parent_path().parent_path()).string();
   input_directory += "/example_inputs/input_meshes/";
 
   string path = "../../example_inputs/input_meshes/";
@@ -80,7 +80,7 @@ void ModelANSYS_Example::CopyInputFiles(std::string& model_name, std::string& va
   }
 
   //copy variable file into working directory
-  input_directory = fs::current_path().parent_path().parent_path();
+  input_directory = (fs::current_path().parent_path().parent_path()).string();
   input_directory += "/example_inputs/variables_and_configuration_files/";
 
   path = "../../example_inputs/variables_and_configuration_files/";

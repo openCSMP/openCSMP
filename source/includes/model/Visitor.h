@@ -7,6 +7,7 @@ namespace csmp {
 
 template<uint32_t> class Node;
 template<uint32_t> class Face;
+template<uint32_t> class Edge;
 template<uint32_t> class InterFace;
 template<uint32_t> class Element;
 template<uint32_t> class Model;
@@ -78,7 +79,8 @@ class Visitor {
     virtual void Visit( SplitBoundary<dim>* );
     virtual void Visit( Element<dim>* ); 
     virtual void Visit( Face<dim>* );
-    virtual void Visit( InterFace<dim>* ); 
+    virtual void Visit( Edge<dim>* );
+    virtual void Visit( InterFace<dim>* );
     virtual void Visit( Node<dim>* );   
 
     bool Verbose(){return this->verbose_;}

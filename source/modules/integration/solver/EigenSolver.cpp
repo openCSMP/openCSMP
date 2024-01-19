@@ -29,7 +29,7 @@ void EigenSolver::SolveMatrixEquation( SparseMatrix& A,
     // 1. convert sparse matrix to eigen sparse matrix
     // generic eigen sparse matrix is used
     Eigen::SparseMatrix<double> mat;
-    const size_t n_dof{ A.Rows() };
+    const auto n_dof{ A.Rows() };
     mat.resize(A.Rows(), A.Cols());
     mat.reserve(Eigen::VectorXi::Constant(A.Rows(), 24));
     for (size_t i{0U}; i < A.Rows(); ++i) {
@@ -80,7 +80,6 @@ void EigenSolver::SolveMatrixEquation( CompressedRowMatrix& A,
     // 1. convert sparse matrix to eigen sparse matrix
     // generic eigen sparse matrix is used
     Eigen::SparseMatrix<double> mat;
-    const size_t n_dof{ A.Rows() };
     mat.resize(A.Rows(), A.Cols());
     mat.reserve(Eigen::VectorXi::Constant(A.Rows(), 24));
     for (size_t row{0U}; row < A.Rows(); ++row) {
@@ -95,7 +94,7 @@ void EigenSolver::SolveMatrixEquation( CompressedRowMatrix& A,
     // 2. conver rhs vector to eigen vector
     Eigen::VectorXd rhs;
     rhs.resize(A.Rows());
-    for (size_t i = 0; i < x.size(); ++i)
+    for (size_t i = 0U; i < x.size(); ++i)
       rhs[i] = b[i];
 
     // 3. solve using direct LU

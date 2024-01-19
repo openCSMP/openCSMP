@@ -130,8 +130,8 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const
     
     // calculate DN as modified DNT by multiplying with p_k-p_i
     DN.Resize(e.Nodes(), e.Nodes());
-    for (auto i = 0; i < e.Nodes(); ++i) {
-      for (size_t k = 0; k < e.Nodes(); ++k) {
+    for ( uint32_t i = 0u; i < e.Nodes(); ++i) {
+      for ( uint32_t k = 0u; k < e.Nodes(); ++k) {
         DN(i, k) = DNT(i, k)*(el_test_orig[k]() - el_test_orig[i]());
       }
     }
@@ -140,8 +140,8 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const
     MathOperatorLHS<dim,CELL>::LHS.Resize(e.Nodes(),e.Nodes());
     MathOperatorLHS<dim,CELL>::LHS.Fill(0.0);
      
-    for (auto i{0U}; i < e.Nodes(); ++i) {
-      for ( auto k{0U}; k < e.Nodes(); ++k) {
+    for ( uint32_t i{0U}; i < e.Nodes(); ++i) {
+      for ( uint32_t k{0U}; k < e.Nodes(); ++k) {
         if (i != k) {
           const double decision = DNT(i, k)*(el_trigger[k]() - el_trigger[i]());
           if (decision > 0) { // take j = i

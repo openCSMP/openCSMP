@@ -1090,7 +1090,7 @@ double HeterogeneityAndRateAwareModel<dim>::PressureGradientMagnitude( const Ele
     e.dN_AtBaryCenter( DN_ );
     for ( auto i{0U}; i<e.Nodes(); ++i ) {
          const double pf = e.N(i)->Read( pf_key_ );
-         for ( size_t j{0U}; j<dim; ++j )
+         for ( auto j{0U}; j<dim; ++j )
          gradP[j] += DN_(j,i) * pf;
       }
     // elimination of the hydrostatic pressure gradient

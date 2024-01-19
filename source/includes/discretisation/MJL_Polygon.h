@@ -68,7 +68,7 @@ int closestToPolygonCmp( const mjl::Point& a, const mjl::Point& b );
 // member functions
 
 inline Polygon::Polygon()
- : v_(0), size_(0)
+ : v_(0), size_(0u)
   {
   }
 

@@ -169,6 +169,14 @@ here we instantiated an array on the element of size 22. So to recap the variabl
   2 .. VectorVariable
   3 .. TensorVariable
   4 to max<uint32_t> ArrayVariable of that size
+  
+ @attention in addition to the old numbered style a the new way of reading variable types is now supported:
+  The type's can be represented by name and size specification
+  For types SCALAR, VECTOR, TENSOR there is no need to specify the size
+  For ARRAY and FLAGGEDARRAY size should be specified after the "space" following the name of the variable,, e.g. ARRAY 1000, FLAGGEDARRAY 2,
+  but SCALAR, VECTOR, TENSOR
+  
+ @note name of the variable is not case sensitive, i.e. one can put FlaggedArray or FLAGGEDARRAY or flaggedarray
 
 */
 template<uint32_t dim>

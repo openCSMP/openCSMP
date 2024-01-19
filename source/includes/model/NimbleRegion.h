@@ -91,6 +91,7 @@ class NimbleRegion : public ModelSubDomain<dim,Element>,
     size_t Cells() const;
     size_t RenumberNodes() const;
 
+
     // accessors
   
     Element<dim>* const E(size_t);
@@ -115,10 +116,6 @@ class NimbleRegion : public ModelSubDomain<dim,Element>,
   
   private:
     // current implementation based on idea that vectors are resized with little overhead as long as their capacity is not changed
-    // sets are used to keep nodes and elements unique
-    std::vector<Node<dim>*>     nodes_;             ///< sorted into interior and perimeter ranges
-    size_t                      n_interior_nodes_;  ///< first perimeter node
-    std::vector<Element<dim>*>  elements_;          ///< all elements, interior and exterior
     const bool                  verbose_ = true;    ///< flag for testing and reporting
                        
     friend class NimbleRegion_Test;

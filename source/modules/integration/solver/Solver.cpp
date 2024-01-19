@@ -4,7 +4,6 @@
 #include "ModelTime.h"
 #include "SparseMatrix.h"
 #include "CompressedRowMatrix.h"
-#include "SAMG_Solver.h"
 
 using namespace std;
 
@@ -223,7 +222,7 @@ void  Solver::Out( const SparseMatrix& mat, const char* fname ) const
 
     // appending the global runtime to the file name
     // ---------------------------------------------
-    sprintf( gtime, "%lf", model_time );
+    snprintf( gtime, sizeof(gtime), "%lf", model_time );
     strcpy( file, fname );
     strcat( file, gtime );
     strcat( file,".text" );
@@ -269,7 +268,7 @@ void  Solver::Out( const vector<double>& vec, const char* fname ) const
 
     // appending the global runtime to the file name
     // ---------------------------------------------
-    sprintf( gtime, "%lf", model_time );
+    snprintf( gtime, sizeof(gtime), "%lf", model_time );
     strcpy( file, fname );
     strcat( file, gtime );
     strcat( file,".text" );

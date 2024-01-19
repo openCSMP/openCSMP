@@ -1,5 +1,7 @@
 #include <ctime>
 #include "SimulatorSetup.h"
+#include "Model.h"
+#include "Boundary.h"
 #include "Exception.h"
 #include "PropertyDatabase.h"
 #include "SimulationSignalHandler.h"

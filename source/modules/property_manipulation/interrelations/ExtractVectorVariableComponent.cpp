@@ -9,7 +9,7 @@ template<uint32_t dim>
 ExtractVectorVariableComponent<dim>::ExtractVectorVariableComponent( const PropertyDatabase<dim>& p,
                                                                      const char* vec_var, 
                                                                      const char* scalar_var, 
-                                                                     size_t comp )
+                                                                     uint32_t comp )
       : Interrelation<dim>(p),
         V( Interrelation<dim>::GlobalProperty(vec_var) ),
         S( Interrelation<dim>::GlobalProperty(scalar_var) ),

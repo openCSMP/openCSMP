@@ -116,8 +116,8 @@ void DataInputVisitor<Var,dim>::Visit( Face<dim>* eptr )
     // IntegrationPoint properties
     assert( prop_key_.place == FACE_INTEGRATION_POINT );
     /// TODO: @todo SKM: other placements like FV integration points are not considered here yet
-    for ( auto i{0U}; i<eptr->IntegrationPoints(); i++ ) {
-      for ( size_t j{0U}; j<variable_.Size(); j++ )
+    for ( uint32_t i{0U}; i<eptr->IntegrationPoints(); i++ ) {
+      for ( uint32_t j{0U}; j<variable_.Size(); j++ )
         variable_.Component( j, input_data_ref_[ counter_++ ] );
       eptr->Store( i, prop_key_, variable_ );
     }

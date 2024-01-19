@@ -600,7 +600,7 @@ void  ANSYS_Model2D_Test::Test_CreateSplitBoundariesBetweenUniqueRegions()
     model.SplitBoundariesOut();
     
     // using 'nodal variable' to visualise which nodes are manifolds
-    Region<2U>  model_domain = model.Region("Model");
+    Region<2U>&  model_domain = model.Region("Model");
     const csmp::Index var_key = model.Database().StorageKey("nodal variable");
     
     for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit )

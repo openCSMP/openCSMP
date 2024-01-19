@@ -52,7 +52,7 @@ template<uint32_t dim>
 void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( Model<dim>& sg ) const
   {
     std::vector<Point<dim> > bc_vec(0);
-    std::vector<uint32_t>    id_vec(0);
+    std::vector<size_t>      id_vec(0);
     double                   sign;
     size_t                   id, cntr(0);
     
@@ -450,7 +450,7 @@ bool MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU( Model<dim>& mode
     model.FormRegionFrom("cells_with_small_volumes", "cell volume", 0., cell_volume_threshold, false);
     vtk_output.OutputDataToVTK(model, "cells_with_small_volumes", "", "cell volume", 0., true);
     //Jacobian_determinant
-    const double jacobian_determinant_threshold(0.);
+//    const double jacobian_determinant_threshold(0.);
     model.FormRegionFrom("cells_with_negative_Jacobian_determinant", "Jacobian determinant", -1.0e30, 0., false);
     vtk_output.OutputDataToVTK(model, "cells_with_negative_Jacobian_determinant", "", "Jacobian determinant", 0., true);
     //aspect ratio

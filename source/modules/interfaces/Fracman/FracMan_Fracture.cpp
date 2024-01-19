@@ -59,7 +59,7 @@ uint32_t  FRACMAN_Fracture::ID() const
 string  FRACMAN_Fracture::TextID() const
  {
     char num[30];
-    sprintf( num, "%u", id );
+    snprintf( num, sizeof(num), "%ul", id );
     
     return string(num);
  }
@@ -74,7 +74,7 @@ int FRACMAN_Fracture::SetID() const
 string  FRACMAN_Fracture::TextSetID() const
  {
     char num[30];
-    sprintf( num, "%u", fracture_set_id );
+    snprintf( num, sizeof(num), "%ul", fracture_set_id );
     
     return string(num);
  }
@@ -114,7 +114,7 @@ Explanation and file entries:
     0     1.000000e+000     0.000000e+000     0.000000e+000
 @endcode
 */    
-bool  FRACMAN_Fracture::InitializeFrom( int nprops, ifstream& ifs )
+bool  FRACMAN_Fracture::InitializeFrom( long nprops, ifstream& ifs )
  {
     char         text_line[256];
     char        *token;

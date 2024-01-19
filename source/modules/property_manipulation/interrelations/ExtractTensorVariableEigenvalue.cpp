@@ -9,7 +9,7 @@ template<uint32_t dim>
 ExtractTensorVariableEigenvalue<dim>::ExtractTensorVariableEigenvalue( const PropertyDatabase<dim>& p,
                                                                        const char* tens_var, 
                                                                        const char* scalar_var, 
-                                                                       size_t e )
+                                                                       uint32_t e )
       : Interrelation<dim>(p),
         t( Interrelation<dim>::GlobalProperty(tens_var) ),
         s( Interrelation<dim>::GlobalProperty(scalar_var) ),

@@ -36,7 +36,7 @@ public:
     /** adds in values in a separate container, to be output to a separate file
         with the same prefix name as the other monitoring file, except with the "_ext" added to its name.
     */
-    void InsertValueHeader(std::string property_regionname , std::vector<uint32_t>& indexes);
+    void InsertValueHeader(std::string property_regionname, std::vector<size_t>& indexes );
 
     void ClearAllHeadersAndValues(); // zap all recorded values and property names
     void EraseDataValuesOnly(); // zap all recorded values
@@ -76,17 +76,17 @@ private:
 
     std::list<std::string> subdomains_to_calculate_perimeter_,subdomains_to_calculate_dimension_;
 
-    std::vector<uint32_t> int_header_indexes_;
-    std::vector<uint32_t> range_header_indexes_;
-    std::vector<uint32_t> single_value_header_indexes_;
-    std::vector<uint32_t> dimensional_header_indexes_;
-    std::vector<uint32_t> model_time_indexes_;
+    std::vector<size_t> int_header_indexes_;
+    std::vector<size_t> range_header_indexes_;
+    std::vector<size_t> single_value_header_indexes_;
+    std::vector<size_t> dimensional_header_indexes_;
+    std::vector<size_t> model_time_indexes_;
 
     std::vector<std::string>  values_column_headers_; // single value
     std::set<std::string> divide_by_region_volume_,multiply_integrand_with_porosity_;
 
-    bool include_thickness_attribute_;    \
-    bool verbose_,first_monitor_call_;
+    bool include_thickness_attribute_;
+    bool verbose_, first_monitor_call_;
 
     std::vector<double> rowdata_;
     double last_requested_monitor_time_, current_requested_monitor_time_;

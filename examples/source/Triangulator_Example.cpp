@@ -234,7 +234,7 @@ void Triangulator_Example::Run()
 
   // recomputing fluid pressure in the granite taking into account the source term
   const bool debug{false};
-  total_pressure.IntegrateOver( granite_domain, debug );
+  total_pressure.IntegrateOver( model, granite_domain, debug );
 
   printRangeOfVariable( model, "granite", "fluid pressure" );
   printRangeOfVariable( model, "granite", "velocity" );

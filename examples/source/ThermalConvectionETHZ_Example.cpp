@@ -195,7 +195,7 @@ namespace csmp {
       for ( int i=0; i<3; i++ ) {
         cout <<"\n\n\nmain: pressure initialisation loop; iteration: "<< i+1;
         steadyStatePressureOperands( *model, computation_domain, water );
-        steady_state_pressure.IntegrateOver( computation_domain );
+        steady_state_pressure.IntegrateOver( *model, computation_domain );
         monitorVariableRange( *model );
         //printRangeOfVariable( *model, "fluid pressure" );
       }
@@ -343,7 +343,7 @@ namespace csmp {
         monitorVariableRange( *model );        
         // 5. solve transient pressure equation
         transient_pressure.TimeIncrement( 1. / time_increment );
-        transient_pressure.IntegrateOver( computation_domain );
+        transient_pressure.IntegrateOver( *model, computation_domain );
         monitorVariableRange( *model );
         transientFluidProperties( *model, computation_domain, water );
         monitorVariableRange( *model );

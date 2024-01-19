@@ -473,14 +473,18 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     deque<int8_t> vecElementTypes = { T,T,T,T,Q,T,T,T,T,T,Q,Q,Q,T,T,T,T,Q,T,T,T,T,T,T,T,
                                       B,B,B,B,B,B,B,B,B,B,B,B,B,B,B,B,B,B,B,B };
   	
-    const size_t   nodes(22); // number of nodes
+    const size_t     nodes(22);   // number of nodes
   	deque<uint32_t>  npes(45,3);  // default: number of nodes per triangle
-    deque<uint32_t>  epes(45,3);  // default: elements per triangle
+    deque<uint32_t>  epes(45,3);  // default: neighbor elements per triangle
     for ( size_t i{0U}; i<vecElementTypes.size(); ++i ) {
          if ( vecElementTypes[i] == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) {
               npes[i] = 4;
               epes[i] = 4;
            }
+         // default: else if ( vecElementTypes[i] == ISOPARAMETRIC_LINEAR_TRIANGLE ) {
+         //       npes[i] = 3;
+         //       epes[i] = 3;
+         //   }
          else if ( vecElementTypes[i] == ISOPARAMETRIC_LINEAR_BAR ) {
               npes[i] = 2;
               epes[i] = 2;
@@ -666,16 +670,57 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
     
     // adding node and element numbers for comparisons
+    // element number
     PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
     elmt_nums.Reserve( vset.Elements() );
     for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
     vset.AddData( "element number", elmt_nums );
-    // node numbers
+    // node number
     PropertyData node_nums( NODE, SCALAR, 2U );
     node_nums.Reserve( vset.Vertices() );
     for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
     vset.AddData( "node number", node_nums );
-
+    // element variable (tetra=3. quadrilateral-4.)
+    PropertyData elmt_vars( ELEMENT, SCALAR, 2U );
+    elmt_vars.Reserve( vset.Elements() );
+    // tets
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    // quad
+    pushBack( elmt_vars, makeScalar( ANY, 4. ) );
+    // tets
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    // quad
+    pushBack( elmt_vars, makeScalar( ANY, 4. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 4. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 4. ) );
+    // tets
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    // quad
+    pushBack( elmt_vars, makeScalar( ANY, 4. ) );
+    // tets
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    pushBack( elmt_vars, makeScalar( ANY, 3. ) );
+    // bars
+    for ( uint32_t i{0U}; i<20U; ++i )
+      pushBack( elmt_vars, makeScalar( ANY, 2. ) );
+      
+    vset.AddData( "element variable", elmt_vars );
+      
     // vset.Out();
     
     return mesh_topology;

@@ -244,7 +244,7 @@ PointPropertyToCellMapper2D::PointPropertyToCellMapper2D( string csv_file )
     
     size_t n_entries = read_CSV_File( csv_file, row_labels, col_headers, rows_of_columns );
     
-    property_data_ = move( DataTable( csv_file, row_labels, col_headers, rows_of_columns ) );
+    property_data_ = std::move( DataTable( csv_file, row_labels, col_headers, rows_of_columns ) );
     
     // lazy evaluation of: cells_with_points_
     cells_with_points_.resize( n_entries, nullptr );
@@ -379,9 +379,9 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
         extrapolator.Add( &lhs );
         extrapolator.Add( &rhs );
         // computation
-        Region<2> target_domain(model.Region(target_region));
+        Region<2U>& target_domain(model.Region(target_region));
         Out();
-        extrapolator.IntegrateOver( target_domain );
+        extrapolator.IntegrateOver( model, target_domain );
 
         // interpolating nodal values back to the element barycentres in the region
         for ( auto it=target_domain.CellsBegin(); it!=target_domain.CellsEnd(); ++it )
@@ -400,10 +400,11 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
  
 /** Interpolates the values of the target node variable, to the points specified in the CSV file, writing another CSV file with these values
 */
-void PointPropertyToCellMapper2D::MapNodeToPointData( Model<2>& model, string target_region, string target_variable )
+//void PointPropertyToCellMapper2D::MapNodeToPointData( Model<2>& model, string target_region, string target_variable )
+void PointPropertyToCellMapper2D::MapNodeToPointData( Model<2>& model, string target_variable )
  {
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
-    Region<2U>    target_domain(model.Region(target_region.c_str()));
+    // Region<2U>&   target_domain(model.Region(target_region.c_str()));
 
     const csmp::Index eprop_key = model.Database().StorageKey(target_variable.c_str());
     const csmp::Index nprop_key = model.Database().StorageKey((target_variable + " node").c_str());

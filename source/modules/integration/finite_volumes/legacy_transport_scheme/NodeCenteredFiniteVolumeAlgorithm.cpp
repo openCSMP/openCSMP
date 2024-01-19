@@ -224,8 +224,8 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateIntegral_DNT_op_DN_dV_LHS
          DNT *= (*gref_.E(es.eidx_)).WeightAtIntegrationPoint(i) * detJ; 
 
          // assigning the matrix contribution to the solution matrix
-         for ( size_t j{0U}; j<DNT.Rows(); j++ )
-           for ( size_t k{0U}; k<DNT.Cols(); k++ )
+         for ( uint32_t j{0U}; j<DNT.Rows(); j++ )
+           for ( uint32_t k{0U}; k<DNT.Cols(); k++ )
              LHS.Add( gref_.E(es.eidx_)->N(j)->Idx(),
                       gref_.E(es.eidx_)->N(k)->Idx(), DNT(j,k) );
       }
@@ -283,7 +283,7 @@ matrix.
 template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateSectorSourceTermsInLHS( const StencilProcessor<dim>& es ) 
  {
-    for ( size_t i{0U}; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
+    for ( uint32_t i{0U}; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
       {
          // identifying the finite volumes to which the flux will be distributed
          const size_t j(gref_.E(es.eidx_)->N(i)->Idx());
@@ -325,14 +325,14 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateLHS( const StencilProcess
   const double zero(0.);
   
   // putting contributions to pore volume into the matrix diagonal
-  for ( size_t i{0U}; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
+  for ( uint32_t i{0U}; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
     //                                 phi * sector-volume
     LHS.Add( gref_.E(es.eidx_)->N(i)->Idx(),    
              gref_.E(es.eidx_)->N(i)->Idx(), 
              es.sector_pore_volume_[i] / time_multiplier );
     
    // for all finite-volume facets
-  for ( size_t i{0U}; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
+  for ( uint32_t i{0U}; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
     {
        // identifying the finite volumes to which the flux will be distributed
        gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
@@ -371,11 +371,11 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateLHS( const StencilProcess
 
 template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrix_NonlinearNewtonRaphson( const StencilProcessor<dim>& es,
-                                                                                       std::vector<double>& SAT0,
+                                                                                       vector<double>& SAT0,
                                                                                        double time_multiplier)
  {
     // putting contributions to pore volume into the matrix diagonal
-    for ( size_t i{0U}; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ ){
+    for ( uint32_t i{0U}; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ ){
       //  phi * sector-volume
       LHS.Add( gref_.E(es.eidx_)->N(i)->Idx(),
                gref_.E(es.eidx_)->N(i)->Idx(),
@@ -383,7 +383,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrix_NonlinearNewtonRap
     }
 
     // for all finite-volume facets
-    for ( size_t i{0U}; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
+    for ( uint32_t i{0U}; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
       {
          // identifying the finite volumes to which the flux will be distributed
          gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
@@ -412,11 +412,11 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrix_NonlinearNewtonRap
 
 template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidual_NonlinearNewtonRaphson( const StencilProcessor<dim>& es,
-                                                                                        std::vector<double>& SAT0,
+                                                                                        vector<double>& SAT0,
                                                                                         double time_multiplier)
  {
     Element<dim>* e(gref_.E(es.eidx_));
-    size_t NNodes(e->Nodes());
+    uint32_t NNodes(e->Nodes());
     // fill righthandside with the  prop_t0 * pore_vol/time_increment  products
     for ( auto i{0U}; i<NNodes; i++ )
       RHS[ e->N(i)->Idx() ] +=
@@ -437,7 +437,11 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidual_NonlinearNewtonR
 
 
 template<uint32_t dim>
-void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrixAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>& es, std::vector<double>& SAT0, size_t nid, size_t pnid, double time_multiplier,const csmp::Index& adv1_key)
+void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrixAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>& es,
+                                                                                                vector<double>& SAT0,
+                                                                                                size_t nid, uint32_t pnid,
+                                                                                                double time_multiplier,
+                                                                                                const csmp::Index& adv1_key )
  {
 
     if(gref_.N(pnid)->Status( adv1_key ) != DIRICH ){
@@ -447,8 +451,8 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrixAtBoundary_Nonlinea
                  gref_.E(es.eidx_)->N(pnid)->Idx(),
                  (es.sector_pore_volume_[pnid] / time_multiplier) );
 
-        for ( size_t k{0U}; k<gref_.E(es.eidx_)->FV()->FacetsPerSector(pnid); k++ ) {
-              const size_t i(gref_.E(es.eidx_)->FV()->FacetSurroundingSector(pnid,k));
+        for ( uint32_t k{0U}; k<gref_.E(es.eidx_)->FV()->FacetsPerSector(pnid); k++ ) {
+              const uint32_t i(gref_.E(es.eidx_)->FV()->FacetSurroundingSector(pnid,k));
               // if the sector node is the inside node then an incoming flux will create a positive source term
               gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
 
@@ -479,7 +483,10 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrixAtBoundary_Nonlinea
 
 
 template<uint32_t dim>
-void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidualAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>& es, std::vector<double>& SAT0, size_t nid, size_t pnid, double time_multiplier, const csmp::Index& adv1_key)
+void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidualAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>& es,
+                                                                                                  vector<double>& SAT0, size_t nid, uint32_t pnid,
+                                                                                                  double time_multiplier,
+                                                                                                  const csmp::Index& adv1_key)
  {
     if(gref_.N(pnid)->Status( adv1_key ) != DIRICH ){
 
@@ -833,9 +840,9 @@ is returned. If errors occur at more than 2 per cent of the nodes, an
 */
 template<uint32_t dim>
 double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDatabase<dim>& p, 
-                                                                const csmp::Index& adv_key, 
-                                                                bool show_range ,
-                                                                const size_t var_comp_nr ) const
+                                                              const csmp::Index& adv_key,
+                                                              bool show_range ,
+                                                              uint32_t var_comp_nr ) const
  {
     double  rmin, rmax,
               amin = RESULT[0],
@@ -848,12 +855,12 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyData
     if (adv_key.type==SCALAR){
         for ( size_t i{0U}; i<RESULT.size(); i++ ) {
             // recording output range
-            amin = std::min( amin, RESULT[i] );
-            amax = std::max( amax, RESULT[i] );
+            amin = min( amin, RESULT[i] );
+            amax = max( amax, RESULT[i] );
             if ( gref_.N(i)->Status(adv_key) != DIRICH ) {
                 // reading the pre-existing value and calculating the maximum change per node
                 gref_.N(i)->Read( adv_key, sc );
-                difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
+                difference_to_last_output = max( difference_to_last_output, fabs(RESULT[i]-sc()) );
                 // result checking
                 if ( RESULT[i] <= rmax && RESULT[i] >= rmin )
                     gref_.N(i)->Store( adv_key, makeScalar(sc.Flag(),RESULT[i]) );
@@ -872,14 +879,14 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyData
         ArrayVariable av;
         for ( size_t i{0U}; i<RESULT.size(); i++ ) {
             // recording output range
-            amin = std::min( amin, RESULT[i] );
-            amax = std::max( amax, RESULT[i] );
+            amin = min( amin, RESULT[i] );
+            amax = max( amax, RESULT[i] );
 
             // array variables have only one flag, hence they are read similar to Scalar variables
             if ( gref_.N(i)->Status( adv_key ) != DIRICH ) {
                 // reading the pre-existing value and calculating the maximum change per node
                 gref_.N(i)->Read( adv_key, av );
-                difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-av(var_comp_nr) ));
+                difference_to_last_output = max( difference_to_last_output, fabs(RESULT[i]-av(var_comp_nr) ));
                 // result checking
                 if ( RESULT[i] <= rmax && RESULT[i] >= rmin ){
                     av(var_comp_nr)=RESULT[i];
@@ -904,15 +911,15 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyData
         FlaggedArrayVariable fav;
         for ( size_t i{0U}; i<RESULT.size(); i++ ) {
             // recording output range
-            amin = std::min( amin, RESULT[i] );
-            amax = std::max( amax, RESULT[i] );
+            amin = min( amin, RESULT[i] );
+            amax = max( amax, RESULT[i] );
             VARIABLE_FLAG flag(ANY);
             gref_.N(i)->Status( adv_key ,var_comp_nr,flag);
             // Flagged array variables as well as vectors and tensors need a special status call with no return value (it seems)
             if ( flag != DIRICH ) {
                 // reading the pre-existing value and calculating the maximum change per node
                 gref_.N(i)->Read( adv_key, fav );
-                difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-fav(var_comp_nr) ));
+                difference_to_last_output = max( difference_to_last_output, fabs(RESULT[i]-fav(var_comp_nr) ));
                 // result checking
                 if ( RESULT[i] <= rmax && RESULT[i] >= rmin ){
                     fav(var_comp_nr)=RESULT[i];
@@ -947,7 +954,7 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyData
          cout << fixed << setprecision(5) << amin <<" to "<< amax << endl << endl;
       }
       
-    return difference_to_last_output / std::max( amax - amin, 1.0e-20 );
+    return difference_to_last_output / max( amax - amin, 1.0e-20 );
 
  } // end OutputResults
 
@@ -992,12 +999,12 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyData
 	    for ( size_t i{0U}; i<RESULT.size(); i++ ) 
 	      {
 	         // recording output range
-	         amin = std::min( amin, RESULT[i] );
-	         amax = std::max( amax, RESULT[i] );
+	         amin = min( amin, RESULT[i] );
+	         amax = max( amax, RESULT[i] );
 		       if ( gref_.N(i)->Status(adv1_key) != DIRICH ) {
   		         // reading the pre-existing value and calculating the maximum change per node
   		         gref_.N(i)->Read( adv1_key, sc );
-  		         difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
+  		         difference_to_last_output = max( difference_to_last_output, fabs(RESULT[i]-sc()) );
   		         // result checking
   		         if ( RESULT[i] <= rmax && RESULT[i] >= rmin ) {
   		              gref_.N(i)->Store( adv1_key, makeScalar(gref_.N(i)->Status(adv1_key),RESULT[i]) );
@@ -1024,12 +1031,12 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyData
 	   for ( size_t i{0U}; i<RESULT.size(); i++ ) 
 	      {
           // recording output range
-          amin = std::min( amin, RESULT[i] );
-          amax = std::max( amax, RESULT[i] );
+          amin = min( amin, RESULT[i] );
+          amax = max( amax, RESULT[i] );
           if ( gref_.N(i)->Status( adv2_key ) != DIRICH ) {
              // reading the pre-existing value and calculating the maximum change per node
              gref_.N(i)->Read( adv2_key, sc );
-             difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
+             difference_to_last_output = max( difference_to_last_output, fabs(RESULT[i]-sc()) );
              // result checking
              if ( RESULT[i] <= rmax && RESULT[i] >= rmin ) {
                   gref_.N(i)->Store( adv2_key, makeScalar(gref_.N(i)->Status(adv2_key),RESULT[i]) );
@@ -1065,7 +1072,7 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyData
          cout << fixed << setprecision(5) << amin <<" to "<< amax << endl << endl;
       }
       
-    return difference_to_last_output / std::max( amax - amin, 1.0e-20 );
+    return difference_to_last_output / max( amax - amin, 1.0e-20 );
 
  } // end OutputResults
 
@@ -1088,8 +1095,8 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyData
                                                                                     const csmp::Index& adv1_key,
                                                                                     const csmp::Index& adv2_key,
                                                                                     bool show_range,
-                                                                                    std::vector<double>& DS,
-                                                                                    std::vector<double>& SN)
+                                                                                    vector<double>& DS,
+                                                                                    vector<double>& SN)
    {
        assert( result_phase >  0 );
        assert( result_phase <= 2 );
@@ -1142,8 +1149,8 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResultsWithL2NormRes( const
 
     for ( size_t i{0U}; i<RESULT.size(); i++ ) {
          // recording output range
-         amin = std::min( amin, RESULT[i] );
-         amax = std::max( amax, RESULT[i] );
+         amin = min( amin, RESULT[i] );
+         amax = max( amax, RESULT[i] );
            if ( gref_.N(i)->Status( adv_key ) != DIRICH ) {
              // reading the pre-existing value and calculating the maximum change per node
              gref_.N(i)->Read( adv_key, sc );
@@ -1176,7 +1183,7 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResultsWithL2NormRes( const
          cout << scientific << setprecision(5) << amin <<" to "<< amax << endl << endl;
       }
 
-    return sqrt(difference_to_last_output) / std::max( amax - amin, 1.0e-20 );
+    return sqrt(difference_to_last_output) / max( amax - amin, 1.0e-20 );
 
  } // end OutputResultsWithL2NormRes
 
@@ -1216,11 +1223,11 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRaph
           {
               // recording output range
               gref_.N(i)->Read( adv1_key, sc );
-              amin = std::min( amin, RESULT[i] );
-              amax = std::max( amax, RESULT[i] );
+              amin = min( amin, RESULT[i] );
+              amax = max( amax, RESULT[i] );
               if ( gref_.N(i)->Status( adv1_key ) != DIRICH ) {
                   // reading the pre-existing value and calculating the maximum change per node
-                  difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
+                  difference_to_last_output = max( difference_to_last_output, fabs(RESULT[i]-sc()) );
                   // result checking
                   if ( RESULT[i] <= rmax && RESULT[i] >= rmin ) {
                       gref_.N(i)->Store( adv1_key, sc=RESULT[i] );
@@ -1245,11 +1252,11 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRaph
           {
               // recording output range
               gref_.N(i)->Read( adv2_key, sc );
-              amin = std::min( amin, RESULT[i] );
-              amax = std::max( amax, RESULT[i] );
+              amin = min( amin, RESULT[i] );
+              amax = max( amax, RESULT[i] );
               if ( gref_.N(i)->Status( adv2_key ) != DIRICH ) {
                   // reading the pre-existing value and calculating the maximum change per node
-                  difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
+                  difference_to_last_output = max( difference_to_last_output, fabs(RESULT[i]-sc()) );
                   // result checking
                   if ( RESULT[i] <= rmax && RESULT[i] >= rmin ) {
                       gref_.N(i)->Store( adv2_key, sc=RESULT[i] );
@@ -1274,7 +1281,7 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRaph
           cout << scientific << setprecision(5) << amin <<" to "<< amax << endl << endl;
       }
 
-      return difference_to_last_output / std::max( amax - amin, 1.0e-20 );
+      return difference_to_last_output / max( amax - amin, 1.0e-20 );
 
  } // end OutputResults_NonlinearNewtonRaphson
 

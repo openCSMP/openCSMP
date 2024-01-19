@@ -28,6 +28,7 @@
 #include "EigenSolver.h"
 
 #ifdef USE_SAMG_SOLVER
+#include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
 #endif
 

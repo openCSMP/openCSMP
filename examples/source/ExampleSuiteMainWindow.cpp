@@ -1,12 +1,14 @@
 #include "ExampleSuiteMainWindow.h"
 
+#ifdef QT_WIDGETS_LIB // this code needs the QT library
+
 #include <QMessageBox>
 #include <QString>
 
 using namespace std;
 using namespace csmp;
 
-namespace PL{
+namespace PL {
 
 ExampleSuiteMainWindow::ExampleSuiteMainWindow( QWidget *parent )
 {
@@ -156,3 +158,5 @@ void ExampleSuiteMainWindow::on_actionExample_Suite_triggered()
 }
 
 } // PL
+
+#endif // if the QT widgets library is defined

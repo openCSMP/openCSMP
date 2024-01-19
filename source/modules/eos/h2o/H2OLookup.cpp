@@ -25,16 +25,16 @@ H2OLookup::H2OLookup()
   cout << "H2OLookup t_dim, p_dim = " << t_dim << "\t" << p_dim << endl;
 
   // 2. Parameters for viscosity computations. Ideally to be made static consts
-  ak[0] = 0.0181583, ak[1] = 0.0177624, ak[2] = 0.0105287, ak[3] = -0.0036744;
+  ak[0] = 0.0181583; ak[1] = 0.0177624; ak[2] = 0.0105287; ak[3] = -0.0036744;
 
-  bij[0][0] = 0.501938, bij[1][0] = 0.162888, bij[2][0] = -0.130356, bij[3][0] = 0.907919,
-    bij[4][0] = -0.551119, bij[5][0] = 0.146543, bij[0][1] = 0.235622, bij[1][1] = 0.789393,
-    bij[2][1] = 0.673665, bij[3][1] = 1.207552, bij[4][1] = 0.0670665, bij[5][1] = -0.084337,
-    bij[0][2] = -0.274637, bij[1][2] = -0.743539, bij[2][2] = -0.959456, bij[3][2] = -0.687343,
-    bij[4][2] = -0.497089, bij[5][2] = 0.195286, bij[0][3] = 0.145831, bij[1][3] = 0.263129,
-    bij[2][3] = 0.347247, bij[3][3] = 0.213486, bij[4][3] = 0.100754, bij[5][3] = -0.032932,
-    bij[0][4] = -0.0270448, bij[1][4] = -0.0253093, bij[2][4] = -0.0267758, bij[3][4] = -0.0822904,
-    bij[4][4] = 0.0602253, bij[5][4] = -0.0202595;
+  bij[0][0] = 0.501938; bij[1][0] = 0.162888; bij[2][0] = -0.130356; bij[3][0] = 0.907919,
+  bij[4][0] = -0.551119; bij[5][0] = 0.146543; bij[0][1] = 0.235622; bij[1][1] = 0.789393,
+  bij[2][1] = 0.673665; bij[3][1] = 1.207552; bij[4][1] = 0.0670665; bij[5][1] = -0.084337,
+  bij[0][2] = -0.274637; bij[1][2] = -0.743539; bij[2][2] = -0.959456; bij[3][2] = -0.687343,
+  bij[4][2] = -0.497089; bij[5][2] = 0.195286; bij[0][3] = 0.145831; bij[1][3] = 0.263129,
+  bij[2][3] = 0.347247; bij[3][3] = 0.213486; bij[4][3] = 0.100754; bij[5][3] = -0.032932,
+  bij[0][4] = -0.0270448; bij[1][4] = -0.0253093; bij[2][4] = -0.0267758; bij[3][4] = -0.0822904,
+  bij[4][4] = 0.0602253; bij[5][4] = -0.0202595;
 
   // 3. Set up table parameters
   n_tables = 3;
@@ -201,12 +201,12 @@ double H2OLookup::Dvdpbar( double t, double p ) { return -18015.0e0*Compressibil
 //   send to thomas.driesner@erdw.ethz.ch
 
 // These three were rather for debugging. You don't want to use these, rather got to the three following after these
-double H2OLookup::LiquidProperty( const long& it, const int& property_index ) { return satliq[t_dim_table[0] * property_index + it]; }
+double H2OLookup::LiquidProperty( const long& iter, const int& property_index ) { return satliq[t_dim_table[0] * property_index + iter]; }
 
-double H2OLookup::VaporProperty( const long& it, const int& property_index ) { return satvap[t_dim_table[1] * property_index + it]; }
+double H2OLookup::VaporProperty( const long& iter, const int& property_index ) { return satvap[t_dim_table[1] * property_index + iter]; }
 
-double H2OLookup::SinglePhaseProperty( const long& it, const long& ip, const int& property_index ) {
-  return singlephase[t_dim_table[2] * p_dim * property_index + p_dim*it + ip];
+double H2OLookup::SinglePhaseProperty( const long& iter, const long& gp, const int& property_index ) {
+  return singlephase[t_dim_table[2] * p_dim * property_index + p_dim*iter + gp];
 }
 
 // The real stuff
@@ -343,13 +343,13 @@ bool H2OLookup::BoilingCurveInInterpolationCell()
   else return false;
 }
 
-void H2OLookup::GetIndex_iA( const double& tcurrent, const double& pcurrent, const int& property_index )
+void H2OLookup::GetIndex_iA( const double& t_current, const double& p_current, const int& property_index )
 {
   // May 2009: CAUTION - this scheme may fail in case of tcurrent > tmax and pcurrent > pmax
   //           to do: improve range control!
 
-  it = GetTemperatureIndex( tcurrent );
-  ip = GetPressureIndex( pcurrent );
+  it = GetTemperatureIndex( t_current );
+  ip = GetPressureIndex( p_current );
   iA = t_dim_table[2] * p_dim*property_index + it*p_dim + ip;
   iB = iA + p_dim;
   iC = iB + 1;
@@ -473,7 +473,7 @@ double H2OLookup::NormalInterpolation( const double& tcurrent, const double& pcu
 
 
 
-double H2OLookup::NearCriticalInterpolation( const double& tcurrent, const double& pcurrent, const int& property_index )
+double H2OLookup::NearCriticalInterpolation( const double& t_current, const double& p_current, const int& property_index )
 {
   //d cout << "using H2OLookup::NearCriticalInterpolation ...\n";
   it_A = GetTemperatureIndex( cp_h2o.Temperature() );
@@ -495,32 +495,32 @@ double H2OLookup::NearCriticalInterpolation( const double& tcurrent, const doubl
   // p_D - p_A = 0.1 bar
   // t_B - t_A = 0.1 C
 
-  if ( pcurrent >= cp_h2o.Pressure() )
+  if ( p_current >= cp_h2o.Pressure() )
   {
-    if ( tcurrent >= cp_h2o.Temperature() )
+    if ( t_current >= cp_h2o.Temperature() )
     {
-      pnorm = (pcurrent - cp_h2o.Pressure()) / (220.6e5 - cp_h2o.Pressure());
+      pnorm = (p_current - cp_h2o.Pressure()) / (220.6e5 - cp_h2o.Pressure());
       tnorm = (cp_h2o.Temperature() - 373.9e0) / 0.1e0;
       v_top = SinglePhaseProperty( it_A, ip_D, property_index )
         + tnorm*(SinglePhaseProperty( it_B, ip_D, property_index ) - SinglePhaseProperty( it_A, ip_D, property_index ));
-      v_behind = SinglePhaseProperty( it_B, ip_A, property_index ) + (pcurrent - 220.5e5) / 0.1e0*
+      v_behind = SinglePhaseProperty( it_B, ip_A, property_index ) + (p_current - 220.5e5) / 0.1e0*
         (SinglePhaseProperty( it_B, ip_D, property_index ) - SinglePhaseProperty( it_B, ip_A, property_index ));
       it = GetTemperatureIndex( 374.001 );
       v_interpolated = LiquidProperty( it, property_index ) + pnorm*(v_top - LiquidProperty( it, property_index ));
-      tnorm = (tcurrent - cp_h2o.Temperature()) / (374.0e0 - cp_h2o.Temperature());
+      tnorm = (t_current - cp_h2o.Temperature()) / (374.0e0 - cp_h2o.Temperature());
       v_interpolated += tnorm * (v_behind - v_interpolated);
     }
     else
     {
-      pnorm = (pcurrent - cp_h2o.Pressure()) / (220.6e5 - cp_h2o.Pressure());
+      pnorm = (p_current - cp_h2o.Pressure()) / (220.6e5 - cp_h2o.Pressure());
       tnorm = (cp_h2o.Temperature() - 373.9e0) / 0.1;
       v_top = SinglePhaseProperty( it_A, ip_D, property_index )
         + tnorm*(SinglePhaseProperty( it_B, ip_D, property_index ) - SinglePhaseProperty( it_A, ip_D, property_index ));
-      v_before = SinglePhaseProperty( it_A, ip_A, property_index ) + (pcurrent - 220.5e5) / 0.1e0*
+      v_before = SinglePhaseProperty( it_A, ip_A, property_index ) + (p_current - 220.5e5) / 0.1e0*
         (SinglePhaseProperty( it_A, ip_D, property_index ) - SinglePhaseProperty( it_A, ip_A, property_index ));
       it = GetTemperatureIndex( 374.001 );
       v_behind = LiquidProperty( it, property_index ) + pnorm*(v_top - LiquidProperty( it, property_index ));
-      tnorm = (tcurrent - 373.9e0) / (cp_h2o.Temperature() - 373.9e0);
+      tnorm = (t_current - 373.9e0) / (cp_h2o.Temperature() - 373.9e0);
       v_interpolated = v_before + tnorm * (v_behind - v_before);
     }
   }
@@ -529,43 +529,43 @@ double H2OLookup::NearCriticalInterpolation( const double& tcurrent, const doubl
     if ( tcurrent >= cp_h2o.Temperature() )
     {
       tboil = TfromP( 220.5e5 );
-      pnorm = (pcurrent - 220.5e5) / (cp_h2o.Pressure() - 220.5e5);
+      pnorm = (p_current - 220.5e5) / (cp_h2o.Pressure() - 220.5e5);
       tnorm = (cp_h2o.Temperature() - tboil) / (374.0e0 - tboil);
       v_bottom = VaporProperty( tboil, property_index )
         + tnorm*(SinglePhaseProperty( it_B, ip_A, property_index ) - VaporProperty( tboil, property_index ));
-      v_behind = SinglePhaseProperty( it_B, ip_A, property_index ) + (pcurrent - 220.5e5) / 0.1e0*
+      v_behind = SinglePhaseProperty( it_B, ip_A, property_index ) + (p_current - 220.5e5) / 0.1e0*
         (SinglePhaseProperty( it_B, ip_D, property_index ) - SinglePhaseProperty( it_B, ip_A, property_index ));
       it = GetTemperatureIndex( 374.001 );
       v_interpolated = v_bottom + pnorm*(LiquidProperty( it, property_index ) - v_bottom);
-      tnorm = (tcurrent - cp_h2o.Temperature()) / (374.0e0 - cp_h2o.Temperature());
+      tnorm = (t_current - cp_h2o.Temperature()) / (374.0e0 - cp_h2o.Temperature());
       v_interpolated += tnorm * (v_behind - v_interpolated);
     }
     else
     {
-      if ( pcurrent > LiquidProperty( tcurrent, pressure_index ) )
+      if ( p_current > LiquidProperty( t_current, pressure_index ) )
       {
         tboil = TfromP( pcurrent );
-        tnorm = (tcurrent - 373.9e0) / (tboil - 373.9e0);
-        v_before = SinglePhaseProperty( it_A, ip_A, property_index ) + (pcurrent - 220.5e5) / 0.1e0*
+        tnorm = (t_current - 373.9e0) / (tboil - 373.9e0);
+        v_before = SinglePhaseProperty( it_A, ip_A, property_index ) + (p_current - 220.5e5) / 0.1e0*
           (SinglePhaseProperty( it_A, ip_D, property_index ) - SinglePhaseProperty( it_A, ip_A, property_index ));
         v_boil = LiquidProperty( tboil, property_index );
         v_interpolated = v_before + tnorm*(v_boil - v_before);
       }
-      else if ( pcurrent < LiquidProperty( tcurrent, pressure_index ) )
+      else if ( p_current < LiquidProperty( t_current, pressure_index ) )
       {
         tboil = TfromP( 220.5e5 );
-        pnorm = (pcurrent - 220.5e5) / (cp_h2o.Pressure() - 220.5e5);
-        tnorm = (tcurrent - tboil) / (cp_h2o.Temperature() - tboil);
+        pnorm = (p_current - 220.5e5) / (cp_h2o.Pressure() - 220.5e5);
+        tnorm = (t_current - tboil) / (cp_h2o.Temperature() - tboil);
         v_bottom = VaporProperty( tboil, property_index )
           + tnorm*(SinglePhaseProperty( it_B, ip_A, property_index ) - VaporProperty( tboil, property_index ));
         it = GetTemperatureIndex( 374.001 );
         v_behind = v_bottom + pnorm*(LiquidProperty( it, property_index ) - v_bottom);
-        tboil = TfromP( pcurrent );
-        tnorm = (tcurrent - tboil) / (cp_h2o.Temperature() - tboil);
+        tboil = TfromP( p_current );
+        tnorm = (t_current - tboil) / (cp_h2o.Temperature() - tboil);
         v_boil = VaporProperty( tboil, property_index );
         v_interpolated = v_boil + tnorm*(v_behind - v_boil);
       }
-      else return AccidentalBoilingCurveEncounter( tcurrent, pcurrent, property_index );
+      else return AccidentalBoilingCurveEncounter( t_current, p_current, property_index );
     }
   }
   //d cout << "leaving near-critical interpolation\n";
@@ -945,7 +945,7 @@ void H2OLookup::BuildTable0And1()
 void H2OLookup::BuildTable2()
 {
   Prop *properties, *liqprops, *vapprops;
-  double psat;
+  double psat{ std::numeric_limits<double>::quiet_NaN() };
 
   properties = newProp( 'T', 'p', 1 );
   liqprops = newProp( 'T', 'p', 1 );
@@ -1076,9 +1076,9 @@ void H2OLookup::BuildTable2()
 
 long H2OLookup::GetTemperatureIndex( const double& t )
 {
-  double t_res;
-  long      it;
-  if ( t <    0.0e0 )
+  double t_res(-273.15);
+  long   it(UNSPECIFIED);
+  if ( t < 0.0e0 )
   {
     cout << "H2OLookup::GetTemperatureIndex(const double& t) : t < 0 (t = " << t << "), better terminate ...\n";
     cout << "or to continue, enter any key : ";

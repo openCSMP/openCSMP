@@ -75,7 +75,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
       const double icemModelTime( timer.Stop() );
 
       size_t nullNeighborsOut(0);
-      const Region<3U> model_domain1(modelOutput1.Region("Model"));
+      const Region<3U>& model_domain1(modelOutput1.Region("Model"));
       for ( auto it = model_domain1.CellsBegin(); it != model_domain1.CellsEnd(); ++it )
         for ( auto n{0}; n < (*it)->Neighbors(); ++n )
           if( (*it)->Neighbor(n) == nullptr )
@@ -127,7 +127,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
       timer.Start();
       const string file_name("ANSYS_Model3D_Test_modelOutput1");
       Model<3> modelInput1( file_name, set<string>({}) );
-      const Region<3U> model_domain2(modelInput1.Region("Model"));
+      const Region<3U>& model_domain2(modelInput1.Region("Model"));
       const double binaryModelTime( timer.Stop() );
       _test( elementCount == modelInput1.Region("Model").Cells() );
       _test( nodeCount    == modelInput1.Region("Model").Nodes() );

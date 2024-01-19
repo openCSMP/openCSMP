@@ -853,7 +853,9 @@ SYSTEM_STATE  elementState( PHASES_CONTINUOUS_ACROSS_ELEMENT cphases )
            cerr <<"\nelementState: no suitable conversion found.\n";
            return SYSTEM_STATE::full;
       }
- }
+    return SYSTEM_STATE::undefined;
+    
+ } //end elementState
 
 
 

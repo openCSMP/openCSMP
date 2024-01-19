@@ -5,6 +5,8 @@
 #include "Standard_IO_Handler.h"
 #include "ModelTopology.h"
 #include "Model.h"
+#include "Region.h"
+#include "Boundary.h"
 #include "ErrorHandler.h"
 
 /* General IO include section */
@@ -25,7 +27,6 @@ namespace csmp {
 
 CGNS_Interface::CGNS_Interface( bool isoparametric_mesh )
     :file_type_(CG_FILE_ADF2),
-     csmp_elmt_specs_(),
      isoparametric_( isoparametric_mesh ),
      interactive_property_assignment_(false)
  {
@@ -45,7 +46,7 @@ int CGNS_Interface::SetFileType( int file_type )
     //std::string errmsg;
     if (cg_set_file_type( file_type_ ) )
     {
-        error_handler.notice(csmp::FATAL_ERROR, "CGNS_Interface::SetFileFormat():","cg_set_file_type");
+        error_handler.Note(csmp::FATAL_ERROR, "CGNS_Interface::SetFileFormat():","cg_set_file_type");
         return 1;
     }
 
@@ -84,7 +85,7 @@ int CGNS_Interface::Read_CGNS_Mesh( const std::string&   filename,
     /// open CGNS file for read-only
     int cgfile;
     if ( cg_open(infile.c_str(),CG_MODE_READ,&cgfile) )
-        error_handler.notice(csmp::FATAL_ERROR, "CGNS_Interface::Read_CGNS_Mesh():","cg_open");
+        error_handler.Note(csmp::FATAL_ERROR, "CGNS_Interface::Read_CGNS_Mesh():","cg_open");
 
     /// read mesh
     ReadUnstructMesh<dim>(cgfile,filename,vset,mesh_topology);
@@ -118,7 +119,7 @@ int CGNS_Interface::ReadUnstructMesh( int cgfile, const std::string& filename, c
     /// check that there is only one base
     cg_nbases(cgfile,&nbase);
     if( nbase!=1 ){
-        error_handler.notice(csmp::FATAL_ERROR, "CGNS_Interface::ReadUnctructMesh():","Unexpected number of bases, works only for 1 base.");
+        error_handler.Note(csmp::FATAL_ERROR, "CGNS_Interface::ReadUnctructMesh():","Unexpected number of bases, works only for 1 base.");
         return 1;
     }
     cgbase=1;
@@ -172,11 +173,11 @@ void CGNS_Interface::ReadCoords( int cgfile, int cgbase, int cgzone, int total_n
     cgsize_t irmax = total_num_coords;
     /// read grid coordinates
     cg_coord_read(cgfile,cgbase,cgzone,"CoordinateX",
-                  RealSingle,&irmin,&irmax,xcoord);
+                  CG_RealSingle,&irmin,&irmax,xcoord);
     cg_coord_read(cgfile,cgbase,cgzone,"CoordinateY",
-                  RealSingle,&irmin,&irmax,ycoord);
+                  CG_RealSingle,&irmin,&irmax,ycoord);
     cg_coord_read(cgfile,cgbase,cgzone,"CoordinateZ",
-                  RealSingle,&irmin,&irmax,zcoord);
+                  CG_RealSingle,&irmin,&irmax,zcoord);
 
     /// adding xcoord,ycoord,zcoord to VSet
     vset.ResizeNodes( total_num_coords );
@@ -218,11 +219,11 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
     int  nperelmt;
     int  iparent_flag;
     int  nbndry;
-    ElementType_t cgns_fem_type;
+    CG_ElementType_t cgns_fem_type;
     csmp::CSMP_FEM_TYPE csmp_fem_type;
     std::string csmp_fem_type_name;
     std::string section_name;
-    std::pair<typename std::map<std::vector<uint32_t>,std::pair<size_t,size_t> >::iterator,bool> eit;
+
     for ( cgsect=1; cgsect <= nsections; ++cgsect )
     {
         char sname[33];
@@ -231,7 +232,7 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
         section_name = sname;
         //cg_ElementDataSize(cgfile,cgbase,cgzone,cgsect,&element_data_size);
         num_elements = iend - istart + 1;
-        std::vector<uint32_t> section_element_ids;
+        std::vector<size_t> section_element_ids;
         if( error_handler.Verbose() )
         {
             std::cout<<"\nCGNS_Interface::ReadCoordsAndElements():Reading section data...\n";
@@ -252,14 +253,14 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
             while( i < element_data_size )
             {
                 csmp_fem_type = elmt_specs_.CSMP_TypeFrom_CGNS_Type( elements[i++], isoparametric_, dim );
-                csmp_fem_type_name = csmp_elmt_specs_.CSMP_TypeName( csmp_fem_type );
-                nperelmt = csmp_elmt_specs_.NodesPerElementOfType( csmp_fem_type );
+                csmp_fem_type_name = csmp_elmt_specs_::CSMP_TypeName( csmp_fem_type );
+                nperelmt = csmp_elmt_specs_::NodesPerElementOfType( csmp_fem_type );
                 std::vector<uint32_t> nids( nperelmt );
-                size_t iend = i + nperelmt;
+// TODO:                size_t iend2 = i + nperelmt;
                 size_t j = 0;
                 while( i < iend )
                     nids[j++] = elements[i++] - 1;
-                eit = element_ids_.insert( std::make_pair( nids, std::make_pair(static_cast<uint32_t>(csmp_fem_type), 0 ) ) );
+                auto eit = element_ids_.insert( std::make_pair( nids, std::make_pair(static_cast<uint32_t>(csmp_fem_type), 0 ) ) );
                 /// if element was not yet considered
                 if ( eit.second )
                 {
@@ -268,7 +269,7 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
                     vset.ResizeElementTypes( global_eid_ );
                     vset.ResizePlist( global_eid_, nperelmt );
                     vset.ElementType( (*eit.first).second.second, csmp_fem_type );
-                    for( size_t nid = 0 ; nid < nperelmt; ++nid )
+                    for( uint32_t nid = 0u; nid < nperelmt; ++nid )
                         vset.Plist( (*eit.first).second.second, nid, nids[nid] );
                 }
                 /// filling MeshTopology
@@ -277,17 +278,17 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
             }
             delete[] elements;
             /// adding section information to MeshTopology
-            mesh_topology.AddRegionElementTypes( section_name.c_str(), section_element_types );
-            mesh_topology.AddRegionElementIds( section_name.c_str(), section_element_ids );
+            mesh_topology.AddDomainCellTypes( section_name.c_str(), section_element_types );
+            mesh_topology.AddDomainCellIds( section_name.c_str(), section_element_ids );
         }
         else
         {
             csmp_fem_type = elmt_specs_.CSMP_TypeFrom_CGNS_Type( cgns_fem_type, isoparametric_, dim );
-            csmp_fem_type_name = csmp_elmt_specs_.CSMP_TypeName( csmp_fem_type );
+            csmp_fem_type_name = csmp_elmt_specs_::CSMP_TypeName( csmp_fem_type );
             if ( csmp_fem_type != csmp::UNKNOWN )
             {
                 //cg_ElementDataSize(cgfile,cgbase,cgzone,cgsect,&element_data_size);
-                nperelmt = csmp_elmt_specs_.NodesPerElementOfType( csmp_fem_type );
+                nperelmt = csmp_elmt_specs_::NodesPerElementOfType( csmp_fem_type );
                 element_data_size = num_elements * nperelmt;
                 elements = new cgsize_t[ element_data_size ];
                 if( error_handler.Verbose() )
@@ -298,11 +299,11 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
                 auto i = 0;
                 while( i < element_data_size )
                 {
-                    size_t iend = i + nperelmt;
+// TODO: needed?                    size_t iend2 = i + nperelmt;
                     size_t j = 0;
                     while( i < iend )
                         nids[j++] = elements[i++] - 1;
-                    eit = element_ids_.insert( std::make_pair( nids, std::make_pair(static_cast<uint32_t>(csmp_fem_type), 0 ) ) );
+                    auto eit = element_ids_.insert( std::make_pair( nids, std::make_pair(static_cast<uint32_t>(csmp_fem_type), 0 ) ) );
                     if ( eit.second )
                     {
                         (*eit.first).second.second = global_eid_++;
@@ -310,7 +311,7 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
                         vset.ResizeElementTypes( global_eid_ );
                         vset.ResizePlist( global_eid_, nperelmt );
                         vset.ElementType( (*eit.first).second.second, csmp_fem_type );
-                        for( size_t nid = 0 ; nid < nperelmt; ++nid )
+                        for( uint32_t nid = 0u; nid < nperelmt; ++nid )
                             vset.Plist( (*eit.first).second.second, nid, nids[nid] );
                     }
                     /// filling MeshTopology
@@ -318,8 +319,8 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
                 }
                 delete[] elements;
                 /// adding section information to MeshTopology
-                mesh_topology.AddRegionElementType( section_name.c_str(), csmp_fem_type_name );
-                mesh_topology.AddRegionElementIds( section_name.c_str(), section_element_ids );
+                mesh_topology.AddDomainCellType( section_name.c_str(), csmp_fem_type_name );
+                mesh_topology.AddDomainCellIds( section_name.c_str(), section_element_ids );
             }
             else
             {
@@ -377,23 +378,23 @@ int CGNS_Interface::Write_CGNS_Mesh( const std::string&      filename,
 
     /// set file type
     if (cg_set_file_type( GetFileType() ) )
-        error_handler.notice(csmp::FATAL_ERROR, "CGNS_Interface::Write_CGNS_Mesh():","cg_set_file_type");
+        error_handler.Note(csmp::FATAL_ERROR, "CGNS_Interface::Write_CGNS_Mesh():","cg_set_file_type");
 
     /// open CGNS file for write
     unlink(outfile.c_str());
     if (cg_open(outfile.c_str(), CG_MODE_WRITE, &cgfile))
-        error_handler.notice(csmp::FATAL_ERROR, "CGNS_Interface::Write_CGNS_Mesh():","cg_open");
+        error_handler.Note(csmp::FATAL_ERROR, "CGNS_Interface::Write_CGNS_Mesh():","cg_open");
 
     /// ----------------------------------------------------------
 
     if( WriteUnstructMesh<dim>( filename, cgfile, model ) )
-        error_handler.notice(csmp::FATAL_ERROR, "CGNS_Interface::Write_CGNS_Mesh():","Error while writing mesh.");
+        error_handler.Note(csmp::FATAL_ERROR, "CGNS_Interface::Write_CGNS_Mesh():","Error while writing mesh.");
 
     /// ----------------------------------------------------------
     /// close CGNS file
 
     if ( cg_close(cgfile) )
-        error_handler.notice(csmp::FATAL_ERROR, "CGNS_Interface::Write_CGNS_Mesh():","cg_close");
+        error_handler.Note(csmp::FATAL_ERROR, "CGNS_Interface::Write_CGNS_Mesh():","cg_close");
 
     return 0;
 
@@ -450,7 +451,7 @@ void CGNS_Interface::WriteBase( const std::string& filename, int cgfile, int& cg
     if (cg_base_write(cgfile, basename.c_str(), CellDim, PhysDim, &cgbase) ||
         cg_goto(cgfile, cgbase, "end") ||
         cg_descriptor_write("Descriptor", "Multi-block Unstructured Grid"))
-            error_handler.notice(csmp::FATAL_ERROR, "CGNS_Interface::Write_CGNS_Mesh():","unstructured base");
+            error_handler.Note( FATAL_ERROR, "CGNS_Interface::Write_CGNS_Mesh():","unstructured base");
 
     /// additional data
     //        cg_dataclass_write(CGNS_ENUMV(NormalizedByDimensional)
@@ -482,16 +483,15 @@ void CGNS_Interface::WriteZone( const std::string& filename, int cgfile, int cgb
 
     /// write zone
     cgsize_t size[3];
-    for (size_t n = 0; n < 3; ++n )
-        size[n] = 0;
+    for (int n = 0; n < 3; ++n ) size[n] = 0;
     size[0] = model.Region("Model").Nodes();
-    size[1] = model.Region("Model").Elements();
+    size[1] = model.Region("Model").Cells();
     if( model.Boundaries() > 0 )
     {
         typename csmp::Model<dim>::boundaryConstIterator bit    = model.BoundariesBegin();
         typename csmp::Model<dim>::boundaryConstIterator bitEnd = model.BoundariesEnd();
         for ( ; bit!=bitEnd; ++bit )
-            size[1] += (*bit).second.Elements();
+            size[1] += (*bit).second.Cells();
     }
 
     //std::string zonename = "Zone";
@@ -502,7 +502,7 @@ void CGNS_Interface::WriteZone( const std::string& filename, int cgfile, int cgb
         errmsg  = "Cannot write Zone('";
         errmsg += filename;
         errmsg += "')";
-        error_handler.notice(csmp::FATAL_ERROR, "CGNS_Interface::WriteZone():",errmsg.c_str() );
+        error_handler.Note( FATAL_ERROR, "CGNS_Interface::WriteZone():",errmsg.c_str() );
     }
 }
 template void CGNS_Interface::WriteZone<1U>( const std::string&,int,int,int&,const csmp::Model<1U>& );
@@ -521,9 +521,9 @@ void CGNS_Interface::WriteCoords( int cgfile, int cgbase, int cgzone, const csmp
     int cgcoord;
 
     const csmp::Region<dim>& subDomain( model.Region("Model") );
-    typename csmp::Region<dim>::vertexConstIterator nit    = subDomain.NodesBegin();
-    typename csmp::Region<dim>::vertexConstIterator nitEnd = subDomain.NodesEnd();
-    int num_coord = subDomain.Nodes();
+    auto nit    = subDomain.NodesBegin();
+    auto nitEnd = subDomain.NodesEnd();
+    size_t num_coord = subDomain.Nodes();
     float* xcoord = new float[num_coord];
     float* ycoord = new float[num_coord];
     float* zcoord = new float[num_coord];
@@ -565,7 +565,7 @@ void CGNS_Interface::WriteCoords( int cgfile, int cgbase, int cgzone, const csmp
         errmsg += "Region('";
         errmsg += subDomain.Name();
         errmsg += "') coordinates couldn't be written.";
-        error_handler.notice(csmp::FATAL_ERROR, "CGNS_Interface::WriteCoords():",errmsg.c_str());
+        error_handler.Note( FATAL_ERROR, "CGNS_Interface::WriteCoords():",errmsg.c_str());
     }
     delete[] xcoord;
     delete[] ycoord;
@@ -610,21 +610,20 @@ void CGNS_Interface::WriteElements( int cgfile, int cgbase, int cgzone, const cs
     /// write elements
     int cgsect;
 
-    typename csmp::ModelSubDomain<dim,SIMPLEX>::simplexConstIterator eit;
-    typename csmp::ModelSubDomain<dim,SIMPLEX>::simplexConstIterator eitEnd = subDomain.ElementsEnd();
-    int num_element = 0;
-    int eid  = 0;
-    int enodes;
-    for ( eit = subDomain.ElementsBegin(); eit!=eitEnd; ++eit )
+    const auto eitEnd = subDomain.CellsEnd();
+    size_t num_element = 0;
+    size_t eid  = 0;
+    uint32_t enodes;
+    for ( auto eit = subDomain.CellsBegin(); eit!=eitEnd; ++eit )
         num_element += ( (*eit)->Nodes() + 1 ); // nodes + element type
     cgsize_t* elements = new cgsize_t[ num_element ];
-    num_element = subDomain.Elements();
-    for ( eit = subDomain.ElementsBegin(); eit!=eitEnd; ++eit ){
+    num_element = subDomain.Cells();
+    for ( auto eit = subDomain.CellsBegin(); eit!=eitEnd; ++eit ){
         /// type of element
         elements[ eid++ ] = static_cast<int>(elmt_specs_.CGNS_TypeFrom_CSMP_Type( (*eit)->FE_Type() ) );
         /// element nodes
         enodes = (*eit)->Nodes();
-        for ( size_t enid = 0; enid < enodes; ++enid )
+        for ( uint32_t enid = 0u; enid < enodes; ++enid )
             elements[ eid++ ] = (*eit)->N( enid )->Idx() + 1;
     }
 
@@ -633,7 +632,7 @@ void CGNS_Interface::WriteElements( int cgfile, int cgbase, int cgzone, const cs
         errmsg += "Region('";
         errmsg += subDomain.Name();
         errmsg += "') elements couldn't be written.";
-        error_handler.notice(csmp::FATAL_ERROR, "CGNS_Interface::WriteCoordsAndElements():",errmsg.c_str() );
+        error_handler.Note( FATAL_ERROR, "CGNS_Interface::WriteCoordsAndElements():",errmsg.c_str() );
     }
     delete[] elements;
 }
@@ -653,9 +652,9 @@ template void CGNS_Interface::WriteElements<3U>( int,int,int,const csmp::ModelSu
 CGNS_ModelSettings::CGNS_ModelSettings( const std::string& mesh_file_prefix )
     : mesh_file_prefix_     ( mesh_file_prefix )
 {
-    if ( csmp::doesRegionsFileExist( mesh_file_prefix.c_str() ) ){
+    if ( csmp::doesDomainsFileExist( mesh_file_prefix.c_str() ) ){
         regions_.clear();
-        csmp::readDesiredRegions( mesh_file_prefix.c_str(), regions_ );
+        csmp::readDesiredDomains( mesh_file_prefix.c_str(), regions_ );
     }
 }
 
@@ -682,10 +681,10 @@ CGNS_ModelSettings::~CGNS_ModelSettings()
 void CGNS_ModelSettings
 ::MeshSetup( const std::string& regions_file_prefix )
 {
-    if ( csmp::doesRegionsFileExist( regions_file_prefix.c_str() ) )
+    if ( csmp::doesDomainsFileExist( regions_file_prefix.c_str() ) )
     {
         regions_.clear();
-        csmp::readDesiredRegions( regions_file_prefix.c_str(), regions_ );
+        csmp::readDesiredDomains( regions_file_prefix.c_str(), regions_ );
     }
 }
 

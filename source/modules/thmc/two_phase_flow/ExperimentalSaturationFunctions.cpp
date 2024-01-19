@@ -35,8 +35,7 @@ size_t ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes( 
   
     std::cout << "\nExperimentalSaturationFunctions::InitialiseReservoirRockTypes: reading data from file: '"<< rt_file_name <<"' ...\n";
     
-    std::ifstream rt_file;
-    rt_file.open(rt_file_name);
+    std::ifstream rt_file(rt_file_name);
     
     if ( !rt_file.is_open() )
       throw csmp::Exception( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes", "input file not found." );
@@ -48,85 +47,87 @@ size_t ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes( 
     if ( number_of_tables <= 0 )
       throw csmp::Exception( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes", "no data tables contained in input file." );
 
-    for ( int i=0; i < number_of_tables; i++ )
-    {
-        size_t rocktype;
-        rt_file >> rocktype;
-        std::cout << "\nReading data table for RRT: " << rocktype << "\n";
+    for ( int rocktype=0; rocktype < number_of_tables; rocktype++ )
+      {
+          uint32_t n_rocktype;
+          rt_file >> n_rocktype; // check that this is indeed a rocktype number
+          assert( n_rocktype < number_of_tables );
+          std::cout << "\nReading data table for RRT: " << n_rocktype << "\n";
 
-        unsigned int number_of_entries;
-        rt_file >> number_of_entries;
-        
-        double kro_start_derivative, kro_end_derivative, krw_start_derivative, krw_end_derivative, pc_start_derivative, pc_end_derivative;
-        rt_file >> kro_start_derivative >> kro_end_derivative >> krw_start_derivative >> krw_end_derivative >> pc_start_derivative >> pc_end_derivative;
-        cout << "Derivatives (krnw0,krnw1,krw0,krw1,dpcds0,dpcds1):\t" << kro_start_derivative << "\t" << kro_end_derivative;
-        cout << "\t" << krw_start_derivative << "\t" << krw_end_derivative << "\t" << pc_start_derivative << "\t" << pc_end_derivative << "\n";
- 
-        if ( fabs(pc_start_derivative) > max_derivative_ ) {
-             cerr <<"\n\tsaturation derivative of pc at sw_min: "<< pc_start_derivative;
-             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
-          }
-        if ( fabs(pc_end_derivative) > max_derivative_ ) {
-             cerr <<"\n\tsaturation derivative of pc at sw_max: "<< pc_end_derivative;
-             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
-          }
-        if ( fabs(krw_start_derivative) > max_derivative_ ) {
-             cerr <<"\n\tsaturation derivative of krw at sw_min: "<< krw_start_derivative;
-             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
-          }
-        if ( fabs(krw_end_derivative) > max_derivative_ ) {
-             cerr <<"\n\tsaturation derivative of krw at sw_max: "<< krw_end_derivative;
-             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
-          }
-        if ( fabs(kro_start_derivative) > max_derivative_ ) {
-             cerr <<"\n\tsaturation derivative of krn at sw_min: "<< kro_start_derivative;
-             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
-          }
-        if ( fabs(kro_end_derivative) > max_derivative_ ) {
-             cerr <<"\n\tsaturation derivative of krn at sw_max: "<< kro_end_derivative;
-             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
-          }
-      
-        std::cout << "sw\tkro\tkrw\tpc\n";
-      
-        std::vector<double> sw, kro, krw, pc;
-        double swr(0.), snr(0.);
-        double pre_sw_value(0.);
-        double sw_value(0.), kro_value, krw_value, pc_value;
-        bool swr_found(false), snr_found(false);
-        for ( size_t n = 0; n < number_of_entries; n++ )
-        {
-            pre_sw_value = sw_value;
-            rt_file >> sw_value >> kro_value >> krw_value >> pc_value;
-
-            std::cout << sw_value << "\t" << kro_value << "\t" << krw_value << "\t" << pc_value <<"\n";
+          uint32_t number_of_entries{0U};
+          rt_file >> number_of_entries;
           
-            sw.push_back(sw_value);
-            kro.push_back(kro_value);
-            krw.push_back(krw_value);
-            pc.push_back(pc_value);
+          double kro_start_derivative, kro_end_derivative, krw_start_derivative, krw_end_derivative, pc_start_derivative, pc_end_derivative;
+          rt_file >> kro_start_derivative >> kro_end_derivative >> krw_start_derivative >> krw_end_derivative >> pc_start_derivative >> pc_end_derivative;
+          cout << "Derivatives (krnw0,krnw1,krw0,krw1,dpcds0,dpcds1):\t" << kro_start_derivative << "\t" << kro_end_derivative;
+          cout << "\t" << krw_start_derivative << "\t" << krw_end_derivative << "\t" << pc_start_derivative << "\t" << pc_end_derivative << "\n";
+   
+          if ( fabs(pc_start_derivative) > max_derivative_ ) {
+               cerr <<"\n\tsaturation derivative of pc at sw_min: "<< pc_start_derivative;
+               csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+            }
+          if ( fabs(pc_end_derivative) > max_derivative_ ) {
+               cerr <<"\n\tsaturation derivative of pc at sw_max: "<< pc_end_derivative;
+               csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+            }
+          if ( fabs(krw_start_derivative) > max_derivative_ ) {
+               cerr <<"\n\tsaturation derivative of krw at sw_min: "<< krw_start_derivative;
+               csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+            }
+          if ( fabs(krw_end_derivative) > max_derivative_ ) {
+               cerr <<"\n\tsaturation derivative of krw at sw_max: "<< krw_end_derivative;
+               csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+            }
+          if ( fabs(kro_start_derivative) > max_derivative_ ) {
+               cerr <<"\n\tsaturation derivative of krn at sw_min: "<< kro_start_derivative;
+               csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+            }
+          if ( fabs(kro_end_derivative) > max_derivative_ ) {
+               cerr <<"\n\tsaturation derivative of krn at sw_max: "<< kro_end_derivative;
+               csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+            }
+        
+          std::cout << "sw\tkro\tkrw\tpc\n";
+        
+          std::vector<double> sw, kro, krw, pc;
+          double swr(0.), snr(0.);
+          double pre_sw_value(0.);
+          double sw_value(0.), kro_value, krw_value, pc_value;
+          bool swr_found(false), snr_found(false);
+          for ( uint32_t n{0U}; n < number_of_entries; n++ )
+            {
+                pre_sw_value = sw_value;
+                rt_file >> sw_value >> kro_value >> krw_value >> pc_value;
 
-            if(!swr_found && krw_value > 0.0) {swr = pre_sw_value; swr_found = true;}
-            if(!snr_found && kro_value == 0.0) {snr = 1.0 - sw_value; snr_found = true;}
-        }
+                std::cout << sw_value << "\t" << kro_value << "\t" << krw_value << "\t" << pc_value <<"\n";
+              
+                sw.push_back(sw_value);
+                kro.push_back(kro_value);
+                krw.push_back(krw_value);
+                pc.push_back(pc_value);
 
-        std::cout << "swr = " <<swr<<", snr = "<<snr<<endl;
-        std::cout << "\n";
+                if(!swr_found && krw_value > 0.0) {swr = pre_sw_value; swr_found = true;}
+                if(!snr_found && kro_value == 0.0) {snr = 1.0 - sw_value; snr_found = true;}
+            }
 
-        input_sw_[rocktype] = sw;
-        input_pc_[rocktype] = pc;
+          std::cout << "\nswr = " <<swr<<", snr = "<<snr<<endl;
+          std::cout << "\n";
 
-        csmp::CubicSpline kr1_spline, kr2_spline, pc_spline;
-        kr1_spline.Initialize( sw, krw, krw_start_derivative, krw_end_derivative );
-        kr2_spline.Initialize( sw, kro, kro_start_derivative, kro_end_derivative );
-        pc_spline.Initialize( sw, pc, pc_start_derivative, pc_end_derivative );
+          input_sw_[rocktype] = sw;
+          input_pc_[rocktype] = pc;
 
-        kr1_[rocktype] = kr1_spline;
-        kr2_[rocktype] = kr2_spline;
-        pc_[rocktype] = pc_spline;
-        swr_[rocktype] = swr;
-        snr_[rocktype] = snr;
-     }
+          csmp::CubicSpline kr1_spline, kr2_spline, pc_spline;
+          kr1_spline.Initialize( sw, krw, krw_start_derivative, krw_end_derivative );
+          kr2_spline.Initialize( sw, kro, kro_start_derivative, kro_end_derivative );
+          pc_spline.Initialize( sw, pc, pc_start_derivative, pc_end_derivative );
+
+          kr1_[rocktype] = kr1_spline;
+          kr2_[rocktype] = kr2_spline;
+          pc_[rocktype]  = pc_spline;
+          swr_[rocktype] = swr;
+          snr_[rocktype] = snr;
+          
+       } // end for rocktypes
 
   //Out();
   // limiting the rocktype number range in the property database to the actual maximum value

@@ -69,16 +69,16 @@ Node<dim>::Node( const Node<dim>& nd )
 */
 template<uint32_t dim>
 Node<dim>::Node( Node<dim>&& nd )
-  : xyz_{ move(nd.xyz_) },
-    idx_{ move(nd.idx_) },
-    parent_element_pointers_{ move(nd.parent_element_pointers_) },
-    neighbor_node_pointers_{ move(nd.neighbor_node_pointers_) },
-    manifold_{ move(nd.manifold_) },
-    parent_node_indexes_{ move(nd.parent_node_indexes_) },
-    at_boundary_{ move(nd.at_boundary_) },
-    BREP_entity_{ move(nd.BREP_entity_)}
+  : xyz_{ std::move(nd.xyz_) },
+    idx_{ std::move(nd.idx_) },
+    parent_element_pointers_{ std::move(nd.parent_element_pointers_) },
+    neighbor_node_pointers_{ std::move(nd.neighbor_node_pointers_) },
+    manifold_{ std::move(nd.manifold_) },
+    parent_node_indexes_{ std::move(nd.parent_node_indexes_) },
+    at_boundary_{ std::move(nd.at_boundary_) },
+    BREP_entity_{ std::move(nd.BREP_entity_)}
   {
-    this->LVS( move(nd.LVS()) );
+    this->LVS( std::move(nd.LVS()) );
   }
 
 
@@ -107,7 +107,7 @@ Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
          neighbor_node_pointers_  = nd.neighbor_node_pointers_;
          manifold_                = nd.manifold_;
          parent_node_indexes_     = nd.parent_node_indexes_;
-         this->LVS( move( nd.LVS() ) );
+         this->LVS( std::move( nd.LVS() ) );
       }
     return *this;
  }
@@ -127,11 +127,11 @@ Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
     xyz_                     = nd.xyz_;
     idx_                     = nd.idx_;
     at_boundary_             = nd.at_boundary_;
-    BREP_entity_             = move( nd.BREP_entity_ );
-    parent_element_pointers_ = move( nd.parent_element_pointers_ );
-    neighbor_node_pointers_  = move( nd.neighbor_node_pointers_ );
-    manifold_                = move( nd.manifold_ );
-    parent_node_indexes_     = move( nd.parent_node_indexes_ );
+    BREP_entity_             = std::move( nd.BREP_entity_ );
+    parent_element_pointers_ = std::move( nd.parent_element_pointers_ );
+    neighbor_node_pointers_  = std::move( nd.neighbor_node_pointers_ );
+    manifold_                = std::move( nd.manifold_ );
+    parent_node_indexes_     = std::move( nd.parent_node_indexes_ );
     this->LVS( nd.LVS() );
  
     return *this;
@@ -322,12 +322,12 @@ void  Node<dim>::Assign( vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors
 
 
 
+    /// copies property values from the argument node to the current node
 template<uint32_t dim>
-void  Node<dim>::AssignPropertyValuesFrom( const Node<dim>& nd )
-  {
-     // copies the property values
-     this->LVS( nd.LVS() );
-  }
+void  Node<dim>::CopyPropertyValuesFrom( Node<dim>& nd )
+ {
+    this->LVS( nd.LVS() );
+ }
 
 
 
@@ -407,7 +407,7 @@ void  Node<dim>::AddNeighbor( Node<dim>* neighbor_node )
 template<uint32_t dim>
 void  Node<dim>::RemoveNeighbor( const Node<dim>* const neighbor_node )
  {
-    remove( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), neighbor_node );
+    auto removed = remove( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), neighbor_node );
  }
  
  

@@ -94,14 +94,14 @@ namespace csmp {
 		// 3. eliminating any potentially disfunctional elements / cells from the model
 		// ----------------------------------------------------------------------------
 		// elements that have a negative Jacobian determinant are assumed to be degenerate and flagged for deletion
-		vector<uint32_t> degenerate_elements;
+		vector<size_t> degenerate_elements;
 		int volume_e_removed(0U), surface_e_removed(0U), line_e_removed(0U);
 		for (auto it = model_domain.CellsBegin(); it != model_domain.CellsEnd(); ++it) {
 			// find broken elements
 			// (an element is regarded as broken if the determinant of its Jacobian inverse is negative at least
 			//  at one of the integration points
 			bool broken_elmt(false);
-			for (size_t ipoint = 0U; ipoint<(*it)->IntegrationPoints(); ++ipoint)
+			for (uint32_t ipoint = 0U; ipoint<(*it)->IntegrationPoints(); ++ipoint)
 				if ((*it)->det_JINV_AtIntegrationPoint(ipoint) <= 0.) {
 					broken_elmt = true;
 					break;
@@ -149,7 +149,7 @@ namespace csmp {
     fs::create_directory(example_name);
     fs::current_path(example_name);
 
-    string input_directory = fs::current_path().parent_path().parent_path();
+    string input_directory = (fs::current_path().parent_path().parent_path()).string();
     input_directory += "/example_inputs/input_meshes/";
 
     //copy Eclipse model files into working directory
@@ -165,7 +165,7 @@ namespace csmp {
     }
 
     //copy variable file into working directory
-    input_directory = fs::current_path().parent_path().parent_path();
+    input_directory = (fs::current_path().parent_path().parent_path()).string();
     input_directory += "/example_inputs/variables_and_configuration_files/";
 
     path = "../../example_inputs/variables_and_configuration_files/";

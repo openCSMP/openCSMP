@@ -24,13 +24,13 @@ inline const ScalarVariable&  makeScalarConstRef( const VARIABLE_FLAG flag, cons
 // implicit invocation of move constructor
 inline ScalarVariable  makeScalar2( const VARIABLE_FLAG flag, const double val )
   {
-     return ScalarVariable(flag,val);
+     return makeScalar(flag,val);
   }
 
 // not inlined version
 ScalarVariable  makeScalarNotInlined( const VARIABLE_FLAG flag, const double val )
   {
-     return ScalarVariable(flag,val);
+     return makeScalar(flag,val);
   }
 
 

@@ -7,7 +7,14 @@
 #include "NumIntegral_BT_D_B_dV.h"
 #include "StressesAndStrains2.h"
 #include "ExtractTensorVariableComponent.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
+#include "SAMG_Exception.h"
+#else
+#include "LinearSolver.h"
+#endif
 
 using namespace std;
 

@@ -2,14 +2,6 @@
 #define INCOMPRESSIBLE_SINGLE_PHASE_FLOW_TENSOR_PERM_3DFEM_VV_CASE
 
 #include "Test.h"
-#include "ANSYS_Model3D.h"
-#include "InputDataManager.h"
-#include "VTU_Interface.h"
-#include "LinearSolver.h"
-#include "PDE_Integrator.h"
-#include "PointSource_rhsop.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
 
 namespace csmp
   {

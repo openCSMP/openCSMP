@@ -472,7 +472,7 @@ IsoparametricLinearHexahedron::OutputElementToRhino( const char* file_name,
 {
     char  outfile[NAME_STRING], elmt[30];
     strcpy( outfile, file_name );
-    sprintf( elmt, "%lu", CurrentID() );
+    snprintf( elmt, sizeof(elmt), "%lu", CurrentID() );
     strcat( outfile, elmt );
     strcat( outfile, ".txt" );
 
@@ -919,7 +919,7 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 */
 double
-IsoparametricLinearHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd )
+IsoparametricLinearHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& BMAT, uint32_t nd )
  {
     assert( nd < npe );
     dNr( NXYZ(nd,0), NXYZ(nd,1), NXYZ(nd,2), DNR );
@@ -932,17 +932,17 @@ IsoparametricLinearHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd )
 
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
-    B.Resize(dim,npe);
-    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
-    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
-    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
-    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
-    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
-    B(0,5) = DNR[5]; B(1,5) = DNS[5]; B(2,5) = DNT[5];
-    B(0,6) = DNR[6]; B(1,6) = DNS[6]; B(2,6) = DNT[6];
-    B(0,7) = DNR[7]; B(1,7) = DNS[7]; B(2,7) = DNT[7];
+    BMAT.Resize(dim,npe);
+    BMAT(0,0) = DNR[0]; BMAT(1,0) = DNS[0]; BMAT(2,0) = DNT[0];
+    BMAT(0,1) = DNR[1]; BMAT(1,1) = DNS[1]; BMAT(2,1) = DNT[1];
+    BMAT(0,2) = DNR[2]; BMAT(1,2) = DNS[2]; BMAT(2,2) = DNT[2];
+    BMAT(0,3) = DNR[3]; BMAT(1,3) = DNS[3]; BMAT(2,3) = DNT[3];
+    BMAT(0,4) = DNR[4]; BMAT(1,4) = DNS[4]; BMAT(2,4) = DNT[4];
+    BMAT(0,5) = DNR[5]; BMAT(1,5) = DNS[5]; BMAT(2,5) = DNT[5];
+    BMAT(0,6) = DNR[6]; BMAT(1,6) = DNS[6]; BMAT(2,6) = DNT[6];
+    BMAT(0,7) = DNR[7]; BMAT(1,7) = DNS[7]; BMAT(2,7) = DNT[7];
 
-    B = JINV * B;
+    BMAT = JINV * BMAT;
 
     return detJ;
  }
@@ -1503,7 +1503,7 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 */
 double
-IsoparametricLinearHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, uint32_t gauss_point )
+IsoparametricLinearHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& BMAT, uint32_t gauss_point )
  {
     // 1. compute local test-function derivative matrix at gauss point
     // get local shape function derivatives at Gauss point
@@ -1518,17 +1518,17 @@ IsoparametricLinearHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, ui
 
     // compose matrix DN = 3 x 8 in global coordinates
     // by multiplication of JINV with local DN
-    B.Resize(dim,npe);
-    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
-    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
-    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
-    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
-    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
-    B(0,5) = DNR[5]; B(1,5) = DNS[5]; B(2,5) = DNT[5];
-    B(0,6) = DNR[6]; B(1,6) = DNS[6]; B(2,6) = DNT[6];
-    B(0,7) = DNR[7]; B(1,7) = DNS[7]; B(2,7) = DNT[7];
+    BMAT.Resize(dim,npe);
+    BMAT(0,0) = DNR[0]; BMAT(1,0) = DNS[0]; BMAT(2,0) = DNT[0];
+    BMAT(0,1) = DNR[1]; BMAT(1,1) = DNS[1]; BMAT(2,1) = DNT[1];
+    BMAT(0,2) = DNR[2]; BMAT(1,2) = DNS[2]; BMAT(2,2) = DNT[2];
+    BMAT(0,3) = DNR[3]; BMAT(1,3) = DNS[3]; BMAT(2,3) = DNT[3];
+    BMAT(0,4) = DNR[4]; BMAT(1,4) = DNS[4]; BMAT(2,4) = DNT[4];
+    BMAT(0,5) = DNR[5]; BMAT(1,5) = DNS[5]; BMAT(2,5) = DNT[5];
+    BMAT(0,6) = DNR[6]; BMAT(1,6) = DNS[6]; BMAT(2,6) = DNT[6];
+    BMAT(0,7) = DNR[7]; BMAT(1,7) = DNS[7]; BMAT(2,7) = DNT[7];
 
-    B = JINV * B;
+    BMAT = JINV * BMAT;
 
     return detJ;
  }
@@ -1605,7 +1605,7 @@ IsoparametricLinearHexahedron::MidSideNodes(std::vector<uint32_t>& ids) const
  
 
 double
-IsoparametricLinearHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
+IsoparametricLinearHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& BMAT )
  {
     dNr( 0.0, 0.0, 0.0, DNR );
     dNs( 0.0, 0.0, 0.0, DNS );
@@ -1617,15 +1617,15 @@ IsoparametricLinearHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
-    B.Resize(dim,npe);
-    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
-    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
-    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
-    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
-    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
-    B(0,5) = DNR[5]; B(1,5) = DNS[5]; B(2,5) = DNT[5];
-    B(0,6) = DNR[6]; B(1,6) = DNS[6]; B(2,6) = DNT[6];
-    B(0,7) = DNR[7]; B(1,7) = DNS[7]; B(2,7) = DNT[7];
+    BMAT.Resize(dim,npe);
+    BMAT(0,0) = DNR[0]; BMAT(1,0) = DNS[0]; BMAT(2,0) = DNT[0];
+    BMAT(0,1) = DNR[1]; BMAT(1,1) = DNS[1]; BMAT(2,1) = DNT[1];
+    BMAT(0,2) = DNR[2]; BMAT(1,2) = DNS[2]; BMAT(2,2) = DNT[2];
+    BMAT(0,3) = DNR[3]; BMAT(1,3) = DNS[3]; BMAT(2,3) = DNT[3];
+    BMAT(0,4) = DNR[4]; BMAT(1,4) = DNS[4]; BMAT(2,4) = DNT[4];
+    BMAT(0,5) = DNR[5]; BMAT(1,5) = DNS[5]; BMAT(2,5) = DNT[5];
+    BMAT(0,6) = DNR[6]; BMAT(1,6) = DNS[6]; BMAT(2,6) = DNT[6];
+    BMAT(0,7) = DNR[7]; BMAT(1,7) = DNS[7]; BMAT(2,7) = DNT[7];
 
     B = JINV * B;
 
@@ -1793,7 +1793,7 @@ IsoparametricLinearHexahedron::OutputNodeDataToVTK( const char* file_name,
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );
-     sprintf( elmt, "%lu", CurrentID() );
+     snprintf( elmt, sizeof(elmt), "%lu", CurrentID() );
      strcat( outfile, elmt );
      strcat( outfile, ".vtk" );
 

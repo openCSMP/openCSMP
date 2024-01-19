@@ -88,8 +88,8 @@ NodeManifold<dim>::NodeManifold( const NodeManifold& nmf )
 
 template<uint32_t dim>
 NodeManifold<dim>::NodeManifold( NodeManifold&& nmf )
- : branches_( move(nmf.branches_) ),
-   parent_geometry_( move(nmf.parent_geometry_) )
+ : branches_( std::move(nmf.branches_) ),
+   parent_geometry_( std::move(nmf.parent_geometry_) )
  {
  }
 
@@ -111,8 +111,8 @@ template<uint32_t dim>
 NodeManifold<dim>& NodeManifold<dim>::operator=( NodeManifold<dim>&& nmf )
  {
     if ( this != &nmf ) {
-         branches_        = move(nmf.branches_);
-         parent_geometry_ = move(nmf.parent_geometry_);
+         branches_        = std::move(nmf.branches_);
+         parent_geometry_ = std::move(nmf.parent_geometry_);
       }
     return *this;
  }
@@ -251,7 +251,7 @@ uint32_t NodeManifold<dim>::Branches() const
 template<uint32_t dim>
 uint32_t NodeManifold<dim>::NodeMapSize() const
 {
-  return node_parent_interface_map_.size();
+  return static_cast<uint32_t>(node_parent_interface_map_.size());
 }
 
 
@@ -263,7 +263,7 @@ uint32_t NodeManifold<dim>::InterFaces(Node<dim>* n) const
   //check map has been calibrated
   assert( !node_parent_interface_map_.empty() );
 
-  return node_parent_interface_map_.at(n).size();
+  return static_cast<uint32_t>(node_parent_interface_map_.at(n).size());
 }
 
 

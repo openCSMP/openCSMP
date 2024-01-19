@@ -3,6 +3,7 @@
 
 #include "Parameter.h"
 #include "DenseMatrix.h"
+
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
 #include "TensorVariable.h"
@@ -11,7 +12,6 @@
 
 namespace csmp {
 
-class Parameter;
 template<uint32_t> class Element;
 template<uint32_t> class PropertyDatabase;
 
@@ -93,7 +93,7 @@ class MathOperatorRHS {
     VARIABLE_TYPE TestOperandType()             const;
     PLACEMENT     TestOperandPlacement()        const;
     uint32_t      TestOperandDataDepth()        const;
-    uint32_t      TestOperandOffset()           const;
+    size_t        TestOperandOffset()           const;
     void          TestOperandOffset( size_t );
 
     /// Accumulation Process Settings
@@ -145,8 +145,7 @@ class MathOperatorRHS {
     virtual void  AssignToGlobal( const CELL<dim>&, std::vector<double>& rhs );
 
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    virtual void  AssignToGlobal(const CELL<dim>&, std::vector<double>& rhs, const std::vector<size_t>&  );
-    // virtual void  AssignToGlobal(const InterFace<dim>&, std::vector<double>& rhs, const std::vector<size_t>& );
+    virtual void  AssignToGlobal( const CELL<dim>&, std::vector<double>& rhs, const std::vector<size_t>& );
 
     virtual MathOperatorRHS<dim,CELL>* clone() const = 0;
 
@@ -157,17 +156,12 @@ class MathOperatorRHS {
     std::pair<Parameter, size_t>        top;                 ///< test function operand
 
     std::vector<double>                 RHS;                 ///< solution vector<double> to be accumulated
-    std::vector<size_t>                 IDT;                 ///< node-ID & global constraint points vector ( test operand )
 
     std::vector<DenseMatrix<DM_MIN> >   MTRL;                ///< material property matrix(es) needed for PDE operand
+  
+  // TODO: remove these non parallelisable members
     DenseMatrix<DM_MIN>                 DERIV;               ///< shape function derivative matrix
     std::vector<double>                 IPOL;                ///< shape function vector
-
-    std::vector<ScalarVariable >        SC;                  ///< node property vector<double> of scalars
-    std::vector<VectorVariable<dim> >   VC;                  ///< vectors
-    std::vector<TensorVariable<dim> >   TS;                  ///< tensors
-    std::vector<ArrayVariable >         AR;                  ///< arrays
-    std::vector<FlaggedArrayVariable >  FR;                  ///< flagged arrays
 
     double                              factor_;             ///< constant factor
 
@@ -189,9 +183,10 @@ class MathOperatorRHS {
 };
 
 // for multi-dimensional solution variables
-void transformNodeIndexVector( uint32_t dim, const csmp::Index&, std::vector<size_t>& );
+//void transformNodeIndexVector( uint32_t dim, const csmp::Index&, std::vector<size_t>& );
 
-
+/// expands element dof vec in var1_comp0, var1_comp2... form
+void transformNodeIndexVector( const csmp::Index&, std::vector<size_t>& );
 
 } // csmp
 

@@ -8,46 +8,9 @@
 
 #include "SplitBoundary_Example.h"
 
-#include "CSMP_definitions.h"
-#include "compareFloats.h"
-#include "ANSYS_Model3D.h"
 #include "ANSYS_Model2D.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
-#include "PDE_Integrator.h"
-#include "PDE_Integrator.h"
-#include "Face.h"
-#include "NumIntegral_NT_op_N_dS.h"
-#ifdef CSMP_WITH_SAMG_SOLVER
-#include "SAMG_Solver.h"
-#include "SAMG_Settings.h"
-#endif
-#ifdef CSMP_WITH_MESCHACH
-#include "Gauss_Solver.h"
-#endif
-
-#include <iostream>
-#include "InputDataManager.h"
-#include "VTK_Interface.h"
+#include "SplitBoundary.h"
 #include "VTU_Interface.h"
-
-// include any header files that you need here...
-#include "SteadyStateDiffusor.h"
-#include "CSMP_highLevelUtilities.h"
-#include "ComputationalSettings.h"
-#include "IAPWS_H2OPropertiesVisitor.h"
-#include "NumIntegral_NT_op_dNi_dV.h"
-#include "PT_op.h"
-#include "NumIntegral_BT_D_B_dV.h"
-#include "NumIntegral_PT_op_dS.h"
-#include "NumIntegral_PT_op_dV.h"
-#include "NumIntegral_BT_D_op_dV.h"
-#include "NumIntegral_BT_op_dV.h"
-#include "StressesAndStrains.h"
-#include "StressesAndStrains2.h"
-#include "NodeCenteredFiniteVolumeTransport.h"
-#include "SinglePhaseVelocityVisitor.h"
-#include "ExtractTensorVariableComponent.h"
 
 using namespace std;
 
@@ -155,21 +118,5 @@ void printNeigboursOfPerimeterElements( const PropertyDatabase<2>& pbase, const 
        }
        
  } // printNeigboursOfPerimeterElements
-
-
-/* TODO: get 3D approach to work in 2D, see below
- // create Boundary
- InsertBoundary( const char* region1, const char* region2,
- const bool remove_dim_minus1_region(true);
- model.CreateInternalBoundaryFrom( "STANDARD", remove_dim_minus1_region );
- set<string> strings_in_bundary_name({"STANDARD"});
- string boundary_name = model.FindBoundaryName( strings_in_bundary_name );
- model.BoundariesOut();
- // create SplitBoundary from boundary
- Boundary<2>& boundary_domain(model.Boundary(boundary_name));
- model.CreateSplitBoundaryFrom( boundary_domain );
- model.SplitBoundariesOut();
-
-*/
 
 } // csmp

@@ -251,17 +251,19 @@ namespace csmp {
     my_w_pure = exp(log_my_w_pure);
   }
   
+  
   template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::MaoDuanBrineRelativeViscosity( double T, double m ) {
     const double Tsquared(T*T);
-    const double A = -0.21319213+0.13651589E-2*T - 0.12191756E-5*Tsquared;
+    const double Ahere = -0.21319213+0.13651589E-2*T - 0.12191756E-5*Tsquared;
     const double B = 0.69161945E-1 - 0.27292263E-3*T + 0.20852448E-6*Tsquared;
     const double C = -0.25988855E-2 + 0.77989227E-5*T;
     
-    log_my_b_rel = A*m + B*pow(m, 2) + C*pow(m, 3);
+    log_my_b_rel = Ahere*m + B*pow(m, 2) + C*pow(m, 3);
     my_b_rel = exp(log_my_b_rel);
     my_b = my_b_rel * my_w_pure;
   }
+  
   
   template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::Visit( Node<dim>* node )

@@ -285,7 +285,6 @@ struct CRC3_RockType0 {
   /// capillary pressure that does not depend on Sw but on radius of well completion  
   double Pc( double /* Sw */ ) const {
        const double IFT = 0.035; // interfacial tension water/CO2 (N/m) 
-std::cerr << IFT / diameter_ << "\n";
        return IFT / diameter_;
     }
 

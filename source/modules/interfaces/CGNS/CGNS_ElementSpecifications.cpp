@@ -7,9 +7,9 @@
 #if CGNS_VERSION < 3100
 # define cgsize_t int
 #else
-# if CG_BUILD_SCOPE
+# ifndef CG_BUILD_SCOPE
 #  error enumeration scoping needs to be off
-# endif
+#endif
 #endif
 
 /**

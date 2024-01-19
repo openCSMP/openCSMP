@@ -3,6 +3,7 @@
 #include "ModelTime.h"
 #include "GlobalVerbose.h"
 #include "Model.h"
+#include "Boundary.h"
 #include "VTU_Interface.h"
 #include "ANSYS_Model2D.h"
 #include "SAMG_Solver.h"
@@ -109,7 +110,7 @@ void Geothermal_Example::Run()
   if (fs::exists(file_name)) fs::copy(file_name, "./");
   else {
     string error_message = "\n\nError: file '";
-    string input_directory = fs::current_path().parent_path().parent_path();
+    string input_directory = (fs::current_path().parent_path().parent_path()).string();
     input_directory += "/example_inputs/variables_and_configuration_files/";
     error_message += (name + "' does not exist in directory "  + input_directory);
     error_message += (", example cannot run, please copy this file into this directory\n");

@@ -4,8 +4,13 @@
 #include "Model.h"
 #include "Exception.h"
 #include "ErrorHandler.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
 #include "SAMG_Settings.h"
+#else
+#include "LinearSolver.h"
+#endif
 
 using namespace std;
 
@@ -134,7 +139,6 @@ size_t IterativeIntegrator<dim,CELLTYPE>::Iterations( ModelSubDomain<dim,CELLTYP
 }
 
 
-
 template<uint32_t dim,template<uint32_t> class CELLTYPE>
 void IterativeIntegrator<dim,CELLTYPE>::SAMG_KeepMemory() {
   SAMG_Settings* settings = GetSAMG_Settings();
@@ -142,7 +146,6 @@ void IterativeIntegrator<dim,CELLTYPE>::SAMG_KeepMemory() {
     settings->Set_iswit(4);
   }
 }
-
 
 
 template<uint32_t dim,template<uint32_t> class CELLTYPE>
@@ -154,7 +157,6 @@ void IterativeIntegrator<dim,CELLTYPE>::SAMG_KeepSettings() {
 }
 
 
-
 template<uint32_t dim,template<uint32_t> class CELLTYPE>
 SAMG_Settings* IterativeIntegrator<dim,CELLTYPE>::GetSAMG_Settings() {
   SAMG_Solver& solver = dynamic_cast<SAMG_Solver&>(this->GetSolver());
@@ -162,6 +164,7 @@ SAMG_Settings* IterativeIntegrator<dim,CELLTYPE>::GetSAMG_Settings() {
 }
 
 #endif // with SAMG_Solver
+
 
 template class IterativeIntegrator<1U>;
 template class IterativeIntegrator<2U>;

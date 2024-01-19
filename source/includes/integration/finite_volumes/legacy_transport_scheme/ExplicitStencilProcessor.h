@@ -27,7 +27,7 @@ struct ExplicitStencilProcessor {
     /// Advection Diffusion Equation
 
     /// first-order accurate solution for advection equation
-    virtual void InitializeFirstOrder( const FV_Parameter& param, const Element<dim>& e ,const VARIABLE_TYPE &vt=SCALAR, const size_t var_comp_nr=0);
+    virtual void InitializeFirstOrder( const FV_Parameter& param, const Element<dim>& e ,const VARIABLE_TYPE &vt=SCALAR, uint32_t var_comp_nr=0u );
 
     /// limited second-order explicit advection equation ( standart limiter, without diffusion )
     void AccumulateExplicitAdvectionSolution2( 
@@ -52,7 +52,7 @@ struct ExplicitStencilProcessor {
                                      const Element<dim>& e,
                                      std::vector<double>& res, 
                                      const VARIABLE_TYPE &vt=SCALAR, 
-                                     const size_t var_comp_nr=0);
+                                     uint32_t var_comp_nr=0 );
 
     /// limited second-order explicit advection-diffusion equation ( standart limiter )
     void AccumulateExplicitAdvectionDiffusionSolution2( 
@@ -147,12 +147,12 @@ struct ExplicitStencilProcessor {
 
     /// inflow & outflow boundary correction for two phase flow
     void AccumulateExplicitTwoPhaseSolutionAtBoundary(const FV_Parameter& param,
-                                              const Element<dim>& e,
-                                              TwoPhaseModel<dim>& relperm,
-                                              uint32_t pnid,
-                                              double& flux,
-                                              bool with_gravity_forces,
-                                              bool with_capillary_spreading);
+                                                      const Element<dim>& e,
+                                                      TwoPhaseModel<dim>& relperm,
+                                                      uint32_t pnid,
+                                                      double& flux,
+                                                      bool with_gravity_forces,
+                                                      bool with_capillary_spreading);
                                     
     void Out() const;
 

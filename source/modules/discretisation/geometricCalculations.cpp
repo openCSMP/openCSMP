@@ -608,20 +608,20 @@ Return order of points which will give counter-clockwise numbering in a righthan
 */
 
 static bool isTetra( const csmp::Point<1U>& pt1,
-              const csmp::Point<1U>& pt2,
-              const csmp::Point<1U>& pt3,
-              const csmp::Point<1U>& pt4,
-              std::map<size_t, size_t>& order )
+                      const csmp::Point<1U>& pt2,
+                      const csmp::Point<1U>& pt3,
+                      const csmp::Point<1U>& pt4,
+                      std::map<size_t, size_t>& order )
 {
   // no tetra in 1D
   return false;
 }
 
 static bool isTetra( const csmp::Point<2U>& pt1,
-              const csmp::Point<2U>& pt2,
-              const csmp::Point<2U>& pt3,
-              const csmp::Point<2U>& pt4,
-              std::map<size_t, size_t>& order )
+                      const csmp::Point<2U>& pt2,
+                      const csmp::Point<2U>& pt3,
+                      const csmp::Point<2U>& pt4,
+                      std::map<size_t, size_t>& order )
 {
   // no tetra in 1D
   return false;

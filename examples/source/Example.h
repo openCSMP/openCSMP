@@ -34,14 +34,14 @@ public:
   /// Reporting interface
   void SetTitle( const std::string& text ) { title_ = text; }
   void SetCategory( const std::string& text ) { category_ = text; }
-  void SetDifficulty( const size_t& difficulty );
+  void SetDifficulty( const int& difficulty );
   void AddDescription( const std::string& text );
   void AddRequirement( const std::string& text ); // use this to tell which source file is used
   void AddAuthor( const std::string& text );
 
   // Return functions
   std::string  GetTitle() const;
-  size_t       GetDifficulty() const;
+  int          GetDifficulty() const;
   std::string  GetCategory() const;
 
 protected:
@@ -70,7 +70,7 @@ private:
   std::list<std::string> descriptions_;
   std::list<std::string> requirements_;
   std::list<std::string> authors_;
-  size_t difficulty_;                       ///< Example Difficulty: 1-5
+  int difficulty_;                       ///< Example Difficulty: 1-5
   // disabled
   Example( const Example& );
   Example& operator = ( const Example& );

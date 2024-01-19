@@ -582,7 +582,7 @@ and poroelastic sources and sinks during transient fluid flow are
 compensated for through the consideration of a flux balance vector that 
 is supplied as a method argument.  
 
-@param time_increment  the current time-increment for
+@param time_interval  the current time-increment for
 the advection step needs to be specified in order to compose the 
 solution. This time increment must satisfy the CFL condition because 
 this is an explicit transport scheme.  
@@ -803,9 +803,9 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
 
                       // now the saturation dependent properties are computed
                       // for all FACETS per SECTOR surrounding the finite volume at the boundary
-                      for ( auto i{0U}; i<e->FV()->FacetsPerSector(pnid); i++ )
+                      for ( auto l{0U}; l<e->FV()->FacetsPerSector(pnid); ++l )
                         {
-                           auto     iFacet( e->FV()->FacetSurroundingSector(pnid,i) );
+                           auto     iFacet( e->FV()->FacetSurroundingSector(pnid,l) );
                            uint32_t inside_node,outside_node;
                            e->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );
 

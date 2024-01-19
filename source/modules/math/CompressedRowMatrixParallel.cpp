@@ -44,7 +44,7 @@ void CompressedRowMatrixParallel::CreatePartitions( uint32_t n_parts, vector<pai
        uint32_t nrow= static_cast<uint32_t>(floor(static_cast<double>((ia.size()-1)/n_parts)));
        // N1 partitions which store (nrow) rows
        // (n_parts - N1) partitions which store (nrow+1) rows
-       uint32_t N1 = n_parts - (ia.size() - nrow * n_parts) + 1U; // Number of partitions with (nrow) rows
+       uint32_t N1 = n_parts - (static_cast<uint32_t>(ia.size()) - nrow * n_parts) + 1U; // Number of partitions with (nrow) rows
 
        ranges.resize(n_parts);
        vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >( ranges ).swap( ranges );
@@ -346,7 +346,7 @@ are halo elements in the corresponding row.
 @return the number of true values in this vector.
 */
 uint32_t CompressedRowMatrixParallel::RowsWithHaloElements( int32_t n_block,
-                                                  vector<pair<pair<uint32_t,uint32_t>,vector<bool> > > & partition_vector  ) const
+                                                            vector<pair<pair<uint32_t,uint32_t>,vector<bool> > > & partition_vector  ) const
  {
     // falsify boolean vector of current partition
     fill( partition_vector[n_block].second.begin(), partition_vector[n_block].second.end(), false );

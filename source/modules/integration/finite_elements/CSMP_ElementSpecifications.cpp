@@ -36,7 +36,7 @@ The CSMP type name of the finite element that shall be queried.
 1 = linear, 2 = quadratic, 3 = cubic.
 
 */
-size_t  CSMP_ElementSpecifications::InterpolationOrder( const std::string& etype )
+uint32_t  CSMP_ElementSpecifications::InterpolationOrder( const std::string& etype )
  {
      if ( LinearElement( CSMP_Type(etype) ) )    return 1U;
      if ( QuadraticElement( CSMP_Type(etype) ) ) return 2U;
@@ -44,7 +44,7 @@ size_t  CSMP_ElementSpecifications::InterpolationOrder( const std::string& etype
      return 0U; // order not identified, probably constant as in a polygon
  }
 
-size_t  CSMP_ElementSpecifications::InterpolationOrder( int8_t etype )
+uint32_t  CSMP_ElementSpecifications::InterpolationOrder( int8_t etype )
   {
     if ( LinearElement( etype ) )    return 1U;
     if ( QuadraticElement( etype ) ) return 2U;

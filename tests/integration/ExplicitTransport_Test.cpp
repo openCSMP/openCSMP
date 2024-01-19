@@ -7,13 +7,21 @@
 //
 
 #include "Model.h"
+#include "Boundary.h"
+//#include "SplitBoundary.h"
 #include "vsetMakers.h"
 #include "ExplicitTransport_Test.h"
 #include "VTK_Interface.h"
 #include "Index.h"
 #include "ANSYS_Model3D.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVEWR
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
+#else
+#include "LinearSolver.h"
+#endif
+
 #include "PDE_Integrator.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
@@ -109,7 +117,7 @@ Model<3U>*  ExplicitTransport_Test::CreateHexahedralModel()
 void ExplicitTransport_Test::run()
  {
     model_ptr_ = CreateTetrahedralModel();
-    Region<3U>  model_domain = model_ptr_->Region("Model");
+    Region<3U>&  model_domain = model_ptr_->Region("Model");
     AssignFlowProperties();
     const bool initialize_flux( true ); // prescibed 'total velocity'
     initializeFiniteVolumeProperties( *model_ptr_, model_domain, initialize_flux );
@@ -313,7 +321,7 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
     // --------------------------------------------------------
     const csmp::Index  vol_key(model_ptr_->Database().StorageKey("finite volume"));
     double             total_volume(0.), total_PV(0.);
-    Region<3U>         model_domain(model_ptr_->Region("Model"));
+    Region<3U>&        model_domain(model_ptr_->Region("Model"));
     const double       model_volume = model_domain.Volume(); // finite element estimate
 
     for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
@@ -417,7 +425,7 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
 */
 void ExplicitTransport_Test::TestInteriorFluxBalance( double tolerance_relaxation_factor )
  {
-    const Region<3U>   model_domain(model_ptr_->Region("Model"));
+    const Region<3U>&  model_domain(model_ptr_->Region("Model"));
     const csmp::Index  pf_key(model_ptr_->Database().StorageKey("fluid pressure"));
     const csmp::Index  flux_key(model_ptr_->Database().StorageKey("facet flux"));
     model_domain.UpdateMemberIndexes();
@@ -456,7 +464,7 @@ void ExplicitTransport_Test::TestNoFlowBoundaryFluxBalance( double tolerance_rel
  {
     const csmp::Index  pf_key(model_ptr_->Database().StorageKey("fluid pressure"));
     const csmp::Index  flux_key(model_ptr_->Database().StorageKey("facet flux"));
-    Region<3U>         model_domain(model_ptr_->Region("Model"));
+    Region<3U>&        model_domain(model_ptr_->Region("Model"));
  
     double  min_val(1.0e30), max_val(-1.0e30);
     for ( auto nit=model_domain.PerimeterNodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
@@ -560,8 +568,8 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 2, true );
 
     // 1.3 integrating this initial tracer concentration
-    Region<3U>  model_domain = model_ptr_->Region("Model");
-    const bool  multiply_with_porosity(true);
+    Region<3U>&  model_domain = model_ptr_->Region("Model");
+    const bool   multiply_with_porosity(true);
     const double initial_concentration = model_domain.VolumeIntegral_x_Thickness( "concentration",  multiply_with_porosity );
  
     // 1.4 transporting for trice the time

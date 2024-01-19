@@ -191,7 +191,7 @@ void RhinoSurfaceReader::ObjectToPData( const string& obj_name,
                 {
                    coord[static_cast<uint32_t>(j)] = (*lit)[i][j];
                    // convert double coordinate value to string and add to hash key
-                   sprintf( num, "%lf", (*lit)[i][j] );
+                   snprintf( num, sizeof(num), "%lf", (*lit)[i][j]  );
                    key += num;
                 }
               // adding new map entry
@@ -228,7 +228,7 @@ void RhinoSurfaceReader::ObjectToPData( const string& obj_name,
                 {
                    coord[static_cast<uint32_t>(j)] = (*lit)[i][j];
                    // convert double coordinate value to string and add to hash key
-                   sprintf( num, "%lf", (*lit)[i][j] );
+                   snprintf( num, sizeof(num), "%lf", (*lit)[i][j]  );
                    key += num;
                 }
               // search the ID map for the node number
@@ -861,7 +861,7 @@ void RhinoSurfaceReader::MoveCoordinates( double x_move, double y_move, double z
     map<string,list<mjl::Triangle3D> >::iterator  oit;  
     list<mjl::Triangle3D>::iterator                            tit;
     mjl::Point3D                                               pt[3];
-    int32_t                                                     pid;
+    size_t                                                     pid;
     
     for ( oit = objects.begin(); oit!=objects.end(); oit++ )
       for ( tit=(*oit).second.begin(); tit!=(*oit).second.end(); tit++ )

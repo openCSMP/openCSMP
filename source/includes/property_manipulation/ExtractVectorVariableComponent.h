@@ -22,12 +22,12 @@ class ExtractVectorVariableComponent : public Interrelation<dim> {
     Operand<dim>&        V;
     Operand<dim>&        S;
     VectorVariable<dim>  vc;
-    const size_t         component;
+    const uint32_t       component;
     
   public:
     ExtractVectorVariableComponent( const PropertyDatabase<dim>& p,
                                     const char* vec_var, const char* scalar_var, 
-                                    size_t comp );
+                                    uint32_t comp );
                                     
     ~ExtractVectorVariableComponent();
     

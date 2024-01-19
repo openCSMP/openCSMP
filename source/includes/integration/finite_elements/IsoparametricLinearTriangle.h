@@ -79,9 +79,7 @@ class IsoparametricLinearTriangle : public FiniteElement {
     std::vector<double>   ss_;
     std::vector<double>   W_;
     DenseMatrix<DM_MIN>   NXY_;
-//    DenseMatrix<DM_MIN> DN_;
     DenseMatrix<DM_MIN>   JMAT_;
-//    std::vector<double> LXY_;
     std::vector<double>   RS_;
     bool                  use2Dto3Djacobi_;
 

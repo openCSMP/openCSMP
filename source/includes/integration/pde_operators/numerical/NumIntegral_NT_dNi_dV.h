@@ -9,7 +9,7 @@ namespace csmp {
 enum SPATIAL_DERIVATIVE { X_DIRECTION=0, Y_DIRECTION=1, Z_DIRECTION=2 };
 
 /**
-    Accumulation of scalar coordinate axis aligned test-function * test function derivative products.
+    Accumulation of scalar-coordinate-axis-aligned test-function * test function derivative products.
     @attention no operand values are required.
 
     @author Yan Zaretskiy & Sebastian Geiger (2009), coefficient free version by SKM 29/2/16
@@ -20,22 +20,22 @@ template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_NT_dNi_dV : public MathOperatorLHS<dim,CELL> {
   public:
     NumIntegral_NT_dNi_dV( const PropertyDatabase<dim>&,
-                           /* no operand in this pde operator */
+                           /* no operand 'oper' in this pde operator */
                            const char* basic,
                            const char* test );
     
     virtual ~NumIntegral_NT_dNi_dV();
   
     /// does nothing since there are no operands to read
-    virtual void GetOperands( const CELL<dim>& ) {}
+    virtual void GetOperands( const CELL<dim>& ) { /* no operand to read */ }
   
-    /// calculates the required finite element integral
+    /// Computes N_transposed * DN_i product that is weighted by the determinant of Jacobian matrix.
     virtual void ComputeContribution( const CELL<dim>& );
   
-    /// to chose the spatial derivate direction of interest; default is Y-axis
+    /// chose the desired spatial derivate; default is Y
     void SpatialDerivative( SPATIAL_DERIVATIVE );
   
-    /// to transpose the element matrix that will get accumulated; default is false
+    /// transposes LHS element matrix before it gets accumulated; default is false
     void Transposed();
   
     virtual NumIntegral_NT_dNi_dV<dim,CELL>* clone() const { return new NumIntegral_NT_dNi_dV<dim,CELL> (*this); }

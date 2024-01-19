@@ -319,7 +319,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs()
 Removes named Region object and (optionally) its elements and nodes.
 
 @param  regionName The name of the region object which shall be removed.
-@param  delete_elmts_and_update_connectivity  gets MeshManager to delete elements and nodes and rebuilt local connectivity.
+@param  erase_elmts_and_update_connectivity  gets MeshManager to delete elements and nodes and rebuilt local connectivity.
 
 @note If the region which shall be removed does not exist, the method reports a warning.
 
@@ -797,7 +797,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
         it = groups.begin(); it != groups.end(); it++ )
   {
     cout << "\nProperty value: " << (*it).first;
-    sprintf( num, "%lu", group_idx++ );
+    snprintf( num, sizeof(num), "%lu", group_idx++ );
     (*it).second = string( gname + num );
 
     if ( (*it).second != "undefined" )
@@ -1321,7 +1321,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
       while ( !elements.empty() )
         {
            // creating name of contiguous subregion
-           sprintf( num, "%lu", n_subgroups );
+           snprintf( num, sizeof(num), "%lu", n_subgroups );
            subregion_name = region_name + num;
            if ( n_subgroups == 1U ) {
                  cout <<"\nModel<"<< dim <<">::PartitionRegionIntoContiguousSubRegions: ";
@@ -1467,7 +1467,7 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
     ++subgroupNum;
     string  subregion_name;
     char    num[128];
-    sprintf( num, "%lu", subgroupNum );
+    snprintf( num, sizeof(num), "%lu", subgroupNum );
     subregion_name = region_name + num;
     cout << "\t\t\t'" << subregion_name << "'";
     cout << " (" << subgroupSize << " elmts)" << endl;
@@ -1746,7 +1746,7 @@ void  RegionInterface<dim, REGION_COMPLEX>::CopyRegion( const char* existing_reg
   // will not be unique because it overlaps with the original region
   pair<typename map<string, csmp::Region<dim> >::iterator, bool>
     it = (unique_region) ? uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( gr_ref ) ) ) :
-    regionMap_.insert( make_pair( output_region, move( csmp::Region<dim>( gr_ref ) ) ) );
+    regionMap_.insert( make_pair( output_region, std::move( csmp::Region<dim>( gr_ref ) ) ) );
   if ( !it.second )
     throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::CopyRegion",
                            "region to copy to- could not be formed",
@@ -2332,7 +2332,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region,
   vector<csmp::Element<dim>*>( new_region1 ).swap( new_region1 );
 
   // rebuilding the decimated region
-  r1_ref.CellVector() = move( new_region1 );
+  r1_ref.CellVector() = std::move( new_region1 );
   r1_ref.CreateNodePointerVector();
   r1_ref.IdentifyPerimeter();
 
@@ -2413,7 +2413,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::MoveToNonUniqueRegions( const char* u
 
   // performing the move
   auto region_handle = uniqueRegionMap_.extract( unique_region );
-  regionMap_.insert( move(region_handle) );
+  regionMap_.insert( std::move(region_handle) );
 
   return true;
 

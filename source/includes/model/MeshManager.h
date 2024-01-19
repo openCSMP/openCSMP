@@ -80,6 +80,9 @@ public:
   /// number of Manifold objects existing in conjuction with the split boundaries
   size_t NodeManifolds() const;
   
+  /// order of shape functions used by the elements in the mesh; @return set to record potentially different levels of P-refinement
+  std::set<uint32_t> OrderOfShapeFunctions() const;
+  
   typename plf::colony<Node<dim> >::iterator      NodesBegin();
   typename plf::colony<Node<dim> >::iterator      NodesEnd();
 

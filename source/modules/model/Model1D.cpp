@@ -175,9 +175,9 @@ template<uint32_t dim>
 void Model1D<dim>::Initialize( VSet<dim>& vset )
 {
     // Create Model from Vset data and conectivity information
-    const bool create_boundaries                    ( false );
-    const bool non_box_shaped_model                 ( false );
-    const bool isoparametric_elements               ( true  );
+//    const bool create_boundaries                    ( false );
+//    const bool non_box_shaped_model                 ( false );
+//    const bool isoparametric_elements               ( true  );
 
     Model<dim>::Initialize( vset );
 }

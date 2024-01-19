@@ -40,10 +40,10 @@ void FluidCompressibilitySourceLHS<dim>::AccumulateStencil( const Element<dim>& 
         double pf0(0.), pf1(0.);
         // getting pressures p0 and p1 at sector integration points 
         if ( interpolate_pf_to_sector_ip_ == true ) {
-             const size_t s_ip(0U), n_nodes(e.Nodes()); // sector integration point and element nodes
+             const uint32_t s_ip(0U), n_nodes(e.Nodes()); // sector integration point and element nodes
              e.N_AtSectorIntegrationPoint( i, s_ip );
              // interpolate pressures to sector integration point
-             for ( size_t j{0U}; j<n_nodes; ++j ) {
+             for ( uint32_t j{0U}; j<n_nodes; ++j ) {
                   pf0 += e.FE()->NRST[j] * e.N(j)->Read( key_PF0_ );
                   pf1 += e.FE()->NRST[j] * e.N(j)->Read( key_PF1_ );
                }

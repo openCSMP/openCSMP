@@ -26,12 +26,12 @@ class FemFromGridVisitor : public Visitor<dim> {
     virtual void Visit( Element<dim>* );  // this includes constraint points as target 
 
   private:
-    const PropertyDatabase<dim>&          pref;
+    const PropertyDatabase<dim>& pref;
     const FiniteDifferenceGrid&  grid;
-    std::vector<ElementGrid>         egrids;
-    DenseMatrix<DM_MIN>           XY, NN;
+    std::vector<ElementGrid>     egrids;
+    DenseMatrix<DM_MIN>          XY, NN;
     ScalarVariable               val;
-    csmp::Index                      key;
+    csmp::Index                  key;
 
     bool IsInsideTriangle( double x, double y, bool update=true );
     bool IsInsideQuadrilateral( double x, double y );

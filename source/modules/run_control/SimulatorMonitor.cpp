@@ -295,8 +295,8 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
             vector<uint32_t> old_index_to_new_index(columnheaders.size());
             std::fill(old_index_to_new_index.begin(),old_index_to_new_index.end(),values_column_headers_.size());
 
-            for (auto i = 0; i < columnheaders.size() ; i++)
-                for (size_t j = 0 ; j < values_column_headers_.size(); j++)
+            for (auto i = 0u; i < columnheaders.size() ; i++)
+              for (uint32_t j = 0u; j < values_column_headers_.size(); j++)
                 {
                     if ( columnheaders[i].find(string(values_column_headers_[j]+"("))!=std::string::npos){
                         old_index_to_new_index[i]=j;
@@ -305,8 +305,8 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
                 }
 
             std::fill(rowdata_.begin(), rowdata_.end(),0.0);
-            for (auto i = 0 ; i < data.size() ; i++){
-                for (size_t j = 0; j < columnheaders.size() ; j++)
+            for (auto i = 0u; i < data.size() ; i++){
+                for (uint32_t j = 0u; j < columnheaders.size() ; j++)
                     if (j < values_column_headers_.size())
                         values_[i][old_index_to_new_index[j]]=data[i][j];
             }
@@ -328,7 +328,7 @@ string SimulatorMonitor<dim>::UScoreForSpace(string text)
 }
 
 template<uint32_t dim>
-void SimulatorMonitor<dim>::InsertValueHeader(string property_regionname, vector<uint32_t> &indexes)
+void SimulatorMonitor<dim>::InsertValueHeader(string property_regionname, vector<size_t>& indexes )
 {
     string property_column_header_entry=UScoreForSpace(property_regionname);
 

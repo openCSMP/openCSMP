@@ -12,8 +12,14 @@
 #include "MeshDiagnostics.h"
 #include "ModelTopology.h"
 #include "CSMP_highLevelUtilities.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
+#else
+#include "LinearSolver.h"
+#endif
+
 #include "Region.h"
 #include "PDE_Integrator.h"
 #include "NumIntegral_dNT_dN_dV.h"

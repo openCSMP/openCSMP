@@ -33,26 +33,26 @@ class Fluid {
     Fluid();
 
     /// the node property fluid viscosity (Pa.s) returned has been interpolated to the user-specified target placement (argument parameter)
-    double Viscosity( Node<dim>* const, size_t phase ) const;
+    double Viscosity( Node<dim>* const, uint32_t phase ) const;
     /// the node property fluid viscosity (Pa.s) interpolated to element barycentre
-    double Viscosity( Element<dim>* const, size_t phase ) const;
+    double Viscosity( Element<dim>* const, uint32_t phase ) const;
     /// the node property fluid viscosity (Pa.s) at the node i of the element
-    double Viscosity( Element<dim>* const, size_t node, size_t phase ) const;
+    double Viscosity( Element<dim>* const, uint32_t node, uint32_t phase ) const;
 
     /// the returned node property fluid density (of phase) (kg/m3) interpolated to the user-specified target placement (argument parameter)
-    double Density( Node<dim>* const, size_t phase ) const;
-    double Density( Element<dim>* const, size_t phase ) const;
-    double Density( Element<dim>* const, size_t node, size_t phase ) const;
+    double Density( Node<dim>* const, uint32_t phase ) const;
+    double Density( Element<dim>* const, uint32_t phase ) const;
+    double Density( Element<dim>* const, uint32_t node, uint32_t phase ) const;
 
     /// returns saturation-weighted density average (kg/m3) for the fluid mixture; properties are interpolated to the target placement
     double MixtureDensity( Node<dim>* const ) const;
     double MixtureDensity( Element<dim>* const ) const;
-    double MixtureDensity( Element<dim>* const, size_t node ) const;
+    double MixtureDensity( Element<dim>* const, uint32_t node ) const;
 
     /// returns the ratio of the phase viscosities at the target placement
     double ViscosityRatio( Node<dim>* const ) const;
     double ViscosityRatio( Element<dim>* const ) const;
-    double ViscosityRatio( Element<dim>* const, size_t node ) const;
+    double ViscosityRatio( Element<dim>* const, uint32_t node ) const;
 
   protected:
     /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of

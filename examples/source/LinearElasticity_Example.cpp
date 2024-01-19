@@ -77,7 +77,10 @@ void LinearElasticity_Example::Specifications()
 */
 void LinearElasticity_Example::Run()
 {
-    /*
+    // ---------------------------------------------------------------------------------------
+    // 0. Import model from Shewchuk's Triangle mesher
+    // ---------------------------------------------------------------------------------------
+//    /* uncomment this block to use it
     TRIANGLE_Interface  mesh_interface;
     VSet<2U>            mesh_container;
     char                file_name[200];
@@ -89,12 +92,13 @@ void LinearElasticity_Example::Run()
 
     // 'example12.txt' is the text file that defines the variables used in this example
     Model<2U>  model( mesh_container, "LinearElasticity_Example-variables.txt" );
+    string     config_file = file_name; // model.Name();
     mesh_container.Erase();
-    */
-
+//*/
     // ---------------------------------------------------------------------------------------
     // 1. Load CSMP native format model
     // ---------------------------------------------------------------------------------------
+/*
     string model_name;
     cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'blunt30deg.1':"<<endl;
     cin.ignore();
@@ -109,7 +113,7 @@ void LinearElasticity_Example::Run()
     CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
     //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
     Model<2U>  model(model_name, variable_file);
-
+    */
     printModelDimensions( model, true );
 
     // assigns the element area to a distributed variable called 'area'
@@ -150,15 +154,19 @@ void LinearElasticity_Example::Run()
   // ---------------------------------------------------------------------------------------
   // 5. Computing fluid pressure
   // ---------------------------------------------------------------------------------------
-  // NB: interrelations are deprecated now; nonetheless this demontrates use of STL unary functions
+  // interrelation demontrating the use of STL unary functions
     if ( with_pore_pressure ) {
          const double fluid_viscosity(1.0e-03);
          ConstantFactor<2U,divides>  conductivity( model.Database(),
                                                   "conductivity", "permeability",
                                                    fluid_viscosity );
          model.Apply( conductivity );
-         SteadyStatePressure( model );
+         // input variable values
+         printRangeOfVariable( model, "conductivity" );
          vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 0 );
+         // fluid pressure computation
+         SteadyStatePressure( model );
+         vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 1 );
       }
 
 
@@ -186,13 +194,10 @@ void LinearElasticity_Example::Run()
 
     deformation.Add( &stiffness );
     deformation.Add( &bforces );  // force vector must always be there so that Dirichlet conditions are accumulated
-    if ( with_body_forces )       deformation.Add( &bodyforce );
-    if ( with_volume_strains )    deformation.Add( &volstrain );
-    if ( with_pore_pressure )     deformation.Add( &porepressure );
-
-#ifdef CSMP_WITH_SAMG_SOLVER
+    if ( with_body_forces )    deformation.Add( &bodyforce );
+    if ( with_volume_strains ) deformation.Add( &volstrain );
+    if ( with_pore_pressure )  deformation.Add( &porepressure );
     if ( with_boundary_stresses ) deformation.AddBoundaryIntegral( &bstresses );
-#endif
 
     const bool plane_strain(true);
     const bool principal_vectors(true);
@@ -201,9 +206,31 @@ void LinearElasticity_Example::Run()
     if ( with_plane_stress ) postpro.PlaneStress();
      deformation.AddPostProcess( &postpro );
 
-    if ( !restricted_to_rock ) deformation.IntegrateOver( model_domain );
+    if ( !restricted_to_rock ) {
+        // printing the variable values that enter the equations for the whole model domain
+        printRangeOfVariable( model, "Young's modulus" );
+        printRangeOfVariable( model, "Poisson's ratio" );
+        if ( with_body_forces ) printRangeOfVariable( model, "gravity force" );
+        if ( with_volume_strains ) printRangeOfVariable( model, "dilatation" );
+        printRangeOfVariable( model, "displacement" );
+        vtk_output.OutputDataToVTK( model, "displacement", "displacement", 0, true );
+        if ( with_pore_pressure ) printRangeOfVariable( model, "fluid pressure" );
+        // solving the mechanics problem on whole model
+        deformation.IntegrateOver( model_domain );
+      }
     // note! - the model must be supplied here so that the algorithm can search for boundaries that touch the computational domain
-    else deformation.IntegrateOver( model, model.Region("rock") );
+    else {
+        // printing the variable values that enter the equations for the whole model domain
+        printRangeOfVariable( model, "rock", "Young's modulus" );
+        printRangeOfVariable( model, "rock", "Poisson's ratio" );
+        if ( with_body_forces ) printRangeOfVariable( model, "rock", "gravity force" );
+        if ( with_volume_strains ) printRangeOfVariable( model, "rock", "dilatation" );
+        printRangeOfVariable( model, "rock", "displacement" );
+        vtk_output.OutputDataToVTK( model, "rock", "displacement", "displacement", 0, true );
+        if ( with_pore_pressure ) printRangeOfVariable( model, "rock", "fluid pressure" );
+        // solving the mechanics problem only for the region 'rock'
+        deformation.IntegrateOver( model, model.Region("rock") );
+      }
 
 
   // ---------------------------------------------------------------------------------------
@@ -291,7 +318,7 @@ void LinearElasticity_Example::SteadyStatePressure( Model<2U>& model )
 
    pressure.AddPostProcess( &postpro );
    
-#ifdef CSMP_WITH_SAMG_SOLVER && SAMG_MULTIPLE_INSTANCES
+#if defined CSMP_WITH_SAMG_SOLVER && defined SAMG_MULTIPLE_INSTANCES
    pressure.GetSolverSettings().SetSolverInstance(2);
 #endif
    pressure.ComputeSteadyState( model.Region("Model") );

@@ -14,11 +14,11 @@ distributed with the code package available at www.MindView.net.*/
 #include <iterator>
 #include <string>
 
-struct Isalpha : std::unary_function<char, bool> {
+struct Isalpha {
   bool operator()(char c) { return static_cast<bool>(std::isalpha(c)); }
 };
 
-class Delimiters : std::unary_function<char, bool> {
+class Delimiters {
   std::string exclude;
 public:
   Delimiters() {}
@@ -29,8 +29,7 @@ public:
 };
 
 template<class InputIter, class Pred = Isalpha>
-class TokenIterator : public std::iterator<
-    std::input_iterator_tag, std::string, std::ptrdiff_t> {
+class TokenIterator {
   InputIter first;
   InputIter last;
   std::string word;

@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Stephan Matthai. All rights reserved.
 //
 
-#include "CSMP_definitions.h"
 #include "SKUA_Example.h"
 #include "ModelTopology.h"
 #include "EigenSolver.h"
 
-#include "Boundary.h"
 #include "Model.h"
+#include "Boundary.h"
+#include "SplitBoundary.h"
 #include "Region.h"
 #include "VSet.h"
 

@@ -8,9 +8,9 @@
 
 namespace csmp {
 
-template<uint32_t dim> class Visitor;
-template<uint32_t dim> class Element;
-template<uint32_t dim> class NodeManifold;
+template<uint32_t> class Visitor;
+template<uint32_t> class Element;
+template<uint32_t> class NodeManifold;
 class FiniteElement_TestData;
 
 /**
@@ -115,8 +115,8 @@ class Node : public LocalVariableStorage<dim,Node> {
     /// expects a sorted vector without duplicates
     void Assign( std::vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors=false );
     
-    /// copies the values of the stored node properties over to the current node
-    void  AssignPropertyValuesFrom( const Node<dim>& );
+    /// copies property values from the argument node to the current node
+    void CopyPropertyValuesFrom( Node<dim>& );
 
     /// builds the neighbor connectivity working through higher-dimensional parent element edges that the node is part of; returns new number of neighbors
     uint32_t AssignNodeNeighbors();

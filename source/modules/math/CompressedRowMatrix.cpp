@@ -66,16 +66,16 @@ void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&
     G.ia.push_back(0);
     int32_t index=0;
     double initial_value(0.);
-    uint32_t num_nodes = gref.Nodes();
+    size_t num_nodes = gref.Nodes();
 
     for (const auto & test_operand : test_operands) {
       if (test_operand.first.key.place != NODE)
         throw csmp::Exception(ERROR, "generateSparsityPatternEliminatingEssentialConditions()", "only supporting nodal variables");
 
       csmp::Index prop_key = test_operand.first.key;
-      size_t offset = test_operand.second;
+      uint32_t offset = static_cast<uint32_t>(test_operand.second);
 
-      uint32_t variable_size(1);
+      uint32_t variable_size{1U};
       if (prop_key.type == SCALAR) variable_size = 1;
       else if (prop_key.type == VECTOR) variable_size = dim;
       else if (prop_key.type == TENSOR) variable_size = dim*dim;
@@ -92,7 +92,7 @@ void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&
           size_t idx = (*nit)->Idx();
           size_t pos = DOF_indexes[idx];
           if(pos != NULL_IDX)
-            node_indexes.insert(pos * variable_size + i + offset);
+            node_indexes.insert(static_cast<uint32_t>(pos) * variable_size + i + offset);
 
           //neighboring nodes of current node
           for (auto n{0U}; n < (*nit)->Neighbors(); n++) {
@@ -102,13 +102,15 @@ void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&
               idx = nd->Idx();
               pos = DOF_indexes[idx];
               if(pos != NULL_IDX)
-                node_indexes.insert(pos * variable_size + i + offset);
+                node_indexes.insert(static_cast<uint32_t>(pos) * variable_size + i + offset);
           }
 
           index += node_indexes.size();
           G.ia.push_back(index);
-          for (uint32_t node_index: node_indexes) {
-            G.ja.push_back(node_index);
+          for ( const auto& node_index : node_indexes ) {
+          // TODO: the CRS only takes 'int32_t' for ja as required by samg
+            assert( node_index < numeric_limits<int32_t>::max() );
+            G.ja.push_back( static_cast<int32_t>(node_index) );
             G.a.push_back(initial_value);
           }
         }
@@ -118,7 +120,7 @@ void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&
       for (auto nit = gref.PerimeterNodesBegin(); nit != gref.NodesEnd(); nit++) {
         if ((*nit)->Status(prop_key) == DIRICH) continue; //ignoring dirichlet nodes
         for (auto i{0U}; i < variable_size; i++) {
-          set<uint32_t> node1_pos;
+          set<size_t> node1_pos;
           //current node
           auto node1 = (*nit);
           size_t idx1 = node1->Idx();
@@ -167,8 +169,9 @@ void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&
 
           index += node1_pos.size();
           G.ia.push_back(index);
-          for (auto node_index: node1_pos) {
-            G.ja.push_back(node_index);
+          for ( const auto& node_index : node1_pos ) {
+            assert( node_index < numeric_limits<int32_t>::max() );
+            G.ja.push_back(static_cast<uint32_t>(node_index));
             G.a.push_back(initial_value);
           }
 
@@ -180,7 +183,7 @@ void generateSparsityPatternEliminatingEssentialConditions( CompressedRowMatrix&
     } //end looping over test_operands
 
     G.ia.pop_back();
-    G.ia.push_back( G.ja.size() );
+    G.ia.push_back( static_cast<uint32_t>(G.ja.size()) );
 
 
 #ifdef debug_sparsity_pattern
@@ -371,9 +374,9 @@ CompressedRowMatrix::CompressedRowMatrix( const CompressedRowMatrix& crm )
  }
 
 CompressedRowMatrix::CompressedRowMatrix( CompressedRowMatrix&& crm ) noexcept
-  : ia(move(crm.ia)),
-    ja(move(crm.ja)),
-    a(move(crm.a))
+  : ia(std::move(crm.ia)),
+    ja(std::move(crm.ja)),
+    a(std::move(crm.a))
   {
     if(verbose_) cout<<"CompressedRowMatrix: called move constructor"<<endl;
   }
@@ -392,9 +395,9 @@ CompressedRowMatrix&  CompressedRowMatrix::operator=( const CompressedRowMatrix&
   CompressedRowMatrix&  CompressedRowMatrix::operator=( CompressedRowMatrix&& crm ) noexcept
   {
     if ( &crm != this ) {
-      ia = move(crm.ia);
-      ja = move(crm.ja);
-      a  = move(crm.a);
+      ia = std::move(crm.ia);
+      ja = std::move(crm.ja);
+      a  = std::move(crm.a);
     }
     if(verbose_) cout<<"CompressedRowMatrix: called move assignment operator"<<endl;
     return *this;
@@ -424,13 +427,15 @@ double  CompressedRowMatrix::operator()( uint32_t i, uint32_t j ) const
 */
 
 
-double CompressedRowMatrix::operator()( size_t i, size_t j ) const
-{
-  assert( i < ja.size()-1U );
-  assert( j < ja.size()-1U );
+double CompressedRowMatrix::operator()( uint32_t i, uint32_t j ) const
+  {
+    assert( i < ja.size()-1U );
+    assert( j < ja.size()-1U );
+    assert( i < numeric_limits<int32_t>::max() );
+    assert( j < numeric_limits<int32_t>::max() );
 
-  return this->At(i,j);
-}
+    return this->At(i,j);
+  }
 
 
 /**
@@ -970,15 +975,15 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
 
 
 
-size_t CompressedRowMatrix::Rows() const
+uint32_t CompressedRowMatrix::Rows() const
 {
-    return (ia.size()-1U);
+    return static_cast<uint32_t>(ia.size()-1U);
 }
 
 
-size_t CompressedRowMatrix::Cols() const
+uint32_t CompressedRowMatrix::Cols() const
 {
-    return (ia.size()-1U);
+    return static_cast<uint32_t>(ia.size()-1U);
 }
 
 

@@ -1,6 +1,7 @@
 #include "StreamFunction_Example.h"
 
 #include "Model.h"
+#include "Boundary.h"
 #include "Region.h"
 #include "PDE_Integrator.h"
 #include "CSMP_highLevelUtilities.h"
@@ -121,7 +122,7 @@ void StreamFunction_Example::Run()
   if (fs::exists(file_name)) fs::copy(file_name, "./");
   else {
     string error_message = "\n\nError: file '";
-    string input_directory = fs::current_path().parent_path().parent_path();
+    string input_directory = (fs::current_path().parent_path().parent_path()).string();
     input_directory += "/example_inputs/variables_and_configuration_files/";
     error_message += (name + "' does not exist in directory "  + input_directory);
     error_message += (", example cannot run, please copy this file into this directory\n");
@@ -203,7 +204,7 @@ void StreamFunction_Example::Run()
 
 // TESTING VTK OUTPUT OF QUADRATIC TRIANGLE ELEMENTS
 const csmp::Index pf_key = model.Database().StorageKey("fluid pressure");
-Region<2U>  rref = model.Region("Model");
+Region<2U>&       rref   = model.Region("Model");
 rref.E(5)->CoordinateMatrix();
 DenseMatrix<DM_MIN> DATA;
 DATA.Resize(1,6);

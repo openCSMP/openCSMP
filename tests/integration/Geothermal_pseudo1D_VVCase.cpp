@@ -1,4 +1,39 @@
 #include "Geothermal_pseudo1D_VVCase.h"
+#include "Model.h"
+#include "Boundary.h"
+#include "GlobalVerbose.h"
+#include "PropertyHandle.h"
+#include "VTU_Interface.h"
+#include "ConductivityVisitor.h"
+#include "PropertyAtPointVisitor.h"
+#include "ThermalVisitor.h"
+#include "SourceVisitor.h"
+
+#include "ANSYS_Model2D.h"
+#include "ANSYS_Model3D.h"
+
+#include "InputDataManager.h"
+#include "ComputationalSettings.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Solver.h"
+#include "SAMG_Settings.h"
+#else
+#include "LinearSolver.h"
+#endif
+
+#include "PDE_Integrator.h"
+#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_SetRHS_to_Zero.h"
+#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_lhsop_N_dV.h"
+#include "NumIntegral_NT_op_N_dV.h"
+#include "PointSource_rhsop.h"
+
+#include "VelocityAndVolumeFlux.h"
+
+#include "ExplicitMassBasedTransport.h"
+#include "MassBasedStencilProcessor.h"
 
 using namespace std;
 
@@ -113,9 +148,9 @@ Criterion:  comparison with TOUGH
     // ---------------------------------
     // Finite Element Mesh Construction
     std::string geometry_name ("2000x1000_mesh"); 
-	std::string regions_name (this->getName()); 
-	std::string config_name (this->getName()); 
-	std::string vars_name (this->getName()+".txt");
+    std::string regions_name (this->getName());
+	  std::string config_name (this->getName());
+	  std::string vars_name (this->getName()+".txt");
     
     ANSYS_Model2D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() , false, true );
     model.InstantiateFiniteVolumes();
@@ -168,7 +203,7 @@ Criterion:  comparison with TOUGH
 
     //! Thermal Visitor
     ThermalVisitor<DIM>   thermal_equilibrator( model);
-	SourceVisitor<DIM>    source_calculator(model);
+	  SourceVisitor<DIM>    source_calculator(model);
 
     //! get nodal rock properties
     model.ExtrapolateCellToNodeProperty("porosity", "nodal porosity");
@@ -183,15 +218,12 @@ Criterion:  comparison with TOUGH
 
 
     //! to quickly replace SAMG with LU solver when necessary, uncomment
-    #ifdef CSMP_WITH_SAMG_SOLVER
-    //LUdcmp_Solver solver;
-    //SAMG_Settings settings;
-    //SAMG_Solver solver(&settings);
-    SAMG_Solver solver;
-
-    #else
+#ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Settings settings;
+    SAMG_Solver solver(&settings);
+#else
     CSMP_DEFAULT_LINEAR_SOLVER solver;
-    #endif
+#endif
     
     //! steady state pressure
     PDE_Integrator<DIM,Element>  steady_state_pressure( solver );
@@ -203,7 +235,7 @@ Criterion:  comparison with TOUGH
 
     steady_state_pressure.Add( &p_conductance );                           
     steady_state_pressure.Add(&zero_fluid_src);
-	steady_state_pressure.AddPostProcess( &velocity );
+	  steady_state_pressure.AddPostProcess( &velocity );
                                                                            
     //! transient pressure
     PDE_Integrator<DIM,Element>  transient_pressure( solver );

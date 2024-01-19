@@ -75,7 +75,7 @@ string Example::GetTitle() const
 }
 
 /// return function
-size_t Example::GetDifficulty() const
+int Example::GetDifficulty() const
 {
   return difficulty_;
 }
@@ -87,7 +87,7 @@ string Example::GetCategory() const
 }
 
 /// set function, takes care that 0 < difficulty < 4
-void Example::SetDifficulty( const size_t& difficulty )
+void Example::SetDifficulty( const int& difficulty )
 {
   difficulty_ = difficulty;
   difficulty_ = difficulty_ < 1 ? 1 : difficulty_;
@@ -133,35 +133,32 @@ list<string>::const_iterator Example::GetAuthorsEnd() const
 
 string Example::GetExampleFileName(const char* path)
 {
-  const char* file = path;
-  while (*path)
-    if (*path++ == '/') file = path;
-  //get rid of the file extension
-  size_t lastindex = string(file).find_last_of(".");
-  string file_name = string(file).substr(0, lastindex);
-  return file_name;
+  fs::path p(path);
+  return p.stem().string();
 }
 
-
+/// NB: this function expects that the directory that contains the executable is     open-csmp/examples/example_inputs/
 void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_name, std::string& model_name,
                                                            std::string& variable_file, std::string config_file)
 {
   //create of directory with current example name and go into this directory
-  fs::create_directory("../example_outputs");
-  fs::current_path("../example_outputs");
-  if(fs::is_directory(example_name)) fs::remove_all(example_name); //if directory already exists, delete it
+  string current_path = fs::current_path().parent_path().string();
+  fs::current_path(fs::path(current_path));
+  fs::create_directory(fs::path("example_outputs"));
+  fs::current_path(fs::path("example_outputs"));
+  if(fs::is_directory(fs::path(example_name))) fs::remove_all(fs::path(example_name)); //if directory already exists, delete it
   fs::create_directory(example_name);
-  fs::current_path(example_name);
+  fs::current_path(fs::path(example_name));
 
   //copy input files into working directory
   if(!model_name.empty()) {
-    string input_directory = fs::current_path().parent_path().parent_path();
+    string input_directory = (fs::current_path().parent_path().parent_path()).string();
     input_directory += "/example_inputs/csmp_native_format_models/";
     //.vset
     string path = "../../example_inputs/csmp_native_format_models/";
     string name = model_name + ".vset";
     string file_name = path + name;
-    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    if (fs::exists(fs::path(file_name))) fs::copy(fs::path(file_name), fs::path("./"));
     else {
       string error_message = "\n\nError: file '";
       error_message += (name + "' does not exist in directory "  + input_directory);
@@ -171,7 +168,7 @@ void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_
     //boundaries.dat
     name = model_name + "_boundaries.dat";
     file_name = path + name;
-    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    if (fs::exists(fs::path(file_name))) fs::copy(fs::path(file_name), fs::path("./"));
     else {
       string error_message = "\n\nError: file '";
       error_message += (name + "' does not exist in directory "  + input_directory);
@@ -181,7 +178,7 @@ void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_
     //regions.dat
     name = model_name +  "_regions.dat";
     file_name = path + name;
-    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    if (fs::exists(fs::path(file_name))) fs::copy(fs::path(file_name), fs::path("./"));
     else {
       string error_message = "\n\nError: file '";
       error_message += (name + "' does not exist in directory "  + input_directory);
@@ -191,7 +188,7 @@ void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_
     //variables.dat
     name = model_name  + "_variables.dat";
     file_name = path + name;
-    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    if (fs::exists(fs::path(file_name))) fs::copy(fs::path(file_name), fs::path("./"));
     else {
       string error_message = "\n\nError: file '";
       error_message += (name + "' does not exist in directory "  + input_directory);
@@ -201,17 +198,17 @@ void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_
     //splitboundaries.dat - optional
     name = model_name  + "_splitboundaries.dat";
     file_name = path + name;
-    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    if (fs::exists(fs::path(file_name))) fs::copy(fs::path(file_name), fs::path("./"));
   }
 
   //copy variable file
   if(!variable_file.empty()) {
-    string input_directory = fs::current_path().parent_path().parent_path();
+    string input_directory = (fs::current_path().parent_path().parent_path()).string();
     input_directory += "/example_inputs/variables_and_configuration_files/";
 
     string path = "../../example_inputs/variables_and_configuration_files/";
     string file_name = path + variable_file;
-    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    if (fs::exists(fs::path(file_name))) fs::copy(fs::path(file_name), fs::path("./"));
     else {
       string error_message = "\n\nError: file '";
       error_message += (variable_file + "' does not exist in directory "  + input_directory);
@@ -222,13 +219,13 @@ void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_
 
   //copy configuration file if required
   if(!config_file.empty()) {
-    string input_directory = fs::current_path().parent_path().parent_path();
+    string input_directory = (fs::current_path().parent_path().parent_path()).string();
     input_directory += "/example_inputs/variables_and_configuration_files/";
 
     string path = "../../example_inputs/variables_and_configuration_files/";
     config_file += "-configuration.txt";
     string file_name = path + config_file;
-    if(fs::exists(file_name)) fs::copy(file_name, "./");
+    if(fs::exists(fs::path(file_name))) fs::copy(fs::path(file_name), fs::path("./"));
     else {
       string error_message = "\n\nError: file '";
       error_message += (config_file + "' does not exist in directory "  + input_directory);

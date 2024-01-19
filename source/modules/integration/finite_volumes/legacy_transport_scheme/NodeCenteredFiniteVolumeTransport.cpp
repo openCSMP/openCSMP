@@ -2025,7 +2025,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable1stOrder( NodeCentere
                               "Type of the advected variable is not known or number of variable components not initialized properly.  Will not advect!\
                               Check the initialization process of your NCFVT class.");
 
-    for (size_t ncom = 0; ncom<var_ncomponents_; ncom++ ){
+    for (uint32_t ncom{0u}; ncom<var_ncomponents_; ncom++ ){
         vector<FV_Parameter>::const_iterator  fvt(STENCIL_DATA.begin());
 
         for ( typename vector<Element<dim>*>::const_iterator

@@ -9,7 +9,7 @@ template<uint32_t dim>
 ExtractTensorVariableRow<dim>::ExtractTensorVariableRow( const PropertyDatabase<dim>& p,
                                                          const char* tens_var, 
                                                          const char* vector_var, 
-                                                         size_t r )
+                                                         uint32_t r )
       : Interrelation<dim>(p),
         t( Interrelation<dim>::GlobalProperty(tens_var) ),
         v( Interrelation<dim>::GlobalProperty(vector_var) ),

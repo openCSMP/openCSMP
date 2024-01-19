@@ -86,7 +86,7 @@ namespace csmp
 
     void CubicSpline_Test::InitializeTest( const std::vector<double>& rx,
                                            const std::vector<double>& rfx,
-                                           const double df1, const double dfn )
+                                           const double deriv_f1, const double deric_fn )
     {
         cspline2.Initialize( rx, rfx, df1, dfn);
         cspline2_copy = new CubicSpline( cspline2 );

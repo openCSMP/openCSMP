@@ -22,7 +22,7 @@ class FRACMAN_Fracture {
     ~FRACMAN_Fracture();
     FRACMAN_Fracture& operator=( const FRACMAN_Fracture& ffr );
     
-    bool    InitializeFrom( int nprops, std::ifstream& ifs );
+    bool    InitializeFrom( long nprops, std::ifstream& ifs );
 
     /// compare perimeter length
     bool operator<( const FRACMAN_Fracture& ffr ) const;

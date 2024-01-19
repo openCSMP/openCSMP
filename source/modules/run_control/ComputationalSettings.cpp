@@ -64,7 +64,7 @@ The strategy chosen by the user with the options:
 PEDANTIC, CONSERVATIVE, MODERATE, AGGRESSIVE, DARING.
 @endcode
 
-@return The fluid pressure solve frequency multiplier and a multiplier that
+The fluid pressure solve frequency multiplier and a multiplier that
 decides by how much the Courant number shall be overstepped. 
 The latter must be <= 1 if the explicit advection scheme is used.  
 */

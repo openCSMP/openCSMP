@@ -18,12 +18,12 @@ class ExtractTensorVariableEigenvalue : public Interrelation<dim> {
     Operand<dim>&        t;
     Operand<dim>&        s;
     TensorVariable<dim>  ts;
-    const size_t         eval;
+    const uint32_t       eval;
     
   public:
     ExtractTensorVariableEigenvalue( const PropertyDatabase<dim>& p,
-                                    const char* tens_var, const char* scalar_var, 
-                                    size_t eval );
+                                     const char* tens_var, const char* scalar_var,
+                                     uint32_t eval );
                                     
     void Calculate();
      

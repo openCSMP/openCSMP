@@ -574,7 +574,7 @@ void   FiniteDifferenceGrid::Out( const char* fname, int32_t tstep, bool with_fr
  {
     char name[200], num[30];
     strcpy( name, fname );
-    sprintf( num, "%d", tstep );
+    snprintf( num, sizeof(num), "%d", tstep );
     strcat( name, num );
 
     ofstream ifs( name );    
@@ -615,7 +615,7 @@ bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32_t tstep, boo
  {
     char name[200], num[30], heading[200];
     strcpy( name, bin_name );
-    sprintf( num, "%d", tstep );
+    snprintf( num, sizeof(num), "%d", tstep );
     strcat( name, num );
     strcpy( heading, "FiniteDifferenceGrid::BinaryOut: double grid as binary file");
  
@@ -1055,7 +1055,7 @@ void   FiniteDifferenceGrid::SaveToPPM( const char* filename, int32_t timestep, 
     // file name + extension
     char name[200], num[30];
     strcpy( name, filename );
-    sprintf( num, "%d", timestep );
+    snprintf( num, sizeof(num), "%d", timestep );
     strcat( name, num );
     strcat( name, ".ppm" );
 
@@ -1133,7 +1133,7 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t ti
     
     // file name + extension
     char num[30];
-    sprintf( num, "%d", timestep );
+    snprintf( num, sizeof(num), "%d", timestep );
     string  name(filename), padded_string( num );
     replaceWhiteSpaceBy( padded_string, '0' );
     name += padded_string;
@@ -1286,7 +1286,7 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t ti
     
     // file name + extension
     char num[30];
-    sprintf( num, "%d", timestep );
+    snprintf( num, sizeof(num), "%d", timestep );
     string  name(filename), padded_string( num );
     replaceWhiteSpaceBy( padded_string, '0' );
     name += padded_string;
@@ -1452,7 +1452,7 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep,
     
     // file name + extension
     char num[30];
-    sprintf( num, "%d", timestep );
+    snprintf( num, sizeof(num), "%d", timestep );
     string  name(filename), padded_string( num );
     replaceWhiteSpaceBy( padded_string, '0' );
     name += padded_string;
@@ -1598,7 +1598,7 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep,
     
     // file name + extension
     char num[30];
-    sprintf( num, "%d", timestep );
+    snprintf( num, sizeof(num), "%d", timestep );
     string  name(filename), padded_string( num );
     replaceWhiteSpaceBy( padded_string, '0' );
     name += padded_string;

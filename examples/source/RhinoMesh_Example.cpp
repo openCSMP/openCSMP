@@ -249,7 +249,7 @@ void  RhinoMesh_Example::ConcentrationRectangle( Model<3U>& sg, double concentra
     fs::current_path(example_name);
 
     //copy model files into working directory
-    string input_directory = fs::current_path().parent_path().parent_path();
+    string input_directory = (fs::current_path().parent_path().parent_path()).string();
     input_directory += "/example_inputs/input_meshes/";
 
     string path = "../../example_inputs/input_meshes/";
@@ -274,7 +274,7 @@ void  RhinoMesh_Example::ConcentrationRectangle( Model<3U>& sg, double concentra
     }
 
     //copy variable file into working directory
-    input_directory = fs::current_path().parent_path().parent_path();
+    input_directory = (fs::current_path().parent_path().parent_path()).string();
     input_directory += "/example_inputs/variables_and_configuration_files/";
 
     path = "../../example_inputs/variables_and_configuration_files/";

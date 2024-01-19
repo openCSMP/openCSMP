@@ -20,7 +20,7 @@ template<uint32_t dim>
                                   std::vector<std::string>& pore_velocities)
   : fv_transport_vapor( fv_vapor ),
     fv_transport_liquid( fv_liquid ),
-    phases(densities.size()),
+    phases( static_cast<uint32_t>(densities.size())),
     gravity(-9.80665), // scalar acts to increase the pressure
     pot_crit(1.e-20),
     xyz(dim),

@@ -2,50 +2,11 @@
 #define GEOTHERMAL_PSEUDO1D_VVCASE_H
 
 #include "Test.h"
-
-#include "Model.h"
-#include "VTU_Interface.h"
-#include "ANSYS_Model3D.h"
-#include "CSMP_highLevelUtilities.h"
-#include "LinearSolver.h"
-#include "LUdcmp_Solver.h"
 #include "CSMP_definitions.h"
-#include "GlobalVerbose.h"
 
-// finite volumes 
-#include "ExplicitMassBasedTransport.h"
-#include "MassBasedStencilProcessor.h"
+namespace csmp {
 
-// finite elements
-#include "PDE_Integrator.h"
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_lhsop_N_dV.h"
-//#include "NumIntegral_dNT_op_dV.h"
-#include "NumIntegral_SetRHS_to_Zero.h"
-#include "PointSource_rhsop.h"
-#include "VelocityAndVolumeFlux.h"
-
-// visitors
-//#include "ComputeGravityTermVisitor.h"
-#include "ThermalVisitor.h"
-#include "SourceVisitor.h"
-#include "ConductivityVisitor.h"
-#include "PropertyAtPointVisitor.h"
-
-// utilities and monitoring
-#include "InputDataManager.h"
-#include "ComputationalSettings.h"
-
-#include "ANSYS_Model2D.h"
-
-
-using namespace std;
-using namespace csmp;
-
-
-namespace csmp
-  {
+template<uint32_t> class Model;
 
   /** Geothermal pseudo 1D Test Case
   =================================
@@ -62,9 +23,9 @@ namespace csmp
         Geothermal_pseudo1D_VVCase(const char* prefix);
         virtual void run();
       private:
-        void outputToVTU( Model<2U>& model,string model_name, const list<string>& props, size_t timestep );
-        void ComputeMassConductivity (Model<2U>& model);
-    bool Compare (Model<2U>& model, string file);
+        void outputToVTU( Model<2U>& model,std::string model_name, const std::list<std::string>& props, size_t timestep );
+        void ComputeMassConductivity ( Model<2U>& model );
+    bool Compare (Model<2U>& model, std::string file );
     };
 
   } // csmp

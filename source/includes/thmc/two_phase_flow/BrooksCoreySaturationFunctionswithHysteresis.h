@@ -65,7 +65,7 @@ template<uint32_t dim, template<uint32_t> class USER>
 class BrooksCoreySaturationFunctionsWithHysteresis {
   public:
     enum FLUID_PHASE {H2O, CO2};
-    enum TWO_PHASE_FLOW_PROCESS { DRAINAGE, IMBIBITION };
+    enum TWO_PHASE_FLOW_PROCESS { DRAINAGE, IMBIBITION, CO_CURRENT_FLOW, COUNTER_CURRENT_FLOW };
     enum HYSTERIC_MODEL_PARAMETERS : uint32_t { AWD=0U, AOD=1U, CWD=2U, COD=3U, AWI=4U, AOI=5U, CWI=6U, COI=7U };
   
   public:

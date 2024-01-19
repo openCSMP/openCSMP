@@ -1,4 +1,6 @@
 #include "Model.h"
+#include "Boundary.h"
+#include "SplitBoundary.h"
 #include "VSet.h"
 #include "VSetConverter.h"
 #include "ModelTopology.h"
@@ -2595,7 +2597,7 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
     csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "is undefined; nothing could be done" );
     return;
   }
-  csmp::Index  prop_key( database_.StorageKey( prop ) );
+  const csmp::Index  prop_key( database_.StorageKey( prop ) );
 
   // properties / variables placed on the model
   if ( prop_key.place == MODEL ) {
@@ -2658,6 +2660,11 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
   // boundaries
   if ( prop_key.place == BOUNDARY || prop_key.place == FACE || prop_key.place == FACE_INTEGRATION_POINT ||
        prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ) {
+    if ( this->Boundaries() == 0U ) {
+         vmin = vmax = numeric_limits<double>::quiet_NaN();
+         csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "model does not contain any boundaries; nothing could be done" );
+         return;
+      }
     typename map<string, csmp::Boundary<dim> >::const_iterator  git( this->BoundariesBegin() );
     (*git).second.MinMaxOf( prop_key, vmin, vmax );
     double  gmin( vmin ), gmax( vmax );
@@ -2676,6 +2683,11 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
   // split boundaries
   if ( prop_key.place == SPLIT_BOUNDARY || prop_key.place == INTER_FACE || prop_key.place == INTER_FACE_INTEGRATION_POINT ||
        prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
+    if ( this->SplitBoundaries() == 0U ) {
+         vmin = vmax = numeric_limits<double>::quiet_NaN();
+         csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "model does not contain any split boundaries; nothing could be done" );
+         return;
+      }
     typename map<string, csmp::SplitBoundary<dim> >::const_iterator  git( this->SplitBoundariesBegin() );
     (*git).second.MinMaxOf( prop_key, vmin, vmax );
     double  gmin( vmin ), gmax( vmax );
@@ -3070,15 +3082,15 @@ string  boundingBox( const Model<3U>& sg, double& dim_x, double& dim_y, double& 
   string  dimensions;
   char num[30];
   dimensions += "x-length (m): ";
-  sprintf( num, "%lf", dim_x );
+  snprintf( num, sizeof(num), "%lf", dim_x );
   dimensions += num;
   dimensions += ",  ";
   dimensions += "y-length: ";
-  sprintf( num, "%lf", dim_y );
+  snprintf( num, sizeof(num), "%lf", dim_y );
   dimensions += num;
   dimensions += ",  ";
   dimensions += "z-length: ";
-  sprintf( num, "%lf", dim_z );
+  snprintf( num, sizeof(num), "%lf", dim_z );
   dimensions += num;
   dimensions += " (box-shaped model). ";
 
@@ -3139,17 +3151,17 @@ double printRangeOfVariable( const Model<dim>& sg,
      // recording the measured variable value range at given timestep
      double& model_time( ModelTime::Instance().modelTime );
      char   info[100];
-     sprintf( info, "%lf", model_time );
+     snprintf( info, sizeof(info), "%lf", model_time );
      string var_info(info);
      var_info += " secs, range of'";
      var_info += var;
      var_info += "' [";
      var_info += sg.Database().Unit(var);
      var_info += "]: ";
-     sprintf( info, "%lf", pmin );
+     snprintf( info, sizeof(info), "%lf", pmin );
      var_info += info;
      var_info += " to ";
-     sprintf( info, "%lf", pmax );
+     snprintf( info, sizeof(info), "%lf", pmax );
      var_info += info;
      
      io.RecordInformation( var_info );
@@ -3212,7 +3224,7 @@ double printRangeOfVariable( const Model<dim>& sg,
      
      // recording the measured variable value range at given timestep
      char info[100];
-     sprintf( info, "%lf", model_time );
+     snprintf( info, sizeof(info), "%lf", model_time );
      string var_info(info);
      var_info += info;
      var_info += ", region: ";
@@ -3222,10 +3234,10 @@ double printRangeOfVariable( const Model<dim>& sg,
      var_info += "' [";
      var_info += p_ref.Unit(var);
      var_info += "]: ";
-     sprintf( info, "%lf", pmin );
+     snprintf( info, sizeof(info), "%lf", pmin );
      var_info += info;
      var_info += " to ";
-     sprintf( info, "%lf", pmax );
+     snprintf( info, sizeof(info), "%lf", pmax );
      var_info += info;
      
      io.RecordInformation( var_info );

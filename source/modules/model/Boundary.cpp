@@ -56,9 +56,9 @@ Boundary<dim>::Boundary( const Boundary& ed )
 /// move constructor
 template<uint32_t dim>
 Boundary<dim>::Boundary( Boundary&& ed )
-  : ModelSubDomain<dim, Face>( move(ed) ),
-    LocalVariableStorage<dim,Boundary>( move(ed) ),
-    boundaryFlag_( move(ed.boundaryFlag_) )
+  : ModelSubDomain<dim, Face>( std::move(ed) ),
+    LocalVariableStorage<dim,Boundary>( std::move(ed) ),
+    boundaryFlag_( std::move(ed.boundaryFlag_) )
 {
 }
 
@@ -769,7 +769,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
       
       // in 3D, there still could be line elements in the region which are not eligible to become faces,
       // unless the Region consist only of line elements
-      if constexpr ( dim == 3 ) if ( (*it)->IsLine() ) continue;
+      if constexpr ( dim == 3u ) if ( (*it)->IsLine() ) continue;
 
       // finding the higher-dimensional element(s) that sit(s) adjacent to the lower-dimensional one
       pair<Element<dim>*,Element<dim>*>  inner_outer_elements = parentElementsSharedByFace<dim>( (*it)->NodesBegin(), (*it)->NodesEnd() );

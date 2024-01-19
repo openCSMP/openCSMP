@@ -137,7 +137,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
      // to test whether new node point is already part of the mesh or whether
      // it must be created     
      size_t              nID(nodeIDs.size()); // new node ID tracker
-     int8_t              bflag;
+//     int8_t              bflag;
      map<size_t,int8_t>  new_bflags;
 
      for ( auto pit=vset.PlistBegin(); pit!=vset.PlistEnd(); pit++ )

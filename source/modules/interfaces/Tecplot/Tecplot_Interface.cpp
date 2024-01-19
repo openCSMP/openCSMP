@@ -124,7 +124,7 @@ void Tecplot_Interface<dim>
      outfile += file_name;
      replaceWhiteSpaceBy( outfile, '-' );
      char  num[30];
-     sprintf( num, "%ld", timestep );
+     snprintf( num, sizeof(num), "%ld", timestep );
      outfile += num;
      outfile += ".dat";
        
@@ -242,7 +242,7 @@ void Tecplot_Interface<dim>
     outfile += file_name;
     replaceWhiteSpaceBy( outfile, '-' );
     char  num[30];
-    sprintf( num, "%ld", timestep );
+    snprintf( num, sizeof(num), "%ld", timestep );
     outfile += num;
     outfile += ".dat";
     

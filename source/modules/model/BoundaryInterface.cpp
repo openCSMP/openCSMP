@@ -625,9 +625,10 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     const size_t       new_faces_required(subdomain.Cells());
     vector<Face<dim>*> face_vector;
     face_vector.reserve(new_faces_required);
+#ifdef DEBUG
     const size_t n_original_faces(model.Mesh().Faces());
     const size_t n_original_elmts(model.Mesh().Elements());
-
+#endif
     // establish the storage requirements for face variables
     const LocalVariables             lvsFaces( model.Database().LocalVariablesAt(FACE) );
     const IntegrationPointVariables  lvsIntegrationPoints( model.Database().IntegrationPointVariablesAt(FACE) );
@@ -2047,7 +2048,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
 // helper function for method below
 template<uint32_t dim>
 void createBoundaryFaces( MeshManager<dim>& mesh, const PropertyDatabase<dim>& dbase,
-                          const set<pair<Element<dim>*,size_t> >& face_set, vector<Face<dim>*>& boundary_faces )
+                          const set<pair<Element<dim>*,uint32_t> >& face_set, vector<Face<dim>*>& boundary_faces )
  {
     assert( !face_set.empty() );
     
@@ -2098,7 +2099,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromNodeFlag
 
   const csmp::Region<dim>& model_domain = boundaryComplex->Region("Model");
 
-  set<pair<Element<dim>*,size_t> > top_faces, bottom_faces, left_faces, right_faces, front_faces, back_faces, irregular_faces, internal_faces;
+  set<pair<Element<dim>*,uint32_t> > top_faces, bottom_faces, left_faces, right_faces, front_faces, back_faces, irregular_faces, internal_faces;
 
   // for all element faces on the model boundary
   for ( size_t eid{model_domain.InteriorCells()}; eid < model_domain.Cells(); ++eid )

@@ -43,28 +43,28 @@
 
 #include "cgnstypes.h"
 
-#if CG_BUILD_SCOPE
-# ifndef CGNS_SCOPE_ENUMS
-#  define CGNS_SCOPE_ENUMS
-# endif
+#ifdef CG_BUILD_SCOPE
+#ifndef CGNS_SCOPE_ENUMS
+#define CGNS_SCOPE_ENUMS
+#endif
 #else
-# ifdef CGNS_SCOPE_ENUMS
-#  undef CGNS_SCOPE_ENUMS
-# endif
+#ifdef CGNS_SCOPE_ENUMS
+#undef CGNS_SCOPE_ENUMS
+#endif
 #endif
 
 #ifndef CGNSDLL
-# ifdef _WIN32
-#  if defined(BUILD_DLL)
-#    define CGNSDLL _declspec(dllexport)
-#  elif defined(USE_DLL)
-#    define CGNSDLL _declspec(dllimport)
-#  else
-#    define CGNSDLL
-#  endif
-# else
-#  define CGNSDLL
-# endif
+#ifdef _WIN32
+#if defined(BUILD_DLL)
+#define CGNSDLL _declspec(dllexport)
+#elif defined(USE_DLL)
+#define CGNSDLL _declspec(dllimport)
+#else
+#define CGNSDLL
+#endif
+#else
+#define CGNSDLL
+#endif
 #endif
 
 #ifdef CGNS_SCOPE_ENUMS

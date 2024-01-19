@@ -51,7 +51,7 @@
 #include "NodeManifoldManager_Test.h" // tests split boundary functionality
 
 #include "FiniteElement_Test.h"
-#include "FiniteElement_Test.h"
+#include "FiniteElementPolicy_Test.h"
 #include "IsoparametricQuadraticTetrahedron_Test.h"
 #include "IsoparametricLinearTetrahedron.h"
 #include "IsoparametricQuadraticTetrahedron.h"
@@ -115,6 +115,7 @@
 #include "LinearCuboid_Test.h"
 #include "SplitBoundary_Test.h"
 #include "SplitBoundaryInterface_Test.h"
+#include "MiscFunctionality_Test.h"
 
 using namespace std;
 using namespace csmp;
@@ -201,7 +202,7 @@ int main()
   //      refactored.addTest( new ANSYS_Model2D_Test() );
   //      refactored.addTest( new SplitBoundary_Test() );
 
-  refactored.addTest( new SparseMatrix_Test() );
+  refactored.addTest( new MiscFunctionality_Test() );
 
   //      refactored.addTest( new MeshManager_Test() );
   //      refactored.addTest( new NodeManifoldManager_Test() );
@@ -256,7 +257,8 @@ int main()
       basic.addTest( new Face_Test() );
       basic.addTest( new InterFace_Test() );
       basic.addTest( new ModelSubDomain_Test() );       
-      basic.addTest( new Region_Test() );          
+      basic.addTest( new Region_Test() );
+      basic.addTest( new BoundaryInterface_Test() );
       basic.addTest( new ModelBasics_Test() );
       
       //mesh manager    
@@ -328,6 +330,7 @@ int main()
       interdependent1.addTest( new LinearCuboid_Test(false) );  // TODO: add automatic test of interpolation function derivative matrix
       // math operators etc.
       interdependent1.addTest( new Operand_Test() );
+      interdependent1.addTest( new FiniteElementPolicy_Test() );
       interdependent1.addTest( new MathOperatorLHS_Test());
       interdependent1.addTest( new MathOperatorRHS_Test());
       interdependent1.addTest( new LinearCuboid_Test(false) );

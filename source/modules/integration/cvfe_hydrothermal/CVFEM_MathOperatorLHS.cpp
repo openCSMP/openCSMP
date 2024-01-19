@@ -1,5 +1,6 @@
 #include "CVFEM_MathOperatorLHS.h"
 #include "Exception.h"
+#include "Face.h"
 
 using namespace std;
 

@@ -1,4 +1,8 @@
 #include "CGNS_Model.h"
+#include "CGNS_Interface.h"
+#include "ModelTopology.h"
+#include "Exception.h"
+#include "ModelTime.h"
 
 using namespace std;
 
@@ -20,7 +24,7 @@ Uses the method Initialize.
                                bool use_regions_file,
                                bool create_boundaries
                              )
-   : Model<dim>( variable_file.c_str(), false )
+   : Model<dim>( variable_file.c_str() )
    {
       this->Name( mesh_file_set.c_str() );
       Initialize( mesh_file_set,
@@ -36,7 +40,7 @@ Uses the method Initialize.
                                bool use_regions_file,
                                bool create_boundaries
                              )
-   : Model<dim>( variable_file.c_str(), false )
+   : Model<dim>( variable_file.c_str() )
    {
       this->Name( mesh_file_set.c_str() );
       std::string regions_file_prefix( mesh_file_set );
@@ -123,13 +127,9 @@ Uses the method Initialize.
 
          if ( use_regions_file )
            Model<dim>::Initialize( regions_file_prefix.c_str(),
-                                   mesh_topology, vset,
-                                   create_boundaries,
-                                   irregular_mesh );
+                                   mesh_topology, vset );
          else
-           Model<dim>::Initialize( mesh_topology, vset,
-                                   create_boundaries,
-                                   irregular_mesh );
+           Model<dim>::Initialize( mesh_topology, vset );
       }
 
     // -------------------------------------------------

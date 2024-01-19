@@ -59,7 +59,7 @@ uint32_t  FRED_Fracture::ID() const
 string  FRED_Fracture::TextID() const
  {
     char num[30];
-    sprintf( num, "%u", id );
+    snprintf( num, sizeof(num), "%ul", id );
     
     return string(num);
  }
@@ -74,7 +74,7 @@ int FRED_Fracture::SetID() const
 string  FRED_Fracture::TextSetID() const
  {
     char num[30];
-    sprintf( num, "%u", fracture_set_id );
+    snprintf( num, sizeof(num), "%ul", fracture_set_id );
     
     return string(num);
  }
@@ -119,7 +119,7 @@ bool  FRED_Fracture::InitializeFrom( int nprops, ifstream& ifs )
     char         text_line[256];
     char        *token;
     const char* const  delims = " ,=#%<>"; 
-    int          n_pts, p_id;
+    uint32_t      n_pts, p_id;
     mjl::Point3D  pt;
     
     // 0. zapping all previous storage
@@ -177,7 +177,7 @@ bool  FRED_Fracture::InitializeFrom( int nprops, ifstream& ifs )
     // ---------------------------------------------------
     // 2. reading point lines
     // ---------------------------------------------------
-    for ( int i=0; i<n_pts; i++ ) {
+    for ( uint32_t i=0u; i<n_pts; i++ ) {
          ifs.getline( text_line, 256 );
          // ID of point
          token = strtok( text_line, delims ); 

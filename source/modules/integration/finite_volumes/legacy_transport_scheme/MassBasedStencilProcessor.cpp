@@ -27,7 +27,7 @@ template<uint32_t dim>
 void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& param,
                                                           const Element<dim>& e ,
                                                           const VARIABLE_TYPE &vt,
-                                                          const size_t var_comp_nr)
+                                                          uint32_t var_comp_nr)
  {
      this->sector_pore_volume_.resize(e.Nodes());
      this->psi1_.resize(e.Nodes());

@@ -151,10 +151,10 @@ class VData {
     size_t BFlags() const;
   
     /// number of nodes stored for element, face or interface
-    size_t PlistSize( size_t eidx ) const;
+    uint32_t PlistSize( size_t eidx ) const;
 
     /// number of neighbors stored for element, face or interface
-    size_t PfvertsSize( size_t eidx ) const;
+    uint32_t PfvertsSize( size_t eidx ) const;
     
     /// get type; a mesh is of hybrid-element type if it contains multiple element types
     bool   HybridElementTypeMesh() const;

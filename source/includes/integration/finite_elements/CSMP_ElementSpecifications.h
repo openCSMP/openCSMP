@@ -32,8 +32,8 @@ class CSMP_ElementSpecifications {
     static CSMP_FEM_TYPE CSMP_TypeUsingLocalCoordinates( int8_t CSMP_finite_element_type );
     static std::string   CSMP_TypeName( int8_t CSMP_finite_element_type );
 
-    static size_t        InterpolationOrder( const std::string& etype );
-    static size_t        InterpolationOrder( int8_t etype );
+    static uint32_t      InterpolationOrder( const std::string& etype );
+    static uint32_t      InterpolationOrder( int8_t etype );
     /// reference element is stored in parametric space and calculation outcomes are transformed into physical space by Jacobian transformation
     static bool          UsesLocalCoordinates( int8_t etype );
     /// calls previous method because CSMP++ currently has no sub- or super-parametric elements

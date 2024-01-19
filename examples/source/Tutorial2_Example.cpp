@@ -48,7 +48,7 @@ void Tutorial2_Example::Specifications()
 // **********************************************************************************************
 //
 // A CSMP main file that first solves the steady state pressure diffusion equation using a fully
-// implicit FE discretisation and computes the velocity field averwards. This velocity field is
+// implicit FE discretisation and computes the velocity field afterwards. This velocity field is
 // then used to compute the advection of a non-reacting chemical species with the FV method
 // (explicit or implicit). A simple quadrilateral FE mesh is generated automatically in CSMP from
 // which the Model is built. Output is written to VTK and Matlab files.
@@ -287,8 +287,8 @@ void Tutorial2_Example::Run()
     const double    hour(3600.0);
     const double    max_time (240.0*hour);    // run for 10 days
     double          time_increment(2.0*hour); // timestep 2 hours
-    const long        save_frequency(6);        // write results to file every 12 hours
-    size_t	          save_counter(1), time;
+    const long      save_frequency(6);        // write results to file every 12 hours
+    size_t	        save_counter(1);
 
 
     // -----------------------
@@ -310,7 +310,7 @@ void Tutorial2_Example::Run()
 
          // output variables
          if ( save_counter == save_frequency ) {
-              time = static_cast<long>(model_time/hour);
+              auto time = static_cast<unsigned long>(model_time/hour);
               // to VTK files
               vtk_output.OutputDataToVTK( model, "concentration", "concentration", time );
               // to Matlab files
@@ -326,7 +326,7 @@ void Tutorial2_Example::Run()
 
     // final output
     // to VTK files
-    time = static_cast<long>(model_time/hour);
+    auto time = static_cast<unsigned long>(model_time/hour);
     vtk_output.OutputDataToVTK( model, "concentration", "concentration", time );
     // to Matlab files
     matlab.Write2DMatlabFile(  model, "concentration", "concentration", time );

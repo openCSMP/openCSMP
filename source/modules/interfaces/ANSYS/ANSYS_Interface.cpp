@@ -966,10 +966,10 @@ bool ANSYS_Interface::ReadPlistASCII( ifstream& ifs, VSet<dim>& vset )
 
     map<size_t,vector<int64_t> >  plist;
     vector<int64_t>          dummy;
-    size_t                       total_items, 
-                                 element(0), item(0), 
-                                 id, nodes;
-    const size_t                 n_nodes(vset.Vertices());
+    size_t                   total_items,
+                             element(0), item(0),
+                             id, nodes;
+    const size_t             n_nodes(vset.Vertices());
     
     pair<map<size_t,vector<int64_t> >::iterator,bool>  it;
     pair<size_t,vector<int64_t> > data;
@@ -1313,7 +1313,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
      }
 
     if ( flag_value_errors > 0 ) {
-         cerr <<"\n\n\t"<<"encountered "<< flag_value_errors <<" BOX_BUNDARY flag values that were out of the range defined for this enum [-29,0].\n";
+         cerr <<"\n\n\t"<<"encountered "<< flag_value_errors <<" BOX_BOUNDARY flag values that were out of the range defined for this enum [-29,0].\n";
          csmp_error.Note( INFO, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range, setting to IRREGULAR.");
       }
 

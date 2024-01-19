@@ -1,12 +1,22 @@
 #include "ANSYS_Model3D.h"
 #include "VTU_Interface.h"
-#include "LinearSolver.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
+#else
+#include "LinearSolver.h"
+#endif
+
 #include "PDE_Integrator.h"
 #include "PT_op.h"
+
+#include "Model.h"
+#include "Boundary.h"
+
 #include "NumIntegral_BT_D_B_dV.h"
-#include"NumIntegral_BT_op_dV.h"
-#include"NumIntegral_PT_op_dV.h"
+#include "NumIntegral_BT_op_dV.h"
+#include "NumIntegral_PT_op_dV.h"
 #include "StressesAndStrains.h"
 #include "ExtractTensorVariableComponent.h"
 #include "BoreHole_stability_InclinedWell3D_VVCase.h"

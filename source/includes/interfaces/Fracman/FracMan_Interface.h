@@ -31,19 +31,19 @@ class FRACMAN_Interface {
     
   private:
     /// returns number of points
-    long ReadFORMAT( std::ifstream& ifs, int& scale, int& fracs, 
-                     int& props, bool ascii );
+    long ReadFORMAT( std::ifstream& ifs, long& scale, long& fracs,
+                     long& props, bool ascii );
     
     /// returns whether property specs were read correctly
-    bool ReadPROPERTIES( std::ifstream& ifs, int n_props, std::list<std::string>& props );
+    bool ReadPROPERTIES( std::ifstream& ifs, long n_props, std::list<std::string>& props );
     
     // stored data 
     std::map<std::string,FRACMAN_Fracture> fractures;
     std::list<std::string>                 properties;
-    int     n_points,
-            n_fractures,
-            n_properties,
-            scale_factor;
+    long         n_points,
+                 n_fractures,
+                 n_properties,
+                 scale_factor;
     std::string  dataset;
 };
 

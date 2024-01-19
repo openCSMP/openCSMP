@@ -1,15 +1,9 @@
 #ifndef CSMP_PDE_INTEGRATOR_H
 #define CSMP_PDE_INTEGRATOR_H
 
-#include "CSMP_definitions.h"
-#include "SparseMatrix.h"
-
-#include "Region.h"
-#include "Boundary.h"
-#include "SplitBoundary.h"
-
 #include "MathOperatorRHS.h"
 #include "MathOperatorLHS.h"
+#include "SparseMatrix.h"
 
 namespace csmp {
 
@@ -17,6 +11,11 @@ template<uint32_t> class Element;
 template<uint32_t> class Face;
 template<uint32_t> class InterFace;
 template<uint32_t> class NimbleRegion;
+template<uint32_t> class Model;
+template<uint32_t,template<uint32_t> class> class ModelSubDomain;
+template<uint32_t> class Region;
+template<uint32_t> class Boundary;
+template<uint32_t> class SplitBoundary;
 class Solver;
 
 class PDE_Integrator_Test;
@@ -24,45 +23,52 @@ class PDE_Integrator_Test;
 /**
 
 @brief Accumulator and integrator for FEM or FVM-derived integral forms of PDEs
-and their solution in the form of linear algebraic sets of equations (system Ax=b).
+and their solution by solving linear sets of linear algebraic equations (system Ax=b).
 Applicable to CSMP++ Model objects or their subregions.
 
 @author S.K. Matthai
 @author Stephen G. Roberts
-@author various extra constributions (Adrian Burri, Julian Mindel, Kho Luat Tran).
+@author various extra contributions (Adrian Burri, Julian Mindel, Kho Luat Tran).
 @date 1997
-@date replaced by merge of PDE_Integrator 1/4/22
+@date replaced by merge of PDE_Integrator 1/4/_22
+@date working toward a rigorous test of the functionality and better user feedback
 
 @section motivation Motivation
 
-To encapsulate the integration and numerical solution of
-partial-differential equations (PDE) in their integral form. This
-process entails (1) the assembly of a sparse matrix with the contributions
-from finite elements or finite volumes, (2) the assembly of a right-hand vector with
-essential and initial conditions; elimination of Dirichlet constraints.
+To encapsulate the integration / numerical solution of
+partial-differential equations (PDE). This
+process entails
+
+(0) the creation of a sparsity pattern
+(1) the assembly of a sparse solution matrix, G, using integral contributions from finite elements or finite volumes,
+(2) the assembly of a right-hand vector with essential and initial conditions; before, Dirichlet conditions are eliminated.
 (3) Inversion of the matrix equation Ax=b to find the solution vector x.
-The dependent physical variable(s) stored in
-the solution vector are updated on the mesh.
+(4) Mapping the results from the result vector 'x' back onto the mesh, performing range checks.
 
 
-@section design Design Intent
+@section design Design
 
-The intent of using a 'strategy' pattern for the
-design was to separate the PDE operator / integrator implementation from the
+The 'strategy' design pattern is used to separate the PDE operator / integrator implementation from the
 the type of finite element(s) or FV's used and the solution method chosen.
 As a consequence, the same PDE operator objects and solution methods can
 be used for a range of computational cell types with
 different node numbers and so forth.
+The Bridge pattern is used to decouple specific cell types and interpolation orders from the
+way the contributions from the finite elements are integrated. These implementations
+are found in collections of subclasses of the MathOperatorLHS and MathOperatorRHS,
+which are grouped together in specific PDE operator libraries.
+These are further subdivided into ones for analytic and others for numeric integration.
 
 The PDE_Integrator class is a base class from which specific PDE_Integrator subclasses can
-be inherited to test improvements of its functionality.
+be inherited. These subclasses  are found in the pde_integrators directory in the source.
+Subclasses are implemented to support nonlinear iteration loops
+and more user-friendly high-level forms of integrators like the SteadyStateDiffusor.
 
 
 @section applicability Applicability
 
-PDE_Integrator objects can be used to carry out any 2D and 3D computation which
-are possible with CSMP++. These computations may either appy to entire
-Model objects or to Regions which form subsets thereof.
+PDE_Integrator supports the solution of elliptic, parabolic and even hyperbolic PDEs in 2D and 3D .
+These computations can be targeted on the entire Model, Regions thereof and Boundary objects..
 
 
 @section participant Participants
@@ -72,23 +78,26 @@ that are inherited from the MathOperatorLHS and MathOperatorRHS base
 classes. Other variables set the state of the algorithm, the time_increment
 in transient calculations and so forth.
 
-PDE_Integrator also contains or connects to a Solver object which inverts the sparse solution matrix.
-
+To solve the system of equations, the PDE_Integrator uses a Solver object.
+Different solvers can be configured, applied and managed via the Strategy pattern
+as described in the users guide.
 
 
 @section collaborations Collaborations
 
 PDE_Integrator interact with Model, Region, Boundary and SplitBoundary objects.
 It queries these objects for the data needed to setup the solution matrices and vectors.
+It also uses them to managed evolving boundary conditions, including ones
+needed to dynamically couple domains together.
 
 PDE_Integrator also collaborates with the MeshManager and the
 PropertyDatabase to gain access to variables and finite elements
 (Element class instances).
 
 PDE_Integrator obtains the finite-element contributions from the Element class
-that in turn accesses the specific finite-element type which appears hidden
-behind the specific element that is assembled.
-This is implemented as a 'bridge' pattern.
+that in turn has access to specific finite-element functionality via its FE policy.
+The interior workings of this remain hidden behind the interface of the specific element that is assembled.
+This is implemented as based on a 'bridge' pattern.
 
 
 @section consequences Consequences
@@ -102,8 +111,9 @@ MathOperatorRHS.
 
 @section implementation Implementation
 
-The PDE_Integrator is a stand-alone object, which is passed to the Model.
-The interaction with the Model follows a visitor like pattern. The Model
+The PDE_Integrator is a stand-alone object, which is passed to the Model or applied
+to one of its regions or boundaries with the IntegrateOver() method.
+The interaction with the Model follows a visitor-like pattern. The Model
 passes the PDE_Integrator on to a region to which its application has been restricted.
 Inside the Model, the following steps take place when a
 PDE_Integrator is applied by calling Model::Apply():
@@ -117,7 +127,7 @@ PDE_Integrator::EstablishMatrixSetup( mesh, phys_vars );
 @endcode
 
 Now the PDE_Integrator accumulates the contributions to the global solution
-matrices seqentially:
+matrix seqentially:
 
 @code
 PDE_Integrator::Accumulate ( mesh, property_collection );
@@ -138,16 +148,16 @@ PDE_Integrator::AssignEssentialConditions( mesh, property_collection );
 Here an elimination is performed, retaining, if so, the symmetric shape of the solution matrix.
 @endcode
 
-If the computation is a transient one, and the solution method is Backward
-Euler implicit timestepping, righthand-side source terms (typically fluid
-source or other rates) are now multiplied with the time increment and added
-to the righthand vector.
+If the computation is a transient one, and the time-stepping solution method is Backward
+Euler implicit, then righthand-side source terms (typically fluid
+source or other rates) are added to to the righthand vector after initial conditions were multiplied into it.
+For such integrals LateAccumulate needs to be specified.
 
 @code
 PDE_Integrator::LateAccumulate( mesh, property_collection );
 @endcode
 
-Now the solver is invoked to invert the solution matrix:
+Now the solver is invoked to solve the ensuing linear algebraic system  LHS * x = RHS.
 
 @code
 PDE_Integrator::Solve();
@@ -165,16 +175,15 @@ and post-processing operations are applied:
 PDE_Integrator::PostProcess( mesh, property_collection );
 @endcode
 
-Post-processing may be for instance, the computation of flow velocities
+Post-processing may be, for instance, the computation of flow velocities
 from computed fluid-pressure gradients and permeability values.
 
-Important is also the mapping from global node ID numbers to entry
-positions in the global solution matrix: In the simplemost case, of
-a single degree-of-freedom per node and a global computation, the
+Important also is the mapping from global node ID numbers to entry
+positions in the global solution matrix troughout the solution process:
+In the simplest case, of a single degree-of-freedom per node and a global computation, the
 mapping is:
 
 G(n,n), rh(n) -> n = node-ID-1
-
 
 For vector variables:
 
@@ -240,7 +249,7 @@ done in the following example:
   if ( with_pore_pressure )     deformation.Add( &porepressure );
 
   StressesAndStrains<2U>  postpro( example_model, "Young's modulus",
-                                                           "Poisson's ratio", "displacement", true, true );
+                                                  "Poisson's ratio", "displacement", true, true );
 
   if ( with_plane_stress ) postpro.PlaneStress();
    deformation.AddPostProcess( &postpro );
@@ -288,6 +297,7 @@ class PDE_Integrator {
     bool          Transient() const;
   
     /// accumulates, assembles, and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file; uses node numbering
+    // TODO: do we need this method
     void          IntegrateOver( ModelSubDomain<dim,CELLTYPE>&, bool debug=false );
 
     /// also considers  "dS" pde operators from Boundary or SplitBoundary objects if these share nodes with domain on which the solution is obtained
@@ -333,17 +343,16 @@ class PDE_Integrator {
   protected:
 
     /// checks whether any Boundary object in the model is a surface of the computational domain
-    std::list<std::string> IdentifySharedBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&);
+    std::list<std::string> IdentifySharedBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>& ) const;
+
+    /// checks whether any SplitBoundary object in the model is a surface of the computational domain
+    std::list<std::string> IdentifySharedSplitBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>& ) const;
   
-    /// checks whether any SplitBoundary object in the model has higher-dim elements on either side the computational domain
-    std::list<std::string> IdentifySharedSplitBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>&);
-
-
-    /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved
-    virtual void  EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& );
+    /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved, but without boundary or splitboundary integrals
+    virtual bool EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& );
 
     /// for the elimination of Dirichlet constraints from the solution matrix; called after EstablishMatrixSetup but before accumulation
-    void  ReduceSystemSizeEliminatingEssentialConditions( const ModelSubDomain<dim,CELLTYPE>& , size_t total_degrees_of_freedom);
+    void  ReduceSystemSizeEliminatingEssentialConditions( const ModelSubDomain<dim,CELLTYPE>&, size_t max_offset );
   
     /// in time-dependent calculations this method assigns initial conditions to the RHS; uses node numbering
     virtual void  AssignInitialConditions( const ModelSubDomain<dim,CELLTYPE>& );
@@ -354,27 +363,26 @@ class PDE_Integrator {
     /// accumulates finite element integrals into solution matrix and right-hand side; uses node numbering
     virtual void  Accumulate( const ModelSubDomain<dim,CELLTYPE>& );
 
-    /// accumulates finite element integrals for Faces into right-hand side for boundaries provided; uses node numbering
-    virtual void AccumulateBoundaries(  Model<dim>& , ModelSubDomain<dim,CELLTYPE>&, std::list<std::string> shared_boundaries );
-
-    /// accumulates finite element integrals into solution matrix and right-hand side for all splitboundaries provided; uses node numbering
-    virtual void AccumulateSplitBoundaries( Model<dim>&, ModelSubDomain<dim,CELLTYPE>&, std::list<std::string> shared_splitboundaries);
-
-    /// accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
-  // TODO: refactor: rename methods Accumulate and LateAccumulate and let overloading take care of name resolution
-    virtual void  AccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const Boundary<dim>& );
-    
-    /// accumulation of Robin-type boundary conditions to SplitBoundary interfaces
-    virtual void  AccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const SplitBoundary<dim>& );
-
     /// accumulates finite-element integrals to matrix and vector after the corresponding entries were already multiplied with the initial conditions; uses node numbering
     virtual void  LateAccumulate( const ModelSubDomain<dim,CELLTYPE>& );
 
+    /// accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
+    virtual void  AccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const Boundary<dim>& );
+    /// version that uses 'boundary_faces_' to accumulate over
+    virtual void  AccumulateBoundaryIntegrals();
+    
+    /// accumulation of Robin-type boundary conditions to SplitBoundary interfaces
+    virtual void  AccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const SplitBoundary<dim>& );
+    /// version that uses 'splitboundary_interfaces_' to accumulate over
+    virtual void  AccumulateSplitBoundaryIntegrals();
+
     /// late accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
     virtual void  LateAccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const Boundary<dim>& );
+    virtual void  LateAccumulateBoundaryIntegrals();
     virtual void  LateAccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&, const SplitBoundary<dim>& );
+    virtual void  LateAccumulateSplitBoundaryIntegrals();
     
-    /// couples domains separated by SplitBoundaries using the information from NodeManifolds
+    /// couples domains separated by SplitBoundaries using the information from NodeManifolds @todo:  refactor this method from Luat to increase efficiency
     void CoupleDomainsAcrossSplitBoundary( ModelSubDomain<dim,CELLTYPE>& );
 
     /// calls connected solver object to find x in G x = rh problem
@@ -392,8 +400,11 @@ class PDE_Integrator {
     std::map<std::string,MathOperatorRHS<dim,Face>*>      rhs_boundary_operators_;  ///< surface integrals for accumulation over boundary
     std::map<std::string,MathOperatorLHS<dim,InterFace>*> lhs_split_boundary_operators_;  ///< implicit integral coupling terms for SplitBoundary
     std::map<std::string,MathOperatorRHS<dim,InterFace>*> rhs_split_boundary_operators_;  ///< explicit integral coupling terms for SplitBoundary
-    std::map<Parameter,size_t>                            basic_operands_;
-    std::map<Parameter,size_t>                            test_operands_;           ///< dependent variables in the solved system of equations
+    std::map<csmp::Parameter,size_t>                      basic_operands_;
+    std::map<csmp::Parameter,size_t>                      test_operands_;           ///< dependent variables in the solved system of equations
+  
+    std::vector<const csmp::Face<dim>*>       boundary_faces_;           ///< empty if computation applies to entire model; else Faces needed for dS integrals
+    std::vector<const csmp::InterFace<dim>*>  splitboundary_interfaces_; ///< empty if computation applies to entire model; else InterFaces needed for domain coupling
 
     SparseMatrix          G_;           ///< solution matrix
     std::vector<double>   rh_;          ///< righthand vector
@@ -419,6 +430,18 @@ class PDE_Integrator {
     
     friend PDE_Integrator_Test;
 };
+
+
+/// collects pointers to Faces that may be needed to accumulate surface integrals on a computational domain consisting of elements
+template<uint32_t dim>
+bool collectBorderFacesOfComputationRegion( const Model<dim>&, const ModelSubDomain<dim,Element>&,
+                                            std::vector<const csmp::Face<dim>*>& boundary_faces );
+    
+/// collects pointers to  InterFaces that may be needed to accumulate splitboundary integrals on a computational domain consisting of elements
+template<uint32_t dim>
+bool collectInterfacesInComputationRegion( const Model<dim>&, const ModelSubDomain<dim,Element>&,
+                                           std::vector<const csmp::InterFace<dim>*>& splitboundary_interfaces );
+ 
 
 } // csmp
 
