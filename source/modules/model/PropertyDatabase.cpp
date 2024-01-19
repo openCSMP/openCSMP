@@ -1027,7 +1027,7 @@ csmp::Index  PropertyDatabase<dim>::AddProperty( const char* name, const char* n
    if (this->Verbose()) cout <<"\nINFO, PropertyDatabase<dim>::AddProperty adding new property: '"<< name <<"'\n";
 
    /// Roman,2013: Added explicit way of reading the size of variable
-   EstablishVariableTypeDependentProperties( static_cast<int>(vtype), vsize, added_prop.key );
+   EstablishVariableTypeDependentProperties( vtype, vsize, added_prop.key );
    EstablishPlacementDependentProperties(  added_prop.key.place, added_prop.key );
 
    propList_[ added_prop.name ] = added_prop;

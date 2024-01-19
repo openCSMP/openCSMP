@@ -477,7 +477,7 @@ void DES2PhaseSlightlyCompressibleFlow_Example::ComputeSteadyStatePressure( Mode
     if(!with_tensor_k) conductance_operator = "total mobility permeability product";
     else conductance_operator = "tensor total mobility permeability product";
 
-#ifdef USE_SAMG_SOLVER
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings settings;
     // iout
     settings.ExplicitSecondary(true);

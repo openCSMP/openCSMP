@@ -185,14 +185,17 @@ Index::Index( const csmp::Index& idx )
     localVariables(idx.localVariables), integrationPointVariables(idx.integrationPointVariables),
     indexTracker(nullptr)
   {
-  // attach itself to IndexTracker and vice versa
-  if(idx.indexTracker)
-    {
-      // attach this Index to index tracker of the argument index
-      idx.indexTracker->Attach( this, &idx );
-      // vice versa
-      Attach( idx.indexTracker );
-    }
+      assert( place != UNDEFINED );
+      assert( index != UNSPECIFIED );
+      // attach itself to IndexTracker and vice versa
+      assert( idx.indexTracker != nullptr );
+      if(idx.indexTracker)
+        {
+          // attach this Index to index tracker of the argument index
+          idx.indexTracker->Attach( this, &idx );
+          // vice versa
+          Attach( idx.indexTracker );
+        }
   }
 
 
@@ -205,14 +208,17 @@ Index::Index( csmp::Index&& idx )
     localVariables(std::move(idx.localVariables)), integrationPointVariables(std::move(idx.integrationPointVariables)),
     indexTracker(nullptr)
   {
-  // attach itself to IndexTracker and vice versa
-  if ( idx.indexTracker ) {
-       idx.indexTracker->Attach( this, &idx );
-       // vice versa
-       Attach( idx.indexTracker );
-       // reset index-tracker pointer of empty Index object
-       idx.Detach();
-    }
+      assert( place != UNDEFINED );
+      assert( index != UNSPECIFIED );
+      // attach itself to IndexTracker and vice versa
+      assert( idx.indexTracker != nullptr );
+      if ( idx.indexTracker ) {
+           idx.indexTracker->Attach( this, &idx );
+           // vice versa
+           Attach( idx.indexTracker );
+           // reset index-tracker pointer of empty Index object
+           idx.Detach();
+        }
   }
 
 
