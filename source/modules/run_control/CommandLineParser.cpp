@@ -205,7 +205,7 @@ double CommandLineParser::convertArgument(string arg) {
 
 template <>
 const char* CommandLineParser::convertArgument(string arg) {
-  char* result = new char[arg.size()];
+  char* result = new char[arg.size()+1]; // null terminator of string
   std::strcpy(result, arg.c_str());
   return result;
 }

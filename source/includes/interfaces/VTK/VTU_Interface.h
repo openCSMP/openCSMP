@@ -83,7 +83,7 @@ namespace vtuInterfaceDispatch
     To instantiata a VTU_Interface, dimension and a reference to the
     model has to be provided
 
-    In the most simple case, all you need is
+    In the simplest case, all you need is
     @code
     VTU_Interface<SPACE> vtu( model );
     vtu.OutputDataToVTU( "BOX", "fluid pressure" );

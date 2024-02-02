@@ -51,6 +51,8 @@ VSet<dim>::VSet( const vector<int8_t>&  elmt_types,
 : VData( npes, epes, nodes ),
   pmtrl_( epes.size(), UNSPECIFIED )
 {
+  assert( !elmt_types.empty() );
+  assert( elmt_types.size() == epes.size() );
 	ElementTypes( elmt_types );
 }
 
@@ -182,16 +184,14 @@ void VSet<dim>::AddXYZ( const deque<double>& x,
 
 
 /**
-Assigns record of nodes per element to VSet.
-Since the entries are serialised, the record 'pelmt' is needed in order
-to recuperate element types and the nodes per element information when
-reading the VSet.
+  Assigns record of nodes per element to base class VData of VSet.
 */
 template<uint32_t dim>
 void VSet<dim>::AddPlist( typename map<size_t, vector<int64_t> >::const_iterator first,
-						              typename map<size_t, vector<int64_t> >::const_iterator last)
+						              typename map<size_t, vector<int64_t> >::const_iterator last )
 {
 	typename deque<vector<int64_t> >::iterator it = PlistBegin();
+  assert( TotalNumberOfCells() == distance(first,last) );
 
 	while (first != last && it != PlistEnd())
     {
@@ -204,16 +204,14 @@ void VSet<dim>::AddPlist( typename map<size_t, vector<int64_t> >::const_iterator
 
 
 	/**
-	Assigns record of nodes per element to VSet.
-	Since the entries are serialised, the record 'pelmt' is needed in order
-	to recuperate element types and the nodes per element information when
-	reading the VSet.
+    Assigns record of nodes per element to base class VData of VSet.
 	*/
 template<uint32_t dim>
 void VSet<dim>::AddPlist( typename deque<vector<int64_t> >::const_iterator first,
                           typename deque<vector<int64_t> >::const_iterator last )
 {
 	typename deque<vector<int64_t> >::iterator it = PlistBegin();
+  assert( TotalNumberOfCells() == distance(first,last) );
 
 	while (first != last && it != PlistEnd())
     {

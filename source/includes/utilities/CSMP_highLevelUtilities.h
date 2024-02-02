@@ -27,11 +27,11 @@ std::vector<std::string> splitString( std::string str, char delimiter );
 /// to fill whitespace in strings with character of choice, for instance '_'
 void replaceWhiteSpaceBy( std::string&, char ascii_char );
 
-/// converts integral types to strings without loss of precision (std::to_string limits to 6 significant digits)
+/// converts types to strings without loss of precision (std::to_string limits to 6 significant digits)
 template <typename T>
 inline std::string number_to_string( const T& value ) {
   std::stringstream sstr;
-  sstr << std::setprecision( 16 ) << value;
+  sstr << std::setprecision( 16 ) << std::ios::scientific << value;
   return sstr.str();
 }
 

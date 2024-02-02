@@ -52,10 +52,13 @@ VData::VData( const deque<uint32_t>& npes,
     first_face_(npes.size()),
     first_interface_(npes.size())
  {
-    for ( auto i{0U}; i<epes.size(); i++ )
+    assert( !npes.empty() );
+    const size_t n_cells{ epes.size() };
+    for ( size_t i{0U}; i<n_cells; i++ )
       plist[i]   = vector<int64_t>(npes[i]);
          
-    for ( auto i{0U}; i<epes.size(); i++ )
+    assert( !epes.empty() );
+    for ( size_t i{0U}; i<n_cells; i++ )
       pfverts[i] = vector<int64_t>(epes[i]);
  }
 

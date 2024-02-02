@@ -1095,7 +1095,7 @@ void floodFill( CELL<dim>* const eptr, set<CELL<dim>*>& elements_contiguous_subs
                 const auto  n_neighbors(nit->Neighbors());
                 new_neighbor_elements.reserve( n_neighbors );
                 // adding its neighbor ids to the element list to be processed next, if they haven't been dealt with already
-                for ( auto j{0U}; j<neighbors; ++j )
+                for ( uint32_t j{0U}; j<n_neighbors; ++j )
                   // if there is a neighbor whose neighbors have not been traversed, it is input in the list
                   if ( nit->Neighbor(j) != nullptr )
                     new_neighbor_elements.push_back( nit->Neighbor(j) );
