@@ -506,7 +506,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
             switch( var_type ) {
                  case SCALAR: {
                         PropertyData elmt_prop( ELEMENT, SCALAR, dim );
-                        elmt_prop.Reserve( vset.Elements() );
+                        elmt_prop.Reserve( vset.TotalNumberOfCells() );
                         while (ssCellPropertyData >> valueCellProperty)
                           pushBack( elmt_prop, makeScalar( ANY, valueCellProperty ) );
                         vset.AddData( nameAttrCellPropertyData, elmt_prop );
@@ -524,7 +524,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                    break;
                  case VECTOR: { // TODO: not tested yet
                         PropertyData elmt_prop( ELEMENT, VECTOR, dim );
-                        elmt_prop.Reserve( vset.Elements() );
+                        elmt_prop.Reserve( vset.TotalNumberOfCells() );
                         vector<double> value( dim );
                         while ( ssCellPropertyData >> value[counter++] ) {
                              if ( counter == dim ) {
@@ -538,7 +538,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                    break;
                  case TENSOR: { // TODO: not tested yet
                         PropertyData elmt_prop( ELEMENT, TENSOR, dim );
-                        elmt_prop.Reserve( vset.Elements() );
+                        elmt_prop.Reserve( vset.TotalNumberOfCells() );
                         vector<double>      value( dim * dim );
                         TensorVariable<dim> ts;
                         while ( ssCellPropertyData >> value[counter++] ) {
@@ -554,9 +554,9 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                         vset.AddData( nameAttrCellPropertyData, elmt_prop );
                      }
                    break;
-                 case ARRAY: { // TODO: not tested yet
+                 case ARRAY: {
                         PropertyData elmt_prop( ELEMENT, ARRAY, dim, numberOfComponents );
-                        elmt_prop.Reserve( vset.Elements() );
+                        elmt_prop.Reserve( vset.TotalNumberOfCells() );
                         vector<double> value( numberOfComponents );
                         ArrayVariable array( numberOfComponents );
                         while ( ssCellPropertyData >> array( static_cast<uint32_t>(counter++) ) ) {
@@ -597,30 +597,30 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
             cout <<"\n\t\t"<<"reading POINT property: '"<< nameAttrPointPropertyData <<"' and adding it to the VSet."<< endl;
             switch( var_type ) {
                  case SCALAR: {
-                        PropertyData elmt_prop( ELEMENT, SCALAR, dim );
-                        elmt_prop.Reserve( vset.Elements() );
+                        PropertyData node_prop( NODE, SCALAR, dim );
+                        node_prop.Reserve( vset.Vertices() );
                         while (ssPointPropertyData >> valuePointProperty)
-                          pushBack( elmt_prop, makeScalar( ANY, valuePointProperty ) );
-                        vset.AddData( nameAttrPointPropertyData, elmt_prop );
+                          pushBack( node_prop, makeScalar( ANY, valuePointProperty ) );
+                        vset.AddData( nameAttrPointPropertyData, node_prop );
                      }
                    break;
                  case VECTOR: { // TODO: not tested yet
-                        PropertyData elmt_prop( ELEMENT, VECTOR, dim );
-                        elmt_prop.Reserve( vset.Elements() );
+                        PropertyData node_prop( NODE, VECTOR, dim );
+                        node_prop.Reserve( vset.Vertices() );
                         vector<double> value( dim );
                         while ( ssPointPropertyData >> value[counter++] ) {
                              if ( counter == dim ) {
                                   VectorVariable<dim> vc( value );
-                                  pushBack( elmt_prop, vc );
+                                  pushBack( node_prop, vc );
                                   counter = 0U;
                                }
                           }
-                        vset.AddData( nameAttrPointPropertyData, elmt_prop );
+                        vset.AddData( nameAttrPointPropertyData, node_prop );
                      }
                    break;
                  case TENSOR: { // TODO: not tested yet
-                        PropertyData elmt_prop( ELEMENT, TENSOR, dim );
-                        elmt_prop.Reserve( vset.Elements() );
+                        PropertyData node_prop( NODE, TENSOR, dim );
+                        node_prop.Reserve( vset.Vertices() );
                         vector<double>      value( dim * dim );
                         TensorVariable<dim> ts;
                         while ( ssPointPropertyData >> value[counter++] ) {
@@ -629,29 +629,29 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                                   for ( uint32_t i{0u}; i<dim; ++i )
                                     for ( uint32_t j{0u}; j<dim; ++j )
                                       ts(i,j) = value[counter2++];
-                                  pushBack( elmt_prop, ts );
+                                  pushBack( node_prop, ts );
                                   counter = 0U;
                                }
                           }
-                        vset.AddData( nameAttrPointPropertyData, elmt_prop );
+                        vset.AddData( nameAttrPointPropertyData, node_prop );
                      }
                    break;
                  case ARRAY: { // TODO: not tested yet
-                        PropertyData elmt_prop( ELEMENT, ARRAY, dim, numberOfComponents );
-                        elmt_prop.Reserve( vset.Elements() );
+                        PropertyData node_prop( NODE, ARRAY, dim, numberOfComponents );
+                        node_prop.Reserve( vset.Vertices() );
                         vector<double> value( numberOfComponents );
                         ArrayVariable array( numberOfComponents );
                         while ( ssPointPropertyData >> array( static_cast<uint32_t>(counter++) ) ) {
                              if ( counter == numberOfComponents ) {
-                                   pushBack( elmt_prop, array );
+                                   pushBack( node_prop, array );
                                   counter = 0U;
                                }
                           }
-                        vset.AddData( nameAttrPointPropertyData, elmt_prop );
+                        vset.AddData( nameAttrPointPropertyData, node_prop );
                      }
                    break;
                  default:
-                   cerr <<"\nReading point properties: flagged-array or other variables not handled yet." << endl;
+                   cerr <<"\nReading point properties (node data): flagged-array or other variables not handled yet." << endl;
               }
         } // end reading point properties
 
