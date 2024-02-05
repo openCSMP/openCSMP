@@ -460,7 +460,7 @@ void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<dim>& vset, bool isoparametr
     if ( !vset.HybridElementTypeMesh() )
       vset.ElementType( 0U, ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( vset.ElementType(0U), isoparametric, dim ) );
     else
-      for ( size_t i{0U}; i<vset.ElementTypes(); i++ )
+      for ( size_t i{0U}; i<vset.TotalNumberOfCells(); i++ )
         vset.ElementType( i, ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( vset.ElementType(i), isoparametric, dim ) );
 
  } // end
@@ -975,9 +975,10 @@ bool ANSYS_Interface::ReadPlistASCII( ifstream& ifs, VSet<dim>& vset )
     pair<size_t,vector<int64_t> > data;
     
     // now the vset can be resized according to the new information
-    deque<uint32_t>  ndele(vset.ElementTypes());
+    assert( vset.HybridElementTypeMesh() );
+    deque<uint32_t>  ndele(vset.TotalNumberOfCells());
                        
-    for ( size_t i{0U}; i<vset.ElementTypes(); i++ )
+    for ( size_t i{0U}; i<vset.TotalNumberOfCells(); i++ )
       ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
     vset.ResizePlist( ndele );
 
@@ -1058,8 +1059,9 @@ bool ANSYS_Interface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     // making an array of numbers of neighbors of each element
-    deque<uint32_t>  nbors( vset.ElementTypes() );
-    for ( size_t i{0U}; i<vset.ElementTypes(); ++i )
+    assert( vset.HybridElementTypeMesh() );
+    deque<uint32_t>  nbors( vset.TotalNumberOfCells() );
+    for ( size_t i{0U}; i<vset.TotalNumberOfCells(); ++i )
       nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
     vset.ResizePfverts( nbors );
 
@@ -1384,7 +1386,7 @@ template bool ANSYS_Interface::ReadPelementBinary( FILE*, VSet<3U>& );
 
 
 
-
+// assumes that Pelmt data has already been read
 template<uint32_t dim>
 bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
 {
@@ -1394,7 +1396,8 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
     size_t        entries(0);
 
     // setting up the storage for 'plist' in VSet
-    const size_t   nelements(vset.ElementTypes());
+    assert( vset.Elements() > 0 );
+    const size_t  nelements(vset.TotalNumberOfCells());
 
     // now the vset can be resized according to the new information
     deque<uint32_t>  ndele(nelements);
@@ -1455,7 +1458,9 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     int64_t       entries(0);
 
     // setting up the storage for 'pfverts' in VSet
-    const size_t   nelements(vset.ElementTypes());
+    assert( vset.Elements() > 0 );
+    assert( vset.HybridElementTypeMesh() );
+    const size_t   nelements(vset.TotalNumberOfCells());
 
     // making an array of with the number of neighbors for each element
     deque<uint32_t>  nbors( nelements );

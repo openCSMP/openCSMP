@@ -141,7 +141,7 @@ class VData {
     /// topologically collocated nodes along the node-matched boundaries of mesh patches
     size_t NodeManifolds() const;
 
-    /// CSMP types of the elements, faces and interfaces contained in the mesh
+    /// number of unique CSMP finite-element/cell types contained in the mesh
     size_t ElementTypes() const;
   
     /// number of element neighbors in a single element type mesh
@@ -357,6 +357,7 @@ class VData {
     
     /// angle between line elements in degrees
     double AngleBetweenLineElements2D( size_t elmt1, size_t elmt2 );
+    double AngleBetweenLineElements3D( size_t elmt1, size_t elmt2 );
     
     /// computes the unit normals to the surfaces and then returns the angle between them
     double AngleBetweenSurfaceElements3D( size_t elmt1, size_t elmt2 );

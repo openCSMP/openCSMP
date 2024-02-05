@@ -75,7 +75,6 @@ namespace csmp {
 template<uint32_t dim>
 int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, bool verbose )
  {
-    const uint32_t DIM{3u};
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
     
     try {
@@ -275,8 +274,8 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
 
         // creating the 'npes' (number of nodes-per-element) and 'plist' (nodes-per-element) records from the plist_data and offset data
         deque<vector<int64_t> >  plist;
-        deque<uint32_t>               n_nodes_per_element;
-        size_t                             prev_offset{0u};
+        deque<uint32_t>          n_nodes_per_element;
+        size_t                   prev_offset{0u};
         counter = 0u;
         for ( const auto& offset : offsetsValues ) {
              // nodes per element record
@@ -303,7 +302,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
         }
 
         // Accessing attributes
-        vector<int8_t> valueCellTypes;
+        deque<int8_t> valueCellTypes;
         {
           const char* typeAttrCellData = dataArrayCellDataNode->first_attribute("type")->value();
           const char* nameAttrCellData = dataArrayCellDataNode->first_attribute("Name")->value();
@@ -351,9 +350,8 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
         for ( const auto& cit : valueCellTypes )
           n_neighbors_per_element.push_back( CSMP_ElementSpecifications::NeighborsPerElementOfType( cit ) );
         
-        // Constructing the VSET
-        VSet<DIM>  vset( valueCellTypes, n_nodes_per_element, n_neighbors_per_element, n_vertices );
-        valueCellTypes.clear();
+        // Configuring the VSET
+        vset.Resize( valueCellTypes, n_nodes_per_element, n_neighbors_per_element, n_vertices, 0U, 0U );
         n_nodes_per_element.clear();
         n_neighbors_per_element.clear();
 
@@ -363,6 +361,10 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
         py.clear();
         pz.clear();
         
+        // finite-element / cell types
+        vset.AddElementTypes( valueCellTypes.begin(), valueCellTypes.end() );
+        valueCellTypes.clear();
+        
         // nodes per element record
         vset.AddPlist( plist.begin(), plist.end() );
         plist.clear();
@@ -370,13 +372,13 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
         // creating element neighbor information
         vset.EstablishElementConnectivity3D();
         const uint32_t MODEL_DIMENSION = vset.SpatialDimension();
+        if ( MODEL_DIMENSION != dim )
+          csmp_error.Note( INFO, "readVTU_File", to_string(MODEL_DIMENSION), "= spatial dimension of the model in the file is different from that expected by the reader.");
 
 
         // 4. creating regions stored in the model topology class
         // ------------------------------------------------------
         cout <<"\n\n"<<"readVTU_File: attempting to build a csmp::ModelTopology object, provided that 'region id' or 'attribute' information is contained in the VTU file."<< endl;
-        ModelTopology mesh_topology( file_name.c_str(), true );
-        // reading DataArray 'region_id' and using it to identify how many regions there are via a map
 
         // Access Cells node
         rapidxml::xml_node<>* cellData = pieceNode->first_node("CellData");
@@ -448,11 +450,11 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                          region_cells.assign( rit.second.begin(), rit.second.end() );
                          // identifying the element type of the region assuming that they all consist of a single type of cell type (VTK_TYPE)
                          const int8_t fe_type = ( vset.HybridElementTypeMesh() == true ) ? vset.ElementType( region_cells[0u] ) : vset.ElementType(0u);
-                         mesh_topology.AddDomain( (string("region") + to_string(rit.first)).c_str(), set<string>{parseFiniteElementType(fe_type)}, region_cells );
+                         topology.AddDomain( (string("region") + to_string(rit.first)).c_str(), set<string>{parseFiniteElementType(fe_type)}, region_cells );
                          region_cells.clear();
                      }
                  }
-              assert( mesh_topology.Cells() == vset.TotalNumberOfCells() );
+              assert( topology.Cells() == vset.TotalNumberOfCells() );
            } // end model topology
            
 
@@ -493,9 +495,9 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
             const char* numComponentsAttrCellPropertyData = ( sibling->first_attribute("NumberOfComponents") ) ?
                                                              sibling->first_attribute("NumberOfComponents")->value() : nullptr;
             // reading the cell property data
-            istringstream ssCellPropertyData(cellDataArray->value());
+            istringstream ssCellPropertyData(sibling->value());
             const int numberOfComponents = ( numComponentsAttrCellPropertyData ) ? atoi(numComponentsAttrCellPropertyData) : 1;
-            const csmp::VARIABLE_TYPE var_type = inferTypeFromNumberOfComponents<DIM>( numberOfComponents );
+            const csmp::VARIABLE_TYPE var_type = inferTypeFromNumberOfComponents<dim>( numberOfComponents );
             double valueCellProperty;
             counter = 0U;
             
@@ -503,7 +505,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
             cout <<"\n\t\t"<<"reading CELL property: '"<< nameAttrCellPropertyData <<"' and adding it to the VSet."<< endl;
             switch( var_type ) {
                  case SCALAR: {
-                        PropertyData elmt_prop( ELEMENT, SCALAR, DIM );
+                        PropertyData elmt_prop( ELEMENT, SCALAR, dim );
                         elmt_prop.Reserve( vset.Elements() );
                         while (ssCellPropertyData >> valueCellProperty)
                           pushBack( elmt_prop, makeScalar( ANY, valueCellProperty ) );
@@ -521,12 +523,12 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                      }
                    break;
                  case VECTOR: { // TODO: not tested yet
-                        PropertyData elmt_prop( ELEMENT, VECTOR, DIM );
+                        PropertyData elmt_prop( ELEMENT, VECTOR, dim );
                         elmt_prop.Reserve( vset.Elements() );
-                        vector<double> value( DIM );
+                        vector<double> value( dim );
                         while ( ssCellPropertyData >> value[counter++] ) {
-                             if ( counter == DIM ) {
-                                  VectorVariable<DIM> vc( value );
+                             if ( counter == dim ) {
+                                  VectorVariable<dim> vc( value );
                                   pushBack( elmt_prop, vc );
                                   counter = 0U;
                                }
@@ -535,15 +537,15 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                      }
                    break;
                  case TENSOR: { // TODO: not tested yet
-                        PropertyData elmt_prop( ELEMENT, TENSOR, DIM );
+                        PropertyData elmt_prop( ELEMENT, TENSOR, dim );
                         elmt_prop.Reserve( vset.Elements() );
-                        vector<double>      value( DIM * DIM );
-                        TensorVariable<DIM> ts;
+                        vector<double>      value( dim * dim );
+                        TensorVariable<dim> ts;
                         while ( ssCellPropertyData >> value[counter++] ) {
-                             if ( counter == DIM * DIM ) {
+                             if ( counter == dim * dim ) {
                                   uint32_t counter2{0u};
-                                  for ( uint32_t i{0u}; i<DIM; ++i )
-                                    for ( uint32_t j{0u}; j<DIM; ++j )
+                                  for ( uint32_t i{0u}; i<dim; ++i )
+                                    for ( uint32_t j{0u}; j<dim; ++j )
                                       ts(i,j) = value[counter2++];
                                   pushBack( elmt_prop, ts );
                                   counter = 0U;
@@ -553,13 +555,13 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                      }
                    break;
                  case ARRAY: { // TODO: not tested yet
-                        PropertyData elmt_prop( ELEMENT, ARRAY, DIM );
+                        PropertyData elmt_prop( ELEMENT, ARRAY, dim, numberOfComponents );
                         elmt_prop.Reserve( vset.Elements() );
                         vector<double> value( numberOfComponents );
                         ArrayVariable array( numberOfComponents );
                         while ( ssCellPropertyData >> array( static_cast<uint32_t>(counter++) ) ) {
                              if ( counter == numberOfComponents ) {
-                                   pushBack( elmt_prop, array );
+                                  pushBack( elmt_prop, array );
                                   counter = 0U;
                                }
                           }
@@ -585,9 +587,9 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
             const char* numComponentsAttrPointPropertyData = ( sibling->first_attribute("NumberOfComponents") ) ?
                                                               sibling->first_attribute("NumberOfComponents")->value() : nullptr;
             // reading the cell property data
-            istringstream ssPointPropertyData(pointDataArray->value());
+            istringstream ssPointPropertyData(sibling->value());
             const int numberOfComponents = ( numComponentsAttrPointPropertyData ) ? atoi(numComponentsAttrPointPropertyData) : 1;
-            const csmp::VARIABLE_TYPE var_type = inferTypeFromNumberOfComponents<DIM>( numberOfComponents );
+            const csmp::VARIABLE_TYPE var_type = inferTypeFromNumberOfComponents<dim>( numberOfComponents );
             double valuePointProperty;
             counter = 0U;
             
@@ -595,7 +597,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
             cout <<"\n\t\t"<<"reading POINT property: '"<< nameAttrPointPropertyData <<"' and adding it to the VSet."<< endl;
             switch( var_type ) {
                  case SCALAR: {
-                        PropertyData elmt_prop( ELEMENT, SCALAR, DIM );
+                        PropertyData elmt_prop( ELEMENT, SCALAR, dim );
                         elmt_prop.Reserve( vset.Elements() );
                         while (ssPointPropertyData >> valuePointProperty)
                           pushBack( elmt_prop, makeScalar( ANY, valuePointProperty ) );
@@ -603,12 +605,12 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                      }
                    break;
                  case VECTOR: { // TODO: not tested yet
-                        PropertyData elmt_prop( ELEMENT, VECTOR, DIM );
+                        PropertyData elmt_prop( ELEMENT, VECTOR, dim );
                         elmt_prop.Reserve( vset.Elements() );
-                        vector<double> value( DIM );
+                        vector<double> value( dim );
                         while ( ssPointPropertyData >> value[counter++] ) {
-                             if ( counter == DIM ) {
-                                  VectorVariable<DIM> vc( value );
+                             if ( counter == dim ) {
+                                  VectorVariable<dim> vc( value );
                                   pushBack( elmt_prop, vc );
                                   counter = 0U;
                                }
@@ -617,15 +619,15 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                      }
                    break;
                  case TENSOR: { // TODO: not tested yet
-                        PropertyData elmt_prop( ELEMENT, TENSOR, DIM );
+                        PropertyData elmt_prop( ELEMENT, TENSOR, dim );
                         elmt_prop.Reserve( vset.Elements() );
-                        vector<double>      value( DIM * DIM );
-                        TensorVariable<DIM> ts;
+                        vector<double>      value( dim * dim );
+                        TensorVariable<dim> ts;
                         while ( ssPointPropertyData >> value[counter++] ) {
-                             if ( counter == DIM * DIM ) {
+                             if ( counter == dim * dim ) {
                                   uint32_t counter2{0u};
-                                  for ( uint32_t i{0u}; i<DIM; ++i )
-                                    for ( uint32_t j{0u}; j<DIM; ++j )
+                                  for ( uint32_t i{0u}; i<dim; ++i )
+                                    for ( uint32_t j{0u}; j<dim; ++j )
                                       ts(i,j) = value[counter2++];
                                   pushBack( elmt_prop, ts );
                                   counter = 0U;
@@ -635,7 +637,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                      }
                    break;
                  case ARRAY: { // TODO: not tested yet
-                        PropertyData elmt_prop( ELEMENT, ARRAY, DIM );
+                        PropertyData elmt_prop( ELEMENT, ARRAY, dim, numberOfComponents );
                         elmt_prop.Reserve( vset.Elements() );
                         vector<double> value( numberOfComponents );
                         ArrayVariable array( numberOfComponents );

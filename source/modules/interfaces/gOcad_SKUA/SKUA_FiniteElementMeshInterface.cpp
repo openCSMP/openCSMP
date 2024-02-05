@@ -203,7 +203,8 @@ void SKUA_FiniteElementMeshInterface::ReadMeshBinary( const string&  meshfile,
                                      "Element types not read correctly");
                                        
     else { // if 'pelmt' was read correctly, CSMP element-type identifiers are created from SKUA integer identifiers
-         for ( size_t i{0U}; i<vset.ElementTypes(); ++ i )
+         assert( vset.HybridElementTypeMesh() );
+         for ( size_t i{0U}; i<vset.TotalNumberOfCells(); ++ i )
            vset.ElementType( i, convertSKUA_ElementType( vset.ElementType(i), isoparametric_ ) );
        }
     if ( !ReadPlistBinary( ifs_dat, vset ) )
@@ -344,8 +345,8 @@ void SKUA_FiniteElementMeshInterface::ReadMeshASCII( const string& meshfile,
                                     "Element types not read correctly");
       }
     else { // if 'pelmt' was read correctly, CSMP element-type identifiers are created from SKUA integer identifiers
-         
-         for ( size_t i{0U}; i<vset.ElementTypes(); ++ i )
+         assert( vset.HybridElementTypeMesh() );
+         for ( size_t i{0U}; i<vset.TotalNumberOfCells(); ++ i )
            vset.ElementType( i, convertSKUA_ElementType( vset.ElementType(i), isoparametric_ ) );
       }
     if ( !ReadPlistASCII( ifs_dat, vset ) ) {
@@ -978,8 +979,9 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
          ndele.push_back( csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(0U) ) );
          vset.ResizePlist( total_items / ndele[0] ); // number of elements
       }
-    else {                   
-         for ( size_t i{0U}; i<vset.ElementTypes(); i++ )
+    else {
+         assert( vset.HybridElementTypeMesh() );
+         for ( size_t i{0U}; i<vset.TotalNumberOfCells(); i++ )
            ndele.push_back( csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) ) );
          vset.ResizePlist( ndele ); 
       }
@@ -1063,7 +1065,8 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>
          vset.ResizePfverts( total_items / nbors[0] );
       }
     else {
-         for ( size_t i{0U}; i<vset.ElementTypes(); ++i )
+         assert( vset.HybridElementTypeMesh() );
+         for ( size_t i{0U}; i<vset.TotalNumberOfCells(); ++i )
            nbors.push_back( csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) ) );
          vset.ResizePfverts( nbors );
       }
@@ -1555,7 +1558,8 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistBinary( FILE* fp, VSet<dim>& vset
     size_t        entries(0);
 
     // setting up the storage for 'plist' in VSet
-    const size_t   nelements(vset.ElementTypes());
+    assert( vset.HybridElementTypeMesh() );
+    const size_t  nelements(vset.TotalNumberOfCells());
 
     // now the vset can be resized according to the new information
     deque<uint32_t>  ndele(nelements);
@@ -1611,7 +1615,8 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vs
     size_t        entries(0);
 
     // setting up the storage for 'pfverts' in VSet
-    const size_t   nelements(vset.ElementTypes());
+    assert( vset.HybridElementTypeMesh() );
+    const size_t   nelements(vset.TotalNumberOfCells());
 
     // making an array of numbers of neighbors of each element
     deque<uint32_t>  nbors( nelements );

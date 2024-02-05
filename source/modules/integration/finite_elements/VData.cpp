@@ -212,7 +212,10 @@ size_t VData::NodeManifolds() const { return pmanifolds_.size(); }
 /// the plist contains all: elements, faces and interfaces
 size_t VData::TotalNumberOfCells() const { return plist.size(); }
 
-size_t VData::ElementTypes() const { return pelmt.size(); }
+size_t VData::ElementTypes() const {
+//     return pelmt.size();
+     return set<int8_t>( pelmt.begin(), pelmt.end() ).size();
+  }
 
 size_t VData::ElementNeighbors() const { return pfverts.size(); }
 
@@ -2896,7 +2899,35 @@ size_t VData::RenumberElementsCounterClockwise2D()
 
      return radiansToDegrees( acos(cos_theta) );
      
-  } // end angleBetweenLineSegments
+  } // end AngleBetweenLineElements2D
+
+
+
+
+ /// finds angle between 2 line elements determined by their number in the plist
+ double VData::AngleBetweenLineElements3D( size_t elmt1, size_t elmt2 )
+  {
+     assert( elmt1 < pelmt.size() );
+     assert( elmt2 < pelmt.size() );
+     assert( isLineElement( parseFiniteElementTypeEnum( pelmt[elmt1] ) ) );
+     assert( isLineElement( parseFiniteElementTypeEnum( pelmt[elmt2] ) ) );
+     
+     // representing line elements as vectors
+     const double v1x = px[ plist[elmt1][1U] ] - px[ plist[elmt1][0U] ];
+     const double v1y = py[ plist[elmt1][1U] ] - py[ plist[elmt1][0U] ];
+     const double v1z = pz[ plist[elmt1][1U] ] - pz[ plist[elmt1][0U] ];
+     const double v2x = px[ plist[elmt2][1U] ] - px[ plist[elmt2][0U] ];
+     const double v2y = py[ plist[elmt2][1U] ] - py[ plist[elmt2][0U] ];
+     const double v2z = pz[ plist[elmt2][1U] ] - pz[ plist[elmt2][0U] ];
+     
+     // cos theta = dot-product over cross-product (length1 * length2)
+     double cos_theta = (v1x*v2x + v1y*v2y + v1z*v2z) / (sqrt(v1x*v1x+v1y*v1y+v1z*v1z) * sqrt(v2x*v2x+v2y*v2y+v2z*v2z));
+
+     return radiansToDegrees( acos(cos_theta) );
+     
+  } // end AngleBetweenLineElements2D
+
+ 
  
  
  
@@ -3497,6 +3528,7 @@ void VData::EstablishElementConnectivity3D()
     // -----------------
     if ( !line_elmt_that_share_node.empty() )
       {
+        cout << "\n\t\tline elements...\n";
         // map<size_t,set<uint32_t> >  line_elmt_that_contain_node;
         for ( const auto& it : line_elmt_that_share_node )
           {
@@ -3540,14 +3572,14 @@ void VData::EstablishElementConnectivity3D()
                    const int64_t           n_elmts_to_combine(2U);
                    deque<vector<int64_t> > combinations;
                    if ( createUniqueCombinations( joint_line_elmts, n_elmts_to_combine, combinations ) == 0 )
-                     csmp_error.Note( ERROR, "EstablishElementConnectivity2D", "no combinations between elements available");
+                     csmp_error.Note( ERROR, "EstablishElementConnectivity3D", "no combinations between elements available");
                    // finding inter-element angle for all combinations
                    //             angle, combination number
                    vector<pair<double,size_t> > inter_element_angles;
                    inter_element_angles.reserve( combinations.size() );
                    size_t n_combi{0};
                    for ( auto cit : combinations ) {
-                        const double angle = AngleBetweenLineElements2D( cit[0], cit[1] );
+                        const double angle = AngleBetweenLineElements3D( cit[0], cit[1] );
                         // ignoring edge direction
                         const double acute_angle = ( angle > 90. ) ? 180. - angle : angle;
                         inter_element_angles.push_back( make_pair( acute_angle, n_combi++ ) );
@@ -3603,6 +3635,7 @@ void VData::EstablishElementConnectivity3D()
     // --------------------
     if ( !surface_neighbor_keys.empty() )
       {
+        cout << "\n\t\tsurface elements...\n";
         for ( auto it=surface_neighbor_keys.begin(); it!=surface_neighbor_keys.end(); ++it )
           {
              assert( !(*it).second.empty() );
@@ -3705,7 +3738,7 @@ void VData::EstablishElementConnectivity3D()
     // -------------------
     if ( !volume_neighbor_keys.empty() )
       {
-        cout << "\n\t\tvolume elements...\n";
+        cout << "\t\tvolume elements...\n";
         for ( auto it=volume_neighbor_keys.begin(); it!=volume_neighbor_keys.end(); ++it )
           {
               // 2.3.0 - there must be at least 1 face entry
@@ -3732,7 +3765,9 @@ void VData::EstablishElementConnectivity3D()
           }
 
       } // volume elements
- 
+
+    cout << "\n"<<"EstablishElementConnectivity3D: Established neighbor connectivity of "<< pfverts.size() <<" cells successfully.\n"<< endl;
+
  } // end EstablishElementConnectivity3D
 
 
