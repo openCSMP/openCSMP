@@ -11,6 +11,7 @@
 
 namespace csmp {
 
+// TODO: replace returned vector by std::array<double,dim>
 /**
     @brief Generic class that is used in CSMP to stored Node coordinate values
     and to manipulate them efficiently.

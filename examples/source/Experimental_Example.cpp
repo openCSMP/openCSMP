@@ -34,6 +34,7 @@
 #include "Standard_IO_Handler.h"
 #include "VTK_Interface.h"
 #include "VTU_Interface.h"
+#include "DynamicArray2D.h"
 
 #include "ANSYS_Model3D.h"
 #include "UG4_UGX_FileExport.h"
@@ -61,6 +62,16 @@ void Experimental_Example::Specifications()
 
 void Experimental_Example::Run()
  {
+    // comparing 1D array with vector of vectors
+    DynamicArray2D<double> mat(3,5);
+    // unsupported 2D initialisation: DynamicArray2D<double> mat2{ {1.,0}, {0.,2.} };
+    // should work: DynamicArray2D<double> mat2{ 1., 0., 0., 2. };
+    // would not know m, n: DynamicArray2D<double> mat2( vector<double>{1., 0., 0., 2.} );
+    DynamicArray2D<double> mat3{ 1., 0., 0., 2. }; // square matrix
+    DynamicArray2D<double> mat4{ {1., 0.}, {0., 2.} };
+    // assignments
+    DynamicArray2D<double> mat5 = { 1., 0., 0., 2. };
+  
     // 2D Test case without SplitBoundary objects
     // ------------------------------------------
     VSet<2U> mesh;

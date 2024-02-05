@@ -7,7 +7,10 @@
 
 namespace csmp {
 
-class  Tutorial4_Example_Revisited : public Example
+/**
+       As refactored by Hani Akbari (2018)
+*/
+class  Tutorial4_Example_revised : public Example
 {
 
 public:

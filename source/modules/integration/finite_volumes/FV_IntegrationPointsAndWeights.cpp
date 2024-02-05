@@ -479,7 +479,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
          for ( uint32_t jEdge = 0U; jEdge < 4U; jEdge++ )
            m_edge_of_sectors[jSector][jEdge] = make_pair(jEdge,(jEdge+1) % 4); 
       }
-    
+
 } // end CreateDataFor_ISOPARAMETRIC_LINEAR_TRIANGLE
 
 

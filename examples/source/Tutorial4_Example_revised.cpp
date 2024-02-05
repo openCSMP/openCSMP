@@ -1,4 +1,4 @@
-#include "Tutorial4_Example_Revisited.h"
+#include "Tutorial4_Example_revised.h"
 
 // CSMP model
 #include "ANSYS_Model2D.h" // TODO: replace and use CSMP native model instead
@@ -29,7 +29,7 @@ using namespace std;
 
 namespace csmp {
 
-void Tutorial4_Example_Revisited::Specifications()
+void Tutorial4_Example_revised::Specifications()
 {
   SetTitle( "Tutorial 4 Revisited: Stokes lubrication equation" );
   SetDifficulty( 3 );
@@ -41,7 +41,7 @@ void Tutorial4_Example_Revisited::Specifications()
   AddDescription( "for solving the Stokes equation using a standard FE method. Furthermore, a stabilisation parameter" );
   AddDescription( "is introduced to allow the discretisation of velocity and pressure in the Stokes equation using" );
   AddDescription( "the same FE basis functions." );
-  AddRequirement( "source code in: 'Tutorial4_Example_Revisited.cpp'" );
+  AddRequirement( "source code in: 'Tutorial4_Example_revised.cpp'" );
   AddRequirement( "pores Binary files, stokes_variables.txt, no need of configuration" );
 } // Initialize()
 
@@ -62,15 +62,16 @@ void Tutorial4_Example_Revisited::Specifications()
   //
   // *************************************************************************************************
 
-void Tutorial4_Example_Revisited::Run()
+void Tutorial4_Example_revised::Run()
 {
   // ----------------------------------------------------------------------------------
-  // 0.0 Set variables used throughout the simulation
+  // 0.0 Record CPU time required for simulation
   // ----------------------------------------------------------------------------------
-  clock_t start( clock() ); // record the CPU time
+  clock_t start( clock() ); //
 
   string input_file;
   cout << "\nTutorial4_Example: Please enter the name of input mesh ( default: pores ): ";
+  cout.flush();
   cin >> input_file;
 
   // ------------------------------
@@ -240,7 +241,7 @@ void Tutorial4_Example_Revisited::Run()
   Quick hack that loops over a 2D boundary, reads in a nodal source term and scales it by 0.5 of the length
   of the edges of the connected FEs wich lie at the model boundary (here it is the LEFT boundary)
   */
-void Tutorial4_Example_Revisited::assignFluxToPointSource( Model<2U>& mdl, const char* flux )
+void Tutorial4_Example_revised::assignFluxToPointSource( Model<2U>& mdl, const char* flux )
 {
 
   // backup the fluxes that are orginally assigned in a temporary variable
@@ -289,7 +290,7 @@ void Tutorial4_Example_Revisited::assignFluxToPointSource( Model<2U>& mdl, const
 
 
 /// simple combine x and y component of computed velocities into a vector and saves it to the grod
-void Tutorial4_Example_Revisited::constructVelocityVector( Model<2U>& mdl )
+void Tutorial4_Example_revised::constructVelocityVector( Model<2U>& mdl )
 {
   VectorVariable<2U> v;
   ScalarVariable     p;
@@ -308,7 +309,7 @@ void Tutorial4_Example_Revisited::constructVelocityVector( Model<2U>& mdl )
 
 
 /// scale the size of the CSMP model (NB divides by the provided factor!)
-void Tutorial4_Example_Revisited::scaleRegion( Model<2U>& mdl, double scale_factor )
+void Tutorial4_Example_revised::scaleRegion( Model<2U>& mdl, double scale_factor )
 {
   double       x_, y_;
   const double factor( scale_factor );
