@@ -24,7 +24,7 @@ of the finite element for which the stencil was initialized.
 Class provides a whole set of functionality, related to construction of the
 node-centered FV virtual cells for realisation of the CVPEM in CSP.
  
-Tesarius: sector - sector part of the finite element (FE) , attributed to the FE node.
+Tesarius: sector - sector part of the finite element (FE), attributed to the FE node.
 Number of sectors corresponds to the number of nodes. Sector is a topological
 hexahedron and is defined in physical and parametric spaces of the FE.
 Physical and parametric spaces of the FE are related by the mapping,
@@ -46,8 +46,6 @@ tetrahedrons, hexahedrons, prisms  and pyramids.
 @section participants Participants
 
 Gets it data from IntegrationPointsAndWeights.
- 
-
  
 @section implementation Implementation
 

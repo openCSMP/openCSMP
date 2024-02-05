@@ -15,10 +15,11 @@ namespace csmp {
 
 class ScalarVariable;
 class ArrayVariable;
+class FlaggedArrayVariable;
 template<uint32_t> class VectorVariable;
 template<uint32_t> class TensorVariable;
 template<uint32_t> class VSet;
-template class ModelTopology;
+class ModelTopology;
 
 
  /**
