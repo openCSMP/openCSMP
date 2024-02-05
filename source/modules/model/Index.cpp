@@ -187,7 +187,6 @@ Index::Index( const csmp::Index& idx )
     indexTracker(nullptr)
   {
       // attach itself to IndexTracker and vice versa
-      assert( idx.indexTracker != nullptr );
       if(idx.indexTracker)
         {
           // attach this Index to index tracker of the argument index
@@ -208,7 +207,6 @@ Index::Index( csmp::Index&& idx )
     indexTracker(nullptr)
   {
       // attach itself to IndexTracker and vice versa
-      assert( idx.indexTracker != nullptr );
       if ( idx.indexTracker ) {
            idx.indexTracker->Attach( this, &idx );
            // vice versa
