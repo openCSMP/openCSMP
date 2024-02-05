@@ -94,11 +94,6 @@ PropertyDatabase<dim>::PropertyDatabase( const PropertyDatabase<dim>& p )
 
 
 
-
-
-
-
-
 ///  Initialization with variable specifications read from '*-variables.txt' ascii file.
 template<uint32_t dim>
 void PropertyDatabase<dim>::Initialize( const char* variables_file )
@@ -119,6 +114,9 @@ void PropertyDatabase<dim>::Initialize( const char* variables_file )
 
 
 
+
+
+
 template<uint32_t dim>
 void PropertyDatabase<dim>::InitializeVariableTypeCount( std::map<VARIABLE_TYPE,uint32_t>& typeCount )
   {
@@ -127,6 +125,8 @@ void PropertyDatabase<dim>::InitializeVariableTypeCount( std::map<VARIABLE_TYPE,
     for( set<VARIABLE_TYPE>::const_iterator it( types.begin() ); it != types.end(); ++it )
       typeCount[*it] = 0;
   }
+
+
 
 
 /// Initializes private container to all available placements

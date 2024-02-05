@@ -176,6 +176,7 @@ Index::Index( VARIABLE_TYPE ty, PLACEMENT pl, uint32_t idx,
 
 Creates an index based on the provided parameter
 @param idx an existing csmp::Index object
+@attention asserting specific offsets cannot be done here where the Indices are constructed because they are calculated and assigned later after they keys have been registered with the database.
 */
 Index::Index( const csmp::Index& idx ) 
   : type(idx.type), place(idx.place), index(idx.index),
@@ -185,8 +186,6 @@ Index::Index( const csmp::Index& idx )
     localVariables(idx.localVariables), integrationPointVariables(idx.integrationPointVariables),
     indexTracker(nullptr)
   {
-      assert( place != UNDEFINED );
-      assert( index != UNSPECIFIED );
       // attach itself to IndexTracker and vice versa
       assert( idx.indexTracker != nullptr );
       if(idx.indexTracker)
@@ -208,8 +207,6 @@ Index::Index( csmp::Index&& idx )
     localVariables(std::move(idx.localVariables)), integrationPointVariables(std::move(idx.integrationPointVariables)),
     indexTracker(nullptr)
   {
-      assert( place != UNDEFINED );
-      assert( index != UNSPECIFIED );
       // attach itself to IndexTracker and vice versa
       assert( idx.indexTracker != nullptr );
       if ( idx.indexTracker ) {
