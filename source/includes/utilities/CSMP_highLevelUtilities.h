@@ -2,7 +2,6 @@
 #define CSMP_HIGH_LEVEL_UTILITIES_H
 
 #include "CSMP_definitions.h"
-#include "FiniteElement.h"
 
 namespace csmp {
 
@@ -34,6 +33,32 @@ inline std::string number_to_string( const T& value ) {
   sstr << std::setprecision( 16 ) << std::ios::scientific << value;
   return sstr.str();
 }
+
+
+/// scientific-format string with appropriate digits (without loss of precision (std::to_string limits to 6 significant digits)
+template <typename T>
+inline std::string numberToString( const T& value, bool verbose=false ) {
+  if constexpr( std::is_same<T,double>::value ) {
+      // int snprintf ( char * s, size_t n, const char * format, ... );
+      //                sign + digit +  dp +       digits          + e + sign + expo + \0 (15 significant digits)
+      std::string dstring( 1 + 1 +      1  + (DBL_DECIMAL_DIG - 1) + 1 + 1    + 5, '\0');
+      auto slen = snprintf( &dstring[0], dstring.size(), "%1.14e", value );
+      dstring.resize(slen);
+      if ( verbose ) std::cout <<"\nmain: floating point value: "<< dstring <<" vs. "<< value << std::endl;
+      return dstring;
+    }
+  else if constexpr ( std::is_same<T,float>::value )
+    {
+      //                sign + digit +  dp +       digits          + e + sign + expo + \0 (8 significant digits)
+      std::string fstring( 1 + 1 +      1  + (FLT_DECIMAL_DIG - 1) + 1 + 1    + 3, '\0');
+      auto slen = snprintf( &fstring[0], fstring.size(), "%1.7e", value );
+      fstring.resize(slen);
+      if ( verbose ) std::cout <<"\nmain: floating point value: "<< fstring <<" vs. "<< value << std::endl;
+      return fstring;
+    }
+  return number_to_string( value );
+}
+
 
 /// evaluates the distance between 2 points
 bool areFartherApartThan( const double* pn, const double* pw, double distance );

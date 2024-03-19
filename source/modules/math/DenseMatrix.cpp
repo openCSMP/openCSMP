@@ -1,6 +1,7 @@
 #include "DenseMatrix.h"
 #include "compareFloats.h"
 #include <cmath>
+#include <cassert>
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -18,8 +19,30 @@ template<uint32_t mn_max>
 DenseMatrix<mn_max>::DenseMatrix()
  : rows(mn_max), cols(mn_max)
  {
-//    cout <<"\nDenseMatrix<"<< mn_max <<","<< mn_max <<">: called constructor."<< endl;
+//  cout <<"\nDenseMatrix<"<< mn_max <<","<< mn_max <<">: called constructor."<< endl;
  }
+
+template<uint32_t mn_max>
+DenseMatrix<mn_max>::DenseMatrix( const std::initializer_list<std::initializer_list<double>>& array_init_data )
+ {
+    if ( (rows=static_cast<uint32_t>(array_init_data.size())) > mn_max )
+      throw out_of_range("DenseMatrix (ctor): initialiser list contains more rows than matrix has storage for");
+    const auto it = array_init_data.begin();
+    if ( (cols=static_cast<uint32_t>((*it).size())) > mn_max )
+      throw out_of_range("DenseMatrix (ctor): first row in initialiser list contains more columns than matrix has storage for");
+    
+    uint32_t i{0u};
+    for ( const auto& row : array_init_data ) { // iterate through outer list to find largest inner list
+          if ( cols != row.size() )
+            throw out_of_range("DenseMatrix (ctor): row with wrong number of columns in initialiser list");
+          uint32_t col{0u};
+          for ( const auto& col_val : row )
+            data[i][col++] = col_val;
+          i++;
+     }
+
+ } // end constructor(initializer_list)
+
 
 
 /// copy constructor
@@ -1561,12 +1584,9 @@ void DenseMatrix<mn_max>::In()
 template<uint32_t mn_max>
 void DenseMatrix<mn_max>::Out( long digits ) const
  {
-    long  prec{2}; // default
     cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">: rows="<< rows <<", cols="<< cols << endl;
-    if ( digits != 0U ) { 
-         cout.setf(ios::scientific);
-         prec = cout.precision(digits);
-      }
+    cout.setf(ios::scientific);
+    long prec = cout.precision(digits);
     const uint32_t stride{ 3U }; // note that there is extra padding
     const uint32_t split_after = ( digits != 0U ) ? 10U : 18U;
     uint32_t       row_break;
@@ -1615,10 +1635,11 @@ template class DenseMatrix<DM3>;
 template<>
 bool operator==( const DenseMatrix<DM_MIN>& MA, const DenseMatrix<DM_MIN>& MB )
  {
+    if ( &MA == &MB ) return true;
     assert( MA.Rows() == MB.Rows() );
     assert( MA.Cols() == MB.Cols() );
-    for ( auto i{0U}; i<MA.Rows(); i++ )
-      for ( auto j{0U}; j<MA.Cols(); j++ )
+    for ( uint32_t i{0U}; i<MA.Rows(); i++ )
+      for ( uint32_t j{0U}; j<MA.Cols(); j++ )
         if ( essentiallyEqual( MA(i,j), MB(i,j) ) == false ) return false;
          
     return true;

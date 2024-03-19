@@ -1,6 +1,8 @@
 #ifndef CSMP_DENSE_MATRIX_H
 #define CSMP_DENSE_MATRIX_H
 
+//#define DENSE_MATRIX_USED_TOGETHER_WITH_CSMP
+
 #include <stdexcept>
 #include <typeinfo>
 #include <array>
@@ -43,6 +45,7 @@ template<uint32_t mn_max>
 class DenseMatrix {
   public:
     DenseMatrix();
+    DenseMatrix( const std::initializer_list<std::initializer_list<double>>& );
     DenseMatrix( uint32_t m, uint32_t n );
     DenseMatrix( uint32_t m, uint32_t n, double val );
     DenseMatrix( const DenseMatrix& );
@@ -161,6 +164,7 @@ class DenseMatrix {
 #endif
   
   private:
+  // square matrix of dimension mn_max times mn_max
    std::array<std::array<double,mn_max>, mn_max> data;
    uint32_t  rows, cols;
    

@@ -1,7 +1,4 @@
 #include "CubicSpline.h"
-#include "CSMP_mathUtilities.h"
-
-#include <cmath>
 
 using namespace std;
 

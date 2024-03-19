@@ -2,6 +2,7 @@
 #include "Box.h"
 #include "CSMP_definitions.h"
 #include "CSMP_global_enumerations.h"
+#include "TensorVariable.h"
 
 #include "IsoparametricLinearHexahedron.h"
 #include "IsoparametricLinearPyramid.h"

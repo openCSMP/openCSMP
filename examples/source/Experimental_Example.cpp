@@ -62,15 +62,27 @@ void Experimental_Example::Specifications()
 
 void Experimental_Example::Run()
  {
+    // testing numberToString and matrix output
+    // ----------------------------------------
+    double dvalue{ 1.0e-15 };
+    float  fvalue{ 1.0e-01 };
+    cout <<"\nexample: floating point numbers: "<< dvalue <<" vs. "<< fvalue << endl;
+
+    cout <<"\n"<<"experimental example: sum: "<< numberToString( fvalue + dvalue );
+
+    cout <<"\n"<<"experimental example: float with size "<< sizeof(dvalue) <<": "<< numberToString( dvalue );
+    cout <<"\n"<<"experimental example: float with size "<< sizeof(fvalue) <<": "<< numberToString( fvalue );
+
+ 
     // comparing 1D array with vector of vectors
     DynamicArray2D<double> mat(3,5);
     // unsupported 2D initialisation: DynamicArray2D<double> mat2{ {1.,0}, {0.,2.} };
     // should work: DynamicArray2D<double> mat2{ 1., 0., 0., 2. };
     // would not know m, n: DynamicArray2D<double> mat2( vector<double>{1., 0., 0., 2.} );
-    DynamicArray2D<double> mat3{ 1., 0., 0., 2. }; // square matrix
+//    DynamicArray2D<double> mat3{ 1., 0., 0., 2. }; // square matrix
     DynamicArray2D<double> mat4{ {1., 0.}, {0., 2.} };
     // assignments
-    DynamicArray2D<double> mat5 = { 1., 0., 0., 2. };
+//    DynamicArray2D<double> mat5 = { 1., 0., 0., 2. };
   
     // 2D Test case without SplitBoundary objects
     // ------------------------------------------

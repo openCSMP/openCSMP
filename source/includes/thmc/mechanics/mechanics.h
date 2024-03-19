@@ -3,6 +3,7 @@
 
 #include "CSMP_definitions.h"
 #include "DenseMatrix.h"
+#include "TensorVariable.h"
 
 namespace csmp {
 

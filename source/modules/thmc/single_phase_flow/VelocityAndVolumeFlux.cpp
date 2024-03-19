@@ -30,18 +30,17 @@ have the wrong placement or type.
  
 tested:  */
 template<uint32_t dim, template<uint32_t> class CELL>
-VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux(  const Model<dim>& sg,
-                                                            const char* oper,   // conductivity
-                                                            const char* basic,  // porosity
-                                                            const char* test,   // fluid pressure 
-                                                            bool  node_averaging,
-                                                            const char* velocity,
-                                                            const char* pore_velocity,
-                                                            const char* volume_flux,
-                                                            const char* nodal_velocity,
-                                                            const char* nodal_pore_velocity,
-                                                            const char* nodal_volume_flux)
-
+VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
+                                                        const char* oper,   // conductivity
+                                                        const char* basic,  // porosity
+                                                        const char* test,   // fluid pressure
+                                                        bool  node_averaging,
+                                                        const char* velocity,
+                                                        const char* pore_velocity,
+                                                        const char* volume_flux,
+                                                        const char* nodal_velocity,
+                                                        const char* nodal_pore_velocity,
+                                                        const char* nodal_volume_flux )
   : MathOperatorLHS<dim,CELL>(sg.Database(),oper,basic,test),
     // getting the necessary csmp::Index keys
     velo_key_(sg.Database().StorageKey(velocity)),
