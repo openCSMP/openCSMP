@@ -1,7 +1,7 @@
 #ifndef CSMP_DENSE_MATRIX_H
 #define CSMP_DENSE_MATRIX_H
 
-//#define DENSE_MATRIX_USED_TOGETHER_WITH_CSMP
+#define DENSE_MATRIX_USED_TOGETHER_WITH_CSMP
 
 #include <stdexcept>
 #include <typeinfo>
