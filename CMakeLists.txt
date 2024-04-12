@@ -9,8 +9,8 @@ set(PACKAGE_TARNAME "${PACKAGE_NAME}")
 
 if(DEFINED ENV{csmp_api_SOURCE_DIR})
     message("Environment Variable csmp_api_SOURCE_DIR is defined to $ENV{csmp_api_SOURCE_DIR}")
-elseif()
-    message("Environment Variable csmp_api_SOURCE_DIR NOT defined: This will likely lead to compilation issues. Please define variable to location of open-csmp")
+else()
+    message(WARNING "Environment Variable csmp_api_SOURCE_DIR NOT defined: This will likely lead to compilation issues. Please define variable to location of open-csmp")
 endif()
 
 set(CMAKE_MODULE_PATH $ENV{csmp_api_SOURCE_DIR}/cmake)
