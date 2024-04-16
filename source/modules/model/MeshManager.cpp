@@ -261,7 +261,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   input_etypes.insert( parseFiniteElementTypeEnum( vset.ElementType( 0U ) ) );
 
   if ( vset.HybridElementTypeMesh() )
-    for ( size_t i{0U}; i<vset.TotalNumberOfCells(); ++i )
+    for ( size_t i{0U}; i<vset.Cells(); ++i )
       input_etypes.insert( parseFiniteElementTypeEnum( vset.ElementType( i ) ) );
 
   cout << "\nMeshManager<" << dim << ">::Initialize: ";

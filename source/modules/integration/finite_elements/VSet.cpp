@@ -127,7 +127,7 @@ void VSet<dim>::Resize( const deque<int8_t>& etypes,
   // resizing the polygonal data
 	VData::Resize(etypes, npes, epes, nodes, faces, interfaces);
 
-  if ( etypes.size() != TotalNumberOfCells() )
+  if ( etypes.size() != Cells() )
     throw csmp::Exception( ERROR, "VSet<dim>::Resize", "element types does not match number of finite elements in 'plist'");
 
   pmtrl_.resize( epes.size() - faces - interfaces );
@@ -191,7 +191,7 @@ void VSet<dim>::AddPlist( typename map<size_t, vector<int64_t> >::const_iterator
 						              typename map<size_t, vector<int64_t> >::const_iterator last )
 {
 	typename deque<vector<int64_t> >::iterator it = PlistBegin();
-  assert( TotalNumberOfCells() == distance(first,last) );
+  assert( Cells() == distance(first,last) );
 
 	while (first != last && it != PlistEnd())
     {
@@ -211,7 +211,7 @@ void VSet<dim>::AddPlist( typename deque<vector<int64_t> >::const_iterator first
                           typename deque<vector<int64_t> >::const_iterator last )
 {
 	typename deque<vector<int64_t> >::iterator it = PlistBegin();
-  assert( TotalNumberOfCells() == distance(first,last) );
+  assert( Cells() == distance(first,last) );
 
 	while (first != last && it != PlistEnd())
     {

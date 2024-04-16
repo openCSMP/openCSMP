@@ -199,18 +199,44 @@ double VData::P( uint32_t coordinate_axis, size_t i ) const
 }
 
 
-size_t VData::Vertices() const { return px.size(); }
+size_t VData::Vertices() const {
+     if ( px.empty() ) return 0ul;
+     return px.size();
+  }
     
-size_t VData::Elements() const { return plist.size() - (plist.size() - first_face_); }
+size_t VData::Elements() const {
+     if ( plist.empty() ) return 0ul;
+//       throw length_error("VData::Elements: unitialised 'plist'");
+     return plist.size() - (plist.size() - first_face_);
+  }
 
-size_t VData::Faces() const { return first_interface_ - first_face_; }
+size_t VData::Faces() const {
+     if ( plist.empty() ) return 0ul;
+//       throw length_error("VData::Faces: unitialised 'plist'");
+     return first_interface_ - first_face_;
+  }
 
-size_t VData::Interfaces() const { return plist.size() - first_interface_; }
+size_t VData::Interfaces() const {
+     if ( plist.empty() ) return 0ul;
+//       throw length_error("VData::Interfaces: unitialised 'plist'");
+     return plist.size() - first_interface_;
+  }
 
-size_t VData::NodeManifolds() const { return pmanifolds_.size(); }
+size_t VData::NodeManifolds() const {
+     if ( pmanifolds_.empty() ) return 0ul;
+//       throw length_error("VData::NodeManifolds: unitialised 'pmanifolds'; does the model contain any SplitBoundary objects");
+     return pmanifolds_.size();
+  }
 
 /// the plist contains all: elements, faces and interfaces
-size_t VData::TotalNumberOfCells() const { return plist.size(); }
+size_t VData::Cells() const {
+     if ( pelmt.empty() )
+       throw length_error("VData::Cells: unitialised 'pelmt' array");
+     if ( pelmt.size() == 1U and plist.empty() )
+       throw length_error("VData::Cells: single-element type mesh, but 'plist' not initialised");
+    if ( !plist.empty() ) return plist.size();
+    return pelmt.size();
+ }
 
 size_t VData::ElementTypes() const {
 //     return pelmt.size();
@@ -4166,7 +4192,7 @@ void VData::InitialiseNodeTopologyIdentifiers()
     map<size_t,set<size_t> > node_parent_line_elmts;
     map<size_t,set<size_t> > node_parent_surf_elmts;
     
-    for ( size_t i{0U}; i<TotalNumberOfCells(); i++ )
+    for ( size_t i{0U}; i<Cells(); i++ )
       {
          // getting the element type
          if ( HybridElementTypeMesh() ) elmt_type = static_cast<CSMP_FEM_TYPE>(ElementType(i));

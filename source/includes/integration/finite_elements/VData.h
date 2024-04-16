@@ -136,7 +136,7 @@ class VData {
     size_t Interfaces() const;
   
     /// combined number of any entities: elements + faces + interfaces
-    size_t TotalNumberOfCells() const;
+    size_t Cells() const;
     
     /// topologically collocated nodes along the node-matched boundaries of mesh patches
     size_t NodeManifolds() const;

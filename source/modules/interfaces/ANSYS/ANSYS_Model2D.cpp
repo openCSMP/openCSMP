@@ -227,11 +227,19 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
 } // end Initialize
 
 
+
 /**
 
-Default constructor of Model is called. Then the model is build
-from the 'icem_file_set' '*.asc' and '*.dat' files using the method
-Initialize.
+Model is build from the ANSYS 'icem_file_set' '*.asc' and '*.dat' files using the method
+Initialize().
+
+@param icem_file_set ANSYS 'icem_file_set' '*.asc' and '*.dat' files, binary is cross-platform, . asc text file has platform-dependent line endiings
+@param regions_file_prefix usually name of model, but can be specified
+@param variable_file text file listing the variables used in the computation with the loaded model
+@param irregular_mesh  true if the mesh is not rectangular shaped
+@param binary_file if the mesh connectivity was output from ANSYS to a binary file
+@param use_regions_file to allow user to eliminate regions (and the corresponding elements) from the computations
+
 */
 ANSYS_Model2D::ANSYS_Model2D( const char* icem_file_set,
                               const char* regions_file_prefix,
