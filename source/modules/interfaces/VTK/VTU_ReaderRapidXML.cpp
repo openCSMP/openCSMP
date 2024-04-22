@@ -454,7 +454,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                          region_cells.clear();
                      }
                  }
-              assert( topology.Cells() == vset.TotalNumberOfCells() );
+              assert( topology.Cells() == vset.Cells() );
            } // end model topology
            
 
@@ -506,7 +506,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
             switch( var_type ) {
                  case SCALAR: {
                         PropertyData elmt_prop( ELEMENT, SCALAR, dim );
-                        elmt_prop.Reserve( vset.TotalNumberOfCells() );
+                        elmt_prop.Reserve( vset.Cells() );
                         while (ssCellPropertyData >> valueCellProperty)
                           pushBack( elmt_prop, makeScalar( ANY, valueCellProperty ) );
                         vset.AddData( nameAttrCellPropertyData, elmt_prop );
@@ -524,7 +524,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                    break;
                  case VECTOR: { // TODO: not tested yet
                         PropertyData elmt_prop( ELEMENT, VECTOR, dim );
-                        elmt_prop.Reserve( vset.TotalNumberOfCells() );
+                        elmt_prop.Reserve( vset.Cells() );
                         vector<double> value( dim );
                         while ( ssCellPropertyData >> value[counter++] ) {
                              if ( counter == dim ) {
@@ -538,7 +538,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                    break;
                  case TENSOR: { // TODO: not tested yet
                         PropertyData elmt_prop( ELEMENT, TENSOR, dim );
-                        elmt_prop.Reserve( vset.TotalNumberOfCells() );
+                        elmt_prop.Reserve( vset.Cells() );
                         vector<double>      value( dim * dim );
                         TensorVariable<dim> ts;
                         while ( ssCellPropertyData >> value[counter++] ) {
@@ -556,7 +556,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                    break;
                  case ARRAY: {
                         PropertyData elmt_prop( ELEMENT, ARRAY, dim, numberOfComponents );
-                        elmt_prop.Reserve( vset.TotalNumberOfCells() );
+                        elmt_prop.Reserve( vset.Cells() );
                         vector<double> value( numberOfComponents );
                         ArrayVariable array( numberOfComponents );
                         while ( ssCellPropertyData >> array( static_cast<uint32_t>(counter++) ) ) {

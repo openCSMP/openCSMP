@@ -3,7 +3,8 @@
 #include "Region.h"
 #include "Model.h"
 #include "PDE_Integrator.h"
-#include "CSMP_highLevelUtilities.h"
+// #include "CSMP_highLevelUtilities.h"
+#include "MeshManagementUtilities.h"
 #include "CSMP_definitions.h"
 
 // File I/O and Initialization
@@ -37,6 +38,9 @@
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "VelocityAndVolumeFlux.h"
+
+// comment-out this preprocessor directive if you want to run with a CSMP native model
+#define RUN_DIRECTLY_WITH_TRIANGLE_INPUT_FILE
 
 using namespace std;
 
@@ -77,28 +81,32 @@ void LinearElasticity_Example::Specifications()
 */
 void LinearElasticity_Example::Run()
 {
+#ifdef RUN_DIRECTLY_WITH_TRIANGLE_INPUT_FILE
     // ---------------------------------------------------------------------------------------
     // 0. Import model from Shewchuk's Triangle mesher
     // ---------------------------------------------------------------------------------------
 //    /* uncomment this block to use it
     TRIANGLE_Interface  mesh_interface;
     VSet<2U>            mesh_container;
-    char                file_name[200];
+    string              file_name;
     cout <<"\nmain: Enter name of 'Triangle' input file set: ";
     cin >> file_name;
-    mesh_interface.ReadTriangle2DMesh( file_name, mesh_container );
+    const bool isoparametric{true};
+    mesh_interface.ReadTriangle2DMesh( file_name.c_str(), mesh_container, isoparametric );
     VSetConverter<2U>  converter;
     converter.ConvertLinearToQuadraticTriangles( mesh_container );
 
-    // 'example12.txt' is the text file that defines the variables used in this example
+    // 'LinearElasticity_Example-variables.txt' is the text file that defines the variables used in this example
     Model<2U>  model( mesh_container, "LinearElasticity_Example-variables.txt" );
-    string     config_file = file_name; // model.Name();
+    string     config_file{ file_name };
+    // give this model a name as none is supplied to the constructor
+    model.Name( file_name.c_str() );
     mesh_container.Erase();
-//*/
+    PrintModelProperties( model );
+#else
     // ---------------------------------------------------------------------------------------
     // 1. Load CSMP native format model
     // ---------------------------------------------------------------------------------------
-/*
     string model_name;
     cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'blunt30deg.1':"<<endl;
     cin.ignore();
@@ -113,7 +121,7 @@ void LinearElasticity_Example::Run()
     CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
     //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
     Model<2U>  model(model_name, variable_file);
-    */
+#endif
     printModelDimensions( model, true );
 
     // assigns the element area to a distributed variable called 'area'
@@ -200,8 +208,9 @@ void LinearElasticity_Example::Run()
     if ( with_boundary_stresses ) deformation.AddBoundaryIntegral( &bstresses );
 
     const bool plane_strain(true);
-    const bool principal_vectors(true);
-    StressesAndStrains<2U>  postpro( model, "Young's modulus", "Poisson's ratio", "displacement", plane_strain, principal_vectors );
+    const bool Eigen_vectors(true);
+    StressesAndStrains<2U>  postpro( model, "Young's modulus", "Poisson's ratio", "displacement",
+                                     plane_strain, Eigen_vectors );
 
     if ( with_plane_stress ) postpro.PlaneStress();
      deformation.AddPostProcess( &postpro );
@@ -294,8 +303,9 @@ void LinearElasticity_Example::Run()
 
     cout <<"\nmain: That's it..."<< endl;
 
+#ifndef RUN_DIRECTLY_WITH_TRIANGLE_INPUT_FILE
     fs::current_path("../../example_inputs/");
-  
+#endif
 } // end Run
 
 
@@ -332,5 +342,32 @@ void LinearElasticity_Example::SteadyStatePressure( Model<2U>& model )
 } // end SteadyStatePressure
 
 
+
+void LinearElasticity_Example::PrintModelProperties( const Model<2U>& model )
+ {
+    cout << "\n==================================================================================================";
+    cout << "\nModel '"<< model.Name() <<"' has been established successfully ";
+    if ( model.Mesh().Elements() > 0 ) {
+         size_t volume_elmts{0U}, surface_elmts{0U}, line_elmts{0U};
+         cout <<"(total cells "<< currentCellTypes( model.Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts );
+         cout <<", nodes "<< model.Mesh().Nodes() <<")";
+         cout <<"\n\t\t\t("<< model.Mesh().Elements() <<" elements: volumes "<< volume_elmts <<", surfaces "<< surface_elmts <<", lines "<< line_elmts <<")";
+      }
+    if ( model.Mesh().Faces() > 0 ) {
+         size_t volume_faces{0U}, surface_faces{0U}, line_faces{0U};
+         currentCellTypes( model.Mesh(), FACE, volume_faces, surface_faces, line_faces );
+         assert( volume_faces == 0U );
+         cout <<"\n\t\t\t("<< model.Mesh().Faces() <<" faces: surfaces "<< surface_faces <<", lines "<< line_faces <<")";
+      }
+    if ( model.Mesh().InterFaces() > 0 ) {
+         size_t volume_ifaces{0U}, surface_ifaces{0U}, line_ifaces{0U};
+         currentCellTypes( model.Mesh(), INTER_FACE, volume_ifaces, surface_ifaces, line_ifaces );
+         assert( volume_ifaces == 0U );
+         cout <<"\n\t\t\t("<< model.Mesh().InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
+      }
+    cout << "\n==================================================================================================";
+    cout << endl;
+    
+} // end PrintModelProperties
 
 } // csmp
