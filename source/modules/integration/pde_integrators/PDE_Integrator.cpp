@@ -13,7 +13,6 @@
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
 #include "SAMG_Settings.h"
-static_assert( 2 > 3, "code is being compiled with SAMG");
 #else
 #include "LinearSolver.h"
 #endif

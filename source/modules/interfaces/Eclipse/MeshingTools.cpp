@@ -3781,8 +3781,7 @@ bool processBarElement( bool tetra_mesh,
                        const vector<GridNode*>& nodes,
                        const vector<vector<size_t> >& face_nodes )
 {
-    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
+    // csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
     addBarCell(cells,nodes[0],nodes[1]);
     return true;
 }

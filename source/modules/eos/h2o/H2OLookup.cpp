@@ -388,28 +388,27 @@ void H2OLookup::GetIndex_iA( const double& t_current, const double& p_current, c
 double H2OLookup::DynamicViscosity( const double& T, const double& rho )  const
 {
   const double tstar( 647.27e0 ), rhostar( 317.763e0 );
-  double trat, trat1, rhorat, rhorat1, n0, n;
-  int i, j, k;
 
-  trat = T / tstar;
-  trat1 = 1.0e0 / trat - 1.0e0;
-  rhorat = rho / rhostar;
-  rhorat1 = rhorat - 1.0e0;
+  double trat = T / tstar;
+  double trat1 = 1.0e0 / trat - 1.0e0;
+  double rhorat = rho / rhostar;
+  double rhorat1 = rhorat - 1.0e0;
 
-  n0 = 0;
-  for ( k = 0; k<4; ++k )
+  double n0 = 0;
+  for ( int k = 0; k<4; ++k )
   {
     n0 += (ak[k] * pow( (1.0e0 / trat), k ));
   }
   n0 = 1.0e0 / n0;
   n0 *= (sqrt( trat ));
 
-  n = 0;
-  for ( i = 0; i<6; ++i )
+  double n = 0;
+  // SKM: added _ because i shadows local variable
+  for ( int i_ = 0; i_<6; ++i_ )
   {
-    for ( j = 0; j<5; ++j )
+    for ( int j = 0; j<5; ++j )
     {
-      n += (bij[i][j] * pow( trat1, i )*pow( rhorat1, j ));
+      n += (bij[i_][j] * pow( trat1, i_ )*pow( rhorat1, j ));
     }
   }
   n = n0*exp( rhorat*n );

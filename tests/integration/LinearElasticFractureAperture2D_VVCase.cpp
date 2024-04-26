@@ -276,12 +276,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
     _test( avg_percent_error < min_avg_error_ );
 
     //Saving solution to file
-    if ( false ){
-      WriteSolutionToFile(data, output_file + "_Aperture.txt");
-      }
-
-
-
+    // WriteSolutionToFile(data, output_file + "_Aperture.txt");
     std::cout << "\nLinearElasticFractureAperture finished running VV_Case" << std::endl;
 
     return;

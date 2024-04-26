@@ -28,8 +28,8 @@ SparseMatrix::SparseMatrix( const SparseMatrix& sp )
  
  
 SparseMatrix::SparseMatrix( SparseMatrix&& sp )
- : data_(move(sp.data_)),
-   entries_(move(sp.entries_))
+ : data_(sp.data_),
+   entries_(sp.entries_)
  {
  }
  

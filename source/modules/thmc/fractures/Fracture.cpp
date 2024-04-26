@@ -867,7 +867,7 @@ double Fracture<dim>::DistanceFromTip(std::map<Point<dim>, Node<dim>*>& nodemap,
   switch (side){
     case RIGHT: {
         double lengthfromtip = 0.0;
-        for ( auto i_n = nodemap.find(N->Coordinate()); i_n != --(nodemap.end()); 0 ){
+        for ( auto i_n = nodemap.find(N->Coordinate()); i_n != --(nodemap.end()); ){
             auto i_n_old = i_n++;                                         //assign old value and then iterate
             assert(i_n->first == i_n->second->Coordinate());
             lengthfromtip += i_n_old->first.DistanceTo(i_n->first);       //add distance between each Node
@@ -877,7 +877,7 @@ double Fracture<dim>::DistanceFromTip(std::map<Point<dim>, Node<dim>*>& nodemap,
       break;
     case LEFT: {
         double lengthfromtip = 0.0;
-        for ( auto i_n = nodemap.find(N->Coordinate()); i_n != ++(nodemap.begin()); 0 ){
+        for ( auto i_n = nodemap.find(N->Coordinate()); i_n != ++(nodemap.begin()); ){
             auto i_n_old = i_n--;                                         //assign old value and then iterate
             assert(i_n->first == i_n->second->Coordinate());
 
@@ -1027,8 +1027,8 @@ double Fracture<dim>::AnalyticalAperture(double t, double x){
   //Viscosity Dominated Solution
   if (DimensionlessViscosity() > M_dominant){
     //Garagash 2005
-    double epsi_K = 0.1076 * std::pow( DimensionlessToughness(), 3.16796);
-    double OmegaBar_1_at_well = 0.75802;
+//    double epsi_K = 0.1076 * std::pow( DimensionlessToughness(), 3.16796);
+//    double OmegaBar_1_at_well = 0.75802;
     //std::cout << epsi_K*OmegaBar_1_at_well << std::endl;
 
     double gamma0     = 0.6152;

@@ -166,7 +166,7 @@ void SneddonCrackCoupled3D_VVCase::run()
     /// Elasticity Boundary Conditions
     /// --------------------------------
     //Elasticity Dirichlet
-    Node<dim> *cornerNodeLeftBottom, *cornerNodeRightBottom, *cornerNodeRightTop;
+    Node<dim> *cornerNodeLeftBottom{0}, *cornerNodeRightBottom{0}, *cornerNodeRightTop{0};
     for (vector<Node<dim>*>::const_iterator node (model.Region("Model").NodesBegin()); node != model.Region("Model").NodesEnd(); ++node )
     {
         if ( (*node)->AtBoundary() == CNR1 ) cornerNodeLeftBottom = (*node);

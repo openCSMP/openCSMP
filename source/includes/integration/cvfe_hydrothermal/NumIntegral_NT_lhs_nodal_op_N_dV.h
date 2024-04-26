@@ -23,7 +23,7 @@ class NumIntegral_NT_lhs_nodal_op_N_dV : public MathOperatorLHS<dim,CELL> {
     virtual void GetOperands( const CELL<dim>& ) override;
     virtual void ComputeContribution( const CELL<dim>& ) override;
     
-    virtual NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>* clone() const { return new NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>(*this); }
+  virtual NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>* clone() const override { return new NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>(*this); }
 
   private:
 

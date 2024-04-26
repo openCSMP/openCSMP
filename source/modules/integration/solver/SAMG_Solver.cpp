@@ -5,7 +5,7 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 #include "CSMP_mathUtilities.h"
-#include <fstream>
+//#include <fstream>
 
 #ifndef SAMG_MULTIPLE_INSTANCES
 #include "samg.h"
@@ -241,7 +241,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
 #if defined(_OPENMP )
 #pragma omp parallel for // algorithm has been done this way to complete idea of "first touch".
 #endif
-    for ( int32_t i{0U}; i < nnu_; i++ ) {
+    for ( int32_t i{0}; i < nnu_; i++ ) {
       u_[i] = x[i%nsys_*(nnu_ / nsys_) + i / nsys_]; // initial guess for the solution vector
       f_[i] = b[i%nsys_*(nnu_ / nsys_) + i / nsys_]; // right-hand side
     }
@@ -250,7 +250,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
 #if defined(_OPENMP )
 #pragma omp parallel for // algorithm has been done this way to complete idea of "first touch".
 #endif
-    for ( int32_t i{0U}; i<nnu_; i++ ) {
+    for ( int32_t i{0}; i<nnu_; i++ ) {
       u_[i] = x[i]; // initial guess for the solution vector
       f_[i] = b[i]; // right-hand side
     }
@@ -665,7 +665,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
 
   // solver returned ok so lets place contents back into x
   if ( settings_->UsePointBasedApproach() )
-    for ( auto i{0U}; i < nnu_; i++ )
+    for ( int32_t i{0U}; i < nnu_; i++ )
       x[i%nsys_*(nnu_ / nsys_) + i / nsys_] = u_[i];
   else x = u_;
 
@@ -1319,7 +1319,7 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
     ofs.open(out_file.c_str());
     ofs.setf(ios::scientific);
     prec = ofs.precision(15);
-    for ( size_t i{0U}; i<nnu_; i++ ) ofs << f_[i] << endl;
+    for ( size_t i{0u}; i<static_cast<size_t>(nnu_); i++ ) ofs << f_[i] << endl;
     ofs.unsetf( ios::scientific );
     ofs.precision(prec);
     ofs.close();
