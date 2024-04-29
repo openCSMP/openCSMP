@@ -34,39 +34,73 @@ void CSMPInterfaces_Example::Specifications()
   AddRequirement( "input mesh files that can be read by csmp.");
 } 
 
-/** 
-    Build CSMP native format models (binary files) using various interfaces, including ANSYS, SKUA, ECLIPSE, RHINO, TRIANGLE, etc.
 
+/**
+    Builds CSMP native format models (binary files) using various interfaces, including ANSYS, SKUA, ECLIPSE, RHINO, TRIANGLE, etc.
     User can select which model to build or build all the models that shall be used in other examples.
-*/
+    For this purpose, existing "default" files from the directory example_inputs/ will be used.
+    
+    @attention To run the OpenCSMP examples, please copy the 'example_inputs/' directory to a location outside of the open-csmp repository
+    as you do not want the repository to track your experimentation with the examples..
+    Set this new directory as the working directory of your IDE (CLion, XCode, QT_Creator, MS Vis Studio etc.).
+    Look at the 3 sub directories of example_inputs/ after running the example. They should contain:
 
+	- "input_meshes/" contains mesh files that can be read by OpenCSMP interfaces;
+
+	- 'csmp_native_format_models/' that contains OpenCSMP native format binary files (*.vset and *.dat files);
+
+	- 'variables_and_configuration_files/' (*.txt files) containing variable lists and model configuration files.
+  
+  @note Typically the name of these files represents the name of the model with an argument like '-variables.txt' of '-configuration.txt' see CSMP users guide.
+
+  Creating new subdirectories in your new working directory, this  Run() functions will:
+
+	1) create an example directory from its name (i.e., 'example_outputs/example_name/');
+
+	2) recover default input files from the 'example_inputs/' directory,
+     copy them into the example directory
+
+	3) produce all outputs in the created example directory (note: if an example directory already exists, it will be overwritten). 
+
+  @note to use your own inputs, please copy the input files into corresponding sub directories of 'example_inputs/'
+  
+  @attention Again: do not create your working directory anywhere inside the cloned open-csmp repository!
+
+*/
 void CSMPInterfaces_Example::Run()
 {
-  //set working directory to 'input_meshes/'
-  if(!fs::is_directory("input_meshes")) {
-    string message("\nCSMPInterfaces_Example::Run(): 'input_meshes/' directory does not exists in current working directory: ");
-    message += (fs::current_path()).string();
-    message += ", please ensure the working directory is set correctly (refer to open-csmp/examples/README.txt)";
-    throw std::runtime_error(message);
-  } else fs::current_path("input_meshes");
-
+  // checking working directory and illustrating C++ exception handling
+  try {
+      // set path to current directory 'input_meshes/'
+      if(!fs::is_directory("input_meshes")) {
+        string message("\nCSMPInterfaces_Example::Run(): 'input_meshes/' directory is missing from your current working directory: '");
+        message += (fs::current_path()).string();
+        message += "'\n\nPlease ensure that working directory is set correctly to  new 'example_inputs/' directory \n\t (refer to open-csmp/examples/README.txt)\n";
+        throw std::runtime_error(message);
+      } else fs::current_path("input_meshes");
+    }
+  catch( const std::exception& ex ) {
+      cerr <<"\nCSMPInterfaces_Example::Run: caught runtime error: "<< ex.what() << endl;
+      throw csmp::Exception( FATAL_ERROR, "CSMPInterfaces_Example::Run", "Terminating examples program.");
+    }
 
   Standard_IO_Handler  stdio;
   output_vtu_ = stdio.YesNo("\nDo you want to output vtu files for visualisation?");
+  cout.flush();
 
   do {
-    cerr << "\nPlease select from the following options (-1 to get back):" << endl;
-    cerr << "  Build CSMP native format models from: " << endl;
-    cerr << "    1.) ANSYS 2D model" << endl;
-    cerr << "    2.) ANSYS 3D model" << endl;
-    cerr << "    3.) TRIANGLE" << endl;
-    cerr << "    4.) Triangulator" << endl;
-    cerr << "    5.) Quadrilaterator" << endl;
-    cerr << "    6.) gOcad_SKUA" << endl;
-    cerr << "    7.) Eclipse" << endl;
-    cerr << "    8.) GeoModeller" << endl;
-    cerr << "    9.) Rhinoceros" << endl;
-    cerr << "    10.) Build all models" << endl;
+    cout << "\nPlease select from the following options (-1 to get back):" << endl;
+    cout << "  Build CSMP native format models from: " << endl;
+    cout << "    1.) ANSYS 2D model" << endl;
+    cout << "    2.) ANSYS 3D model" << endl;
+    cout << "    3.) TRIANGLE" << endl;
+    cout << "    4.) Triangulator" << endl;
+    cout << "    5.) Quadrilaterator" << endl;
+    cout << "    6.) gOcad_SKUA" << endl;
+    cout << "    7.) Eclipse" << endl;
+    cout << "    8.) GeoModeller" << endl;
+    cout << "    9.) Rhinoceros" << endl;
+    cout << "    10.) Build all models" << endl;
 
     uint32_t option(0U);
     cin >> option;
@@ -74,14 +108,14 @@ void CSMPInterfaces_Example::Run()
     //ANSYS 2D models
     if (option == 1) {
       do {
-        cerr << "\nPlease choose from the following ANSYS 2D models (-1 to get back)" << endl;
-        cerr << "      1.) box2d_fault" << endl;
-        cerr << "      2.) pores" << endl;
-        cerr << "      3.) 2000x1000_mesh" << endl;
-        cerr << "      4.) Jura-slope1" << endl;
-        cerr << "      5.) LeftRight" << endl;
-        cerr << "      6.) build all above models" << endl;
-        cerr << "      7.) specify another model name" << endl;
+        cout << "\nPlease choose from the following ANSYS 2D models (-1 to get back)" << endl;
+        cout << "      1.) box2d_fault" << endl;
+        cout << "      2.) pores" << endl;
+        cout << "      3.) 2000x1000_mesh" << endl;
+        cout << "      4.) Jura-slope1" << endl;
+        cout << "      5.) LeftRight" << endl;
+        cout << "      6.) build all above models" << endl;
+        cout << "      7.) specify another model name" << endl;
         uint32_t sub_option(0U);
         cin >> sub_option;
         if (sub_option == 1) BuildFromANSYS2DModel("box2d_fault");
@@ -111,15 +145,15 @@ void CSMPInterfaces_Example::Run()
     //ANSYS 3D models
     else if (option == 2) {
       do {
-        cerr << "\nPlease choose from the following ANSYS 3D models (-1 to get back)" << endl;
-        cerr << "      1.) hex2_3" << endl;
-        cerr << "      2.) prism_test" << endl;
-        cerr << "      3.) fracs4" << endl;
-        cerr << "      4.) one_sphere_0.45_tetra" << endl;
-        cerr << "      5.) FracBox" << endl;
-        cerr << "      6.) 3D_box" << endl;
-        cerr << "      7.) build all above models" << endl;
-        cerr << "      8.) specify another model name" << endl;
+        cout << "\nPlease choose from the following ANSYS 3D models (-1 to get back)" << endl;
+        cout << "      1.) hex2_3" << endl;
+        cout << "      2.) prism_test" << endl;
+        cout << "      3.) fracs4" << endl;
+        cout << "      4.) one_sphere_0.45_tetra" << endl;
+        cout << "      5.) FracBox" << endl;
+        cout << "      6.) 3D_box" << endl;
+        cout << "      7.) build all above models" << endl;
+        cout << "      8.) specify another model name" << endl;
         uint32_t sub_option(0U);
         cin >> sub_option;
         if (sub_option == 1) BuildFromANSYS3DModel("hex2_3");
@@ -151,15 +185,15 @@ void CSMPInterfaces_Example::Run()
     //TRIANGLE models
     else if (option == 3) {
       do {
-        cerr << "\nPlease choose from the following TRIANGLE models (-1 to get back)" << endl;
-        cerr << "      1.) well.1" << endl;
-        cerr << "      2.) veins_20k.1" << endl;
-        cerr << "      3.) frac30.1" << endl;
-        cerr << "      4.) blunt30deg.1" << endl;
-        cerr << "      5.) topo.1" << endl;
-        cerr << "      6.) example21.1" << endl;
-        cerr << "      7.) build all above models" << endl;
-        cerr << "      8.) specify another model name" << endl;
+        cout << "\nPlease choose from the following TRIANGLE models (-1 to get back)" << endl;
+        cout << "      1.) well.1" << endl;
+        cout << "      2.) veins_20k.1" << endl;
+        cout << "      3.) frac30.1" << endl;
+        cout << "      4.) blunt30deg.1" << endl;
+        cout << "      5.) topo.1" << endl;
+        cout << "      6.) example21.1" << endl;
+        cout << "      7.) build all above models" << endl;
+        cout << "      8.) specify another model name" << endl;
         uint32_t sub_option(0U);
         cin >> sub_option;
         if (sub_option == 1) BuildFromTRIANGLEModel("well.1");
@@ -191,14 +225,14 @@ void CSMPInterfaces_Example::Run()
     //Triangulator models
     else if (option == 4) {
       do {
-        cerr << "\nPlease choose from the following Triangulator models (-1 to get back)" << endl;
-        cerr << "      1.) tutorial1_input" << endl;
-        cerr << "      2.) specify another model name" << endl;
+        cout << "\nPlease choose from the following Triangulator models (-1 to get back)" << endl;
+        cout << "      1.) tutorial1_input" << endl;
+        cout << "      2.) specify another model name" << endl;
         uint32_t sub_option(0U);
         cin >> sub_option;
         if (sub_option == 1) BuildFromTriangulatorModel("tutorial1_input", 100., 80.);
         else if (sub_option == 2) {
-          cerr << "\n        Please type in a model name" << endl;
+          cout << "\n        Please type in a model name" << endl;
           string model_name;
           cin >> model_name;
           double x, y;
@@ -217,11 +251,11 @@ void CSMPInterfaces_Example::Run()
     //Quadrilaterator models
     else if (option == 5) {
       do {
-        cerr << "\nPlease choose from the following Quadrilaterator models (-1 to get back)" << endl;
-        cerr << "      1.) tutorial2_input" << endl;
-        cerr << "      2.) tutorial2_input_20x20" << endl;
-        cerr << "      3.) build all above models" << endl;
-        cerr << "      4.) specify another model name" << endl;
+        cout << "\nPlease choose from the following Quadrilaterator models (-1 to get back)" << endl;
+        cout << "      1.) tutorial2_input" << endl;
+        cout << "      2.) tutorial2_input_20x20" << endl;
+        cout << "      3.) build all above models" << endl;
+        cout << "      4.) specify another model name" << endl;
         uint32_t sub_option(0U);
         cin >> sub_option;
         if (sub_option == 1) BuildFromQuadrilateratorModel("tutorial2_input", 10., 10.);
@@ -231,7 +265,7 @@ void CSMPInterfaces_Example::Run()
           BuildFromQuadrilateratorModel("tutorial2_input_20x20", 20., 20.);
         }
         else if (sub_option == 4) {
-          cerr << "\n        Please type in a model name" << endl;
+          cout << "\n        Please type in a model name" << endl;
           string model_name;
           cin >> model_name;
           double x, y;
@@ -250,20 +284,20 @@ void CSMPInterfaces_Example::Run()
     //gOcad_SKUA models
     else if (option == 6) {
       do {
-        cerr << "\nPlease choose from the following SKUA models (-1 to get back)" << endl;
-        cerr << "      1.) SKUA_boundary_and_split_boundary" << endl;
-        cerr << "      2.) SKUA_box_shaped_with_boundary" << endl;
-        cerr << "      3.) SKUA_box_shaped_with_edges" << endl;
-        cerr << "      4.) SKUA_box_shaped_with_split_boundary" << endl;
-        cerr << "      5.) SKUA_cross_bedded_xsmall" << endl;
-        cerr << "      6.) SKUA_intersecting_split_boundary_surfaces" << endl;
-        cerr << "      7.) SKUA_model" << endl;
-        cerr << "      8.) SKUA_split_boundary_layer" << endl;
-        cerr << "      9.) SKUA_split_boundary_layer_with_well" << endl;
-        cerr << "      10.) SKUA_split_boundary_surface" << endl;
-        cerr << "      11.) SKUA_box_snowflake_split_boundaries" << endl;
-        cerr << "      12.) build all above models" << endl;
-        cerr << "      13.) specify another model name" << endl;
+        cout << "\nPlease choose from the following SKUA models (-1 to get back)" << endl;
+        cout << "      1.) SKUA_boundary_and_split_boundary" << endl;
+        cout << "      2.) SKUA_box_shaped_with_boundary" << endl;
+        cout << "      3.) SKUA_box_shaped_with_edges" << endl;
+        cout << "      4.) SKUA_box_shaped_with_split_boundary" << endl;
+        cout << "      5.) SKUA_cross_bedded_xsmall" << endl;
+        cout << "      6.) SKUA_intersecting_split_boundary_surfaces" << endl;
+        cout << "      7.) SKUA_model" << endl;
+        cout << "      8.) SKUA_split_boundary_layer" << endl;
+        cout << "      9.) SKUA_split_boundary_layer_with_well" << endl;
+        cout << "      10.) SKUA_split_boundary_surface" << endl;
+        cout << "      11.) SKUA_box_snowflake_split_boundaries" << endl;
+        cout << "      12.) build all above models" << endl;
+        cout << "      13.) specify another model name" << endl;
         uint32_t sub_option(0U);
         cin >> sub_option;
         if (sub_option == 1) BuildFromSKUAModel<3U>("SKUA_boundary_and_split_boundary");
@@ -290,7 +324,7 @@ void CSMPInterfaces_Example::Run()
           BuildFromSKUAModel<3U>("SKUA_split_boundary_surface");
           BuildFromSKUAModel<3U>("SKUA_box_snowflake_split_boundaries");
         } else if (sub_option == 13) {
-          cerr << "\n        Please type in a model name" << endl;
+          cout << "\n        Please type in a model name" << endl;
           string model_name;
           cin >> model_name;
           BuildFromSKUAModel<3U>(model_name);
@@ -305,14 +339,14 @@ void CSMPInterfaces_Example::Run()
       //Eclipse model
     else if (option == 7) {
       do {
-        cerr << "\nPlease choose from the following options (-1 to get back)" << endl;
-        cerr << "      1.) create CSMP native model from Eclipse model 'NPD5.grdecl'" << endl;
-        cerr << "      2.) specify another Eclipse model name" << endl;
+        cout << "\nPlease choose from the following options (-1 to get back)" << endl;
+        cout << "      1.) create CSMP native model from Eclipse model 'NPD5.grdecl'" << endl;
+        cout << "      2.) specify another Eclipse model name" << endl;
         uint32_t sub_option(0U);
         cin >> sub_option;
         if (sub_option == 1) BuildFromEclipseModel("NPD5");
         else if (sub_option == 2) {
-          cerr << "\n        Please type in a model name" << endl;
+          cout << "\n        Please type in a model name" << endl;
           string model_name;
           cin >> model_name;
           BuildFromEclipseModel(model_name);
@@ -327,14 +361,14 @@ void CSMPInterfaces_Example::Run()
       //GeoModeller
     else if (option == 8) {
       do {
-        cerr << "\nPlease choose from the following options (-1 to get back)" << endl;
-        cerr << "      1.) create CSMP native model from GeoModeller model 'Mansfield_H8_NoOrphans.mesh'" << endl;
-        cerr << "      2.) specify another GeoModeller model name" << endl;
+        cout << "\nPlease choose from the following options (-1 to get back)" << endl;
+        cout << "      1.) create CSMP native model from GeoModeller model 'Mansfield_H8_NoOrphans.mesh'" << endl;
+        cout << "      2.) specify another GeoModeller model name" << endl;
         uint32_t sub_option(0U);
         cin >> sub_option;
         if (sub_option == 1) BuildFromGeoModellerModel("Mansfield_H8_NoOrphans.mesh");
         else if (sub_option == 2) {
-          cerr << "\n        Please type in a model name" << endl;
+          cout << "\n        Please type in a model name" << endl;
           string model_name;
           cin >> model_name;
           BuildFromGeoModellerModel(model_name);
@@ -349,14 +383,14 @@ void CSMPInterfaces_Example::Run()
       //Rhino model
     else if (option == 9) {
       do {
-        cerr << "\nPlease choose from the following options (-1 to get back)" << endl;
-        cerr << "      1.) create CSMP native model from Rhino model 'example20.raw'" << endl;
-        cerr << "      2.) specify another Rhino model name" << endl;
+        cout << "\nPlease choose from the following options (-1 to get back)" << endl;
+        cout << "      1.) create CSMP native model from Rhino model 'example20.raw'" << endl;
+        cout << "      2.) specify another Rhino model name" << endl;
         uint32_t sub_option(0U);
         cin >> sub_option;
         if (sub_option == 1) BuildFromRhinoModel("example20.rawh");
         else if (sub_option == 2) {
-          cerr << "\n        Please type in a model name" << endl;
+          cout << "\n        Please type in a model name" << endl;
           string model_name;
           cin >> model_name;
           BuildFromRhinoModel(model_name);
@@ -432,6 +466,8 @@ void CSMPInterfaces_Example::BuildFromANSYS2DModel(const string& model_name) {
   cout<<"\nStart building ANSYS 2D model '"<<model_name<<"'..."<<endl;
   const string variables_file = "initial-variables.txt";
   ANSYS_Model2D model( model_name.c_str(), variables_file.c_str() );
+  // creates subdirectory inside 'input_meshes' to store native model files
+  fs::current_path("../");
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
   model.OutputToBinaryFile( model_name.c_str() );
@@ -445,6 +481,7 @@ void CSMPInterfaces_Example::BuildFromANSYS3DModel(const string& model_name) {
   cout<<"\nStart building ANSYS 3D model '"<<model_name<<"'..."<<endl;
   const string variables_file = "initial-variables.txt";
   ANSYS_Model3D model( model_name.c_str(), variables_file.c_str() );
+  fs::current_path("../");
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
   model.OutputToBinaryFile( model_name.c_str() );
@@ -463,6 +500,7 @@ void CSMPInterfaces_Example::BuildFromTRIANGLEModel(const string& model_name) {
   mesh_converter.ConvertLinearToQuadraticTriangles( mesh_container );
   const string variables_file = "initial-variables.txt";
   Model<2U>   model( mesh_container, variables_file.c_str() );
+  fs::current_path("../");
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
   model.OutputToBinaryFile( model_name.c_str() );
@@ -505,6 +543,7 @@ void CSMPInterfaces_Example::BuildFromTriangulatorModel(const string& model_name
 
   const string variables_file = "initial-variables.txt";
   Model<2U> model( vset, variables_file.c_str() );
+  fs::current_path("../");
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
   model.OutputToBinaryFile( model_name.c_str() );
@@ -524,6 +563,7 @@ void CSMPInterfaces_Example::BuildFromQuadrilateratorModel(const string& model_n
   quadrilaterator.QuadrilateralsFromRegularGrid( mesh_container, model_name.c_str(), x, y );
   const string variables_file = "initial-variables.txt";
   Model<2U> model( mesh_container, variables_file.c_str() ); // Quadrilaterator makes isoparametric FEs
+  fs::current_path("../");
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
   model.OutputToBinaryFile( model_name.c_str() );
@@ -557,6 +597,7 @@ void CSMPInterfaces_Example::BuildFromSKUAModel(const string& model_name) {
     throw std::runtime_error(error_message);
   }
   Model<dim>  model( model_topology, vset, variables_file.c_str(), false );
+  fs::current_path("../");
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
   model.OutputToBinaryFile( model_name.c_str() );
@@ -657,6 +698,7 @@ void CSMPInterfaces_Example::BuildFromEclipseModel(const string& model_name) {
     cout << "\n\tline elements removed:    " << line_e_removed;
   }
 
+  fs::current_path("../");
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
   modelOut.OutputToBinaryFile( model_name.c_str() );
@@ -676,6 +718,7 @@ void CSMPInterfaces_Example::BuildFromGeoModellerModel(const string& model_name)
   const string variables_file = "initial-variables.txt";
   Model<3U>  model(model_topology, vset, variables_file.c_str(), false );
 
+  fs::current_path("../");
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
   model.OutputToBinaryFile( model_name.c_str() );
@@ -703,6 +746,7 @@ void CSMPInterfaces_Example::BuildFromRhinoModel(const string& model_name) {
 
   const string variables_file = "initial-variables.txt";
   Model<3U>  model3D( mesh_container, variables_file.c_str() );
+  fs::current_path("../");
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
   model3D.OutputToBinaryFile( model_name.c_str() );

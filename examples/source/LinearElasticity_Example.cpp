@@ -39,8 +39,8 @@
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "VelocityAndVolumeFlux.h"
 
-// comment-out this preprocessor directive if you want to run with a CSMP native model
-#define RUN_DIRECTLY_WITH_TRIANGLE_INPUT_FILE
+// comment-in this preprocessor directive if you want to run directly with the Triangle mesher input file deck
+// #define RUN_DIRECTLY_WITH_TRIANGLE_INPUT_FILE
 
 using namespace std;
 
@@ -85,7 +85,6 @@ void LinearElasticity_Example::Run()
     // ---------------------------------------------------------------------------------------
     // 0. Import model from Shewchuk's Triangle mesher
     // ---------------------------------------------------------------------------------------
-//    /* uncomment this block to use it
     TRIANGLE_Interface  mesh_interface;
     VSet<2U>            mesh_container;
     string              file_name;

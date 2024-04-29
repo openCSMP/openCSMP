@@ -131,7 +131,11 @@ string Example::GetExampleFileName(const char* path)
   return p.stem().string();
 }
 
-/// NB: this function expects that the directory that contains the executable is     open-csmp/examples/example_inputs/
+
+/**
+    Creates new directory "example_outputs/" side by side with the working directory "example_inputs", moving any file writing by the current example into there.
+    @attention This function expects that the directory that contains the executable is    open-csmp/examples/example_inputs/
+*/
 void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_name, std::string& model_name,
                                                            std::string& variable_file, std::string config_file)
 {
