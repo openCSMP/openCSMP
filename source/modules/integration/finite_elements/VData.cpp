@@ -268,7 +268,7 @@ void VData::AddNodeManifolds( VData::manifoldContainer::const_iterator first,
                               VData::manifoldContainer::const_iterator last )
  {
     assert( Interfaces() > 0 );
-    assert( distance(first,last) < Vertices() );
+    assert( distance(first,last) < static_cast<long>(Vertices()) );
     pmanifolds_.assign( first, last );
  }
                           
@@ -287,13 +287,13 @@ bool  VData::IsoparametricElementMesh() const
 
 
 /// using element types, coordinate range, and boundary flags, asesses whether this is a 1D, 2D , or three dimensional model
-int VData::SpatialDimension() const
+uint32_t VData::SpatialDimension() const
  {
    // 1. looking at the element types
    if ( !HybridElementTypeMesh() )
      return CSMP_ElementSpecifications::MinimumSpatialDimension( pelmt[0] );
      
-   uint32_t spatial_dim{1};
+   uint32_t spatial_dim{1u};
    for ( auto i : pelmt ) {
         spatial_dim = max( spatial_dim, CSMP_ElementSpecifications::MinimumSpatialDimension(i) );
         if (  spatial_dim == 3 ) break;
@@ -608,7 +608,7 @@ VData::manifoldContainer::const_iterator  VData::PmanifoldsEnd() const
  
  
 
-void VData::Plist( size_t eidx, uint32_t nidx, size_t val )
+void VData::Plist( size_t eidx, uint32_t nidx, int64_t val )
   { 
      assert( eidx < plist.size() ); 
      assert( nidx < plist[eidx].size() ); 
@@ -832,7 +832,7 @@ is issued.
 void VData::ResizeNodes( size_t nodes )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    size_t  node_max(0U);
+    int64_t  node_max(0U);
     
     // getting highest node ID in the plist array
     if ( !plist.empty() ) {
@@ -842,7 +842,7 @@ void VData::ResizeNodes( size_t nodes )
                i=(*it).begin(); i!=(*it).end(); i++ )
            if ( (*i) > node_max ) node_max = (*i);
         
-       if ( nodes < node_max )
+       if ( static_cast<int64_t>(nodes) < node_max )
          csmp_error.Note( WARNING, "VData::ResizeNodes", "'plist' contains node numbers larger than desired size" );
       }
       
@@ -868,7 +868,7 @@ void VData::ResizeBFlags()
     const size_t orig_size{ bflags.size() };
     bflags.resize( px.size() );
     if ( bflags.size() > orig_size )
-    fill( next(bflags.begin(),orig_size), bflags.end(), NOT );
+    fill( next(bflags.begin(),static_cast<long>(orig_size)), bflags.end(), NOT );
     bflags.shrink_to_fit();
  }
 
@@ -881,7 +881,7 @@ void VData::ResizeBREP_Flags()
     const size_t orig_size{ gflags_.size() };
     gflags_.resize( px.size() );
     if ( gflags_.size() > orig_size )
-    fill( next(gflags_.begin(),orig_size), gflags_.end(), MESH_VERTEX );
+    fill( next(gflags_.begin(),static_cast<long>(orig_size)), gflags_.end(), MESH_VERTEX );
     gflags_.shrink_to_fit();
  }
 
@@ -2003,7 +2003,7 @@ void VData::ScaleCoordinateToRange( char coordinate_axis, double cmin, double cm
 */
 bool  VData::operator==( const VData& vd ) const
  {
-    bool return_value(true);
+    bool return_value{true};
     if ( !(hybrid_mesh_ == vd.hybrid_mesh_) ) return false;
     if ( first_face_      != vd.first_face_ ) return false;
     if ( first_interface_ != vd.first_interface_ ) return false;
