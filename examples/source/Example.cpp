@@ -133,8 +133,17 @@ string Example::GetExampleFileName(const char* path)
 
 
 /**
-    Creates new directory "example_outputs/" side by side with the working directory "example_inputs", moving any file writing by the current example into there.
-    @attention This function expects that the directory that contains the executable is    open-csmp/examples/example_inputs/
+   Creates new directory "example_outputs/" side by side with the working directory "example_inputs", moving any file writing by the current example into there.
+   
+   @attention This function expects that the directory that contains the executable is    open-csmp/examples/example_inputs/
+
+   Context: to run the examples, you need to create a new directory somewhere outside of your repository and copy the example_inputs/  directory from the repository in there,
+   including its subdirectories. Then set this example_inputs/  directory as your working directory (XCode:  Product -> Scheme -> Edit Scheme -> custom working directory in the Options tab)
+
+   When you created a CSMP native binary, it gets  placed into the directory  example_inputs/csmp_native_format_models/
+   Then, when you run any of the examples, CSMP will create a new directory  example_outputs/
+   in your new directory side-by-side with example_inputs/ and this is where you will find the results of your computations.
+   This is done by this method.
 */
 void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_name, std::string& model_name,
                                                            std::string& variable_file, std::string config_file)

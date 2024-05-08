@@ -450,7 +450,7 @@ void CSMPInterfaces_Example::Run()
       break;
     }
     //quit
-    else if (option == -1) {fs::current_path("../"); break;}
+    else if (option == -1) break;
     //re-select
     else {
       cerr << "Wrong number, please type in a right number from the following options" << endl;

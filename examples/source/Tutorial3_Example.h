@@ -8,6 +8,7 @@
 
 namespace csmp {
 
+/// incompressible two-phase flow of immiscible fluids
 class  Tutorial3_Example : public Example
 {
 
@@ -18,7 +19,7 @@ public:
 
 private:
 
-    // a simple function that computes the total mobility from the chosen relative permeability model
+    /// function computes the total mobility lambda_t  from the relative permeability curves defined in the chosen relative permeability model
     void computeTotalMobility( Model<2U>& mdl, TwoPhaseModel<2U>& relperm );
 
 };

@@ -5,6 +5,7 @@
 
 namespace csmp {
 
+/// Classic advection - diffusion equation (ADE) solver
 class  Tutorial2_Example : public Example
 {
 

@@ -5,6 +5,7 @@
 
 namespace csmp {
 
+/// transient pressure diffusion through a porous medium
 class  Tutorial1_Example : public Example
 {
 

@@ -5,6 +5,8 @@
 #include "VTU_Interface.h"
 #include "PL_Utilities.h"
 
+using namespace std;
+
 namespace csmp {
 
 void Averaging_Example::Specifications()
@@ -27,25 +29,29 @@ void Averaging_Example::Specifications()
 */
 void Averaging_Example::Run()
 {
-  /*
-  // initializing model and properties
-  ANSYS_Model2D model( "LeftRight", "CSMP-1phase-variables.txt", true );
-  */
+  string model_name;
 
-  std::string model_name;
-  std::cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'LeftRight':"<<std::endl;
-  std::cin.ignore();
-  getline(std::cin, model_name);
+#ifdef USE_ANSYS_INPUT_FILE
+  // choose an input model with large variations in element size to maximise the difference between the different
+  // extrapolation approaches
+  cout<< "\nPlease enter the name of ANSYS input model: "<<endl;
+  cin >> model_name;
+  // initializing model and properties
+  ANSYS_Model2D model( model_name.c_str(), "CSMP-1phase-variables.txt", true );
+#else
+  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'LeftRight':"<<endl;
+  cin.ignore();
+  getline(cin, model_name);
   if (model_name.length() == 0) model_name = "LeftRight";
 
   //find the name of current example source file
-  std::string file_name = GetExampleFileName(__FILE__);
-  std::string variable_file = "CSMP-1phase-variables.txt";
+  string file_name = GetExampleFileName(__FILE__);
+  string variable_file = "CSMP-1phase-variables.txt";
   //create of directory with current example name, go into this directory, and copy input files into it.
   CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
   //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
   Model<2U>  model(model_name, variable_file);
-
+#endif
   PropertyHandle<2U> sourceSink( model, "fluid volume source", SCALAR, ELEMENT );
   PropertyHandle<2U> nodalSourceSinkByDistance( model, "nodal fluid volume source distance", SCALAR, NODE );
   PropertyHandle<2U> nodalSourceSinkByVolume( model, "nodal fluid volume source volume", SCALAR, NODE );
@@ -77,7 +83,10 @@ void Averaging_Example::Run()
   // creating a perturbed field and extrapolating this
   randomPerturb( model, "fluid volume source", 20. );
 
-  region.ExtrapolateCellToNodeProperty( "fluid volume source", "nodal fluid volume source distance" );
+  // weight_element_influence_by_distance_of barycentre to node
+  const bool by_distance{true};
+  region.ExtrapolateCellToNodeProperty( "fluid volume source", "nodal fluid volume source distance", by_distance );
+  // weighting by element area (opposite effect)
   region.ExtrapolateCellToNodeProperty( "fluid volume source", "nodal fluid volume source volume", false );
 
   vtu.OutputDataToVTU( "PerturbedFluidVolumeSource", "fluid volume source", "Model", static_cast<int>(1) );

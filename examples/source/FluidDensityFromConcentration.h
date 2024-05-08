@@ -16,8 +16,9 @@ class FluidDensityFromConcentration : public Interrelation<dim> {
     
   public:
     FluidDensityFromConcentration( const PropertyDatabase<dim>& p, double rho_max );
-    ~FluidDensityFromConcentration() {};
-    void Calculate();
+    virtual ~FluidDensityFromConcentration() {}
+    
+    virtual void Calculate();
 };
 
 }

@@ -47,23 +47,22 @@ void TransientPressure_Example::Specifications()
 
 /** *****************************************************************************************
 
-  // (4) 2D transient calculation constant rate draw down from a pumping well near a highly
-  //     permeable fault. Model uses a 'Triangle' generated input mesh (file set well.1)
-  //
-  //     Use example_viewer.tcl to visualize vtk output
-  //
-  //     Vary the draw down rate and observe at which rate the fluid pressure becomes negative
-  //     and the computation breaks down. Observe further how the presence of a highly-
-  //     permeable fault zone changes the pressure diffusion
-  // *****************************************************************************************
-
-*/
+  (4) 2D transient calculation constant rate draw down from a pumping well near a highly
+      permeable fault. Model uses a 'Triangle' generated input mesh (file set well.1)
+  
+      Use example_viewer.tcl to visualize vtk output
+ 
+      Vary the draw down rate and observe at which rate the fluid pressure becomes negative
+      and the computation breaks down. Observe further how the presence of a highly-
+      permeable fault zone changes the pressure diffusion
+      
+  **************************************************************************************** */
 void TransientPressure_Example::Run()
 {
   double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
 
-  /*
+#ifdef BUILD_INPUT_MODEL_WITH_TRIANGULATOR
   // 1.0 Building quadratic triangular FE mesh
   // -----------------------------------------
   TRIANGLE_Interface  mesh_interface;
@@ -81,8 +80,7 @@ void TransientPressure_Example::Run()
   // set boolean for isoparametric elements to true
   // -----------------------------------------------
   Model<2U>   model( mesh_container, "TransientPressure_Example-variables.txt" );
-  */
-
+#else
   // ------------------------------------------------------------
   // 1. Load CSMP native format model
   // ------------------------------------------------------------
@@ -91,7 +89,6 @@ void TransientPressure_Example::Run()
   cin.ignore();
   getline(cin, model_name);
   if (model_name.length() == 0) model_name = "well.1";
-
   //find the name of current example source file
   string file_name = GetExampleFileName(__FILE__);
   string variable_file = "TransientPressure_Example-variables.txt";
@@ -99,16 +96,17 @@ void TransientPressure_Example::Run()
   CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
   //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
   Model<2U>  model(model_name, variable_file);
+#endif
 
-  // 3.0 Input the initial Conditions
+  // 3.0 Input the initial conditions
   // --------------------------------
   model.InputPropertyValue( "fluid volume source", makeScalar(PLAIN,0.0) );
   model.InputPropertyValue( "porosity",            makeScalar(PLAIN,0.2) );
   model.InputPropertyValue( "storativity",         makeScalar(PLAIN,2.0e-9) );
   model.InputPropertyValue( "fluid pressure",      makeScalar(PLAIN,1.0e+7) );
 
-  // 4.0 Forming various unique Groups
-  // ---------------------------------
+  // 4.0 Forming various unique Region objects
+  // -----------------------------------------
   cout << "\nForming the region 'fault zone' " << endl;
   model.FormRegionFrom( "fault zone", "permeability", 1.0e-19, 1.0e-16, true );
   cout << "\nForming the region 'well' " << endl;
@@ -162,7 +160,7 @@ void TransientPressure_Example::Run()
   // 8. Variables for transient loop
   // --------------------------------
   VTK_Interface<2U>  vtk_output;
-  vtk_output.OutputDataToVTK( model, "hydraulic-condunctivity", "conductivity",  0 );
+  vtk_output.OutputDataToVTK( model, "hydraulic-conductivity", "conductivity",  0 );
   // only write the results of the fault zone to jpg files because they will be too large otherwise
   JPEG_RegionInterface  jpg_output( model, "fault zone" );
 
@@ -173,7 +171,7 @@ void TransientPressure_Example::Run()
   cin  >> save_frequency;
 
 
-  // 9. Opening a file for writing the fluid pressure in the well to a txt file
+  // 9. Opening a file for writing the fluid pressure in the well in text format
   // ---------------------------------------------------------------------------
   char  outfile[200];
   strcpy( outfile, "well-pressure" );

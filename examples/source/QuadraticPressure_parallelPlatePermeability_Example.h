@@ -5,10 +5,14 @@
 
 namespace csmp {
 
-class  QuadraticPressure_parallelPlatePermeability_Example : public Example{
-public:
-  virtual void Run();
-  virtual void Specifications();
+/// pressure computation using FEM with quadratic basis functions and the parallel-plate model for fracture permeability
+class  QuadraticPressure_parallelPlatePermeability_Example : public Example {
+
+  public:
+  
+    virtual void Run();
+    virtual void Specifications();
+    
 };
 
 } // csmp

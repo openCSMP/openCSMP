@@ -108,7 +108,7 @@ void process( const INDEX<SCALAR,INTER_FACE>& );
 void process( const INDEX<TENSOR,REGION>& );
 
 
-// combinations
+// illustration of Index - INDEX combinations
 /*
 void process( Region<3>& gref, const INDEX<SCALAR,NODE>&, const ScalarVariable& sc )
  {
@@ -121,7 +121,8 @@ void process( Region<3>& gref, const INDEX<SCALAR,NODE>&, const ScalarVariable& 
 process( gref, permeability, sc );
 */
 
-void  TemplatizedIndex_Example::Run() 
+
+void  TemplatizedIndex_Example::Run()
  {
     Index idx;
     INDEX<SCALAR,NODE>  scalar(0);
