@@ -182,7 +182,7 @@ bool  FRED_Fracture::InitializeFrom( int nprops, ifstream& ifs )
          // ID of point
          token = strtok( text_line, delims ); 
          if ( token == NULL ) return false;
-         p_id  = atol( token ); 
+         p_id  = atoi( token ); 
          // coordinates of point
          token = strtok( NULL, delims ); // X
          if ( token == NULL ) return false;

@@ -3,15 +3,64 @@
 
 #include "CSMP_definitions.h"
 
-#include <filesystem>
-namespace fs = std::filesystem;
-
 namespace csmp {
 
 class ExampleSuite;
 
-/// Subclassing allows to run examples in ExamplesSuite
-class Example
+/**
+@class Example Example "examples/Example.h"
+
+@author P. Lang
+@date 2010
+
+@section examples Application Examples
+
+@code
+// DECLARATION
+#include "Example.h"
+
+namespace csmp {
+
+class  YourExampleClass : public Example{
+public:
+  virtual void Run();
+  virtual void Initialize();
+};
+
+} // csmp
+
+
+// DEFINITION
+#include "YourExampleClass.h"
+
+#include "CSMP_definitions.h"
+...
+
+using namespace std;
+
+namespace csmp{
+
+void YourExampleClass::Initialize()
+{
+  SetTitle ( "CSMP Example 1" );
+  SetDifficulty( 1 );
+  AddAuthor ( "SKM" );
+  AddDescription( "computes steady state pressure distribution" );
+  AddDescription( "2D reservoir profile" );
+  AddRequirement( "image(granite_model1)" );
+  AddRequirement( "configuration(example1.txt)" );
+} // Initialize()
+
+void Example1ForSuite::Execute()
+{
+  ...your application code, or a simple function call for an external resource
+} // Execute()
+
+} // csmp
+
+@endcode
+
+*/class Example
 {
 
 friend class ExampleSuite;
@@ -70,60 +119,6 @@ private:
   Example& operator = ( const Example& );
 };
 
-/**
-@class Example Example "examples/Example.h"
-
-@author P. Lang
-@date 2010
-
-@section examples Application Examples
-
-@code
-// DECLARATION
-#include "Example.h"
-
-namespace csmp {
-
-class  YourExampleClass : public Example{
-public:
-  virtual void Run();
-  virtual void Initialize();
-};
-
-} // csmp
-
-
-// DEFINITION
-#include "YourExampleClass.h"
-
-#include "CSMP_definitions.h�
-...
-
-using namespace std;
-
-namespace csmp{
-
-void YourExampleClass::Initialize()
-{
-  SetTitle ( "CSMP Example 1" );
-  SetDifficulty( 1 );
-  AddAuthor ( "SKM" );
-  AddDescription( "computes steady state pressure distribution" );
-  AddDescription( "2D reservoir profile" );
-  AddRequirement( "image(granite_model1)" );
-  AddRequirement( "configuration(example1.txt)" );
-} // Initialize()
-
-void Example1ForSuite::Execute()
-{
-  ...your application code, or a simple function call for an external resource
-} // Execute()
-
-} // csmp
-
-@endcode
-
-*/
 
 } // csmp
 

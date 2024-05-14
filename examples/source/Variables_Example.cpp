@@ -199,7 +199,7 @@ void Variables_Example::Run()
 
     cout << "\nDone...\n";
 
-    fs::current_path("../../example_inputs/");
+    filesystem::current_path("../../example_inputs/");
 
  } // Run()
 

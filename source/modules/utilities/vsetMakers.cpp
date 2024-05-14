@@ -2,6 +2,7 @@
 #include "Box.h"
 #include "CSMP_definitions.h"
 #include "CSMP_global_enumerations.h"
+#include "TensorVariable.h"
 
 #include "IsoparametricLinearHexahedron.h"
 #include "IsoparametricLinearPyramid.h"
@@ -288,7 +289,7 @@ ModelTopology  test_CreateSimplestPolyElement2DModel( VSet<2U>& vset )
     mesh_topology.AddDomain( "LEFT",   set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{9} );
 
     assert( mesh_topology.Cells() == vset.Elements() + vset.Faces() + vset.Interfaces() );
-    assert( mesh_topology.Cells() == vset.TotalNumberOfCells() );
+    assert( mesh_topology.Cells() == vset.Cells() );
 
     // adding corresponding materials to VSet
     const size_t n_elements{4};
@@ -830,7 +831,7 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     mesh_topology.AddDomain( "inclined_split_boundary", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{40,41,42} );
 
     assert( mesh_topology.Cells() == vset.Elements() + vset.Faces() + vset.Interfaces() );
-    assert( mesh_topology.Cells() == vset.TotalNumberOfCells() );
+    assert( mesh_topology.Cells() == vset.Cells() );
     
     // node manifolds
     ManifoldType SB{ ManifoldType::SPLIT_BOUNDARY }, SBE{ ManifoldType::SPLIT_BOUNDARY_END }, SBX{ ManifoldType::SPLIT_BOUNDARY_CROSSING };

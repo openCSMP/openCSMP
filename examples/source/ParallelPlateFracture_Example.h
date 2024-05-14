@@ -5,6 +5,7 @@
 
 namespace csmp {
 
+/// Stokes - Darcy flow through fracture network in a porous rock
 class  ParallelPlateFracture_Example : public Example {
 public:
   virtual void Run();

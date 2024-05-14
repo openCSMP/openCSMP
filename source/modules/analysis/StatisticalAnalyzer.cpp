@@ -618,10 +618,7 @@ const
         // 2. storing result map and zeroing vector for next group
         //--------------------------------------------------------
         results[ flow_domain ] = pair<HistogramBins,uint32_t>(result,subdomain.Cells());
-        for ( HistogramBins::iterator
-             rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
-        
-        //    } // end for all regions
+        for ( auto r=result.begin(); r!=result.end(); r++ ) (*r).second = 0.;
         
     } // end RegionPropertyHistogramsIntegrationPoint
 

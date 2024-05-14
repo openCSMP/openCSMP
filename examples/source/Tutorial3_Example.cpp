@@ -31,6 +31,7 @@ using namespace std;
 
 namespace csmp{
 
+
 void Tutorial3_Example::Specifications()
 {
   SetTitle( "Tutorial 3: Incompressible 2-phase flow" );
@@ -42,39 +43,44 @@ void Tutorial3_Example::Specifications()
   AddDescription( "IMPIS (Implicit Pressure Implicit Saturation) approach based on the FE-FV scheme of CSMP." );
   AddDescription( "Output is written to Matlab files and individual regions are monitored");
   AddRequirement( "box2d_fault, tutorial3_variables.txt");
-} // Initialize()
+}
 
-// **********************************************************************************************
-//
-// A CSMP main file that uses an ANSYS-ICEM FE mesh to build the Model and simulate
-// incompressible two-phase flow using an IMPES (Implicit Pressure Explicit Saturation) or
-// IMPIS (Implicit Pressure Implicit Saturation) approach based on the FE-FV scheme of CSMP.
-// Output is written to Matlab files and individual groups are monitored
-//
-//
-// Tasks and exercises:
-//
-// 1. Generate a 2D ANSYS mesh with a new geometry, check comphg.wikidot.com for a small how-to
-// 2. Compare results for implicit and explicit FV schemes and different timestepping.
-// 3. Compare results for homogeneous porous media to the analytical solution for the
-//    Buckley-Leverett problem
-// 4. Allow the user to define, at runtime (!), to choose between a different relperm models
-//    available in the two_phase directory
-// 5. Design and program a Visitor that computes the total mobility and phase mobilities
-//    using the kr-model that the user defines. Get together as a team to compare your visitors
-//    and generate a final version for the SVN (NB: The visitor should check that the results
-//    are within range and give error statements if the wrong variable placements are used or
-//    variables are not defined)
-// 6. Program a function that computes the capillary pressure at the element center as well as
-//    the derivative dpc/dS
-// 7. Program a diffusion algorithm, using the FE method, to solve the non-linear diffusion
-//    equation for the capillary pressure, i.e. phi dS/dt = div * ( lambda_star dpc/dS grad S )
-// 8. Compare simulations with and without capillary effects for explicit/implicit FV schemes
-//    and different time-steps. Analyse how the FV simulation of capillary spreading compares
-//    to your FE algorithm
-//
-// **********************************************************************************************
+/** **********************************************************************************************
 
+Example program that uses a mesh created with ANSYS-ICEM FE  to build the Model and simulate
+incompressible two-phase flow using an IMPES (Implicit Pressure Explicit Saturation) or
+IMPIS (Implicit Pressure Implicit Saturation) approach based on the FE-FV scheme of CSMP.
+Output is written to Matlab files and individual groups are monitored
+
+Tasks and exercises:
+
+1. Generate a 2D ANSYS mesh with a new geometry, check comphg.wikidot.com for a small how-to
+
+2. Compare results for implicit and explicit FV schemes and different timestepping.
+
+3. Compare results for homogeneous porous media to the analytical solution for the
+   Buckley-Leverett problem
+   
+4. Allow the user to define, at runtime (!), to choose between a different relperm models
+   available in the two_phase directory
+   
+5. Design and program a Visitor that computes the total mobility and phase mobilities
+   using the kr-model that the user defines. Get together as a team to compare your visitors
+   and generate a final version for the SVN (NB: The visitor should check that the results
+   are within range and give error statements if the wrong variable placements are used or
+   variables are not defined)
+   
+6. Program a function that computes the capillary pressure at the element center as well as
+   the derivative dpc/dS
+   
+7. Program a diffusion algorithm, using the FE method, to solve the non-linear diffusion
+   equation for the capillary pressure, i.e. phi dS/dt = div * ( lambda_star dpc/dS grad S )
+   
+8. Compare simulations with and without capillary effects for explicit/implicit FV schemes
+   and different time-steps. Analyse how the FV simulation of capillary spreading compares
+   to your FE algorithm
+
+**********************************************************************************************/
 void Tutorial3_Example::Run()
 {
     // -------------------------------------
@@ -314,7 +320,7 @@ void Tutorial3_Example::Run()
     // terminate
     cerr << "\nmain: That's it..."<< endl;
 
-    fs::current_path("../../example_inputs/");
+    filesystem::current_path("../../example_inputs/");
 
 } // Run()
 

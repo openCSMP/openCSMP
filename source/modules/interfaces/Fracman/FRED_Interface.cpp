@@ -33,8 +33,8 @@ END FORMAT
 
 */
 // returns number of points
-long FRED_Interface::ReadFORMAT( ifstream& ifs, int& scale,
-                                 int& fracs, int& props, bool ascii )
+long FRED_Interface::ReadFORMAT( ifstream& ifs, double& scale,
+                                 long& fracs, int& props, bool ascii )
  {
     char  text_line[256];
     char* result(0);

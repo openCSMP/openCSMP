@@ -14,8 +14,6 @@
 #include "TextInterface.h"
 #include "VTK_Interface.h"
 
-
-
 using namespace std;
 
 namespace csmp {
@@ -42,20 +40,20 @@ void RegionProperties_Example::Run()
     //find the name of current example source file
     string example_name = GetExampleFileName(__FILE__);
     //create a working directory with the name of this example and go into it
-    fs::create_directory("../example_outputs");
-    fs::current_path("../example_outputs");
-    if (fs::is_directory(example_name)) fs::remove_all(example_name); //if directory already exists, delete it
-    fs::create_directory(example_name);
-    fs::current_path(example_name);
+    filesystem::create_directory("../example_outputs");
+    filesystem::current_path("../example_outputs");
+    if (filesystem::is_directory(example_name)) filesystem::remove_all(example_name); //if directory already exists, delete it
+    filesystem::create_directory(example_name);
+    filesystem::current_path(example_name);
 
     //copy variable file into working directory
     string variable_file ("example1.txt" );
     string path = "../../example_inputs/variables_and_configuration_files/";
     string file_name = path + variable_file;
-    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    if (filesystem::exists(file_name)) filesystem::copy(file_name, "./");
     else {
       string error_message = "\n\nError: file '";
-      string input_directory = (fs::current_path().parent_path().parent_path()).string();
+      string input_directory = (filesystem::current_path().parent_path().parent_path()).string();
       input_directory += "/example_inputs/variables_and_configuration_files/";
       error_message += (variable_file + "' does not exist in directory " + input_directory);
       error_message += (", example cannot run, please copy this file into this directory\n");
@@ -139,7 +137,7 @@ void RegionProperties_Example::Run()
    
    cout <<"\nRegionProperties_Example: That's it..."<< endl;
 
-   fs::current_path("../../example_inputs/");
+   filesystem::current_path("../../example_inputs/");
   
 } // end RegionProperties_Example::run
 

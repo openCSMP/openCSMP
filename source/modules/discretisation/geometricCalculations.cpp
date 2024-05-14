@@ -603,25 +603,24 @@ bool isTetra( const csmp::Point<3U>& pt1,
 }
 
 /**
-Check whether provided 4 point create tetrahedron or quadrilateral.
-Return order of points which will give counter-clockwise numbering in a righthand-rule coordinate system.
+    Check whether provided 4 point create tetrahedron or quadrilateral.
+    Return order of points which will give counter-clockwise numbering in a righthand-rule coordinate system.
 */
-
 static bool isTetra( const csmp::Point<1U>& pt1,
-                      const csmp::Point<1U>& pt2,
-                      const csmp::Point<1U>& pt3,
-                      const csmp::Point<1U>& pt4,
-                      std::map<size_t, size_t>& order )
+                     const csmp::Point<1U>& pt2,
+                     const csmp::Point<1U>& pt3,
+                     const csmp::Point<1U>& pt4,
+                     std::map<size_t, size_t>& order )
 {
   // no tetra in 1D
   return false;
 }
 
 static bool isTetra( const csmp::Point<2U>& pt1,
-                      const csmp::Point<2U>& pt2,
-                      const csmp::Point<2U>& pt3,
-                      const csmp::Point<2U>& pt4,
-                      std::map<size_t, size_t>& order )
+                     const csmp::Point<2U>& pt2,
+                     const csmp::Point<2U>& pt3,
+                     const csmp::Point<2U>& pt4,
+                     std::map<size_t, size_t>& order )
 {
   // no tetra in 1D
   return false;

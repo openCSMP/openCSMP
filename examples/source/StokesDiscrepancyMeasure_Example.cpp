@@ -262,7 +262,7 @@ void StokesDiscrepancyMeasure_Example::Run()
     vtk_output.OutputDataToVTK( model, "Stokes-discrepancy-vector", "Stokes Discrepancy vector", 1 );
     vtk_output.OutputDataToVTK( model, "Stokes-discrepancy-measure", "Stokes Discrepancy Measure", 1 );
 
-    fs::current_path("../../example_inputs/");
+    filesystem::current_path("../../example_inputs/");
 
 } // Run()
 

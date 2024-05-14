@@ -1,5 +1,4 @@
 #include "PDE_Integrator.h"
-#include "LinearSolver.h"
 #include "Model.h"
 #include "ModelSubDomain.h"
 #include "Region.h"
@@ -10,6 +9,14 @@
 #include "NimbleRegion.h"
 #include "ErrorHandler.h"
 #include "Exception.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Solver.h"
+#include "SAMG_Settings.h"
+#else
+#include "LinearSolver.h"
+#endif
+
 
 using namespace std;
 
@@ -1888,17 +1895,17 @@ void PDE_Integrator<dim,CELLTYPE>::IntegrateOver( ModelSubDomain<dim,CELLTYPE>& 
     // 1. configure algorithm
     EstablishMatrixSetup( domain );
     
-    if ( !rhs_boundary_operators_.empty() ||
-         !rhs_split_boundary_operators_.empty() ||
-         !lhs_split_boundary_operators_.empty() )
-      throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::IntegrateOver( ModelSubDomain)",
-                            "this method only works if there are no split boundary or boundary integrals");
-
+    if ( domain.Name() != "Model" ) {
+         if ( !rhs_boundary_operators_.empty() ||
+              !rhs_split_boundary_operators_.empty() ||
+              !lhs_split_boundary_operators_.empty() )
+            throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::IntegrateOver( ModelSubDomain)",
+                                  "this method only works if there are no split boundary or boundary integrals");
  
-    if ( !rhs_boundary_operators_.empty() )
-      throw csmp::Exception( ERROR, "PDE_Integrator<>::IntegrateOver(domain):",
-                            "integrator contains Boundary object integrals; call IntegrateOver(model,domain), such that boundary objects can be considered." );
-   
+         if ( !rhs_boundary_operators_.empty() )
+           throw csmp::Exception( ERROR, "PDE_Integrator<>::IntegrateOver(domain):",
+                                 "integrator contains Boundary object integrals; call IntegrateOver(model,domain), such that boundary objects can be considered." );
+      }
     // 2. Accumulation of finite element integrals
     domain.RenumberNodes();
     Accumulate( domain );

@@ -69,10 +69,10 @@ void QuadrilateratorToCSMPbinary_Example::Run()
     string path = "../../example_inputs/input_meshes/";
     string name = file_name + ".txt";
     file_name = path + name;
-    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    if (filesystem::exists(file_name)) filesystem::copy(file_name, "./");
     else {
       string error_message = "\n\nError: file '";
-      string input_directory = (fs::current_path().parent_path().parent_path()).string();
+      string input_directory = (filesystem::current_path().parent_path().parent_path()).string();
       input_directory += "/example_inputs/input_meshes/";
       error_message += (name + "' does not exist in directory "  + input_directory);
       error_message += (", example cannot run, please copy this file into this directory\n");
@@ -176,7 +176,7 @@ void QuadrilateratorToCSMPbinary_Example::Run()
     // writing the CSMP binary
     model.OutputToBinaryFile( model.Name() );
 
-     fs::current_path("../../example_inputs/");
+     filesystem::current_path("../../example_inputs/");
  
  } // end run
 

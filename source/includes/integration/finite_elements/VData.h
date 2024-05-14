@@ -121,7 +121,7 @@ class VData {
     bool operator==( const VData& ) const;
     
     /// using element types, coordinate range, and boundary flags, asesses whether this is a 1D, 2D , or three dimensional model
-    int SpatialDimension() const;
+    uint32_t SpatialDimension() const;
 
     /// returns number of nodes in the mesh
     size_t Vertices() const;
@@ -136,7 +136,7 @@ class VData {
     size_t Interfaces() const;
   
     /// combined number of any entities: elements + faces + interfaces
-    size_t TotalNumberOfCells() const;
+    size_t Cells() const;
     
     /// topologically collocated nodes along the node-matched boundaries of mesh patches
     size_t NodeManifolds() const;
@@ -207,7 +207,7 @@ class VData {
     uint32_t OrderOfFiniteElementInterpolationFunctions() const;
  
     /// set node index of element in serialised array of node ids; use pelmt to determine how many nodes there shoud be
-    void   Plist( size_t eidx, uint32_t node, size_t val );
+    void   Plist( size_t eidx, uint32_t node, int64_t val );
 
     /// get node index of element in serialised array of node ids; use pelmt to determine how many nodes there shoud be
     int64_t  Plist( size_t eidx, uint32_t node ) const;

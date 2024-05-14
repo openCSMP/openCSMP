@@ -329,7 +329,7 @@ void SlopeMechanics_Example::Run()
   
    cout <<"\nSlopeMechanics_Example: That's it!\n";
 
-   fs::current_path("../../example_inputs/");
+   filesystem::current_path("../../example_inputs/");
   
 } // end Run
 

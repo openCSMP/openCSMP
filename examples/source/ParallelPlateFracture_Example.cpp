@@ -311,7 +311,7 @@ void ParallelPlateFracture_Example::Run()
     cout <<"\nExample: That's it..."<< endl;
     delete model;
 
-    fs::current_path("../../example_inputs/");
+    filesystem::current_path("../../example_inputs/");
 
 } // end Run
 

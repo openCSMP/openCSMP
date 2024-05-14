@@ -10,12 +10,11 @@ namespace csmp {
 
 template<uint32_t dim>
 HydroFractureVisitor<dim>::HydroFractureVisitor( Model<dim>& sg )
-  :  pref(sg.Database()),
-     // property keys
-     K_key(pref.StorageKey("conductivity")),
-     Pe_key(pref.StorageKey("excess pressure")),
-     S_key(pref.StorageKey("storativity")),
-     V_key(pref.StorageKey("velocity")),
+  :  // property keys
+     K_key(sg.Database().StorageKey("conductivity")),
+     Pe_key(sg.Database().StorageKey("excess pressure")),
+     S_key(sg.Database().StorageKey("storativity")),
+     V_key(sg.Database().StorageKey("velocity")),
      fractured( sg.Region("Model").Cells() ),
      GRAD_LIMIT(101325.), // one bar m-1
      K_LIMIT(1.),         // maximum hydraulic conductivity that can be induced by 

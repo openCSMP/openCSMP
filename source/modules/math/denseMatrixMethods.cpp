@@ -7,6 +7,7 @@
 //
 
 #include "denseMatrixMethods.h"
+#include "CSMP_definitions.h"
 
 namespace csmp {
 

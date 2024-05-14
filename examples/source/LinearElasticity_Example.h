@@ -7,12 +7,13 @@ namespace csmp {
 
   template<uint32_t> class Model;
 
-class  LinearElasticity_Example : public Example{
+class  LinearElasticity_Example : public Example {
 public:
   virtual void Run();
   virtual void Specifications();
 private:
   void SteadyStatePressure( Model<2U>& );
+  void PrintModelProperties( const Model<2U>& );
 };
 
 } // csmp

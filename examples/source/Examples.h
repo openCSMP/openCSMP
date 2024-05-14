@@ -62,6 +62,7 @@
 #include "VariableManagement_Example.h" // reading and writing variables to CSMP binary files
 #include "CSMPInterfaces_Example.h"
 #include "ThermalConvectionETHZ_Example.h"
+// TODO: include Lukas Mosser's correlation based black-oil model property calculations
 
 
 #endif

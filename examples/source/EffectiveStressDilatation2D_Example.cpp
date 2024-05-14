@@ -253,7 +253,7 @@ void EffectiveStressDilatation2D_Example::Run()
   
     cout <<"\nRun: a total of "<< cumulative_production <<" (m3), was produced after "<< model_time/86400. <<" days\n";
 
-    fs::current_path("../../example_inputs/");
+    filesystem::current_path("../../example_inputs/");
   
 } // end Run
 

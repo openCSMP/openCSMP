@@ -92,7 +92,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::Run()
       RunSimulation(model);
     }
 
-    fs::current_path("../../example_inputs/");
+    filesystem::current_path("../../example_inputs/");
   } // end run
   
   

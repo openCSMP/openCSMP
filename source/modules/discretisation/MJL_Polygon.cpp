@@ -114,16 +114,15 @@ void Polygon::BoundingRectangle( mjl::Point& cnr_min, mjl::Point& cnr_max ) cons
 // tested: O.K.
 bool Polygon::IsPositivelyOriented() const
  {
-    mjl::Edge  e;
-    double     angle{0.};
+    double angle{0.};
 
-    for ( size_t i=0u, angle=0.; i<size_; i++ )
+    for ( size_t i=0u; i<size_; i++ )
       {
          // getting edge (if pos. counter-clockwise) and point clockwise
          mjl::Point a = Cw()->Point();
          mjl::Point b = Ccw()->Point();
          // must be backwards (see MJL definition p. 120, fig. 5.12)
-         e.Set(b,a);
+         mjl::Edge e(b,a);
          angle += signedAngle(V()->Point(),e);
          Advance( CLOCKWISE );
       }

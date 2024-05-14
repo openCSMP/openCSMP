@@ -123,8 +123,8 @@ double  MohrCoulombFailure<dim>::MeanStress( const TensorVariable<dim>& ts )
 template<uint32_t dim>
 double  MohrCoulombFailure<dim>::DeviatoricStress( const TensorVariable<dim>& ts, double& t ) 
  {
-    // Smith & Griffiths, p. 233
-    if ( dim == 2 )
+    // Smith & Griffiths, p. 236 (t is one of the stress invariants)
+    if constexpr ( dim == 2U )
       {
          t = ((ts(0,0)-ts(1,1))*(ts(0,0)-ts(1,1))) + 3.*ts(0,1)*ts(0,1);
          t = std::sqrt(t) / std::sqrt(3.);
@@ -139,12 +139,14 @@ double  MohrCoulombFailure<dim>::DeviatoricStress( const TensorVariable<dim>& ts
          t  = std::sqrt(t) / std::sqrt(3.);
       }
     
+    static_assert( dim != 1U, "MohrCoulombFailure<dim>::DeviatoricStress: does not work in 1D.");
+    
     return t * std::sqrt(3./2.);
     
  } // end DeviatoricStress
 
 
-template class MohrCoulombFailure<1U>;
+//template class MohrCoulombFailure<1U>;
 template class MohrCoulombFailure<2U>;
 template class MohrCoulombFailure<3U>;
 

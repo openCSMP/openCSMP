@@ -8,16 +8,18 @@
 namespace csmp {
 
 /**
+
+Adapts local permeability of rock-sequence such that fluid overpressure gets dissipated.
+
 @author S.K. Matthaei
 @author S. Geiger
 @author S. Roberts
 @date 1999
 */
-
 template<uint32_t dim>
 class HydroFractureVisitor : public Visitor<dim> {
   public:
-    explicit HydroFractureVisitor( Model<dim>& sg );
+    explicit HydroFractureVisitor( Model<dim>& );
     virtual ~HydroFractureVisitor();
 
     virtual void Visit( Element<dim>* );
@@ -26,7 +28,6 @@ class HydroFractureVisitor : public Visitor<dim> {
     void    HydroFracturedElements( std::vector<uint32_t>& ) const;
 
   private:
-     const PropertyDatabase<dim>&  pref;
      BoolVector               fractured;
      csmp::Index              Pe_key, S_key, K_key, V_key; 
      double                   q, dp;

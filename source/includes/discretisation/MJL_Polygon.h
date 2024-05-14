@@ -5,6 +5,7 @@
 #include "MJL_Edge.h"
 
 #include <list>
+#include <cassert>
 
 namespace mjl {
 

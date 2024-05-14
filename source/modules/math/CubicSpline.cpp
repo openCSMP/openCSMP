@@ -1,7 +1,8 @@
-#include "CubicSpline.h"
-#include "CSMP_mathUtilities.h"
-
 #include <cmath>
+#include <iostream>
+#include <fstream>
+#include <cassert>
+#include "CubicSpline.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ double CubicSpline::Derivative( double x ) const
 
 double CubicSpline::MaxDerivative() const
  {
-    return (*std::max_element( y2a_.begin(), y2a_.end() ));
+    return (*max_element( y2a_.begin(), y2a_.end() ));
  } 
 
 
@@ -40,15 +41,15 @@ double CubicSpline::Range_fx() const
  
 
 // function prototypes
-void spline( const std::vector<double>& x, // x values    (0..n-1) 
-             const std::vector<double>& y, // f(x) values (0..n-1)
+void spline( const vector<double>& x, // x values    (0..n-1)
+             const vector<double>& y, // f(x) values (0..n-1)
              double yp1, double ypn,    // slope at beginning and end
-	           std::vector<double>& y2 );    // f''(x) at above points
+	           vector<double>& y2 );    // f''(x) at above points
 
 
 CubicSpline::CubicSpline()
- : x_range_(std::numeric_limits<double>::quiet_NaN()),
-   y_range_(std::numeric_limits<double>::quiet_NaN())
+ : x_range_(numeric_limits<double>::quiet_NaN()),
+   y_range_(numeric_limits<double>::quiet_NaN())
  {
  }
 
@@ -137,15 +138,15 @@ void CubicSpline::Initialize( const char* datafile )
     ya_min = *( min_element( ya_.begin(), ya_.end() ) );
     ya_max = *( max_element( ya_.begin(), ya_.end() ) );
 
-    x_range_ = std::fabs(xa_max - xa_min);
-    y_range_ = std::fabs(ya_max - ya_min);
+    x_range_ = fabs(xa_max - xa_min);
+    y_range_ = fabs(ya_max - ya_min);
 
     // creating the cubic spline from input points
     spline( xa_, ya_, y1, yn, y2a_ );    
  
  } // end Initialize
 
-void  CubicSpline::Initialize( const std::vector<double>& xa, const std::vector<double>& ya,
+void  CubicSpline::Initialize( const vector<double>& xa, const vector<double>& ya,
                                const double y1, const double yn )
 {
 
@@ -191,10 +192,10 @@ void CubicSpline::Out() const
 
 
 /// creates cubic spline second derivative from input points and values (called only once when the spline is contructed)
-void spline( const std::vector<double>& x, // x values    (0..n-1) 
-             const std::vector<double>& y, // f(x) values (0..n-1)
+void spline( const vector<double>& x, // x values    (0..n-1)
+             const vector<double>& y, // f(x) values (0..n-1)
              double yp1, double ypn,       // slope at beginning and end
-	           std::vector<double>& y2 )     // f''(x) at above points
+	           vector<double>& y2 )     // f''(x) at above points
 {
   assert( x.size() == y.size() );
   assert( x.size() >= 3U ); 
@@ -203,7 +204,7 @@ void spline( const std::vector<double>& x, // x values    (0..n-1)
 	double p, qn, sig, un;
 
 	const size_t n(y2.size());
-	std::vector<double>  u(n-1);
+	vector<double>  u(n-1);
 	
 	if (yp1 > 0.99e30) y2[0]=u[0]=0.;
 	else {
@@ -259,7 +260,7 @@ double splint( const vector<double>& xa,
 	
 	if ( fabs(h) < numeric_limits<double>::epsilon() ) {
 	     string err("\nsplint: Bad xa input to routine splint: ");
-	     cout << err << x <<" ("<< h <<"), xa:"<< std::endl;
+	     cout << err << x <<" ("<< h <<"), xa:"<< endl;
 	     for ( uint32_t i=0U; i<xa.size(); i++ ) cout <<" "<< xa[i];
 	     cout << endl;
 	     throw range_error( err.c_str() );

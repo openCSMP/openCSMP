@@ -32,7 +32,7 @@ class FRED_Interface {
     
   private:
     /// returns number of points
-    long ReadFORMAT( std::ifstream& ifs, int& scale, int& fracs,
+    long ReadFORMAT( std::ifstream& ifs, double& scale, long& fracs,
                      int& props, bool ascii );
     
     /// returns whether property specs were read correctly
@@ -41,10 +41,10 @@ class FRED_Interface {
     // stored data 
     std::map<std::string,FRED_Fracture> fractures;
     std::list<std::string>              properties;
-    int     n_points,
-            n_fractures,
-            n_properties,
-            scale_factor;
+    long                                n_points,
+                                        n_fractures;
+    int                                 n_properties;
+    double                              scale_factor;
     std::string  dataset;
 };
 

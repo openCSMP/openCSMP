@@ -209,6 +209,10 @@ as is done for instance by methods of the ANSYS_Interface. The
 model topology object has a rich interface which allows the user to
 select sub portions of the model stored in the vset.
 
+@param treat_domains_as_regions_and_use_regions_file  when there is a "-regions.txt"  file, the elements of regions that are not mentioned in there will be eliminated from the mesh from which the CSMP models gets build.
+This is important because meshing tools like ANSYS mesh every part of the BREP using lines, surfaces and volumes.
+However intervening lines or surfaces are normally not desired because element integral contributions would be duplicated for elements which share the same nodes. This is also why ANSYS_Interface eliminates the lower-dimensional elements from regions if all these element groups have the same name.
+
 @section implementation Implementation
 
 The constructor first initializes the MeshManager and then the
@@ -440,6 +444,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
                         "model contains disconnected mesh patches. They will be connected with SplitBoundary objects." );
 
     // 2. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
+    vset.RemoveData("permeability"); // not needed here
     InputVariablesFrom( vset );
 
     // 3. forming default computational domain called "Model" and regions

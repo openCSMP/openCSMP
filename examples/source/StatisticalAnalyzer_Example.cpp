@@ -105,7 +105,7 @@ void StatisticalAnalyzer_Example::Run()
   //                                                             output file name                   log10_of_bin_values
   porosity_histogram.OutputRegionPropertyAbundancePolygonsMaple( "porosity", bins, porosity_results, false );
 
-  fs::current_path("../../example_inputs/");
+  filesystem::current_path("../../example_inputs/");
 
 } // Run()
 

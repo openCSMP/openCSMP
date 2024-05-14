@@ -41,37 +41,41 @@ void Tutorial1_Example::Specifications()
   AddDescription( "hydraulic conductivity is computed as a function of the permeability and viscosity. Output");
   AddDescription( "is written to VTK and Matlab files.");
   AddRequirement( "tutorial1_input, tutorial1_variables.txt");
-} // Initialize()
+}
 
-// **********************************************************************************************
-//
-// A simple CSMP file that solves the transient pressure diffusion equation using a fully
-// implicit FE discretisation. A simple triangular FE mesh is generated automatically in CSMP
-// from which the Model is built. Boundary and initial conditions are applied and the
-// hydraulic conductivity is computed as a function of the permeability and viscosity. Output
-// is written to VTK and Matlab files.
-//
-// Tasks and exercises:
-//
-// 1. Generate different text-input files with varying permeabilities
-//    (see User's Guide Page 45 "Regular Meshes from Pixel Data")
-//    NB: Uncomment the line where a fixed, uniform permeability is set!
-// 2. Visualise results and observe how pressure diffusion varies for models with
-//    and without permeability contrast
-// 3. Vary boundary and initial conditions (e.g., fixed pressure on two sides vs. one side,
-//    change compressibility, etc.)
-// 4. Visualise results and observe what happens
-// 5. Generate a simple mesh that is only 1 FE high, use a uniform permeability and apply
-//    boundary conditions such that you can compare numerical results with your analytical
-//    solution for the diffusion equation
-// 6. Write a new function that reads in porosity and computes the compressibility as
-//    a function of the user-specified fluid- and rock-compressibilities, i.e. solves
-//    c = phi * c_f + (1-phi) * c_r for each FE with phi = porosity, c_f = fluid compressibility
-//    and c_r = rock compressibility. Look at other classes in /source_code/interrelations for
-//    inspiration.
-//
-// **********************************************************************************************
+/** **********************************************************************************************
+ 
+Simple program that shows how to solve the transient pressure diffusion equation using a fully
+implicit FE discretisation. A simple triangular FE mesh is generated automatically in CSMP
+from which the Model is built. Boundary and initial conditions are applied and the
+hydraulic conductivity is computed as a function of the permeability and viscosity. Output
+is written to VTK and Matlab files.
 
+Tasks and exercises:
+
+1. Generate different text-input files with varying permeabilities
+ (see User's Guide Page 45 "Regular Meshes from Pixel Data")
+ NB: Uncomment the line where a fixed, uniform permeability is set!
+   
+2. Visualise results and observe how pressure diffusion varies for models with
+  and without permeability contrast
+   
+3. Vary boundary and initial conditions (e.g., fixed pressure on two sides vs. one side,
+  change compressibility, etc.)
+   
+4. Visualise results and observe what happens
+
+5. Generate a simple mesh that is only 1 FE high, use a uniform permeability and apply
+  boundary conditions such that you can compare numerical results with your analytical
+  solution for the diffusion equation
+   
+6. Write a new function that reads in porosity and computes the compressibility as
+  a function of the user-specified fluid- and rock-compressibilities, i.e. solves
+  c = phi * c_f + (1-phi) * c_r for each FE with phi = porosity, c_f = fluid compressibility
+  and c_r = rock compressibility. Look at other classes in /source_code/interrelations for
+  inspiration.
+
+******************************************************************************************** */
 void Tutorial1_Example::Run()
 {
     double& model_time( ModelTime::Instance().modelTime );
@@ -277,7 +281,7 @@ void Tutorial1_Example::Run()
     // terminate
     cout <<"\nmain: That's it..."<< endl;
 
-    fs::current_path("../../example_inputs/");
+    filesystem::current_path("../../example_inputs/");
 
 } // Run
 

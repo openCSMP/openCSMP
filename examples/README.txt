@@ -1,3 +1,6 @@
+README file for OpenCSMP examples
+=================================
+Qi Shao, 2023
 
 To run the OpenCSMP examples, please copy the 'example_inputs/' directory to a location outside of the open-csmp source directory (source code), and set it as the working directory of your IDE.
 

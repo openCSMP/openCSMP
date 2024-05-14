@@ -44,9 +44,10 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     enum{DIM=2U};
     if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
     
-    // build 2D model from mesh
+    // building and testing first 2D model from mesh (already including faces and interfaces)
+    // --------------------------------------------------------------------------------------
     VSet<DIM> vset, vset2;
-    ModelTopology mesh_topology = test_Create_MeshPatchWithLineElements_VSet( vset );
+    ModelTopology mesh_topology = test_Create_BoundarySplitBoundaryPatch( vset );
     _test( mesh_topology.Cells() == vset.Elements() );
     {
       // adding the original element numbers to VSet, assigning the same numbers as face numbers as these will be converted later
@@ -54,82 +55,93 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
       elmt_nums.Reserve( vset.Elements() );
       for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
       vset.AddData( "element number", elmt_nums );
-      // face numbers (to be retrieved when the elements will later be converted to Face objects)
-      /* (not possible because there are no face objects stored in the VSet)
+      // face numbers
       PropertyData face_nums( FACE, SCALAR, 2U );
-      face_nums.Reserve( vset.Elements() );
-      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( face_nums, makeScalar( ANY, i ) );
+      face_nums.Reserve( vset.Faces() );
+      for ( size_t i{0U}; i<vset.Faces(); ++i ) pushBack( face_nums, makeScalar( ANY, i ) );
       vset.AddData( "face number", face_nums );
-      */
+      // interface numbers
+      PropertyData iface_nums( INTER_FACE, SCALAR, 2U );
+      iface_nums.Reserve( vset.Interfaces() );
+      for ( size_t i{0U}; i<vset.Interfaces(); ++i ) pushBack( iface_nums, makeScalar( ANY, i ) );
+      vset.AddData( "interface number", iface_nums );
       // node numbers
       PropertyData node_nums( NODE, SCALAR, 2U );
       node_nums.Reserve( vset.Vertices() );
       for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
       vset.AddData( "node number", node_nums );
     }
-    const bool vset_only_contains_elements{ true };
-    Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", vset_only_contains_elements );
-    printModelDimensions( model, true );
-    _test( printRangeOfVariable( model, "element number" ) <= vset.Elements() );
-    _test( printRangeOfVariable( model, "node number" ) <= vset.Vertices() );
-    _test( vset.Faces() == 0U );
+    // creating and testing the model
+    {
+      const bool vset_only_contains_elements{ false };
+      Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", vset_only_contains_elements );
+      printModelDimensions( model, true );
+      _test( printRangeOfVariable( model, "element number" ) <= vset.Elements() );
+      _test( printRangeOfVariable( model, "node number" ) <= vset.Vertices() );
+      _test( vset.Faces() == 0U );
+      
+      // copying "element number" to "face number" for the faces created from lower-dimensional elements
+      const csmp::Index fn_key = model.Database().StorageKey("face number");
+      _test( mesh_topology.CellsWithinDomain("BOTTOM") == model.Boundary("BOTTOM").Cells() );
+      _test( mesh_topology.CellsWithinDomain("RIGHT")  == model.Boundary("RIGHT").Cells() );
+      _test( mesh_topology.CellsWithinDomain("TOP")    == model.Boundary("TOP").Cells() );
+      _test( mesh_topology.CellsWithinDomain("LEFT")   == model.Boundary("LEFT").Cells() );
+      Boundary<2U>& bottom{ model.Boundary("BOTTOM") }, right{ model.Boundary("RIGHT") },
+                    top{ model.Boundary("TOP") }, left{ model.Boundary("LEFT") };
+      // BOTTOM
+      size_t n_face{0U};
+      const auto end1 = mesh_topology.CellsOfDomainEnd("BOTTOM");
+      for ( auto it=mesh_topology.CellsOfDomainBegin("BOTTOM"); it!=end1; ++it )
+        bottom.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+      // RIGHT
+      n_face = 0U;
+      const auto end2 = mesh_topology.CellsOfDomainEnd("RIGHT");
+      for ( auto it=mesh_topology.CellsOfDomainBegin("RIGHT"); it!=end2; ++it )
+        right.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+      // TOP
+      n_face = 0U;
+      const auto end3 = mesh_topology.CellsOfDomainEnd("TOP");
+      for ( auto it=mesh_topology.CellsOfDomainBegin("TOP"); it!=end3; ++it )
+        top.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+      // LEFT
+      n_face = 0U;
+      const auto end4 = mesh_topology.CellsOfDomainEnd("LEFT");
+      for ( auto it=mesh_topology.CellsOfDomainBegin("LEFT"); it!=end4; ++it )
+        left.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+      
+      // testing whether original Face and Interface numbers are preserved in output
+      const bool   get_indices_from_stored_variables{true};
+      const auto zero_errors{0};
+      _test( model.Mesh().CheckElementConnectivity() == zero_errors );
+      model.OutputMeshTo( vset2, get_indices_from_stored_variables );
+      _test( vset2 == vset );
+    }
     
-    // copying "element number" to "face number" for the faces created from lower-dimensional elements
-    const csmp::Index fn_key = model.Database().StorageKey("face number");
-    _test( mesh_topology.CellsWithinDomain("BOTTOM") == model.Boundary("BOTTOM").Cells() );
-    _test( mesh_topology.CellsWithinDomain("RIGHT")  == model.Boundary("RIGHT").Cells() );
-    _test( mesh_topology.CellsWithinDomain("TOP")    == model.Boundary("TOP").Cells() );
-    _test( mesh_topology.CellsWithinDomain("LEFT")   == model.Boundary("LEFT").Cells() );
-    Boundary<2U>& bottom{ model.Boundary("BOTTOM") }, right{ model.Boundary("RIGHT") },
-                  top{ model.Boundary("TOP") }, left{ model.Boundary("LEFT") };
-    // BOTTOM
-    size_t n_face{0U};
-    const auto end1 = mesh_topology.CellsOfDomainEnd("BOTTOM");
-    for ( auto it=mesh_topology.CellsOfDomainBegin("BOTTOM"); it!=end1; ++it )
-      bottom.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
-    // RIGHT
-    n_face = 0U;
-    const auto end2 = mesh_topology.CellsOfDomainEnd("RIGHT");
-    for ( auto it=mesh_topology.CellsOfDomainBegin("RIGHT"); it!=end2; ++it )
-      right.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
-    // TOP
-    n_face = 0U;
-    const auto end3 = mesh_topology.CellsOfDomainEnd("TOP");
-    for ( auto it=mesh_topology.CellsOfDomainBegin("TOP"); it!=end3; ++it )
-      top.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
-    // LEFT
-    n_face = 0U;
-    const auto end4 = mesh_topology.CellsOfDomainEnd("LEFT");
-    for ( auto it=mesh_topology.CellsOfDomainBegin("LEFT"); it!=end4; ++it )
-      left.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
-    
-    // testing whether original Face numbers are preserved in output
-    const bool   get_indices_from_stored_variables{true};
-    const auto zero_errors{0};
-    _test( model.Mesh().CheckElementConnectivity() == zero_errors );
-    model.OutputMeshTo( vset2, get_indices_from_stored_variables );
-    _test( vset2 == vset );
-    
-    // checking the single element regions
-    //model.RegionsOut();
-    const Region<2U>& fracs(model.Region("FRAC3"));
-    //cerr <<"\ninterior vs perimeter: "<< fracs.InteriorCells() <<" "<< fracs.PerimeterCells();
-    _test( fracs.InteriorCells()  == 0 );
-    _test( fracs.PerimeterCells() == 1 );
-    
-    // saving model to binary
-    const string test_model_name( string(model.Name()) + "Vset_TestCase" );
-    model.OutputToBinaryFile( test_model_name.c_str() );
-    
-    // bringing the model back (calling reconstructor)
-    Model<DIM>  model2( test_model_name );
-    // getting this a distinct name for the destruction process
-    model2.Name( (string(model2.Name()) + "_reconstructed").c_str() );
-    printModelDimensions( model, true );
-    model2.OutputMeshTo( vset2 );
-    
+    // Building second model with faces that get created from the elements
+    // -------------------------------------------------------------------
+    {
+      // model that consists only of elements, but Face objects will be created from boundary regions
+      mesh_topology = test_Create_MeshPatchWithLineElements_VSet( vset );
+      const bool vset_only_contains_elements{ true };
+      Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", vset_only_contains_elements );
+      printModelDimensions( model, true );
+      // checking single element regions
+      //model.RegionsOut();
+      const Region<2U>& fracs(model.Region("FRAC3"));
+      //cerr <<"\ninterior vs perimeter: "<< fracs.InteriorCells() <<" "<< fracs.PerimeterCells();
+      _test( fracs.InteriorCells()  == 0 );
+      _test( fracs.PerimeterCells() == 1 );
+      // saving model to binary
+      const string test_model_name( string(model.Name()) + "Vset_TestCase" );
+      model.OutputToBinaryFile( test_model_name.c_str() );
+      // bringing the model back (calling reconstructor)
+      Model<DIM>  model2( test_model_name );
+      // getting this a distinct name for the destruction process
+      model2.Name( (string(model2.Name()) + "_reconstructed").c_str() );
+      printModelDimensions( model, true );
+      model2.OutputMeshTo( vset2 );
+    }
     // comparing it to original VSet
-    // TODO: test still fails because the faces numbers are not the same 
     if ( vset2 == vset ) return true;
     return false;
     

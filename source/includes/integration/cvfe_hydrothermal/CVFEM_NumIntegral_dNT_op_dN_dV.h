@@ -25,7 +25,7 @@ class CVFEM_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim,CELL> {
     
     virtual void ComputeContribution( const CELL<dim>& ) override;
     
-    virtual CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>* clone() const { return new CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>(*this); }
+    virtual CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>* clone() const override { return new CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>(*this); }
   private:
     DenseMatrix<DM_MIN>  B, BT; 
 

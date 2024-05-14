@@ -33,7 +33,7 @@ namespace csmp {
 
 void Tutorial2_Example::Specifications()
 {
-  SetTitle( "Tutorial 2: Diffusion - advection" );
+  SetTitle( "Tutorial 2: classic Advection - Diffusion Equation (ADE) solver" );
   SetDifficulty( 3 );
   SetCategory( "Tutorials (composite functionality)" );
   AddAuthor( "Sebastian Geiger" );
@@ -43,34 +43,36 @@ void Tutorial2_Example::Specifications()
   AddDescription( "(explicit or implicit). A simple quadrilateral FE mesh is generated automatically in CSMP from" );
   AddDescription( "which the Model is built. Output is written to VTK and Matlab files." );
   AddRequirement( " tutorial2_input (10 x 10m), tutorial2_variables.txt");
-} // Initialize()
+}
 
-// **********************************************************************************************
-//
-// A CSMP main file that first solves the steady state pressure diffusion equation using a fully
-// implicit FE discretisation and computes the velocity field afterwards. This velocity field is
-// then used to compute the advection of a non-reacting chemical species with the FV method
-// (explicit or implicit). A simple quadrilateral FE mesh is generated automatically in CSMP from
-// which the Model is built. Output is written to VTK and Matlab files.
-//
-//
-// Tasks and exercises:
-//
-// 1. Change the permeability and/or porosity of the central Region and observe how solute
-//    transport behaviour varies.
-// 2. Compare different time-stepping schemes
-// 3. Use tutorial 1 as a template and generate a transient FE algorithm that solves the
-//    diffusion of the solute.
-// 4. Generate a simple mesh that is only 1 FE high, use a uniform permeability and apply
-//    boundary conditions such that you can compare numerical results for advection and diffusion
-//    with an analytical solution. Vary the different Peclet number (ratio of advection over
-//    diffusion) and investigate different time-stepping and spatial approximation schemes.
-//
-// TODO: SKM implicit version produces artifacts at edges
-// TODO: SKM remove right-hand side fixed concentration BC
-//
-// **********************************************************************************************
 
+/** **********************************************************************************************
+
+ADE solver that first solves the steady state pressure diffusion equation using a fully
+implicit FE discretisation and computes the velocity field afterwards. This velocity field is
+then used to compute the advection of a non-reacting chemical species with the FV method
+(explicit or implicit). A simple quadrilateral FE mesh is generated automatically in CSMP from
+which the Model is built. Output is written to VTK and Matlab files.
+
+Tasks and exercises:
+
+1. Change the permeability and/or porosity of the central Region and observe how solute
+   transport behaviour varies.
+   
+2. Compare different time-stepping schemes
+
+3. Use tutorial 1 as a template and generate a transient FE algorithm that solves the
+   diffusion of the solute.
+   
+4. Generate a simple mesh that is only 1 FE high, use a uniform permeability and apply
+   boundary conditions such that you can compare numerical results for advection and diffusion
+   with an analytical solution. Vary the different Peclet number (ratio of advection over
+   diffusion) and investigate different time-stepping and spatial approximation schemes.
+
+TODO: SKM implicit version produces artifacts at edges; fix needed
+TODO: SKM remove right-hand side fixed concentration boundary condition
+
+**********************************************************************************************/
 void Tutorial2_Example::Run()
 {
     /*
@@ -334,7 +336,7 @@ void Tutorial2_Example::Run()
     // terminate
     cout <<"\nmain: That's it..."<< endl;
 
-    fs::current_path("../../example_inputs/");
+    filesystem::current_path("../../example_inputs/");
 
 } // Run()
 

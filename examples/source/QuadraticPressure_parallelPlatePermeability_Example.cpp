@@ -55,8 +55,8 @@ void QuadraticPressure_parallelPlatePermeability_Example::Specifications()
 */
 void QuadraticPressure_parallelPlatePermeability_Example::Run()
 {
-    /*
-     // 1. Reader for Shewchuk's 'Triangle' FE meshes
+#ifdef USE_INPUT_MODEL_CREATED_BY_TRIANGLE_DIRECTLY
+    // 1. Reader for Shewchuk's 'Triangle' FE meshes
     //     et up the converter that converts the linear input triangles to
     //     quadratic (6 nodes) traingular finite elements
     // -----------------------------------------------------------------------------
@@ -67,15 +67,14 @@ void QuadraticPressure_parallelPlatePermeability_Example::Run()
     const bool isoparametric(true), extra_checks(true);
     VSet<2U>   mesh_container;
     mesh_interface.ReadTriangle2DMesh( file_name, mesh_container, isoparametric, extra_checks );
+    // convert 3-noded linear triangles into 6-noded quadratic ones
     VSetConverter<2U>().ConvertLinearToQuadraticTriangles( mesh_container );
-
 
     // 2. model construction using IsoarametricQuadraticTriangle elements
     // -------------------------------------------------------------------
     Model<2U>  model( mesh_container, "example2.txt" );
     mesh_container.Erase();
-    */
-
+#else
     // ------------------------------------------------------------
     // 1. Load CSMP native format model
     // ------------------------------------------------------------
@@ -92,7 +91,7 @@ void QuadraticPressure_parallelPlatePermeability_Example::Run()
     CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
     //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
     Model<2U>  model(model_name, variable_file);
-
+#endif
 
     // 3. Input of material properties and initial conditions
     // (the permeability is read in from the 'Triangle' input files)
@@ -202,7 +201,7 @@ void QuadraticPressure_parallelPlatePermeability_Example::Run()
     vtk_output.OutputDataToVTK( model, "volume-flux",    "volume flux",       0 );
     vtk_output.OutputDataToVTK( model, "nvolume-flux",   "nodal volume flux", 0 );
 
-    fs::current_path("../../example_inputs/");
+    filesystem::current_path("../../example_inputs/");
 
 } // end Run
 

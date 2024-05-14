@@ -1097,12 +1097,14 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 template<uint32_t dim>
 void FiniteVolumeStencil<dim>::Out() const
 {
-   cout<<"\nFiniteVolumeStencil<dim>::Out: \nVolume Weights: ";
+   cout<<"\nFiniteVolumeStencil<dim>::Out: \nVolume Weights ";
+   cout <<"("<< sector_integration_weights.size() <<","<< sector_integration_weights[0].size() <<"):";
    for( uint32_t i{0U}; i<sector_integration_weights.size(); i++)
       for( uint32_t j{0U}; j<sector_integration_weights[i].size(); j++)
         cout<<" "<<sector_integration_weights[i][j];
    
-   cout<<endl<<endl<<" Volume IPs: "<<endl;
+   cout<<endl<<endl<<" Volume IPs "<<endl;
+   cout <<"("<< sector_integration_points.size() <<","<< sector_integration_points[0].size() <<",rst):";
    for( uint32_t i{0U}; i<sector_integration_points.size(); i++) {
      for( uint32_t j{0U}; j<sector_integration_points[i].size(); j++) {
         for( uint32_t k{0U}; k<dim; k++) cout<<" "<<sector_integration_points[i][j][k];
@@ -1110,7 +1112,8 @@ void FiniteVolumeStencil<dim>::Out() const
         }
    }
                 
-   cout<<endl<<" Facet Weights: ";
+   cout<<endl<<" Facet Weights ";
+   cout <<"("<< facet_integration_weights.size() <<","<< facet_integration_weights[0].size() <<"):";
    for( uint32_t i{0U}; i<facet_integration_weights.size(); i++) {
      for( uint32_t j{0U}; j<facet_integration_weights[i].size(); j++) {
        cout<<" "<<facet_integration_weights[i][j] ;
@@ -1119,6 +1122,7 @@ void FiniteVolumeStencil<dim>::Out() const
    cout<<endl;
    
    cout<<endl<<" Facet IPs: "<<endl;
+   cout <<"("<< facet_integration_points.size() <<","<< facet_integration_points[0].size() <<",rst):";
    for( uint32_t i{0U}; i<facet_integration_points.size(); i++) {
      for( uint32_t j{0U}; j<facet_integration_points[i].size(); j++) {
        for( uint32_t k{0U}; k<dim; k++) cout<<" "<<facet_integration_points[i][j][k];
@@ -1126,9 +1130,10 @@ void FiniteVolumeStencil<dim>::Out() const
      }
    }
 
-  cout<<endl<<" Facet parametric normals inside the element: "<<endl;
-   for( uint32_t i{0U}; i<facet_parametric_normals.size(); i++) {
-     for( uint32_t j{0U}; j<dim; j++) {
+  cout<<endl<<" Facet parametric normals inside the element "<<endl;
+  cout <<"("<< facet_parametric_normals.size() <<",rst):";
+  for( uint32_t i{0U}; i<facet_parametric_normals.size(); i++) {
+    for( uint32_t j{0U}; j<dim; j++) {
        cout<<" "<<facet_parametric_normals[i][j] ;
      }
      cout<<endl;
@@ -1136,6 +1141,7 @@ void FiniteVolumeStencil<dim>::Out() const
      
    if ( !facet_normals.empty() && !facet_normals[0].empty() ) {
        cout<<endl<<" Facet physical normals inside the element: "<<endl;
+       cout <<"("<< facet_normals.size() <<",xyz):";
        for( uint32_t i{0U}; i<facet_normals.size(); i++) {
          if ( !facet_normals[i].empty() )
            for( uint32_t j{0U}; j<dim; j++) {
@@ -1145,7 +1151,8 @@ void FiniteVolumeStencil<dim>::Out() const
        }
      }
 
-    cout<<endl<<" Facet surrounding node in the element: "<<endl;
+    cout<<endl<<" Facet surrounding node in the element "<<endl;
+    cout <<"("<< Sectors() <<","<< facets_surrounding_node[0].size() <<"):";
     for( uint32_t i{0U}; i<Sectors(); i++) {
       for( uint32_t j{0U}; j<facets_surrounding_node[i].size(); j++) {
         cout<<" "<<facets_surrounding_node[i][j] ;
@@ -1154,6 +1161,7 @@ void FiniteVolumeStencil<dim>::Out() const
     }
     
     cout<<endl<<" Edges pairs in the element "<<endl;
+    cout <<"("<< edges_of_element.size() <<",2):";
     for( uint32_t i{0U}; i<edges_of_element.size(); i++) {
       cout<<" "<< edges_of_element[i].first <<", "<< edges_of_element[i].second <<" ";
     }

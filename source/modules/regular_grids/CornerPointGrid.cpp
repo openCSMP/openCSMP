@@ -1311,11 +1311,11 @@ bool CornerPointGrid::ConstructEclipseCell1110( ColumnCell&  cell, uint32_t& i, 
 
   if ( invalid_elements > 0 ) {
     //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
+//    for ( auto eid : new_elements ) {
       //generator_->plist.erase(eid);
       //generator_->fem_types.pop_back();
       //--generator_->elementID;
-    }
+//    }
     throw csmp::Exception( ERROR, "CornerPointGrid::ConstructEclipseCell1110(Pyramid)", "encountered invalid element(s)" );
     return false;
   }

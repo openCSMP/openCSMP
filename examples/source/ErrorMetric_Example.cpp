@@ -136,7 +136,7 @@ void ErrorMetric_Example::Run()
     vtk_output.OutputDataToVTK( model, "discretization-error-magnitude", "discretization error magnitude", 1, true );
     vtk_output.OutputDataToVTK( model, "FRAC_VOLUMES", "discretization-error-magnitude", "discretization error magnitude", 1, true );
 
-    fs::current_path("../../example_inputs/");
+    filesystem::current_path("../../example_inputs/");
 
 } // Run()
 
