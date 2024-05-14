@@ -137,7 +137,7 @@ void DES2PhaseSlightlyCompressibleFlow_Example::RunSimulation( Model<dim>& model
                                            config_file.c_str(),
                                            false,
                                            true,   // 2) default prop.values
-                                           true,   // 3) group prop.values
+                                           true,   // 3) regional prop.values
                                            true,   // 4) essential box-boundary conditions
                                            false,  // 5) essential flags
                                            false   // 6) boundary conditions
@@ -175,7 +175,7 @@ void DES2PhaseSlightlyCompressibleFlow_Example::RunSimulation( Model<dim>& model
     // -------------------------------------------------------------
     // 7.0 Construct the finite volume grid and DES transport algorithms
     // -------------------------------------------------------------
-    DES2PhaseTransport<dim,FlowFunctionsModule1>* DEStransport;
+    DES2PhaseTransport<dim,FlowFunctionsModule1>* DEStransport{nullptr};
     DEStransport = new DES2PhaseSlightlyCompressibleTransport<dim,FlowFunctionsModule1> (model, "Model",
                                                                                          with_gravity_forces,
                                                                                          with_capillary_spreading,

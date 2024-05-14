@@ -44,13 +44,14 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     enum{DIM=2U};
     if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
     
-    // building and testing first 2D model from mesh (already including faces and interfaces)
-    // --------------------------------------------------------------------------------------
+    // building and testing first 2D model from mesh & topology (already including faces and interfaces)
+    // -------------------------------------------------------------------------------------------------
     VSet<DIM> vset, vset2;
     ModelTopology mesh_topology = test_Create_BoundarySplitBoundaryPatch( vset );
-    _test( mesh_topology.Cells() == vset.Elements() );
+    _test( mesh_topology.Cells() == vset.Cells() );
     {
-      // adding the original element numbers to VSet, assigning the same numbers as face numbers as these will be converted later
+      // adding the original element numbers to VSet, assigning the same numbers
+      // as face numbers as these will be converted later
       PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
       elmt_nums.Reserve( vset.Elements() );
       for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
@@ -58,12 +59,12 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
       // face numbers
       PropertyData face_nums( FACE, SCALAR, 2U );
       face_nums.Reserve( vset.Faces() );
-      for ( size_t i{0U}; i<vset.Faces(); ++i ) pushBack( face_nums, makeScalar( ANY, i ) );
+      for ( size_t i{ vset.Elements() }; i<vset.Elements() + vset.Faces(); ++i ) pushBack( face_nums, makeScalar( ANY, i ) );
       vset.AddData( "face number", face_nums );
       // interface numbers
       PropertyData iface_nums( INTER_FACE, SCALAR, 2U );
       iface_nums.Reserve( vset.Interfaces() );
-      for ( size_t i{0U}; i<vset.Interfaces(); ++i ) pushBack( iface_nums, makeScalar( ANY, i ) );
+      for ( size_t i{ vset.Elements() + vset.Faces() }; i<vset.Cells(); ++i ) pushBack( iface_nums, makeScalar( ANY, i ) );
       vset.AddData( "interface number", iface_nums );
       // node numbers
       PropertyData node_nums( NODE, SCALAR, 2U );
@@ -71,14 +72,16 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
       for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
       vset.AddData( "node number", node_nums );
     }
-    // creating and testing the model
+    // ----------------------------------------------------
+    // creating and testing model with faces and interfaces
+    // ----------------------------------------------------
     {
       const bool vset_only_contains_elements{ false };
       Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", vset_only_contains_elements );
       printModelDimensions( model, true );
       _test( printRangeOfVariable( model, "element number" ) <= vset.Elements() );
       _test( printRangeOfVariable( model, "node number" ) <= vset.Vertices() );
-      _test( vset.Faces() == 0U );
+      // correct reproduction of what is in the VSet, see  model.Mesh().Out();
       
       // copying "element number" to "face number" for the faces created from lower-dimensional elements
       const csmp::Index fn_key = model.Database().StorageKey("face number");
@@ -117,10 +120,11 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
       _test( vset2 == vset );
     }
     
-    // Building second model with faces that get created from the elements
+    // -------------------------------------------------------------------
+    // Building second model with faces created from elements
     // -------------------------------------------------------------------
     {
-      // model that consists only of elements, but Face objects will be created from boundary regions
+      // model consists only of elements
       mesh_topology = test_Create_MeshPatchWithLineElements_VSet( vset );
       const bool vset_only_contains_elements{ true };
       Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", vset_only_contains_elements );
@@ -364,7 +368,7 @@ bool VSet_TestCase::Test_EstablishElementConnectivity2D()
     auto itb=backup_vset.PfvertsBegin();
     auto elmt{0U}, vec_mismatches{0U};
     for ( auto it=vset.PfvertsBegin(); it!=vset.PfvertsEnd(); ++it, ++itb ) {
-        for ( auto i{0}; i<(*it).size(); ++i )
+        for ( uint32_t i{0u}; i<(*it).size(); ++i )
           if ( (*it) != (*itb) ) {
                cerr <<"\n\t"<< elmt <<":";
                for ( auto j : (*itb) ) cerr <<" "<< j;

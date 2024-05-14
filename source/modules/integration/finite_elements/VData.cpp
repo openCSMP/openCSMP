@@ -2622,7 +2622,8 @@ size_t VData::RenumberElementsCounterClockwise2D()
  
  
  /**
-   Line elements are oriented in a consistent way for internal 1D regions within a 2D domain.
+   Line elements must be oriented in a consistent way for internal 1D regions or along the boundaries of a2D domain.
+   This method accomplishes this.
    
    @brief To ensure that the normals pointing out of a lower (1D) dimensional elements located at the model boundary,
    and that they all point in the same direction for internal boundaries, the nodes of such elements must be locally ordered consistently;
@@ -2663,7 +2664,10 @@ size_t VData::RenumberElementsCounterClockwise2D()
             cerr <<"\nVData::CreateConsistentLineElementOrientations2D: 'pfverts' is empty; nothing could be done.\n";
             return;
          }
-      assert( plist.size() == pfverts.size() ); 
+      // if this is already a full fledged CSMP model it is assumed to comply with the CSMP conventions
+      if ( Faces() > 0u || Interfaces() > 0u ) return;
+      
+      assert( plist.size() == pfverts.size() );
        
       // assuming that the mesh consists of surface and line elements
       assert( HybridElementTypeMesh()==true ); 
@@ -2684,7 +2688,8 @@ size_t VData::RenumberElementsCounterClockwise2D()
             // only recording line elements that are located at the beginning or end of a polyline = line element chain
             if ( isLineElement( etype ) ) {
                   // line elements with a single neighbor at the beginning or end of polyline
-                  if ( ((pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] >= 0) || (pfverts[elmt_idx][0] >= 0 && pfverts[elmt_idx][1] < 0)) )
+                  if ( ((pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] >= 0) ||
+                        (pfverts[elmt_idx][0] >= 0 && pfverts[elmt_idx][1] < 0)) )
                     // but only, if that neighbor is located on the inside of the model
                     if ( bflags[ plist[elmt_idx][0] ] == NOT || bflags[ plist[elmt_idx][1] ] == NOT ) {
                          line_elmts.insert( elmt_idx );
@@ -2748,8 +2753,8 @@ size_t VData::RenumberElementsCounterClockwise2D()
       // ------------------------------------------------------------------------------------------------------
       // (after the potential re-orientation of surface elements by ModelTopology) line element orientations might be inconsistent with surface ones)
       // root-elmt & numbers of interconnected line elements in discovered chain
-      map<int64_t ,deque<int64_t> > polylines;
-      set<int64_t>                  processed_elmts;
+      map<int64_t,deque<int64_t> > polylines;
+      set<int64_t>                 processed_elmts;
       
       // looping over the line elements that are missing one neighbor, starting at the beginning or end of a chain
       for ( auto it=line_elmts.begin(); it!= line_elmts.end(); ++it )
@@ -2847,7 +2852,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
           cout << endl;
         }
       else {
-           cerr <<"\nVData::CreateConsistentLineElementOrientations: WARNING: No changes were made. Unable to process line element chains. ";
+           cerr <<"\nVData::CreateConsistentLineElementOrientations2D: WARNING: No changes were made. Unable to process line element chains. ";
            cerr <<"\n\n\t\t"<<"line elements processed: "<< processed_elmts.size() << endl;
         }
       
@@ -2882,7 +2887,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
            
         } // end boundary_line_elmts
               
-  } // end CreateConsistentLineElementOrientations
+  } // end CreateConsistentLineElementOrientations2D
 
 
 

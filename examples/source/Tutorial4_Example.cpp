@@ -243,10 +243,13 @@ void Tutorial4_Example::Run()
   // output pressure and (nodal) velocity to the same VTU file
   vtu.OutputDataToVTU( "PoreScaleVariables", outputProps, "PORES", static_cast<int>(0) );
 
+  // if you do not want XML files, use this VTK output interface
+  /*
   VTK_Interface<2U>   vtk;
-  vtk.OutputDataToVTK(model, "PORES", "pressure", "fluid pressure", static_cast<int>(0), true );
-  vtk.OutputDataToVTK( model, "PORES" "velocity", "nodal velocity", static_cast<int>(0), true );
-
+  vtk.OutputDataToVTK( model, "PORES", "pressure", "fluid pressure", static_cast<int>(0), true );
+  vtk.OutputDataToVTK( model, "PORES", "velocity", "nodal velocity", static_cast<int>(0), true );
+  */
+  
   // terminate
   cerr << "\n\nmain: That's it, run completed successfully..." << endl;
 

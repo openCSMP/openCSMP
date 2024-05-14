@@ -994,7 +994,11 @@ void Model<dim>::IndexByPropertyValues()
                     csmp_error.Note( ERROR, "Model::IndexByPropertyValues:",
                                   "'face number' value is NaN, replacing with 'uint32_' max." );
                   const size_t face_number = ( isnan(fp_val) ) ? numeric_limits<uint32_t>::max() : static_cast<uint32_t>(fp_val);
-                  if ( face_number >= n_faces + mesh.Elements() )
+                  if ( face_number < mesh.Elements() )
+                    csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
+                                      "'face number' falls below the range of available faces:",
+                                             to_string(face_number) );
+                  if ( face_number < mesh.Elements() || face_number >= n_faces + mesh.Elements() )
                     csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
                                       "'face number' exceeds range of available faces:",
                                              to_string(face_number) );
@@ -1018,9 +1022,13 @@ void Model<dim>::IndexByPropertyValues()
              const typename plf::colony<csmp::InterFace<dim>>::iterator ifaces_end(mesh.InterFacesEnd());
              for ( auto it=mesh.InterFacesBegin(); it!=ifaces_end; ++it ) {
                   const size_t iface_number = static_cast<uint32_t>((*it).Read(key));
+                  if ( iface_number < mesh.Elements() + mesh.Faces() )
+                    csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
+                                      "'interface number' falls below the range of available interfaces:",
+                                            to_string(iface_number) );
                   if ( iface_number >= n_all_cells )
                     csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
-                                      "'interface number' exceeds range of available faces:",
+                                      "'interface number' exceeds range of available interfaces:",
                                             to_string(iface_number) );
                   (*it).Idx( iface_number );
                }

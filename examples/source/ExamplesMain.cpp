@@ -92,6 +92,8 @@ int main()
             examplesSuite.RegisterExample( new TemperatureDensityPressure_Example() );
             examplesSuite.RegisterExample( new ThermalConvectionETHZ_Example() );
             examplesSuite.RegisterExample( new Geothermal_Example() );
+            // CVEN90074 course 2024
+            examplesSuite.RegisterExample( new MechanicsAndMultiphaseFlow_Example() );
 
       // TUTORIALS
             examplesSuite.RegisterExample( new Tutorial1_Example() );

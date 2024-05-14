@@ -63,6 +63,6 @@
 #include "CSMPInterfaces_Example.h"
 #include "ThermalConvectionETHZ_Example.h"
 // TODO: include Lukas Mosser's correlation based black-oil model property calculations
-
+#include "MechanicsAndMultiphaseFlow_Example.h"
 
 #endif

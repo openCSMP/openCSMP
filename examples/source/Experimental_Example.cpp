@@ -62,6 +62,38 @@ void Experimental_Example::Specifications()
 
 void Experimental_Example::Run()
  {
+    // a little demonstration of the pointer concept used extensively in C and C++
+    int a{3};
+    // pointer to the integer a
+    int* ptr = &a;
+    int* ptr2{ nullptr }; // safe initalisation of pointer
+    delete ptr2;  // de-allocate the memory pointed to by a (in this case none;
+    int ptr3[] = { 0, 1, 2, 3, 4, 5 }; // C-style fixed array based on the pointer concept
+    // accessing the array's fourth element (counting from 0..arraysize-1
+    *(ptr3 + 3) = 24;
+    // assignment of values
+    ptr3[3] = 24;
+    
+    // dynamic array (which lives in heap memory)
+    int* array_ptr = new int[5];
+    // size of array pointer (not the array)
+    cout <<"\nmain: "<< sizeof(array_ptr) <<" (size of pointer = machine word) vs. "<< sizeof(int) <<" (integer)."<< endl;
+    // what is the size of the array? - some work to calculate for a dynamic array
+    cout <<"\nmain: array size: "<< 5 * sizeof(int) + sizeof(array_ptr) << endl;
+    // now the array has to be de-allocated, otherwise we have a memory leak
+    delete[] array_ptr;
+    // IN CONTEMPORARY PRACTICE DO NOT USE RAW POINTERS, use autoptr instead
+    std::shared_ptr<int> aptr{&a};
+    // aptr will get deleted automatically when the program finishes, but its management incurs some overhead
+    
+    cout <<"main: value of a: ";
+    cout << a <<" or "<< *ptr;
+    // check the validity of the pointer before using (derefencing) it
+    if ( ptr2 != nullptr ) cout << *ptr2;
+    // shorthand
+    if ( ptr2 ) cout << *ptr2;
+ 
+ 
     // testing numberToString and matrix output
     // ----------------------------------------
     double dvalue{ 1.0e-15 };
