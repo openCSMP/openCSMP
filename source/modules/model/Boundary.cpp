@@ -862,6 +862,9 @@ cerr << endl;
 
 
 /**
+      Accumulates existing Face objects, identified by their ID number into a new Boundary object.
+      The Face ids are expected to be in the the range between n_elements and n_interfaces-1.
+      
       Method assumes that face numbers follow consecutively on the element numbers and before the interface numbers in the mesh.
       Thus, the first Face is expected to have the index  'n_elements'
 */
@@ -890,17 +893,24 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
     csmp_error.Note( WARNING, "Boundary<dim>::AccumulateByNumber",
                       "user-supplied face ID set contained duplicates which were removed." );
 #endif
+  // checking that the required faces already exist
+  if ( mesh.Faces() == 0 )
+    csmp_error.Note( FATAL_ERROR, "Boundary<dim>::AccumulateByNumber",
+                       "n_faces=0! - This method expects that the Faces that shall be accumulated have already been created; please use other face creation method." );
+
   // checking that there are not more ids than there are faces in the model
   if ( cell_ids.size() > mesh.Faces() )
     csmp_error.Note( ERROR, "Boundary<dim>::AccumulateByNumber",
                        "user-supplied face-number vector is larger than range of index-to-element-pointer mapping." );
 
-  // creating the element vector for the region
+  // creating the face vector for the boundary
   // NB: assumes that the Faces are numbered consecutively from 0..n-1, while the supplied IDs start at the number of elements
   const auto offset = mesh.Elements();
   this->cell_vec_.reserve( cell_ids.size() );
   for ( auto& idx : cell_ids ) {
        const auto face = idx - offset;
+       // TODO: this method makes no Faces, but depends on MeshManager for this task
+       assert( mesh.Faces() != 0 );
        assert( face < mesh.Faces() );
        Face<dim>* fptr = &(*next(mesh.FacesBegin(),face));
        assert( fptr != nullptr );

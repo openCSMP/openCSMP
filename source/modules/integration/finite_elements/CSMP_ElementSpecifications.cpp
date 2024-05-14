@@ -728,7 +728,7 @@ uint32_t CSMP_ElementSpecifications::SegmentsPerElementOfType( int8_t etype )
          etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ||
          etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ||
          etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ||
-		 etype == LINEAR_CUBOID)
+		     etype == LINEAR_CUBOID)
         return 12U;
 
     // quadrilateral
@@ -738,7 +738,7 @@ uint32_t CSMP_ElementSpecifications::SegmentsPerElementOfType( int8_t etype )
          etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ||
          etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ||
          etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL ||
-		 etype == LINEAR_RECTANGLE)
+		     etype == LINEAR_RECTANGLE)
         return 4U;
 
     // triangle
@@ -796,7 +796,7 @@ uint32_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int8_t etype )
          etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ||
          etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ||
          etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ||
-		 etype == LINEAR_CUBOID)
+		     etype == LINEAR_CUBOID)
         return 6U;
 
     // quadrilateral
@@ -806,7 +806,7 @@ uint32_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int8_t etype )
          etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ||
          etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ||
          etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL ||
-		 etype == LINEAR_RECTANGLE)
+		     etype == LINEAR_RECTANGLE)
         return 4U;
 
     // triangle

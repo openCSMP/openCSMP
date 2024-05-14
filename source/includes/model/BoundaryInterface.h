@@ -80,16 +80,19 @@ class BoundaryInterface {
     bool BoxShaped() const;
 
 
-    // -----------------------------------------------
-    // Boundary creation, modification & removal
-    // -----------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Boundary creation, modification & removal in collaboration with MeshManager that creates and removes the needed Faces
+    // ---------------------------------------------------------------------------------------------------------------------
     
-    /// uses the Face ids stored in the model topology object to form boundaries with corresponding names; returns number of boundaries formed
+    /// uses the Face ids stored in the model topology object to form boundaries using Face objects which already exist; returns number of boundaries formed
     size_t FormBoundariesFrom( const ModelTopology& );
     
-    /// creates uniquely named boundary (Face) patches, returning their names if successful; the input element patch is removed but its name precedes that of the Boundaries
+    /// converts lower-dimensional Region into uniquely named Boundary patches, assigning more specific names to these; the input Region and its elements are removed
     std::pair<std::set<std::string>,bool>  CreateInternalBoundaryFrom( const char* dimension_minus1_region );
  
+     /// converts lower-dimensional Region on the outside of the model into a Boundary; returns whether this conversion was successful as well as the boundary name
+    std::pair<std::string,bool>  CreateExternalBoundaryFrom( const char* dimension_minus1_region, bool check_topo_attributes_of_nodes );
+
     // external boundaries are build automatically during model construction using
     // EstablishBoxBoundaries() or EstablishBoundariesFromRegions(), see protected methods
                                                                        
@@ -103,7 +106,7 @@ class BoundaryInterface {
     bool EstablishEdgeBoundariesOfBoxShapedModel();
 
     /// Removes boundary with  deletion of its faces in the MeshManager
-    void RemoveBoundary( const char* boundary, bool eerase_faces );
+    void RemoveBoundary( const char* boundary, bool erase_faces );
     
     /// Remove boundary, also deleting associated face objects if so requested
     void RemoveBoundary( csmp::Boundary<dim>&, bool erase_faces );

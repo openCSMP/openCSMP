@@ -2177,15 +2177,19 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
           // 1. checking that elements have equivalent types as neighbors
           for ( auto i{0U}; i<(*first)->Neighbors(); ++i )
             if ( (*first)->Neighbor(i) ) {
-                 if constexpr ( dim == 3 ) {
+                 if constexpr ( dim == 3U ) {
                       if ( (*first)->IsVolume() && !(*first)->Neighbor(i)->IsVolume() ) {
-                           cerr <<"\nconnectivityCheck: volume Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
+                           cerr <<"\nconnectivityCheck: ERROR: volume Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
                            cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
                            issues++;
                         }
                       if ( (*first)->IsSurface() && !(*first)->Neighbor(i)->IsSurface() ) {
-                           cerr <<"\nconnectivityCheck: surface Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
+                           cerr <<"\nconnectivityCheck: ERROR: surface Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
                            cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
+                           cerr <<"\n\n"<<"first element:";
+                           (*first)->Out();
+                           cerr <<"\n\n"<<"wrongly connected neighbor element:";
+                           (*first)->Neighbor(i)->Out();
                            issues++;
                         }
                       if ( (*first)->IsLine() && !(*first)->Neighbor(i)->IsLine() ) {
@@ -2194,9 +2198,14 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
                            issues++;
                         }
                    }
-                 if constexpr ( dim == 2 ) {
+                 if constexpr ( dim == 2U ) {
+                      if ( (*first)->IsLine() && !(*first)->Neighbor(i)->IsLine() ) {
+                           cerr <<"\nconnectivityCheck: ERROR: line Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
+                           cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
+                           issues++;
+                        }
                       if ( (*first)->IsSurface() && !(*first)->Neighbor(i)->IsSurface() ) {
-                           cerr <<"\nconnectivityCheck: surface Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a line element!";
+                           cerr <<"\nconnectivityCheck: ERROR: surface Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a line element!";
                            issues++;
                         }
                    }
@@ -2215,7 +2224,7 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
                 if ( !isLineElement(etype) &&
                      !isTriangular(etype)  &&
                      !isTetrahedral(etype) ) {
-                    cerr <<"\nconnectivityCheck: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
+                    cerr <<"\nconnectivityCheck: ERROR: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
                     cerr <<" has only "<< n_connected_neighbors <<" neighbor(s).";
                     issues++;
                   }
@@ -2223,7 +2232,7 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
           
           if ( isQuadrilateral(etype) || isPrism(etype) ) {
                 if ( n_connected_neighbors < 2 ) {
-                    cerr <<"\nconnectivityCheck: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
+                    cerr <<"\nconnectivityCheck: ERROR: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
                     cerr <<" has only "<< n_connected_neighbors <<" neighbor(s).";
                     issues++;
                   }
@@ -2231,7 +2240,7 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
           
           if ( isHexahedral(etype) || isPyramid(etype) ) {
                 if ( n_connected_neighbors < 3 ) {
-                    cerr <<"\nconnectivityCheck: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
+                    cerr <<"\nconnectivityCheck: ERROR: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
                     cerr <<" has only "<< n_connected_neighbors <<" neighbor(s).";
                     issues++;
                   }

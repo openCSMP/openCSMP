@@ -45,6 +45,10 @@ size_t  sharedElements( const Region<dim>&, const Region<dim>& );
 template<uint32_t dim>
 bool  hasLowerDimensionalRepresentation( const Region<dim>& );
 
+/// if all BOX_BOUDARY flags != NOT region is on an external boundary; method highlights potential inconsistencies with topology
+template<uint32_t dim>
+bool  formsPartOfExternalBoundary( const Region<dim>&, bool check_topology_as_well=true );
+
 template<uint32_t dim>
 bool  containsVolumeElements( const Region<dim>& );
 

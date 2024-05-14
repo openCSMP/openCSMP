@@ -325,7 +325,10 @@ bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoxShaped() const
 
 
 
-
+/**
+  Assuming that the necessary Face objects already exist, this method creates Boundaries interpreting the Cell 'idx'
+  stored in the model topology object as Face 'idx' ranging between n_elements..interfaces-1
+ */
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FormBoundariesFrom( const ModelTopology& topo )
 {
@@ -355,11 +358,11 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FormBoundariesFrom( const ModelT
                 topo.CellsOfDomainEnd( lit.c_str() ),
                 back_inserter( cell_ids ) );
 
-          // retrieving the elements by their IDs and assigning them  to the region
+          // retrieving the faces by their 'idx' numbers and assigning them to the Boundary
           (*it.first).second.AccumulateByNumber( static_cast<BOUNDARY_COMPLEX<dim>*>(this)->Mesh(), cell_ids );
           cell_ids.erase( cell_ids.begin(), cell_ids.end() );
 
-          // removing the group if it contains no elements
+          // removing the Boundary again if it contains no elements
           if ( (*it.first).second.Cells() == 0U ) {
               boundaryMap_.erase( it.first );
               csmp_error.Note( WARNING, "BoundaryInterface::FormBoundariesFrom",
@@ -1762,6 +1765,90 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
 
 
 
+
+/**
+    converts lower-dimensional Region on the outside of the model into a Boundary; returns whether this conversion was successful as well as the boundary name
+*/
+template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
+pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom( const char* dimension_minus1_region, bool check_topo_attributes_of_nodes )
+  {
+	  BOUNDARY_COMPLEX<dim>* model(static_cast<BOUNDARY_COMPLEX<dim>*>(this));
+
+    // 0. does the Region exist and is it lower dimensional?
+    // -----------------------------------------------------
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    // is the region there
+    if ( !model->ContainsRegion(dimension_minus1_region) ) {
+          csmp_error.Note( WARNING, "BoundaryInterface::CreateExternalBoundaryFrom",
+                                     "unable to find lower-dimensional regions to create Boundary from");
+         return make_pair( string(dimension_minus1_region) + " not found", false );
+      }
+    Region<dim>& subdomain = model->Region(dimension_minus1_region);
+    // is it lower dimensional?
+    if ( !hasLowerDimensionalRepresentation(subdomain) ) {
+         csmp_error.Note( WARNING, "BoundaryInterface::CreateExternalBoundaryFrom",
+                          dimension_minus1_region, "is not lower-dimensional (dim-1)");
+         return make_pair( string(dimension_minus1_region) + " not lower dimensional", false );
+      }
+    // is the region located at the outer boundary of the model
+    if ( !formsPartOfExternalBoundary(subdomain,check_topo_attributes_of_nodes) ) {
+         csmp_error.Note( WARNING, "BoundaryInterface::CreateExternalBoundaryFrom",
+                          dimension_minus1_region, "is not entirely located on an external boundary of the model");
+         return make_pair( string(dimension_minus1_region) + " not on external boundary", false );
+       }
+    
+    // 1. making a map of the region's elements that will be converted to faces
+    // -----------------------------------------------------------------------
+    vector<Element<dim>*>  elmts_to_become_faces;
+    elmts_to_become_faces.reserve( subdomain.Cells() );
+    elmts_to_become_faces.insert( elmts_to_become_faces.end(),
+                                  subdomain.CellsBegin(), subdomain.CellsEnd() );
+
+    // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
+    // -------------------------------------------------------------------------------------
+    assert( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) == 0 ); // zero means that there are no issues
+    vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
+                                                                             elmts_to_become_faces.begin(),
+                                                                             elmts_to_become_faces.end() );
+    // 3. creating the Boundary from the faces
+    // ---------------------------------------
+    // create boundary name by appending '_BOUNDARY' to the original name of the region
+    const string boundary_name( string(dimension_minus1_region) + "_BOUNDARY" );
+    
+    // create boundary and trying to find suitable  BOX_BOUNDARY flag for it
+    BOX_BOUNDARY boundary_flag = parseBoundary( boundary_name.c_str() );
+    if ( boundary_flag == MULTIPLE ) boundary_flag = IRREGULAR; // outside
+    if ( !AddBoundary( boundary_name.c_str(), faces.begin(), faces.end(), boundary_flag ) ) {
+         csmp_error.Note( WARNING, "BoundaryInterface::CreateExternalBoundaryFrom",
+                          boundary_name.c_str(), "could not be created");
+         return make_pair( string(dimension_minus1_region) + " could not be created", false );
+      }
+    cout << "\n\nBoundaryInterface::CreateExternalBoundaryFrom: created external boundary '";
+    cout <<" "<< boundary_name <<"' successfully.";
+    cout << endl;
+
+	  // 4. removing the original regions from which the boundaries were created
+    // ------------------------------------------------------------------------------------
+    // (no flagging for rebuilt of regions is necessary as they will be completely removed)
+    const bool erase_elements{ true };
+    model->RemoveRegion( dimension_minus1_region, erase_elements );
+    model->UpdateRegions();
+
+	  cout <<"\n\n"<<"BoundaryInterface::CreateExternalBoundaryFrom: removed input region."<< endl;
+
+	  return make_pair( boundary_name, true );
+
+  } // end CreateExternalBoundaryFrom
+
+
+
+
+
+
+
+
+
+
   /**
   Creates boundary around "Model" region determining whether lower-dimensional
   regions shall become a boundary segments on the basis of whether their name contains
@@ -1805,14 +1892,6 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
           continue;
         if ( !hasLowerDimensionalRepresentation(it->second) )
           continue;
-        if constexpr (dim == 3U ) {
-            if ( !containsSurfaceElements(it->second) )
-              continue;
-          }
-        if constexpr (dim == 2U ) {
-            if ( !containsLineElements(it->second) )
-              continue;
-          }
         // accumulating the elements of the eligible regions
         const pair<size_t,size_t> elmt_range{ elmts_to_become_faces.size(), elmts_to_become_faces.size() + (*it).second.Cells() };
         elmts_to_become_faces.insert( elmts_to_become_faces.end(),

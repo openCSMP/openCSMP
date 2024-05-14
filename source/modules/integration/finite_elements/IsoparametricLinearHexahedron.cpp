@@ -1627,7 +1627,7 @@ IsoparametricLinearHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& BMAT )
     BMAT(0,6) = DNR[6]; BMAT(1,6) = DNS[6]; BMAT(2,6) = DNT[6];
     BMAT(0,7) = DNR[7]; BMAT(1,7) = DNS[7]; BMAT(2,7) = DNT[7];
 
-    B = JINV * BMAT;
+    BMAT = JINV * BMAT;
 
     return detJ;
  }

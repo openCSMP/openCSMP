@@ -2186,6 +2186,49 @@ bool  hasLowerDimensionalRepresentation( const Region<dim>& region )
   return true;
 }
 
+
+
+/// if all BOX_BOUDARY flags != NOT region is on an external boundary; method highlights potential inconsistencies with topology
+template<uint32_t dim>
+bool  formsPartOfExternalBoundary( const Region<dim>& region, bool check_topo_as_well )
+  {
+    bool all_nodes_are_at_boundary{ true };
+    
+    if ( check_topo_as_well ) {
+         for ( const auto& nit : region.NodeVector() ) {
+             if ( nit->AtBoundary() == NOT )
+               all_nodes_are_at_boundary = false;
+             if ( nit->Attribute() == MESH_VERTEX ||
+                  nit->Attribute() == INTERSECTION_POINT ||
+                  nit->Attribute() == INTERIOR_LINE ||
+                  nit->Attribute() == INTERIOR_SURFACE ) {
+                  all_nodes_are_at_boundary = false;
+                  cout <<"\n"<<"formsPartOfExternalBoundary(check_topo_as_well): detected vertex flagged '";
+                  cout << parseTopology( nit->Attribute() ) <<"'"<< endl;
+               }
+              
+          }
+      }
+    else {
+        for ( const auto& it : region.NodeVector() ) {
+             if ( it->AtBoundary() == NOT )
+               all_nodes_are_at_boundary = false;
+          }
+      }
+    return all_nodes_are_at_boundary;
+ }
+ 
+template bool formsPartOfExternalBoundary( const Region<2U>&, bool );
+template bool formsPartOfExternalBoundary( const Region<3U>&, bool );
+
+template<>
+bool formsPartOfExternalBoundary( const Region<1U>&, bool ) {
+     throw logic_error("ERROR, formsPartOfExternalBoundary: boundary objects do not exist in one-dimensional models\n");
+  }
+
+ 
+
+
 template<uint32_t dim>
 bool  containsVolumeElements( const Region<dim>& region )
 {

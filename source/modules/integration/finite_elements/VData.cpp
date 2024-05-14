@@ -3504,6 +3504,7 @@ void VData::EstablishElementConnectivity3D()
                  }
                else {
                     // for all line elements
+                    assert( CSMP_ElementSpecifications::LineElement( etype ) );
                     // node 0
                     pair<map<size_t,set<size_t> >::iterator,bool>
                       it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set<size_t>{elmt_idx} ) );
@@ -3641,6 +3642,8 @@ void VData::EstablishElementConnectivity3D()
              assert( !(*it).second.empty() );
              // 2.2.1 if there is only a single entry, the face is at the model boundary
              // ------------------------------------------------------------------------
+             //  face-node key  element idx, face number
+             // map<set<size_t>,map<size_t,uint32_t> >  surface_neighbor_keys;
              if ( (*it).second.size() == 1U ) {
                   const size_t elmt_idx = (*(*it).second.begin()).first;
                   const uint32_t face   = (*(*it).second.begin()).second;
@@ -3657,11 +3660,19 @@ void VData::EstablishElementConnectivity3D()
              // 2.2.2 if there is only one matching neighbor it gets recorded
              // ------------------------------------------------------------------------
              else if ( (*it).second.size() == 2U ) {
+                  // identifying surface element neighbors
+                  const size_t   elmt1      = (*(*it).second.begin()).first;  // element idx
+                  const uint32_t face_elmt1 = (*(*it).second.begin()).second; // local face of element
+                  const size_t   elmt2      = (*next((*it).second.begin(),1)).first;  // element idx
+                  const uint32_t face_elmt2 = (*next((*it).second.begin(),1)).second; // local face of element
+                  // compatibility check
+                  const CSMP_FEM_TYPE etype1 = static_cast<CSMP_FEM_TYPE>( pelmt[elmt1] );
+                  const CSMP_FEM_TYPE etype2 = static_cast<CSMP_FEM_TYPE>( pelmt[elmt2] );
+                  assert( CSMP_ElementSpecifications::SurfaceElement( etype1 ) );
+                  assert( CSMP_ElementSpecifications::SurfaceElement( etype2 ) );
+                  assert( face_elmt1 < CSMP_ElementSpecifications::FacesPerElementOfType( etype1 ) );
+                  assert( face_elmt2 < CSMP_ElementSpecifications::FacesPerElementOfType( etype2 ) );
                   // the neighbors are recorded in the 'pfverts' map
-                  const size_t elmt1      = (*(*it).second.begin()).first;
-                  const size_t face_elmt1 = (*(*it).second.begin()).second;
-                  const size_t elmt2      = (*next((*it).second.begin(),1)).first;
-                  const size_t face_elmt2 = (*next((*it).second.begin(),1)).second;
                   pfverts[elmt1][face_elmt1] = elmt2;
                   pfverts[elmt2][face_elmt2] = elmt1;
                 }

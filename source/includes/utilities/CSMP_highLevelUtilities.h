@@ -2,7 +2,7 @@
 #define CSMP_HIGH_LEVEL_UTILITIES_H
 
 #include "CSMP_definitions.h"
-#include "FiniteElement.h"
+//#include "FiniteElement.h"
 
 namespace csmp {
 
