@@ -309,7 +309,7 @@ void MechanicsAndMultiphaseFlow_Example::Run()
     cout <<"\nmain: That's it..."<< endl;
 
 #ifndef RUN_DIRECTLY_WITH_TRIANGLE_INPUT_FILE
-    fs::current_path("../../example_inputs/");
+    filesystem::current_path("../../example_inputs/");
 #endif
 } // end Run
 

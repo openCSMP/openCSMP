@@ -313,7 +313,7 @@ bool  ModelSubDomain<dim,CELL>::IsContiguous() const
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   pair<int32_t, int32_t>  dimensionality = SpatialDimensions();
-  if ( dimensionality.first > 1U ) {
+  if ( dimensionality.first > 1 ) {
       csmp_error.Note( WARNING, "ModelSubDomain<dim,CELL>::IsContiguous:",
                          "method can determine contiguity only for domains which consist only of same shape cells (line, surface or volume type); returned false." );
       return false;
@@ -582,7 +582,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
     // -----------------------------------------------------------------
     set<CELL<dim>*> interior_elmts, boundary_elmts;
     set<Node<dim>*>                 boundary_nodes;
-    set<pair<CELL<dim>*,size_t> >   boundary_faces;
+    set<pair<CELL<dim>*,uint32_t> > boundary_faces;
 
     // 1.1 If all cells have the same spatial dimension
     // ---------------------------------------------------
@@ -818,8 +818,8 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
       {
         bd_face_vec_.reserve(cell_vec_.size() - boundary_elmts.size());
         //       parent cell of face, face
-        typename set<pair<CELL<dim>*, size_t> >::const_iterator  bfit(boundary_faces.begin());
-        typename set<pair<CELL<dim>*, size_t> >::const_iterator  ffit(boundary_faces.begin());
+        typename set<pair<CELL<dim>*,uint32_t> >::const_iterator  bfit(boundary_faces.begin());
+        typename set<pair<CELL<dim>*,uint32_t> >::const_iterator  ffit(boundary_faces.begin());
         vector<uint32_t>  bface_data;
         size_t            counter(0U);
 
@@ -828,7 +828,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
             bface_data.reserve(3);
             // as long as we considering faces of the same cell
             while ( (*bfit).first == (*ffit).first ) {
-                bface_data.push_back(static_cast<ONE_BYTE_NUMBER>((*bfit).second));
+                bface_data.push_back((*bfit).second);
                 bfit++;
                 if ( bfit == boundary_faces.end() ) break;
               }
@@ -1137,7 +1137,7 @@ size_t ModelSubDomain<dim,CELL>::FacetIntegrationPoints() const
 // INDEXES
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t  ModelSubDomain<dim,CELL>::DomainIndex() const
+int32_t  ModelSubDomain<dim,CELL>::DomainIndex() const
 {
   return domain_idx_;
 }
@@ -1595,33 +1595,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf",
                              "Model/Region/SplitBoundary/Boundary properties have constant values within individual model subdomains; read directly!");
 
-    // properties / variables placed on the model
-    /*
-    if ( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY ) {
-          if ( prop_key.type == SCALAR ) vmin = vmax = Read( prop_key );
-          else if ( prop_key.type == VECTOR ) {
-               VectorVariable<dim>  vc;
-               Read( prop_key, vc );
-               vmin = vmax = vc.Length();
-            }
-          else if ( prop_key.type == TENSOR ) {
-               TensorVariable<dim>  ts;
-               Read( prop_key, ts );
-               minMaxEigenValues( ts, vmin, vmax );
-            }
-          else if ( prop_key.type == ARRAY ) {
-               ArrayVariable  a(prop_key.dataDepth);
-               Read( prop_key, a );
-               a.MinMax( vmin, vmax );
-            }
-          else if ( prop_key.type == FLAGGEDARRAY ) {
-               FlaggedArrayVariable  a(prop_key.dataDepth);
-               Read( prop_key, a );
-               a.MinMax( vmin, vmax );
-            }
-          return;
-      }
-   */
+   // the 'Model' region was already dealt with by Model::MinMaxOf
 
    // node properties of any kind
    if ( prop_key.place == NODE ) {

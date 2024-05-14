@@ -111,7 +111,7 @@ class ModelSubDomain {
     // ----------------------------------------
 
     /// reference counting-based unique domain identifier  (0..n-1)
-    size_t DomainIndex() const;
+    int32_t DomainIndex() const;
 
     /// renumbers nodes in domain 0..n-1
     size_t  RenumberNodes() const;
@@ -313,7 +313,7 @@ class ModelSubDomain {
     std::vector<CELL<dim>*>             cell_vec_;               ///< doubly sorted, interior cells first
     std::vector<std::vector<uint32_t> > bd_face_vec_;            ///< as in second segment of cell_vec_
     std::vector<csmp::Node<dim>*>       node_vec_;               ///< doubly sorted, interior nodes first
-    size_t                              first_bd_node_ = std::numeric_limits<uint32_t>::max(); ///< begin of the perimeter nodes
+    size_t                              first_bd_node_ = std::numeric_limits<size_t>::max(); ///< begin of the perimeter nodes
     inline static int32_t               domain_count_ = 0;       ///<  reference-counting to get unique identifier for subdomains
     int32_t                             domain_idx_;             ///< created during construction from domain_count_
     bool                                rebuilt_needed_ = false; ///< parameter set when mesh gets modified by MeshManager so that update can be prompted

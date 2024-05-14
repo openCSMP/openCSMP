@@ -444,7 +444,6 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
                         "model contains disconnected mesh patches. They will be connected with SplitBoundary objects." );
 
     // 2. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
-    vset.RemoveData("permeability"); // not needed here
     InputVariablesFrom( vset );
 
     // 3. forming default computational domain called "Model" and regions

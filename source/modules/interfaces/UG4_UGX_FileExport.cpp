@@ -887,8 +887,8 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
              const Region<dim>& subdomain = model.Region(rit);
              // resetting the colour that the subset will be visualised with in PROMESH
              if ( colour == 10 ) colour = 9;
-             const size_t domain_index{ subdomain.DomainIndex() };
-             const auto   rgba = goodColour( colour );
+             const auto domain_index{ subdomain.DomainIndex() };
+             const auto rgba = goodColour( colour );
              ofs <<"\t\t<subset name=\""<< rit <<"\" color=\"";
              ofs << get<0>(rgba) <<" "<< get<1>(rgba) <<" "<< get<2>(rgba) <<" "<< get<3>(rgba);
              ofs <<"\" state=\""<< domain_index <<"\">"<< endl;
@@ -975,8 +975,8 @@ bool UG4_UGX_FileExport<dim>::Write_UGX_FileASCII( const Model<dim>& model, cons
              const Boundary<dim>& subdomain = model.Boundary(bit);
              // resetting the colour that the subset will be visualised with in PROMESH
              if ( colour == 10 ) colour = 9;
-             const size_t domain_index{ subdomain.DomainIndex() };
-             const auto   rgba = goodColour( colour );
+             const auto domain_index{ subdomain.DomainIndex() };
+             const auto rgba = goodColour( colour );
              ofs <<"\t\t<subset name=\""<< bit <<"\" color=\"";
              ofs << get<0>(rgba) <<" "<< get<1>(rgba) <<" "<< get<2>(rgba) <<" "<< get<3>(rgba);
              ofs <<"\" state=\""<< domain_index <<"\">"<< endl;

@@ -259,11 +259,14 @@ bool MeshManager_Test::TestCompleteModel2D()
     
     // testing that the model has the right area (also checks element orientations)
     const Region<2>&  model_domain(model.Region("Model"));
-    const double model_area{ 4.5 * 7. };
-    _test( approximatelyEqual(model_domain.Volume(),model_area) );
+    const double analytic_model_area{ 4.5 * 7. };
+    const double computed_model_area{ model_domain.Volume() };
+    const double tolerance{ analytic_model_area * numeric_limits<double>::epsilon() };
+    _test( approximatelyEqual(analytic_model_area,computed_model_area,tolerance) );
     
     // can such a model be output to VTU?
     VTU_Interface<2>  vtu_out( model );
+    printRangeOfVariable( model, "permeability" );
     vtu_out.OutputDataToVTU( "SPLIT22_BASIC", "permeability", "Model", 0 );
     
     // saving model to disk and bringing it back
@@ -856,8 +859,8 @@ void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neig
 
     const auto elmtsEnd{ subdomain.CellsEnd() };
     for ( auto it=subdomain.CellsBegin(); it!=elmtsEnd; ++it ) {
-         const auto n_segments{ (*it)->Segments() };
-         for ( auto segm_id{0}; segm_id < n_segments; ++segm_id ) {
+         const uint32_t n_segments{ (*it)->Segments() };
+         for ( uint32_t segm_id{0u}; segm_id < n_segments; ++segm_id ) {
               (*it)->FE()->NodesOfSegment( segm_id, segm_nodes );
               // replacing local with global node ids
               for ( auto& sit : segm_nodes ) sit = static_cast<uint32_t>((*it)->N(sit)->Idx());
@@ -873,7 +876,8 @@ void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neig
                    node_neighbors[ segm_node3 ].insert( segm_node1 );
                 }
               // if there are two midside nodes
-              else throw csmp::Exception( ERROR, "nodeNeighbors", "method only handles a single segment midside node" );
+              if ( segm_nodes.size() > 3U )
+                throw csmp::Exception( ERROR, "nodeNeighbors", "method only handles a single segment midside node" );
            }
       }
       
