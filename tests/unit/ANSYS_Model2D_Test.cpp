@@ -91,7 +91,11 @@ void ANSYS_Model2D_Test::run()
       }
     _test( counter == 4U );
 
-    right.InputPropertyValue( "face variable", makeScalar( PLAIN, 2. ) );
+    // testing output of boundary/face variables (for each all variable values must have been initialised, else they do not get stored)
+    model.InputPropertyValue( "face variable", makeScalar( PLAIN, 0. ) ); // all faces
+    // assignment works, see  printRangeOfVariable( model, "face variable" );
+    right.InputPropertyValue( "face variable", makeScalar( PLAIN, 2. ) ); // only those in boundary "RIGHT
+    // assignment works, see  printRangeOfVariable( model, "RIGHT", "face variable" );
     ArrayVariable av( "nodal array", model.Database() );
     // SKM FIX: if av is not initialized its values are NAN and a comparison with another array variable will always evaluate as false
     av = 5.;
@@ -114,16 +118,17 @@ void ANSYS_Model2D_Test::run()
     // model.Out();
 
     Model<2U> modelBinIn0(bin1name);
-    Index nodalArrayKey0( modelBinIn0.Database().StorageKey("nodal array") );
-    Index faceVariableKey0( modelBinIn0.Database().StorageKey("face variable") );
-    _test( (*modelBinIn0.Boundary("RIGHT").CellsBegin())->Read(faceVariableKey0) == 2. );
+    const Index nodalArrayKey0( modelBinIn0.Database().StorageKey("nodal array") );
+    const Index faceVariableKey0( modelBinIn0.Database().StorageKey("face variable") );
+    const double face_var_value = (*modelBinIn0.Boundary("RIGHT").CellsBegin())->Read(faceVariableKey0);
+    _test( face_var_value == 2. );
     ArrayVariable avBin0( "nodal array", modelBinIn0.Database() );
     (*modelBinIn0.Region("Model").NodesBegin())->Read( nodalArrayKey0, avBin0 );
     _test( avBin0 == av );
     
     Model<2U> modelBinIn1(bin1name);
-    Index nodalArrayKey( modelBinIn1.Database().StorageKey("nodal array") );
-    Index faceVariableKey( modelBinIn1.Database().StorageKey("face variable") );
+    const Index nodalArrayKey( modelBinIn1.Database().StorageKey("nodal array") );
+    const Index faceVariableKey( modelBinIn1.Database().StorageKey("face variable") );
     _test( leftNodes == modelBinIn1.Boundary("LEFT").Nodes() );
     _test( rightNodes == modelBinIn1.Boundary("RIGHT").Nodes() );
     _test( topNodes == modelBinIn1.Boundary("TOP").Nodes() );
@@ -238,7 +243,7 @@ void ANSYS_Model2D_Test::Test_ANSYS_ModelConstructionAndSaving2D( const std::str
     old_and_new_elmtids.clear();
     _test( mesh_topology.Cells() == vset.Elements() );
     
-    // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
+    // compute new connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
     vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
     
@@ -252,24 +257,27 @@ void ANSYS_Model2D_Test::Test_ANSYS_ModelConstructionAndSaving2D( const std::str
         for ( auto nbor=vset.PfvertsBegin(eidx); nbor!=vset.PfvertsEnd(eidx); ++nbor, ++face )
           if ( isTriangularElement(etype) && (*nbor) >= 0 ) {
              // face 0
-             if ( face == 0 && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT ) {
+             if ( face == 0 && vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,1)) ) != NOT &&
+                               vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,2)) ) != NOT ) {
                   cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *nbor;
-                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
-                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
+                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,1)))) );
+                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,2)))) );
                   cerr << endl;
                   dodgy_neighbors++;
                }
-             if ( face == 1 && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT ) {
+             if ( face == 1 && vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,2)) ) != NOT &&
+                               vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,0)) ) != NOT ) {
                   cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *nbor;
-                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
-                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
+                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,2)))) );
+                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,0)))) );
                   cerr << endl;
                   dodgy_neighbors++;
                }
-             if ( face == 2 && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT ) {
+             if ( face == 2 && vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,0)) ) != NOT &&
+                               vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,1)) ) != NOT ) {
                   cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *nbor;
-                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
-                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
+                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,0)))) );
+                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag( static_cast<size_t>(vset.Plist(eidx,1)))) );
                   cerr << endl;
                   dodgy_neighbors++;
                }

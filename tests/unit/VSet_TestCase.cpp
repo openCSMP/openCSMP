@@ -84,13 +84,14 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
       // correct reproduction of what is in the VSet, see  model.Mesh().Out();
       
       // copying "element number" to "face number" for the faces created from lower-dimensional elements
-      const csmp::Index fn_key = model.Database().StorageKey("face number");
       _test( mesh_topology.CellsWithinDomain("BOTTOM") == model.Boundary("BOTTOM").Cells() );
       _test( mesh_topology.CellsWithinDomain("RIGHT")  == model.Boundary("RIGHT").Cells() );
       _test( mesh_topology.CellsWithinDomain("TOP")    == model.Boundary("TOP").Cells() );
       _test( mesh_topology.CellsWithinDomain("LEFT")   == model.Boundary("LEFT").Cells() );
       Boundary<2U>& bottom{ model.Boundary("BOTTOM") }, right{ model.Boundary("RIGHT") },
                     top{ model.Boundary("TOP") }, left{ model.Boundary("LEFT") };
+
+      const csmp::Index fn_key = model.Database().StorageKey("face number");
       // BOTTOM
       size_t n_face{0U};
       const auto end1 = mesh_topology.CellsOfDomainEnd("BOTTOM");
@@ -124,6 +125,7 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     // Building second model with faces created from elements
     // -------------------------------------------------------------------
     {
+      vset.Erase();
       // model consists only of elements
       mesh_topology = test_Create_MeshPatchWithLineElements_VSet( vset );
       const bool vset_only_contains_elements{ true };
@@ -145,7 +147,7 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
       printModelDimensions( model, true );
       model2.OutputMeshTo( vset2 );
     }
-    // comparing it to original VSet
+    // comparing it to original VSet (OK 15/5/2024)
     if ( vset2 == vset ) return true;
     return false;
     

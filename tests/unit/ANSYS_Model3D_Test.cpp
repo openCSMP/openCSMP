@@ -77,7 +77,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
       size_t nullNeighborsOut(0);
       const Region<3U>& model_domain1(modelOutput1.Region("Model"));
       for ( auto it = model_domain1.CellsBegin(); it != model_domain1.CellsEnd(); ++it )
-        for ( auto n{0}; n < (*it)->Neighbors(); ++n )
+        for ( uint32_t n{0}; n < (*it)->Neighbors(); ++n )
           if( (*it)->Neighbor(n) == nullptr )
             ++nullNeighborsOut;
 
@@ -86,7 +86,8 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
       const double matrixLeftValue(2.);
       const double matrixRightValue(3.);
       const double tolerance(1.0e-5);
-      modelOutput1.Region("Model").InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 1.0 ) );
+      modelOutput1.InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 1.0 ) );
+      modelOutput1.InputPropertyValue( "permeability", makeScalar( PLAIN, 1.0 ) ); // to avoid NaN values
       modelOutput1.Region("MATRIX_LEFT").InputPropertyValue( "permeability", makeScalar( PLAIN, matrixLeftValue ) );
       modelOutput1.Region("MATRIX_RIGHT").InputPropertyValue( "permeability", makeScalar( PLAIN, matrixRightValue ) );
 
@@ -135,7 +136,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
       if ( verbose ) cout <<"\n\nrun: Model reconstructed from file:\n";
       size_t nullNeighbors(0);
       for ( auto it = model_domain2.CellsBegin(); it != model_domain2.CellsEnd(); ++it )
-        for ( auto n{0}; n < (*it)->Neighbors(); ++n )
+        for ( uint32_t n{0u}; n < (*it)->Neighbors(); ++n )
           if( (*it)->Neighbor(n) == nullptr )
             ++nullNeighbors;
 
@@ -194,9 +195,11 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
       Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");
       Index regionVectorKey = modelOutput2.Database().StorageKey("region vector");
       Index modelTensorKey = modelOutput2.Database().StorageKey("model tensor");
+      ArrayVariable zero_array( "boundary array",  modelOutput2.Database() );
       ArrayVariable ba( "boundary array",  modelOutput2.Database() );
       ArrayVariable baPlain( "boundary array",  modelOutput2.Database() );
-      ba = 99.;
+      zero_array = 0.;
+      ba         = 99.;
 
       //Geometry
       const size_t nodeCount2( modelOutput2.Region("Model").Nodes() );
@@ -204,11 +207,13 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
       const size_t boundaryCount2( modelOutput2.Boundaries() );
 
       //Variables
-      modelOutput2.Region("Model").InputPropertyValue( "diffusivity", diff );
+      modelOutput2.InputPropertyValue( "diffusivity", diff );
       modelOutput2.Region("Model").Store( regionVectorKey, vv );
-      modelOutput2.Region("Model").InputPropertyValue( "nodal array", na );
+      modelOutput2.InputPropertyValue( "nodal array", na );
       modelOutput2.Store( modelTensorKey, tv );
+      modelOutput2.InputPropertyValue( "boundary scalar", makeScalar( PLAIN, 0. ) );
       modelOutput2.Boundary("BOUNDARY1").InputPropertyValue("boundary scalar", makeScalar( PLAIN, 1. ) );
+      modelOutput2.InputPropertyValue( "boundary array", zero_array );
       modelOutput2.Boundary("BOUNDARY2").InputPropertyValue("boundary array", ba );
 
       modelOutput2.OutputToBinaryFile("ANSYS_Model3D_Test_modelOutput2");

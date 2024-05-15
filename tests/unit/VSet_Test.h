@@ -104,7 +104,7 @@ void VSet_Test::run()
     pz.push_back( (double)i*10 );
   }
   vset4.AddXYZ( px, py, pz );
-  for( auto i = 0; i < 13; ++i )
+  for( size_t i = 0u; i < 13; ++i )
   {
     _test( vset4.Px( i ) == (double)i*10 );
     _test( vset4.Py( i ) == (double)i*10 );

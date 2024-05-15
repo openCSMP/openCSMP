@@ -1138,6 +1138,122 @@ std::pair<uint32_t,uint32_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentF
 
 
 
+uint32_t  CSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType( int8_t CSMP_FE_type, uint32_t segm_id )
+ {
+    switch( CSMP_FE_type )
+      {
+         // tetrahedra
+         case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON:
+         case QUADRATIC_TETRAHEDRON:
+         case BARYCENTRIC_QUADRATIC_TETRAHEDRON:
+           switch( segm_id ) {
+               case 0: return 4;
+               case 1: return 5;
+               case 2: return 6;
+               case 3: return 7;
+               case 4: return 8;
+               case 5: return 9;
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return UINT_MAX;
+            }
+         // hexahedra
+         case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20:
+         case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27:
+           switch( segm_id ) {
+               case 0: return 8;
+               case 1: return 9;
+               case 2: return 10;
+               case 3: return 11;
+               case 4: return 12;
+               case 5: return 13;
+               case 6: return 14;
+               case 7: return 15;
+               case 8: return 16;
+               case 9: return 17;
+               case 10: return 18;
+               case 11: return 18;
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return UINT_MAX;
+            }
+         // prisms
+         case ISOPARAMETRIC_QUADRATIC_PRISM15:
+         case ISOPARAMETRIC_QUADRATIC_PRISM18:
+           switch( segm_id ) {
+               case 0: return 6;
+               case 1: return 7;
+               case 2: return 8;
+               case 3: return 12;
+               case 4: return 13;
+               case 5: return 14;
+               case 6: return 9;
+               case 7: return 10;
+               case 8: return 11;
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return UINT_MAX;
+            }
+         // pyramids
+         case ISOPARAMETRIC_QUADRATIC_PYRAMID13:
+         case ISOPARAMETRIC_QUADRATIC_PYRAMID14:
+           switch( segm_id ) {
+               case 0: return 5;
+               case 1: return 6;
+               case 2: return 7;
+               case 3: return 8;
+               case 4: return 9;
+               case 5: return 10;
+               case 6: return 11;
+               case 7: return 12;
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return UINT_MAX;
+            }
+         // triangles
+         case ISOPARAMETRIC_QUADRATIC_TRIANGLE:
+         case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE:
+           switch( segm_id ) {
+               case 0: return 4;
+               case 1: return 5;
+               case 2: return 3;
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return UINT_MAX;
+            }
+         // quadrilaterals
+         case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL:
+           switch( segm_id ) {
+               case 0: return 4;
+               case 1: return 5;
+               case 2: return 6;
+               case 3: return 7;
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return UINT_MAX;
+             }
+         // line elements
+         case ISOPARAMETRIC_QUADRATIC_BAR:
+           return 2;
+         default:
+           std::cerr <<"\nCSMP_ElementSpecifications::MidsideNodeOfSegmentForElementOfType: ";
+           std::cerr <<"element type could not be identified.\n";
+      }
+      
+    return UINT_MAX;
+    
+ } // end MidsideNodeOfSegmentForElementOfType
+
+
+
+
+
 
 /**
     Returns the number of the node that is the n'th node of a particular face of the supplied

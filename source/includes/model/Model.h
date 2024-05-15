@@ -445,10 +445,10 @@ double  printRangeOfVariable( const Model<dim>&,
                               Standard_IO_Handler& io, const char* var,
                               bool max_instead_of_min = true );
 
-/// prints range of target variable within specific model subdomain
+/// prints range of target variable within specific model subdomain (Region, Boundary or SplitBoundary)
 template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
-                              const char* region, const char* var, bool max_or_min = true );
+                              const char* subdomain, const char* var, bool max_or_min = true );
 
 /// prints range of target variable within specific model subdomain and logs it to IO handler
 template<uint32_t  dim>

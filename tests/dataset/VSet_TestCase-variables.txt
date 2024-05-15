@@ -57,3 +57,4 @@ element number		EN	X	1	0.	2.10E+09	element
 face number		FN	X	1	0.	2.10E+09	face
 interface number	IFN	X	1	0.	2.10E+09	interface
 node number		NN	X	1	0.	2.10E+09	node
+permeability		k	m2	1	1.0e-21	1.0e-7	element

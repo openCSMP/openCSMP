@@ -274,63 +274,63 @@ IsoparametricQuadraticHexahedron::NodesOfSegment( uint32_t segm_id, std::vector<
     std::cout <<"\nIsoparametricQuadraticHexahedron::NodesOfSegment: This function has not been checked yet !"<< std::endl;
     snids.resize(3);
     if ( segm_id == 0 ) {
-         snids[0] = 1;
-         snids[1] = 0;
-         snids[2] = 8;
-      }
-    else if ( segm_id == 1 ) {
-         snids[0] = 2;
+         snids[0] = 0;
          snids[1] = 1;
          snids[2] = 8;
       }
-    else if ( segm_id == 2 ) {
-         snids[0] = 3;
+    else if ( segm_id == 1 ) {
+         snids[0] = 1;
          snids[1] = 2;
+         snids[2] = 9;
+      }
+    else if ( segm_id == 2 ) {
+         snids[0] = 2;
+         snids[1] = 3;
          snids[2] = 10;
       }
     else if ( segm_id == 3 ) {
-         snids[0] = 0;
-         snids[1] = 3;
+         snids[0] = 3;
+         snids[1] = 0;
          snids[2] = 11;
       }
     else if ( segm_id == 4 ) {
-         snids[0] = 5;
+         snids[0] = 0;
          snids[1] = 4;
          snids[2] = 12;
       }
     else if ( segm_id == 5 ) {
-         snids[0] = 6;
+         snids[0] = 1;
          snids[1] = 5;
          snids[2] = 13;
       }
     else if ( segm_id == 6 ) {
-         snids[0] = 7;
+         snids[0] = 2;
          snids[1] = 6;
          snids[2] = 14;
       }
     else if ( segm_id == 7 ) {
-         snids[0] = 4;
+         snids[0] = 3;
          snids[1] = 7;
          snids[2] = 15;
       }
     else if ( segm_id == 8 ) {
          snids[0] = 4;
-         snids[1] = 0;
+         snids[1] = 5;
          snids[2] = 16;
       }
     else if ( segm_id == 9 ) {
          snids[0] = 5;
-         snids[1] = 1;
+         snids[1] = 6;
          snids[2] = 17;
       }
     else if ( segm_id == 10 ) {
          snids[0] = 6;
-         snids[1] = 2;
+         snids[1] = 7;
          snids[2] = 18;
       }
     else if ( segm_id == 11 ) {
          snids[0] = 7;
-         snids[1] = 3;
+         snids[1] = 4;
          snids[2] = 19;
       }
 

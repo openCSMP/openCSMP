@@ -63,6 +63,7 @@ class CSMP_ElementSpecifications {
     static uint32_t      NeighborsPerElementOfType( int8_t CSMP_finite_element_type );
     static uint32_t      NodesPerFaceForElementOfType( int8_t CSMP_finite_element_type, uint32_t face );
     static std::pair<uint32_t,uint32_t>  CornerNodesPerSegmentForElementOfType( int8_t CSMP_finite_element_type, uint32_t segm );
+    static uint32_t      MidsideNodeOfSegmentForElementOfType( int8_t CSMP_FE_type, uint32_t segm_id );
     static uint32_t      FaceNodeForElementOfType( int8_t CSMP_finite_element_type, uint32_t face, uint32_t face_node );
 };
 

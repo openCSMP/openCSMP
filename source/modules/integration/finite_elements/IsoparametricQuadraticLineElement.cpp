@@ -205,8 +205,7 @@ void IsoparametricQuadraticLineElement::NodesOfSegment( uint32_t segm_id, std::v
     snids.resize(3);
     snids[0] = 0;
     snids[1] = 1;  
-    snids
-      [2] = 2; // midside node comes last
+    snids[2] = 2; // midside node comes last
  }
 
 

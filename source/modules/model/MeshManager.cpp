@@ -358,7 +358,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
    }
  
   // 2.3 Assign neighbor elements to elements
-  const int64_t  n_elmts(elements_.size());
+  const int64_t  n_elmts = static_cast<int64_t>(elements_.size());
   if ( vset.WithNeighbourConnectivity() ) {
        if ( csmp_error.Verbose() )
           cout << "\nMeshManager<" << dim << ">::Initialize: assigning neighbors to elements..." << endl;
@@ -415,7 +415,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( FACE ) );
 
        // the faces are numbered  elements to (elements + faces - 1), but they are stored in connector at Face 0..n-1
-       int64_t   face_idx(vset.Elements());
+       size_t   face_idx(vset.Elements());
        typename deque<vector<int64_t> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
        while ( first != last ) {
             const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( face_idx ));
@@ -431,9 +431,9 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                                                           stencil_ptr, evars, cvars ) );
             // assigning nodes to faces
             const auto nodes( (*fit).Nodes() );
-            for ( auto j{0U}; j<nodes; ++j ) {
-                const size_t node = vset.Plist( face_idx, j );
-                assert( node < n_nodes );
+            for ( uint32_t j{0U}; j<nodes; ++j ) {
+                const int64_t node = vset.Plist( face_idx, j );
+                assert( node < static_cast<int64_t>(n_nodes) );
                 (*fit).Assign( j, &(*next(nodes_.begin(),node)) );
               }
             ++face_idx;
@@ -450,7 +450,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
          {
             if ( csmp_error.Verbose() )
               cout << "\nMeshManager<" << dim << ">::Initialize: connecting faces to their equidimensional and higher-dimensional neighbors..." << endl;
-            const int64_t  n_faces(faces_.size());
+            const size_t  n_faces(faces_.size());
             for ( auto& e : faces_ )
               {
                  // Equidimensional Face neighbors first
@@ -461,8 +461,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                       // if there is a neighbor (as is the case if the stored index is greater than zero)
                       // (e->Idx() starts with elements=first face)
                       const int64_t  index( vset.Pfvert( e.Idx(), j ) );
-                      if ( index >= n_elmts+n_faces ) {
-                           cerr <<"\n\t"<< index <<" vs. number of elements+faces = "<< n_elmts + n_faces << endl;
+                      if ( index >= n_elmts+static_cast<int64_t>(n_faces) ) {
+                           cerr <<"\n\t"<< index <<" vs. number of elements+faces = "<< n_elmts + static_cast<int64_t>(n_faces) << endl;
                            csmp_error.Note( ERROR, "MeshManager::Initialise: ", "face ID in 'pfverts' out of range.");
                         }
                       if ( index >= n_elmts )
@@ -545,18 +545,18 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             const auto nodes( (*ifit).FE()->Nodes() );
             // assigning nodes
             // inside
-            for ( auto j{0U}; j<nodes; ++j ) {
-                 const size_t node = vset.Plist( interface_idx, j );
-                 if ( node >= n_nodes ) {
+            for ( uint32_t j{0U}; j<nodes; ++j ) {
+                 const int64_t node = vset.Plist( interface_idx, j );
+                 if ( node >= static_cast<int64_t>(n_nodes) ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": INSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
                       csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
                    }
                  (*ifit).Assign( j, &(*next(nodes_.begin(),node)), INSIDE );
               }
             // outside
-            for ( auto j{0U}; j<nodes; ++j ) {
-                 const size_t node = vset.Plist( interface_idx, j+nodes );
-                 if ( node >= n_nodes ) {
+            for ( uint32_t j{0U}; j<nodes; ++j ) {
+                 const int64_t node = vset.Plist( interface_idx, j+nodes );
+                 if ( node >= static_cast<int64_t>(n_nodes) ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": OUTSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
                       csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
                    }
@@ -580,16 +580,16 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
          // connecting interfaces to their higher-dimensional neighbors
          for ( auto& itf : interfaces_ )
            {
-              const int64_t iface_idx = itf.Idx();
+              const int64_t iface_idx = static_cast<int64_t>(itf.Idx());
               assert(  iface_idx >= n_elmts + n_faces );
               
               // 1. Assigning equidimensional InterFace-type neighbors first
               // -----------------------------------------------------------
               const auto neighbors( itf.Neighbors() );
-              for ( auto j{0U}; j<neighbors; ++j )
+              for ( uint32_t j{0U}; j<neighbors; ++j )
                 {
                    // if there is a neighbor (as is the case if the stored index is greater than zero)
-                   const int64_t  index = vset.Pfvert( iface_idx, j );
+                   const int64_t  index = vset.Pfvert( static_cast<size_t>(iface_idx), j );
                    
                    // if there is no neighbor nothing needs to be done because all neighbor pointers
                    // are already set to 'null' per default
@@ -603,15 +603,15 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 
                    // NB: the interface number in the container is the number from the VSet - elements - faces
                    // because the interface container indexes from 0..n-1
-                   const size_t neighbor_idx = index - n_elmts - n_faces;
+                   const int64_t neighbor_idx = index - n_elmts - n_faces;
                    itf.Assign( j, &(*next(interfaces_.begin(),neighbor_idx)) );
                 }
 
              // 2. Assigning the higher-dimensional neighbor Element objects
              // ------------------------------------------------------------
              // (both higher-dimensional neighbors must be defined because interfaces exist only on the inside of models)
-             const int64_t  index1 = vset.Pfvert( iface_idx, neighbors );
-             const int64_t  index2 = vset.Pfvert( iface_idx, neighbors+1U );
+             const int64_t  index1 = vset.Pfvert( static_cast<size_t>(iface_idx), neighbors );
+             const int64_t  index2 = vset.Pfvert( static_cast<size_t>(iface_idx), neighbors+1U );
              
              if ( index1 < 0 || index2 < 0 ) {
                   cerr <<"\n\tInterFace "<< iface_idx <<": inner neighbor "<< index1 <<" and outer neighbor "<< index2 <<"\n";
@@ -628,14 +628,14 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
              Element<dim>* const innerElement = &(*next(elements_.begin(),index1));
              Element<dim>* const outerElement = &(*next(elements_.begin(),index2));
              // assignment: local number of faces adjacent to InterFace; these face numbers must always be defined
-             const auto inner_face_id = static_cast<uint32_t>(vset.Pfvert( iface_idx, neighbors+2U ));
-             const auto outer_face_id = static_cast<uint32_t>(vset.Pfvert( iface_idx, neighbors+3U ));
+             const auto inner_face_id = static_cast<uint32_t>(vset.Pfvert( static_cast<size_t>(iface_idx), neighbors+2U ));
+             const auto outer_face_id = static_cast<uint32_t>(vset.Pfvert( static_cast<size_t>(iface_idx), neighbors+3U ));
              assert( inner_face_id < innerElement->Faces() );
              assert( outer_face_id < outerElement->Faces() );
              itf.Assign( innerElement, inner_face_id, outerElement, outer_face_id );
              
              // assignment: intervening Element else boundary flag INTERNAL
-             const int64_t  index3 = vset.Pfvert( iface_idx, neighbors+4U );
+             const int64_t  index3 = vset.Pfvert( static_cast<size_t>(iface_idx), neighbors+4U );
              assert( index3 < n_elmts );
              assert( index3 > MULTIPLE );
              Element<dim>* const middleElement = (index3 < 0) ? nullptr : &(*next(elements_.begin(),index3));
@@ -700,8 +700,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
         // creating sorted vector of node points
         vector<Node<dim>*>  nptrs;
         nptrs.reserve( pnode[node].size() );
-        for ( auto s : pnode[node] )
-          nptrs.push_back( &(*next(nodes_.begin(),s)) );
+        for ( auto& s : pnode[node] )
+          nptrs.push_back( &(*next(nodes_.begin(),static_cast<long>(s))) );
         // assigning the neighbor pointers to the node
         n.Assign( nptrs, true );
         node++;
@@ -900,7 +900,7 @@ Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt
      }
 
    // searching the mesh tree for a node with the same location (using the provided point as a start location)
-   Node<dim>*          nptr( &(*next(nodes_.begin(),nearby_node)) );
+   Node<dim>*          nptr( &(*next(nodes_.begin(),static_cast<long>(nearby_node))) );
    double              new_distance(pt.DistanceTo(nptr->Coordinate())), old_distance(1e30);
    map<double,size_t>  distances;
    // estimating a tolerance on the basis of the distance of the point to the node and the first node
@@ -4405,11 +4405,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of node variable not recognized." );
       }
     // storing the data in the VSet
     if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+    else
+      csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                       (*pit).first, "contained NaN values and was therefore not stored in VSet." );
   }
 
   // -------------------------------------------------
@@ -4492,11 +4495,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           }
        break;
       default:
-        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                            (*pit).first, "type of element variable not recognized." );
     }
     // storing the data in the VSet
     if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+    else
+      csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                       (*pit).first, "contained NaN values and was therefore not stored in VSet." );
   }
 
   // element integration point properties
@@ -4593,11 +4599,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                           (*pit).first, "type of element integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+      else
+        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
     }
   }
 
@@ -4710,11 +4719,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
          break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of element sector integraton point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+      else
+        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
     }
   }
 
@@ -4827,11 +4839,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of facet integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+      else
+        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
     }
   }
 
@@ -4857,14 +4872,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       case SCALAR: {
         ScalarVariable value;
         for ( const auto& it : faces_ ) {
-          it.Read( (*pit).second, value );
-          if ( value.Has_NaN_Values() ) {
-               variable_contains_NaN_values = true;
-               break;
+              it.Read( (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
+              pushBack( data, value );
             }
-          pushBack( data, value );
-        }
-      }
+          }
         break;
       case VECTOR: {
         VectorVariable<dim> value;
@@ -4915,11 +4930,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           }
         break;
       default:
-        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                            (*pit).first, "type of face variable not recognized." );
     }
     // storing the data in the VSet
     if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+    else
+      csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                       (*pit).first, "contained NaN values and was therefore not stored." );
   }
 
 
@@ -5016,11 +5034,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of face integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+      else
+        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
     }
   }
 
@@ -5134,11 +5155,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of face-sector integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+      else
+        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
     }
   }
 
@@ -5252,11 +5276,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of face facet integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+      else
+        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
     }
   }
 
@@ -5340,11 +5367,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       }
    break;
       default:
-        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                            (*pit).first, "type of interface variable not recognized." );
     }
     // storing the data in the VSet
     if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+    else
+      csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                       (*pit).first, "contained NaN values and was therefore not stored in VSet." );
   }
 
   // interface integration point properties
@@ -5438,11 +5468,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of interface integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+      else
+        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
     }
   }
 
@@ -5554,11 +5587,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of interface sector integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+      else
+        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
     }
   }
 
@@ -5670,11 +5706,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of interface facet integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+      else
+        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
+                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
     }
   }
 

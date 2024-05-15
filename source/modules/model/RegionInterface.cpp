@@ -486,7 +486,7 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
   {
     BinaryFileSectionWrite uhdr( fp, "UNIQREGN" );
 
-    int64_t  records = this->UniqueRegions();
+    int64_t  records = static_cast<int64_t>(this->UniqueRegions());
     
     // writing number of unique regions
     fp.write( reinterpret_cast<const char*>(&records), sizeof( int64_t  ) );
@@ -510,7 +510,7 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
     cout << "\n\n\tNon-unique regions overlapping unique ones and potentially each other: ";
     BinaryFileSectionWrite nhdr( fp, "NONUREGN" );
 
-    int64_t  records = this->Regions() - this->UniqueRegions();
+    int64_t  records = static_cast<int64_t>(this->Regions() - this->UniqueRegions());
 
     fp.write( reinterpret_cast<const char*>(&records), sizeof( int64_t  ) );
 

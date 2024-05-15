@@ -2131,11 +2131,9 @@ bool VData::DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes )
     set<size_t>  node_set;
  
     // creating the unique nodeset
-    for ( deque<vector<int64_t> >::const_iterator
-          it=plist.begin(); it!=plist.end(); it++ )
-      for ( vector<int64_t>::const_iterator
-            vt=(*it).begin(); vt!=(*it).end(); vt++ )
-        node_set.insert( *vt );
+    for ( auto it=plist.begin(); it!=plist.end(); it++ )
+      for ( auto vt=(*it).begin(); vt!=(*it).end(); vt++ )
+        node_set.insert( static_cast<size_t>(*vt) );
         
     // if nothing can be done because there are not enough node coordinates
     if ( node_set.size() > px.size() )
@@ -2677,11 +2675,11 @@ size_t VData::RenumberElementsCounterClockwise2D()
       set<int64_t>  line_elmts, boundary_line_elmts;
       // recording the corner-node ids of the surface elements for later searching
       // face-nd-id key, boundary face node ids in correct sequence
-      deque<pair<int64_t ,int64_t> > surf_elmt_face_nd_ids;
+      deque<pair<int64_t,int64_t> > surf_elmt_face_nd_ids;
 
       const vector<int8_t>::const_iterator  end = PelmtEnd();
       vector<int8_t>::const_iterator        eit = PelmtBegin();
-      int64_t                               elmt_idx{0U};
+      size_t                                elmt_idx{0U};
 
        while( eit != end ) {
             CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( (*eit) );
@@ -2691,11 +2689,11 @@ size_t VData::RenumberElementsCounterClockwise2D()
                   if ( ((pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] >= 0) ||
                         (pfverts[elmt_idx][0] >= 0 && pfverts[elmt_idx][1] < 0)) )
                     // but only, if that neighbor is located on the inside of the model
-                    if ( bflags[ plist[elmt_idx][0] ] == NOT || bflags[ plist[elmt_idx][1] ] == NOT ) {
+                    if ( bflags[ static_cast<size_t>(plist[elmt_idx][0]) ] == NOT || bflags[ static_cast<size_t>(plist[elmt_idx][1]) ] == NOT ) {
                          line_elmts.insert( elmt_idx );
                       }
                   // line elements on the model boundary
-                 if ( bflags[ plist[elmt_idx][0] ] < 0 && bflags[ plist[elmt_idx][1] ] < 0 ) {
+                 if ( bflags[ static_cast<size_t>(plist[elmt_idx][0]) ] < 0 && bflags[ static_cast<size_t>(plist[elmt_idx][1]) ] < 0 ) {
                        boundary_line_elmts.insert( elmt_idx );
                     }
               }
@@ -2760,18 +2758,18 @@ size_t VData::RenumberElementsCounterClockwise2D()
       for ( auto it=line_elmts.begin(); it!= line_elmts.end(); ++it )
         {
            // getting index of element and skipping elements that have already been processed
-           elmt_idx = (*it);
+           elmt_idx = static_cast<size_t>(*it);
            if ( processed_elmts.find(elmt_idx) != processed_elmts.end() ) continue;
 
            // isolated line elements (no neighbors) are skipped as well
            if ( pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] < 0 ) {
-                polylines.insert( make_pair( elmt_idx, deque<int64_t>{elmt_idx} ) );
+                polylines.insert( make_pair( elmt_idx, deque<int64_t>{static_cast<int64_t>(elmt_idx)} ) );
                 processed_elmts.insert( elmt_idx );
                 continue;
              }
 
          // storing the element as the first in a new line element sequence
-          auto chain_it=polylines.insert( make_pair( elmt_idx, deque<int64_t>{elmt_idx} ) );
+          auto chain_it=polylines.insert( make_pair( elmt_idx, deque<int64_t>{static_cast<int64_t>(elmt_idx)} ) );
           // making sure that the element was indeed inserted (else it is a duplicate)
           assert( chain_it.second == true );
           processed_elmts.insert( elmt_idx );
@@ -3055,7 +3053,7 @@ void  VData::EstablishElementConnectivity2D()
         while( eit != end ) {
              // if this is a triangle or quadrilateral
               if ( HybridElementTypeMesh() ) {
-                   etype = parseFiniteElementTypeEnum( pelmt[elmt_idx] );
+                   etype = parseFiniteElementTypeEnum( pelmt[static_cast<size_t>(elmt_idx)] );
                    assert ( etype != CUBIC_TRIANGLE );
                    assert ( etype != ISOPARAMETRIC_CUBIC_TRIANGLE );
                    assert ( etype != CUBIC_BAR );
@@ -3067,7 +3065,7 @@ void  VData::EstablishElementConnectivity2D()
              // triangular elements have their faces opposite of the nodes 
              // and the corner nodes are sufficient to identify them
              if ( is_triangle ) {
-                  pfverts[elmt_idx].resize(3U,IRREGULAR);
+                  pfverts[static_cast<size_t>(elmt_idx)].resize(3U,IRREGULAR);
                   const set<int64_t> face1({ (*eit)[1], (*eit)[2] });
                   const set<int64_t> face2({ (*eit)[2], (*eit)[0] });
                   const set<int64_t> face3({ (*eit)[0], (*eit)[1] });
@@ -3087,7 +3085,7 @@ void  VData::EstablishElementConnectivity2D()
                   if ( face3_it.second == false ) (*face3_it.first).second.insert( make_pair( elmt_idx, 2 ) );
                }
              else if ( is_quadrilateral ) {
-                  pfverts[elmt_idx].resize(4U,IRREGULAR);
+                  pfverts[static_cast<size_t>(elmt_idx)].resize(4U,IRREGULAR);
                   // see CSMP fem specifications for these conventions 
                   const set<int64_t> face1{ (*eit)[0], (*eit)[1] };
                   const set<int64_t> face2{ (*eit)[1], (*eit)[2] };
@@ -3115,7 +3113,7 @@ void  VData::EstablishElementConnectivity2D()
              // any line elements (making a map of which ones share a node; this map also identifies manifolds)
              else {
                   assert( isLineElement( etype ) );
-                  pfverts[elmt_idx].resize(2U,IRREGULAR);
+                  pfverts[static_cast<size_t>(elmt_idx)].resize(2U,IRREGULAR);
                   pair<map<int64_t ,set<int64_t> >::iterator,bool> // node 1 (on the side of neighbor 0)
                     it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set<int64_t>{elmt_idx} ) );
                   // if there is already an entry for the node, the elmt id is added to the set
@@ -3148,7 +3146,7 @@ void  VData::EstablishElementConnectivity2D()
                   size_t face = (*(*it).second.begin()).second;
                   // nodes of face
                   etype = (HybridElementTypeMesh()==false) ? parseFiniteElementTypeEnum( ElementType(0) ) : 
-                                                             parseFiniteElementTypeEnum( ElementType(elmt_idx) );
+                                                             parseFiniteElementTypeEnum( ElementType(static_cast<size_t>(elmt_idx)) );
                   is_triangle      = isTriangularElement( etype );
                   is_quadrilateral = isQuadrilateralElement( etype );
                   assert( is_triangle || is_quadrilateral );
@@ -3164,8 +3162,8 @@ void  VData::EstablishElementConnectivity2D()
                        else if ( face==3 ) { node0=3; node1=0; }
                     }
                   // creating face unit normal
-                  const double dx = px[ plist[elmt_idx][node1] ] - px[ plist[elmt_idx][node0] ]; // dx=x2-x1 
-                  const double dy = py[ plist[elmt_idx][node1] ] - py[ plist[elmt_idx][node0] ]; // dy=y2-y1, 
+                  const double dx = px[ plist[static_cast<size_t>(elmt_idx)][node1] ] - px[ plist[static_cast<size_t>(elmt_idx)][node0] ]; // dx=x2-x1 
+                  const double dy = py[ plist[static_cast<size_t>(elmt_idx)][node1] ] - py[ plist[static_cast<size_t>(elmt_idx)][node0] ]; // dy=y2-y1, 
                   const double length = sqrt( dx*dx + dy*dy );
                   // normals are (-dy, dx)=clockwise and (dy, -dx)=counter-clockwise (USED HERE)
                   const double unrml[2U] = { dy/length, -dx/length };
@@ -3198,15 +3196,15 @@ void  VData::EstablishElementConnectivity2D()
                   // all other cases remain IRREGULAR
                   
                   // assigning boundary to the face without neighbor
-                  pfverts[elmt_idx][face] = boundary;
+                  pfverts[static_cast<size_t>(elmt_idx)][face] = boundary;
                }
              // if there are 2 elements that share the face
              // -------------------------------------------
              else {
                   // the neighbors are recorded in the 'pfverts' map
-                  const size_t elmt1      = (*(*it).second.begin()).first;
+                  const int64_t elmt1     = (*(*it).second.begin()).first;
                   const size_t face_elmt1 = (*(*it).second.begin()).second;
-                  const size_t elmt2      = (*next((*it).second.begin(),1)).first;
+                  const int64_t elmt2     = (*next((*it).second.begin(),1)).first;
                   const size_t face_elmt2 = (*next((*it).second.begin(),1)).second;
                   pfverts[elmt1][face_elmt1] = elmt2;
                   pfverts[elmt2][face_elmt2] = elmt1;
@@ -3216,7 +3214,7 @@ void  VData::EstablishElementConnectivity2D()
         // detecting elements with more than one face on boundary (these need to be fixed)
         elmt_idx = 0U;
         for ( auto pft=pfverts.begin(); pft!=pfverts.end(); ++pft, ++elmt_idx ) {
-              auto etype2D = (HybridElementTypeMesh()==false) ? pelmt[0] : pelmt[elmt_idx];
+              auto etype2D = (HybridElementTypeMesh()==false) ? pelmt[0] : pelmt[static_cast<size_t>(elmt_idx)];
               if ( !isLineElement( parseFiniteElementTypeEnum( etype2D ) ) )
                 {
                    size_t boundaries_per_element(0U);
@@ -3226,10 +3224,10 @@ void  VData::EstablishElementConnectivity2D()
                    if ( boundaries_per_element > 1U &&
                        isTriangularElement( parseFiniteElementTypeEnum( etype ) ) )
                      {
-                       cerr <<"\n\n\telement "<< elmt_idx <<" ("<< parseFiniteElementType( pelmt[elmt_idx] ) <<") ";
+                       cerr <<"\n\n\telement "<< elmt_idx <<" ("<< parseFiniteElementType( pelmt[static_cast<size_t>(elmt_idx)] ) <<") ";
                        cerr <<" has "<< boundaries_per_element <<" faces on model boundary.\n";
                        csmp_error.Note( WARNING, "VData::EstablishElementConnectivity2D:",
-                                         "triangular element with  2 faces on boundary ");
+                                         "triangular element with 2 faces on boundary ");
                        triangle_with_all_nodes_on_boundary = true;
                      }
                 }
@@ -3246,7 +3244,7 @@ void  VData::EstablishElementConnectivity2D()
                 // 1. isolated line elements terminating either at an inside node (NOT) or at the BOX_BOUNDARY
                 // --------------------------------------------------------------------------------------------------
                 if ( n_connections == 0U ) {
-                     const size_t elmt = (*it.second.begin());
+                     const size_t elmt = static_cast<size_t>(*it.second.begin());
                      // if there is no neighbor element opposite to the zeroeth node
                      if ( it.first == plist[elmt][1] ) {
                           // identifying the boundary that the missing neighbor is located at
@@ -3371,13 +3369,14 @@ void  VData::EstablishElementConnectivity2D()
 */
 size_t VData::SwitchCornerTriangles2D()
  {
+ /* commented out because code seems OK because the nodes and their numbering will not be affected
     if ( HybridElementTypeMesh() ) {
          cout <<"\n\n"<<"VData::SwitchCornerTriangles2D: WARNING: while mesh contains corner-spanning triangles ";
          cout <<" this method cannot be applied because it cannot simultaneously fix the adjacent line elements yet that are contained in the VSet.\n";
          cout <<" Please improve method. or fix corner elements in meshing tool."<< endl;
          return 0U;
       }
-      
+*/
     size_t switched_triangles{0};
     
     if ( pfverts.empty() || pfverts.size() != plist.size() ) {
@@ -3391,14 +3390,14 @@ size_t VData::SwitchCornerTriangles2D()
       {
          if ( isTriangularElement( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) ) ) {
               // count valid neighbors
-              size_t nbors = count_if( pfverts[elmt_idx].begin(), pfverts[elmt_idx].end(),
-                                       []( int64_t  nbor )->bool { return (nbor >= 0) ? true : false; } );
+              auto nbors = count_if( pfverts[elmt_idx].begin(), pfverts[elmt_idx].end(),
+                                     []( int64_t  nbor )->bool { return (nbor >= 0) ? true : false; } );
               assert( nbors != 0 );
               if ( nbors == 1 ) {
                    // finding the only valid neigbor and its shared face
                    pair<size_t,size_t> face_nds;
                    size_t              cnr_nd(UINT_MAX);
-                   int64_t               nb_idx(UINT_MAX);
+                   int64_t             nb_idx(UINT_MAX);
                    for ( auto i{0U}; i<3; ++i ) {
                         if ( pfverts[elmt_idx][i] >= 0 ) {
                              nb_idx = pfverts[elmt_idx][i];
@@ -3876,9 +3875,14 @@ throw csmp::Exception( ERROR, "VData::RemeshCornerSpanningTetrahedra",
 
 
 /**
-      Finds the neighbors of each node and returns them into the argument vector..
+      Finds the neighbor nodes of each node and returns them into the argument vector.
       
       This method is equivalent to creating a sparsity pattern for matrix accumulation.
+      
+      @param pnode is a vector of sets of nodes that share a connection with the node that corresponds to its entry, i.e., pnode[node].
+      
+      @attention method handles quadratic elements with a single midside node; these mid-side nodes just have two node neighbors each.
+      @note no provisions are made for bubble nodes because they are not connected with one-another and are typically eliminated in static condensation.
       
       @test OK SKM 8/12/21
 */
@@ -3894,16 +3898,16 @@ void VData::EstablishNodeNeighborConnectivity( vector<set<size_t>>& pnode ) cons
     if ( !pnode.empty() ) pnode.clear();
     pnode.resize( px.size() );
     
-    bool higher_order_elements{false};
- 
-    const size_t n_elements{ plist.size() };
+    // all cells involving nodes: elements, faces, interfaces
+    const size_t n_cells{ plist.size() };
     // looping over the elements to get the corner nodes of their segments
-    for ( size_t elmt{0}; elmt < n_elements; ++elmt ) {
+    for ( size_t elmt{0}; elmt < n_cells; ++elmt ) {
          // getting the element type
          const auto CSMP_FE_type = (HybridElementTypeMesh()) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
-         if ( !higher_order_elements && CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) > 1 ) {
-              csmp_error.Note( ERROR, "VData::EstablishNodeNeighborConnectivity", "connectivity of midside nodes not tested yet; check!" );
-              higher_order_elements = true;
+         if ( CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) > 2 ) {
+              csmp_error.Note( ERROR, "VData::EstablishNodeNeighborConnectivity",
+                              "node connectivity not implemented for cubic elements with more than one midside node" );
+              return;
            }
          // for each segment
          const auto n_segments{ CSMP_ElementSpecifications::SegmentsPerElementOfType( CSMP_FE_type ) };
@@ -3916,10 +3920,18 @@ void VData::EstablishNodeNeighborConnectivity( vector<set<size_t>>& pnode ) cons
               // storing the node-to-node connections avoiding duplicates
               pnode[ segm_nodes.first ].insert( segm_nodes.second );
               pnode[ segm_nodes.second ].insert( segm_nodes.first );
+              // if there is a mid-side node
+              if ( CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) == 2 ) {
+                   size_t segm_node3 = plist[ elmt ][ segm_node3 ];
+                   pnode[ segm_node3 ].insert( segm_nodes.first );
+                   pnode[ segm_node3 ].insert( segm_nodes.second );
+                }
+              else if ( CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) > 2 )
+                throw out_of_range("VData::EstablishNodeNeighborConnectivity: cannot handle more than one segment mid-side node");
            }
          // if this is an interface with nodes on the inside and outside
          if ( elmt > first_interface_ ) {
-             // do the whole thing again, for the second lot of node entries in the plist
+             // do the whole thing again, but for the second lot of node entries in plist
              const auto n_nodes = CSMP_ElementSpecifications::NodesPerElementOfType(CSMP_FE_type);
              for ( auto segm_id{0}; segm_id < n_segments; ++segm_id ) {
                   pair<size_t,size_t>
@@ -3930,46 +3942,18 @@ void VData::EstablishNodeNeighborConnectivity( vector<set<size_t>>& pnode ) cons
                   // storing the node-to-node connections avoiding duplicates
                   pnode[ segm_nodes.first ].insert( segm_nodes.second );
                   pnode[ segm_nodes.second ].insert( segm_nodes.first );
+                  // if there are mid-side nodes
+                  if ( CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) == 2 ) {
+                       size_t segm_node3 = plist[ elmt ][ segm_node3 + n_nodes ];
+                       pnode[ segm_node3 ].insert( segm_nodes.first );
+                       pnode[ segm_node3 ].insert( segm_nodes.second );
+                    }
+                  else if ( CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) > 2 )
+                    throw out_of_range("VData::EstablishNodeNeighborConnectivity: cannot handle more than one mid-side node");
                }
            }
       }
       
-    // finite elements with midside nodes and bubble functions
-    if ( higher_order_elements ) {
-      for ( size_t elmt{0}; elmt < n_elements; ++elmt )
-        if ( pnode[elmt].empty() )
-          {
-             // getting the element type
-             const auto CSMP_FE_type = (HybridElementTypeMesh()) ? pelmt[elmt] : pelmt[0];
-             if ( CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) == 2 ) {
-                 // dealing with quadratic elements that have midside nodes
-                 // relying on the numbering convention that midside nodes follow the corner nodes in the same order
-                 // and that there is one midside node per segment
-                 const auto n_nodes = CSMP_ElementSpecifications::NodesPerElementOfType(CSMP_FE_type);
-                 // for each segment
-                 const auto n_segments{ CSMP_ElementSpecifications::SegmentsPerElementOfType( CSMP_FE_type ) };
-                 const auto first_midside_node = n_nodes - n_segments;
-                 // assigning the segment corner nodes as neighbors of the midside node
-                 for ( auto segm_id{0}; segm_id < n_segments; ++segm_id ) {
-                      pair<size_t,size_t>
-                        segm_nodes = CSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType( CSMP_FE_type, segm_id );
-                      // replacing local with global node ids
-                      const size_t midside_node = plist[ elmt ][ first_midside_node + segm_id ];
-                      segm_nodes.first          = plist[ elmt ][ segm_nodes.first ];
-                      segm_nodes.second         = plist[ elmt ][ segm_nodes.second ];
-                      // storing the node-to-node connections avoiding duplicates
-                      pnode[ midside_node ].insert( segm_nodes.first );
-                      pnode[ midside_node ].insert( segm_nodes.second );
-                   }
-               }
-             else {
-                  csmp_error.Note( ERROR, "VData::EstablishNodeNeighborConnectivity", "connectivity of midside nodes for O>2 meshes not done yet" );
-                  break;
-               }
-           }
-           
-      } // end higher-order elements
-
 #ifdef MESH_MANAGER_DEBUG
     // printing the node-neighbor vector for testing
     cout <<"\n\nVData::EstablishNodeNeighborConnectivity: connectivity created for "<< pnode.size() <<" nodes:";

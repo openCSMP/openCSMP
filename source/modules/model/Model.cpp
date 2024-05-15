@@ -335,7 +335,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     const bool contiguous_model( mesh_manager_.IsContiguous() );
     if ( !contiguous_model )
       csmp_error.Note( INFO, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
-                         "model contains disconnected mesh patches - will attempt to connect them with SplitBoundary objects." );
+                      "model contains disconnected mesh patches - will attempt to connect them with SplitBoundary objects." );
 
     // 3. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
     InputVariablesFrom( vset );
@@ -352,7 +352,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
 	
     // 6. forming Boundaries
     //    if the model is box-shaped (albeit perhaps with an irregular top surface)
-    if (  mesh_topology.BoxShapedModel() ) {
+    if (  (dim == 2 && mesh_topology.RectangleShapedModel()) || (dim == 3 && mesh_topology.BoxShapedModel()) ) {
          this->EstablishBoxBoundaries();
          // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
          cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";
@@ -2868,7 +2868,7 @@ void Model<dim>::OutputToBinaryFile( const char* file_string )
   map<string, Index>  properties;
   Database().ListVariables( MODEL, properties );
 
-  // for all model properties
+  // for all properties 'Model' whose value is stored on the model
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
     {
       // setting the specifications for the property storage (no memory allocation yet)
@@ -2974,7 +2974,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const set<string>&
        for ( auto pit = vset.PropertyValuesBegin(); pit != vset.PropertyValuesEnd(); ++pit )
          if ( Database().IsDefined( (*pit).first.c_str() ) == false ) {
               double vmin, vmax;
-              string notation{"abbrev"}; notation += counter++;
+              string notation{"abbrev"}; notation += to_string(counter++);
               (*pit).second.MinMaxOf( vmin, vmax );
               // if we are dealing with a range of real numbers
               if ( !isnan(vmin) && !isnan(vmax) && vmin < vmax )

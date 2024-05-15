@@ -1,4 +1,4 @@
-'blunt30deg.1-configuration.txt' extremely basic test model
+'HorFracs2D-configuration.txt' basic test model
 
 # assigning general material properties to the model
 # mechanical properties
