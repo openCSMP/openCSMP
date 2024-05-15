@@ -99,7 +99,7 @@ void GravityInducedFluidPressure_Test::InitialiseModel3D( const char* model )
     const bool restart = (ifs.good()) ? true : false;
  
     if (!restart)
-      model3D_ = new ANSYS_Model3D( model, model, "CO2-geo-sequestration-variables.txt", true, true );
+      model3D_ = new ANSYS_Model3D( model, model, "CO2-geo-sequestration-variables.txt", true );
     else
       model3D_ = new Model<3U>( string(model) );
 

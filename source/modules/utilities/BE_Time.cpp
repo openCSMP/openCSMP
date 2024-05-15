@@ -1,5 +1,3 @@
-#include <iostream>
-#include <cstdlib>
 #include "BE_Time.h"
 
 using namespace std;

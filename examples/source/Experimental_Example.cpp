@@ -143,7 +143,6 @@ void Experimental_Example::Run()
     // 3D 'prism_mesh' testcase
     // ------------------------
     ANSYS_Model3D  model3D( "prism_test", "UG4_UGX_FileExport-variables.txt",
-                             false, /* irregular_mesh */
                              true   /* binary_file */
                           );
     printRangeOfVariable( model3D, "element number" );

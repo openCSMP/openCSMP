@@ -1547,7 +1547,7 @@ size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   this->cell_vec_.reserve( element_ids.size() );
   for ( const auto& idx : element_ids ) {
        assert( idx < mesh.Elements() );
-       Element<dim>* eptr = &(*next(mesh.ElementsBegin(),idx));
+       Element<dim>* eptr = &(*next(mesh.ElementsBegin(),static_cast<int64_t>(idx)));
        assert( eptr != nullptr );
        assert( eptr->Idx() == idx );
        this->cell_vec_.push_back( eptr );

@@ -479,7 +479,7 @@ void  ModelSubDomain<dim,CELL>::IdentifyPerimeter()
          @date 11/10/2019
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_cells )
+void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( int64_t interior_cells )
   {
      ErrorHandler&  csmp_error(ErrorHandler::Instance());
 
@@ -488,7 +488,7 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_cells 
        csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                           Name(), "model subdomain: CELL vector not initialised yet.");
                               
-     if ( interior_cells > cell_vec_.size() ) {
+     if ( interior_cells > static_cast<int64_t>(cell_vec_.size()) ) {
            cerr <<"\ninterior cells: "<< interior_cells;
            csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                               Name(), "model subdomain: less CELLs in CELL vector than interior cells specified.");
@@ -501,36 +501,42 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_cells 
        }
        
      // (re)setting the CELL face vector; note: size must already be correct else Contains(eptr) function used below will fail
-     bd_face_vec_.resize( cell_vec_.size() - interior_cells );
+     const int64_t n_elmts_with_perimeter_faces = static_cast<int64_t>(cell_vec_.size()) - interior_cells;
+     assert( n_elmts_with_perimeter_faces > 0 );
+     bd_face_vec_.resize( static_cast<size_t>(n_elmts_with_perimeter_faces) );
 
      const typename vector<CELL<dim>*>::const_iterator perimeterElementsBegin( next(cell_vec_.begin(),interior_cells) );
      const typename vector<CELL<dim>*>::const_iterator cellsEnd( cell_vec_.end() );
      vector<uint32_t>  boundary_faces;
-     size_t            counter(0U);
+     size_t            counter{0U};
 
      // for all faces of CELLs that are located on the subdomain boundary
      for ( auto it = perimeterElementsBegin; it != cellsEnd; ++it )
        {
-          assert( (*it)->Faces() == (*it)->Neighbors() );
-          const auto faces( (*it)->Faces() );
-          boundary_faces.reserve( faces );
-          for ( auto face(0U); face<faces; ++face )
-            //   located on model boundary          or  neighbor is not contained in this subdomain
-            if ( (*it)->Neighbor( face ) == nullptr || !(Contains((*it)->Neighbor(face))) )
-              boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
-          // storing the boundary face vector for the current cell
-          if ( boundary_faces.size() == faces ) {
-               if ( (dim == 2 && (*it)->IsSurface()) ||
-                    (dim == 3 && (*it)->IsVolume()) ) {
-                    cout <<"\n\tINFO, ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector: subdomain '"<< Name();
-                    cout <<"', cell: "<< (*it)->Idx() <<"("<< parseFiniteElementType((*it)->FE_Type()) <<")";
-                    cout <<" is a stand-alone cell in this subdomain.";
-                 }
-            }
-          bd_face_vec_[counter] = boundary_faces;
-          boundary_faces.clear();
-          counter++;
-       }
+           // line elements cannot have a face on the outside of the model
+           if ( (*it)->IsLine() == false )
+             {
+                assert( (*it)->Faces() == (*it)->Neighbors() );
+                const uint32_t faces( (*it)->Faces() );
+                boundary_faces.reserve( faces );
+                for ( uint32_t face{0U}; face<faces; ++face )
+                  //   located on model boundary          or  neighbor is not contained in this subdomain
+                  if ( (*it)->Neighbor( face ) == nullptr || !(Contains((*it)->Neighbor(face))) )
+                    boundary_faces.push_back( face );
+                // storing the boundary face vector for the current cell
+                if ( boundary_faces.size() == faces ) {
+                     if ( (dim == 2 && (*it)->IsSurface()) ||
+                          (dim == 3 && (*it)->IsVolume()) ) {
+                          cout <<"\n\tINFO, ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector: subdomain '"<< Name();
+                          cout <<"', cell: "<< (*it)->Idx() <<"("<< parseFiniteElementType((*it)->FE_Type()) <<")";
+                          cout <<" is a stand-alone cell in this subdomain.";
+                       }
+                  }
+                bd_face_vec_[counter] = boundary_faces;
+                boundary_faces.clear();
+             }
+           counter++;
+         }
       
   } // end BuildPerimeterFaceVector
 

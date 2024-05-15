@@ -92,7 +92,7 @@ namespace csmp {
     if (!restart) {
       model = new ANSYS_Model3D(geometry_name.c_str(),
                                 regions_name.c_str(),
-                                vars_name.c_str(), false, true);
+                                vars_name.c_str(), true );
     }
     else model = new Model<DIM>(restart_name);
   

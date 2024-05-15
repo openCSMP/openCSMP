@@ -368,12 +368,12 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     // extracting perimeter elements to set for comparison
     size_t perimeter_elements(model1_domain.PerimeterCells());
     // extracting the perimeter face vector for comparison with re-read model2
-    vector<vector<int8_t> > perimeter_faces;
+    vector<vector<uint32_t> > perimeter_faces;
     perimeter_faces.reserve(model1_domain.PerimeterCells());
-    for ( auto e=model1_domain.InteriorCells(); e<model1_domain.Cells(); ++e ) {
-         vector<int8_t>  face_vec;
-         for ( auto i{0}; i<model1_domain.PerimeterFaces(e); ++i )
-           face_vec.push_back( static_cast<int8_t>(model1_domain.PerimeterFace(e,i)) );
+    for ( size_t e=model1_domain.InteriorCells(); e<model1_domain.Cells(); ++e ) {
+         vector<uint32_t>  face_vec;
+         for ( uint32_t i{0u}; i<model1_domain.PerimeterFaces(e); ++i )
+           face_vec.push_back( model1_domain.PerimeterFace(e,i) );
          perimeter_faces.push_back( std::move(face_vec) );
       }
     // counting the perimeter faces
@@ -395,12 +395,12 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     _test( perimeter_elements = perimeter_elements2 );
   
     // test 1: re-read model2
-    vector<vector<int8_t> > perimeter_faces2;
+    vector<vector<uint32_t> > perimeter_faces2;
     perimeter_faces2.reserve(model2_domain.PerimeterCells());
     for ( auto e=model2_domain.InteriorCells(); e<model2_domain.Cells(); ++e ) {
-         vector<int8_t>  face_vec;
-         for ( auto i{0}; i<model2_domain.PerimeterFaces(e); ++i )
-           face_vec.push_back( static_cast<int8_t>(model2_domain.PerimeterFace(e,i)) );
+         vector<uint32_t>  face_vec;
+         for ( uint32_t i{0u}; i<model2_domain.PerimeterFaces(e); ++i )
+           face_vec.push_back( model2_domain.PerimeterFace(e,i) );
          perimeter_faces2.push_back( std::move(face_vec) );
       }
     // counting the perimeter faces
@@ -411,7 +411,6 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     _test( n_perimeter_faces == n_perimeter_faces2 );
 
     // test 5: is the content of the perimeter face vectors actually the same ?
-    // TODO: could the occassional failure of this test have anything to do with the short enum proplem (Edoardo Pezzuli)?
 	  _test( equal(perimeter_faces2.begin(), perimeter_faces2.end(), perimeter_faces.begin(), perimeter_faces.end() ) );
 
     // test 6: verifying that the outer surface area and volume of in the re-read CSMP native model is the same
@@ -570,7 +569,7 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
 
 
 /**
-    Checks whether the neighbor information matches the boundary face info for region "Model"
+    Checks whether the neighbor information is consistent with the boundary face info for region "Model"
     Two potential failures are detected and reported:
     1. the number of perimeter faces is not correct
     2. the ids of the perimeter faces are not correct
@@ -581,24 +580,26 @@ bool consistencyCheckNeighborVersusPerimeterFaces( const Model<3U>& model )
    
     const Region<3U>& model_domain(model.Region("Model"));
    
-    for ( auto e=model_domain.InteriorCells(); e<model_domain.Cells(); ++e )
-     {
-         const auto expected_perimeter_faces{ model_domain.PerimeterFaces(e) };
-         uint32_t   perimeter_faces(0U);
-         
-         for ( uint32_t j{0U}; j<model_domain.E(e)->Neighbors(); ++j )
-           // if there is no neighbor, there should be a boundary face corresponding to this
-           if ( model_domain.E(e)->Neighbor(j) == nullptr )
-             {
-                // checking the perimeter face information
-                uint32_t face = model_domain.PerimeterFace( e, perimeter_faces );
-                if ( j != face )
-                  consistency_check_failures++;
-                perimeter_faces++;
-             }
-           if ( expected_perimeter_faces != perimeter_faces )
-             consistency_check_failures++;
-      }
+    for ( size_t e=model_domain.InteriorCells(); e<model_domain.Cells(); ++e )
+      // only higher-dimensional elements have faces on the model boundary
+      if ( model_domain.E(e)->IsLine() == false )
+       {
+           // number of element faces on the region perimeter for the current element
+           const size_t expected_perimeter_faces{ model_domain.PerimeterFaces(e) };
+           uint32_t     perimeter_faces(0U);
+           
+           for ( uint32_t j{0U}; j<model_domain.E(e)->Neighbors(); ++j )
+             // if there is no neighbor, there should be a boundary face corresponding to this
+             if ( model_domain.E(e)->Neighbor(j) == nullptr )
+               {
+                  // checking the perimeter face information
+                  uint32_t face = model_domain.PerimeterFace( e, perimeter_faces++ );
+                  if ( j != face )
+                    consistency_check_failures++;
+               }
+             if ( expected_perimeter_faces != perimeter_faces )
+               consistency_check_failures++;
+        }
   
     return ( consistency_check_failures == 0U );
    

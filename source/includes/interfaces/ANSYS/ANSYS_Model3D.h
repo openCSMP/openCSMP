@@ -24,26 +24,22 @@ class ANSYS_Model3D : public Model<3U> {
     ANSYS_Model3D( const char* icem_file_set,
                    const char* regions_file_prefix,
                    const char* variable_file,
-                   bool irregular_mesh = false, /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
                    bool binary_file = true );   /* true = reduce regions according to regions file, false = does not redure regions */
 
     /// (non-)isoparametric input from ANSYS *.asc, *.dat and *-variable.txt files
     ANSYS_Model3D( bool isoparametric,
                    const char* icem_file_set,
                    const char* variable_file,
-                   bool irregular_mesh = false,  /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
                    bool binary_file = true  );   /* true = reduce regions according to regions file, false = does not redure regions */
 
     /// input from ANSYS *.asc, *.dat and *-variable.txt files
     ANSYS_Model3D( const char* icem_file_set,
                    const char* variable_file,
-                   bool irregular_mesh = false,  /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
                    bool binary_file = true );    /* true = reduce regions according to regions file, false = does not redure regions */
 
     /// input from ANSYS *.asc, *.dat files
     /// creates empty property database
     ANSYS_Model3D( const char* icem_file_set,
-                   bool irregular_mesh = false,  /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
                    bool binary_file = true );    /* true = reduce regions according to regions file, false = does not redure regions */
 
     // To rebuild model from CSMP native binary file do not use an ANSYS model
@@ -59,13 +55,11 @@ class ANSYS_Model3D : public Model<3U> {
 private:
     void InitializeANSYS( const char* mesh_file_set,
                            const char* regions_file_prefix,
-                           bool irregular_mesh,
                            bool binary_input_file );
 
     void InitializeANSYS( bool isoparametric,
                            const char* mesh_file_set,
                            const char* regions_file_prefix,
-                           bool irregular_mesh,
                            bool binary_file );
 
     std::vector<Point<3U> > node_coords_;        ///< node coordinates in VSet order to re-establish original node numbering if necessary

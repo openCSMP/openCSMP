@@ -3386,7 +3386,7 @@ size_t VData::SwitchCornerTriangles2D()
       }
       
     const size_t n_elements{pfverts.size()};
-    for ( size_t elmt_idx{0}; elmt_idx < n_elements; ++elmt_idx )
+    for ( size_t elmt_idx{0ul}; elmt_idx < n_elements; ++elmt_idx )
       {
          if ( isTriangularElement( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) ) ) {
               // count valid neighbors
@@ -3409,17 +3409,18 @@ size_t VData::SwitchCornerTriangles2D()
                              break;
                           }
                      }
-                   assert( isTriangularElement( parseFiniteElementTypeEnum( pelmt[nb_idx] ) ) );
+                   size_t nbor_idx = static_cast<size_t>(nb_idx);
+                   assert( isTriangularElement( parseFiniteElementTypeEnum( pelmt[nbor_idx] ) ) );
                    //           face nodes, other node, but order in pair flipped so that opposite face can be matched
-                   map<pair<size_t,size_t>,size_t> fnids{ {{plist[nb_idx][2],plist[nb_idx][1]},0},
-                                                          {{plist[nb_idx][0],plist[nb_idx][2]},1},
-                                                          {{plist[nb_idx][1],plist[nb_idx][0]},2} };
+                   map<pair<size_t,size_t>,size_t> fnids{ {{plist[nbor_idx][2],plist[nbor_idx][1]},0},
+                                                          {{plist[nbor_idx][0],plist[nbor_idx][2]},1},
+                                                          {{plist[nbor_idx][1],plist[nbor_idx][0]},2} };
                    // searching reversed nodes in map
                    auto face_it = fnids.find( face_nds );
                    if ( face_it != fnids.end() ) {
                         // reassigning nodes to new elements (first nodes are taken as those on the far sides (not shared ones))
                         array<int64_t, 3> elmt1_nds{ plist[elmt_idx][0], plist[elmt_idx][1], plist[elmt_idx][2] };
-                        array<int64_t, 3> elmt2_nds{ plist[nb_idx][0],   plist[nb_idx][1],   plist[nb_idx][2] };
+                        array<int64_t, 3> elmt2_nds{ plist[nbor_idx][0], plist[nbor_idx][1], plist[nbor_idx][2] };
                         // rotating these vectors such that the unshared nodes become the corner nodes
                         rotate( begin(elmt1_nds), begin(elmt1_nds) + cnr_nd, end(elmt1_nds) );
                         rotate( begin(elmt2_nds), begin(elmt2_nds) + (*face_it).second, end(elmt2_nds) );
@@ -3428,13 +3429,13 @@ size_t VData::SwitchCornerTriangles2D()
                         plist[elmt_idx][1] = elmt1_nds[1];
                         plist[elmt_idx][2] = elmt2_nds[0];
                         // new element 2 (nb_idx)
-                        plist[nb_idx][0]   = elmt2_nds[0];
-                        plist[nb_idx][1]   = elmt2_nds[1];
-                        plist[nb_idx][2]   = elmt1_nds[0];
+                        plist[nbor_idx][0] = elmt2_nds[0];
+                        plist[nbor_idx][1] = elmt2_nds[1];
+                        plist[nbor_idx][2] = elmt1_nds[0];
                         // reassigning neighbors
                         // old neighbors
                         array<int64_t, 3> elmt1_nbors{ pfverts[elmt_idx][0], pfverts[elmt_idx][1], pfverts[elmt_idx][2] };
-                        array<int64_t, 3> elmt2_nbors{ pfverts[nb_idx][0],   pfverts[nb_idx][1],   pfverts[nb_idx][2] };
+                        array<int64_t, 3> elmt2_nbors{ pfverts[nbor_idx][0], pfverts[nbor_idx][1], pfverts[nbor_idx][2] };
                         // rotating these vectors such that the unshared nodes become the corner nodes
                         rotate( elmt1_nbors.begin(), elmt1_nbors.begin() + cnr_nd, elmt1_nbors.end() );
                         rotate( elmt2_nbors.begin(), elmt2_nbors.begin() + (*face_it).second, elmt2_nbors.end() );
@@ -3443,9 +3444,9 @@ size_t VData::SwitchCornerTriangles2D()
                         pfverts[elmt_idx][1] = nb_idx;
                         pfverts[elmt_idx][2] = elmt1_nbors[2];
                         // new element 2
-                        pfverts[nb_idx][0]   = elmt1_nbors[1];
-                        pfverts[nb_idx][1]   = elmt_idx;
-                        pfverts[nb_idx][2]   = elmt2_nbors[2];
+                        pfverts[nbor_idx][0] = elmt1_nbors[1];
+                        pfverts[nbor_idx][1] = static_cast<int64_t>(elmt_idx);
+                        pfverts[nbor_idx][2] = elmt2_nbors[2];
                         // TODO: check: these new elements should only have a single boundary face left
                         switched_triangles += 2U;
                      }

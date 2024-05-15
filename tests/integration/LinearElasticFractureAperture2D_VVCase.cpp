@@ -110,8 +110,8 @@ void LinearElasticFractureAperture2D_VVCase::run()
     output_file              += prefix_;
 
 
-    bool irregular = false, binary = true, regions = true; //should not be changed
-    ANSYS_Model2D model( mesh_file.c_str() , regions_file.c_str(), vars_file.c_str(), irregular, binary, regions);    // Constractor for empty variables
+    bool binary = true, regions = true; //should not be changed
+    ANSYS_Model2D model( mesh_file.c_str() , regions_file.c_str(), vars_file.c_str(), binary, regions );
 
     string sb_name = *(model.CreateSplitBoundaryFrom("FRACTURE").first.begin());
 

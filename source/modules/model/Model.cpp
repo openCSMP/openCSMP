@@ -420,6 +420,8 @@ if ( mesh_manager_.InterFaces() > 0 )
 /**
     NEW (2022)! - builds model assuming that all information about regions, boundaries or split boundaries is stored in from ModelTopology.
     
+    @attention if there are domains in the VSet which consist of elements of diffierent spatial dimensions, only those of the highest one are kept.
+    
     @note If the Model topology object enlists a Boundary object, the corresponding stored idx values are interpreted as Face ids,
     noting that the all entries in the VSet are numbered consecutively and continuously starting with Element followed by Face and InterFace objects.
 */
@@ -445,14 +447,27 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
 
     // 2. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
     InputVariablesFrom( vset );
+    
+    // 3. keep only the highest-dimensional elements in regions which have the same name
+     {
+        mesh_topology.RemoveLowDimCellsFromDomains( vset );
+        //    reducing the element data to the desired elements specified in the topology object
+        //    if the element numbers in the two are different.
+        if ( mesh_topology.Cells() != vset.Elements() + vset.Faces() + vset.Interfaces() ) {
+            map<size_t,size_t>  old_and_new_elmtids;
+            mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
+            vset.ReduceTo( old_and_new_elmtids );
+            old_and_new_elmtids.clear();
+          }
+      }
 
-    // 3. forming default computational domain called "Model" and regions
+    // 4. forming default computational domain called "Model" and regions
     const bool place_into_unique_regions{ mesh_topology.ModelDomains() == 0 };
     const size_t elmts = this->FormModelRegion( place_into_unique_regions );
     if ( elmts == 0U )
       csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "Region 'Model' has zero elements.");
 
-    // 4. associating supplied subregions with regions (model subdomains)
+    // 5. associating supplied subregions with regions (model subdomains)
     this->FormRegionsFrom( mesh_topology );
     this->FormBoundariesFrom( mesh_topology );
     this->FormSplitBoundariesFrom( mesh_topology );
@@ -461,7 +476,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     this->BoundariesOut();
     this->SplitBoundariesOut();
 
-    // 5. adding property storage to the Model
+    // 6. adding property storage to the Model
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 

@@ -556,14 +556,14 @@ void Boundary_Test::runCurrent()
       
       // test that model contains no surface elements after boundary construction
       {
-         ANSYS_Model3D m0( "BoxHalfs3D", "BoxHalfs3DirregularNoHalf", "CSMP-variables.txt", true, true );
+         ANSYS_Model3D m0( "BoxHalfs3D", "BoxHalfs3DirregularNoHalf", "CSMP-variables.txt", true );
          NoSurfaceElementsAsNodeParents( m0.Region("Model") );
          n_nodes_model = m0.Mesh().Nodes();
       }
       
       // test standard model with box boundaries
       {
-        ANSYS_Model3D m01( "BoxHalfs3D", "CSMP-variables.txt", false, true );
+        ANSYS_Model3D m01( "BoxHalfs3D", "CSMP-variables.txt", true );
         _test( m01.Boundaries() == 6 ); // six surfaces of the box-shaped model
         _test( m01.Regions() == 4 );
         _test( n_nodes_model == m01.Region("Model").Nodes() );
@@ -580,10 +580,8 @@ void Boundary_Test::runCurrent()
  
       // testing case where no boundaries are created because there are no boundary-regions listed in regions file
       {
-        const bool irregular_mesh(true);   /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
         const bool binary_file(true);      /* true = binary, false = ascii */
-        ANSYS_Model3D m02( "BoxHalfs3D", "BoxHalfs3DirregularNoBoundaries", "CSMP-variables.txt",
-                            irregular_mesh, binary_file );
+        ANSYS_Model3D m02( "BoxHalfs3D", "BoxHalfs3DirregularNoBoundaries", "CSMP-variables.txt", binary_file );
                             
         _test( m02.Boundaries() == 0 );
         _test( n_nodes_model == m02.Region("Model").Nodes() );

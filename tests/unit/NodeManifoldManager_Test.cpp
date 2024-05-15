@@ -61,10 +61,9 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
   Model<dim>* modelIN(nullptr);
 
   if ( dim == 2U )
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
   else if ( dim == 3U )
-    // SKM FIX: irregular = true
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
 /*
   // validating the model
   if ( verbose_ ) {
@@ -287,10 +286,9 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_a
   Model<dim>* modelIN(nullptr);
 
   if ( dim == 2U )
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
   else if ( dim == 3U )
-    // SKM FIX: irregular = true
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
 
   // check the model
   if ( verbose_ ) {

@@ -178,7 +178,6 @@ detailed reporting of the reading progress is output and
 errors are raised is encountered.  
 
 */
-
 template<uint32_t dim>
 void ANSYS_Interface::ReadMeshBinary( const string&  meshfile,
                                       VSet<dim>&  vset,

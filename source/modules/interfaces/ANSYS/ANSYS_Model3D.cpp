@@ -24,14 +24,12 @@ Added by: Julian E. Mindel 16-03-2012
 ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
                               const char* regions_file_prefix,
                               const char* variable_file,
-                              bool irregular_mesh,
                               bool binary_file )
   : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
   InitializeANSYS( icem_file_set,
                    regions_file_prefix,
-                   irregular_mesh,
                    binary_file );
 }
 
@@ -45,7 +43,6 @@ Initialize.
 ANSYS_Model3D::ANSYS_Model3D( bool isoparametric,
                               const char* icem_file_set,
                               const char* variable_file,
-                              bool irregular_mesh,
                               bool binary_file )
   : Model<3U>( variable_file )
 {
@@ -53,7 +50,6 @@ ANSYS_Model3D::ANSYS_Model3D( bool isoparametric,
   InitializeANSYS( isoparametric,
                    icem_file_set,
                    icem_file_set,
-                   irregular_mesh,
                    binary_file );
 }
 /**
@@ -64,14 +60,12 @@ Initialize.
 
 ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
                               const char* variable_file,
-                              bool irregular_mesh,
                               bool binary_file )
   : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
   InitializeANSYS( icem_file_set,
                    icem_file_set,
-                   irregular_mesh,
                    binary_file );
 }
 
@@ -87,13 +81,11 @@ Uses the method Initialize.
 @author Julian E. Mindel 16-03-2012
 */
 ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
-                              bool irregular_mesh,
                               bool binary_file )
 {
   this->Name( icem_file_set );
   InitializeANSYS( icem_file_set,
                    icem_file_set,
-                   irregular_mesh,
                    binary_file );
 }
 
@@ -129,7 +121,6 @@ between the elements from ANSYS is not used, but this data is recreated
 void ANSYS_Model3D::InitializeANSYS( bool isoparametric,
                                      const char* mesh_file_set,
                                      const char* regions_file_prefix,
-                                     bool irregular_mesh,
                                      bool binary_input_file )
 {
   double& model_time( ModelTime::Instance().modelTime );
@@ -237,9 +228,8 @@ void ANSYS_Model3D::InitializeANSYS( bool isoparametric,
 
 
 void ANSYS_Model3D::InitializeANSYS( const char* mesh_file_set,
-                                      const char* regions_file_prefix,
-                                      bool irregular_mesh,
-                                      bool binary_input_file )
+                                     const char* regions_file_prefix,
+                                     bool binary_input_file )
 {
   double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
@@ -257,7 +247,7 @@ void ANSYS_Model3D::InitializeANSYS( const char* mesh_file_set,
 
     // 0. reading the mesh from ANSYS-CSMP-input files
     const bool recreate_node_boundary_flags{true};
-    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, recreate_node_boundary_flags );
+    mesh_interface.Read_ANSYS_Mesh( std::string{mesh_file_set}, vset, mesh_topology, binary_input_file, recreate_node_boundary_flags );
     // ATTENTION (comment from SKM): Since ANSYS does not output the neighbour connectivity correctly,
     // the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
     // later on this connectivity will be recreated inside of the Model where suitable machinery exists.

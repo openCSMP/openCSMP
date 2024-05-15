@@ -23,7 +23,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
         cout << "\n-------------------------------------------------------";
         string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
         model3d_name_ = "ModelDykeAllLayersSplit";
-        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true );
+        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true );
  
         //writing ansys model to file deleting it and then recreating a csmp native model from the file
         if ( reconstruct_from_file ) {
@@ -189,7 +189,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
       TensorVariable<3> tvPlain;
       
       if ( verbose ) cout <<"Building ModelOutput..."<<endl;
-      ANSYS_Model3D modelOutput2( "FracBox", "Vset_TestCase.txt",true,true );
+      ANSYS_Model3D modelOutput2( "FracBox", "Vset_TestCase.txt",true );
       ArrayVariable na( "nodal array", modelOutput2.Database(), 2., ROBIN );
       Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
       Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");
@@ -234,7 +234,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
       _test( nodeCount2 == modelInput2.Region("Model").Nodes() );     
 
       // gui consturctor
-      ANSYS_Model3D guiModel1( "FracBox", true, true );
+      ANSYS_Model3D guiModel1( "FracBox", true );
       _test( guiModel1.UniqueRegions() == 2 ); // FRACTURES and MATRIX
       _test( guiModel1.Boundaries() == 6 );
 
@@ -298,7 +298,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
       _test( back.Cells() != 0 );
       
       // testing model with finite volume variables
-      ANSYS_Model3D modelOutput3( "FracBox", "FracBoxNoFrac", "Vset_TestCase.txt",true,true);
+      ANSYS_Model3D modelOutput3( "FracBox", "FracBoxNoFrac", "Vset_TestCase.txt",true);
 
       Index faipVectorKey( modelOutput3.Database().StorageKey("faip vector") );
       Index seipTensorKey( modelOutput3.Database().StorageKey("seip tensor") );
@@ -396,7 +396,6 @@ void ANSYS_Model3D_Test::ModelRecoveryFromFileTest()
     // Test: box-shaped model with boundary information (Boundary->ModelSubDomain)
     // -----------------------------------------------------------------------------
          ANSYS_Model3D model1( "cube_flag", "CSMP-variables.txt",
-                                 false, /* irregular_mesh */
                                  true   /* binary_file */
                              );
                              
@@ -608,7 +607,6 @@ void ANSYS_Model3D_Test::ModelRecoveryFromFileTest()
    // TESTING THE SAME WITH  A MORE COMPLEX MODEL
       {
          ANSYS_Model3D modelOut( "prism_test", "CSMP-variables.txt",
-                                 false, /* irregular_mesh */
                                  true   /* binary_file */
                              );
         

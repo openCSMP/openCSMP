@@ -31,7 +31,7 @@ Criterion:
 =================================
 */
 
-void Geothermal_2D_VVCase::outputToVTU( Model<3U>& model,std::string model_name, const list<string>& props, size_t timestep )
+void Geothermal_2D_VVCase::outputToVTU( Model<3U>& model,string model_name, const list<string>& props, size_t timestep )
   {
       static VTU_Interface<3U> vtu(model);
       vtu.OutputDataToVTU( ( string(model_name) + "_Properties" ).c_str(), props, model.Region("Model"), timestep);
@@ -89,13 +89,12 @@ void Geothermal_2D_VVCase::ComputeMassGravityTerm (Model<3U>& model)
 
     // ---------------------------------
     // Finite Element Mesh Construction
-    std::string geometry_name ("2000x1000_mesh");
-	std::string regions_name (this->getName()); 
-	std::string config_name (this->getName()); 
-	std::string vars_name (this->getName()+".txt");
+    string geometry_name ("2000x1000_mesh");
+	  string regions_name (this->getName());
+	  string config_name (this->getName());
+	  string vars_name (this->getName()+".txt");    
     
-    
-    ANSYS_Model3D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() , true, true );
+    ANSYS_Model3D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str(), true );
     const PropertyDatabase<DIM>&  pd_ref(model.Database()); //reference to the models property database.
     
     printModelDimensions<DIM>(model, true );

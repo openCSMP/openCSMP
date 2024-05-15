@@ -122,9 +122,9 @@ void SneddonCrackCoupled_VVCase::run()
     string  coarse_mesh_quad = "InternalBoundary_Test_quadratic";
     string mesh_file         = input_dir + prefix_;
 
-    bool irregular(false), binary(true), regions(true);
+    bool binary(true), regions(true);
     ANSYS_Model2D model( mesh_file.c_str(), regions_file.c_str(), vars_file.c_str(),
-                         irregular, binary, regions);    // Constractor for empty variables
+                         binary, regions);    // Constractor for empty variables
 
     std::string sb_name = *(model.CreateSplitBoundaryFrom( "FRACTURE" ).first.begin()) ; //relies on split boundary naming convention
     std::string sb_reg  = *(model.InsertLowerDimensionalRegionsIntoSplitBoundaries(0).begin() );

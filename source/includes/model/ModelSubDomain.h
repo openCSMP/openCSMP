@@ -97,7 +97,7 @@ class ModelSubDomain {
     void SortVectors( size_t interior_cells, size_t interior_nodes );
     
     /// assuming that a partitioned (and sorted) cell vector is in place, constructs the bd_face_vec_ by checking whether neighbor cells belong to the domain or not
-    void BuildPerimeterFaceVector( size_t interior_cells );
+    void BuildPerimeterFaceVector( int64_t interior_cells );
     
     /// removes any cells or node pointers that were set to zero elsewhere; returns number of cells removed
     size_t RemoveNullPointerCells();

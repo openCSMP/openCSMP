@@ -1,6 +1,8 @@
 #ifndef BRUCE_ECKEL_TIMER_UTILITY_H
 #define BRUCE_ECKEL_TIMER_UTILITY_H
 
+#include <iostream>
+#include <cstdlib>
 #include <ctime>
 #include <cstring>
 

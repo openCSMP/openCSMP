@@ -126,7 +126,7 @@ namespace csmp
       string mesh_file     = input_dir + prefix_;
 
       // Model configuration:
-      ANSYS_Model2D model( mesh_file.c_str(), regions_file.c_str(), vars_file.c_str(), false, true, true);                       // when using boundary faces
+      ANSYS_Model2D model( mesh_file.c_str(), regions_file.c_str(), vars_file.c_str(), true, true );                       // when using boundary faces
 
       //Testing correct construction of model
       Region<DIM>& MyModelRegion = model.Region("Model");

@@ -260,7 +260,7 @@ bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file){
     const char* variables_file("SplitBoundary_Test-variables.txt");
     const char* regions_file("InternalBoundary_Test");
 
-    ANSYS_Model2D model(mesh_file, regions_file, variables_file, false, true, true);
+    ANSYS_Model2D model(mesh_file, regions_file, variables_file, true, true );
 
     pair<set<string>,bool> sb_name = model.CreateSplitBoundaryFrom("FRACTURE");
 
@@ -304,7 +304,7 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
     const char* regions_file("InternalBoundary_Test");
 
     //model construction
-    ANSYS_Model2D model(mesh_file, regions_file, variables_file, false, true, true);
+    ANSYS_Model2D model(mesh_file, regions_file, variables_file, true, true);
 
     //split boundary construction
     pair<set<string>,bool> sb_name  = model.CreateSplitBoundaryFrom( "FRACTURE" );
@@ -401,9 +401,9 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name )
   const std::string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model = NULL;
   if constexpr ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
   else if constexpr ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
 
   // visualization
   VTU_Interface<dim> vtu( *model );
@@ -437,9 +437,9 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
   const std::string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model = NULL;
   if constexpr ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
   else if constexpr ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
 
   // visualization
   VTU_Interface<dim> vtu( *model );
@@ -478,9 +478,9 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
   const string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model(nullptr);
   if constexpr ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
   else if constexpr ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
 
   string  splitboundary_regions_file( model_name );
 

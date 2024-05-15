@@ -47,13 +47,12 @@ void SplitBoundary_Example::Run()
 {
   // 0. converting ANSYS input file set into a CSMP model and save it to binary file
   // -------------------------------------------------------------------------------
-  const bool irregular_mesh(false);         /* true = non-box shaped model, false = box shaped model */
   const bool binary_file(true);             /* true = binary, false = ascii */
   const bool use_regions_file(true);        /* true = reduce regions according to regions file, false = does not redure regions */
   // Ansys model
   const string model_name("BoxHalfs2D");
   ANSYS_Model2D ansys_model("BoxHalfs2D", "BoxHalfs2D", "THMC_shear_zone-variables.txt",
-                             irregular_mesh, binary_file, use_regions_file );
+                             binary_file, use_regions_file );
                              
   // testing region insertion here
   Region<2> region1_before(ansys_model.Region("MATRIX_RIGHT"));

@@ -50,7 +50,7 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeCorrespondance_2D( const char* m
   const char* regions_file("InternalBoundary_Test");
 
 // TODO: replace these ANSYS models with CSMP native models that we construct once and then hand over to the tests
-  ANSYS_Model2D model1(mesh_file, regions_file, variables_file, false, true, true);
+  ANSYS_Model2D model1(mesh_file, regions_file, variables_file, true, true);
 
   ///Testing Differnt model creations
   //Region -> SplitBoundary
@@ -126,10 +126,9 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( co
   const char* variables_file("SplitBoundary_Test-variables.txt");
   const char* regions_file("InternalBoundary3D_Test");
 
-  bool irregular = false;
   bool reduce_to_regions = true;
 
-  ANSYS_Model3D model1(mesh_file, regions_file, variables_file, irregular, reduce_to_regions);
+  ANSYS_Model3D model1(mesh_file, regions_file, variables_file, reduce_to_regions);
 
   //Getting volumetric regions for later use
   Region<DIM>& BottomUnit1 = model1.Region("BOTTOMUNIT");
@@ -277,10 +276,9 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_I
   const char* variables_file("SplitBoundary_Test-variables.txt");
   const char* regions_file("InternalBoundary3D_Intersect_Test");
 
-  bool irregular = false;
   bool reduce_to_regions = true;
 
-  ANSYS_Model3D model1(mesh_file, regions_file, variables_file, irregular, reduce_to_regions);
+  ANSYS_Model3D model1(mesh_file, regions_file, variables_file, reduce_to_regions);
 
   //Getting volumetric regions for later use
   Region<DIM>& left_back_bottom     = model1.Region("LEFT_BACK_BOTTOM");
@@ -535,10 +533,9 @@ bool SplitBoundaryInterface_Test<DIM>::Test_NodeAndElementsCorrespondance_3D_X_I
   const char* variables_file("SplitBoundary_Test-variables.txt");
   const char* regions_file("InternalBoundary3D_Intersect_Test");
 
-  bool irregular = false;
   bool reduce_to_regions = true;
 
-  ANSYS_Model3D model1(mesh_file, regions_file, variables_file, irregular, reduce_to_regions);
+  ANSYS_Model3D model1(mesh_file, regions_file, variables_file, reduce_to_regions);
 
   //Getting volumetric regions for later use
   Region<dim>& left_back_bottom     = model1.Region("LEFT_BACK_BOTTOM");
@@ -868,10 +865,10 @@ void SplitBoundaryInterface_Test<dim>::Test_splitboundary_between_regions( const
   Model<dim>* modelIN(nullptr);
 
   if constexpr ( dim == 2U )
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
   else if constexpr ( dim == 3U )
     // SKM FIX: irregular = true
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
 
   // validating the model
   if ( verbose_ ) cout << "\nSplitBoundary_Test<" << dim << ">::test_splitboundary_between_regions: model contains the regions:";
@@ -966,9 +963,9 @@ void SplitBoundaryInterface_Test<dim>::Detect_and_create_splitboundaries( const 
   // 1. convert ansys model into CSMP model
   Model<dim>* model = NULL;
   if constexpr ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
   else if constexpr ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
 
   // 2. build CSMP SplitBoundary
   // ---------------------------------------------------------------------------------------
@@ -1002,9 +999,9 @@ void SplitBoundaryInterface_Test<dim>::Detect_and_create_splitboundaries_from_co
   // 1. convert ansys model into CSMP model
   Model<dim>* model = NULL;
   if constexpr ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
   else if constexpr ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
   
   // 2. create lower - dimensional stand - alone meshes from SplitBoundary objects, and
   //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')

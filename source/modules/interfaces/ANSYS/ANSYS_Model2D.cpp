@@ -11,11 +11,10 @@ using namespace std;
 namespace csmp {
 
 void ANSYS_Model2D::InitializeANSYS( bool isoparametric,
-                                      const char* mesh_file_set,
-                                      const char* regions_file_prefix,
-                                      bool irregular_mesh,
-                                      bool binary_input_file,
-                                      bool use_regions_file )
+                                     const char* mesh_file_set,
+                                     const char* regions_file_prefix,
+                                     bool binary_input_file,
+                                     bool use_regions_file )
 {
   // -------------------------------------------------  
   // initializing the empty Model from the ANSYS
@@ -31,7 +30,8 @@ void ANSYS_Model2D::InitializeANSYS( bool isoparametric,
 
     // 0. reading mesh from ANSYS CSMP-input .asc and .dat files,
     //    eliminating unwanted line/surface element regions
-    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, true );
+    const bool reassign_boundary_flags{true};
+    mesh_interface.Read_ANSYS_Mesh( string{mesh_file_set}, vset, mesh_topology, binary_input_file, reassign_boundary_flags );
  
     // 1. recreating 'pfverts' information because ANSYS ICEM CFD does not get the neighbor connectivity right
     vset.RemovePfverts();
@@ -120,7 +120,6 @@ void ANSYS_Model2D::InitializeANSYS( bool isoparametric,
 */
 void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
                                      const char* regions_file_prefix,
-                                     bool irregular_mesh,
                                      bool binary_input_file,
                                      bool use_regions_file )
 {
@@ -139,7 +138,7 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
     // 0. reading the mesh from ANSYS CSMP-input files, eliminating the unwanted line/surface element regions
     //    node numbers of triangles and quadrilaterals are reversed if they are in clockwise order (establishing right-hand coordinate compliance)
     const bool recreate_node_boundary_flags{true}; // does this using the lower-dimensional boundary regions 
-    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, recreate_node_boundary_flags );
+    mesh_interface.Read_ANSYS_Mesh( string( mesh_file_set ), vset, mesh_topology, binary_input_file, recreate_node_boundary_flags );
     
     // create 'pfverts' information because the one ANSYS does not get the line element orientations right
     vset.RemovePfverts();
@@ -244,7 +243,6 @@ Initialize().
 ANSYS_Model2D::ANSYS_Model2D( const char* icem_file_set,
                               const char* regions_file_prefix,
                               const char* variable_file,
-                              bool irregular_mesh,
                               bool binary_file,
                               bool use_regions_file )
   : Model<2U>( variable_file )
@@ -252,7 +250,6 @@ ANSYS_Model2D::ANSYS_Model2D( const char* icem_file_set,
   this->Name( icem_file_set );
   InitializeANSYS( icem_file_set,
                    regions_file_prefix,
-                   irregular_mesh,
                    binary_file,
                    use_regions_file );
 }
@@ -267,7 +264,6 @@ Initialize.
 ANSYS_Model2D::ANSYS_Model2D( bool isoparametric,
                               const char* icem_file_set,
                               const char* variable_file,
-                              bool irregular_mesh,
                               bool binary_file,
                               bool use_regions_file )
   : Model<2U>( variable_file )
@@ -276,14 +272,12 @@ ANSYS_Model2D::ANSYS_Model2D( bool isoparametric,
   InitializeANSYS( isoparametric,
                    icem_file_set,
                    icem_file_set,
-                   irregular_mesh,
                    binary_file,
                    use_regions_file );
 }
 
 ANSYS_Model2D::ANSYS_Model2D( const char* icem_file_set,
                               const char* variable_file,
-                              bool irregular_mesh,
                               bool binary_file,
                               bool use_regions_file )
   : Model<2U>( variable_file )
@@ -291,20 +285,17 @@ ANSYS_Model2D::ANSYS_Model2D( const char* icem_file_set,
   this->Name( icem_file_set );
   InitializeANSYS( icem_file_set,
                    icem_file_set,
-                   irregular_mesh,
                    binary_file,
                    use_regions_file );
 }
 
 ANSYS_Model2D::ANSYS_Model2D( const char* icem_file_set,
-                              bool irregular_mesh,
                               bool binary_file,
                               bool use_regions_file )
 {
   this->Name( icem_file_set );
   InitializeANSYS( icem_file_set,
                    icem_file_set,
-                   irregular_mesh,
                    binary_file,
                    use_regions_file );
 }

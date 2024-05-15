@@ -2200,6 +2200,8 @@ bool  ModelTopology::BoxShapedModel() const
  } // end BoxShapedModel
 
 
+
+
  bool  ModelTopology::RectangleShapedModel() const
  {
     // making a boundary map

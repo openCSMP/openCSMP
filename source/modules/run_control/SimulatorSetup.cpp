@@ -955,7 +955,7 @@ void SimulatorSetup<dim>::LoadModel()
             this->model_ = dynamic_cast<Model<dim>*> ( new ANSYS_Model2D(geometry_file_prefix_.data(),name_.c_str(),null_variable_file));
             break;
         case 3:
-            this->model_ = dynamic_cast<Model<dim>*> ( new ANSYS_Model3D(geometry_file_prefix_.data(),name_.c_str(),null_variable_file,true,true));
+            this->model_ = dynamic_cast<Model<dim>*> ( new ANSYS_Model3D(geometry_file_prefix_.data(),name_.c_str(),null_variable_file,true));
             break;
         default:
             throw csmp::Exception( ERROR, "SimulatorSetup<dim>::LoadModel()",

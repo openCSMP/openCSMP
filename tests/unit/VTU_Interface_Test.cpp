@@ -108,8 +108,7 @@ void VTU_Interface_Test::run()
   vtu.OutputDataToVTU( "VTU_TestArray3D",  outputPropsArrays, "Model", static_cast<int>(0) );
 
   // planar model in 3D space (do not create boundaries, else model will fail)
-  const bool irregular_mesh{false};
-  ANSYS_Model3D modelB( "BoxHalfs3D", "CSMP-variables.txt", irregular_mesh, true );
+  ANSYS_Model3D modelB( "BoxHalfs3D", "CSMP-variables.txt", true );
   VTU_Interface<DIM> vtuB( modelB );
   vtuB.OmitZeroInFileName( true );
   modelB.InputPropertyValue( "nodal vector", vectorA );
