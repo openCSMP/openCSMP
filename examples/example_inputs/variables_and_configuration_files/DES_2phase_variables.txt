@@ -34,6 +34,7 @@ face gravity term	fgt	N/m	2	-150000000	150000000	FACE	computed
 face total mobility permeability product	flt	1/(Pa.s)	2	1E-18	1	FACE	computed			
 fluid pressure	pf	Pa	1	0	1000000000	NODE	computed			
 reduced fluid pressure	rpf	Pa	1	-100000000	100000000	NODE	computed			
+previous reduced fluid pressure	prpf	Pa	1	-100000000	100000000	NODE	computed			
 nodal fluid mass source	nQM	kg/(kg.s)	1	-100000000	100000000	NODE	computed			
 fluid mass source	QM	kg/(kg.s)	1	-100000000	100000000	ELEMENT	input			
 previous nodal fluid mass source	nQM0	kg/(kg.s)	1	-100000000	100000000	NODE	computed			
@@ -57,7 +58,7 @@ relative permeability model parameters	kri_param	none	8	-50000000	50000000	ELEME
 dip vector	dip	none	2	-1	1	ELEMENT	computed			
 sector pore volume	sPV	m3	1	1E-08	1000000	SECTOR_INTEGRATION_POINT	computed			
 facet area	fA	m2	1	1E-08	1000000	FACET_INTEGRATION_POINT	computed			
-facet normal	fn	none	2	1	1	FACET_INTEGRATION_POINT	computed			
+facet normal	fn	none	2	0.9999999	1.0000001	FACET_INTEGRATION_POINT	computed			
 FV pore volume	fvPV	m3	1	0	10000000	NODE	computed			
 default time increment	dt	s	1	0.001	8640000	MODEL	input			
 element number		Ne	none	1	0	10000000000	ELEMENT	computed		
