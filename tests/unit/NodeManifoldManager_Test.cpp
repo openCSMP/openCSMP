@@ -599,20 +599,22 @@ void NodeManifoldManager_Test::Test_created_manifolds( Model<dim>& modelIN )
   // 3. test whether each node is contained in one manifold only
   const Region<dim>& model_domain(modelIN.Region( "Model" ));
   for( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); nit++ ) {
-        if( (*nit)->IsManifold() ) {
-           auto nd = (*nit);
-           for ( auto mit = modelIN.Mesh().NodeManifoldsBegin(); mit!=modelIN.Mesh().NodeManifoldsEnd(); mit++ ) {
-               for( uint32_t n(0); n<(*mit).Branches(); n++ )
-                 _test(nd != (*mit).N(n));
-            }
-        }
+        if ( (*nit)->IsManifold() ) {
+           for ( auto mit = modelIN.Mesh().NodeManifoldsBegin(); mit!=modelIN.Mesh().NodeManifoldsEnd(); mit++ )
+             // if this is not the same manifold (if both have the same address)
+             if ( (*nit)->Manifold() != &(*mit) ) {
+                 for ( uint32_t n{0u}; n<(*mit).Branches(); n++ )
+                   // we test that the Node has not the same address as nodes contained in other manifolds
+                   _test( (*nit) != (*mit).N(n) );
+               }
+         }
     }
 
   // 4. testing the sorting function
   //    (nodes were sorted by entry pressure)
   const csmp::INDEX<SCALAR,ELEMENT> key_pd = csmp::INDEX<SCALAR,ELEMENT>( modelIN.Database().StorageKey("entry pressure") );
   
-  size_t id(0);
+  size_t id{0ul};
   for(auto mit = modelIN.Mesh().NodeManifoldsBegin();mit!=modelIN.Mesh().NodeManifoldsEnd();mit++, id++) {
       (*mit).SortByVariableValue(key_pd);
       if ( verbose_ ) cout<<"\nManifold id = "<<id<<":"<<endl;
