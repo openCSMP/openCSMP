@@ -1954,9 +1954,9 @@ void test_Create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
     
     iElement = 0;
-    for(size_t k = 0U; k < iDim_k-1; k++) //z
-  	for(size_t j{0U}; j < iDim_j-1; j++) //y
-  	for(auto i{0U}; i < iDim_i-1; i++) //x
+    for(size_t k{0UL}; k < iDim_k-1; k++) //z
+  	for(size_t j{0UL}; j < iDim_j-1; j++) //y
+  	for(auto i{0UL}; i < iDim_i-1; i++) //x
   	{
   	 
      //size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
@@ -2264,9 +2264,9 @@ void test_Create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
   	//nodes at corners:
     //nodes at edges:
   	//nodes at faces:
-  	for(size_t k = 0U; k < iDim_k; k++) //z
+  	for(size_t k{0U}; k < iDim_k; k++) //z
   	for(size_t j{0U}; j < iDim_j; j++) //y
-  	for(auto i{0U}; i < iDim_i; i++) //x
+  	for(size_t i{0U}; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  

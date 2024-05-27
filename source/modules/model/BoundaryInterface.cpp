@@ -1994,8 +1994,7 @@ for ( auto& it : elmts_to_become_faces ) {
     Tries to replace bondary surface elements with Faces and assign these to Box boundaries.
     TOP, BOTTOM, INTERNAL, IRREGULAR, VERTICAL_SIDE etc. Edge boundaries are not created.
     
-    @attention this method ignores potential surface elements that might be present on the outer boundaries of the Model.
-    @attention method assumes that model perimeter correctly captures the outside faces of the model.
+    @attention method assumes that the  perimeter of region "Model" correctly identifies the outside faces of the elements of the model.
     @attention this method was designed primarily for three-dimensional models.
     
     @author SKM
@@ -2016,6 +2015,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
 
     // creating faces on the outside of the model
     const csmp::Region<dim>& model_domain( boundaryComplex->Region("Model") );
+    assert( model_domain.PerimeterCells() > 0 );
     for ( size_t i=model_domain.InteriorCells(); i<model_domain.Cells(); ++i )
       for ( auto j{0U}; j < model_domain.PerimeterFaces(i); ++j ) {
            // ascertaining that we are indeed at the model boundary
@@ -2042,8 +2042,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     
     set<Face<dim>*>  top_faces, bottom_faces, left_faces, right_faces, front_faces, back_faces, irregular_faces;
     
-    // for all Face objects on the model boundary
-    for ( auto fit=next(mesh.FacesBegin(),n_initial_faces); fit!=mesh.FacesEnd(); ++fit )
+    // for all Face objects on the model boundary (initial faces would normally be zero)
+    for ( auto fit=next(mesh.FacesBegin(),static_cast<long>(n_initial_faces)); fit!=mesh.FacesEnd(); ++fit )
       {
          // getting the (outward) pointing unit normal to face
          (*fit).UnitNormal( nrml );
@@ -2085,7 +2085,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     if ( !back_faces.empty() ) {
          vector<Face<dim>*> boundary_faces( back_faces.begin(), back_faces.end() );
          boundaryComplex->AddBoundary( "BACK", boundary_faces.begin(), boundary_faces.end(), BACK );
-      } // IRREGULAR
+      } // IRREGULAR (left-over faces)
     if ( !irregular_faces.empty() ) {
          vector<Face<dim>*> boundary_faces( irregular_faces.begin(), irregular_faces.end() );
          boundaryComplex->AddBoundary( "IRREGULAR", boundary_faces.begin(), boundary_faces.end(), IRREGULAR );
@@ -2101,20 +2101,21 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     if constexpr ( dim == 3 )
       n_faces_assigned += Boundary("FRONT").Cells() + Boundary("BACK").Cells();
       
-    if ( n_faces_assigned != mesh.Faces() - n_initial_faces )
-      csmp_error.Note( WARNING, "BoundaryInterFace::EstablishBoundaryFlagsFromOrientation",
-                         "Not all boundary Face faces could be assigned to standard boundaries");
+      if ( n_faces_assigned != mesh.Faces() - n_initial_faces ) {
+        csmp_error.Note( WARNING, "BoundaryInterFace::EstablishBoundaryFlagsFromOrientation",
+                           "Not all boundary Face faces could be assigned to standard boundaries");
+         return false;
+      }
     
     
-    // 5. adjusting flag if TOP boundary was originally flagged as irregular
-    // ---------------------------------------------------------------------
+    // 5. adjusting node flags for TOP or BOTTOM boundary nodes that were flagged as irregular
+    // ---------------------------------------------------------------------------------------
     for ( auto it = boundaryComplex->BoundariesBegin(); it != boundaryComplex->BoundariesEnd(); ++it )
       if ( (*it).first == "TOP" or (*it).first == "BOTTOM" )
         {
-           BOX_BOUNDARY bflag(IRREGULAR);
-           if ( isDiagnosticBoxBoundaryClassifier( (*it).first ) ) bflag = parseBoundary( (*it).first );
            for ( auto nit=(*it).second.NodesBegin(); nit!=(*it).second.NodesEnd(); ++nit )
-             (*nit)->AtBoundary( bflag );
+             if ( (*nit)->AtBoundary() == IRREGULAR )
+               (*nit)->AtBoundary( parseBoundary( (*it).first ) );
         }
 
     cout << "\n\nBoundaryInterface::EstablishBoxBoundariesFromOrientation: done!\n";

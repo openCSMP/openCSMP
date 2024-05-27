@@ -1854,6 +1854,138 @@ template BOX_BOUNDARY atBoundary( const Element<3U>* const );
 
 
 
+/// identifying the boundary that a lower dimensional element is located on from the BOX_BOUNDARY flags assigned to its nodes
+template<uint32_t dim>
+BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& node_flags )
+ {
+    if ( node_flags.empty() ) return NOT;
+    
+    // TWO-DIMENSIONAL MODELS
+    if constexpr ( dim == 2U ) {
+         // else there is a problem
+         assert( node_flags.size() <= 2 );
+         // one flag
+         if ( node_flags.size() == 1 ) {
+              switch( (*node_flags.begin())  ) {
+                   case LEFT:
+                     return LEFT;
+                   case RIGHT:
+                     return RIGHT;
+                   case BOTTOM:
+                     return BOTTOM;
+                   case TOP:
+                     return TOP;
+                   default:
+                     return IRREGULAR;
+                }
+           }
+         else { // 2 flags since there is a corner flag
+             const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ (*node_flags.rbegin()) };
+             // the higher bflag value would be the corner value
+             if ( isCorner(b2) ) {
+                  switch( b1 ) {
+                       case LEFT:
+                         return LEFT;
+                       case RIGHT:
+                         return RIGHT;
+                       case BOTTOM:
+                         return BOTTOM;
+                       case TOP:
+                         return TOP;
+                       default:
+                         return IRREGULAR;
+                    }
+              }
+          }
+         // error
+         cerr <<"\n"<<"BOX_BOUNDARY atBoundary<2>( const set<BOX_BOUNDARY>& ): Error: could not resolve boundary status."<< endl;
+      } // end 2D
+      
+    // THREE-DIMENSIONAL MODELS
+    if constexpr ( dim == 3 ) {
+         assert( node_flags.size() <= 4 );
+         // all node flags are the same (size 1)
+         if ( node_flags.size() == 1 ) {
+                switch( (*node_flags.begin())  ) {
+                     case LEFT:
+                       return LEFT;
+                     case RIGHT:
+                       return RIGHT;
+                     case BOTTOM:
+                       return BOTTOM;
+                     case TOP:
+                       return TOP;
+                     case FRONT:
+                       return FRONT;
+                     case BACK:
+                       return BACK;
+                     default:
+                       return IRREGULAR;
+                  }
+           }
+         // two node flags
+         else if ( node_flags.size() == 2 ) {
+              const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ (*node_flags.rbegin()) };
+              // the higher bflag value would be the corner value
+              if ( isCorner(b2) ) {
+                  switch( b1 ) {
+                       case LEFT:
+                         return LEFT;
+                       case RIGHT:
+                         return RIGHT;
+                       case BOTTOM:
+                         return BOTTOM;
+                       case TOP:
+                         return TOP;
+                       case FRONT:
+                         return FRONT;
+                       case BACK:
+                         return BACK;
+                       default:
+                         return IRREGULAR;
+                    }
+                }
+           }
+         // three different node flags
+         else if ( node_flags.size() == 3 ) {
+              const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ *next(node_flags.begin(),1) }, b3{ *next(node_flags.begin(),2) };
+              if ( isLEFT(b1) && isLEFT(b2) && isLEFT(b3) ) return LEFT;
+              if ( isRIGHT(b1) && isRIGHT(b2) && isRIGHT(b3) ) return RIGHT;
+              if ( isBOTTOM(b1) && isBOTTOM(b2) && isBOTTOM(b3) ) return BOTTOM;
+              if ( isTOP(b1) && isTOP(b2) && isTOP(b3) ) return TOP;
+              if ( isFRONT(b1) && isFRONT(b2) && isFRONT(b3) ) return FRONT;
+              if ( isBACK(b1) && isBACK(b2) && isBACK(b3) ) return BACK;
+              return IRREGULAR;
+           }
+           
+         // >=4? - there could be an error
+         else if ( node_flags.size() == 4 ) {
+              const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ *next(node_flags.begin(),1) },
+                                 b3{ *next(node_flags.begin(),2) }, b4{ *next(node_flags.begin(),3) };
+              if ( isLEFT(b1) && isLEFT(b2) && isLEFT(b3) && isLEFT(b4) ) return LEFT;
+              if ( isRIGHT(b1) && isRIGHT(b2) && isRIGHT(b3) && isRIGHT(b4) ) return RIGHT;
+              if ( isBOTTOM(b1) && isBOTTOM(b2) && isBOTTOM(b3) && isBOTTOM(b4) ) return BOTTOM;
+              if ( isTOP(b1) && isTOP(b2) && isTOP(b3) && isTOP(b4) ) return TOP;
+              if ( isFRONT(b1) && isFRONT(b2) && isFRONT(b3) && isFRONT(b4) ) return FRONT;
+              if ( isBACK(b1) && isBACK(b2) && isBACK(b3) && isBACK(b4) ) return BACK;
+              return IRREGULAR;
+           }
+         else if ( node_flags.size() > 4 ) {
+              cerr <<"\n"<<"BOX_BOUNDARY atBoundary<3>( const set<BOX_BOUNDARY>& ): Error: more than 4 flags cannot be handled yet."<< endl;
+           }
+
+         // error
+         cerr <<"\n"<<"BOX_BOUNDARY atBoundary<3>( const set<BOX_BOUNDARY>& ): Error: could not resolve boundary status."<< endl;
+      }
+
+    return IRREGULAR;
+
+ } // end atBoundary(set<BOX_BOUNDARY>)
+
+template BOX_BOUNDARY atBoundary<2>( const set<BOX_BOUNDARY>& );
+template BOX_BOUNDARY atBoundary<3>( const set<BOX_BOUNDARY>& );
+
+
 
 
 /**
@@ -1970,16 +2102,9 @@ bool hasAllSideBoundaries( const Model<3U>& model )
     if ( (*it)->AtBoundary() != NOT )
       flags_of_model.insert( (*it)->AtBoundary() );
 
-  // searching for flags2d in flags_of_model
-  auto it = flags_of_model.begin();
-  for ( auto i = flags3d.begin(); i != flags3d.end() && it != flags_of_model.end(); ++i )
-  {
-    it = std::lower_bound( it, flags_of_model.end(), (*i) );
-    // make sure the found item is a match
-    if ( it != flags_of_model.end() && *i < *it )
-      it = flags_of_model.end(); // break out early
-  }
-  if ( it != flags_of_model.end() ) return true;
+  // searching for flags3d in flags_of_model
+  for ( const auto& i : flags3d )
+    if ( flags_of_model.count(i) < 1 ) return false;
 
   return false;
 }

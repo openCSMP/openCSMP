@@ -262,7 +262,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
     Point<dim>  BaryCenter() const;
 
     /// projects node points onto line returning max distance between them; vec direction can have any length
-    double    LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
+    double      LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
 
 
     // ------------------------------------------------------------------------

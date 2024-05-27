@@ -1162,62 +1162,70 @@ template void  Face<3U>::NodePropertyVector( const csmp::Index&, std::vector<Fla
 template<uint32_t dim>
 void  Face<dim>::Out() const
  {
-    cout <<"\n\n\nFace<"<< dim <<">::Out: number: "<< idx_;
+    cout <<"\n\nFace<"<< dim <<">::Out: number: "<< idx_;
 
     string str;
     cout <<" ("<< parseFiniteElementType(this->FE_Type()) <<")";
-    if ( outerParent_ == nullptr ) cout <<", face is located at model boundary.";
+    if ( outerParent_ == nullptr ) {
+         BOX_BOUNDARY bflag = innerParent_->AtBoundary(inner_parent_face_id_);
+         if ( bflag == NOT ) cerr <<", Error: although it has no outer parent element, Face is not located on model boundary.";
+         else cout <<", located at boundary: "<< parseBoundary( bflag );
+      }
     cout << endl;
 
-    cout <<"\nInternal data: "<< endl;
 
-    cout <<"\n\tconnected nodes with boundary flags:  ";
-    for ( auto i{0U}; i<this->Nodes(); i++ ) {
+    cout <<"\t"<<"Connected nodes with boundary flags:  ";
+    for ( uint32_t i{0U}; i<this->Nodes(); i++ ) {
          str = parseBoundary(N(i)->AtBoundary());
          cout << N(i)->Idx() <<":"<< str <<"  ";
       }
     cout << endl;
-
-    cout <<"\n\tconnected neighbor Face types / boundary flags:\n";
-    for ( auto i{0U}; i<this->Neighbors(); i++ )
-      if ( Neighbor(i) != NULL ) {
-           cout <<"\t\t"<< Idx() <<":";
-           cout << parseFiniteElementType(Neighbor(i)->FE_Type()) <<": ";
-           cout << endl;
-        }
-      else cout <<"none.  ";
-    cout << endl;
-
-    cout <<"\tFace is connected via bridge pattern to: ";
-    cout << parseFiniteElementType(this->FE_Type()) << endl;
-
-    cout <<"\n\tAspect ratio (b-box):   "<< this->AspectRatio() << endl;
-
-    Point<dim>  pt(this->BaryCenter());
-
-    if ( dim == 1U )
-       cout <<"\n\tBarycentre at (xyz): "<< pt[0] << endl;
-    else if ( dim == 2U )
-       cout <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
-    else
-       cout <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
-
-    const size_t ipoints(this->IntegrationPoints());
-    if ( ipoints > 0U ) {
-         cout <<"\n\tStorage sites for IntegrationPoint properties: "<< ipoints << endl;
-      }
-
-    cout <<"\nParent (higher-dimensional) Element objects:\n";
+ 
+ 
+    cout <<"\t"<<"Parent (higher-dimensional) Element objects:\n";
     if ( innerParent_ != nullptr ) {
-         cout <<"\t"<<"inside higher-dim parent Element: "<< this->innerParent_->Idx();
+         cout <<"\t\t"<<"inside higher-dim parent element: "<< this->innerParent_->Idx() <<", face: "<< inner_parent_face_id_;
          cout  <<" ("<< parseFiniteElementType(this->Parent(INSIDE)->FE_Type()) <<")"<< endl;
       }
-    else cout <<"\tnone.\n";
+    else cout <<"\tno inside parent element (Error!).\n";
     if ( this->outerParent_ != nullptr ) {
-         cout <<"\t"<<"outside higher-dim parent Element: "<< this->outerParent_->Idx();
+         cout <<"\t\t"<<"outside higher-dim parent element: "<< this->outerParent_->Idx() <<", face: "<< outer_parent_face_id_;
          cout <<" ("<< parseFiniteElementType(this->Parent(OUTSIDE)->FE_Type()) <<")"<< endl;
       }
-    else cout <<"\tnone.\n";
+    else cout <<"\t\t"<<"no outside parent element.\n";
+
+
+    assert( this->IsSurface() || this->IsLine() );
+    assert( this->FE() != nullptr );
+    Point<dim> nrml = this->UnitNormal();
+    cout <<"\t"<<"Unit normal: "<< nrml;
+    cout << endl;
+
+
+    cout <<"\t"<<"Aspect ratio (b-box):   "<< this->AspectRatio() << endl;
+    Point<dim>  pt(this->BaryCenter());
+    if ( dim == 1U )
+       cout <<"\tBarycentre at (xyz): "<< pt[0] << endl;
+    else if ( dim == 2U )
+       cout <<"\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
+    else
+       cout <<"\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
+
+
+    bool connected_nbors = false;
+    for ( uint32_t i{0U}; i<this->Neighbors(); i++ ) if ( Neighbor(i) ) connected_nbors = true;
+    if ( connected_nbors ) {
+        cout <<"\t"<<"connected neighbor Face objects:\n";
+        for ( uint32_t i{0U}; i<this->Neighbors(); i++ ) {
+              if ( Neighbor(i) != nullptr ) {
+                   cout <<"\t\t"<< Idx() <<":";
+                   cout << parseFiniteElementType(Neighbor(i)->FE_Type()) <<": ";
+                   cout << endl;
+                }
+              else cout <<"\t\t"<<" none.  ";
+          }
+        cout << endl;
+      }
 
  } // end Out
 

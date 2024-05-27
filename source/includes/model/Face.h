@@ -241,8 +241,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // ------------------------------------------------------------------------
 
     mutable size_t           idx_;
-    uint32_t inner_parent_face_id_ = UNSPECIFIED; ///< face number of inside higher-dimensional parent element, segm id if Face is line element in 3D
-    uint32_t outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent element, segm id if Face is line element in 3D
+    uint32_t                 inner_parent_face_id_ = std::numeric_limits<uint32_t>::max(); ///< face number of inside higher-dimensional parent element, segm id if Face is line element in 3D
+    uint32_t                 outer_parent_face_id_ = std::numeric_limits<uint32_t>::max(); ///< face number of outside higher-dimensional parent element, segm id if Face is line element in 3D
     Element<dim>*            innerParent_;        ///< higher-dimensional neighbor in opposite direction of unit normal (always there)
     Element<dim>*            outerParent_;        ///< higher-dimensional neighbor element in direction of interface normal
     std::vector<Node<dim>*>  node_connector_;     ///< pointers to the nodes of the face

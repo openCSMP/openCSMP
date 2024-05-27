@@ -1,6 +1,7 @@
 #ifndef CSMP_BOX_H
 #define CSMP_BOX_H
 
+#include <set>
 #include "Point.h"
 
 namespace csmp {
@@ -156,6 +157,10 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const, uint32_t boundary_face );
 /// returns whether the cell is at the model boundary as inferred if all nodes of a line or surface element are flagged boundary or one face of a volume element is
 template<uint32_t dim, template<uint32_t> class CELL>
 bool atBoundary( const CELL<dim>* const );
+
+/// identifying the boundary that a lower dimensional element is located on from the BOX_BOUNDARY flags assigned to its nodes
+template<uint32_t dim>
+BOX_BOUNDARY atBoundary( const std::set<BOX_BOUNDARY>& node_flags );
 
 /// prints a summary of the current flags of the nodes and elements to screen.
 template<uint32_t dim> void printBoxBoundaryFlags( const Model<dim>& );

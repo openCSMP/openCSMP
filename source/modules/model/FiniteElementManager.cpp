@@ -104,9 +104,9 @@ FiniteElementManager::~FiniteElementManager()
 
 FiniteElement*  FiniteElementManager::LinearBarElement() const
  {
-    if ( line_ptr != NULL ) return line_ptr;
+    if ( line_ptr != nullptr ) return line_ptr;
     std::cerr <<"\nFiniteElementManager::LinearBarElement: Not available."<< std::endl;
-    return NULL;
+    return nullptr;
  }
  
  

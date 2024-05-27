@@ -1286,7 +1286,10 @@ Face<dim>* const MeshManager<dim>::AddEdgeFace( Face<dim>* const adjacent_face1,
 
 
 
-
+/**
+    After testing whether the provided element face lies on the model boundary (has no neigbhor),
+    method caps it with a Face object that has the same normal orientation as the Element face.
+*/
 template<uint32_t dim>
 Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const eptr,
                                                     uint32_t local_face_id,
@@ -1303,6 +1306,12 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
      csmp_error.Note( ERROR, "MeshManager<dim>::AddBoundaryFace", "face ID does not exist in element");
    if ( eptr->Neighbor(local_face_id) != nullptr )
      csmp_error.Note( WARNING, "MeshManager<dim>::AddBoundaryFace", "element face has a neighbor; is it really located at model boundary?");
+   // is face indeed a boundary face?
+   if ( eptr->Neighbor(local_face_id) != nullptr ) {
+        cout <<"\n"<<"Element "<< eptr->Idx() <<": face "<< local_face_id << endl;
+        csmp_error.Note( ERROR, "MeshManager<dim>::AddBoundaryFace", "requested face does not lie on model boundary");
+        return nullptr;
+     }
 
    // 1. constructing new face, connecting it to its higher-dimensional neighbor on the inside, and assigning nodes
    const size_t face_number{faces_.size()};
@@ -1311,6 +1320,12 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
                                       fvm_manager_, local_face_id, lvars, ivars ) );
 
    (*fit).Idx( face_number );
+
+#ifdef MESH_MANAGER_DEBUG
+cerr <<"\n\n Element "<< eptr->Idx() <<": created new Face on face: "<< local_face_id;
+eptr->Out();
+(*fit).Out();
+#endif
 
    return &(*fit);
 

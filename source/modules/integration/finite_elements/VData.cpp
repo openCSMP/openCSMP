@@ -1210,7 +1210,8 @@ void VData::EstablishZeroBasedNumbering()
              cerr << "\nVData::EstablishZeroBasedNumbering: Numbering already is 0..n-1 based.\n";
              return;
           }
-    // to convert: 
+          
+    // to convert:
     // plist
     for ( auto& it : plist )
       for ( auto& n : it )
@@ -3517,7 +3518,7 @@ void VData::EstablishElementConnectivity3D()
                // creating face key of node pointers from indices of face nodes
                set<size_t> key;
                const auto nodes(CSMP_ElementSpecifications::NodesPerFaceForElementOfType( etype, face ) );
-               for ( auto j{0U}; j<nodes; ++j ) {
+               for ( uint32_t j{0U}; j<nodes; ++j ) {
                     // inserting the global  node numbers into the key
                     const size_t face_node = plist[elmt_idx][ CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, j ) ];
                     key.insert( face_node );
@@ -3801,8 +3802,20 @@ void VData::EstablishElementConnectivity3D()
               else if ( (*it).second.size() == 1 ) {
                   const size_t elmt          = (*(*it).second.begin()).first;
                   const size_t boundary_face = (*(*it).second.begin()).second;
-                  // TODO: one could narrow down which boundary this is, but it will not be used later
-                  pfverts[elmt][boundary_face] = IRREGULAR;
+                  // collecting the face nodes to query Box
+                  const auto n_face_nodes = CSMP_ElementSpecifications::NodesPerFaceForElementOfType( pelmt[elmt], boundary_face );
+                  set<BOX_BOUNDARY> bflag_set;
+                  for ( uint32_t n{0u}; n<n_face_nodes; ++n ) {
+                       const size_t nidx = plist[elmt][CSMP_ElementSpecifications::FaceNodeForElementOfType( pelmt[elmt], boundary_face, n )];
+                       if ( bflags[nidx] != NOT )
+                         bflag_set.insert( intToBOX_BOUNDARY( bflags[nidx] ) );
+                    }
+                  if ( bflag_set.empty() ) {
+                       cerr <<"\n"<<"VData::EstablishElementConnectivity3D: although element "<< elmt <<" has no neighbor at face "<< boundary_face;
+                       cerr <<", all node boundary flags have value: NOT; setting neighor to IRREGULAR"<< endl;
+                       pfverts[elmt][boundary_face] = IRREGULAR;
+                    }
+                  else pfverts[elmt][boundary_face] = atBoundary<3>( bflag_set );
                 }
           }
 
