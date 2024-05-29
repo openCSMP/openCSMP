@@ -57,7 +57,7 @@ void VariableManagement_Example::Run()
     //    can be read because the specification of variables in the VSet is incomplete)
     {
       VSet<2U>      vset;
-      ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
+      ModelTopology topo = create_MeshPatchWithLineElements_VSet( vset );
       const bool convert_bdry_elmts_to_faces{true};
       Model<2U>     original_model( topo, vset, "Minimum-variables.txt", convert_bdry_elmts_to_faces );
       // saving model to CSMP binary

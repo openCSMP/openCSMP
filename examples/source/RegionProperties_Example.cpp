@@ -67,7 +67,7 @@ void RegionProperties_Example::Run()
     const size_t  n_squares_on_side(4U);
     const bool    skewed(false);
     const bool    isoparametric(true); // quadrilateral exists only in isoparametric form
-    test_Create_Square_VSet( mesh_container, n_squares_on_side, DIM, skewed );
+    create_Square_VSet( mesh_container, n_squares_on_side, DIM, skewed );
     
     // making two extra regions
     set<string>  fem_type;

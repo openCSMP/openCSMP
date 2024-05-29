@@ -15,7 +15,7 @@ void Operand_Test::run()
   // 2D test case
   {
     VSet<2U>    mesh_container;
-    test_Create_TrianglePatch_VSet( mesh_container );
+    create_TrianglePatch_VSet( mesh_container );
 
     // Building Region object from ANSYS data files
     string mesh_name("triangle_patch");

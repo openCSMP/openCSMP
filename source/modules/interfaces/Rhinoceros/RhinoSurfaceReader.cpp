@@ -154,9 +154,9 @@ bool RhinoSurfaceReader::InitializeFrom( const char* raw_file, bool erase_old )
 
 
 void RhinoSurfaceReader::ObjectToPData( const string& obj_name,
-                                            map<size_t,mjl::Point3D>&  points,
-                                            map<size_t,vector<int64_t> >& plist,
-                                            size_t poffset ) const
+                                        map<size_t,mjl::Point3D>&  points,
+                                        map<size_t,vector<size_t> >& plist,
+                                        size_t poffset ) const
   {
      // finding the desired object in the map 
      map<string,list<mjl::Triangle3D> >::const_iterator it = objects.find(obj_name);  
@@ -173,12 +173,12 @@ void RhinoSurfaceReader::ObjectToPData( const string& obj_name,
     // zooming through the triangle list, 
     // creating a unique set of nodes ordered by hashkeys created from the node coordinates
     // for this, the node coordinates are converted to strings 
-    map<string,vector<double> >          pxyz;
-    vector<double>                       coord(3);
+    map<string,vector<double> >            pxyz;
+    vector<double>                         coord(3);
     list<mjl::Triangle3D>::const_iterator  lit;
     string                                 key;
     char                                   num[20];
-    int32_t                                  i, j;
+    uint32_t                               i, j;
      
     for ( lit=(*it).second.begin(); lit!=(*it).second.end(); lit++ )
       {
@@ -189,7 +189,7 @@ void RhinoSurfaceReader::ObjectToPData( const string& obj_name,
               // for all the coordinate directions
               for ( j=0; j<3; j++ )
                 {
-                   coord[static_cast<uint32_t>(j)] = (*lit)[i][j];
+                   coord[j] = (*lit)[i][j];
                    // convert double coordinate value to string and add to hash key
                    snprintf( num, sizeof(num), "%lf", (*lit)[i][j]  );
                    key += num;
@@ -203,8 +203,8 @@ void RhinoSurfaceReader::ObjectToPData( const string& obj_name,
     // and assigning the vertex points to the output map
     map<string,size_t>                              pxyz_ids;
     size_t                                          n;
-    vector<int64_t>                                  ids(3);
-    map<string,vector<double> >::const_iterator  pit;
+    vector<size_t>                                  ids(3);
+    map<string,vector<double> >::const_iterator     pit;
     
     for ( n=poffset, pit=pxyz.begin(); pit!=pxyz.end(); pit++ )
       { 
@@ -226,7 +226,7 @@ void RhinoSurfaceReader::ObjectToPData( const string& obj_name,
               // --------------------------------------------------------------
               for ( j=0; j<3; j++ )
                 {
-                   coord[static_cast<uint32_t>(j)] = (*lit)[i][j];
+                   coord[j] = (*lit)[i][j];
                    // convert double coordinate value to string and add to hash key
                    snprintf( num, sizeof(num), "%lf", (*lit)[i][j]  );
                    key += num;
@@ -240,7 +240,7 @@ void RhinoSurfaceReader::ObjectToPData( const string& obj_name,
                    cout <<"\nTerminating execution of ObjectToPData()." << endl;
                    return;
                 }
-              else ids[static_cast<uint32_t>(i)] = (*cit).second; 
+              else ids[i] = (*cit).second;
            }
          // assigning entry to plist
          plist[ n++ ] = ids;
@@ -253,9 +253,9 @@ void RhinoSurfaceReader::ObjectToPData( const string& obj_name,
 
 
 
-void RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<int64_t> >& plist,
-                                                  map<size_t,vector<int64_t> >& pfverts,
-                                                  vector<std::int8_t>& pbflags ) const
+void RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<size_t> >& plist,
+                                              map<size_t,vector<int64_t> >& pfverts,
+                                              vector<std::int8_t>& pbflags ) const
  {
      //  parent element id,  edge of p1 < p2
      map<pair<size_t,size_t>,int64_t> edge_map;
@@ -285,22 +285,22 @@ void RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<int64_t> >
           // neighbor 1 (12)                              clockwise nodes 
           if ( (eit=edge_map.find( make_pair((*pit).second[2],(*pit).second[1]))) == edge_map.end() ) {
                nbors[0] = IRREGULAR_OUTSIDE;
-               pbflags[ (*pit).second[2] ] = nbors[0];
-               pbflags[ (*pit).second[1] ] = nbors[0];
+               pbflags[ (*pit).second[2] ] = static_cast<int8_t>(nbors[0]);
+               pbflags[ (*pit).second[1] ] = static_cast<int8_t>(nbors[0]);
             }
           else nbors[0] = (*eit).second;
           // neighbor 2 (20)
           if ( (eit=edge_map.find( make_pair((*pit).second[0],(*pit).second[2]))) == edge_map.end() ) {
                nbors[1] = IRREGULAR_OUTSIDE;
-               pbflags[ (*pit).second[0] ] = nbors[1];
-               pbflags[ (*pit).second[2] ] = nbors[1];
+               pbflags[ (*pit).second[0] ] = static_cast<int8_t>(nbors[1]);
+               pbflags[ (*pit).second[2] ] = static_cast<int8_t>(nbors[1]);
             }
           else nbors[1] = (*eit).second;
           // neighbor 3 (01)
           if ( (eit=edge_map.find( make_pair((*pit).second[1],(*pit).second[0]))) == edge_map.end() ) {
                nbors[2] = IRREGULAR_OUTSIDE;
-               pbflags[ (*pit).second[1] ] = nbors[2];
-               pbflags[ (*pit).second[0] ] = nbors[2];
+               pbflags[ (*pit).second[1] ] = static_cast<int8_t>(nbors[2]);
+               pbflags[ (*pit).second[0] ] = static_cast<int8_t>(nbors[2]);
             }
           else nbors[2] = (*eit).second;
           // adding new neighbor vector to map
@@ -394,9 +394,9 @@ number. A map is also created which contains entries of the node numbers
 which make up each triangle.   
 */
 bool RhinoSurfaceReader::PopObject( const char *obj_name,
-                                        map<size_t,mjl::Point3D >&  points,
-                                        map<size_t,vector<int64_t> >& plist,
-                                        size_t poffset ) const
+                                    map<size_t,mjl::Point3D >&  points,
+                                    map<size_t,vector<size_t> >& plist,
+                                    size_t poffset ) const
  {
      ObjectToPData( string(obj_name), points, plist, poffset );
      
@@ -490,7 +490,7 @@ void RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) const
 
     // find object and create pxyz and plist arrays for the desired object
     map<size_t,mjl::Point3D>     points;
-    map<size_t,vector<int64_t> >  plist;
+    map<size_t,vector<size_t> >  plist;
 
     PopObject( object.c_str(), points, plist );
     
@@ -663,10 +663,8 @@ void RhinoSurfaceReader::WriteObjectToTSurf( const char* obj, ofstream& ofs ) co
  {
     assert( ofs.is_open() );
  
-    map<size_t,mjl::Point3D>                     points;
-    map<size_t,vector<int64_t> >                  plist;
-    map<size_t,mjl::Point3D>::const_iterator     it;
-    map<size_t,vector<int64_t> >::const_iterator  pit;
+    map<size_t,mjl::Point3D>     points;
+    map<size_t,vector<size_t> >  plist;
 
     // find object and create pxyz and plist arrays for the desired object
     PopObject( obj, points, plist, 0 );
@@ -675,7 +673,7 @@ void RhinoSurfaceReader::WriteObjectToTSurf( const char* obj, ofstream& ofs ) co
     ofs <<"TFACE" << endl;
     
     // write vertex coordinates
-    for ( it=points.begin(); it!=points.end(); it++ )
+    for ( auto it=points.begin(); it!=points.end(); it++ )
       {
          // identifier     node ID 1...n
          ofs <<"VRTX "<< (*it).first+1 <<" ";
@@ -683,11 +681,11 @@ void RhinoSurfaceReader::WriteObjectToTSurf( const char* obj, ofstream& ofs ) co
       }
 
     // writing node id's per triangle as in plist
-    for ( pit=plist.begin(); pit!=plist.end(); pit++ )
+    for ( auto pit=plist.begin(); pit!=plist.end(); pit++ )
       {
          ofs <<"TRGL ";
          // again node ids must be augmented by 1 since Gocad counts 1...n
-         for ( size_t i{0U}; i<3; i++ ) ofs << (*pit).second[i]+1 <<" ";
+         for ( unsigned int i{0U}; i<3; i++ ) ofs << (*pit).second[i]+1 <<" ";
          ofs << endl;
       } 
 
@@ -858,13 +856,10 @@ void RhinoSurfaceReader::MoveCoordinates( double x_move, double y_move, double z
       }
 
     // looping over the objects 
-    map<string,list<mjl::Triangle3D> >::iterator  oit;  
-    list<mjl::Triangle3D>::iterator                            tit;
-    mjl::Point3D                                               pt[3];
-    size_t                                                     pid;
+    mjl::Point3D  pt[3];
     
-    for ( oit = objects.begin(); oit!=objects.end(); oit++ )
-      for ( tit=(*oit).second.begin(); tit!=(*oit).second.end(); tit++ )
+    for ( auto oit = objects.begin(); oit!=objects.end(); oit++ )
+      for ( auto tit=(*oit).second.begin(); tit!=(*oit).second.end(); tit++ )
         {
            for ( int32_t i=0; i<3; i++ )
              {
@@ -877,7 +872,7 @@ void RhinoSurfaceReader::MoveCoordinates( double x_move, double y_move, double z
                 pt[i](2) += z_move;
              }
            // storing the reworked points re-organising the triangle if necessary
-           pid = (*tit).id_;
+           auto pid = (*tit).id_;
            (*tit).Set( pt[0], pt[1], pt[2], pid );
        }
 

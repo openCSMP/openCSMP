@@ -24,23 +24,23 @@ int flux_mismatch( bool bPrescribedVelocity )
     
     VSet<3>  mesh_container;
    
-   //(a)test_Create_One_Hexahedra_VSet(mesh_container); //0
+   //(a)create_One_Hexahedra_VSet(mesh_container); //0
    
-   //(b)test_Create_One_Prism_VSet(mesh_container,true); //0
+   //(b)create_One_Prism_VSet(mesh_container,true); //0
 
    //(c)
-   test_Create_Pyramid_Hexa_VSet(mesh_container,true);
+   create_Pyramid_Hexa_VSet(mesh_container,true);
 
    //(d)
-   //test_Create_Hexahedra_VSet(mesh_container, true); //10-17
+   //create_Hexahedra_VSet(mesh_container, true); //10-17
 
-   //(e)test_Create_Prism_VSet(mesh_container, true); //10-16
+   //(e)create_Prism_VSet(mesh_container, true); //10-16
 
    //(f) 
-   //test_Create_Pyramid_VSet(mesh_container, true); //10-16
+   //create_Pyramid_VSet(mesh_container, true); //10-16
    
    //(g)
-  // test_Create_Prism_Hexa_VSet(mesh_container, true);
+  // create_Prism_Hexa_VSet(mesh_container, true);
    
    Model<3U>  sg( mesh_container, "example15.txt" ); 
    mesh_container.Erase();

@@ -145,7 +145,7 @@ void MeshManager_Test::run()
   ModelTopology topology;
   string        var_file("CSMP-variables.txt");
   const bool    regions_to_boundaries{true};
-  test_Create_FracBox( topology, vset );
+  create_FracBox( topology, vset );
   
   Model<3>      model( topology, vset, var_file.c_str(), regions_to_boundaries );
   
@@ -189,10 +189,10 @@ Checks that numbers of elements etc. in mesh manager do indeed reflect those of 
 */
 void MeshManager_Test::TestBasics()
 {
-	// vsetMakers: test_Create_Pyramid_Hexa_VSet
+	// vsetMakers: create_Pyramid_Hexa_VSet
   VSet<3>    vset;
   const bool bSkewed{false};
-  test_Create_Pyramid_Hexa_VSet( vset, bSkewed );
+  create_Pyramid_Hexa_VSet( vset, bSkewed );
   Model<3> model( vset );
   model.Name("PyramidHexaPatch");
   // bounding box
@@ -227,7 +227,7 @@ void MeshManager_Test::TestBasics()
   
   // does this also work correctly in 2D?
   VSet<2> vset2D;
-  test_Create_MeshPatchWithLineElements_VSet( vset2D );
+  create_MeshPatchWithLineElements_VSet( vset2D );
   Model<2> model2D( vset2D, "CSMP-variables.txt" ); // needs "element number" and "node number"
   model2D.Name("MeshPatchWithLineElements");
   const Region<2>&  model_domain2D(model2D.Region("Model"));
@@ -253,7 +253,7 @@ void MeshManager_Test::TestBasics()
 bool MeshManager_Test::TestCompleteModel2D()
  {
     VSet<2U>       vset;
-    ModelTopology  topo = test_Create_BoundarySplitBoundaryPatch( vset );
+    ModelTopology  topo = create_BoundarySplitBoundaryPatch( vset );
     const bool     treat_all_domains_as_regions{false};
     Model<2>       model( topo, vset, "CSMP-1phase-variables.txt", treat_all_domains_as_regions );
     
@@ -292,7 +292,7 @@ bool MeshManager_Test::Test_parentElementsSharedByFace()
  {
     VSet<3U> vset;
     // testing with element 13 with face 4 on the LEFT outside
-    test_Create_Prism_Hexa_VSet( vset, false );
+    create_Prism_Hexa_VSet( vset, false );
     Model<3U>    model( vset, "CSMP-variables.txt" );
     const size_t ELMT{13}; // 13 in VSet
     Element<3>*  eptr = &(*next(model.Mesh().ElementsBegin(),ELMT));
@@ -349,7 +349,7 @@ bool MeshManager_Test::Test_BuiltElementConnectivity2D()
  {
     // 2D functionality
     VSet<2U> vset, vset_orig;
-    test_Create_TrianglePatch_VSet( vset );
+    create_TrianglePatch_VSet( vset );
     vset_orig = vset;
     Model<2> model( vset, "CSMP-variables.txt" );
     Region<2>& model_domain = model.Region("Model");
@@ -375,7 +375,7 @@ bool MeshManager_Test::Test_BuiltElementConnectivity3D()
  {
     // 2D functionality
     VSet<3U> vset, vset_orig;
-    test_Create_Pyramid_Hexa_VSet( vset, false );
+    create_Pyramid_Hexa_VSet( vset, false );
     vset_orig = vset;
     Model<3> model( vset, "CSMP-variables.txt" );
     Region<3>& model_domain = model.Region("Model");
@@ -404,8 +404,8 @@ bool MeshManager_Test::Test_MeshTraversal3D()
  {
     // building the test model
     VSet<3U> vset;
-    test_Create_Pyramid_Hexa_VSet( vset, false );
-//    test_Create_Hexahedra_VSet( vset, false );
+    create_Pyramid_Hexa_VSet( vset, false );
+//    create_Hexahedra_VSet( vset, false );
 //    testCreateTetra_VSet( vset );
     Model<3>   model( vset, "CSMP-variables.txt" );
     Region<3>& model_domain = model.Region("Model");
@@ -570,7 +570,7 @@ bool MeshManager_Test::TestEntityNumberingFunction( Model<3>& model )
 bool MeshManager_Test::TestElementDeletionAndInsertion()
 {
   VSet<3U> vset;
-  test_Create_Hexahedra_VSet( vset, false );
+  create_Hexahedra_VSet( vset, false );
   Model<3>   model( vset, "CSMP-variables.txt" );
   //Region<3>& model_domain = model.Region("Model");
 
@@ -650,10 +650,10 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 */
 bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
 {
-	// vsetMakers: test_Create_Pyramid_Hexa_VSet
+	// vsetMakers: create_Pyramid_Hexa_VSet
   VSet<3>    vset;
   const bool bSkewed{false};
-  test_Create_Pyramid_Hexa_VSet( vset, bSkewed );
+  create_Pyramid_Hexa_VSet( vset, bSkewed );
   Model<3> model( vset );
   model.Name("PyramidHexaPatch"); // only hexa and pyramid type of elements; pyramids=26..32
 
@@ -739,10 +739,10 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
 
 bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
 {
-	// vsetMakers: test_Create_Pyramid_Hexa_VSet
+	// vsetMakers: create_Pyramid_Hexa_VSet
   VSet<3>    vset;
   const bool bSkewed{false};
-  test_Create_Pyramid_Hexa_VSet( vset, bSkewed );
+  create_Pyramid_Hexa_VSet( vset, bSkewed );
   Model<3> model( vset );
   model.Name("PyramidHexaPatch");
 

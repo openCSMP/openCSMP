@@ -348,7 +348,7 @@ int main()
     if ( test_interdependent2 ) {
       // creating models needed once
       VSet<2U>   vset2D;
-      ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset2D );
+      ModelTopology topo = create_MeshPatchWithLineElements_VSet( vset2D );
       string     var_file{"CSMP-1phase-variables.txt"};
       const bool use_regions_file{true};
       Model<2U>  model2D( topo, vset2D, var_file.c_str(), use_regions_file );

@@ -49,7 +49,7 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 	map< string, std::set<std::string> > fem_types;
 	map< string, vector<size_t> >        regions; // key: name of the region, value: list of vertices
 	vector<int8_t>                       element_types;
-	deque< vector< int64_t  > >          elements;
+	deque< vector< size_t  > >           elements;
 	vector<int8_t>                       element_type;
 	deque<uint32_t>                      mixed_ele_plist;      // number of nodes per element
 	deque<uint32_t>                      mixed_ele_pfverts;    // number of neighbours per element
@@ -88,7 +88,7 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
   uint32_t npe, fpe, inode;
 	string stype;
 	int8_t etype;
-	int64_t  elem_idx = 0;
+	size_t elem_idx = 0;
   
 	while (true)
 	{
@@ -118,11 +118,11 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 		if (n_elem <= 0) throw out_of_range(str+"value not expected");
 		n_elements += n_elem;
 
-		vector<int64_t> elem(npe);
+		vector<size_t> elem(npe);
 
-		for (int i = 0; i<n_elem; i++)
+		for (size_t i = 0; i<n_elem; i++)
       {
-        for (int j = 0; j<npe; j++) {
+        for (uint32_t j = 0; j<npe; j++) {
             file >> inode;
             elem[j] = inode - 1; // intrepid files node index starts from 1 (apparently)
           }
@@ -171,7 +171,7 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 
 	vector<std::int8_t> pbflags; // boundary type
   pbflags.reserve(n_vertices);
-	for (int i = 0; i<n_vertices; i++)
+	for ( size_t i = 0ul; i<n_vertices; i++)
 		pbflags.push_back(IRREGULAR_OUTSIDE);
 	vset.AddBFlags(pbflags.begin(), pbflags.end());
 	
@@ -353,7 +353,7 @@ void IntrepidInterface::RepairElementOrientations( VSet<3U>& vset ) const
      vector<uint32_t>  ids;
      size_t            repaired_elmts(0U);
    
-     for ( size_t elmt=0u; elmt<vset.Elements(); ++elmt )
+     for ( size_t elmt=0ul; elmt<vset.Elements(); ++elmt )
        if ( vset.ElementType(elmt) == ISOPARAMETRIC_LINEAR_TETRAHEDRON )
          {
             // initialising a tetrahedral element
@@ -369,10 +369,9 @@ void IntrepidInterface::RepairElementOrientations( VSet<3U>& vset ) const
             if ( tet.Volume() < 0. ) {
                 tet.CounterClockwiseNodes( ids );
                 // reassigning the nodes to the plist in opposite order (first getting the global node numbers
-                // TODO: global node number is stored, but might exceed range of uint32_t
                 for ( auto it=ids.begin(); it!=ids.end(); ++it ) (*it) = vset.Plist( elmt, (*it) );
                 size_t counter(0U);
-                for ( vector<int64_t>::iterator nit=vset.PlistBegin(elmt); nit!=vset.PlistEnd(elmt); ++nit )
+                for ( auto nit=vset.PlistBegin(elmt); nit!=vset.PlistEnd(elmt); ++nit )
                   (*nit) = ids[counter++];
                 repaired_elmts++;
               }

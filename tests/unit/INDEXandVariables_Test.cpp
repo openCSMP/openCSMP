@@ -34,7 +34,7 @@ void INDEXandVariables_Test::run()
     // Run Test for 3D Model constructed by ANSYS mesh reader
 	  string variables_filename = (string)(this->getName() + ".txt");
     VSet<2U>       vset;
-    ModelTopology  model_topo = test_Create_BoundarySplitBoundaryPatch( vset );
+    ModelTopology  model_topo = create_BoundarySplitBoundaryPatch( vset );
     const bool treat_domains_as_regions_and_use_regions_file_if_any{ false };
     Model m0( model_topo, vset, variables_filename.c_str(), treat_domains_as_regions_and_use_regions_file_if_any );
     m0.OutputToBinaryFile("INDEXandVariables_Test_BinaryModel");

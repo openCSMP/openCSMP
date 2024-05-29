@@ -215,8 +215,7 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
                                                  uint32_t adjacent_face_of_inner_element,
                                                  uint32_t adjacent_face_of_outer_element,
                                                  const LocalVariables& interface_variables,
-                                                 const IntegrationPointVariables& interface__ipoint_vars,
-                                                 const LocalVariables& node_variables );
+                                                 const IntegrationPointVariables& interface__ipoint_vars );
 
   /// creates face and assigns nodes and higher-dimensional neighbors @note the face neighbor element pointers are not assigned;
   Face<dim>* const AddFace( Element<dim>* const inner_parent, uint32_t inner_parent_face_id,

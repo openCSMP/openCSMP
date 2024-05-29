@@ -22,9 +22,9 @@ using namespace std;
 namespace csmp {
 
 /**
-    creates Mesh with a single quadratic quadrilateral
+    creates Mesh with 4 linear quadrilateral elements
 */
-VSet<2U> test_CreateVSet()
+VSet<2U> create_Quadrilateral_VSet()
 {
     const size_t iNodes(9);
     const size_t iNrOfElements(4);
@@ -35,10 +35,11 @@ VSet<2U> test_CreateVSet()
                     iso_quadrilateral.ElementType(), iNodes, iNrOfElements );
   	
   	//define nodes
-  	std::deque<double> px(iNodes);
-  	std::deque<double> py(iNodes);
-  	std::deque<double> pz(iNodes);
+  	deque<double> px(iNodes);
+  	deque<double> py(iNodes);
+  	deque<double> pz(iNodes);
   
+    // xy plane, left-right numbering from bottom y to top y
   	px[0]=0.;py[0]=0.;pz[0]=0.;
   	px[1]=1.;py[1]=0.;pz[1]=0.;
   	px[2]=2.;py[2]=0.;pz[2]=0.;
@@ -53,8 +54,8 @@ VSet<2U> test_CreateVSet()
   	vset.AddXYZ( px, py, pz );
     
     //define elements
-    std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
-    std::vector<int64_t> vecNodes(4);
+    deque<vector<size_t> > deqElements(iNrOfElements);
+    vector<size_t> vecNodes(4);
     //element 0
     vecNodes[0]=0;
     vecNodes[1]=1;
@@ -83,8 +84,8 @@ VSet<2U> test_CreateVSet()
     vset.AddPlist( deqElements.begin(),deqElements.end());
 
     //define neighbors
-    std::deque<std::vector<int64_t> > deqElementNeighbors(iNrOfElements);
-    std::vector<int64_t> vecNeighbors(4);
+    deque<vector<int64_t> > deqElementNeighbors(iNrOfElements);
+    vector<int64_t> vecNeighbors(4);
     //element 0
     vecNeighbors[0]=BOTTOM_OUTSIDE;
     vecNeighbors[1]=2;
@@ -125,7 +126,8 @@ VSet<2U> test_CreateVSet()
     vset.Out();
     
     return vset;
-}
+    
+} // end create_QuadraticQUadrilateral_VSet
 
 
 
@@ -134,7 +136,7 @@ VSet<2U> test_CreateVSet()
 
 
 
-void test_Create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed )
+void create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed )
 {    
   	IsoparametricLinearQuadrilateral iso_quad;
   	
@@ -157,9 +159,9 @@ void test_Create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bS
 
   	//-----------------------NODES
   	//define nodes
-  	std::deque<double> px(nodes);
-  	std::deque<double> py(nodes);
-  	std::deque<double> pz(nodes);
+  	deque<double> px(nodes);
+  	deque<double> py(nodes);
+  	deque<double> pz(nodes);
   	
   	px[0]=0;                py[0]=0;                  pz[0]=0;
   	px[1]=length_of_sides;  py[1]=0;                  pz[1]=0;
@@ -167,7 +169,7 @@ void test_Create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bS
   	px[3]=0;                py[3]=length_of_sides;    pz[3]=0;
   	
   	if( bSkewed )
-  	 for (auto i = 0; i < 8; i++)
+  	 for ( unsigned int i = 0; i < 8; i++)
   	  {
   	    px[i]+= (rand()%2000)*PERTURBATION;
   	    py[i]+= (rand()%2000)*PERTURBATION;
@@ -179,7 +181,7 @@ void test_Create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bS
   	
   	//--------------------------ELEMENTS
     //define hexahedron elements (elements 0->26), assign nodes per element
-    std::deque< std::vector<int64_t> > deqElements(1);
+    deque< vector<size_t> > deqElements(1);
     deqElements[0].resize(nodes);
   	 
     deqElements[0][0]= 1;
@@ -190,7 +192,7 @@ void test_Create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bS
 
      //---------------------------------NEIGHBORS
     //define neighbors
-    std::deque<std::vector<int64_t> > deqElementNeighbors(1);
+    deque<vector<int64_t> > deqElementNeighbors(1);
     deqElementNeighbors[0].resize(4);
   	deqElementNeighbors[0][0]= BACK_OUTSIDE;
   	deqElementNeighbors[0][1]= BOTTOM_OUTSIDE;
@@ -242,11 +244,11 @@ ModelTopology  test_CreateSimplestPolyElement2DModel( VSet<2U>& vset )
 
   	//-----------------------NODES (6)
   	//define node coordinates
-  	std::deque<double> px = { 0.,1.,2.,0.,1.,2. };
+  	deque<double> px = { 0.,1.,2.,0.,1.,2. };
     assert( px.size() == n_nodes );
-  	std::deque<double> py = { 1.,1.,1., 0.,0.,0. };
+  	deque<double> py = { 1.,1.,1., 0.,0.,0. };
     assert( py.size() == n_nodes );
-  	std::deque<double> pz(n_nodes,0.);
+  	deque<double> pz(n_nodes,0.);
   	  	  	
   	vset.AddXYZ( px, py, pz );
   	
@@ -259,7 +261,7 @@ ModelTopology  test_CreateSimplestPolyElement2DModel( VSet<2U>& vset )
 
   	//--------------------------ELEMENTS
   	// define nodes per element
-    deque< vector<int64_t> > plist = { {0,3,1}, {1,3,4}, {1,4,5,2}, {1,3}, // 4 elements
+    deque< vector<size_t> > plist = { {0,3,1}, {1,3,4}, {1,4,5,2}, {1,3}, // 4 elements
                                        {3,4}, {4,5}, {5,2}, {2,1}, {1,0}, {0,3} }; // 17 faces
     assert( plist.size() == n_cells );
     vset.AddPlist( plist.begin(), plist.end() );
@@ -326,7 +328,7 @@ ModelTopology  test_CreateSimplestPolyElement2DModel( VSet<2U>& vset )
 
 
 
-void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
+void create_TrianglePatch_VSet( VSet<2U>& vset )
 {    
     //--------------------------ELEMENT TYPES
   	//add element types
@@ -341,9 +343,9 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
 
   	//-----------------------NODES
   	//define nodes
-  	std::deque<double> px(n_nodes);
-  	std::deque<double> py(n_nodes);
-  	std::deque<double> pz(n_nodes);
+  	deque<double> px(n_nodes);
+  	deque<double> py(n_nodes);
+  	deque<double> pz(n_nodes);
   	
   	px[0]=0.;                 py[0]=100.;               pz[0]=0.;
   	px[1]=52.73842909594504;  py[1]=100.;               pz[1]=0.;
@@ -361,8 +363,8 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
   	
   	//--------------------------ELEMENTS
   	// define nodes per element
-  	vector<int64_t> node_dummy(3);
-    std::deque< std::vector<int64_t> > deqElements(10,node_dummy);
+  	vector<size_t> node_dummy(3);
+    deque< vector<size_t> > deqElements(10,node_dummy);
     deqElements[0][0]= 0;
     deqElements[0][1]= 3;
     deqElements[0][2]= 1;
@@ -399,7 +401,7 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
      //---------------------------------NEIGHBORS
     //define neighbors per element
   	vector<int64_t> nbor_dummy(3);
-    std::deque<std::vector<int64_t> > deqElementNeighbors(10,nbor_dummy);
+    deque<vector<int64_t> > deqElementNeighbors(10,nbor_dummy);
     deqElementNeighbors[0][0]= 1;
     deqElementNeighbors[0][1]= TOP_OUTSIDE;
     deqElementNeighbors[0][2]= 2;
@@ -447,7 +449,7 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
     
     vset.Out();
     
-} // end test_Create_TrianglePatch_VSet
+} // end create_TrianglePatch_VSet
 
 
 
@@ -466,7 +468,7 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
         @author SKM
         @date 1/10/2021
 */
-ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
+ModelTopology create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 {
     //--------------------------ELEMENT TYPES
   	//add element types
@@ -497,10 +499,10 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 
   	//-----------------------NODES
   	//define node coordinates
-  	std::deque<double> px(nodes);
-  	std::deque<double> py(nodes);
-  	std::deque<double> pz(nodes,0.);
-  	std::deque<int8_t> bflags(nodes,NOT), gflags(nodes,MESH_VERTEX);
+  	deque<double> px(nodes);
+  	deque<double> py(nodes);
+  	deque<double> pz(nodes,0.);
+  	deque<int8_t> bflags(nodes,NOT), gflags(nodes,MESH_VERTEX);
   	
   	px[0]=0.;    py[0]=5.;    bflags[0] = CNR4;       gflags[0] = EXTERIOR_POINT;
   	px[1]=2.;    py[1]=5.;    bflags[1] = TOP;        gflags[1] = EXTERIOR_LINE;
@@ -539,7 +541,7 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 
   	//--------------------------ELEMENTS
   	// define nodes per element
-    std::deque< std::vector<int64_t> > deqElements(45);
+    deque< vector<size_t> > deqElements(45);
     deqElements[0]  = { 1, 5, 6 };
     deqElements[1]  = { 0, 4, 5 };
     deqElements[2]  = { 0, 5, 1 };
@@ -590,7 +592,7 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 
      //---------------------------------NEIGHBORS
     //define neighbors per element
-    std::deque<std::vector<int64_t> > deqElementNeighbors(45);
+    deque<vector<int64_t> > deqElementNeighbors(45);
     deqElementNeighbors[0]  = { 3, 4, 2 };
     deqElementNeighbors[1]  = { 7, 2, LEFT };
     deqElementNeighbors[2]  = { 0, TOP, 1 };
@@ -642,7 +644,7 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
 
     // creating a matching model topology
-    ModelTopology mesh_topology( "test_Create_MeshPatchWithLineElements_VSet", true );
+    ModelTopology mesh_topology( "create_MeshPatchWithLineElements_VSet", true );
     // all surface elements are "MATRIX"
     mesh_topology.AddDomain( "MATRIX", set<string>{"ISOPARAMETRIC_LINEAR_TRIANGLE", "ISOPARAMETRIC_LINEAR_QUADRILATERAL"},
                               vector<size_t>{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24} );
@@ -726,7 +728,7 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     
     return mesh_topology;
     
-} // end test_Create_MeshPatchWithLineElements_VSet
+} // end create_MeshPatchWithLineElements_VSet
 
 
 
@@ -735,7 +737,7 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 
 
 /// model  SPLIT22_BASIC  with box boundaries (Faces) and one through-going and one internal crossing split boundary
-ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
+ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
  {
     //--------------------------ELEMENT TYPES
   	//add element types
@@ -764,11 +766,11 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
 
   	//-----------------------NODES (35)
   	//define node coordinates
-  	std::deque<double> px = { 0,1,3,4.5, 0,1,3,4.5, 0,1.5, 0,2,2,3,4.5, 0,1.4,2.4,2.4,3.5,4.5, 0,1.4,2.4,2.4,3.5,4.5, 0,1.5,3,4.5, 0,1.5,3,4.5 };
+  	deque<double> px = { 0,1,3,4.5, 0,1,3,4.5, 0,1.5, 0,2,2,3,4.5, 0,1.4,2.4,2.4,3.5,4.5, 0,1.4,2.4,2.4,3.5,4.5, 0,1.5,3,4.5, 0,1.5,3,4.5 };
     assert( px.size() == n_nodes );
-  	std::deque<double> py = { 7,7,7,7, 5.5,5.5,5.5,5.5, 4.5,4.5, 3.5,3.5,3.5,3.5,3.5, 2.5,2.3,2.2,2.2,2.1,2, 2.5,2.3,2.2,2.2,2.1,2, 1,1,1,1, 0,0,0,0 };
+  	deque<double> py = { 7,7,7,7, 5.5,5.5,5.5,5.5, 4.5,4.5, 3.5,3.5,3.5,3.5,3.5, 2.5,2.3,2.2,2.2,2.1,2, 2.5,2.3,2.2,2.2,2.1,2, 1,1,1,1, 0,0,0,0 };
     assert( py.size() == n_nodes );
-  	std::deque<double> pz(n_nodes,0.);
+  	deque<double> pz(n_nodes,0.);
   	  	  	
   	vset.AddXYZ( px, py, pz );
   	
@@ -790,7 +792,7 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
 
   	//--------------------------ELEMENTS
   	// define nodes per element
-    deque< vector<int64_t> > plist = { {0,4,5,1}, {1,5,6,2}, {2,6,7,3}, {4,8,9,5}, {5,9,6}, {8,10,11,9}, {9,12,13,6}, {6,13,14,7}, {10,15,16,11}, {11,16,17}, // 19 elements
+    deque< vector<size_t> >  plist = { {0,4,5,1}, {1,5,6,2}, {2,6,7,3}, {4,8,9,5}, {5,9,6}, {8,10,11,9}, {9,12,13,6}, {6,13,14,7}, {10,15,16,11}, {11,16,17}, // 19 elements
                                        {12,18,19,13}, {13,19,20,14}, {21,27,28,22}, {28,29,23,22}, {24,29,25}, {25,29,30,26}, {27,31,32,28}, {28,32,33,29}, {29,33,34,30},
                                        {31,32}, {32,33}, {33,34}, {34,30}, {30,26}, {20,14}, {14,7}, {7,3}, {3,2}, {2,1}, {1,0}, {0,4}, {4,8}, {8,10}, {10,15}, {21,27}, {27,31}, // 17 faces
                                        {15,16,22,21}, {16,17,23,22}, {18,19,25,24}, {19,20,26,25}, {11,9,9,12}, {17,11,12,18}, {29,23,24,29} }; // 7 interfaces
@@ -867,13 +869,13 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     
     return mesh_topology;
     
- } // end test_Create_BoundarySplitBoundaryPatch
+ } // end create_BoundarySplitBoundaryPatch
 
 
 
 
-void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
-{    
+void create_One_Hexahedra_VSet( VSet<3U>& vset, bool bSkewed )
+{
   	IsoparametricLinearHexahedron iso_hexahedron;
   	
   	//elements hexahedrons
@@ -895,9 +897,9 @@ void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
 
   	//-----------------------NODES
   	//define nodes
-  	std::deque<double> px(nodes);
-  	std::deque<double> py(nodes);
-  	std::deque<double> pz(nodes);
+  	deque<double> px(nodes);
+  	deque<double> py(nodes);
+  	deque<double> pz(nodes);
   	
   	px[0]=0;py[0]=0;pz[0]=0;
   	px[1]=1;py[1]=0;pz[1]=0;
@@ -909,7 +911,7 @@ void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   	px[7]=0;py[7]=1;pz[7]=1;
   	
   	if( bSkewed )
-  	 for (auto i = 0; i < 8; i++)
+  	 for ( unsigned int i = 0; i < 8; i++)
   	  {
   	    px[i]+= (rand()%2000)*PERTURBATION;
   	    py[i]+= (rand()%2000)*PERTURBATION;
@@ -922,7 +924,7 @@ void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   	
   	//--------------------------ELEMENTS
     //define hexahedron elements (elements 0->26), assign nodes per element
-    std::deque<std::vector<int64_t> > deqElements(1);
+    deque<vector<size_t> > deqElements(1);
     deqElements[0].resize(8);
   	 
     deqElements[0][0]= 1;
@@ -937,7 +939,7 @@ void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
 
      //---------------------------------NEIGHBORS
     //define neighbors
-    std::deque<std::vector<int64_t> > deqElementNeighbors(1);
+    deque<vector<int64_t> > deqElementNeighbors(1);
     deqElementNeighbors[0].resize(6);
   	deqElementNeighbors[0][0]= BACK_OUTSIDE;
   	deqElementNeighbors[0][1]= BOTTOM_OUTSIDE;
@@ -972,7 +974,7 @@ void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
 
 
 
-void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
+void create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
 {
     const size_t iNrOfElements(27);
     
@@ -997,9 +999,9 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
 
   	//-----------------------NODES
   	//define nodes
-  	std::deque<double> px(nodes);
-  	std::deque<double> py(nodes);
-  	std::deque<double> pz(nodes);
+  	deque<double> px(nodes);
+  	deque<double> py(nodes);
+  	deque<double> pz(nodes);
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j{0U}; j < iDim_j; j++) //y
@@ -1028,10 +1030,10 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
     
     //--------------------------ELEMENTS
     //define hexahedron elements (elements 0->26), assign nodes per element
-    std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
-    for(size_t k = 0U; k < iDim_k-1; k++) //z
+    deque<vector<size_t> > deqElements(iNrOfElements);
+    for(size_t k{0U}; k < iDim_k-1; k++) //z
   	for(size_t j{0U}; j < iDim_j-1; j++) //y
-  	for(auto i{0U}; i < iDim_i-1; i++) //x
+  	for(size_t i{0U}; i < iDim_i-1; i++) //x
   	{
   	 const size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
       
@@ -1052,7 +1054,7 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
     //---------------------------------NEIGHBORS
     //define neighbors
     const int64_t   iDim_i_(iDim_i), iDim_j_(iDim_j), iDim_k_(iDim_k), iDim_km1_2_(iDim_km1_2);
-    std::deque<std::vector<int64_t> > deqElementNeighbors(iNrOfElements);
+    deque<vector<int64_t> > deqElementNeighbors(iNrOfElements);
     for( int64_t  k = 0; k < iDim_k_-1; k++) //z
   	for( int64_t  j = 0; j < iDim_j_-1; j++) //y
   	for( int64_t  i = 0; i < iDim_i_-1; i++) //x
@@ -1177,12 +1179,12 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
 
 
 
-void test_Create_Square_VSet( VSet<2U>& vset, size_t size_sides, double dimension, bool bSkewed )
+void create_Square_VSet( VSet<2U>& vset, int size_sides, double dimension, bool bSkewed )
 {
   if(size_sides==1)
-    test_Create_One_Square_VSet( vset, dimension, bSkewed );
+    create_One_Square_VSet( vset, dimension, bSkewed );
   else
-    test_Create_SlitRectangle_VSet( vset, size_sides, size_sides,dimension,dimension, 0, bSkewed );
+    create_SlitRectangle_VSet( vset, size_sides, size_sides, dimension, dimension, 0, bSkewed );
 }
 
 
@@ -1192,8 +1194,8 @@ void test_Create_Square_VSet( VSet<2U>& vset, size_t size_sides, double dimensio
 
 
 
-void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t y_dimension, 
-                                     double x_length, double y_length, size_t depth_of_slit, bool bSkewed )
+void create_SlitRectangle_VSet( VSet<2U>& vset, int x_dimension, int y_dimension,
+                                double x_length, double y_length, int depth_of_slit, bool bSkewed )
 {
   assert(x_dimension>0);
   assert(y_dimension>0);
@@ -1204,15 +1206,15 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
   IsoparametricLinearQuadrilateral iso_quadrilateral;
   	
   //node dimensions of box
-  size_t iDim_i(x_dimension+1U);//j - width
-  size_t iDim_j(y_dimension+1U);//i - length
+  long iDim_i(x_dimension+1);//j - width
+  long iDim_j(y_dimension+1);//i - length
   	
   size_t iNrOfElements( (iDim_i-1)*(iDim_j-1) );
     
   //elements hexahedrons
   size_t nodes(iDim_i*iDim_j);  //number of nodes: 64 on a 4x4x4 grid
   
-  cout <<"\ntest_Create_SlitRectangle_VSet:\n";
+  cout <<"\ncreate_SlitRectangle_VSet:\n";
   cout << "\n\tDim i: " << iDim_i << " Dim j: " << iDim_j << " nr of elements: " << iNrOfElements << " nodes: " << nodes;
      
   //------------------------CREATE VSET
@@ -1224,15 +1226,15 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
 
   	//-----------------------NODES
   	//define nodes
-  	std::deque<double> px(nodes);
-  	std::deque<double> py(nodes);
-  	std::deque<double> pz(nodes);
+  	deque<double> px(nodes);
+  	deque<double> py(nodes);
+  	deque<double> pz(nodes);
   
   	double delta_x = x_length/static_cast<double>(x_dimension);
   	double delta_y = y_length/static_cast<double>(y_dimension);
   	
-  	for(size_t j{0U}; j < iDim_j; j++) //y
-  	for(auto i{0U}; i < iDim_i; i++) //x
+  	for(long j{0U}; j < iDim_j; j++) //y
+  	for(long i{0U}; i < iDim_i; i++) //x
   	{
   	  if(bSkewed)
   	  {
@@ -1250,9 +1252,9 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
   	
     //--------------------------ELEMENTS
     //define quad elements (elements 0->26), assign nodes per element
-    std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
+    deque<vector<size_t> > deqElements(iNrOfElements);
     for(size_t j{0U}; j < iDim_j-1; j++) //y
-  	for(auto i{0U}; i < iDim_i-1; i++) //x
+  	for(size_t i{0U}; i < iDim_i-1; i++) //x
   	{
   	 const size_t iElement((iDim_i-1)*j+i);
       
@@ -1267,9 +1269,9 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
     //---------------------------------NEIGHBORS
     //define neighbors
     const int64_t   iDim_i_(iDim_i), iDim_j_(iDim_j);
-    std::deque<std::vector<int64_t> > deqElementNeighbors(iNrOfElements);
-    for( long j = 0; j < iDim_j_-1; j++ ) //y
-  	for( long i = 0; i < iDim_i_-1; i++ ) //x
+    deque<vector<int64_t> > deqElementNeighbors(iNrOfElements);
+    for( int64_t j = 0; j < iDim_j_-1; j++ ) //y
+  	for( int64_t i = 0; i < iDim_i_-1; i++ ) //x
   	{
   	 const size_t iElement((iDim_i-1)*j+i);
      
@@ -1303,7 +1305,7 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
     //nodes at edges:
   	//nodes at faces:
   	for(size_t j{0U}; j < iDim_j; j++) //y
-  	for(auto i{0U}; i < iDim_i; i++) //x
+  	for(size_t i{0U}; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -1439,8 +1441,10 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
     Creates:
     - 32 elements (26 hex + 6 pyramids)
     - 64 nodes
+    
+    @test
 */
-void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
+void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 {
     const int iNrOfElements(32/*26 hexahedrons + 6 pyramids*/);
     
@@ -1499,9 +1503,9 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     
   	//-----------------------NODES
   	//define nodes
-  	std::deque<double> px(nodes);
-  	std::deque<double> py(nodes);
-  	std::deque<double> pz(nodes);
+  	deque<double> px(nodes);
+  	deque<double> py(nodes);
+  	deque<double> pz(nodes);
   
   	for( unsigned int k{0U}; k < iDim_k; k++ ) //z
   	for( unsigned int j{0U}; j < iDim_j; j++ ) //y
@@ -1534,7 +1538,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     
     //--------------------------ELEMENTS
     //define hexahedron elements (elements 0->31), assign nodes per element
-    std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
+    deque<vector<size_t> > deqElements(iNrOfElements);
     for( unsigned int k{0U}; k < iDim_k-1; k++ ) //z
   	for( unsigned int j{0U}; j < iDim_j-1; j++ ) //y
   	for( unsigned int i{0U}; i < iDim_i-1; i++ ) //x
@@ -1560,12 +1564,12 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	
   	int node_center(64);
     //element 26, assign nodes per element
-    std::vector<int64_t> vecNodes(5);
+    vector<size_t> vecNodes(5);
     vecNodes[0]= 1+ 21;
     vecNodes[1]= 1+ 22;
     vecNodes[2]= 1+ 26;
     vecNodes[3]= 1+ 25;
-    vecNodes[4]= 1+ node_center;
+    vecNodes[4]= 1U + node_center;
     deqElements[26]=vecNodes;
 
     //element 27
@@ -1613,7 +1617,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     //---------------------------------NEIGHBORS
     const int   iDim_i_(iDim_i), iDim_j_(iDim_j), iDim_k_(iDim_k);
     //define neighbors
-    std::deque<std::vector<int64_t> >  deqElementNeighbors(iNrOfElements);
+    deque<vector<int64_t> >  deqElementNeighbors(iNrOfElements);
     for( unsigned int k{0U}; k < iDim_k_-1; k++ ) //z
   	for( unsigned int j{0U}; j < iDim_j_-1; j++ ) //y
   	for( unsigned int i{0U}; i < iDim_i_-1; i++ ) //x
@@ -1637,27 +1641,27 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
      iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*(j-1)+i;
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;
-     deqElementNeighbors[iElement][1]= (j==0) ?BOTTOM_OUTSIDE:iNeighbor;
+     deqElementNeighbors[iElement][1]= (j==0) ? BOTTOM_OUTSIDE : iNeighbor;
      //face 2
      iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i+1;
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;     
-     deqElementNeighbors[iElement][2]= (i==iDim_i_-2) ?RIGHT_OUTSIDE:iNeighbor;
+     deqElementNeighbors[iElement][2]= (i==iDim_i_-2) ? RIGHT_OUTSIDE : iNeighbor;
      //face 3
      iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*(j+1)+i;
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;     
-     deqElementNeighbors[iElement][3]= (j==iDim_j_-2) ?TOP_OUTSIDE:iNeighbor;
+     deqElementNeighbors[iElement][3]= (j==iDim_j_-2) ? TOP_OUTSIDE : iNeighbor;
      //face 4
      iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+(i-1);
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;     
-     deqElementNeighbors[iElement][4]= (i==0) ?LEFT_OUTSIDE:iNeighbor;
+     deqElementNeighbors[iElement][4]= (i==0) ? LEFT_OUTSIDE : iNeighbor;
      //face 5
      iNeighbor = 1+ iDim_km1_2*(k+1)+(iDim_j-1)*j+i;
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;     
-     deqElementNeighbors[iElement][5]= (k==iDim_k_-2) ?FRONT_OUTSIDE:iNeighbor;
+     deqElementNeighbors[iElement][5]= (k==iDim_k_-2) ? FRONT_OUTSIDE : iNeighbor;
   
     }
     
@@ -1682,7 +1686,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     deqElementNeighbors[15][1]=1+29;
     
     //pyramid neighbors are:
-    std::vector<int64_t> vecNeighbors(5);
+    vector<int64_t> vecNeighbors(5);
     
     //element 26
     vecNeighbors[0]=1+27;
@@ -1739,7 +1743,8 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	//nodes at corners:
     //nodes at edges:
   	//nodes at faces:
-  	for(size_t k = 0U; k < iDim_k; k++) //z
+    // tested: SKM 27/5/2024
+  	for(size_t k{0U}; k < iDim_k; k++) //z
   	for(size_t j{0U}; j < iDim_j; j++) //y
   	for(auto i{0U}; i < iDim_i; i++) //x
   	{
@@ -1822,9 +1827,10 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 
     vset.EstablishZeroBasedNumbering();
+    
     // vset.Out();
-}
-
+    
+} // end create_Pyramid_Hexa_VSet
 
 
 
@@ -1843,7 +1849,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     
     @note model comes with the correct box boundary flags.
 */
-void test_Create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
+void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(30/*24 hexahedrons + 6 prisms*/);
     
@@ -1919,13 +1925,13 @@ void test_Create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     
   	//-----------------------NODES
   	//define nodes
-  	std::deque<double> px(nodes);
-  	std::deque<double> py(nodes);
-  	std::deque<double> pz(nodes);
+  	deque<double> px(nodes);
+  	deque<double> py(nodes);
+  	deque<double> pz(nodes);
   
-  	for(size_t k = 0U; k < iDim_k; k++) //z
-  	for(size_t j{0U}; j < iDim_j; j++) //y
-  	for(auto i{0U}; i < iDim_i; i++) //x
+  	for(size_t k{0UL}; k < iDim_k; k++) //z
+  	for(size_t j{0UL}; j < iDim_j; j++) //y
+  	for(size_t i{0UL}; i < iDim_i; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
 //  	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -1951,7 +1957,7 @@ void test_Create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     
     //--------------------------ELEMENTS
     //define hexahedron elements (elements 0->26), assign nodes per element
-    std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
+    deque<vector<size_t> > deqElements(iNrOfElements);
     
     iElement = 0;
     for(size_t k{0UL}; k < iDim_k-1; k++) //z
@@ -2013,7 +2019,7 @@ void test_Create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     //---------------------------------NEIGHBORS
     //define neighbors
     iElement = 0;
-    std::deque<std::vector<int64_t> > deqElementNeighbors(iNrOfElements);
+    deque<vector<int64_t> > deqElementNeighbors(iNrOfElements);
     deqElementNeighbors[0].resize(6);
     deqElementNeighbors[0][0] = BOTTOM_OUTSIDE;
     deqElementNeighbors[0][1] = FRONT_OUTSIDE;
@@ -2207,7 +2213,7 @@ void test_Create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     deqElementNeighbors[29][5] = TOP_OUTSIDE;
     
     //prism neighbors are:
-    std::vector<int64_t> vecNeighbors(5);
+    vector<int64_t> vecNeighbors(5);
     
     //element 4
     vecNeighbors[0]=BOTTOM_OUTSIDE;
@@ -2256,14 +2262,86 @@ void test_Create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     vecNeighbors[3]=1+26;
     vecNeighbors[4]=TOP_OUTSIDE;
     deqElementNeighbors[25]=vecNeighbors;
-
-    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
+    
+    // SKM adjustment according to CSMP_FEM_conventions.pdf (27/5/24)
+    // (assuming that the base plane of the hex is the xz plane)
+    deque<vector<int64_t> >    // first vertical plane (z=0)
+                               // --------------------------
+    deqElementNeighborsSKM = { {BOTTOM, 10, 1, BACK, LEFT, 3},   //  0
+                               {BOTTOM, 11, 2, BACK, 0, 4},      //  1
+                               {BOTTOM, 12, RIGHT, BACK, 1, 6},  //  2
+                               // row 2(back)
+                               {0,      13, 14, BACK, LEFT, 7},  //  3
+                               // prisms (elemts 4, 5)
+                               {BACK, 3, 1, 5, 14},              //  4
+                               {BACK, 4, 6, 8, 15},              //  5
+                               // hexahedra
+                               {2,  16, RIGHT, BACK, 5, 9},      //  6
+                               // top row
+                               {3, 17, 8, BACK, LEFT, TOP},      //  7
+                               {5, 18, 9, BACK, 7, TOP},         //  8
+                               {6, 19, RIGHT, BACK, 8, TOP},     //  9  (10 elmts because one hex is plit into 2 prisms)
+                               // ---------------------------
+                               // second plane (middle layer)
+                               // ---------------------------
+                               {BOTTOM, 20, 11, 0, LEFT, 13},    // 10
+                               {BOTTOM, 21, 12, 1, 10, 14},      // 11
+                               {BOTTOM, 22, RIGHT, 2, 11, 16},   // 12
+                               // middle row
+                               {10, 23, 14, 3, LEFT, 17},        // 13
+                               // prims 14, 15
+                               {4, 13, 11, 15, 24},              // 14
+                               {5, 14, 16, 18, 25},              // 14
+                               // ----------------
+                               {12, 26, RIGHT, 6, 15, 19},       // 16
+                               // top row (middle layer)
+                               {13, 27, 18, 7, LEFT, TOP},       // 17
+                               {15, 28, 19, 8, 17, TOP},         // 18
+                               {16, 29, RIGHT, 9, 18, TOP},      // 19
+                               // -------------------
+                               // third plane (front)
+                               // -------------------
+                               {BOTTOM, FRONT, 21, 10, LEFT, 23},
+                               {BOTTOM, FRONT, 22, 11, 20, 24},
+                               {BOTTOM, FRONT, RIGHT, 12, 21, 26},
+                               // row 2
+                               {20, FRONT, 24, 13, LEFT, 27},
+                               // prism elements 24, 25
+                               {14, 23, 21, 25, FRONT},
+                               {15, 24, 26, 28, FRONT},
+                               // -------------------
+                               {22, FRONT, RIGHT, 16, 25, 29},
+                               // top row
+                               {23, FRONT, 28, 17, LEFT, TOP},
+                               {25, FRONT, 29, 18, 27, TOP},
+                               {26, FRONT, RIGHT, 19, 28, TOP} };
+                               
+    // modify neighbor sequence because in Adriana's labelling the XY plane is the base plane of the hex
+    for ( auto& eit : deqElementNeighborsSKM ) {
+         // copy current entry
+         vector<int64_t> swapvec = eit;
+         // if it refers to hex, write it out in new order
+         if ( swapvec.size() == 6 ) {
+              eit[0] = swapvec[3];
+              eit[1] = swapvec[0];
+              // eit[2] = no change required
+              eit[3] = swapvec[5];
+              // eit[4] = no change required
+              eit[5] = swapvec[1];
+           }
+      }
+    
+    assert( deqElementNeighborsSKM.size() == deqElementNeighbors.size() );
+// SKM fix    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
+    vset.AddPfverts( deqElementNeighborsSKM.begin(), deqElementNeighborsSKM.end() );
   	
+    
   	//------------------------------------------NODE BOUNDARIES
   	//define node boundaries
   	//nodes at corners:
     //nodes at edges:
   	//nodes at faces:
+    // retested: SKM: 27/5/24
   	for(size_t k{0U}; k < iDim_k; k++) //z
   	for(size_t j{0U}; j < iDim_j; j++) //y
   	for(size_t i{0U}; i < iDim_i; i++) //x
@@ -2341,117 +2419,91 @@ void test_Create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
         vset.BFlag( iNode, bBoundary);
       }
   	}
-  	
-    // SKM fix
-    vector<int8_t> bflags(vset.Vertices(),NOT);
-    // overwriting with the boundary flags
-    // bottom
-    bflags[13] = BOTTOM;
-    bflags[17] = BOTTOM;
-    bflags[37] = BOTTOM;
-    bflags[39] = BOTTOM;
-    // right
-    bflags[21] = RIGHT;
-    bflags[27] = RIGHT;
-    bflags[41] = RIGHT;
-    bflags[43] = RIGHT;
-    // top
-    bflags[13] = TOP;
-    bflags[17] = TOP;
-    bflags[37] = TOP;
-    bflags[39] = TOP;
-    // left
-    bflags[14] = LEFT;
-    bflags[24] = LEFT;
-    bflags[38] = LEFT;
-    bflags[42] = LEFT;
-    // back
-    bflags[14] = BACK;
-    bflags[24] = BACK;
-    bflags[38] = BACK;
-    bflags[42] = BACK;
-    // front
-    bflags[50] = FRONT;
-    bflags[53] = FRONT;
-    bflags[56] = FRONT;
-    bflags[58] = FRONT;
-    // edges
-    bflags[12] = EDGE1;
-    bflags[36] = EDGE1;
-   
-    bflags[51] = EDGE2;
-    bflags[57] = EDGE2;
-   
-    bflags[31] = EDGE3;
-    bflags[45] = EDGE3;
-   
-    bflags[11] = EDGE4;
-    bflags[23] = EDGE4;
-   
-    bflags[12] = EDGE5;
-    bflags[36] = EDGE5;
-   
-    bflags[20] = EDGE6;
-    bflags[40] = EDGE6;
-   
-    bflags[35] = EDGE7;
-    bflags[47] = EDGE7;
-   
-    bflags[31] = EDGE8;
-    bflags[45] = EDGE8;
-   
-    bflags[49] = EDGE9;
-    bflags[52] = EDGE9;
-   
-    bflags[55] = EDGE10;
-    bflags[59] = EDGE10;
-   
-    bflags[60] = EDGE11;
-    bflags[62] = EDGE11;
-   
-    bflags[51] = EDGE12;
-    bflags[57] = EDGE12;
-    
-    // corners
-    bflags[8]  = CNR1;
-    bflags[18] = CNR2;
-    bflags[61] = CNR3;
-    bflags[29] = CNR4;
-    bflags[48] = CNR5;
-    bflags[54] = CNR6;
-    bflags[63] = CNR7;
-    bflags[61] = CNR8;
-    
-    // verification of boundary flags
-    for ( size_t i{0U}; i<vset.Vertices(); ++i ) {
-         if ( vset.BoundaryFlag(i) != bflags[i] )
-// original data were not correct:   cerr <<"\n\t"<< (int)vset.BoundaryFlag(i) <<" vs. "<< (int)bflags[i];
-         vset.BFlag( i, bflags[i] );
-      }
 
     vset.EstablishZeroBasedNumbering();
+    vset.ResizeNodes( 64 );
     
     // additional must haves
     vector<int32_t> pmtrl(vset.Elements(),1); // all the same material=1
     // fill( next(pmtrl.begin(),42), pmtrl.end(), 7 );
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
     
-//    vset.Out();
+            // element number
+    PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
+    elmt_nums.Reserve( vset.Elements() );
+    for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    vset.AddData( "element number", elmt_nums );
+    
+    cout <<"\n"<<"create_Prism_Hexa_VSet: model 'Prism_Hexa': "<< endl;
+    vset.Out();
 
-} // end test_Create_Prism_Hexa_VSet
-
-
-
-
-
-
-
-
-
+} // end create_Prism_Hexa_VSet
 
 
+/* FOR WHEN THE XZ PLANE IS THE BASE PLANE OF THE HEXAHEDRON
 
-void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
+    // SKM adjustment according to CSMP_FEM_conventions.pdf (27/5/24)
+    deque<vector<int64_t> >    // first vertical plane (z=0)
+                               // --------------------------
+    deqElementNeighborsSKM = { {BOTTOM, 10, 1, BACK, LEFT, 3},   //  0
+                               {BOTTOM, 11, 2, BACK, 0, 4},      //  1
+                               {BOTTOM, 12, RIGHT, BACK, 1, 6},  //  2
+                               // row 2(back)
+                               {0,      13, 14, BACK, LEFT, 7},  //  3
+                               // prisms (elemts 4, 5)
+                               {BACK, 3, 1, 5, 14},              //  4
+                               {BACK, 4, 6, 8, 15},              //  5
+                               // hexahedra
+                               {2,  16, RIGHT, BACK, 5, 9},      //  6
+                               // top row
+                               {3, 17, 8, BACK, LEFT, TOP},      //  7
+                               {5, 18, 9, BACK, 7, TOP},         //  8
+                               {6, 19, RIGHT, BACK, 8, TOP},     //  9  (10 elmts because one hex is plit into 2 prisms)
+                               // ---------------------------
+                               // second plane (middle layer)
+                               // ---------------------------
+                               {BOTTOM, 20, 11, 0, LEFT, 13},    // 10
+                               {BOTTOM, 21, 12, 1, 10, 14},      // 11
+                               {BOTTOM, 22, RIGHT, 2, 11, 16},   // 12
+                               // middle row
+                               {10, 23, 14, 3, LEFT, 17},        // 13
+                               // prims 14, 15
+                               {4, 13, 11, 15, 24},              // 14
+                               {5, 14, 16, 18, 25},              // 14
+                               // ----------------
+                               {12, 26, RIGHT, 6, 15, 19},       // 16
+                               // top row (middle layer)
+                               {13, 27, 18, 7, LEFT, TOP},       // 17
+                               {15, 28, 19, 8, 17, TOP},         // 18
+                               {16, 29, RIGHT, 9, 18, TOP},      // 19
+                               // -------------------
+                               // third plane (front)
+                               // -------------------
+                               {BOTTOM, FRONT, 21, 10, LEFT, 23},
+                               {BOTTOM, FRONT, 22, 11, 20, 24},
+                               {BOTTOM, FRONT, RIGHT, 12, 21, 26},
+                               // row 2
+                               {20, FRONT, 24, 13, LEFT, 27},
+                               // prism elements 24, 25
+                               {14, 23, 21, 25, FRONT},
+                               {15, 24, 26, 28, FRONT},
+                               // -------------------
+                               {22, FRONT, RIGHT, 16, 25, 29},
+                               // top row
+                               {23, FRONT, 28, 17, LEFT, TOP},
+                               {25, FRONT, 29, 18, 27, TOP},
+                               {26, FRONT, RIGHT, 19, 28, TOP} };
+*/
+
+
+
+
+
+
+
+
+
+void create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 {    
   	IsoparametricLinearPrism iso_prism;
   	
@@ -2474,9 +2526,9 @@ void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 
   	//-----------------------NODES
   	//define nodes
-  	std::deque<double> px(nodes);
-  	std::deque<double> py(nodes);
-  	std::deque<double> pz(nodes);
+  	deque<double> px(nodes);
+  	deque<double> py(nodes);
+  	deque<double> pz(nodes);
   	
   	px[0]=0;py[0]=0;pz[0]=0;
   	px[1]=1;py[1]=0;pz[1]=0;
@@ -2486,7 +2538,7 @@ void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	px[5]=1;py[5]=1;pz[5]=1;
   	
   	if( bSkewed )
-  	 for (auto i = 0; i < 6; i++)
+  	 for ( size_t i = 0ul; i < 6; i++)
   	  {
   	    px[i]+= (rand()%2000)*PERTURBATION;
   	    py[i]+= (rand()%2000)*PERTURBATION;
@@ -2499,7 +2551,7 @@ void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	
   	//--------------------------ELEMENTS
     //define prism element, assign nodes per element
-    std::deque<std::vector<int64_t> > deqElements(1);
+    deque<vector<size_t> > deqElements(1);
     deqElements[0].resize(6);
   	 
     deqElements[0][0]= 1;
@@ -2512,7 +2564,7 @@ void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 
      //---------------------------------NEIGHBORS
     //define neighbors
-    std::deque<std::vector<int64_t> > deqElementNeighbors(1);
+    deque<vector<int64_t> > deqElementNeighbors(1);
     deqElementNeighbors[0].resize(6);
   	deqElementNeighbors[0][0]= BACK_OUTSIDE;
   	deqElementNeighbors[0][1]= BOTTOM_OUTSIDE;
@@ -2543,7 +2595,7 @@ void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 
 
 
-void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
+void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(54/*prisms*/);
     
@@ -2568,9 +2620,9 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
     
   	//-----------------------NODES
   	//define nodes
-  	std::deque<double> px(nodes);
-  	std::deque<double> py(nodes);
-  	std::deque<double> pz(nodes);
+  	deque<double> px(nodes);
+  	deque<double> py(nodes);
+  	deque<double> pz(nodes);
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j{0U}; j < iDim_j; j++) //y
@@ -2603,7 +2655,7 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
 
     //define prism elements (elements 0->54), assign nodes per element
-    std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
+    deque<vector<size_t> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j{0U}; j < iDim_j-1; j++) //y
   	for(auto i{0U}; i < iDim_i-1; i++) //x
@@ -2636,7 +2688,7 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 
     //---------------------------------NEIGHBORS
     //define neighbors
-    std::deque<std::vector<int64_t> > deqElementNeighbors(iNrOfElements);
+    deque<vector<int64_t> > deqElementNeighbors(iNrOfElements);
     for(int64_t  k = 0U; k < iDim_k-1; k++) //z
   	for(int64_t  j{0U}; j < iDim_j-1; j++) //y
   	for(int64_t  i{0U}; i < iDim_i-1; i++) //x
@@ -2805,9 +2857,9 @@ void testCreateTetra_VSet( VSet<3U>& vset )
   	//-----------------------NODES
   	//define nodes
     const size_t n_nodes{8};
-  	std::deque<double> px(n_nodes);
-  	std::deque<double> py(n_nodes);
-  	std::deque<double> pz(n_nodes);
+  	deque<double> px(n_nodes);
+  	deque<double> py(n_nodes);
+  	deque<double> pz(n_nodes);
 
     // node coordinates
     px[0] =-1.0;
@@ -2858,7 +2910,7 @@ void testCreateTetra_VSet( VSet<3U>& vset )
 
     //--------------------------ELEMENTS ('plist')
     //define tetrahedral elements (1..6), assign nodes per element (see hexa decomposition)
-    deque<vector<int64_t> >  deqElements{ {0,1,3,4}, {4,1,3,5}, {4,5,3,7}, {1,2,3,6}, {3,1,6,5}, {5,6,3,7} };
+    deque<vector<size_t> >  deqElements{ {0,1,3,4}, {4,1,3,5}, {4,5,3,7}, {1,2,3,6}, {3,1,6,5}, {5,6,3,7} };
 
   	vset.AddPlist( deqElements.begin(),deqElements.end());
 
@@ -2873,6 +2925,7 @@ void testCreateTetra_VSet( VSet<3U>& vset )
     vector<int32_t> pmtrl( vset.Elements(), 1 );
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
     
+    cout <<"\n"<<"testCreateTetra_VSet: model 'Tetra': "<< endl;
     vset.Out();
 
  } // end testCreateTetra_VSet
@@ -2883,7 +2936,7 @@ void testCreateTetra_VSet( VSet<3U>& vset )
 
 
 
-void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
+void create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
 {
   	IsoparametricLinearPyramid iso_pyramid;
   	
@@ -2909,13 +2962,13 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
     
   	//-----------------------NODES
   	//define nodes
-  	std::deque<double> px(nodes);
-  	std::deque<double> py(nodes);
-  	std::deque<double> pz(nodes);
+  	deque<double> px(nodes);
+  	deque<double> py(nodes);
+  	deque<double> pz(nodes);
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j{0U}; j < iDim_j; j++) //y
-  	for(auto i{0U}; i < iDim_i; i++) //x
+  	for(size_t i{0U}; i < iDim_i; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
 //  	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -2962,10 +3015,10 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
   	
     //--------------------------ELEMENTS
     //define pyramid elements (elements 0->54), assign nodes per element
-    std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
-    for(size_t k = 0U; k < iDim_k-1; k++) //z
+    deque<vector<size_t> > deqElements(iNrOfElements);
+    for(size_t k{0U}; k < iDim_k-1; k++) //z
   	for(size_t j{0U}; j < iDim_j-1; j++) //y
-  	for(auto i{0U}; i < iDim_i-1; i++) //x
+  	for(size_t i{0U}; i < iDim_i-1; i++) //x
   	{
   	 //we have 6 pyramids per cell
   	 
@@ -3041,7 +3094,7 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
 
     //---------------------------------NEIGHBORS
     //define neighbors
-    std::deque<std::vector<int64_t> > deqElementNeighbors(iNrOfElements);
+    deque<vector<int64_t> > deqElementNeighbors(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j{0U}; j < iDim_j-1; j++) //y
   	for(auto i{0U}; i < iDim_i-1; i++) //x
@@ -3259,7 +3312,10 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
 
     vset.EstablishZeroBasedNumbering();
     
-} // end test_Create_Pyramid_VSet
+    cout <<"\n"<<"create_Pyramid_VSet: model 'Pyra_Hexa': "<< endl;
+    vset.Out();
+    
+} // end create_Pyramid_VSet
 
 
 
@@ -3270,7 +3326,7 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
       @author SKM
       @date 2/2/22
 */
-void test_Create_FracBox( ModelTopology& topology, VSet<3U>& vset )
+void create_FracBox( ModelTopology& topology, VSet<3U>& vset )
  {
     set<string> femTypes_matrix{"ISOSPARAMETRIC_LINEAR_TETRAHEDRON"},
                 femTypes_surfaces{"ISOSPARAMETRIC_LINEAR_TRIANGLE"},
@@ -3380,7 +3436,7 @@ deque<double> pz{5.69268,13.547,10,11.9315,10,7.98355,8.51612,10.1406,11.0563,9.
 vset.AddXYZ( px, py, pz );
 
 //'plist' nodes that make up the elements
-deque<vector<int64_t> >  plist( 1872 );
+deque<vector<size_t> >  plist( 1872 );
 	plist[0] = { 194, 193, 309, 192 };
 	plist[1] = { 210, 216, 305, 214 };
 	plist[2] = { 210, 217, 305, 216 };
@@ -7198,7 +7254,7 @@ deque<vector<int64_t> >  pfverts( 1872 );
     pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
   vset.AddData( "node number", node_nums );
 
-} // end test_Create_FracBox
+} // end create_FracBox
 
 
 
@@ -7210,7 +7266,7 @@ deque<vector<int64_t> >  pfverts( 1872 );
 //Initialize Model:
 
 VSet<3U>    mesh_container;
-test_Create_Pyramid_VSet(mesh_container, true);
+create_Pyramid_VSet(mesh_container, true);
 Model<3U>  model3D( mesh_container, true ); 
 model3D.AddFaceTopology();
 mesh_container.Erase();

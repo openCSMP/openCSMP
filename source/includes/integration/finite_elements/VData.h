@@ -207,10 +207,10 @@ class VData {
     uint32_t OrderOfFiniteElementInterpolationFunctions() const;
  
     /// set node index of element in serialised array of node ids; use pelmt to determine how many nodes there shoud be
-    void   Plist( size_t eidx, uint32_t node, int64_t val );
+    void   Plist( size_t eidx, uint32_t node, size_t val );
 
     /// get node index of element in serialised array of node ids; use pelmt to determine how many nodes there shoud be
-    int64_t  Plist( size_t eidx, uint32_t node ) const;
+    size_t  Plist( size_t eidx, uint32_t node ) const;
   
     /// set neighbor element index (or boundary identifier) for neighbor i of element eidx
     void   Pfvert( size_t eidx, uint32_t i, int64_t val );
@@ -240,15 +240,15 @@ class VData {
     void RemoveBflags();
 
     // iterators (for any element, face or interface)
-    std::deque<std::vector<int64_t> >::iterator    PlistBegin();
-    std::deque<std::vector<int64_t> >::iterator    PlistEnd();
-    std::deque<std::vector<int64_t> >::iterator    PfvertsBegin();
-    std::deque<std::vector<int64_t> >::iterator    PfvertsEnd();
+    std::deque<std::vector<size_t> >::iterator    PlistBegin();
+    std::deque<std::vector<size_t> >::iterator    PlistEnd();
+    std::deque<std::vector<int64_t> >::iterator   PfvertsBegin();
+    std::deque<std::vector<int64_t> >::iterator   PfvertsEnd();
 
-    std::vector<int64_t>::iterator                 PlistBegin( size_t eidx );
-    std::vector<int64_t>::iterator                 PlistEnd( size_t eidx );
-    std::vector<int64_t>::iterator                 PfvertsBegin( size_t eidx );
-    std::vector<int64_t>::iterator                 PfvertsEnd( size_t eidx );
+    std::vector<size_t>::iterator                 PlistBegin( size_t eidx );
+    std::vector<size_t>::iterator                 PlistEnd( size_t eidx );
+    std::vector<int64_t>::iterator                PfvertsBegin( size_t eidx );
+    std::vector<int64_t>::iterator                PfvertsEnd( size_t eidx );
 
     std::vector<std::int8_t>::iterator            BFlagsBegin();
     std::vector<std::int8_t>::iterator            BFlagsEnd();
@@ -262,20 +262,20 @@ class VData {
     std::vector<std::int8_t>::const_iterator      BREP_FlagsEnd() const;
 
     // const iterators
-    std::vector<int8_t>::const_iterator                 PelmtBegin() const;
-    std::vector<int8_t>::const_iterator                 PelmtEnd() const;
-    std::deque<std::vector<int64_t> >::const_iterator   PlistBegin() const;
-    std::deque<std::vector<int64_t> >::const_iterator   PlistEnd() const;
-    std::deque<std::vector<int64_t> >::const_iterator   PfvertsBegin() const;
-    std::deque<std::vector<int64_t> >::const_iterator   PfvertsEnd() const;
+    std::vector<int8_t>::const_iterator                PelmtBegin() const;
+    std::vector<int8_t>::const_iterator                PelmtEnd() const;
+    std::deque<std::vector<size_t> >::const_iterator   PlistBegin() const;
+    std::deque<std::vector<size_t> >::const_iterator   PlistEnd() const;
+    std::deque<std::vector<int64_t> >::const_iterator  PfvertsBegin() const;
+    std::deque<std::vector<int64_t> >::const_iterator  PfvertsEnd() const;
   
     /// checks whether pfverts, has right size and contains plausible information (no guarantees!)
     bool WithNeighbourConnectivity() const;
 
-    std::vector<int64_t>::const_iterator                PlistBegin( size_t eidx ) const;
-    std::vector<int64_t>::const_iterator                PlistEnd( size_t eidx ) const;
-    std::vector<int64_t>::const_iterator                PfvertsBegin( size_t eidx ) const;
-    std::vector<int64_t>::const_iterator                PfvertsEnd( size_t eidx ) const;
+    std::vector<size_t>::const_iterator                PlistBegin( size_t eidx ) const;
+    std::vector<size_t>::const_iterator                PlistEnd( size_t eidx ) const;
+    std::vector<int64_t>::const_iterator               PfvertsBegin( size_t eidx ) const;
+    std::vector<int64_t>::const_iterator               PfvertsEnd( size_t eidx ) const;
     
     // specific element, face and interface iterators
     /// iterator to CSMP finite element type of first face stored in mesh
@@ -285,17 +285,17 @@ class VData {
   
     // node iterators for subsets of the Plist
     /// Iterator to beginning of elements in the Plist
-    std::deque<std::vector<int64_t> >::const_iterator    PlistElmtsBegin() const;
+    std::deque<std::vector<size_t> >::const_iterator    PlistElmtsBegin() const;
     /// Iterator to end of elements in the Plist
-    std::deque<std::vector<int64_t> >::const_iterator    PlistElmtsEnd() const;
+    std::deque<std::vector<size_t> >::const_iterator    PlistElmtsEnd() const;
     /// Iterator to beginning of faces in the Plist
-    std::deque<std::vector<int64_t> >::const_iterator    PlistFacesBegin() const;
+    std::deque<std::vector<size_t> >::const_iterator    PlistFacesBegin() const;
     /// Iterator to end of faces in the Plist
-    std::deque<std::vector<int64_t> >::const_iterator    PlistFacesEnd() const;
+    std::deque<std::vector<size_t> >::const_iterator    PlistFacesEnd() const;
     /// Iterator to beginning of interfaces in the Plist
-    std::deque<std::vector<int64_t> >::const_iterator    PlistInterFacesBegin() const;
+    std::deque<std::vector<size_t> >::const_iterator    PlistInterFacesBegin() const;
     /// Iterator to end of interfaces in the Plist
-    std::deque<std::vector<int64_t> >::const_iterator    PlistInterFacesEnd() const;
+    std::deque<std::vector<size_t> >::const_iterator    PlistInterFacesEnd() const;
 
     /// neighbor iterator for first face in plist (use PlistInterFacesBegin() to find last one)
     std::deque<std::vector<int64_t> >::const_iterator    PfvertsFacesBegin() const;
@@ -317,7 +317,7 @@ class VData {
     /// computes neighbor element connectivity between line and surface elements, faces and interfaces and replaces existing connectivity with it
     void   EstablishElementConnectivity2D();
     
-    /// rebuilds 'pfverts' from scratch
+    /// rebuilds 'pfverts' from scratch, needs correect BOX_BOUNDARY flagging of nodes to get the non-neighbors right
     void   EstablishElementConnectivity3D(); // retested: OK 3/12/21 by SKM
     
     /// eliminates corner tetrahedra with all nodes on the model boundary; extra element degrees of freedom are introduced for boundary condition assignment
@@ -378,12 +378,12 @@ class VData {
     bool                               hybrid_mesh_;      ///< mesh that consists of different element types
     std::vector<double>                px, py, pz;        ///< node coordinates
     std::vector<int8_t>                pelmt;             ///< CSMP element type info, needed to read plist & pfverts
-    std::deque<std::vector<int64_t> >  plist;             ///< nodes of each element, face and interface in that order
+    std::deque<std::vector<size_t> >   plist;             ///< nodes of each element, face and interface in that order
     std::deque<std::vector<int64_t> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
     std::vector<std::int8_t>           bflags;            ///< int_8 enumeration flags for those nodes that lie on model boundaries
     std::vector<std::int8_t>           gflags_;           ///< int_8 enumeration flags distinguishing mesh nodes that contribute to the model topology / geometry
-    int64_t                            first_face_;       ///< faces come after elements; if none this is equal to elements
-    int64_t                            first_interface_;  ///< interfaces come after faces; if none this is equal to elements
+    size_t                             first_face_;       ///< faces come after elements; if none this is equal to elements
+    size_t                             first_interface_;  ///< interfaces come after faces; if none this is equal to elements
     // collocated nodes connecting mesh patches, and their flags
     manifoldContainer                  pmanifolds_;       ///< node manifolds, are added separately: @todo must be constructed separately
 

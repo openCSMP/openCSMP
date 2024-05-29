@@ -88,7 +88,7 @@ Model<3U>*  ImplicitTransport_Test::CreateHexahedralModel()
  
     // create test model
     const bool bSkewed(false);
-    test_Create_Hexahedra_VSet( vset, bSkewed ); // only hexahedral elements
+    create_Hexahedra_VSet( vset, bSkewed ); // only hexahedral elements
     //                                singlePhase_advection-variables.txt
     model_ptr_ = new Model<3U>( vset, test_variable_file_.c_str() );
     Point<3U> min_coord, max_coord;
@@ -154,10 +154,10 @@ void ImplicitTransport_Test::run()
     TestFlowThroughModel( "BOX40x3x10m", prescribed_velocity );
     TestFlowThroughModel( "BOX40x3x10m", false );
 
-    // void test_Create_Prism_VSet(VSet<3U>& vset, bool bSkewed=false );
+    // void create_Prism_VSet(VSet<3U>& vset, bool bSkewed=false );
     
 
-    // void test_Create_Prism_Hexa_VSet(VSet<3U>& vset, bool bSkewed=false );
+    // void create_Prism_Hexa_VSet(VSet<3U>& vset, bool bSkewed=false );
  }
 
 

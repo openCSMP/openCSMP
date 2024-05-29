@@ -258,7 +258,7 @@ void VData_Test::run()
   reducedVData.ReduceTo( reducedMap, reducedNodeMap );
   _test( reducedVData.Elements() == 1 );
   _test( reducedVData.Vertices() == 8 );
-  for( auto i = 0; i < reducedVData.Vertices(); ++i )
+  for( unsigned int i = 0; i < reducedVData.Vertices(); ++i )
   {
     _test( reducedVData.Px( i ) != 0. ) ;  _test( reducedVData.Py( i ) != 0. ) ;  _test( reducedVData.Pz( i ) != 0. ) ;
     _test( reducedVData.Px( i ) != 3. ) ;  _test( reducedVData.Py( i ) != 3. ) ;  _test( reducedVData.Pz( i ) != 3. ) ;
@@ -309,6 +309,10 @@ void VData_Test::run()
   // ==============================
   TestBinaryIO();
   
+  // using handcrafted model 'MeshPatchWithLineElements' as input
+  Test_EstablishElementConnectivity2D();
+  
+  // using handcrafted model 'MeshPatchWithLineElements' as input
   Test_CreateConsistentLineElementOrientations2D();
   
   // SKM tests of VData mesh-fix functions
@@ -326,7 +330,7 @@ void VData_Test::run()
 void VData_Test::TestBinaryIO()
  {
     VSet<2U> vset1, vset2;
-    ModelTopology topo = test_Create_BoundarySplitBoundaryPatch( vset1 );
+    ModelTopology topo = create_BoundarySplitBoundaryPatch( vset1 );
     fstream fp( "VData_complete_model", ios::out | ios::binary );
     vset1.OutBinary( fp );
     fp.close();
@@ -351,7 +355,7 @@ bool VData_Test::TestReplacementOfCornerTetrahedra()
   {
      ModelTopology topology;
      VSet<3U>      vset;
-     test_Create_FracBox( topology, vset );
+     create_FracBox( topology, vset );
      
      const size_t n_cnr_spanning_tets{4}; // 385, 687, 760, 821
      _test( vset.RemeshCornerSpanningTetrahedra() == n_cnr_spanning_tets );
@@ -390,6 +394,27 @@ bool VData_Test::TestReplacementOfCornerTetrahedra()
 
 
 
+/// for vsetMaker vset 'MeshPatchWithLineElements' tests whether the handcoded neighbor connectivity is reproduced
+void VData_Test::Test_EstablishElementConnectivity2D()
+ {
+    VSet<2U>  vset1;
+    // 2 fractures that are crossing so that there is a line-element manifold that needs to be disambiguated
+    ModelTopology topo = create_MeshPatchWithLineElements_VSet( vset1 );
+ 
+    // 1. making sure that EstablishElementConnectivity2D performs as expected
+    VSet<2U>  vset2( vset1 );
+    vset2.EstablishElementConnectivity2D();
+
+    // TESTING
+    _test( vset2 == vset1 );
+
+ } // end Test_EstablishElementConnectivity2D
+
+
+
+
+
+
 /* checks whether a neighbor-based traversal of line elements is possible after calling this method
    inside of EstablishElementConnectivity2D()
 */
@@ -397,7 +422,7 @@ void VData_Test::Test_CreateConsistentLineElementOrientations2D()
  {
     VSet<2U>  vset1;
     // 2 fractures that are crossing so that there is a line-element manifold that needs to be disambiguated
-    ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset1 );
+    ModelTopology topo = create_MeshPatchWithLineElements_VSet( vset1 );
  
     // 1. making sure that EstablishElementConnectivity2D performs as expected
     VSet<2U>  vset2( vset1 );
@@ -433,7 +458,7 @@ void VData_Test::Test_InitialiseNodeTopologyIdentifiers()
     // ---------------------------------------------------------------
     {
       VSet<2U> vset1, vset2;
-      ModelTopology topo = test_Create_BoundarySplitBoundaryPatch( vset1 );
+      ModelTopology topo = create_BoundarySplitBoundaryPatch( vset1 );
       vset2 = vset1;
       
       // recreating the node geometry identifiers, to see whether same results are obtained
@@ -446,7 +471,7 @@ void VData_Test::Test_InitialiseNodeTopologyIdentifiers()
    // -------------------------------------------------------------------
    {
       VSet<2U> vset1, vset2;
-      test_Create_MeshPatchWithLineElements_VSet( vset1 );
+      create_MeshPatchWithLineElements_VSet( vset1 );
       vset2 = vset1;
       vset2.InitialiseNodeTopologyIdentifiers();
       _test( vset2 == vset1 );
@@ -457,7 +482,7 @@ void VData_Test::Test_InitialiseNodeTopologyIdentifiers()
    {
       VSet<3U> vset1, vset2;
       ModelTopology   topo;
-      test_Create_FracBox( topo, vset1 );
+      create_FracBox( topo, vset1 );
       // using model topology to assign bounndary flags
       topo.AssignBoxShapedModelFlags( vset1 ); // includes FlagNodesUsingBoundaryDomains(vset1);
       

@@ -29,26 +29,26 @@ class TRIANGLE_Interface {
                            std::map<size_t,double>& bvalues );
 
     void ReadElementDataFile( const char* file, 
-                              std::map<size_t,std::vector<int64_t> >& plist,
+                              std::map<size_t,std::vector<size_t> >& plist,
                               std::vector<double>& evalues );
 
     void ReadPolyDataFile( const char* file, 
-                           std::map<size_t,std::vector<int64_t> >& plist );
+                           std::map<size_t,std::vector<size_t> >& plist );
 
     void ReadNeighborDataFile( const char* file, std::map<size_t,std::vector<int64_t> >& pfverts );
     
-    void FindNeighborsForFractureElements( std::map<size_t,std::vector<int64_t> >& plist,
+    void FindNeighborsForFractureElements( std::map<size_t,std::vector<size_t> >& plist,
                                            std::map<size_t,std::vector<int64_t> >& pfverts );
 
     void FlagBoundaryElements( std::map<size_t,std::vector<int64_t> >& pfverts,
-                               std::map<size_t,std::vector<int64_t> >& plist,
+                               std::map<size_t,std::vector<size_t> >& plist,
                                std::deque<double>& x, std::deque<double>& y );
 
     void FlagBoundaryNodes( std::map<size_t,std::vector<int64_t> >& pfverts,
-                            std::map<size_t,std::vector<int64_t> >& plist,
+                            std::map<size_t,std::vector<size_t> >& plist,
                             std::map<size_t,int8_t>& bflags );
                      
-    void SplitSingleCornerElements( std::map<size_t,std::vector<int64_t> >& plist,
+    void SplitSingleCornerElements( std::map<size_t,std::vector<size_t> >& plist,
                                     std::map<size_t,std::vector<int64_t> >& pfverts, 
                                     std::vector<double>& evalues );
   private: 
@@ -57,15 +57,15 @@ class TRIANGLE_Interface {
                                std::vector<double>& opposite_node,
                                bool verbose=false );
 
-    bool VerifyConsecutiveNodeNumbering( std::map<size_t,std::vector<int64_t> >& plist ) const; 
+    bool VerifyConsecutiveNodeNumbering( std::map<size_t,std::vector<size_t> >& plist ) const; 
     
     void ListZeroPropertyValueElements( std::vector<double>& evalues,
-                                        std::map<size_t,std::vector<int64_t> >& plist, 
+                                        std::map<size_t,std::vector<size_t> >& plist, 
                                         std::deque<double>& x, 
                                         std::deque<double>& y ) const;
 
-    void FlagBoundaryNodesAccordingTo( int fvert, std::int8_t bflag,
-                                       const std::vector<int64_t>& nds, 
+    void FlagBoundaryNodesAccordingTo( unsigned int fvert, std::int8_t bflag,
+                                       const std::vector<size_t>& nds, 
                                        std::map<size_t,int8_t>& bflags );
     
     void FlagCornerNodes( std::map<size_t,int8_t>& bflags,

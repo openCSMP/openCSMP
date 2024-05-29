@@ -201,6 +201,8 @@ Node<1U>* const cornerFlaggedNode( Model<1U>& model, BOX_BOUNDARY corner_flag )
 
 /**
    Parses the BOX_BOUNDARY identifier (see Box.h). If the boundary flag cannot be resolved a value of NOT is returned if it is positive and IRREGULAR if negative.
+   
+   @attention use this only to convert ANSYS or outside-of CSMP generated flags of the enlisted names into BOX_BOUNDARY enums
 */
 BOX_BOUNDARY intToBOX_BOUNDARY( int8_t i )
 {
@@ -2161,7 +2163,7 @@ void boxFlagsToVariable( Model<dim>& model, const char* node_variable, const cha
     (*nit)->Store( nprop_key, makeScalar( ANY, static_cast<double>((*nit)->AtBoundary()) ) );
 
   for ( auto eit = mregion.CellsBegin(); eit != mregion.CellsEnd(); eit++ ) {
-       uint32_t face = UNSPECIFIED;
+       uint32_t face = numeric_limits<uint32_t>::max();
        bool at_boundary{false};
        for ( auto i{0U}; i<(*eit)->Neighbors(); ++i )
          if ( (*eit)->Neighbor(i) == nullptr ) {

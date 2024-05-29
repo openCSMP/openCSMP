@@ -37,7 +37,7 @@ public:
 	std::vector<Point<3u>> ordinaryNodes;
 	std::deque<Point<3u>> extraNodes;
 
-	std::map<size_t, std::vector<int64_t>>  plist;
+	std::map<size_t, std::vector<size_t>>  plist;
 	std::vector<int8_t> fem_types;
 
 	Pillar* p0;
@@ -237,7 +237,7 @@ public:
       return found;
 	}
 
-	int64_t  vertexIDs[8];
+	size_t  vertexIDs[8];
 	IsoparametricLinearHexahedron hexa;
 	IsoparametricLinearPyramid pyra;
 	IsoparametricLinearTetrahedron tetra;
@@ -270,7 +270,7 @@ public:
 
 	bool ConstructHexahedron(ColumnCell& cell) {
 		//std::cerr << "hexa: \n";				
-		for (auto i = 0; i < 8; ++i) {
+		for ( size_t i = 0; i < 8; ++i) {
 			vertexIDs[i] = i;
 			auto p = getNodeCoord(cell, vertexIDs[i]);
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -281,7 +281,7 @@ public:
 		}
 
 		uint32_t iNrIps = hexa.IntegrationPoints();
-		for (auto iIp = 0; iIp < iNrIps; ++iIp) {
+		for (uint32_t iIp = 0u; iIp < iNrIps; ++iIp) {
 			hexa.JacobianAtIntegrationPoint(iIp);
 			double jacdet = hexa.JacobianDeterminant();
 			//std::cerr << "jacdet = " << jacdet << '\n';
@@ -308,7 +308,7 @@ public:
 		vertexIDs[4] = apex;
 
 		//std::cerr << "pyramid: \n";
-		for (auto i = 0; i < 5; ++i) {
+		for (uint32_t i = 0; i < 5; ++i) {
 			auto p = getGlobalNodeCoord(vertexIDs[i]);
 			//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -319,7 +319,7 @@ public:
 		}
 
     uint32_t iNrIps = pyra.IntegrationPoints();
-		for (auto iIp = 0; iIp < iNrIps; ++iIp) {
+		for (uint32_t iIp = 0; iIp < iNrIps; ++iIp) {
 			pyra.JacobianAtIntegrationPoint(iIp);
 			double jacdet = pyra.JacobianDeterminant();
 			//std::cerr << "jacdet = " << jacdet << '\n';
@@ -330,8 +330,8 @@ public:
 		return true;
 	}
 
-	size_t EmitPyramid(ColumnCell& cell) {
-		std::vector<int64_t> ids(&vertexIDs[0], &vertexIDs[5]);
+	size_t EmitPyramid(ColumnCell& ) {
+		std::vector<size_t> ids(&vertexIDs[0], &vertexIDs[5]);
 		size_t elid = elementID++;
 		plist.emplace(elid, ids);
 		fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
@@ -346,7 +346,7 @@ public:
 		vertexIDs[3] = apex;
 
 		//std::cerr << "tetra: \n";
-		for (auto i = 0; i < 4; ++i) {
+		for (uint32_t i = 0; i < 4; ++i) {
 			auto p = getGlobalNodeCoord(vertexIDs[i]);
 			//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -357,7 +357,7 @@ public:
 		}
 
     uint32_t iNrIps = tetra.IntegrationPoints();
-		for (auto iIp = 0; iIp < iNrIps; ++iIp) {
+		for (uint32_t iIp = 0; iIp < iNrIps; ++iIp) {
 			tetra.JacobianAtIntegrationPoint(iIp);
 			double jacdet = tetra.JacobianDeterminant();
 			//std::cerr << "jacdet = " << jacdet << '\n';
@@ -368,8 +368,8 @@ public:
 		return true;
 	}
 
-	size_t EmitTetrahedron(ColumnCell& cell) {
-		std::vector<int64_t> ids(&vertexIDs[0], &vertexIDs[4]);
+	size_t EmitTetrahedron(ColumnCell& ) {
+		std::vector<size_t> ids(&vertexIDs[0], &vertexIDs[4]);
 		size_t elid = elementID++;
 		plist.emplace(elid, ids);
 		fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
@@ -386,7 +386,7 @@ public:
 		vertexIDs[5] = getNodeID(cell, face5);
 
 		//std::cerr << "prism: \n";
-		for (auto i = 0; i < 6; ++i) {
+		for ( uint32_t i = 0; i < 6; ++i) {
 			auto p = getGlobalNodeCoord(vertexIDs[i]);
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
 			prism.XYZ(i, 0, p[0]);
@@ -396,7 +396,7 @@ public:
 		}
 
 		auto iNrIps = prism.IntegrationPoints();
-		for (auto iIp = 0; iIp < iNrIps; ++iIp) {
+		for ( uint32_t iIp = 0; iIp < iNrIps; ++iIp) {
 			prism.JacobianAtIntegrationPoint(iIp);
 			double jacdet = prism.JacobianDeterminant();
 			//std::cerr << "jacdet = " << jacdet << '\n';
@@ -407,8 +407,8 @@ public:
 		return true;
 	}
 
-	size_t EmitPrism(ColumnCell& cell) {
-		std::vector<int64_t> ids(&vertexIDs[0], &vertexIDs[6]);
+	size_t EmitPrism(ColumnCell& ) {
+		std::vector<size_t> ids(&vertexIDs[0], &vertexIDs[6]);
 		size_t elid = elementID++;
 		plist.emplace(elid, ids);
 		fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
@@ -417,92 +417,92 @@ public:
 
 
 	// return a list of globalNodeID from local vertex index
-	  std::vector<int64_t> getGlobalIDList(ColumnCell& cell, size_t list_size, const int64_t* vertexID ) {
-		std::vector<int64_t> nodeIDs;
-		nodeIDs.reserve(list_size);
-		for (int i = 0; i < list_size; ++i) {
-			nodeIDs.push_back(getNodeID(cell, vertexID[i]));
-		}
-		return nodeIDs;
+	  std::vector<size_t> getGlobalIDList(ColumnCell& cell, size_t list_size, const size_t* vertexID ) {
+        std::vector<size_t> nodeIDs;
+        nodeIDs.reserve(list_size);
+        for (size_t i = 0; i < list_size; ++i) {
+          nodeIDs.push_back(getNodeID(cell, vertexID[i]));
+        }
+        return nodeIDs;
 	}
 
 	/// degenerates to one prism
 
-	std::vector<int64_t> degenerateToOnePrismAtEdge23(ColumnCell& cell) {    // 034 125
-		static const int64_t  vertexIDs[6] = { 0, 3, 4, 1, 2, 5 };
+	std::vector<size_t> degenerateToOnePrismAtEdge23(ColumnCell& cell) {    // 034 125
+		static const size_t  vertexIDs[6] = { 0, 3, 4, 1, 2, 5 };
 		return getGlobalIDList(cell, 6, vertexIDs);
 	}
 
-	std::vector<int64_t> degenerateToOnePrismAtEdge30(ColumnCell& cell) { //051 362
-		static const int64_t  vertexIDs[6] = { 0, 5, 1, 3, 6, 2 };
-		return getGlobalIDList(cell, 6, vertexIDs);
+	std::vector<size_t> degenerateToOnePrismAtEdge30(ColumnCell& cell) { //051 362
+		static const size_t  vertexIDs[6] = { 0, 5, 1, 3, 6, 2 };
+		return getGlobalIDList(cell, 6, vertexIDs );
 	}
 
-	std::vector<std::vector<int64_t>> degenerateToTwoTetrahedrasAtEdge02(ColumnCell& cell) {    // 1010
-		std::vector<std::vector<int64_t>> nodeLists;          // tetra 0125 0237
+	std::vector<std::vector<size_t>> degenerateToTwoTetrahedrasAtEdge02(ColumnCell& cell) {    // 1010
+		std::vector<std::vector<size_t>> nodeLists;          // tetra 0125 0237
 		nodeLists.reserve(2);
 
-		static const int64_t  vertexIDs1[4] = { 0, 1, 2, 5 };
+		static const size_t  vertexIDs1[4] = { 0, 1, 2, 5 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-		static const int64_t  vertexIDs2[4] = { 0, 2, 3, 7 };
+		static const size_t  vertexIDs2[4] = { 0, 2, 3, 7 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
 
 		return nodeLists;
 	}
 
-	std::vector<std::vector<int64_t>> degenerateToTwoTetrahedraAtEdge13(ColumnCell& cell) {    // 0101
-		std::vector<std::vector<int64_t>> nodeLists;          // tetra 1304 1326
+	std::vector<std::vector<size_t>> degenerateToTwoTetrahedraAtEdge13(ColumnCell& cell) {    // 0101
+		std::vector<std::vector<size_t>> nodeLists;          // tetra 1304 1326
 		nodeLists.reserve(2);
 
-		static const int64_t  vertexIDs1[4] = { 1, 3, 0, 4 };
+		static const size_t  vertexIDs1[4] = { 1, 3, 0, 4 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-		static const int64_t  vertexIDs2[4] = { 1, 3, 2, 6 };
+		static const size_t  vertexIDs2[4] = { 1, 3, 2, 6 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
 
 		return nodeLists;
 	}
 
-	std::vector<std::vector<int64_t>> splitToFiveTetrahedrasAtTwoEdges0257(ColumnCell& cell) {
-		std::vector<std::vector<int64_t>> nodeLists;                // 0457 0125 0237 0257 2756
+	std::vector<std::vector<size_t>> splitToFiveTetrahedrasAtTwoEdges0257(ColumnCell& cell) {
+		std::vector<std::vector<size_t>> nodeLists;                // 0457 0125 0237 0257 2756
 		nodeLists.reserve(5);
 
-		static const int64_t  vertexIDs1[4] = { 0, 4, 5, 7 };
+		static const size_t  vertexIDs1[4] = { 0, 4, 5, 7 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-		static const int64_t  vertexIDs2[4] = { 0, 1, 2, 5 };
+		static const size_t  vertexIDs2[4] = { 0, 1, 2, 5 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
 
-		static const int64_t  vertexIDs3[4] = { 0, 2, 3, 7 };
+		static const size_t  vertexIDs3[4] = { 0, 2, 3, 7 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs3));
 
-		static const int64_t  vertexIDs4[4] = { 0, 2, 5, 7 };
+		static const size_t  vertexIDs4[4] = { 0, 2, 5, 7 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs4));
 
-		static const int64_t  vertexIDs5[4] = { 2, 7, 5, 6 };
+		static const size_t  vertexIDs5[4] = { 2, 7, 5, 6 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs5));
 
 		return nodeLists;
 	}
 
-	std::vector<std::vector<int64_t>> splitToFiveTetrahedrasAtTwoEdges1347(ColumnCell& cell) {
-		std::vector<std::vector<int64_t>> nodeLists;                // 0134 1456 1236 1346 3467
+	std::vector<std::vector<size_t>> splitToFiveTetrahedrasAtTwoEdges1347(ColumnCell& cell) {
+		std::vector<std::vector<size_t>> nodeLists;                // 0134 1456 1236 1346 3467
 		nodeLists.reserve(5);
 
-		static const int64_t  vertexIDs1[4] = { 0, 1, 3, 4 };
+		static const size_t  vertexIDs1[4] = { 0, 1, 3, 4 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-		static const int64_t  vertexIDs2[4] = { 1, 4, 5, 6 };
+		static const size_t  vertexIDs2[4] = { 1, 4, 5, 6 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
 
-		static const int64_t  vertexIDs3[4] = { 1, 2, 3, 6 };
+		static const size_t  vertexIDs3[4] = { 1, 2, 3, 6 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs3));
 
-		static const int64_t  vertexIDs4[4] = { 1, 3, 4, 6 };
+		static const size_t  vertexIDs4[4] = { 1, 3, 4, 6 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs4));
 
-		static const int64_t  vertexIDs5[4] = { 3, 4, 6, 7 };
+		static const size_t  vertexIDs5[4] = { 3, 4, 6, 7 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs5));
 
 		return nodeLists;

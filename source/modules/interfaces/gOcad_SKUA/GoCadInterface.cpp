@@ -375,7 +375,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
              xyz[2] = atof( token );   // z
              // node properties
              if ( !properties.empty() ) {
-                  for ( auto n=0; n<data_entries; n++ ) {
+                  for ( size_t n=0ul; n<data_entries; n++ ) {
                        token    = strtok( NULL, delims );
                        props[n] = atof( token ); // property value
                     }
@@ -417,9 +417,9 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
 
     // 4. Reading triangle elements TRGL
     // ---------------------------------
-    map<size_t,vector<int64_t> >  triangles;
-    vector<int64_t>               node_ids(3);
-    size_t                       triangleID(1);
+    map<size_t,vector<size_t> > triangles;
+    vector<size_t>              node_ids(3);
+    size_t                      triangleID(1);
 
     do
       {
@@ -456,7 +456,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
 
     // 4. Testing whether input was read correctly
     // -------------------------------------------
-    typename map<size_t,vector<int64_t> >::iterator  plit;
+    typename map<size_t,vector<size_t> >::iterator  plit;
     size_t n;
     
     if ( !properties.empty() ) assert( node_properties.size() == nodes.size() );
@@ -614,7 +614,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        // ----------------------------------------------------
        if ( debug ) cout <<"\nTest1 face1: Element ID recovered for key: "<< face_key;
        if ( debug ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[0] = ((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[0] = static_cast<int64_t>((*face_it).second);
        // if the face belongs to the same element one searches for
        // the next occurrence of the key in the multimap
        // ----------------------------------------------
@@ -623,7 +623,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        // -----------------------
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[0] = ((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[0] = static_cast<int64_t>((*face_it).second);
             else {
                 if ( debug ) cout <<"\nElement: "<< (*plit).first <<" Test face 1: failed comparison: list-face key: ";
                 if ( debug ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -651,11 +651,11 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( debug ) cout <<"\nTest1 face2: Element ID recovered for key: "<< face_key;
        if ( debug ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[1] = ((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[1] = static_cast<int64_t>((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[1] = (*face_it).second;
+            if ( (*face_it).first == face_key ) pfvert[1] = static_cast<int64_t>((*face_it).second);
             else {
                 if ( debug ) cout <<"\nElement: "<< (*plit).first <<" Test face 2: failed comparison: list-face key: ";
                 if ( debug ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -675,11 +675,11 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( debug ) cout <<"\nTest1 face3: Element ID recovered for key: "<< face_key;
        if ( debug ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[2] = ((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[2] = static_cast<int64_t>((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[2] = ((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[2] = static_cast<int64_t>((*face_it).second);
             else {
                 if ( debug ) cout <<"\nElement: "<< (*plit).first <<" Test face 3: failed comparison: list-face key: ";
                 if ( debug ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -739,7 +739,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
             data.Reserve( vset.Vertices() );
             VectorVariable<dim> vc;
             for ( nprop_it=node_properties.begin(); nprop_it!=node_properties.end(); nprop_it++ ) {
-                 for ( size_t i{0U}; i<3; i++ ) vc(i) = (*nprop_it).second[ data_entry+i ];
+                 for ( uint32_t i{0U}; i<3; i++ ) vc(i) = (*nprop_it).second[ data_entry+i ];
                  pushBack( data, vc );
               }
             // adding scalars to the VSet
@@ -753,8 +753,8 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
             data.Reserve( vset.Vertices() );
             TensorVariable<dim> ts;
             for ( nprop_it=node_properties.begin(); nprop_it!=node_properties.end(); nprop_it++ ) {
-                 for ( size_t i{0U}; i<3; i++ )
-                   for ( size_t j{0U}; j<3; j++ ) ts(i,j) = (*nprop_it).second[ data_entry+i*3+j ];
+                 for ( uint32_t i{0U}; i<3; i++ )
+                   for ( uint32_t j{0U}; j<3; j++ ) ts(i,j) = (*nprop_it).second[ data_entry+i*3+j ];
                  pushBack( data, ts );
               }
             // adding scalars to the VSet
@@ -1111,7 +1111,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
     map<size_t,double>                                     node_property;
     typename map<size_t,double>::const_iterator                     prit;
     vector<double>                 xyz(3);
-    size_t                         nodeID(UNSPECIFIED);
+    size_t                         nodeID = numeric_limits<size_t>::max();
     int32_t                        attr;
     pair<int32_t,vector<double> >  node;
 
@@ -1181,8 +1181,8 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
     // 3. Reading tetrahedral elements TETRA
     // -------------------------------------
     //   id      attr   node xyz
-    map<size_t,vector<int64_t> >  tetrahedra;
-    vector<int64_t>  node_ids(4);
+    map<size_t,vector<size_t> >  tetrahedra;
+    vector<size_t>  node_ids(4);
     size_t          tetraID = 1;
 
     // reading line by line 
@@ -1236,7 +1236,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
    // newid oldid
    map<int64_t ,int64_t>                  shared_vtrx;
    typename map<int64_t ,int64_t>::const_iterator  shit;
-   int64_t                                  newID;
+   size_t                                  newID;
    bool                                      cnp_data_read;
 
    // filling node ID's from first TVOLUME into 'shared_vtrx' map
@@ -1262,10 +1262,10 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
                {
                   // new vertex id
                   token  = strtok( NULL, delims );
-                  newID  = static_cast<int64_t>(atol( token ));
+                  newID  = atol( token );
                   // collocated old vertex id
                   token  = strtok( NULL, delims );
-                  nodeID = static_cast<int64_t>(atol( token ));
+                  nodeID = atol( token );
                   // if there is property information, it is ignored since it
                   // duplicates already existing node data.
                   
@@ -1364,7 +1364,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
             
                   // translating node IDs to CSP ids
                   // -------------------------------
-                  for ( auto n=0; n<4; n++ )
+                  for ( size_t n=0; n<4; n++ )
                     {
                        if ( (shit=shared_vtrx.find( node_ids[n] )) != shared_vtrx.end() )
                          node_ids[n] = (*shit).second;
@@ -1391,7 +1391,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 
     // 4. Testing whether input was read correctly
     // -------------------------------------------
-    typename map<size_t,vector<int64_t> >::iterator  plit;
+    typename map<size_t,vector<size_t> >::iterator  plit;
     size_t n;
     
     if ( verbose )
@@ -1570,7 +1570,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        // ----------------------------------------------------
        if ( verbose ) cout <<"\nTest1 face1: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[0] = ((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[0] = static_cast<int64_t>((*face_it).second);
        // if the face belongs to the same element one searches for
        // the next occurrence of the key in the multimap
        // ----------------------------------------------
@@ -1579,7 +1579,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        // -----------------------
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[0] = ((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[0] = static_cast<int64_t>((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 1: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -1609,11 +1609,11 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( verbose ) cout <<"\nTest1 face2: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[1] = ((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[1] = static_cast<int64_t>((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[1] = ((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[1] = static_cast<int64_t>((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 2: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -1636,11 +1636,11 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( verbose ) cout <<"\nTest1 face3: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[2] = ((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[2] = static_cast<int64_t>((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[2] = ((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[2] = static_cast<int64_t>((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 3: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -1663,11 +1663,11 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( verbose ) cout <<"\nTest1 face4: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[3] = ((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[3] = static_cast<int64_t>((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[3] = ((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[3] = static_cast<int64_t>((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 4: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -2207,7 +2207,7 @@ const
           break;
         case ELEMENT_INTEGRATION_POINT:
              for ( auto it= gref.CellsBegin(); it!=gref.CellsEnd(); it++ )
-               for ( auto i{0}; i<(*it)->IntegrationPoints(); i++ )
+               for ( uint32_t i{0u}; i<(*it)->IntegrationPoints(); i++ )
                {
                   // getting constraint point coordinates
                   Point<dim>  pt((*it)->IntegrationPoint(i));
@@ -2237,8 +2237,8 @@ const
                                ofs << vc_elmt_data[ (*en_it) ][j] <<" ";
                          break;
                        case TENSOR:
-                            for ( auto k=0; k<3; k++ )
-                              for ( auto j{0U}; j<3; j++ )
+                            for ( uint32_t k=0; k<3; k++ )
+                              for ( uint32_t j{0U}; j<3; j++ )
                                  ofs << ts_elmt_data[ (*en_it) ](k,j) <<" ";
                       default:
                          throw out_of_range("GoCadInterface<dim>: variable type not handled");
@@ -2589,7 +2589,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                       break;
                     case TENSOR:
                          (*eit)->Read(prop_key, ts );
-                         for ( auto i{0}; i<(*eit)->Nodes(); i++ ) ts_elmt_data[ (*eit)->N(i)->Idx() ] = ts;
+                         for ( uint32_t i{0u}; i<(*eit)->Nodes(); i++ ) ts_elmt_data[ (*eit)->N(i)->Idx() ] = ts;
                     default:
                       throw out_of_range("GoCadInterface<dim>: variable type not handled");
                 }
@@ -2615,7 +2615,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                size_t  counter(0U);
                for ( auto eit=sg.CellsBegin(); eit != sg.CellsEnd(); ++eit )
                  {
-                    for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ ) {
+                    for ( uint32_t i{0u}; i<(*eit)->IntegrationPoints(); i++ ) {
                         // getting constraint point coordinates
                         Point<dim>  pt((*eit)->IntegrationPoint(i));
                         (*eit)->Read( i, prop_key, sc );
@@ -2886,8 +2886,8 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                          break;
                        case TENSOR:                   
                             gref.N( nodes[i] )->Read(prop_key, ts );
-                            for ( auto j{0U}; j<dim; j++ )
-                              for ( auto k=0; k<dim; k++ )
+                            for ( uint32_t j{0U}; j<dim; j++ )
+                              for ( uint32_t k=0u; k<dim; k++ )
                                  ofs << ts(j,k) <<" ";
                        default:
                          throw out_of_range("GoCadInterface<dim>: variable type not handled");
@@ -2929,8 +2929,8 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                                ofs << vc_elmt_data[ (*en_it) ][j] <<" ";
                          break;
                        case TENSOR:
-                            for ( auto k=0; k<dim; k++ )
-                              for ( auto j{0U}; j<dim; j++ )
+                            for ( uint32_t k=0u; k<dim; k++ )
+                              for ( uint32_t j{0U}; j<dim; j++ )
                                  ofs << ts_elmt_data[ (*en_it) ](k,j) <<" ";
                        default:
                           throw out_of_range("GoCadInterface<dim>: variable type not handled");
@@ -3044,20 +3044,17 @@ Loops through plist making a map of node numbers. If this map has jumps
 in the numbering, these are detected when looping through it again. 
  */
 template<uint32_t dim>
-bool GoCadInterface<dim>::VerifyConsecutiveNodeNumbering( map<size_t,vector<int64_t> >& plist )
- const 
+bool GoCadInterface<dim>::VerifyConsecutiveNodeNumbering( map<size_t,vector<size_t> >& plist )
+ const
  {
-    map<size_t,vector<int64_t> >::const_iterator  it;
-    vector<int64_t>::const_iterator                  nit;
-    set<int64_t>                                     node_numbers;
-    set<int64_t>::const_iterator                     sit;
-    size_t                                          counter(1);
+    set<size_t>  node_numbers;
+    size_t       counter(1);
     
-    for ( it=plist.begin(); it!=plist.end(); it++ )
-      for ( nit=(*it).second.begin(); nit!=(*it).second.end(); nit++ ) 
+    for ( auto it=plist.begin(); it!=plist.end(); it++ )
+      for ( auto nit=(*it).second.begin(); nit!=(*it).second.end(); nit++ )
         node_numbers.insert( *nit );
           
-    for ( sit=node_numbers.begin(); sit!=node_numbers.end(); sit++ )
+    for ( auto sit=node_numbers.begin(); sit!=node_numbers.end(); sit++ )
       // if a gap in the numbering leads to a difference in incremented counter
       // and the ordered node numbers in the list, false is returned.
       if ( *sit != counter++ ) 

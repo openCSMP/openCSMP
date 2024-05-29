@@ -164,18 +164,18 @@ void VSet<dim>::AddXYZ( const deque<double>& x,
       VData::ResizeNodes(x.size());
     }
 
-	for (auto i = 0; i<x.size(); i++) Px(i, x[i]);
+	for (size_t i = 0UL; i<x.size(); i++) Px(i, x[i]);
 
 	if constexpr ( dim > 1 )
     {
       assert(x.size() == y.size());
-      for (auto i = 0; i<y.size(); i++) Py(i, y[i]);
+      for (size_t i = 0UL; i<y.size(); i++) Py(i, y[i]);
     }
 
 	if constexpr ( dim > 2 )
     {
       assert(y.size() == z.size());
-      for (auto i = 0; i<x.size(); i++) Pz(i, z[i]);
+      for (size_t i = 0UL; i<x.size(); i++) Pz(i, z[i]);
     }
     
    ResizeBFlags();
@@ -187,10 +187,10 @@ void VSet<dim>::AddXYZ( const deque<double>& x,
   Assigns record of nodes per element to base class VData of VSet.
 */
 template<uint32_t dim>
-void VSet<dim>::AddPlist( typename map<size_t, vector<int64_t> >::const_iterator first,
-						              typename map<size_t, vector<int64_t> >::const_iterator last )
+void VSet<dim>::AddPlist( typename map<size_t, vector<size_t> >::const_iterator first,
+						              typename map<size_t, vector<size_t> >::const_iterator last )
 {
-	typename deque<vector<int64_t> >::iterator it = PlistBegin();
+	auto it = PlistBegin();
   assert( Cells() == distance(first,last) );
 
 	while (first != last && it != PlistEnd())
@@ -207,10 +207,10 @@ void VSet<dim>::AddPlist( typename map<size_t, vector<int64_t> >::const_iterator
     Assigns record of nodes per element to base class VData of VSet.
 	*/
 template<uint32_t dim>
-void VSet<dim>::AddPlist( typename deque<vector<int64_t> >::const_iterator first,
-                          typename deque<vector<int64_t> >::const_iterator last )
+void VSet<dim>::AddPlist( typename deque<vector<size_t> >::const_iterator first,
+                          typename deque<vector<size_t> >::const_iterator last )
 {
-	typename deque<vector<int64_t> >::iterator it = PlistBegin();
+	auto it = PlistBegin();
   assert( Cells() == distance(first,last) );
 
 	while (first != last && it != PlistEnd())
@@ -516,7 +516,7 @@ bool  VSet<dim>::OutputTo( const char* bin_file, double time ) const
     records = pmtrl_.size();
     fp.write( reinterpret_cast<const char*>(&records), sizeof(int32_t));
     // individual records (all together)
-    fp.write( reinterpret_cast<const char*>(&pmtrl_[0]), sizeof(int32_t) * records );
+    fp.write( reinterpret_cast<const char*>(&pmtrl_[0]), static_cast<long>(sizeof(int32_t) * records) );
 	}
 
 	// 5. Writing the property data records to file
@@ -620,7 +620,7 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double& time, const set<string
     fp.read( reinterpret_cast<char*>(&records), sizeof(int32_t));
     pmtrl_.resize( records );
     // individual records (all together)
-    fp.read( reinterpret_cast<char*>(&pmtrl_[0]), records * sizeof(int32_t) );
+    fp.read( reinterpret_cast<char*>(&pmtrl_[0]), static_cast<long>(records * sizeof(int32_t)) );
 	}
 
 	// Reading the property data records from file (PropertyData)
@@ -630,7 +630,7 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double& time, const set<string
 		fp.read( reinterpret_cast<char*>(&records), sizeof(size_t));
 		if (records > 0)
 			// reading the datasets sequentially
-			for (auto i = 0; i<records; ++i)
+			for ( size_t i = 0ul; i<records; ++i )
 			{
 				// reading the property name
 				char heading[INFO_STRING];
@@ -743,7 +743,7 @@ bool  VSet<dim>::ParallelInputFrom(const char* bin_file, double& time, size_t& f
 	strtok(NULL, ":");
 	strtok(NULL, ":");
 	time = atof(strtok(NULL, ":"));
-	first_outerhalo = atoi(strtok(NULL, ":"));
+	first_outerhalo = atol(strtok(NULL, ":"));
 
 	// 3. reading the mesh connectivity to file
 	cout << "\nVSet<dim>::ParallelInputFrom: reading finite element mesh..." << endl;
@@ -1074,8 +1074,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearHexahedron fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<int64_t>::iterator
-                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    for ( auto nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
                         pt[0] = vset.Px( nid );
@@ -1091,8 +1090,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearPyramid        fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<int64_t>::iterator
-                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    for ( auto nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
                         pt[0] = vset.Px( nid );
@@ -1108,8 +1106,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearPrism fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<int64_t>::iterator
-                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    for ( auto nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
                         pt[0] = vset.Px( nid );
@@ -1125,8 +1122,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearTetrahedron fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<int64_t>::iterator
-                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    for ( auto nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
                         pt[0] = vset.Px( nid );
@@ -1142,8 +1138,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearQuadrilateral  fem(3);
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<int64_t>::iterator
-                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    for ( auto nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
                         pt[0] = vset.Px( nid );
@@ -1159,8 +1154,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearTriangle fem(3);
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<int64_t>::iterator
-                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    for ( auto nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
                         pt[0] = vset.Px( nid );
@@ -1176,8 +1170,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearLineElement    fem(3);
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<int64_t>::iterator
-                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    for ( auto nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
                         pt[0] = vset.Px( nid );
@@ -1194,8 +1187,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
             }
             var *= volume;
             /// summ up data
-            for ( std::vector<int64_t>::iterator
-                  nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit )
+            for ( auto nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit )
             {
                 nid = (*nit);
                 nodal_data[ nid ]   += var;

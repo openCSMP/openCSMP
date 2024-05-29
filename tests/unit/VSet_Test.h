@@ -110,14 +110,14 @@ void VSet_Test::run()
     _test( vset4.Py( i ) == (double)i*10 );
     _test( vset4.Pz( i ) == (double)i*10 );
   }
-  std::map<size_t,std::vector<int64_t> > plist;
-  std::vector<int64_t> plist1;
+  std::map<size_t,std::vector<size_t> > plist;
+  std::vector<size_t> plist1;
   plist1.push_back( 0 ); plist1.push_back( 1 ); plist1.push_back( 4 ); plist1.push_back( 3 );
   plist1.push_back( 6 ); plist1.push_back( 7 ); plist1.push_back( 10 ); plist1.push_back( 9 );
-  std::vector<int64_t> plist2;
+  std::vector<size_t> plist2;
   plist2.push_back( 1 ); plist2.push_back( 2 ); plist2.push_back( 5 ); plist2.push_back( 4 );
   plist2.push_back( 7 ); plist2.push_back( 8 ); plist2.push_back( 11 ); plist2.push_back( 10 );
-  std::vector<int64_t> plist3;
+  std::vector<size_t> plist3;
   plist3.push_back( 2 ); plist3.push_back( 5 ); plist3.push_back( 11 ); plist3.push_back( 8 ); plist3.push_back( 12 );
   plist.insert( make_pair( 0, plist1 ) );
   plist.insert( make_pair( 1, plist2 ) );
@@ -129,7 +129,7 @@ void VSet_Test::run()
   _test( vset4.Plist( 1, 0 ) == 1 ); _test( vset4.Plist( 1, 1 ) == 2 ); _test( vset4.Plist( 1, 2 ) == 5 ); _test( vset4.Plist( 1, 3 ) == 4 );
   _test( vset4.Plist( 1, 4 ) == 7 ); _test( vset4.Plist( 1, 5 ) == 8 ); _test( vset4.Plist( 1, 6 ) == 11 ); _test( vset4.Plist( 1, 7 ) == 10 );
   _test( vset4.Plist( 2, 0 ) == 2 ); _test( vset4.Plist( 2, 1 ) == 5 ); _test( vset4.Plist( 2, 2 ) == 11 ); _test( vset4.Plist( 2, 3 ) == 8 ); _test( vset4.Plist( 2, 4 ) == 12 );
-  std::deque<std::vector<int64_t> > plistDeque;
+  std::deque<std::vector<size_t> > plistDeque;
   plistDeque.push_back( plist1 );
   plistDeque.push_back( plist2 );
   plistDeque.push_back( plist3 );
@@ -212,7 +212,7 @@ void VSet_Test::run()
 // NEW TESTS BY SKM
 // comparitor test
   VSet<3U> vset6;
-  test_Create_Prism_Hexa_VSet( vset6, false /* bSkewed */ );
+  create_Prism_Hexa_VSet( vset6, false /* bSkewed */ );
   _test( vset6.MeshDimension() == 3 );
   vset6.OutputTo( "vsetBIN", 0. );
   VSet<3U> vset7;

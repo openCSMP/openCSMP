@@ -47,7 +47,7 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     // building and testing first 2D model from mesh & topology (already including faces and interfaces)
     // -------------------------------------------------------------------------------------------------
     VSet<DIM> vset, vset2;
-    ModelTopology mesh_topology = test_Create_BoundarySplitBoundaryPatch( vset );
+    ModelTopology mesh_topology = create_BoundarySplitBoundaryPatch( vset );
     _test( mesh_topology.Cells() == vset.Cells() );
     {
       // adding the original element numbers to VSet, assigning the same numbers
@@ -127,7 +127,7 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     {
       vset.Erase();
       // model consists only of elements
-      mesh_topology = test_Create_MeshPatchWithLineElements_VSet( vset );
+      mesh_topology = create_MeshPatchWithLineElements_VSet( vset );
       const bool vset_only_contains_elements{ true };
       Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", vset_only_contains_elements );
       printModelDimensions( model, true );
@@ -221,7 +221,7 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
         if ( verbose_ ) cout <<"Building ModelOutput (regions & irregular boundaries)..."<<endl;
         ModelTopology topology;
         VSet<3U>      vset;
-        test_Create_FracBox( topology, vset );
+        create_FracBox( topology, vset );
         Model<3U>    modelOutput2( topology, vset, "VSet_TestCase-variables.txt", true );
         
         const Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
@@ -357,7 +357,7 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
 bool VSet_TestCase::Test_EstablishElementConnectivity2D()
  {
     VSet<2U> vset;
-    test_Create_MeshPatchWithLineElements_VSet( vset );
+    create_MeshPatchWithLineElements_VSet( vset );
     // making a backup copy
     VSet<2U> backup_vset( vset );
     
@@ -397,7 +397,7 @@ bool VSet_TestCase::Test_EstablishElementConnectivity2D()
 bool VSet_TestCase::Test_EstablishElementConnectivity3D()
  {
     VSet<3U> vset;
-    test_Create_Prism_Hexa_VSet( vset);
+    create_Prism_Hexa_VSet( vset);
     BoundaryFlagsToVTK( vset );
 
     // making a backup copy

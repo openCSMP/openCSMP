@@ -61,11 +61,11 @@ class VSet : public VData {
                  const std::deque<double>& z );
       
     /// the IDs of the nodes that make up each element 
-    void AddPlist( typename std::map<size_t,std::vector<int64_t> >::const_iterator first,
-                   typename std::map<size_t,std::vector<int64_t> >::const_iterator last );
+    void AddPlist( typename std::map<size_t,std::vector<size_t> >::const_iterator first,
+                   typename std::map<size_t,std::vector<size_t> >::const_iterator last );
 
-    void AddPlist( typename std::deque<std::vector<int64_t> >::const_iterator first,
-                   typename std::deque<std::vector<int64_t> >::const_iterator last );
+    void AddPlist( typename std::deque<std::vector<size_t> >::const_iterator first,
+                   typename std::deque<std::vector<size_t> >::const_iterator last );
 
     /// the equi-dimensional neighbors adjacent to the numbered element faces plus boundary identifiers where there is no neighbor
     void AddPfverts( typename std::map<size_t,std::vector<int64_t> >::const_iterator first,

@@ -280,13 +280,13 @@ void Quadrilaterator::QuadrilateralsFromRegularGrid( VSet<2U>& vset, double x_ex
 
 void Quadrilaterator::GenerateVSet( VSet<2U>& vset ) const
  {
-   deque<vector<int64_t> >     plist( n_elements, vector<int64_t>(4) ); 
-   deque<vector<int64_t> >     pfvert( n_elements, vector<int64_t>(4) );
+   deque<vector<size_t> >      plist( n_elements, vector<size_t>{4} );
+   deque<vector<int64_t> >     pfvert( n_elements, vector<int64_t>{4} );
    //FEM_Data<ScalarVariable >  edata( ELEMENT, n_elements );
    PropertyData               edata( ELEMENT, SCALAR, 2U );
    
    unsigned int    i, j, n; 
-   int64_t           fed1, fed2, fed3, fed4;
+   int64_t         fed1, fed2, fed3, fed4;
   
    // n counts the elements
    n = 0;

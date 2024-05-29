@@ -311,7 +311,7 @@ void ANSYS_Model2D_Test::Test_printLineElementRegion()
     // verifying function with predefined correct dataset
     {
       VSet<2U>      vset;
-      ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
+      ModelTopology topo = create_MeshPatchWithLineElements_VSet( vset );
       Model<2U>     model( topo, vset, "CSMP-variables.txt", true );
 
       const bool renumber_nodes{false};
@@ -323,7 +323,7 @@ void ANSYS_Model2D_Test::Test_printLineElementRegion()
     // rebuilding neighbor connectivty and line element connectivity
     {
       VSet<2U>      vset;
-      ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
+      ModelTopology topo = create_MeshPatchWithLineElements_VSet( vset );
       vset.EstablishElementConnectivity2D(); // also deals with line-element orientations
       Model<2U>     model( topo, vset, "CSMP-variables.txt", true );
        

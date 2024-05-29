@@ -348,7 +348,7 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     const bool   skewed_elements(false); // otherwise model is not a box anymore
     VSet<3U>     vset;
   
-    test_Create_Pyramid_Hexa_VSet( vset, skewed_elements );
+    create_Pyramid_Hexa_VSet( vset, skewed_elements );
   
     Model<3U>  model1( vset, varFileName.c_str() );
     _test( consistencyCheckNeighborVersusPerimeterFaces( model1 ) );

@@ -164,12 +164,12 @@ void Box_Test::run()
   _test( parseBoundary( EDGE12 ) == "EDGE12" );
   _test( parseBoundary( INTERNAL ) == "INTERNAL" );
 
-  // for vsetMaker model with mixed element types (32elmts, 64 nodes)
+  // for vsetMaker model Pyra_Hexa with mixed element types (32elmts, 64 nodes): TODO: fails
   _test( TestWhetherSideBoundaryFlagsArePresent() );
   
   // _test( TestWhetherAllBoxFlagsArePresent() ); // fails because the corners are missing
-  _test( TestBoundaryFlagging() );
-  _test( TestWhetherBoundaryFlagsArePreservedInBinaryFile1() );
+  _test( TestBoundaryFlagging() ); // model Tetra
+  _test( TestWhetherBoundaryFlagsArePreservedInBinaryFile1() ); // model Prism_Hexa  TODO: fail
   
   // tests whether the function recreateBoxBoundaryFlags() manages to reconstruct edges and boundaries correctly
   // TODO: fail
@@ -193,7 +193,7 @@ bool Box_Test::TestBoundaryFlagAssigment2D()
     // 1. standard model construction
     // ------------------------------
     VSet<2U> vset;
-    test_Create_TrianglePatch_VSet( vset );
+    create_TrianglePatch_VSet( vset );
     Model<2U>          model( vset, "CSMP-variables.txt" );
     const Region<2U>&  mregion(model.Region("Model"));
    
@@ -293,6 +293,32 @@ bool Box_Test::TestBoundaryFlagging()
 
 
 
+static void printNeighboursOfElement( const VSet<3U>& vset, size_t elmt )
+ {
+    assert( elmt < vset.Elements() );
+    assert( vset.HybridElementTypeMesh() );
+
+//    for ( size_t eidx{0ul}; eidx<vset.Elements(); ++eidx ) {
+    const auto n_nbors = distance( vset.PfvertsBegin(elmt), vset.PfvertsEnd(elmt) );
+    const auto e_type  = vset.ElementType( elmt );
+
+    cout <<"\nprintNeighboursOfElement: element "<< elmt << endl;
+    cout <<"\t"<<"faces and their nodes:"<< endl;
+    for ( uint32_t face{0u}; face<n_nbors; ++face ) {
+          const uint32_t nodes_per_face = CSMP_ElementSpecifications::NodesPerFaceForElementOfType( e_type, face );
+          vector<uint32_t> fnids( nodes_per_face );
+          for ( uint32_t n{0U}; n<nodes_per_face; ++n )
+            fnids[n] = CSMP_ElementSpecifications::FaceNodeForElementOfType( e_type, face, n );
+          // printing the relevant information
+          cout <<"\t\t"<< face <<": ";
+          for ( const auto& i : fnids ) cout <<" "<< vset.Plist( elmt, i );
+          cout << endl;
+    }
+    
+ } // end printNeighboursOfElement
+
+
+
 /**
     Comparing the unit normals with the those of the sides 
     of the box-shaped model. 
@@ -304,14 +330,20 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
  {
     VSet<3U>  vset;
     const bool bSkewed{false};
-    test_Create_Prism_Hexa_VSet( vset, bSkewed );
+    create_Prism_Hexa_VSet( vset, bSkewed );
+
+// checking the Face nodes of element 1
+const size_t element{1ul};
+printNeighboursOfElement( vset, element );
 
     // checking whether original nbor connectivity is correct
     VSet<3U>  vset_test(vset);
+    // needs correct boundary flags
     vset_test.EstablishElementConnectivity3D();
     _test( vset == vset_test );
     
     vset.InitialiseNodeTopologyIdentifiers();
+    if ( verbose_ ) cout <<"\nBox_Test::TestWhetherElementNormalsAreOutwardPointing: building model 'Prism_Hexa'"<< endl;
     Model<3U>  model( vset, "CSMP-variables.txt" );
     printModelDimensions( model );
     Region<3U>& model_domain(model.Region("Model"));
@@ -319,8 +351,14 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
     const double model_surface_area = model_domain.SurfaceArea();
     _equal( model_surface_area, 6. * 3. * 3., 10. ); // 6-faces with 9m2, tolerance=10 eps
     
-    // testing that Bflags are the same as in the original model
-    
+    // testing that Bflags are correct in original model 'Prism_Hexa'
+    model.CreateProperty( "node flag", "NF", "none" );
+    model.CreateProperty( "element flag", "EF", "none", SCALAR, ELEMENT );
+    boxFlagsToVariable( model, "node flag", "element flag" ); // element number initialised by VSetMaker
+    list<string> out_vars{ "node flag", "element flag", "element number" };
+    VTU_Interface<3U> vtu_output( model );
+    string file_name = "PrismHexa";
+    vtu_output.OutputDataToVTU( file_name, out_vars, "Model", 0 );
     
     _test( model.EstablishBoxBoundariesFromOrientation() );
     
@@ -604,7 +642,7 @@ bool Box_Test::TestWhetherSideBoundaryFlagsArePresent()
  {
     VSet<3U>  vset;
     // 64 elements and including nodes on the side of the model
-    test_Create_Pyramid_Hexa_VSet( vset );
+    create_Pyramid_Hexa_VSet( vset );
     Model<3U> model( vset, "CSMP-variables.txt" );
 
     return hasAllSideBoundaries( model );
@@ -622,7 +660,7 @@ bool Box_Test::TestWhetherAllBoxFlagsArePresent()
     
     VSet<3U>  vset;
     const bool bSkewed{false};
-    test_Create_Prism_Hexa_VSet( vset, bSkewed );
+    create_Prism_Hexa_VSet( vset, bSkewed );
     Model<3U>  model( vset, "CSMP-variables.txt" );
 
     return isStrictlyBoxShaped( model );
@@ -636,7 +674,7 @@ bool Box_Test::TestBoundaryFlagRecreation()
  {
     VSet<3U>      vset;
     ModelTopology topo;
-    test_Create_FracBox( topo, vset );
+    create_FracBox( topo, vset );
     
     // adding 'node number' as a variable
     PropertyData node_nums( NODE, SCALAR, 3U );
@@ -690,11 +728,11 @@ bool Box_Test::TestBoundaryFlagRecreation()
     const Region<3U>& model_domain = model.Region("Model");
     const csmp::Index nn_key = model.Database().StorageKey("node number");
     // testing that the boundary flags match
-    for ( size_t i{0U}; i<vset.Vertices(); i++ ) {
+    for ( size_t i{0U}; i<vset.Vertices(); i++ ) { // converting variable value into integer
          _test( vset.BFlag(i) == model_domain.N( static_cast<size_t>(model_domain.N(i)->Read(nn_key)) )->AtBoundary() );
          if ( vset.BFlag(i) != model_domain.N( static_cast<size_t>(model_domain.N(i)->Read(nn_key)) )->AtBoundary() ) {
               cout <<"\nnode "<< model_domain.N(i)->Idx() <<": "<< parseBoundary( model_domain.N( static_cast<size_t>(model_domain.N(i)->Read(nn_key)) )->AtBoundary() );
-              cout <<" vs. "<< parseBoundary( intToBOX_BOUNDARY(vset.BFlag(i)) ) << endl;
+              cout <<" vs. "<< parseBoundary( static_cast<BOX_BOUNDARY>(vset.BFlag(i)) ) << endl;
            }
       }
 
@@ -729,7 +767,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
     
     VSet<3U>  vset;
     const bool bSkewed{false};
-    test_Create_Prism_Hexa_VSet( vset, bSkewed );
+    create_Prism_Hexa_VSet( vset, bSkewed );
     Model<3U>  model( vset, "CSMP-variables.txt" );
     
     const Region<3>&  mregion(model.Region("Model"));
@@ -775,7 +813,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
  {
     VSet<3U>  vset;
     const bool bSkewed{false};
-    test_Create_Prism_Hexa_VSet( vset, bSkewed );
+    create_Prism_Hexa_VSet( vset, bSkewed );
     Model<3U>  model( vset, "CSMP-variables.txt" );
     const Region<3>&  mregion(model.Region("Model"));
 

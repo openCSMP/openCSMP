@@ -40,7 +40,7 @@ FiniteElementPolicy_Test::~FiniteElementPolicy_Test()
 void FiniteElementPolicy_Test::InitialiseModel()
  {
     VSet<3U> vset;
-    test_Create_Prism_Hexa_VSet( vset, false );
+    create_Prism_Hexa_VSet( vset, false );
     model_ptr_ = new Model<3U>( vset, "Variables_Test.txt" );
     e_ptr_     = model_ptr_->Region("Model").E(0);
  }
@@ -71,7 +71,7 @@ void FiniteElementPolicy_Test::CreateLinearScalarNodePropertyVariation()
 
 
 
-/// using 'test_Create_Prism_Hexa_VSet' dataset, tests fem operations against provided data in text file
+/// using 'create_Prism_Hexa_VSet' dataset, tests fem operations against provided data in text file
 void FiniteElementPolicy_Test::run()
 {
    // getting an idea about element that is tested

@@ -1526,8 +1526,8 @@ void ModelTopology::RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset )
             if ( fem_specs::MinimumSpatialDimension( *etype_it ) != elmtdim )
                 remove_types.push_back( *etype_it );
         /// remove ids of low dim elements
-        vector<uint32_t> remove_eids;
-        for ( auto i = 0 ; i < (*rit).second.second.size(); ++i )
+        vector<size_t> remove_eids;
+        for ( size_t i = 0ul; i < (*rit).second.second.size(); ++i )
         {
             size_t elmtid = (*rit).second.second[ i ];
             elmttype = vset.ElementType( elmtid );
@@ -1541,16 +1541,16 @@ void ModelTopology::RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset )
             cerr <<"\nModelTopology::RemoveLowDimCellsFromDomains: ";
             cerr << remove_eids.size();
             cerr <<" elements of types: ";
-            for( auto i = 0 ; i< remove_types.size(); ++i ){
+            for( size_t i{0ul}; i< remove_types.size(); ++i ){
                 if( i != 0 ) cerr<< ", ";
                 cerr << remove_types[ i ];
             }
             cerr <<" were excluded from region "<< (*rit).first << endl;
             //}
-            for( auto i = 0 ; i< remove_types.size(); ++i )
-                (*rit).second.first.erase( remove_types[i] );
-            for( auto i = 0 ; i < remove_eids.size(); ++i )
-                (*rit).second.second.erase( (*rit).second.second.begin() + ( remove_eids[i] - i ) );
+            for( size_t i{0ul}; i< remove_types.size(); ++i )
+              (*rit).second.first.erase( remove_types[i] );
+            for( size_t i{0ul}; i < remove_eids.size(); ++i )
+              (*rit).second.second.erase( (*rit).second.second.begin() + ( remove_eids[i] - i ) );
         }
     }
  } // end RemoveLowDimCellsFromDomains
@@ -2353,28 +2353,28 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
 
      for ( bit=CellsOfDomainBegin("BOTTOM");
            bit!=CellsOfDomainEnd("BOTTOM"); bit++ )
-       for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+       for ( auto nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
          nodes_bottom.push_back( (*nit) );
        
      for ( bit=CellsOfDomainBegin("RIGHT");
            bit!=CellsOfDomainEnd("RIGHT"); bit++ )
-       for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+       for ( auto nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
          nodes_right.push_back( (*nit) );
        
      for ( bit=CellsOfDomainBegin("TOP");
            bit!=CellsOfDomainEnd("TOP"); bit++ )
-       for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+       for ( auto nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
          nodes_top.push_back( (*nit) );
        
      for ( bit=CellsOfDomainBegin("LEFT");
            bit!=CellsOfDomainEnd("LEFT"); bit++ )
-       for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+       for ( auto nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
          nodes_left.push_back( (*nit) );
  
       for ( auto& it : boundary_regions )
        for ( bit=CellsOfDomainBegin(it.c_str());
              bit!=CellsOfDomainEnd(it.c_str()); bit++ )
-         for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+         for ( auto nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
            nodes_irregular.push_back( (*nit) );
 
      // making these containers unique
@@ -2415,7 +2415,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.BFlag( cnr[0], CNR1 );
+          vset.BFlag( static_cast<size_t>(cnr[0]), CNR1 );
        }
 
      if ( !nodes_right.empty() && !nodes_bottom.empty() ) {
@@ -2425,7 +2425,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.BFlag( cnr[0], CNR2 );
+          vset.BFlag( static_cast<size_t>(cnr[0]), CNR2 );
        }
 
      if ( !nodes_right.empty() && !nodes_top.empty() ) {
@@ -2435,7 +2435,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.BFlag( cnr[0], CNR3 );
+          vset.BFlag( static_cast<size_t>(cnr[0]), CNR3 );
        }
 
      if ( !nodes_left.empty() && !nodes_top.empty() ) {
@@ -2445,7 +2445,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.BFlag( cnr[0], CNR4 );
+          vset.BFlag( static_cast<size_t>(cnr[0]), CNR4 );
        }
 
      // 4. potential corners with an irregular boundary
@@ -2459,7 +2459,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                                 nodes_left.begin(), nodes_left.end(),
                                 back_inserter( cnr ) );
              
-              vset.BFlag( cnr[0], CNR4 );
+              vset.BFlag( static_cast<size_t>(cnr[0]), CNR4 );
            }
          if ( !nodes_right.empty() ) {
               vector<int64_t> cnr;
@@ -2467,7 +2467,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                                 nodes_right.begin(), nodes_right.end(),
                                 back_inserter( cnr ) );
              
-              vset.BFlag( cnr[0], CNR3 );
+              vset.BFlag( static_cast<size_t>(cnr[0]), CNR3 );
            }
        }
 
@@ -2479,7 +2479,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                                 nodes_left.begin(), nodes_left.end(),
                                 back_inserter( cnr ) );
              
-              vset.BFlag( cnr[0], CNR1 );
+              vset.BFlag( static_cast<size_t>(cnr[0]), CNR1 );
            }
          if ( !nodes_right.empty() ) {
               vector<int64_t> cnr;
@@ -2487,7 +2487,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
                                 nodes_right.begin(), nodes_right.end(),
                                 back_inserter( cnr ) );
              
-              vset.BFlag( cnr[0], CNR2 );
+              vset.BFlag( static_cast<size_t>(cnr[0]), CNR2 );
            }
        }
 
@@ -2625,7 +2625,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
      for ( auto& it : boundary_regions )
        for ( auto bit=CellsOfDomainBegin(it.c_str());
              bit!=CellsOfDomainEnd(it.c_str()); bit++ )
-         for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+         for ( auto nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
            irregular.push_back( (*nit) );      //E.P BUG Fix - Changed to nit , since before it was passing bit which is an Element ID!! (You want to pass the node ID's)
 
      // making these containers unique

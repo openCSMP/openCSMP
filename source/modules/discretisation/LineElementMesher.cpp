@@ -472,7 +472,7 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset )
         const size_t n_elements( vset.Vertices() - 1U );
 
         //1.0 PList - establish
-        deque<vector<int64_t> >  plist( n_elements, vector<int64_t>(2) );
+        deque<vector<size_t> >  plist( n_elements, vector<size_t>(2) );
 
         //1.1 PList - assigning content
         for ( size_t i{0U}; i<n_elements; ++i )
@@ -523,7 +523,7 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
         // collect the coordinates of  nodes
         set<Point<dim> > nodes;
         Point<dim> p( 0.0 );
-        for( auto i =0U; i< n_vertices; i++ ) {
+        for( size_t i = 0UL; i< n_vertices; i++ ) {
             for( uint32_t dimension=0U; dimension<dim; dimension++ )
                 p[ dimension ] = vset.P(dimension,i);
             nodes.insert( p );
@@ -564,8 +564,8 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
 
             //2.1 PFVerts - assigning content
             for ( size_t i{0UL}; i<n_elements; i++ ) {
-                 pfvert[i][0] = i + 1U;
-                 pfvert[i][1] = i - 1U;
+                 pfvert[i][0] = static_cast<int64_t>(i + 1);
+                 pfvert[i][1] = static_cast<int64_t>(i - 1);
               }
 
             //2.3 PFVerts - assigning boundary flags
@@ -575,7 +575,7 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
             //3.1 VSet  - assigning point x-coordinates
             //    PList - establish
             //    VSet  - adding boundary flags
-            deque<vector<int64_t> >  plist( n_elements, vector<int64_t>(2) );
+            deque<vector<size_t> >  plist( n_elements, vector<size_t>(2) );
 
             size_t node_counter( 0U );
             size_t element_counter( 0U );
@@ -611,7 +611,7 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
                 // identify local indexes of nodes inside the element
                 if( element_counter != n_elements )
                 {
-                    plist[ element_counter ][ 0 ] = node_counter -1U;
+                    plist[ element_counter ][ 0 ] = node_counter - 1;
                     plist[ element_counter ][ 1 ] = node_counter;
                 }
 

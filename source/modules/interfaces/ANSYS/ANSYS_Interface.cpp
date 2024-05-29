@@ -963,15 +963,15 @@ bool ANSYS_Interface::ReadPlistASCII( ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    map<size_t,vector<int64_t> >  plist;
-    vector<int64_t>          dummy;
+    map<size_t,vector<size_t> >  plist;
+    vector<size_t>          dummy;
     size_t                   total_items,
                              element(0), item(0),
                              id, nodes;
     const size_t             n_nodes(vset.Vertices());
     
-    pair<map<size_t,vector<int64_t> >::iterator,bool>  it;
-    pair<size_t,vector<int64_t> > data;
+    pair<map<size_t,vector<size_t> >::iterator,bool>  it;
+    pair<size_t,vector<size_t> > data;
     
     // now the vset can be resized according to the new information
     assert( vset.HybridElementTypeMesh() );
@@ -1096,7 +1096,7 @@ bool ANSYS_Interface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>& vset )
 
          // element ID's in file range 0...elements-1
          for ( size_t i{0U}; i<neighbors; ++i ) {
-              int32_t  idx;
+              int64_t  idx;
               ifs >> idx;
               if ( ifs.bad() ) {
                    cerr <<"\nread 'pfvert' record for element: "<< element <<", neighbor: "<< i <<", value: "<< idx;
@@ -1104,7 +1104,7 @@ bool ANSYS_Interface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>& vset )
                                          "file stream went bad, when reading 'pfverts' record; may be not enough entries." );
                 }
               // element number must not be larger than the number of elements in the mesh
-              assert( idx < vset.Elements() );
+              assert( idx < static_cast<int64_t>(vset.Elements()) );
               // ascertaining that one of the possible options of boundary identifiers was used
               if ( idx < 0 ) assert( idx >= REGION_BOUNDARY );
               (*it.first).second.push_back( idx );
@@ -1426,8 +1426,8 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
     uint32_t*  plist = new uint32_t[ entries ];
     fread( (void*) plist, uibytes, entries, fp );
 
-    deque<vector<int64_t> >::iterator  it(vset.PlistBegin());
-    size_t  nentry(0U);
+    auto   it(vset.PlistBegin());
+    size_t nentry(0U);
 
     // the elements of the plist (node ids) are assigned
     for ( size_t i{0U}; i<nelements; i++, it++ )
@@ -1453,13 +1453,13 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     const size_t  ibytes  = sizeof(int32_t);
-    const size_t  uibytes = sizeof( uint32_t);
-    int64_t       entries(0);
+    const size_t  uibytes = sizeof(uint32_t);
+    size_t        entries(0);
 
     // setting up the storage for 'pfverts' in VSet
     assert( vset.Elements() > 0 );
     assert( vset.HybridElementTypeMesh() );
-    const size_t   nelements(vset.Cells());
+    const size_t nelements(vset.Cells());
 
     // making an array of with the number of neighbors for each element
     deque<uint32_t>  nbors( nelements );
@@ -1480,7 +1480,7 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     fread( (void*) &entries, uibytes, 1U, fp );
     
     assert( entries > 0 );
-    assert( entries < ULONG_MAX );
+    assert( entries < numeric_limits<int64_t>::max() );
     
     if ( entries != n_pfverts_entries_expected ) {
          cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
@@ -1491,9 +1491,8 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
          cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< endl;
          cout.flush();
       }
-    if ( entries >= 2147483647 )
-      csmp_error.Note( ERROR, "ANSYS_Interface::ReadPfvertsBinary", "too many elements in file to be read by this reader");
       
+    // this number format must be respected since the file is written by ANSYS
     int32_t*  pfverts = new int32_t[ entries ];
     fread( (void*) pfverts, ibytes, entries, fp );
 

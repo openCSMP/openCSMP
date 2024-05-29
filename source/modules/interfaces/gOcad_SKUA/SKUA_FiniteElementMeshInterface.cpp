@@ -987,14 +987,14 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
       }
       
     // reading plist
-    deque<vector<int64_t> >  file_records;
-    readVectorOfVectors( ifs, ndele, total_items, file_records );   
+    deque<vector<size_t> >  file_records;
+    readVectorOfVectors( ifs, ndele, total_items, file_records );
 
     // testing whether the nodes are numbered consecutively from 0..n-1
     if ( test_for_consecutive_node_numbering ) {
          set<size_t> node_ids;
-         for ( deque<vector<int64_t> >::const_iterator it=file_records.begin(); it!=file_records.end(); ++it )
-           for ( vector<int64_t>::const_iterator nit=(*it).begin(); nit!=(*it).end(); ++nit )
+         for ( auto it=file_records.begin(); it!=file_records.end(); ++it )
+           for ( auto nit=(*it).begin(); nit!=(*it).end(); ++nit )
              node_ids.insert( (*nit) );
          // does the record start with 0 and ends with n-1?
          if ( (*node_ids.begin()) != 0U ) {
@@ -1200,7 +1200,7 @@ template<uint32_t dim>
 bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    int32_t          integer;
+    int32_t        integer;
    
     AdvancePastCommentLine( ifs );
    
@@ -1235,7 +1235,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
         ifs >> str;
         VARIABLE_TYPE type = parseType( str.c_str() );
         // 1.2 reading array length, if variable is an array or flagged array
-        int32_t  array_length(0);
+        uint32_t  array_length(0);
         if ( type == ARRAY || type == FLAGGEDARRAY ) {
              ifs >> integer;
              if ( integer <= 0 ) {
@@ -1244,7 +1244,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
                                     "negative or zero array length read for variable", property_name.c_str() );
                   return false;
                }
-             array_length = integer;
+             array_length = static_cast<uint32_t>(integer);
           }
         
         // reading number of value entries, cross-checking them using the variable type 
@@ -1275,7 +1275,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
                   ifs >> integer;
                   pdata.PushBack( intToVARIABLE_FLAG(integer) );
                }
-             for ( auto i{0}; i<records; ++i ) {
+             for ( size_t i{0ul}; i<records; ++i ) {
                   ifs >> value;
                   pdata.PushBack( value );
                }
@@ -1471,7 +1471,7 @@ bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary( FILE
            throw csmp::Exception( ERROR, "SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range.");
          // if this is a boundary node
          if ( ival < zero ) {
-              vset.BFlag( i, ival );
+              vset.BFlag( i, static_cast<int8_t>(ival) );
               bnodes.insert(i);
               counter++;
            }
@@ -1584,8 +1584,8 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistBinary( FILE* fp, VSet<dim>& vset
     uint32_t*  plist = new uint32_t[ entries ];
     fread( (void*) plist, uibytes, entries, fp );
 
-    deque<vector<int64_t> >::iterator  it(vset.PlistBegin());
-    size_t                            nentry(0U);
+    auto   it(vset.PlistBegin());
+    size_t nentry(0U);
 
     // the elements of the plist (node ids) are assigned
     for ( size_t i{0U}; i<nelements; i++, it++ )

@@ -119,7 +119,7 @@ void Experimental_Example::Run()
     // 2D Test case without SplitBoundary objects
     // ------------------------------------------
     VSet<2U> mesh;
-    ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( mesh );
+    ModelTopology topo = create_MeshPatchWithLineElements_VSet( mesh );
     const bool treat_domains_as_regions{true}; // model does not contain any Face objects!
     Model<2U> model2D( topo, mesh, "UG4_UGX_FileExport-variables.txt", treat_domains_as_regions );
 
@@ -133,7 +133,7 @@ void Experimental_Example::Run()
 
     VTU_Interface<2U>  vtu(model2D);
     list<string> output_props{ "node number", "element number", "element variable" };
-    vtu.OutputDataToVTU( "test_Create_MeshPatchWithLineElements_VSet", output_props, "Model", static_cast<int>(0) );
+    vtu.OutputDataToVTU( "create_MeshPatchWithLineElements_VSet", output_props, "Model", static_cast<int>(0) );
     
     // OUTPUTS MODEL TO UG (name will be the model name)
     UG4_UGX_FileExport<2U> ug4_exporter2D( model2D );

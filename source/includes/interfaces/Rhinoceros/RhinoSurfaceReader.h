@@ -53,15 +53,15 @@ class RhinoSurfaceReader {
 
      bool PopObject( const char *obj_name,
                      std::map<size_t,mjl::Point3D>& points,
-                     std::map<size_t,std::vector<int64_t> >& plist,
+                     std::map<size_t,std::vector<size_t> >& plist,
                      size_t poffset=0 ) const; ///< node/element numbering (0..n-1)
                      
      void ObjectToPData( const std::string& obj_name,
                          std::map<size_t,mjl::Point3D>& pxyz,
-                         std::map<size_t,std::vector<int64_t> >& plist,
+                         std::map<size_t,std::vector<size_t> >& plist,
                          size_t poffset ) const; ///< node/element numbering (0..n-1)
                          
-     void CreateNeighborPData( const std::map<size_t,std::vector<int64_t> >& plist,
+     void CreateNeighborPData( const std::map<size_t,std::vector<size_t> >& plist,
                                std::map<size_t,std::vector<int64_t> >& pfverts,
                                std::vector<std::int8_t>& pbflags ) const;
                          

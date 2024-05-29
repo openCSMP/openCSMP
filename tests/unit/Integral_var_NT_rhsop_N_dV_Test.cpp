@@ -10,7 +10,7 @@ Integral_var_NT_rhsop_N_dV_Test::Integral_var_NT_rhsop_N_dV_Test( bool verbose )
  : tol_(0.001), verbose_(verbose), sg_(nullptr)
 {
   VSet<2U>    mesh_container;
-  test_Create_TrianglePatch_VSet( mesh_container );
+  create_TrianglePatch_VSet( mesh_container );
 
   // Building Region object from ANSYS data files
   string mesh_name("triangle_patch");

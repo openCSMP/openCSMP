@@ -10,6 +10,7 @@ namespace csmp {
 template<uint32_t> class VSet;
 
 // MISSING
+// TODO: test all the functionality that recreates neighbors etc.
 // TODO: test read / write of VSet/VData with faces and interfaces
 // TODO: test extraction of manifolds
 
@@ -24,6 +25,9 @@ class VData_Test : public Test {
     // checks whether mesh is still intact after corner elements were split
     // test model FracBox
     bool TestReplacementOfCornerTetrahedra();
+
+    /// for vsetMaker vset 'MeshPatchWithLineElements' tests whether the handcoded neighbor connectivity is reproduced
+    void Test_EstablishElementConnectivity2D();
 
     /* checks whether a neighbor-based traversal of line elements is possible after calling this method
        inside of EstablishElementConnectivity2D()

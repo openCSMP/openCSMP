@@ -55,7 +55,7 @@ bool ModelBasics_Test::TestModelConstructionFromVSet()
  {
     const  bool bSkewed{false};
     VSet<3U>    vset, vset1;
-    test_Create_Pyramid_Hexa_VSet( vset, bSkewed );
+    create_Pyramid_Hexa_VSet( vset, bSkewed );
     
     // does the VSet write/reads correctly?
     double time0{3600.123}, time1;
@@ -85,7 +85,7 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack()
  {
      VSet<3U>      vset;
      ModelTopology topology;
-     test_Create_FracBox( topology, vset );
+     create_FracBox( topology, vset );
 
      // creating model
      const bool do_not_use_regions_file{true};
@@ -132,7 +132,7 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack()
 bool ModelBasics_Test::TestWriteModelToDiskAndReadBackWithInterfaces()
  {
      VSet<2U> vset;
-     ModelTopology topology = test_Create_BoundarySplitBoundaryPatch( vset );
+     ModelTopology topology = create_BoundarySplitBoundaryPatch( vset );
 
      // creating model
      Model<2U>  model( topology, vset, "CSMP-1phase-variables.txt", false );

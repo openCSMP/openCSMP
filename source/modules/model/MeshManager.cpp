@@ -307,9 +307,9 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
    {
       const LocalVariables evars( phys_vars.LocalVariablesAt( ELEMENT ) );
       const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( ELEMENT ) );
-      typename deque<vector<int64_t>>::const_iterator first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
+      auto first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
 
-      size_t elmt_idx{0};
+      size_t elmt_idx{0ul};
       // 2.1 If the MeshManager contains only one element type
       if ( !vset.HybridElementTypeMesh() ) {
           const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( 0U ));
@@ -325,8 +325,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
               // assign the nodes
               const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
-              for ( auto j{0U}; j < nodes; ++j )
-                (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
+              for ( uint32_t j{0U}; j < nodes; ++j )
+                (*eit).Assign( j, &(*next(nodes_.begin(), static_cast<long>(vset.Plist( elmt_idx, j )))) );
                 
               // assign the material
               (*eit).Material_ID( vset.Pmtrl( elmt_idx ) );
@@ -349,7 +349,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                                                        evars, cvars, vset.Pmtrl(elmt_idx) ) );
                                                        
               const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
-              for ( auto j{0U}; j < nodes; j++ ) (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
+              for ( auto j{0U}; j < nodes; j++ ) (*eit).Assign( j, &(*next(nodes_.begin(), static_cast<long>(vset.Plist( elmt_idx, j )))) );
               elmt_idx++;
               first++;
             }
@@ -358,16 +358,16 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
    }
  
   // 2.3 Assign neighbor elements to elements
-  const int64_t  n_elmts = static_cast<int64_t>(elements_.size());
+  const size_t  n_elmts = elements_.size();
   if ( vset.WithNeighbourConnectivity() ) {
        if ( csmp_error.Verbose() )
           cout << "\nMeshManager<" << dim << ">::Initialize: assigning neighbors to elements..." << endl;
        if ( !hybrid_element_mesh_ ) {
             const uint32_t n_neighbors = fem_manager_.E( vset.ElementType( 0U ) )->Neighbors();
             for ( auto& e : elements_ )
-              for ( auto j{0U}; j < n_neighbors; ++j ) {
+              for ( uint32_t j{0U}; j < n_neighbors; ++j ) {
                       const int64_t  index{ vset.Pfvert( e.Idx(), j ) };
-                      if ( index >= n_elmts ) {
+                      if ( index >= static_cast<int64_t>(n_elmts) ) {
                            cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
                            csmp_error.Note( ERROR, "MeshManager::Initialise: ", "element ID in 'pfverts' out of range.");
                         }
@@ -381,9 +381,9 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
            for ( auto& e : elements_ ) {
                 const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( e.Idx() ));
                 const uint32_t n_neighbors( fem_manager_.E( csmpElementType )->Neighbors() );
-                for ( auto j{0U}; j < n_neighbors; ++j ) {
+                for ( uint32_t j{0U}; j < n_neighbors; ++j ) {
                       const int64_t  index{ vset.Pfvert( e.Idx(), j ) };
-                      if ( index >= n_elmts ) {
+                      if ( index >= static_cast<int64_t>(n_elmts) ) {
                            cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
                            csmp_error.Note( ERROR, "MeshManager::Initialise: ", "element ID in 'pfverts' out of range.");
                         }
@@ -416,7 +416,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 
        // the faces are numbered  elements to (elements + faces - 1), but they are stored in connector at Face 0..n-1
        size_t   face_idx(vset.Elements());
-       typename deque<vector<int64_t> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
+       auto  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
        while ( first != last ) {
             const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( face_idx ));
             const FiniteVolumeStencil<dim>* const stencil_ptr = (initialise_FV_stencils==true) ?
@@ -432,9 +432,9 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             // assigning nodes to faces
             const auto nodes( (*fit).Nodes() );
             for ( uint32_t j{0U}; j<nodes; ++j ) {
-                const int64_t node = vset.Plist( face_idx, j );
-                assert( node < static_cast<int64_t>(n_nodes) );
-                (*fit).Assign( j, &(*next(nodes_.begin(),node)) );
+                const size_t node = vset.Plist( face_idx, j );
+                assert( node < n_nodes );
+                (*fit).Assign( j, &(*next(nodes_.begin(),static_cast<long>(node))) );
               }
             ++face_idx;
             ++first;
@@ -456,17 +456,17 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  // Equidimensional Face neighbors first
                  // ------------------------------------
                  const auto neighbors( e.Neighbors() );
-                 for ( auto j{0U}; j<neighbors; ++j )
+                 for ( uint32_t j{0U}; j<neighbors; ++j )
                    {
                       // if there is a neighbor (as is the case if the stored index is greater than zero)
                       // (e->Idx() starts with elements=first face)
                       const int64_t  index( vset.Pfvert( e.Idx(), j ) );
-                      if ( index >= n_elmts+static_cast<int64_t>(n_faces) ) {
-                           cerr <<"\n\t"<< index <<" vs. number of elements+faces = "<< n_elmts + static_cast<int64_t>(n_faces) << endl;
+                      if ( index >= static_cast<int64_t>(n_elmts+n_faces) ) {
+                           cerr <<"\n\t"<< index <<" vs. number of elements+faces = "<< n_elmts + n_faces << endl;
                            csmp_error.Note( ERROR, "MeshManager::Initialise: ", "face ID in 'pfverts' out of range.");
                         }
-                      if ( index >= n_elmts )
-                        e.Assign( j, &(*next(faces_.begin(),index - n_elmts)) );
+                      if ( index >= static_cast<int64_t>(n_elmts) )
+                        e.Assign( j, &(*next(faces_.begin(),index - static_cast<int64_t>(n_elmts))) );
                       else {
                            // if the Face neighbor has an index smaller than n_elmts it must be a boundary indicator
                            assert( index < 0 );
@@ -480,7 +480,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  // index of inner neighbor element i which is always there
                  // Inside neighbor 1
                  const int64_t  index1( vset.Pfvert( e.Idx(), neighbors ) );
-                 if ( index1 >= n_elmts ) {
+                 if ( index1 >= static_cast<int64_t>(n_elmts) ) {
                       cerr <<"\n\tFace "<< e.Idx() <<": "<< index1 <<" vs. "<< n_elmts <<" elements.\n";
                       csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of first higher-dimensional element of Face out of range.");
                    }
@@ -491,7 +491,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 
                  // Outside neighbor 2: outer neighbor element will only be there if Face on INTERNAL model boundary
                  const int64_t  index2( vset.Pfvert( e.Idx(), neighbors + 1U ) );
-                 if ( index2 >= n_elmts ) {
+                 if ( index2 >= static_cast<int64_t>(n_elmts) ) {
                       cerr <<"\n\tFace "<< e.Idx() <<": "<< index2 <<" vs. "<< n_elmts <<" elements.\n";
                       csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of second higher-dimensional element of Face out of range.");
                    }
@@ -525,8 +525,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        const LocalVariables evars( phys_vars.LocalVariablesAt( INTER_FACE ) );
        const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( INTER_FACE ) );
 
-       typename deque<vector<int64_t> >::const_iterator  first( vset.PlistInterFacesBegin() ),
-                                                         last( vset.PlistInterFacesEnd() );
+       auto  first( vset.PlistInterFacesBegin() ), last( vset.PlistInterFacesEnd() );
 
        size_t interface_idx(vset.Elements() + vset.Faces());
        while ( first != last )
@@ -546,21 +545,21 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             // assigning nodes
             // inside
             for ( uint32_t j{0U}; j<nodes; ++j ) {
-                 const int64_t node = vset.Plist( interface_idx, j );
-                 if ( node >= static_cast<int64_t>(n_nodes) ) {
+                 const size_t node = vset.Plist( interface_idx, j );
+                 if ( node >= n_nodes ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": INSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
                       csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
                    }
-                 (*ifit).Assign( j, &(*next(nodes_.begin(),node)), INSIDE );
+                 (*ifit).Assign( j, &(*next(nodes_.begin(),static_cast<long>(node))), INSIDE );
               }
             // outside
             for ( uint32_t j{0U}; j<nodes; ++j ) {
-                 const int64_t node = vset.Plist( interface_idx, j+nodes );
-                 if ( node >= static_cast<int64_t>(n_nodes) ) {
+                 const size_t node = vset.Plist( interface_idx, j+nodes );
+                 if ( node >= n_nodes ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": OUTSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
                       csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
                    }
-                 (*ifit).Assign( j, &(*next(nodes_.begin(),node)), OUTSIDE );
+                 (*ifit).Assign( j, &(*next(nodes_.begin(),static_cast<long>(node))), OUTSIDE );
               }
             ++interface_idx;
             ++first;
@@ -575,13 +574,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        else {
          if ( csmp_error.Verbose() )
            cout << "\nMeshManager<" << dim << ">::Initialize: connecting interfaces to their higher-dimensional neighbors..." << endl;
-         const int64_t  n_faces(faces_.size()), n_interfaces(interfaces_.size());
-         const int64_t  n_cells(n_elmts+n_faces+n_interfaces);
+         const size_t  n_faces(faces_.size()), n_interfaces(interfaces_.size());
+         const size_t  n_cells(n_elmts+n_faces+n_interfaces);
          // connecting interfaces to their higher-dimensional neighbors
          for ( auto& itf : interfaces_ )
            {
               const int64_t iface_idx = static_cast<int64_t>(itf.Idx());
-              assert(  iface_idx >= n_elmts + n_faces );
+              assert(  iface_idx >= static_cast<int64_t>(n_elmts + n_faces) );
               
               // 1. Assigning equidimensional InterFace-type neighbors first
               // -----------------------------------------------------------
@@ -596,14 +595,14 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                    if ( index < 0 ) continue;
                    
                    // if the index is out of range
-                   if ( index >= n_cells || index <= n_elmts ) {
+                   if ( index >= static_cast<int64_t>(n_cells) || index <= static_cast<int64_t>(n_elmts) ) {
                         cerr <<"\n\t"<< index <<" vs. number of elements+faces+interfaces = "<< n_cells << endl;
                         csmp_error.Note( ERROR, "MeshManager::Initialise: ", "interface ID in 'pfverts' out of range.");
                      }
 
                    // NB: the interface number in the container is the number from the VSet - elements - faces
                    // because the interface container indexes from 0..n-1
-                   const int64_t neighbor_idx = index - n_elmts - n_faces;
+                   const int64_t neighbor_idx = index - static_cast<int64_t>(n_elmts - n_faces);
                    itf.Assign( j, &(*next(interfaces_.begin(),neighbor_idx)) );
                 }
 
@@ -617,7 +616,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                   cerr <<"\n\tInterFace "<< iface_idx <<": inner neighbor "<< index1 <<" and outer neighbor "<< index2 <<"\n";
                   csmp_error.Note( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace not defined in 'pfverts'.");
                }
-             if ( index1 >= n_elmts || index2 >= n_elmts ) {
+             if ( index1 >= static_cast<int64_t>(n_elmts) || index2 >= static_cast<int64_t>(n_elmts) ) {
                   cerr <<"\n\tInterFace "<< iface_idx <<": inner neighbor "<< index1 <<" and outer "<< index2 <<"\n";
                   csmp_error.Note( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor indices of InterFace out of range.");
                }
@@ -636,7 +635,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
              
              // assignment: intervening Element else boundary flag INTERNAL
              const int64_t  index3 = vset.Pfvert( static_cast<size_t>(iface_idx), neighbors+4U );
-             assert( index3 < n_elmts );
+             assert( index3 < static_cast<int64_t>(n_elmts) );
              assert( index3 > MULTIPLE );
              Element<dim>* const middleElement = (index3 < 0) ? nullptr : &(*next(elements_.begin(),index3));
              if ( middleElement ) itf.Assign( middleElement );
@@ -1144,8 +1143,7 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
                                                                    uint32_t adjacent_face_of_inner_element,
                                                                    uint32_t adjacent_face_of_outer_element,
                                                                    const LocalVariables& lvars,
-                                                                   const IntegrationPointVariables& ivars,
-                                                                   const LocalVariables& nvars )
+                                                                   const IntegrationPointVariables& ivars )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -1601,7 +1599,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceInteriorElementsByFaces( const Prop
          csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceInteriorElementsByFaces", "supplied iterator range is empty; nothing was done.");
          return face_ptrs;
       }
-    else face_ptrs.reserve( n_faces_to_build );
+    else face_ptrs.reserve( static_cast<size_t>(n_faces_to_build) );
     
     const LocalVariables             lvars(pref.LocalVariablesAt(FACE));
     const IntegrationPointVariables& ivars(pref.IntegrationPointVariablesAt(FACE));
@@ -1691,7 +1689,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
          csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces", "supplied iterator range is empty; nothing was done.");
          return face_ptrs;
       }
-    else face_ptrs.reserve( n_faces_to_build );
+    else face_ptrs.reserve( static_cast<size_t>(n_faces_to_build) );
     
     const LocalVariables             lvars(pref.LocalVariablesAt(FACE));
     const IntegrationPointVariables& ivars(pref.IntegrationPointVariablesAt(FACE));
@@ -1958,7 +1956,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
                                                            first->OuterElement(),
                                                            first->InnerElementFace(),
                                                            first->OuterElementFace(),
-                                                           lvsInterfaces, lvsIntegrationPoints, lvsNode ) );
+                                                           lvsInterfaces, lvsIntegrationPoints ) );
          first++;
       }
 
@@ -1988,7 +1986,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
                //Extract outside neighbor and his Reg ID (which is defined on the elements within SplitBoundaryInterface
                ScalarVariable reg_id;
                e_nbr->Read( region_key, reg_id );
-               region_material_ids.insert( reg_id() );
+               region_material_ids.insert( static_cast<uint32_t>(reg_id()) );
              }
            } //looped over all nodes
          } //valid neighbor
@@ -2159,7 +2157,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
     vector<InterFace<dim>*>  interface_ptrs;
     set<Element<dim>*>    outside_neighbors_to_search;
     set<Element<dim>*>    inside_parents;
-    interface_ptrs.reserve( distance(first,last) );
+    interface_ptrs.reserve( static_cast<size_t>(distance(first,last)) );
     // tracking already duplicated nodes to avoid duplicates
     //  original,  duplicate
     map<Node<dim>*,Node<dim>*>  new_nodes;
@@ -2414,7 +2412,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
                        // finding the vector index corresponding to the perimeter node
                        auto lb = perimeter_node_ptrs.end();
                        if ( (lb=lower_bound( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) )) !=  perimeter_node_ptrs.end() )
-                       face_count[ distance(perimeter_node_ptrs.begin(),lb) ]++;
+                       face_count[ static_cast<size_t>(distance(perimeter_node_ptrs.begin(),lb)) ]++;
                     }
                }
              // eliminating those pointers from 'perimeter_node_ptrs' that are shared by multiple elements
@@ -2734,9 +2732,9 @@ template<uint32_t dim>
 size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Node<dim>*>::iterator first,
                                                     typename vector<Node<dim>*>::iterator last )
  {
-    size_t deleted_nodes( distance(first,last) );
+    auto deleted_nodes( distance(first,last) );
  
-     if ( deleted_nodes == 0U ) return 0U;
+     if ( deleted_nodes == 0 ) return 0U;
 
      // 1. disconnecting neighbor nodes from the nodes that will be removed
      // -------------------------------------------------------------------
@@ -2769,7 +2767,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Node
           first++;
        }
      
-     return deleted_nodes;
+     return static_cast<size_t>(deleted_nodes);
     
  } // end DeleteAndRepairConnnectivity(Node)
 
@@ -2807,9 +2805,9 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Elem
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-     size_t elmts_to_delete( distance(first,last) );
+     auto elmts_to_delete( distance(first,last) );
  
-     if ( elmts_to_delete == 0U ) return 0U;
+     if ( elmts_to_delete == 0 ) return 0U;
      
      // 0. distinguishing 2 cases: 1) equidimensional elements, and 2) lower-dim elements that share their nodes equidim ones
      // ---------------------------------------------------------------------------------------------------------------------
@@ -2836,8 +2834,8 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Elem
          // 1.1  finding perimeter nodes for updating and disconnecting element neighbors across perimeter faces
          vector<Element<dim>*> adjacent_elmts;
          vector<Node<dim>*>    interior_nodes;
-         adjacent_elmts.reserve( elmts_to_delete/2 );
-         interior_nodes.reserve( elmts_to_delete );
+         adjacent_elmts.reserve( static_cast<size_t>(elmts_to_delete/2) );
+         interior_nodes.reserve( static_cast<size_t>(elmts_to_delete) );
          auto first1{ first };
          while ( first != last ) {
               assert( (*first) != nullptr );
@@ -2897,7 +2895,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Elem
      // - the element parents of all nodes are updated to account for the deleted elements
      // - the elements will be deleted
      vector<Element<dim>*> adjacent_elmts;
-     adjacent_elmts.reserve( elmts_to_delete/2 );
+     adjacent_elmts.reserve( static_cast<size_t>(elmts_to_delete/2) );
      auto first1{ first };
      while ( first != last )
        {
@@ -2944,9 +2942,9 @@ template<uint32_t dim>
 size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Face<dim>*>::iterator first,
                                                             typename vector<Face<dim>*>::iterator last )
  {
-     size_t faces_to_delete( distance(first,last) );
+     auto faces_to_delete( distance(first,last) );
  
-     if ( faces_to_delete == 0U ) return 0U;
+     if ( faces_to_delete == 0 ) return 0U;
      
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -2958,7 +2956,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Face
                        "input range contains 'nullptr' Face objects; have these Faces already been deleted?");
                        
      face_ptrs.erase( unique( face_ptrs.begin(), face_ptrs.end() ), face_ptrs.end() );
-     if ( face_ptrs.size() < faces_to_delete )
+     if ( face_ptrs.size() < static_cast<size_t>(faces_to_delete) )
        csmp_error.Note( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
                        "input range contained duplicate Face objects, which have been removed");
           
@@ -2979,7 +2977,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Face
        }
      
      // 2. deleting the supplied range of faces, nulling the pointers to them
-     size_t deleted_faces{ faces_to_delete };
+     size_t deleted_faces{ static_cast<size_t>(faces_to_delete) };
      for ( auto& fit : face_ptrs ) {
           faces_.erase( faces_.get_iterator(fit) );
           fit = nullptr;
@@ -3004,9 +3002,9 @@ template<uint32_t dim>
 size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<InterFace<dim>*>::iterator first,
                                                        typename vector<InterFace<dim>*>::iterator last )
  {
-     size_t interfaces_to_delete( distance(first,last) );
+     auto interfaces_to_delete( distance(first,last) );
  
-     if ( interfaces_to_delete == 0U ) return 0U;
+     if ( interfaces_to_delete == 0 ) return 0U;
      
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -3034,7 +3032,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Inte
        }
 
      // 2. deleting the interfaces and nulling the pointers to them
-     size_t deleted_interfaces{ interfaces_to_delete };
+     size_t deleted_interfaces{ static_cast<size_t>(interfaces_to_delete) };
      while( first1 != last ) {
           if ( (*first1) == nullptr ) deleted_interfaces--;
           interfaces_.erase( interfaces_.get_iterator(*first1) );
@@ -3065,8 +3063,8 @@ void  MeshManager<dim>::BuildConnectivity( typename vector<CELL<dim>*>::const_it
                                            typename vector<CELL<dim>*>::const_iterator last )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    const size_t   n_cells_max = distance(first,last);
-    if ( n_cells_max == 0U ) {
+    const auto     n_cells_max = distance(first,last);
+    if ( n_cells_max == 0 ) {
          csmp_error.Note( WARNING, "MeshManager<dim>::BuildConnectivity:", "supplied cell vector is empty; nothing was done." );
          return;
       }
@@ -3078,9 +3076,9 @@ void  MeshManager<dim>::BuildConnectivity( typename vector<CELL<dim>*>::const_it
     
     // if we are dealing with element connectivity in 3D
     if constexpr ( is_same< CELL<dim>,Element<dim> >::value ) {
-        if constexpr( dim == 3U ) volume_cells.reserve( n_cells_max );
-        if constexpr( dim != 1U ) surface_cells.reserve( n_cells_max/3 );
-        line_cells.reserve( n_cells_max/6 );
+        if constexpr( dim == 3U ) volume_cells.reserve( static_cast<size_t>(n_cells_max) );
+        if constexpr( dim != 1U ) surface_cells.reserve( static_cast<size_t>(n_cells_max/3) );
+        line_cells.reserve( static_cast<size_t>(n_cells_max/6) );
         while ( first != cellsEnd ) {
              if constexpr( dim == 3U ) if ( (*first)->FE()->IsVolume() )  volume_cells.push_back(*first);
              if constexpr( dim != 1U ) if ( (*first)->FE()->IsSurface() ) surface_cells.push_back(*first);
@@ -3100,8 +3098,8 @@ void  MeshManager<dim>::BuildConnectivity( typename vector<CELL<dim>*>::const_it
     else { // ( is_same< CELL<dim>,Face<dim> >::value || is_same< CELL<dim>,InterFace<dim> >::value  )
         // dim-1 case
         if constexpr ( dim != 1U ) {
-             surface_cells.reserve( n_cells_max );
-             line_cells.reserve( n_cells_max/6 );
+             surface_cells.reserve( static_cast<size_t>(n_cells_max) );
+             line_cells.reserve( static_cast<size_t>(n_cells_max/6) );
              while ( first != cellsEnd ) {
                   if ( (*first)->FE()->IsSurface() )   surface_cells.push_back(*first);
                   else if ( (*first)->FE()->IsLine() ) line_cells.push_back(*first);
@@ -3113,7 +3111,7 @@ void  MeshManager<dim>::BuildConnectivity( typename vector<CELL<dim>*>::const_it
           }
         // 1D case
         else { // ( dim == 1U )
-             line_cells.reserve( n_cells_max );
+             line_cells.reserve( static_cast<size_t>(n_cells_max) );
              while ( first != cellsEnd ) {
                   line_cells.push_back(*first);
                   first++;
@@ -3227,7 +3225,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename vector<CELL<dim>*>::co
            while ( first != cellsEnd ) {
                 assert( (*first) != nullptr );
                 const size_t n_faces{ (*first)->Faces() };
-                for ( auto face{0}; face < n_faces; ++face ) {
+                for ( uint32_t face{0u}; face < n_faces; ++face ) {
                      // trying to insert cell into the map using a search key of node pointers
                      pair<typename map<set<Node<3>*>,map<CELL<3>*,uint32_t> >::iterator,bool>
                        it = cell_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map<CELL<3>*,uint32_t>{{*first,face}} ) );
@@ -3302,7 +3300,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename vector<CELL<dim>*>::co
            while ( first != cellsEnd ) {
                 assert( (*first) != nullptr );
                 const size_t n_faces{ (*first)->Faces() };
-                for ( auto face{0}; face < n_faces; ++face ) {
+                for ( uint32_t face{0u}; face < n_faces; ++face ) {
                      // trying to insert it into the map
                      auto it = cell_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map<CELL<2>*,uint32_t>{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
@@ -3531,7 +3529,7 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename vector<InterFace<dim
            while ( first != cellsEnd ) {
                 assert( (*first) != nullptr );
                 const size_t n_faces{ (*first)->Faces() };
-                for ( auto face{0}; face < n_faces; ++face ) {
+                for ( uint32_t face{0u}; face < n_faces; ++face ) {
                      // getting node-manifold pointers from set of pointers to face corner nodes
                      set<NodeManifold<3U>*> manifold_ptrs;
                      for ( const auto& nit : (*first)->CornerNodesOfFace(face) ) {
@@ -4170,11 +4168,11 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   for ( const auto& e : elements_ ) {
       const auto neighbors{e.Neighbors()};
       assert( neighbors <= 6 );
-      for ( auto j{0U}; j<neighbors; ++j ) {
+      for ( uint32_t j{0U}; j<neighbors; ++j ) {
             const Element<dim>* const ptr = e.Neighbor(j);
             if ( ptr ) {
                 assert( ptr->Idx() < elements_.size() );
-                vset.Pfvert( eidx, j, ptr->Idx() );
+                vset.Pfvert( eidx, j, static_cast<int64_t>(ptr->Idx()) );
               }
             else vset.Pfvert( eidx, j, e.AtBoundary(j) );
          }
@@ -4188,10 +4186,10 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   for ( const auto& f : faces_ ) {
       // equidimensional neighbors first
       const auto neighbors{ f.Neighbors() };
-      for ( auto j{0U}; j<neighbors; ++j ) {
+      for ( uint32_t j{0U}; j<neighbors; ++j ) {
            // if the neighbor exists
            if ( f.Neighbor(j) != nullptr )
-             vset.Pfvert( eidx, j, f.Neighbor(j)->Idx() );
+             vset.Pfvert( eidx, j, static_cast<int64_t>(f.Neighbor(j)->Idx()) );
            else {
                 // the face is either located on a model boundary or an internal boundary
                 bool all_nodes_at_external_boundary{true};
@@ -4208,12 +4206,12 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       // inner neighbor
       assert( f.InnerParent()->IsEquidimensional() );
       assert( f.InnerParent()->Idx() < Elements() );
-      vset.Pfvert( eidx, neighbors, f.InnerParent()->Idx() );
+      vset.Pfvert( eidx, neighbors, static_cast<int64_t>(f.InnerParent()->Idx()) );
       // outer neighbor
       if ( f.OuterParent() != nullptr ) {
           assert( f.OuterParent()->IsEquidimensional() );
           assert( f.OuterParent()->Idx() < Elements() );
-          vset.Pfvert( eidx, neighbors + 1U, f.OuterParent()->Idx() );
+          vset.Pfvert( eidx, neighbors + 1U, static_cast<int64_t>(f.OuterParent()->Idx()) );
         }
       else {
           // getting the boundary placement of the inner element
@@ -4238,7 +4236,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     const auto neighbors{ f.Neighbors() };
     for ( auto j{0U}; j<neighbors; ++j ) {
          if ( f.Neighbor(j) != nullptr )
-           vset.Pfvert( eidx, j, f.Neighbor(j)->Idx() );
+           vset.Pfvert( eidx, j, static_cast<int64_t>(f.Neighbor(j)->Idx()) );
          else
            vset.Pfvert( eidx, j, INTERNAL );
       }
@@ -4248,8 +4246,8 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     assert( f.OuterParent() != nullptr );
     assert( f.InnerParent()->Idx() < elements_.size() );
     assert( f.OuterParent()->Idx() < elements_.size() );
-    vset.Pfvert( eidx, neighbors,      f.InnerParent()->Idx() );
-    vset.Pfvert( eidx, neighbors + 1U, f.OuterParent()->Idx() );
+    vset.Pfvert( eidx, neighbors,      static_cast<int64_t>(f.InnerParent()->Idx()) );
+    vset.Pfvert( eidx, neighbors + 1U, static_cast<int64_t>(f.OuterParent()->Idx()) );
       
     // 3. storing local number of face of the inner and outer elements that the InterFace is connected to (2 entries)
     assert( f.InnerParentFaceID() < f.InnerParent()->Faces() );
@@ -4260,7 +4258,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     // 4. storing number of intervening element or nullptr identifier (one entry)
     if ( f.HasInterveningElement() ) {
          assert( f.InterveningElement()->Idx() < elements_.size() );
-         vset.Pfvert( eidx, neighbors + 4U, f.InterveningElement()->Idx() );
+         vset.Pfvert( eidx, neighbors + 4U, static_cast<int64_t>(f.InterveningElement()->Idx()) );
       }
     else
       vset.Pfvert( eidx, neighbors + 4U, INTERNAL );

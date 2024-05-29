@@ -53,7 +53,7 @@ void ModelSubDomain_Test::run()
        {
          VSet<3U>   vset;
          const bool skewed(false);
-         test_Create_Prism_Hexa_VSet( vset, skewed );
+         create_Prism_Hexa_VSet( vset, skewed );
          Model<3U>   model1( vset );
         
          //model1.CreateProperty( "box flag", "none", SCALAR, NODE );
@@ -315,7 +315,7 @@ bool ModelSubDomain_Test::Test_EstablishNeighborConnectivity()
     string varFileName("ModelSubDomain_Test-variables.txt");
     const bool   skewed_elements(false); // otherwise model is not a box anymore
     VSet<3U>     vset;
-    test_Create_Pyramid_Hexa_VSet( vset, skewed_elements );
+    create_Pyramid_Hexa_VSet( vset, skewed_elements );
     // adding 'node number' as a variable
     PropertyData node_nums( NODE, SCALAR, 3U );
     node_nums.Reserve( vset.Vertices() );
