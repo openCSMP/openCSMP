@@ -151,8 +151,8 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
                 LinearTriangle().ElementType(), 
                 n_vertices, n_elements );
                                    
-   deque<vector<size_t> >     plist( n_elements, vector<size_t>{3} );
-   deque<vector<int64_t> >    pfvert( n_elements, vector<int64_t>{3} );
+   deque<vector<size_t> >     plist( n_elements, vector<size_t>(3) );
+   deque<vector<int64_t> >    pfvert( n_elements, vector<int64_t>(3) );
    PropertyData               edata( ELEMENT, SCALAR, 2U );
    edata.Resize( n_elements );
    

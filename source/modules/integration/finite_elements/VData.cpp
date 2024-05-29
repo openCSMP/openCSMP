@@ -785,7 +785,7 @@ to be included into the supplied deques.
     pelmt.assign( etypes.begin(), etypes.end() );
     
     for ( size_t i{0U}; i<nrCells; i++ )
-      plist.emplace_back( vector<size_t>{npes[i],numeric_limits<size_t>::max()} );
+      plist.emplace_back( vector<size_t>(npes[i],numeric_limits<size_t>::max()) );
     
     for ( size_t i{0U}; i<nrCells; i++ )
       pfverts.emplace_back( vector<int64_t>(epes[i],IRREGULAR) );
