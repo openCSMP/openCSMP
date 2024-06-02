@@ -33,9 +33,14 @@ class VData_Test : public Test {
        inside of EstablishElementConnectivity2D()
     */
     void Test_CreateConsistentLineElementOrientations2D();
+    
+    /// reestablishes neighbor connectivity for 3D model Rubik cube
+    void Test_RecreateConnectivityOfHexahedralMesh();
 
     void Test_InitialiseNodeTopologyIdentifiers();
-  
+    
+  private:
+    const static bool verbose_ = true;  
 };
 
 

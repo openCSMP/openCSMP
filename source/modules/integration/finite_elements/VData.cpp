@@ -2028,7 +2028,8 @@ bool  VData::operator==( const VData& vd ) const
                      cerr <<" ("<< plist[i].size() <<" vs "<< vd.plist[i].size() <<").";
                   }
                 else {
-                     cerr <<"\n"<< csmp_class <<" "<< parseFiniteElementType(pelmt[i]) <<" "<< i <<": 'plist' member comparison: ";
+                     const auto etype = (HybridElementTypeMesh()) ? pelmt[i] : pelmt[0];
+                     cerr <<"\n"<< csmp_class <<" "<< parseFiniteElementType(etype) <<" "<< i <<": 'plist' member comparison: ";
                      for ( size_t j{0}; j<plist[i].size(); ++j )
                        cerr <<"\n\t\t"<< j <<": "<< plist[i][j] <<" vs "<< vd.plist[i][j];
                   }
@@ -2049,7 +2050,8 @@ bool  VData::operator==( const VData& vd ) const
                      cerr <<" ("<< pfverts[i].size() <<" vs "<< vd.pfverts[i].size() <<").";
                   }
                 else {
-                     cerr <<"\n"<< csmp_class <<" "<< parseFiniteElementType(pelmt[i]) <<" "<< i <<": 'pfvert' member comparison: ";
+                     const auto etype = (HybridElementTypeMesh()) ? pelmt[i] : pelmt[0];
+                     cerr <<"\n"<< csmp_class <<" "<< parseFiniteElementType(etype) <<" "<< i <<": 'pfvert' member comparison: ";
                      for ( size_t j{0}; j<pfverts[i].size(); ++j )
                        cerr <<"\n\t\t"<< j <<": "<< pfverts[i][j] <<" vs "<< vd.pfverts[i][j];
                   }
@@ -3382,8 +3384,8 @@ size_t VData::SwitchCornerTriangles2D()
               if ( nbors == 1 ) {
                    // finding the only valid neigbor and its shared face
                    pair<size_t,size_t> face_nds;
-                   size_t              cnr_nd(UINT_MAX);
-                   int64_t             nb_idx(UINT_MAX);
+                   size_t              cnr_nd(SIZE_MAX);
+                   int64_t             nb_idx(numeric_limits<int64_t>::max());
                    for ( auto i{0U}; i<3; ++i ) {
                         if ( pfverts[elmt_idx][i] >= 0 ) {
                              nb_idx = pfverts[elmt_idx][i];
@@ -3493,8 +3495,8 @@ void VData::EstablishElementConnectivity3D()
     for ( size_t elmt_idx{0}; elmt_idx < n_elements; ++elmt_idx )
       {
          // getting the element type (unfortunately this is known only at runtime)
-         const auto etype = (HybridElementTypeMesh()==true) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt_idx]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
-         assert( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) != UNKNOWN );
+         const CSMP_FEM_TYPE etype = (HybridElementTypeMesh()==true) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt_idx]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
+         assert( etype != UNKNOWN );
          
           const auto faces(CSMP_ElementSpecifications::FacesPerElementOfType(etype));
           pfverts[elmt_idx].resize(faces,IRREGULAR);
@@ -3632,13 +3634,13 @@ void VData::EstablishElementConnectivity3D()
                          // making sure that there only is a single unassigned element
                          assert( joint_line_elmts.size() - 1 == assigned_elements.size() );
                          // finding the yet-to-be-assigned element
-                         size_t unassigned_elmt{UINT_MAX};
+                         size_t unassigned_elmt{SIZE_MAX};
                          for ( auto& eit : joint_line_elmts )
                            if ( assigned_elements.find(eit) == assigned_elements.end() ) {
                                 unassigned_elmt = eit;
                                 break;
                              }
-                         assert ( unassigned_elmt != UINT_MAX );
+                         assert ( unassigned_elmt != SIZE_MAX );
                          // finding the correct side of the line element and assigning the vertex bflag to irt
                          if      ( it.first == plist[unassigned_elmt][0] ) pfverts[unassigned_elmt][0] = bflags[it.first];
                          else if ( it.first == plist[unassigned_elmt][1] ) pfverts[unassigned_elmt][1] = bflags[it.first];
@@ -3667,7 +3669,7 @@ void VData::EstablishElementConnectivity3D()
                   // finding out on which boundary the edge of the face is
                   // relying on appropriate box-boundary flagging
                   // (using only the two first nodes of the face)
-                  const CSMP_FEM_TYPE etype = static_cast<CSMP_FEM_TYPE>( pelmt[elmt_idx] );
+                  const CSMP_FEM_TYPE etype = (HybridElementTypeMesh()==true) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt_idx]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
                   assert( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) != UNKNOWN );
                   const size_t n0 = plist[elmt_idx][CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, 0 ) ];
                   const size_t n1 = plist[elmt_idx][CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, 1 ) ];
@@ -3683,8 +3685,8 @@ void VData::EstablishElementConnectivity3D()
                   const size_t   elmt2      = (*next((*it).second.begin(),1)).first;  // element idx
                   const uint32_t face_elmt2 = (*next((*it).second.begin(),1)).second; // local face of element
                   // compatibility check
-                  const CSMP_FEM_TYPE etype1 = static_cast<CSMP_FEM_TYPE>( pelmt[elmt1] );
-                  const CSMP_FEM_TYPE etype2 = static_cast<CSMP_FEM_TYPE>( pelmt[elmt2] );
+                  const CSMP_FEM_TYPE etype1 = (HybridElementTypeMesh()==true) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt1]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
+                  const CSMP_FEM_TYPE etype2 = (HybridElementTypeMesh()==true) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt2]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
                   assert( CSMP_ElementSpecifications::SurfaceElement( etype1 ) );
                   assert( CSMP_ElementSpecifications::SurfaceElement( etype2 ) );
                   assert( face_elmt1 < CSMP_ElementSpecifications::FacesPerElementOfType( etype1 ) );
@@ -3788,10 +3790,11 @@ void VData::EstablishElementConnectivity3D()
                   const size_t   elmt          = (*(*it).second.begin()).first;
                   const uint32_t boundary_face = (*(*it).second.begin()).second;
                   // collecting the face nodes to query Box
-                  const auto n_face_nodes = CSMP_ElementSpecifications::NodesPerFaceForElementOfType( pelmt[elmt], boundary_face );
+                  const auto etype = (HybridElementTypeMesh()==true) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
+                  const auto n_face_nodes = CSMP_ElementSpecifications::NodesPerFaceForElementOfType( etype, boundary_face );
                   set<BOX_BOUNDARY> bflag_set;
                   for ( uint32_t n{0u}; n<n_face_nodes; ++n ) {
-                       const size_t nidx = plist[elmt][CSMP_ElementSpecifications::FaceNodeForElementOfType( pelmt[elmt], boundary_face, n )];
+                       const size_t nidx = plist[elmt][CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, boundary_face, n )];
                        if ( bflags[nidx] != NOT )
                          bflag_set.insert( static_cast<BOX_BOUNDARY>( bflags[nidx] ) );
                     }
@@ -4432,7 +4435,7 @@ void splitCornerTetrahedron( VData& vdata, size_t cnr, size_t nbr )
     // 1. Establishing the order of the 4 nodes that will be reconnected
     // -----------------------------------------------------------------
     const size_t n_nodes{ vdata.PlistSize(cnr) };
-    size_t       n_cnr(UINT_MAX);
+    size_t       n_cnr(SIZE_MAX);
     assert( n_nodes == 4 ); // tetrahedra only
     for ( uint32_t i{0u}; i<n_nodes; ++i )
       if ( vdata.Pfvert(cnr,i) >= 0 ) { // corner element has only one neighbor; all are opposite to nodes
@@ -4451,7 +4454,7 @@ void splitCornerTetrahedron( VData& vdata, size_t cnr, size_t nbr )
     n2    = vdata.Plist(cnr,n2);
     n_cnr = vdata.Plist(cnr,n_cnr);
     // establishing extra node of opposite tetrahedron 'nbor' (more robust to rely on node numbers only)
-    size_t n4{UINT_MAX};
+    size_t n4{SIZE_MAX};
     for ( uint32_t i{0U}; i<n_nodes; ++i )
       if ( vdata.Plist(nbr,i) != n0 &&
            vdata.Plist(nbr,i) != n1 &&

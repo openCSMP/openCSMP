@@ -2841,6 +2841,107 @@ void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 
 
 /**
+      Creates cube of 27 unit hexahedra, numbered from the back XY plane to the front.
+      Element number is increasing with x in the rows, and from the bottom to the top, then with the planes from the back to the front.
+      
+      @author SKM
+      @date 31/5/2024
+*/
+void create_RubikCube( VSet<3U>& vset )
+  {
+    // Rubik cube 3 x 3 x 3, starting element numbering from the origin in the back plane (XY), moving left to right, from bottom to top
+    deque<double>  px{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3,
+                       0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3,
+                       0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3,
+                       0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3 };
+            
+    deque<double>  py{ 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3,  // Bottom Layer (z = 0)
+                       0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3,  // Middle Layer (z = 1)
+                       0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3,  // Top Layer (z = 2)
+                       0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3 };  // Topmost Layer (z = 3)
+
+    deque<double>  pz{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // Bottom Layer (z = 0)
+                       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // Middle Layer (z = 1)
+                       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  // Top Layer (z = 2)
+                       3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };  // Topmost Layer (z = 3)
+        
+    vector<int8_t> bflags{ // xy plane in the back
+                          CNR1, EDGE1, EDGE1, CNR2,
+                          EDGE4, NOT, NOT, EDGE2,
+                          EDGE4, NOT, NOT, EDGE2,
+                          CNR4, EDGE3, EDGE3, CNR3,
+                          // in midde layer (back)
+                          EDGE5, BOTTOM, BOTTOM, EDGE6,
+                          LEFT, NOT, NOT, RIGHT,
+                          LEFT, NOT, NOT, RIGHT,
+                          EDGE8, TOP, TOP, EDGE7,
+                          // middle layer (front)
+                          EDGE5, BOTTOM, BOTTOM, EDGE6,
+                          LEFT, NOT, NOT, RIGHT,
+                          LEFT, NOT, NOT, RIGHT,
+                          EDGE8, TOP, TOP, EDGE7,
+                          // front (z-max)
+                          CNR5, EDGE9, EDGE9, CNR6,
+                          EDGE12, NOT, NOT, EDGE11,
+                          EDGE12, NOT, NOT, EDGE11,
+                          CNR8, EDGE3, EDGE3, CNR7 };
+
+    assert( bflags.size() == px.size() ); // "boundary flag vector has a different size than node coordinate vector"
+
+    vector<int8_t> vecElementTypes(1,ISOPARAMETRIC_LINEAR_HEXAHEDRON);
+
+    deque<vector<size_t>> plist{ {0, 1, 4, 5, 16, 17, 20, 21}, {1, 2, 5, 6, 17, 18, 21, 22}, {2, 3, 6, 7, 18, 19, 22, 23},
+                                 {4, 5, 8, 9, 20, 21, 24, 25}, {5, 6, 9, 10, 21, 22, 25, 26}, {6, 7, 10, 11, 22, 23, 26, 27},
+                                 {8, 9, 12, 13, 24, 25, 28, 29}, {9, 10, 13, 14, 25, 26, 29, 30}, {10, 11, 14, 15, 26, 27, 30, 31},
+                                 {16, 17, 20, 21, 32, 33, 36, 37}, {17, 18, 21, 22, 33, 34, 37, 38}, {18, 19, 22, 23, 34, 35, 38, 39},
+                                 {20, 21, 24, 25, 36, 37, 40, 41}, {21, 22, 25, 26, 37, 38, 41, 42}, {22, 23, 26, 27, 38, 39, 42, 43},
+                                 {24, 25, 28, 29, 40, 41, 44, 45}, {25, 26, 29, 30, 41, 42, 45, 46}, {26, 27, 30, 31, 42, 43, 46, 47},
+                                 {32, 33, 36, 37, 48, 49, 52, 53}, {33, 34, 37, 38, 49, 50, 53, 54}, {34, 35, 38, 39, 50, 51, 54, 55},
+                                 {36, 37, 40, 41, 52, 53, 56, 57}, {37, 38, 41, 42, 53, 54, 57, 58}, {38, 39, 42, 43, 54, 55, 58, 59},
+                                 {40, 41, 44, 45, 56, 57, 60, 61}, {41, 42, 45, 46, 57, 58, 61, 62}, {42, 43, 46, 47, 58, 59, 62, 63} };
+
+    const auto BA{BACK}, BO{BOTTOM}, L{LEFT}, R{RIGHT}, T{TOP}, F{FRONT};
+    deque<vector<int64_t>> pfverts = { {BO,9,1,BA,L,3}, {BO,10,2,BA,0,4}, {BO,11,R,BA,1,5}, // backplane
+                                       {0,12,4,BA,L,6}, {1,13,5,BA,3,7}, {2,14,R,BA,4,8},
+                                       {3,15,7,BA,L,T}, {4,16,8,BA,6,T}, {5,17,R,BA,7,T},
+                                       {BO,18,10,0,L,12}, {BO,19,11,1,9,13}, {BO,20,R,2,10,14}, // middle plane
+                                       {9,21,13,3,L,15}, {10,22,14,4,12,16}, {11,23,R,5,13,17},
+                                       {12,24,16,6,L,T}, {13,25,17,7,15,T}, {14,26,R,8,16,T},
+                                       {9,F,19,0,L,21}, {10,F,20,1,18,22}, {11,F,R,2,19,23}, // front plane
+                                       {12,F,22,3,L,24}, {13,F,23,4,21,25}, {14,F,R,5,22,26},
+                                       {15,F,25,6,L,T}, {16,F,26,7,24,T}, {17,F,R,8,25,T} };
+
+    const size_t n_elements{plist.size()}, n_nodes{px.size()};
+    
+  	IsoparametricLinearHexahedron iso_hexahedron;
+  	
+    //------------------------CREATE VSET
+    //this is a 3D model, it is a cube of unit-cell hexahedra
+  	vset.Resize( iso_hexahedron.Nodes(),
+                 iso_hexahedron.Neighbors(),
+                 iso_hexahedron.ElementType(),
+                 n_nodes, n_elements );
+
+ 	  vset.AddXYZ( px, py, pz );
+    vset.AddBFlags( bflags.begin(), bflags.end() );
+
+  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
+  	vset.AddPlist( plist.begin(), plist.end() );
+    vset.AddPfverts( pfverts.begin(), pfverts.end());
+
+    // all elements are of the same material labelled 1
+    vector<int32_t> pmtrl( vset.Elements(), 1 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+    
+    vset.Out();
+
+} // end create_RubikCube
+
+
+
+
+
+/**
        Decomposition of a hexahedron into 6 tetrahedra.
        Only 6 elements!
 */

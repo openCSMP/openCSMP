@@ -33,6 +33,9 @@ namespace csmp {
 
     // 3D single-element-type meshes
     // -----------------------------
+    /// Rubik cube of 27 hexahedra, three XY planes of 3x3 elements, numbered from the left to the right (x=0..3), from the bottom to the top (y=0..3)
+    void create_RubikCube( VSet<3U>& );
+
     /// 6 tets from a cube, no midside nodes
     void testCreateTetra_VSet( VSet<3U>& );
     
