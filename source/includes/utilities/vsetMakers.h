@@ -37,7 +37,7 @@ namespace csmp {
     void create_RubikCube( VSet<3U>& );
 
     /// 6 tets from a cube, no midside nodes
-    void testCreateTetra_VSet( VSet<3U>& );
+    void create_Tetra_VSet( VSet<3U>& );
     
     void create_Pyramid_VSet( VSet<3U>&, bool bSkewed=false );
     

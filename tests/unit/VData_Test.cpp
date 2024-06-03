@@ -315,6 +315,11 @@ void VData_Test::run()
   // using handcrafted model 'MeshPatchWithLineElements' as input
   Test_CreateConsistentLineElementOrientations2D();
   
+  // 3D
+  // ======================================================
+  // testing whether the consistent numbering of faces/neighbors can be reproduced for all-tetra model 'Tetra' (6 tets from hexahedron)
+  Test_RecreateConnectivityOfTetrahedralMesh();
+
   // testing whether the consistent numbering of faces/neighbors can be reproduced for all-hexahedral model Rubik cube
   Test_RecreateConnectivityOfHexahedralMesh();
   
@@ -453,6 +458,20 @@ void VData_Test::Test_CreateConsistentLineElementOrientations2D()
 
 
 
+
+    /// reestablishes neighbor connectivity for 3D model Rubik cube
+void VData_Test::Test_RecreateConnectivityOfTetrahedralMesh()
+ {
+    VSet<3U> vset;
+    create_Tetra_VSet( vset );
+    VSet<3U> vset_backup = vset;
+    vset.EstablishElementConnectivity3D();
+    if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfTetrahedralMesh: testing model 'Tetra' (6 from hexahedron)..."<< endl;
+    _test( vset == vset_backup );
+ }
+
+
+
     /// reestablishes neighbor connectivity for 3D model Rubik cube
 void VData_Test::Test_RecreateConnectivityOfHexahedralMesh()
  {
@@ -460,7 +479,7 @@ void VData_Test::Test_RecreateConnectivityOfHexahedralMesh()
     create_RubikCube( vset );
     VSet<3U> vset_backup = vset;
     vset.EstablishElementConnectivity3D();
-    if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model RubikCube..."<< endl;
+    if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'RubikCube'..."<< endl;
     _test( vset == vset_backup );
  }
 

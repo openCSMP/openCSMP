@@ -183,7 +183,7 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
     // Testing model without boundaries, variable&topology tests
     if ( verbose_ ) cout <<"Building ModelOutput (only regions)..."<<endl;
     VSet<3U> vset;
-    testCreateTetra_VSet( vset );
+    create_Tetra_VSet( vset );
     Model<3U>    modelOutput1( vset, "VSet_TestCase-variables.txt" );
     Region<3U>&  model_domain{ modelOutput1.Region("Model") };
     const size_t elementCount1( model_domain.Cells() );
@@ -275,7 +275,7 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
     // ------------------------------------------------------------------------------------
     {
       VSet<3U> vset;
-      testCreateTetra_VSet( vset );
+      create_Tetra_VSet( vset );
       Model<3U> modelOutput3( vset, "VSet_TestCase-variables.txt" );
       
       // 'diffusity' for FV scheme

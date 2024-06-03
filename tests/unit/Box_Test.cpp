@@ -267,7 +267,7 @@ bool Box_Test::TestBoundaryFlagAssigment2D()
 bool Box_Test::TestBoundaryFlagging()
  {
     VSet<3U>  vset;
-    testCreateTetra_VSet( vset );
+    create_Tetra_VSet( vset );
     Model<3U> model( vset, "CSMP-variables.txt" );
    
     string node_variable("nodal box flag"), elmt_variable("element box flag");

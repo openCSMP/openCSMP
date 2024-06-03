@@ -2944,8 +2944,10 @@ void create_RubikCube( VSet<3U>& vset )
 /**
        Decomposition of a hexahedron into 6 tetrahedra.
        Only 6 elements!
+       
+       @test is consistent with CSMP UG, SKM 3/6/2024
 */
-void testCreateTetra_VSet( VSet<3U>& vset )
+void create_Tetra_VSet( VSet<3U>& vset )
  {
     const size_t iNrOfElements{6}, nodes{8};
   	IsoparametricLinearTetrahedron  iso_tet;
@@ -2994,14 +2996,15 @@ void testCreateTetra_VSet( VSet<3U>& vset )
   	vset.AddXYZ( px, py, pz );
     vset.ResizeBFlags();
     
-    vset.BFlag(0,CNR5);
-    vset.BFlag(1,CNR6);
-    vset.BFlag(2,CNR2);
-    vset.BFlag(3,CNR1);
-    vset.BFlag(4,CNR8);
-    vset.BFlag(5,CNR7);
-    vset.BFlag(6,CNR3);
-    vset.BFlag(7,CNR4);
+    // SKM 3/6/24 - made compliant with CSMP UG boundary flags (fig.5)
+    vset.BFlag(0,CNR1);
+    vset.BFlag(1,CNR2);
+    vset.BFlag(2,CNR3);
+    vset.BFlag(3,CNR4);
+    vset.BFlag(4,CNR5);
+    vset.BFlag(5,CNR6);
+    vset.BFlag(6,CNR7);
+    vset.BFlag(7,CNR8);
 
 
     // -------------------------PELMT
@@ -3011,15 +3014,15 @@ void testCreateTetra_VSet( VSet<3U>& vset )
 
     //--------------------------ELEMENTS ('plist')
     //define tetrahedral elements (1..6), assign nodes per element (see hexa decomposition)
-    deque<vector<size_t> >  deqElements{ {0,1,3,4}, {4,1,3,5}, {4,5,3,7}, {1,2,3,6}, {3,1,6,5}, {5,6,3,7} };
+    deque<vector<size_t> >  deqElements{ {0,1,3,4}, {4,5,1,3}, {4,5,3,7}, {1,2,3,6}, {3,1,6,5}, {5,6,3,7} };
 
   	vset.AddPlist( deqElements.begin(),deqElements.end());
 
 
-    //--------------------------ELEMENT NEIGHBORS          0                   1              2
-    deque<vector<int64_t> >  deqElementNeighbors{ {1,LEFT,FRONT,BOTTOM}, {2,FRONT,4,0}, {TOP,5,LEFT,1},
-                                                 //        3                   4              5
-                                                  {BACK,4,RIGHT,BOTTOM}, {5,RIGHT,3,1}, {TOP,BACK,2,4} };
+    //--------------------------ELEMENT NEIGHBORS          0                   1                  2
+    deque<vector<int64_t> >  deqElementNeighbors{ {1,LEFT,BOTTOM,BACK}, {4,0,2,BOTTOM}, {5,LEFT,FRONT,1},
+                                                 //        3                 4              5
+                                                  {TOP,4,RIGHT,BACK}, {RIGHT,5,1,3}, {TOP,2,FRONT,4} };
 
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
 

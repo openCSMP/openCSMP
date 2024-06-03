@@ -34,6 +34,9 @@ class VData_Test : public Test {
     */
     void Test_CreateConsistentLineElementOrientations2D();
     
+    /// reestablishes neighbor connectivity for 3D model Tetra (6 tets created from one hex)
+    void Test_RecreateConnectivityOfTetrahedralMesh();
+
     /// reestablishes neighbor connectivity for 3D model Rubik cube
     void Test_RecreateConnectivityOfHexahedralMesh();
 

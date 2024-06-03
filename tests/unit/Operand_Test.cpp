@@ -229,7 +229,7 @@ void Operand_Test::run()
   // 3D test
   {
     VSet<3U>    mesh_container;
-    testCreateTetra_VSet( mesh_container );
+    create_Tetra_VSet( mesh_container );
 
     // Building Region object from ANSYS data files
     string mesh_name("triangle_patch");
