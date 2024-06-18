@@ -2884,7 +2884,7 @@ void create_RubikCube( VSet<3U>& vset )
                           CNR5, EDGE9, EDGE9, CNR6,
                           EDGE12, NOT, NOT, EDGE11,
                           EDGE12, NOT, NOT, EDGE11,
-                          CNR8, EDGE3, EDGE3, CNR7 };
+                          CNR8, EDGE11, EDGE11, CNR7 };
 
     assert( bflags.size() == px.size() ); // "boundary flag vector has a different size than node coordinate vector"
 

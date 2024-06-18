@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <cassert>
+#include <algorithm>
+
 #include "CubicSpline.h"
 
 using namespace std;

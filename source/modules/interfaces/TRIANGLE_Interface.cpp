@@ -353,7 +353,7 @@ void TRIANGLE_Interface::ReadNodeDataFile( const char* file,
 
     size_t   id, nodes;
     int32_t  dim, node_attributes, boundary_markers;
-    int8_t   pbflag(0);
+    int      pbflag(0);
     double   pbval = numeric_limits<double>::quiet_NaN(), xval, yval;
 
     // erasing vectors and maps
@@ -385,7 +385,7 @@ void TRIANGLE_Interface::ReadNodeDataFile( const char* file,
          if ( pbflag == 1 )
            {
               bvalues[ id ] = pbval;
-              bflags[ id ]  = pbflag;
+              bflags[ id ]  = static_cast<int8_t>(pbflag);
            }
       }
     ifs.close();
