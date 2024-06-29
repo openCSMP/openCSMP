@@ -110,7 +110,7 @@ IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( uint32_t integrati
     else if( integrationPoints == 8 )
     {
         // full 8-node integration scheme, see Akin, 1982, p.100
-        for(auto i{0U}; i<integrationPoints;i++)
+        for(uint32_t i{0U}; i<integrationPoints;i++)
             W[i] = 1.0;
 
         const double a1 = 0.577350269189626;
@@ -169,33 +169,33 @@ IsoparametricLinearHexahedron::VolumeOfTetra(
                             uint32_t verticeIndex4 )
 {
 
-    uint32_t i=verticeIndex1,j=verticeIndex2,k=verticeIndex3,l=verticeIndex4;
+    const uint32_t i=verticeIndex1,j=verticeIndex2,k=verticeIndex3,l=verticeIndex4;
 
-    double d1Times1=	 XY(j,2)*XY(k,0)*XY(l,1)-XY(j,2)*XY(k,1)*XY(l,0)-XY(j,0)*XY(k,2)*XY(l,1)+
+    const double d1Times1=	 XY(j,2)*XY(k,0)*XY(l,1)-XY(j,2)*XY(k,1)*XY(l,0)-XY(j,0)*XY(k,2)*XY(l,1)+
                          XY(j,0)*XY(k,1)*XY(l,2)+XY(j,1)*XY(k,2)*XY(l,0)-XY(j,1)*XY(k,0)*XY(l,2);
 
     if(d1Times1<0.0) cout<<" IsoparametricLinearHexahedron::VolTetra d1 <0.0 "<<endl;
     //if(d1Times1<0.0)	throw std::range_error(" IsoparametricLinearHexahedron::VolTetra d1 <0.0 ");
 
-    double d2TimesXYi0=	-XY(i,2)*XY(k,0)*XY(l,1)+XY(i,2)*XY(k,1)*XY(l,0)+XY(i,2)*XY(j,0)*XY(l,1)-
+    const double d2TimesXYi0=	-XY(i,2)*XY(k,0)*XY(l,1)+XY(i,2)*XY(k,1)*XY(l,0)+XY(i,2)*XY(j,0)*XY(l,1)-
                          XY(i,2)*XY(j,0)*XY(k,1)-XY(i,2)*XY(j,1)*XY(l,0)+XY(i,2)*XY(j,1)*XY(k,0);
 
     if(d2TimesXYi0<0.0)	cout<<" IsoparametricLinearHexahedron::VolTetra d2TimesXYi0 <0.0"<<endl;
     //if(d2TimesXYi0<0.0) throw std::range_error(" IsoparametricLinearHexahedron::VolTetra d2TimesXYi0 <0.0");
 
-    double d3TimesXYi1= -XY(i,1)*XY(k,2)*XY(l,0)+XY(i,1)*XY(k,0)*XY(l,2)+XY(i,1)*XY(j,2)*XY(l,0)-
+    const double d3TimesXYi1= -XY(i,1)*XY(k,2)*XY(l,0)+XY(i,1)*XY(k,0)*XY(l,2)+XY(i,1)*XY(j,2)*XY(l,0)-
                          XY(i,1)*XY(j,2)*XY(k,0)-XY(i,1)*XY(j,0)*XY(l,2)+XY(i,1)*XY(j,0)*XY(k,2);
 
     if(d3TimesXYi1<0.0) cout<<" IsoparametricLinearHexahedron::VolTetra D3TimesXYi1 <0.0"<<endl;
     // throw std::range_error(" IsoparametricLinearHexahedron::VolTetra D3TimesXYi1 <0.0");
 
-    double d4TimesXYi2= -XY(i,1)*XY(k,2)*XY(l,0)+XY(i,1)*XY(k,0)*XY(l,2)+XY(i,1)*XY(j,2)*XY(l,0)-
+    const double d4TimesXYi2= -XY(i,1)*XY(k,2)*XY(l,0)+XY(i,1)*XY(k,0)*XY(l,2)+XY(i,1)*XY(j,2)*XY(l,0)-
                          XY(i,1)*XY(j,2)*XY(k,0)-XY(i,1)*XY(j,0)*XY(l,2)+XY(i,1)*XY(j,0)*XY(k,2);
 
     if(d4TimesXYi2<0.0) cout<< " IsoparametricLinearHexahedron::VolTetra d4TimesXYi2 <0.0"<<endl;
     //if(d4TimesXYi2<0.0) throw std::range_error(" IsoparametricLinearHexahedron::VolTetra d4TimesXYi2 <0.0");
 
-    double volume =fabs(d1Times1) + fabs(d2TimesXYi0) + fabs(d3TimesXYi1) + fabs(d4TimesXYi2);
+    const double volume =fabs(d1Times1) + fabs(d2TimesXYi0) + fabs(d3TimesXYi1) + fabs(d4TimesXYi2);
 
     return volume/6.0;
 }
@@ -308,66 +308,14 @@ IsoparametricLinearHexahedron::NodesOfSegment( uint32_t segm_id, std::vector<uin
  }
 
 
+
+
 /** 
      Face numbering in counter-clockwise order from the outside looking in
      
      @test SKM 2/3/2016
 
 */
-/*
-void IsoparametricLinearHexahedron::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
- {
-    fnids.resize(4);
-
-    if ( face_id == 0 )
-      {
-         fnids[0] = 0;
-         fnids[1] = 3;
-         fnids[2] = 2;
-         fnids[3] = 1;
-      }
-    else if ( face_id == 1 )
-      {
-         fnids[0] = 0;
-         fnids[1] = 1;
-         fnids[2] = 5;
-         fnids[3] = 4;
-      }
-    else if ( face_id == 2 )
-      {
-         fnids[0] = 1;
-         fnids[1] = 2;
-         fnids[2] = 6;
-         fnids[3] = 5;
-      }
-    else if ( face_id == 3 )
-      {
-         fnids[0] = 2;
-         fnids[1] = 3;
-         fnids[2] = 7;
-         fnids[3] = 6;
-      }
-    else if ( face_id == 4 )
-      {
-         fnids[0] = 0;
-         fnids[1] = 4;
-         fnids[2] = 7;
-         fnids[3] = 3;
-      }
-    else if ( face_id == 5 )
-      {
-         fnids[0] = 4;
-         fnids[1] = 5;
-         fnids[2] = 6;
-         fnids[3] = 7;
-      }
-    else
-    std::cerr <<"\nIsoparametricLinearHexahedron::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
- }
-*/
-
-
-
 // SKM refactored 9/8/22, returns empty vector if face_id is out of range
 
 vector<uint32_t>  IsoparametricLinearHexahedron::NodesOfFace( uint32_t face_id ) const
@@ -406,8 +354,9 @@ vector<uint32_t>  IsoparametricLinearHexahedron::CornerNodesOfFace( uint32_t fac
  }
 
 
+
 /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
-std::vector<uint32_t>  IsoparametricLinearHexahedron::NodesConnectedTo( uint32_t node_id ) const
+vector<uint32_t>  IsoparametricLinearHexahedron::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
@@ -560,12 +509,12 @@ IsoparametricLinearHexahedron::OutputElementToRhino( const char* file_name,
 
         DenseMatrix<DM_MIN>  IPPHYSQ;
         isoLinQuad.IntegrationPointsFromParToPhys(IPPHYSQ);
-        const auto numberIPofQuad=4;
+        const uint32_t numberIPofQuad=4;
         rhinos<<"# Face "<<i+1<<", area="<<element1.Volume()<<endl;
-            for(auto n=0;n<numberIPofQuad;n++)
+            for( uint32_t n{0u};n<numberIPofQuad;n++)
             {
             rhinos<<"point (";
-            for(auto k=0;k<dim;k++)
+            for(uint32_t k{0u};k<dim;k++)
             if(k!=dim-1) rhinos<<IPPHYSQ(n,k)<<",";
                         else
                          rhinos<<IPPHYSQ(n,k)<<") ";
@@ -798,7 +747,7 @@ IsoparametricLinearHexahedron::dN( DenseMatrix<DM_MIN>& DN8 )
     M.Resize(dim,1);
 
      // Jacobian transformation to global coordinate system
-     for ( auto i{0U}; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
           // here the global coordinates come in
           dNr( NXYZ(i,0), NXYZ(i,1), NXYZ(i,2), DNR );
@@ -956,10 +905,10 @@ void IsoparametricLinearHexahedron::ParametricToPhysical( vector<double>& rst,
 {
     Nrst(rst[0],rst[1],rst[2], NRST );
 
-    for(auto i{0U}; i<dim; i++)
+    for(uint32_t i{0U}; i<dim; i++)
         xyz[i]=0.0;
 
-    for(auto i{0U}; i<npe; i++)
+    for(uint32_t i{0U}; i<npe; i++)
     {
         xyz[0]+=XY(i,0)*NRST[i];
         xyz[1]+=XY(i,1)*NRST[i];
@@ -979,7 +928,7 @@ void IsoparametricLinearHexahedron::IntegrationPoint( uint32_t ip,
    xyz.resize( XY.Cols() );
    xyz[0] = xyz[1] = xyz[2] = 0.;
 
-   for ( auto i{0U}; i<npe; i++) {
+   for ( uint32_t i{0U}; i<npe; i++) {
        xyz[0] += XY(i,0) * NRST[i];
        xyz[1] += XY(i,1) * NRST[i];
        xyz[2] += XY(i,2) * NRST[i];
@@ -997,9 +946,9 @@ vector<double> N(npe);
 
 Nrst(rst[0],rst[1],rst[2], N );
 
-for(auto i{0U}; i<dim; i++) xyz[i]=0.0;
+for(uint32_t i{0U}; i<dim; i++) xyz[i]=0.0;
 
-for(auto i{0U}; i<npe; i++)
+for(uint32_t i{0U}; i<npe; i++)
     {
     xyz[0]+=XY(i,0)*N[i];
     xyz[1]+=XY(i,1)*N[i];
@@ -1034,7 +983,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
     vector<double> vec(spe);
     EdgeLengths( vec );
     double seg_max(vec[0]), seg_min(vec[0]);
-    for ( auto i=1; i<spe; i++ )
+    for ( uint32_t i{1u}; i<spe; i++ )
     {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
@@ -1099,7 +1048,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                     {
-                        for(auto l=0; l<dim; l++)
+                        for(uint32_t l=0u; l<dim; l++)
                             rstHatK[l] = rstHatK_PlusOne[l];
 
                         minDistanceFromGivenPoint = distanceFromGivenPointL2;
@@ -1325,7 +1274,7 @@ double  IsoparametricLinearHexahedron::AspectRatio()
    double seg_max(vec[0]), seg_min(vec[0]);
 
    // find largest segment
-   for ( auto i=1; i<spe; i++ ) {
+   for ( uint32_t i{1u}; i<spe; i++ ) {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
      }
@@ -1715,8 +1664,8 @@ const
 
   if(gpe==1)
   {
-    for ( auto i{0U}; i<npe; i++ )
-      for ( auto k=0; k<nvars; k++ )
+    for ( uint32_t i{0U}; i<npe; i++ )
+      for ( uint32_t k=0u; k<nvars; k++ )
         NVAR[i*nvars + k] = IVAR[k];
   }
   else
@@ -1750,9 +1699,9 @@ const
      =MATRIX_A(4,2)=MATRIX_A(5,3)=MATRIX_A(6,0)=MATRIX_A(7,1)=d;
 
 
-  for ( auto i{0U}; i<nvars; i++ )
+  for ( uint32_t i{0U}; i<nvars; i++ )
     {
-        for ( auto k=0; k<gpe; k++ ) TEMP_IP(k,0)=IVAR[k*nvars +i];
+        for ( uint32_t k=0; k<gpe; k++ ) TEMP_IP(k,0)=IVAR[k*nvars +i];
 
             TEMP_N=MATRIX_A*TEMP_IP;
             //TEMP_N.Out();
@@ -1894,7 +1843,7 @@ void IsoparametricLinearHexahedron::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, De
 	      dxyz};
 
 	uint32_t k(0), j;
-	for (auto i = 0; i < 8; ++i) { // 8 = npe
+	for (uint32_t i = 0u; i < 8; ++i) { // 8 = npe
 		for (j = 0; j < i; ++j) M(i, j) = M(j, i);
 		for (j = i; j < 8; ++j) M(i, j) = V_[k++];
 	}

@@ -932,70 +932,6 @@ inline double triangleArea( const Point<1U>&, const Point<1U>&, const Point<1U>&
      return 1.;
   }
 
-/**
-
-Method calculates the area of the finite element face
-using its corner nodes and returns it.
-
-@attention works only for straight-sided elements.
-
-@attention for lower-dimensional elements extra attributes are
-needed to scale the returned parameter to arrive at the
-correct spatial dimension.
-
-@attention this method fails to detect element type for cubic or barycentric elements
-
-@author SKM 4/6/2014
-
-*/
-/*
-template<uint32_t dim, template<uint32_t> class CELL>
-double  FiniteElementPolicy<dim,CELL>::FaceArea( uint32_t n ) const
-  {
-    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
-
-    if ( fptr_ == nullptr ) {
-          eptr->Out();
-          throw csmp::Exception( ERROR,
-                                 "FiniteElementPolicy<dim,CELL>::FaceArea:",
-                                 "encountered element with invalid element pointer.");
-       }
-
-    if ( fptr_->IsVolume() ) {
-         vector<uint32_t>  ids;
-         fptr_->NodesOfFace( n, ids );
-
-         // if the face is a triangle, function computes unit normal
-         // tested: O.K.
-         if ( ids.size() == 3U or ids.size() == 6U )
-              return triangleArea( eptr->N(ids[0])->Coordinate(),
-                                   eptr->N(ids[1])->Coordinate(),
-                                   eptr->N(ids[2])->Coordinate() );
-
-         // if the face is a quadrilateral unit normal is obtained this way
-         // tested: O.K.
-         if ( ids.size() == 4U or ids.size() == 8U or ids.size() == 9U )
-              return facetArea4( eptr->N(ids[0])->Coordinate(),
-                                 eptr->N(ids[1])->Coordinate(),
-                                 eptr->N(ids[2])->Coordinate(),
-                                 eptr->N(ids[3])->Coordinate() );
-      }
-
-    // if the element is a surface, the face is a line element
-    // and its length will be returned
-    if ( fptr_->IsSurface() ) {
-         vector<uint32_t>  ids;
-         fptr_->NodesOfFace( n, ids );
-         assert( ids.size() == 2 );
-         Point<dim>  edge = eptr->N(ids[1])->Coordinate() - eptr->N(ids[0])->Coordinate();
-         return edge.Length();
-      }
-
-    // for a line element the area of a face is 1x1 m
-    return 1.;
-
-  } // end FaceArea
-*/
 
 
 
@@ -1045,7 +981,7 @@ void  FiniteElementPolicy<dim,CELL>::UnitNormal( VectorVariable<dim>& nrml ) con
     assert( fptr_ != nullptr );
     CoordinateMatrix();
     uint32_t count{0U};
-    for ( auto d : fptr_->UnitNormal() )
+    for ( const auto& d : fptr_->UnitNormal() )
       nrml( count++ ) = d;
   }
 
@@ -1108,7 +1044,7 @@ void  FiniteElementPolicy<dim,CELL>::UnitNormalToFace( uint32_t face, VectorVari
     CoordinateMatrix();
     vector<double> un(dim,0.);
     fptr_->UnitNormalToFace( face, un );
-    for ( auto d(0); d < dim; ++d )
+    for ( uint32_t d(0u); d < dim; ++d )
       nrml(d) = un[d];
   }
 

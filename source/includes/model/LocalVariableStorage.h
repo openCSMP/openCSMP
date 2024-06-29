@@ -232,14 +232,14 @@ class LocalVariableStorage {
           return *this; }
         Data& operator=( Data&& ) = default;
 #else // debugging: a lot more information is kept in storage
-        uint32_t scalars,           ///< scalar variables stored at the site this policy is associated with
-                vectors,            ///< vector variables at this site
-                tensors,            ///< tensor variables at this site
-                arrays,             ///< array variables at this site
-                flaggedArrays;      ///< flagged array variables at this site
+        uint32_t scalars,            ///< scalar variables stored at the site this policy is associated with
+                 vectors,            ///< vector variables at this site
+                 tensors,            ///< tensor variables at this site
+                 arrays,             ///< array variables at this site
+                 flaggedArrays;      ///< flagged array variables at this site
         
-        uint32_t arrayLength,       ///< length of array variables associated with this site @todo only one size?
-                flaggedArrayLength; ///< length of flagged array variables @todo only one size?
+        uint32_t arrayLength,        ///< length of array variables associated with this site @todo only one size?
+                 flaggedArrayLength; ///< length of flagged array variables @todo only one size?
 
         Data() :
             flags              (0U),
@@ -302,7 +302,7 @@ class LocalVariableStorage {
 // nodes, elements, faces, interfaces
   
 /**
-double        Read    ( const csmp::INDEX<SCALAR,NODE>& ) const;
+double Read( const csmp::INDEX<SCALAR,NODE>& ) const;
 */
 template<uint32_t dim, template<uint32_t> class STOREE>
 template<PLACEMENT place> 
@@ -320,7 +320,7 @@ inline double LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<SCALAR,p
  
 /**
 
-void            Read    ( const csmp::INDEX<SCALAR,NODE>&, ScalarVariable& )         const;
+void   Read ( const csmp::INDEX<SCALAR,NODE>&, ScalarVariable& )         const;
 
 */
 template<uint32_t dim, template<uint32_t> class STOREE>

@@ -14,8 +14,8 @@ namespace csmp
       ~Timer() {}
       
       void Start() { ticks_ = clock(); }
-      double StopClocks() { return (clock() - ticks_); }
-      double Stop() { return StopClocks() / static_cast<double>(CLOCKS_PER_SEC); }
+      double StopClock() { return (clock() - ticks_); }
+      double Stop() { return StopClock() / static_cast<double>(CLOCKS_PER_SEC); }
 
     private:
       Timer( const Timer& );

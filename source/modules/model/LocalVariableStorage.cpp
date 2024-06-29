@@ -622,7 +622,7 @@ void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const Vect
  assert( (idx.flagOffset+dim-1) < data_.flags.size() );
  assert( (idx.dataOffset+dim-1) < data_.data.size() );
 #endif
-    for ( uint32_t i(0); i<dim; ++i ) {
+    for ( uint32_t i{0u}; i<dim; ++i ) {
          data_.flags[ idx.flagOffset+i ] = vc.Flag(i);
          data_.data[ idx.dataOffset+i ]  = vc[i];
       }
@@ -642,7 +642,7 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, VectorVaria
  assert( (idx.flagOffset+dim-1) < data_.flags.size() );
  assert( (idx.dataOffset+dim-1) < data_.data.size() );
 #endif
-    for ( uint32_t i(0); i<dim; ++i ) {
+    for ( uint32_t i{0u}; i<dim; ++i ) {
          vc.Flag(i) = data_.flags[ idx.flagOffset+i ];
          vc(i)      = data_.data[ idx.dataOffset+i ];
       }
@@ -664,7 +664,7 @@ void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const Tens
 #endif
     const uint32_t dataOffset(idx.dataOffset);
     const uint32_t flagOffset(idx.flagOffset);
-    for ( auto i{0U}; i<dim; i++ )
+    for ( uint32_t i{0U}; i<dim; i++ )
       {
         data_.flags[ flagOffset+i ] = ts.Flag(i);
         for ( uint32_t j{0U}; j<dim; j++ )
@@ -688,7 +688,7 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, TensorVaria
 #endif
    const uint32_t dataOffset(idx.dataOffset);
    const uint32_t flagOffset(idx.flagOffset);
-   for ( auto i{0U}; i<dim; i++ )
+   for ( uint32_t i{0U}; i<dim; i++ )
      {
        ts.Flag(i) = data_.flags[ flagOffset+i ] ;
        for ( uint32_t j{0U}; j<dim; j++ )
@@ -713,7 +713,7 @@ void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const Arra
     const uint32_t data_offset( idx.dataOffset );
     const uint32_t flags_offset( idx.flagOffset );
     const uint32_t arraySize( idx.dataDepth );
-    for( uint32_t i(0); i < arraySize; ++i )
+    for( uint32_t i{0u}; i < arraySize; ++i )
       data_.data[ data_offset   + i ] = av[i];
     data_.flags[ flags_offset] = av.Flag();
   }
@@ -736,7 +736,7 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, ArrayVariab
     const uint32_t data_offset( idx.dataOffset );
     const uint32_t flags_offset( idx.flagOffset );
     const uint32_t arraySize( idx.dataDepth );
-    for( uint32_t i(0); i < arraySize; ++i )
+    for( uint32_t i{0u}; i < arraySize; ++i )
       av(i)     = data_.data[ data_offset +  i ];
     av.Flag()= data_.flags[ flags_offset];
 }
@@ -782,7 +782,7 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, FlaggedArra
     const uint32_t data_offset( idx.dataOffset );
     const uint32_t flags_offset( idx.flagOffset );
     const uint32_t arraySize( idx.dataDepth );
-    for( uint32_t i(0); i < arraySize; ++i )
+    for( uint32_t i{0u}; i < arraySize; ++i )
     {
       av(i)     = data_.data[ data_offset +  i ];
       av.Flag(i)= data_.flags[ flags_offset + i ];

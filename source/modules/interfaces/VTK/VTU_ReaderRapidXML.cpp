@@ -273,15 +273,15 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
         }
 
         // creating the 'npes' (number of nodes-per-element) and 'plist' (nodes-per-element) records from the plist_data and offset data
-        deque<vector<int64_t> >  plist;
-        deque<uint32_t>          n_nodes_per_element;
-        size_t                   prev_offset{0u};
+        deque<vector<size_t> >  plist;
+        deque<uint32_t>         n_nodes_per_element;
+        size_t                  prev_offset{0u};
         counter = 0u;
         for ( const auto& offset : offsetsValues ) {
              // nodes per element record
              n_nodes_per_element.push_back( static_cast<uint32_t>(offset - prev_offset) );
              // plist record
-             vector<int64_t> plist_entry;
+             vector<size_t> plist_entry;
              plist_entry.reserve(8u); // optimal for lin.-hex.
              for ( size_t i{prev_offset}; i<offset; ++i )
                plist_entry.push_back( plist_data[counter++] );
