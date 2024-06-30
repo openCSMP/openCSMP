@@ -2,30 +2,29 @@
 #define INTEGRATION_POINT_COUNT_H
 
 
-namespace csmp{
+namespace csmp {
 
   /// Data class that tracks number of element/facet/sector integration points in Element/Face/InterFace
-  struct IntegrationPointCount{
+  struct IntegrationPointCount {
     IntegrationPointCount() : simplexIntegrationPoints(0), sectorIntegrationPoints(0), facetIntegrationPoints(0) {}
-    IntegrationPointCount( size_t siIntegrationPoints, size_t seIntegrationPoints, size_t faIntegrationPoints ) 
-      : simplexIntegrationPoints(siIntegrationPoints), 
+    IntegrationPointCount( uint32_t siIntegrationPoints, uint32_t seIntegrationPoints, uint32_t faIntegrationPoints )
+      : simplexIntegrationPoints(siIntegrationPoints),
         sectorIntegrationPoints(seIntegrationPoints), 
         facetIntegrationPoints(faIntegrationPoints) {}
 
-    IntegrationPointCount& operator = ( const IntegrationPointCount& ipc )
-    {
-      if( this != &ipc )
-        {
-          simplexIntegrationPoints = ipc.simplexIntegrationPoints;
-          sectorIntegrationPoints = ipc.sectorIntegrationPoints;
-          facetIntegrationPoints = ipc.facetIntegrationPoints;
-        }
-      return *this;
-    }
+    IntegrationPointCount& operator = ( const IntegrationPointCount& ipc ) {
+        if( this != &ipc )
+          {
+            simplexIntegrationPoints = ipc.simplexIntegrationPoints;
+            sectorIntegrationPoints = ipc.sectorIntegrationPoints;
+            facetIntegrationPoints = ipc.facetIntegrationPoints;
+          }
+        return *this;
+      }
 
-    size_t simplexIntegrationPoints;
-    size_t sectorIntegrationPoints;
-    size_t facetIntegrationPoints;
+    uint32_t simplexIntegrationPoints;
+    uint32_t sectorIntegrationPoints;
+    uint32_t facetIntegrationPoints;
   };
 
 

@@ -86,7 +86,7 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariabl
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariables& lv, const IntegrationPointVariables& ipv )
   {
-    const std::pair<uint32_t, uint32_t> newContainerSize = lvsCompileTimeDispatch::containerNewSize( static_cast<const STOREE<dim>*>(this), lv, ipv );
+    const std::pair<uint32_t, uint32_t> newContainerSize = localVariableDispatch::containerNewSize( static_cast<const STOREE<dim>*>(this), lv, ipv );
     ResizePropertyStorage(newContainerSize.first, newContainerSize.second);
 
 // initialise auxiliary parameters for debugging
@@ -174,7 +174,7 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     /// @todo (2-F) Asserts missing
 
     // Resize to new state (this already supports ip vars)
-    const std::pair<uint32_t,uint32_t> newTotaDataDepth = lvsCompileTimeDispatch::containerTotalDataDepth( storeePtr, prop_key );
+    const std::pair<uint32_t,uint32_t> newTotaDataDepth = localVariableDispatch::containerTotalDataDepth( storeePtr, prop_key );
     ResizePropertyStorage( newTotaDataDepth.first, newTotaDataDepth.second );
     const uint32_t dataSize = static_cast<uint32_t>(data_.data.size());
     const uint32_t flagSize = static_cast<uint32_t>(data_.flags.size());
@@ -182,7 +182,7 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     /// Roman, 2013: with ipvs support
 
     // Offset
-    const std::pair<uint32_t,uint32_t> newOffset = lvsCompileTimeDispatch::containerOffset( storeePtr, prop_key );
+    const std::pair<uint32_t,uint32_t> newOffset = localVariableDispatch::containerOffset( storeePtr, prop_key );
     const uint32_t dataOffset         ( newOffset.first       );
     const uint32_t flagOffset         ( newOffset.second      );
 
@@ -191,15 +191,15 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     const uint32_t flagDepth          ( prop_key.flagDepth    );
 
     // Cycles
-    const std::pair<int,int> newCycles = lvsCompileTimeDispatch::containerIPCycles( storeePtr, prop_key );
+    const std::pair<int,int> newCycles = localVariableDispatch::containerIPCycles( storeePtr, prop_key );
     const int nipCycles1            ( newCycles.first       );
     const int nipCycles2            ( newCycles.second      );
 
-    const std::pair<int,int> newCycles1Data = lvsCompileTimeDispatch::containerIPCycle1Offset( storeePtr, prop_key );
+    const std::pair<int,int> newCycles1Data = localVariableDispatch::containerIPCycle1Offset( storeePtr, prop_key );
     const int ipCycle1DataOffset    ( newCycles1Data.first  );
     const int ipCycle1FlagOffset    ( newCycles1Data.second );
 
-    const std::pair<int,int> newCycles2Data = lvsCompileTimeDispatch::containerIPCycle2Offset( storeePtr, prop_key );
+    const std::pair<int,int> newCycles2Data = localVariableDispatch::containerIPCycle2Offset( storeePtr, prop_key );
     const int ipCycle2DataOffset    ( newCycles2Data.first  );
     const int ipCycle2FlagOffset    ( newCycles2Data.second );
 
@@ -285,7 +285,7 @@ void LocalVariableStorage<dim,STOREE>::DeleteProperty( const csmp::Index& prop_k
         /// Roman, 2013: with ipvs support
 
         // Offset
-        const std::pair<uint32_t,uint32_t> newOffset = lvsCompileTimeDispatch::containerOffset( storeePtr, prop_key );
+        const std::pair<uint32_t,uint32_t> newOffset = localVariableDispatch::containerOffset( storeePtr, prop_key );
         const uint32_t dataOffset         ( newOffset.first       );
         const uint32_t flagOffset         ( newOffset.second      );
 
@@ -294,15 +294,15 @@ void LocalVariableStorage<dim,STOREE>::DeleteProperty( const csmp::Index& prop_k
         const uint32_t flagDepth          ( prop_key.flagDepth    );
 
         // Cycles
-        const std::pair<int,int> newCycles = lvsCompileTimeDispatch::containerIPCycles( storeePtr, prop_key );
+        const std::pair<int,int> newCycles = localVariableDispatch::containerIPCycles( storeePtr, prop_key );
         const int nipCycles1            ( newCycles.first       );
         const int nipCycles2            ( newCycles.second      );
 
-        const std::pair<int,int> newCycles1Data = lvsCompileTimeDispatch::containerIPCycle1Offset( storeePtr, prop_key );
+        const std::pair<int,int> newCycles1Data = localVariableDispatch::containerIPCycle1Offset( storeePtr, prop_key );
         const int ipCycle1DataOffset    ( newCycles1Data.first  );
         const int ipCycle1FlagOffset    ( newCycles1Data.second );
 
-        const std::pair<int,int> newCycles2Data = lvsCompileTimeDispatch::containerIPCycle2Offset( storeePtr, prop_key );
+        const std::pair<int,int> newCycles2Data = localVariableDispatch::containerIPCycle2Offset( storeePtr, prop_key );
         const int ipCycle2DataOffset    ( newCycles2Data.first  );
         const int ipCycle2FlagOffset    ( newCycles2Data.second );
 
@@ -1205,11 +1205,11 @@ double LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
     // offset to first instance of idx variable in the data vector
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx);
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == SCALAR );
   assert( offsetData.first < data_.data.size() );
 #endif
@@ -1227,13 +1227,13 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, ScalarVariable& sc ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx);
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == SCALAR );
   assert( offset < data_.data.size() );
   assert( flagOffset < data_.flags.size() );
@@ -1258,13 +1258,13 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const ScalarVariable& sc )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == SCALAR );
   assert( offset < data_.data.size() );
   assert( flagOffset < data_.flags.size() );
@@ -1290,11 +1290,11 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == SCALAR || idx.type == ARRAY );
   assert( offsetData.second < data_.flags.size() );
 #endif
@@ -1313,12 +1313,12 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, uint32_t i ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx);
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
     const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
   assert( (i < dim)&&(idx.type != FLAGGEDARRAY) || (i < idx.dataDepth )&&(idx.type == FLAGGEDARRAY) );
   assert( flagOffset+i < data_.flags.size() );
@@ -1338,11 +1338,11 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, VARIABLE_FLAG flag )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
   AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == SCALAR  || idx.type == ARRAY );
   assert( flagOffset < data_.flags.size() );
@@ -1361,12 +1361,12 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, uint32_t i, VARIABLE_FLAG flag )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
   assert( (i < dim)&&(idx.type != FLAGGEDARRAY) || (i < idx.dataDepth )&&(idx.type == FLAGGEDARRAY) );
   assert( flagOffset+i < data_.flags.size() );
@@ -1386,13 +1386,13 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const VectorVariable<dim>& vc )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == VECTOR );
   assert( offset+dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
@@ -1419,13 +1419,13 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, VectorVariable<dim>& vc ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == VECTOR );
   assert( offset+dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
@@ -1452,13 +1452,13 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const TensorVariable<dim>& ts )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == TENSOR );
   assert( offset+dim*dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
@@ -1484,13 +1484,13 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, TensorVariable<dim>& ts ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == TENSOR );
   assert( offset+dim*dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
@@ -1516,15 +1516,15 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const ArrayVariable& av )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
     const uint32_t arraySize( idx.dataDepth );
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == ARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
@@ -1552,7 +1552,7 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, ArrayVariable& av ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
@@ -1560,8 +1560,8 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
     av.Resize( idx.dataDepth );
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == ARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
@@ -1587,15 +1587,15 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const FlaggedArrayVariable& av )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
     const uint32_t arraySize( idx.dataDepth );
 
 #ifndef NDEBUG  
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == FLAGGEDARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
@@ -1622,7 +1622,7 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, FlaggedArrayVariable& av ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
@@ -1630,8 +1630,8 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
     av.Resize( idx.dataDepth );
 
 #ifndef NDEBUG
-  lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  assertFiniteVolumeIntegrationPointPlacement(idx);
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == FLAGGEDARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
@@ -1666,8 +1666,8 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t sector_or_facet, 
   {
 #ifndef NDEBUG
    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-   lvsCompileTimeDispatch::AssertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-   AssertFiniteVolumeIntegrationPointPlacement(idx);
+   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
+   assertFiniteVolumeIntegrationPointPlacement(idx);
 #endif
 
     if ( idx.type == SCALAR ) {

@@ -104,7 +104,7 @@ FiniteElementManager::~FiniteElementManager()
 
 FiniteElement*  FiniteElementManager::LinearBarElement() const
  {
-    if ( line_ptr != nullptr ) return line_ptr;
+    if ( interpolation == 1 && line_ptr != nullptr ) return line_ptr;
     std::cerr <<"\nFiniteElementManager::LinearBarElement: Not available."<< std::endl;
     return nullptr;
  }
@@ -112,7 +112,7 @@ FiniteElement*  FiniteElementManager::LinearBarElement() const
  
 FiniteElement*  FiniteElementManager::LinearTriangleElement() const
  {
-    if ( tria_ptr != nullptr ) return tria_ptr;
+    if ( interpolation == 1 && dimensions >= 2U && tria_ptr != nullptr ) return tria_ptr;
     std::cerr <<"\nFiniteElementManager::LinearTriangleElement: Not available."<< std::endl;
     return nullptr;
  }
@@ -120,7 +120,7 @@ FiniteElement*  FiniteElementManager::LinearTriangleElement() const
  
 FiniteElement*  FiniteElementManager::LinearTetrahedronElement() const
  {
-    if ( tetr_ptr != nullptr ) return tetr_ptr;
+    if ( interpolation == 1 && dimensions == 3U && tetr_ptr != nullptr ) return tetr_ptr;
     std::cerr <<"\nFiniteElementManager::LinearTetrahedronElement: Not available."<< std::endl;
     return nullptr;
  }
@@ -345,8 +345,8 @@ void  FiniteElementManager::CurrentElementTypes( std::list<CSMP_FEM_TYPE>& etype
     etypes.erase( etypes.begin(), etypes.end() );
     if ( dimensions == 3U ) {
 	    etypes.push_back( hexa_ptr->ElementType() );
-	    etypes.push_back( pyra_ptr->ElementType() );
-	    etypes.push_back( pris_ptr->ElementType() );
+	    if ( pyra_ptr ) etypes.push_back( pyra_ptr->ElementType() );
+	    if ( pris_ptr ) etypes.push_back( pris_ptr->ElementType() );
 	    etypes.push_back( tetr_ptr->ElementType() );
       }
     if ( dimensions == 2U || dimensions == 3U ) {

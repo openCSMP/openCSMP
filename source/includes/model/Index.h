@@ -114,6 +114,7 @@ struct Index {
     bool Out( std::fstream& fp ) const;
     bool In( std::fstream& fp );
 
+    // TODO: make all these uint8_t (same size as the flags?
     VARIABLE_TYPE               type;
     PLACEMENT                   place;
     uint32_t                    index = UNSPECIFIED;        ///< For Scalars, Vectors, Tensors, Arrays, FlaggedArrays: the how many'th variable of its kind at specified placement

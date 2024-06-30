@@ -48,7 +48,7 @@ class FiniteElementManager {
     FiniteElement*    LinearTetrahedronElement() const;
     
     // can be changed, but intermediate nodes will become defunct
-    void              InterpolationOrder( uint32_t interpolation_order );
+    void              InterpolationOrder( uint32_t interpolation_order ); // TODO: does not allocate new suite of elements!
     uint32_t          InterpolationOrder() const;
     bool              UsesElementsWithLocalCoordinateSystem() const;
     
