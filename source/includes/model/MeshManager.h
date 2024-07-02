@@ -364,17 +364,6 @@ private:
   friend class Model<dim>;       ///<  exclusive access to private member functions
 };
 
-// POTENTIAL METHODS?
-
-
-   /// replaces face, constructing new nodes & manifolds where indicated by vector
-//  InterFace<dim>* const ReplaceFaceByInterFace( csmp::Face<dim>* eptr,
-//                                                const std::vector<bool>&  nodes_to_duplicate,
-//                                                const LocalVariables&,
-//                                                const IntegrationPointVariables& );
-
-
-
 } // end namespace csmp
 
 #endif

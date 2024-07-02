@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <iterator>
 #include <utility>
+#include <cassert>
+
 
 template<class T>
 class DynamicArray2D
@@ -52,14 +54,14 @@ class DynamicArray2D
     DynamicArray2D( std::initializer_list<data_type> vals )
       : m_rows(vals.size()), m_cols((*std::next(vals.begin(),0)).size()),
         m_data(m_rows*m_cols,0.)
-    {
-       assert( m_rows*m_cols == vals.size() );
-       // assigning the values
-       size_type ij = 0;
-       for ( const auto& row : vals )
-         for ( const auto& col : row )
-           m_data[ij++] = col;
-    }
+      {
+         assert( m_rows*m_cols == vals.size() );
+         // assigning the values
+         size_type ij = 0;
+         for ( const auto& row : vals )
+           for ( const auto& col : row )
+             m_data[ij++] = col;
+      }
 
 
     /// construction of square array via vector-style initialiser list
@@ -87,83 +89,98 @@ class DynamicArray2D
 
     // element access (row major indexation)
     reference operator() (size_type const row,
-                          size_type const column)
-    {
-      return m_data[m_cols*row + column];
-    }
-    const_reference operator() (size_type const row,
-                                size_type const column) const
-    {
-      return m_data[m_cols*row + column];
-    }
-    reference at( size_type const row, size_type const column )
-    {
-      return m_data.at(m_cols*row + column);
-    }
-    const_reference at( size_type const row, size_type const column ) const
-    {
-      return m_data.at(m_cols*row + column);
-    }
+                          size_type const column ) {
+        return m_data[m_cols*row + column];
+      }
+      
+    const_reference operator() (size_type const row, size_type const column ) const {
+        return m_data[m_cols*row + column];
+      }
+      
+    reference at( size_type const row, size_type const column ) {
+        return m_data.at(m_cols*row + column);
+      }
+      
+    const_reference at( size_type const row, size_type const column ) const {
+         return m_data.at(m_cols*row + column);
+      }
 
     // resizing
     void resize(size_type new_rows, size_type new_cols)
-    {
-      // new matrix new_rows times new_cols
-      DynamicArray2D tmp(new_rows, new_cols);
-      // select smaller row and col size
-      auto mc = std::min(m_cols, new_cols);
-      auto mr = std::min(m_rows, new_rows);
-      for (size_type i(0U); i < mr; ++i)
       {
-        // iterators to begin of rows
-        auto row = begin() + i*m_cols;
-        auto tmp_row = tmp.begin() + i*new_cols;
-        // move mc elements to tmp
-        std::move(row, row + mc, tmp_row);
+        // new matrix new_rows times new_cols
+        DynamicArray2D tmp(new_rows, new_cols);
+        // select smaller row and col size
+        auto mc = std::min(m_cols, new_cols);
+        auto mr = std::min(m_rows, new_rows);
+        for (size_type i(0U); i < mr; ++i ) {
+            // iterators to begin of rows
+            auto row = begin() + i*m_cols;
+            auto tmp_row = tmp.begin() + i*new_cols;
+            // move mc elements to tmp
+            std::move(row, row + mc, tmp_row);
+          }
+        // move assignment to this
+        *this = std::move(tmp);
       }
-      // move assignment to this
-      *this = std::move(tmp);
-    }
 
     // size and capacity
     size_type size() const { return m_data.size(); }
+    size_type capacity() const { return m_data.capacity(); }
     size_type max_size() const { return m_data.max_size(); }
     bool empty() const { return m_data.empty(); }
+    
     // dimensionality
     size_type rows() const { return m_rows; }
     size_type cols() const { return m_cols; }
+    
     // data swapping
-    void swap(DynamicArray2D& rhs)
-    {
-      using std::swap;
-      m_data.swap(rhs.m_data);
-      swap(m_rows, rhs.m_rows);
-      swap(m_cols, rhs.m_cols);
-    }
-  private:
-    // content
+    void swap(DynamicArray2D& rhs) {
+        using std::swap;
+        m_data.swap(rhs.m_data);
+        swap(m_rows, rhs.m_rows);
+        swap(m_cols, rhs.m_cols);
+      }
+    
+  // printing array to screen
+  void out() const;
+    
+  private: // DATA MEMBERS
     size_type m_rows{ 0u };
     size_type m_cols{ 0u };
     data_type m_data{};
   };
+  
   template<class T>
-  void swap(DynamicArray2D<T>& lhs, DynamicArray2D<T>& rhs)
-  {
-    lhs.swap(rhs);
-  }
-  template<class T>
-  bool operator== (DynamicArray2D<T> const &a, DynamicArray2D<T> const &b)
-  {
-    if (a.rows() != b.rows() || a.cols() != b.cols())
-    {
-      return false;
+  void swap( DynamicArray2D<T>& lhs, DynamicArray2D<T>& rhs ) {
+      lhs.swap(rhs);
     }
-    return std::equal(a.begin(), a.end(), b.begin(), b.end());
-  }
+    
   template<class T>
-  bool operator!= (DynamicArray2D<T> const &a, DynamicArray2D<T> const &b)
-  {
-    return !(a == b);
-  }
+  bool operator==( const DynamicArray2D<T>& a, const DynamicArray2D<T>& b )
+    {
+      if (a.rows() != b.rows() || a.cols() != b.cols()) return false;
+      return std::equal(a.begin(), a.end(), b.begin(), b.end());
+    }
+
+  template<class T>
+  bool operator!=( const DynamicArray2D<T>& a, const DynamicArray2D<T>& b )
+    {
+      return !(a == b);
+    }
+
+// printing array to screen
+template<class T>
+void DynamicArray2D<T>::out() const
+ {
+    std::cout <<"\n"<<"DynamicArray2D: ("<< rows() <<" x " << cols() <<"):\n";
+    for ( size_type i{0}; i<rows(); ++i )
+      {
+         std::cout <<"\t";
+         for ( size_type j{0}; j<cols(); ++j ) std::cout <<" "<< (*this)(i,j);
+         std::cout << std::endl;
+      }
+    std::cout << std::endl;
+ }
 
 #endif /* DYNAMIC_ARRAY_2D_H */

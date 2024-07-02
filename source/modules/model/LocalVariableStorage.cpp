@@ -1209,7 +1209,7 @@ double LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == SCALAR );
   assert( offsetData.first < data_.data.size() );
 #endif
@@ -1233,7 +1233,7 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == SCALAR );
   assert( offset < data_.data.size() );
   assert( flagOffset < data_.flags.size() );
@@ -1264,7 +1264,7 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == SCALAR );
   assert( offset < data_.data.size() );
   assert( flagOffset < data_.flags.size() );
@@ -1294,7 +1294,7 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == SCALAR || idx.type == ARRAY );
   assert( offsetData.second < data_.flags.size() );
 #endif
@@ -1318,7 +1318,7 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
   assert( (i < dim)&&(idx.type != FLAGGEDARRAY) || (i < idx.dataDepth )&&(idx.type == FLAGGEDARRAY) );
   assert( flagOffset+i < data_.flags.size() );
@@ -1366,7 +1366,7 @@ void LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
   assert( (i < dim)&&(idx.type != FLAGGEDARRAY) || (i < idx.dataDepth )&&(idx.type == FLAGGEDARRAY) );
   assert( flagOffset+i < data_.flags.size() );
@@ -1392,7 +1392,7 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == VECTOR );
   assert( offset+dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
@@ -1425,7 +1425,7 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == VECTOR );
   assert( offset+dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
@@ -1458,7 +1458,7 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == TENSOR );
   assert( offset+dim*dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
@@ -1490,7 +1490,7 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( idx.type == TENSOR );
   assert( offset+dim*dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
@@ -1524,7 +1524,7 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == ARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
@@ -1561,7 +1561,7 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == ARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
@@ -1595,7 +1595,7 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t
 
 #ifndef NDEBUG  
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == FLAGGEDARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
@@ -1631,7 +1631,7 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  assertFiniteVolumeIntegrationPointPlacement(idx);
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == FLAGGEDARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
@@ -1667,7 +1667,7 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t sector_or_facet, 
 #ifndef NDEBUG
    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-   assertFiniteVolumeIntegrationPointPlacement(idx);
+   AssertFiniteVolumeIntegrationPointPlacement(idx);
 #endif
 
     if ( idx.type == SCALAR ) {

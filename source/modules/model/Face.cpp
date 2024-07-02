@@ -216,8 +216,6 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
 
 
 
-
-
 /**
     @note used by MeshManager::AddFace
 */
@@ -268,8 +266,6 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
         this->ResizePropertyStorage( ep );
       
  } // end (constructor that infers face from higher-dimensional parent elements)
-
-
 
 
 

@@ -180,7 +180,7 @@ uint32_t  FiniteElementManager::Dimensions() const
 
 
 
-void FiniteElementManager::InitializeElements( uint32_t dim, size_t interpolation_order, bool isoparametric )
+void FiniteElementManager::InitializeElements( uint32_t dim, uint32_t interpolation_order, bool isoparametric )
  {
     dimensions = dim;
     mixed_element_formulation = false;

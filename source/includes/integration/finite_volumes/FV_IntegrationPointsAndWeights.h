@@ -69,15 +69,15 @@ class FV_IntegrationPointsAndWeights {
     
     void EdgePairs( std::vector<std::pair<uint32_t,uint32_t> >& edges_of_element ) const;
     
-    void EdgeMidpoints(std::vector<Point<dim> >& rst_facet_edge_midpoints );
+    void EdgeMidpoints( std::vector<Point<dim> >& rst_facet_edge_midpoints ) const;
 		  
-	  void Barycenter( Point<dim>& rst_barycenter );
+	  void Barycenter( Point<dim>& rst_barycenter ) const;
     
-    void FacetPoints( std::vector<std::vector<Point<dim> > > & rst_facet_points );
+    void FacetPoints( std::vector<std::vector<Point<dim> > >& rst_facet_points ) const;
     
-    void FacetTypes( std::vector<FV_FACET_TYPE> & facet_types );
+    void FacetTypes( std::vector<FV_FACET_TYPE> & facet_types ) const;
     
-    void SectorPoints( std::vector<std::vector<Point<dim> > >& rst_sector_points ); 
+    void SectorPoints( std::vector<std::vector<Point<dim> > >& rst_sector_points ) const; 
 
     void SectorEdgePairs( std::vector<std::vector<std::pair<uint32_t,uint32_t> > >& edges_of_sector ) const;
 
@@ -87,7 +87,6 @@ class FV_IntegrationPointsAndWeights {
 
     CSMP_FEM_TYPE  m_typeOfSubdividedElement; ///< finite-element type to which the stencil belongs
   
-    // TODO: replace by static arrays; make constant and / or use initialiser lists to set them up
     std::vector<std::pair<uint32_t,uint32_t> > m_edges_of_element;              ///< for each edge, local node numbers on inside and outside of facet
     std::vector<std::vector<uint32_t> >        m_facets_surrounding_node;       ///< [node][facet] = sector-delimiting facets
     std::vector<std::vector<Point<dim> > >     m_facet_integration_points;      ///< [isrf][spts][dim] = 1 for lowest-order integration

@@ -13,6 +13,7 @@ FiniteVolumeStencilManager<dim>::FiniteVolumeStencilManager( const FiniteElement
  }
 
 
+
 template<uint32_t dim>
 FiniteVolumeStencilManager<dim>::~FiniteVolumeStencilManager()
  {
@@ -45,6 +46,8 @@ void FiniteVolumeStencilManager<dim>::Initialize( const FiniteElementManager& fe
     cout <<"\nFiniteVolumeStencilManager<"<< dim <<">::Initialize: stencil manager initialized successfully.\n";
 #endif
  }
+
+
 
 
 /**

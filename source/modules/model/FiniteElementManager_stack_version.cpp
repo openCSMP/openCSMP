@@ -1,33 +1,34 @@
-#include "FiniteElementManager1.h"
+#include "FiniteElementManager_stack_version.h"
 #include "Standard_IO_Handler.h"
 #include "Exception.h"
 #include "NameDemangler.h"
+
 
 using namespace std;
 
 namespace csmp {
 
 // constructor providing options through choice of template arguments
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
-FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::FiniteElementManager1()
-  : line_elmt1(DIM), line_elmt2(DIM), line_elmt3(DIM),
-    tria_elmt2(DIM), tria_elmt3(DIM),
-    quad_elmt1(DIM), quad_elmt2(DIM), quad_elmt3(DIM)
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+FiniteElementManager1<dim,INTPOL_ORDER,USING_LOCAL_COORDS>::FiniteElementManager1()
+  : line_elmt1(dim), line_elmt2(dim), line_elmt3(dim),
+    tria_elmt2(dim), tria_elmt3(dim),
+    quad_elmt1(dim), quad_elmt2(dim), quad_elmt3(dim)
     // other types do not require constructor arguments
   {
   }
 
 
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
-uint32_t  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::NodesOfElementType( CSMP_FEM_TYPE etype )
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+uint32_t  FiniteElementManager1<dim,INTPOL_ORDER,USING_LOCAL_COORDS>::NodesOfElementType( CSMP_FEM_TYPE etype )
  {
     return E( etype )->Nodes();
  }
 
 
 
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
-FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::LinearBarElement()
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+FiniteElement* const FiniteElementManager1<dim,INTPOL_ORDER,USING_LOCAL_COORDS>::LinearBarElement()
  {
 //   static_assert( INTPOL_ORDER==1, "FiniteElementManager::LinearBarElement: Error: interpolation functions are nonlinear" );
    if constexpr ( !USING_LOCAL_COORDS ) return &line_elmt1;
@@ -36,12 +37,12 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
  }
  
  
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
-FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::LinearTriangleElement()
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+FiniteElement* const FiniteElementManager1<dim,INTPOL_ORDER,USING_LOCAL_COORDS>::LinearTriangleElement()
  {
 //   static_assert( INTPOL_ORDER==1, "FiniteElementManager::LinearTriangleElement: Error: interpolation functions are nonlinear" );
    if constexpr( !USING_LOCAL_COORDS ) {
-        if constexpr( DIM != 3U ) return &tria_elmt1a;
+        if constexpr( dim != 3U ) return &tria_elmt1a;
         else return &tria_elmt1b;
      }
    else return &tria_elmt2;
@@ -49,8 +50,8 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
  }
 
 
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
-FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::LinearTetrahedronElement()
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+FiniteElement* const FiniteElementManager1<dim,INTPOL_ORDER,USING_LOCAL_COORDS>::LinearTetrahedronElement()
  {
 //   static_assert( INTPOL_ORDER==1, "FiniteElementManager::LinearTetrahedronElement: Error: interpolation functions are nonlinear" );
    if constexpr ( USING_LOCAL_COORDS == false )
@@ -109,12 +110,12 @@ LINEAR_RECTANGLE
 LINEAR_BAR
 
 */
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
-FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::E( int8_t etype )
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+FiniteElement* const FiniteElementManager1<dim,INTPOL_ORDER,USING_LOCAL_COORDS>::E( int8_t etype )
  {
     // elements with linear interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_LINEAR_TETRAHEDRON: return &tet_elmt2;
                case ISOPARAMETRIC_LINEAR_HEXAHEDRON: return &hexa_elmt2;
@@ -126,7 +127,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_LINEAR_TRIANGLE: return &tria_elmt2;
                case ISOPARAMETRIC_LINEAR_QUADRILATERAL: return &quad_elmt2;
@@ -134,7 +135,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_LINEAR_BAR: return &line_elmt2;
                default: return nullptr;
@@ -144,7 +145,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
 
     // elements with quadratic interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 2 && USING_LOCAL_COORDS ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON: return &tet_elmt3;
                case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27: return &hexa_elmt3;
@@ -156,7 +157,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_QUADRATIC_TRIANGLE: return &tria_elmt3;
                case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL: return &quad_elmt3;
@@ -164,7 +165,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_QUADRATIC_BAR: return &line_elmt3;
                default: return nullptr;
@@ -174,7 +175,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
 
     // elements with quadratic interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS == false ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
            switch ( etype ) {
                case LINEAR_TETRAHEDRON: return &tet_elmt1;
                case LINEAR_CUBOID: return &hexa_elmt1;
@@ -184,7 +185,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
            switch ( etype ) {
                case LINEAR_TRIANGLE: return &tria_elmt1a;
                case LINEAR_RECTANGLE: return &quad_elmt1;
@@ -192,7 +193,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
            switch ( etype ) {
                case LINEAR_BAR: return &line_elmt1;
                default: return nullptr;
@@ -210,12 +211,12 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
 
 
 
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
-FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::E( CSMP_FEM_TYPE etype )
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+FiniteElement* const FiniteElementManager1<dim,INTPOL_ORDER,USING_LOCAL_COORDS>::E( CSMP_FEM_TYPE etype )
  {
     // elements with linear interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_LINEAR_TETRAHEDRON: return &tet_elmt2;
                case ISOPARAMETRIC_LINEAR_HEXAHEDRON: return &hexa_elmt2;
@@ -227,7 +228,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_LINEAR_TRIANGLE: return &tria_elmt2;
                case ISOPARAMETRIC_LINEAR_QUADRILATERAL: return &quad_elmt2;
@@ -235,7 +236,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_LINEAR_BAR: return &line_elmt2;
                default: return nullptr;
@@ -245,7 +246,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
 
     // elements with quadratic interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 2 && USING_LOCAL_COORDS ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON: return &tet_elmt3;
                case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27: return &hexa_elmt3;
@@ -257,7 +258,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_QUADRATIC_TRIANGLE: return &tria_elmt3;
                case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL: return &quad_elmt3;
@@ -265,7 +266,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_QUADRATIC_BAR: return &line_elmt3;
                default: return nullptr;
@@ -275,7 +276,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
 
     // elements with quadratic interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS == false ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
            switch ( etype ) {
                case LINEAR_TETRAHEDRON: return &tet_elmt1;
                case LINEAR_CUBOID: return &hexa_elmt1;
@@ -285,7 +286,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
            switch ( etype ) {
                case LINEAR_TRIANGLE: return &tria_elmt1a;
                case LINEAR_RECTANGLE: return &quad_elmt1;
@@ -293,7 +294,7 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
                default: return nullptr;
              }
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
            switch ( etype ) {
                case LINEAR_BAR: return &line_elmt1;
                default: return nullptr;
@@ -310,21 +311,114 @@ FiniteElement* const FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>:
  
  
 
-/*
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
-uint32_t  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::NodesOfElementType( CSMP_FEM_TYPE etype ) const
- {
-    return E( etype )->Nodes();
- }
-*/
-
-
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
-bool   FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::ContainsElementType( CSMP_FEM_TYPE etype ) const
+// CONSTANT MEMBER FUNCTION
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+const FiniteElement* const FiniteElementManager1<dim,INTPOL_ORDER,USING_LOCAL_COORDS>::E( CSMP_FEM_TYPE etype ) const
  {
     // elements with linear interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
+           switch ( etype ) {
+               case ISOPARAMETRIC_LINEAR_TETRAHEDRON: return &tet_elmt2;
+               case ISOPARAMETRIC_LINEAR_HEXAHEDRON: return &hexa_elmt2;
+               case ISOPARAMETRIC_LINEAR_PRISM: return &prism_elmt2;
+               case ISOPARAMETRIC_LINEAR_PYRAMID: return &pyra_elmt2;
+               case ISOPARAMETRIC_LINEAR_TRIANGLE: return &tria_elmt2;
+               case ISOPARAMETRIC_LINEAR_QUADRILATERAL: return &quad_elmt2;
+               case ISOPARAMETRIC_LINEAR_BAR: return &line_elmt2;
+               default: return nullptr;
+             }
+          }
+        if constexpr ( dim == 2U ) {
+           switch ( etype ) {
+               case ISOPARAMETRIC_LINEAR_TRIANGLE: return &tria_elmt2;
+               case ISOPARAMETRIC_LINEAR_QUADRILATERAL: return &quad_elmt2;
+               case ISOPARAMETRIC_LINEAR_BAR: return &line_elmt2;
+               default: return nullptr;
+             }
+          }
+        if constexpr ( dim == 1U ) {
+           switch ( etype ) {
+               case ISOPARAMETRIC_LINEAR_BAR: return &line_elmt2;
+               default: return nullptr;
+             }
+          }
+      }
+
+    // elements with quadratic interpolation and shape functions
+    if constexpr ( INTPOL_ORDER == 2 && USING_LOCAL_COORDS ) {
+        if constexpr ( dim == 3U ) {
+           switch ( etype ) {
+               case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON: return &tet_elmt3;
+               case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27: return &hexa_elmt3;
+               case ISOPARAMETRIC_QUADRATIC_PRISM18: return &prism_elmt3;
+               case ISOPARAMETRIC_QUADRATIC_PYRAMID13: return &pyra_elmt3;
+               case ISOPARAMETRIC_QUADRATIC_TRIANGLE: return &tria_elmt3;
+               case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL: return &quad_elmt3;
+               case ISOPARAMETRIC_QUADRATIC_BAR: return &line_elmt3;
+               default: return nullptr;
+             }
+          }
+        if constexpr ( dim == 2U ) {
+           switch ( etype ) {
+               case ISOPARAMETRIC_QUADRATIC_TRIANGLE: return &tria_elmt3;
+               case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL: return &quad_elmt3;
+               case ISOPARAMETRIC_QUADRATIC_BAR: return &line_elmt3;
+               default: return nullptr;
+             }
+          }
+        if constexpr ( dim == 1U ) {
+           switch ( etype ) {
+               case ISOPARAMETRIC_QUADRATIC_BAR: return &line_elmt3;
+               default: return nullptr;
+             }
+          }
+      }
+
+    // elements with quadratic interpolation and shape functions
+    if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS == false ) {
+        if constexpr ( dim == 3U ) {
+           switch ( etype ) {
+               case LINEAR_TETRAHEDRON: return &tet_elmt1;
+               case LINEAR_CUBOID: return &hexa_elmt1;
+               case LINEAR_TRIANGLE3D: return &tria_elmt1b;
+               case LINEAR_QUADRILATERAL: return &quad_elmt1;
+               case LINEAR_BAR: return &line_elmt1;
+               default: return nullptr;
+             }
+          }
+        if constexpr ( dim == 2U ) {
+           switch ( etype ) {
+               case LINEAR_TRIANGLE: return &tria_elmt1a;
+               case LINEAR_RECTANGLE: return &quad_elmt1;
+               case LINEAR_BAR: return &line_elmt1;
+               default: return nullptr;
+             }
+          }
+        if constexpr ( dim == 1U ) {
+           switch ( etype ) {
+               case LINEAR_BAR: return &line_elmt1;
+               default: return nullptr;
+             }
+          }
+      }
+
+    cerr <<"\nFiniteElementManager1::Element(CSMP_FEM_TYPE): Requested element is not available: ";
+    cerr << etype <<" = "<< parseFiniteElementType(etype) <<" return NULL pointer."<< std::endl;
+      
+    return nullptr;
+    
+ } // end E( CSMP_FEM_TYPE ) - constant member function version
+
+ 
+ 
+
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+bool   FiniteElementManager1<dim,INTPOL_ORDER,USING_LOCAL_COORDS>::ContainsElementType( CSMP_FEM_TYPE etype ) const
+ {
+    // elements with linear interpolation and shape functions
+    if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS ) {
+        if constexpr ( dim == 3U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_LINEAR_TETRAHEDRON: return true;
                case ISOPARAMETRIC_LINEAR_HEXAHEDRON: return true;
@@ -336,7 +430,7 @@ bool   FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::ContainsEleme
                default: return false;
              }
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_LINEAR_TRIANGLE: return true;
                case ISOPARAMETRIC_LINEAR_QUADRILATERAL: return true;
@@ -344,7 +438,7 @@ bool   FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::ContainsEleme
                default: return false;
              }
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_LINEAR_BAR: return true;
                default: return false;
@@ -354,7 +448,7 @@ bool   FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::ContainsEleme
 
     // elements with quadratic interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 2 && USING_LOCAL_COORDS ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON: return true;
                case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27: return true;
@@ -366,7 +460,7 @@ bool   FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::ContainsEleme
                default: return false;
              }
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_QUADRATIC_TRIANGLE: return true;
                case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL: return true;
@@ -374,7 +468,7 @@ bool   FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::ContainsEleme
                default: return false;
              }
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
            switch ( etype ) {
                case ISOPARAMETRIC_QUADRATIC_BAR: return true;
                default: return false;
@@ -384,7 +478,7 @@ bool   FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::ContainsEleme
 
     // elements with quadratic interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS == false ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
            switch ( etype ) {
                case LINEAR_TETRAHEDRON: return true;
                case LINEAR_CUBOID: return true;
@@ -394,7 +488,7 @@ bool   FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::ContainsEleme
                default: return false;
              }
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
            switch ( etype ) {
                case LINEAR_TRIANGLE: return true;
                case LINEAR_RECTANGLE: return true;
@@ -402,7 +496,7 @@ bool   FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::ContainsEleme
                default: return false;
              }
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
            switch ( etype ) {
                case LINEAR_BAR: return true;
                default: return false;
@@ -417,14 +511,14 @@ bool   FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::ContainsEleme
  
  
  
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
-void  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::CurrentElementTypes( list<CSMP_FEM_TYPE>& etypes ) const
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+void  FiniteElementManager1<dim,INTPOL_ORDER,USING_LOCAL_COORDS>::CurrentElementTypes( list<CSMP_FEM_TYPE>& etypes ) const
  {
     etypes.erase( etypes.begin(), etypes.end() );
     
      // elements with linear interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
              etypes.push_back( ISOPARAMETRIC_LINEAR_TETRAHEDRON );
              etypes.push_back( ISOPARAMETRIC_LINEAR_HEXAHEDRON );
              etypes.push_back( ISOPARAMETRIC_LINEAR_PRISM );
@@ -433,19 +527,19 @@ void  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::CurrentElement
              etypes.push_back( ISOPARAMETRIC_LINEAR_QUADRILATERAL );
              etypes.push_back( ISOPARAMETRIC_LINEAR_BAR );
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
              etypes.push_back( ISOPARAMETRIC_LINEAR_TRIANGLE );
              etypes.push_back( ISOPARAMETRIC_LINEAR_QUADRILATERAL );
              etypes.push_back( ISOPARAMETRIC_LINEAR_BAR );
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
              etypes.push_back( ISOPARAMETRIC_LINEAR_BAR );
           }
       }
 
     // elements with quadratic interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 2 && USING_LOCAL_COORDS ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
              etypes.push_back( ISOPARAMETRIC_QUADRATIC_TETRAHEDRON );
              etypes.push_back( ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 );
              etypes.push_back( ISOPARAMETRIC_QUADRATIC_PRISM18 );
@@ -454,31 +548,31 @@ void  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::CurrentElement
              etypes.push_back( ISOPARAMETRIC_QUADRATIC_QUADRILATERAL );
              etypes.push_back( ISOPARAMETRIC_QUADRATIC_BAR );
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
              etypes.push_back( ISOPARAMETRIC_QUADRATIC_TRIANGLE );
              etypes.push_back( ISOPARAMETRIC_QUADRATIC_QUADRILATERAL );
              etypes.push_back( ISOPARAMETRIC_QUADRATIC_BAR );
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
              etypes.push_back( ISOPARAMETRIC_QUADRATIC_BAR );
           }
       }
 
     // elements with quadratic interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS == false ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
              etypes.push_back( LINEAR_TETRAHEDRON );
              etypes.push_back( LINEAR_CUBOID );
              etypes.push_back( LINEAR_TRIANGLE3D );
              etypes.push_back( LINEAR_QUADRILATERAL );
              etypes.push_back( LINEAR_BAR );
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
              etypes.push_back( LINEAR_TRIANGLE );
              etypes.push_back( LINEAR_RECTANGLE );
              etypes.push_back( LINEAR_BAR );
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
              etypes.push_back( LINEAR_BAR );
           }
       }
@@ -488,14 +582,14 @@ void  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::CurrentElement
  
  
  
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
-void  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::Out() const
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+void  FiniteElementManager1<dim,INTPOL_ORDER,USING_LOCAL_COORDS>::Out() const
  {
      cout <<"\nFiniteElementManager1::Out: ";
 
      // elements with linear interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
              cout <<"\n\tcurrent volume elements: ";
              cout <<"\n\t\t"<< demangle(typeid(tet_elmt2).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(hexa_elmt2).name()) <<" ";
@@ -505,13 +599,13 @@ void  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::Out() const
              cout <<"\n\t\t"<< demangle(typeid(quad_elmt2).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(line_elmt2).name()) <<" ";
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
              cout <<"\n\tcurrent surface elements: ";
              cout <<"\n\t\t"<< demangle(typeid(tria_elmt2).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(quad_elmt2).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(line_elmt2).name()) <<" ";
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
             cout <<"\n\tcurrent line elements: ";
             cout <<"\n\t\t"<< demangle(typeid(line_elmt2).name()) <<" ";
           }
@@ -520,7 +614,7 @@ void  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::Out() const
 
     // elements with quadratic interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 2 && USING_LOCAL_COORDS ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
              cout <<"\n\tcurrent volume elements: ";
              cout <<"\n\t\t"<< demangle(typeid(tet_elmt3).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(hexa_elmt3).name()) <<" ";
@@ -530,13 +624,13 @@ void  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::Out() const
              cout <<"\n\t\t"<< demangle(typeid(quad_elmt3).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(line_elmt3).name()) <<" ";
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
              cout <<"\n\tcurrent surface elements: ";
              cout <<"\n\t\t"<< demangle(typeid(tria_elmt3).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(quad_elmt3).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(line_elmt3).name()) <<" ";
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
             cout <<"\n\tcurrent line elements: ";
             cout <<"\n\t\t"<< demangle(typeid(line_elmt3).name()) <<" ";
           }
@@ -545,7 +639,7 @@ void  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::Out() const
 
     // elements with quadratic interpolation and shape functions
     if constexpr ( INTPOL_ORDER == 1 && USING_LOCAL_COORDS == false ) {
-        if constexpr ( DIM == 3U ) {
+        if constexpr ( dim == 3U ) {
              cout <<"\n\tcurrent volume elements: ";
              cout <<"\n\t\t"<< demangle(typeid(tet_elmt1).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(hexa_elmt1).name()) <<" ";
@@ -555,13 +649,13 @@ void  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::Out() const
              cout <<"\n\t\t"<< demangle(typeid(quad_elmt1).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(line_elmt1).name()) <<" ";
           }
-        if constexpr ( DIM == 2U ) {
+        if constexpr ( dim == 2U ) {
              cout <<"\n\tcurrent surface elements: ";
              cout <<"\n\t\t"<< demangle(typeid(tria_elmt1a).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(quad_elmt1).name()) <<" ";
              cout <<"\n\t\t"<< demangle(typeid(line_elmt1).name()) <<" ";
           }
-        if constexpr ( DIM == 1U ) {
+        if constexpr ( dim == 1U ) {
             cout <<"\n\tcurrent line elements: ";
             cout <<"\n\t\t"<< demangle(typeid(line_elmt1).name()) <<" ";
           }
@@ -571,7 +665,7 @@ void  FiniteElementManager1<DIM,INTPOL_ORDER,USING_LOCAL_COORDS>::Out() const
  } // end Out
 
 
-//template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+//template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
 template class FiniteElementManager1<1U,1,true>;
 template class FiniteElementManager1<2U,1,true>;
 template class FiniteElementManager1<3U,1,true>;

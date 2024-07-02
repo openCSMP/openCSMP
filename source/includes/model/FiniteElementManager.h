@@ -34,7 +34,7 @@ class FiniteElementManager {
     FiniteElementManager& operator=( const FiniteElementManager& mgr );
     ~FiniteElementManager();
 
-    void InitializeElements( uint32_t dim, size_t interpolation_order, bool isoparametric );
+    void InitializeElements( uint32_t dim, uint32_t interpolation_order, bool isoparametric );
     
     uint32_t          Dimensions() const;
     bool              ContainsElementType( CSMP_FEM_TYPE etype ) const;

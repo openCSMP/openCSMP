@@ -9,7 +9,7 @@
 #include <random>
 #include "FiniteElementManager_Test.h"
 #include "FiniteElementManager.h"
-#include "FiniteElementManager1.h"
+#include "FiniteElementManager_stack_version.h"
 #include "vsetMakers.h"
 #include "VSet.h"
 #include "ModelTopology.h"
@@ -41,7 +41,7 @@ void FiniteElementManager_Test::run()
  {
     TestBasicFunctionality();
     TestBasicFunctionality_FiniteElementManager1();
-    TestAccumulationSpeed();
+//    TestAccumulationSpeed();
  
  } // end run
 

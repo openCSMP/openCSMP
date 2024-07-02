@@ -127,7 +127,7 @@ void MechanicsAndMultiphaseFlow_Example::Run()
     printModelDimensions( model, true );
 
     // setting integration points to the inside of the triangle near the corner nodes
-    dynamic_cast<IsoparametricQuadraticTriangle*>(model.Mesh().FiniteElements().E( ISOPARAMETRIC_QUADRATIC_TRIANGLE ))->GaussPointsNearCorners();
+    dynamic_cast<IsoparametricQuadraticTriangle*>(const_cast<FiniteElement*>(model.Mesh().FiniteElements().E( ISOPARAMETRIC_QUADRATIC_TRIANGLE )))->GaussPointsNearCorners();
 
     // assigns the element area to a distributed variable called 'area'
     model.AssignCellCharacteristicsTo( "area", "area" );

@@ -1,7 +1,6 @@
 #ifndef CSMP_FINITE_ELEMENT_MANAGER1_H
 #define CSMP_FINITE_ELEMENT_MANAGER1_H
 
-#include "CSMP_definitions.h"
 #include "LinearLineElement.h"
 #include "IsoparametricQuadraticLineElement.h"
 #include "LinearTriangle.h"
@@ -30,7 +29,9 @@
 namespace csmp {
 
 /**
-@brief Container storing instances of the finite element types used in any particular instance of the class Model.
+@brief Alternative version of FiniteElementManager where all elements are stored on the stack (initialised at compile time in the body of the class)
+   
+   @attention IS SLOWER THAN MANAGER WHERE ELEMENTS ARE CREATED ON THE HEAP!!!! - and less flexible! (SKM30/6/2024)
 
  @atttention needs specialisations for
    - 1, 2, and 3D
@@ -43,17 +44,25 @@ namespace csmp {
 @date 2024
 
 */
-template<uint32_t DIM, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
+template<uint32_t dim, int INTPOL_ORDER, bool USING_LOCAL_COORDS>
 class FiniteElementManager1 {
   public:
     FiniteElementManager1();
+    
+    // dummy function does nothing
+    void InitializeElements( uint32_t /* dimensions */, uint32_t /* interpolation_order */, bool /* isoparametric */ ) {}
 
-    bool              ContainsElementType( CSMP_FEM_TYPE etype ) const;
-    void              CurrentElementTypes( std::list<CSMP_FEM_TYPE>& etypes ) const;
+    bool ContainsElementType( CSMP_FEM_TYPE etype ) const;
+    void CurrentElementTypes( std::list<CSMP_FEM_TYPE>& etypes ) const;
+    int  InterpolationOrder() const { return INTPOL_ORDER; }
+    bool UsesElementsWithLocalCoordinateSystem() const { return USING_LOCAL_COORDS; }
     
     /// get finite element pointer from enumeration type (TODO: maybe a reference should be returned here?)
     FiniteElement* const E( int8_t csmp_etype );
     FiniteElement* const E( CSMP_FEM_TYPE csmp_etype );
+    
+    /// const version needed
+    const FiniteElement* const E( CSMP_FEM_TYPE csmp_etype ) const;
     
     uint32_t NodesOfElementType( CSMP_FEM_TYPE etype );
 

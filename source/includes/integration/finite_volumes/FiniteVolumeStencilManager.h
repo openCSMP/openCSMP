@@ -28,6 +28,7 @@ class FiniteVolumeStencilManager {
   private:
     FiniteVolumeStencilManager() = delete;
     void Initialize( const FiniteElementManager& fem_manager );
+
     // currently the number of supported stencils is fixed to 7
     enum { STENCIL_POLYTYPES = 7 };
     FiniteVolumeStencil<dim>        stencils[STENCIL_POLYTYPES];

@@ -158,7 +158,7 @@ void FV_IntegrationPointsAndWeights<dim>::Resize( uint32_t n_isrf,
 
 template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationPoints( 
-                          std::vector<std::vector<Point<dim> > >&  volume_integration_points ) const
+                          vector<vector<Point<dim> > >&  volume_integration_points ) const
 {
   volume_integration_points = m_volume_integration_points1;
 }
@@ -166,7 +166,7 @@ void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationPoints(
 
 template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationWeights( 
-                                       std::vector<std::vector<double> >&  volume_integration_weights ) const
+                                       vector<vector<double> >&  volume_integration_weights ) const
 {
   volume_integration_weights = m_volume_integration_weights;
 }
@@ -174,7 +174,7 @@ void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationWeights(
 
 template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationPoints( 
-                         std::vector<std::vector<Point<dim> > >&  facet_integration_points ) const
+                         vector<vector<Point<dim> > >&  facet_integration_points ) const
 {
    facet_integration_points = m_facet_integration_points;
 }
@@ -182,7 +182,7 @@ void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationPoints(
 
 template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationWeights( 
-                                      std::vector<std::vector<double> >&  facet_integration_weights ) const
+                                      vector<vector<double> >&  facet_integration_weights ) const
 {
    facet_integration_weights = m_facet_integration_weights;
 }
@@ -190,68 +190,65 @@ void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationWeights(
 
 template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::ProjectionWeights( 
-                                                std::vector<std::vector<double> >&  projection_weights ) const
+                                                vector<vector<double> >&  projection_weights ) const
 {
    projection_weights = m_projection_weights;
 }
 
 template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetNormalTransformations( 
-                                                   std::vector<std::vector<std::pair<double,double>>>&  facet_normal_xforms ) const
+                                                   vector<vector<pair<double,double>>>&  facet_normal_xforms ) const
 {
    facet_normal_xforms = m_facet_normal_xforms;
 }
 
 template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetNormals( 
-                                                   std::vector<Point<dim> >&  facet_normals ) const
+                                                   vector<Point<dim> >&  facet_normals ) const
 {
    facet_normals = m_facet_normals;
 }
 
 
 template<uint32_t dim>
-void FV_IntegrationPointsAndWeights<dim>::FacetsSurroundingNode( 
-                                   std::vector<std::vector<uint32_t> >& facets_surrounding_node ) const
+void FV_IntegrationPointsAndWeights<dim>::FacetsSurroundingNode( vector<vector<uint32_t> >& facets_surrounding_node ) const
 {
    facets_surrounding_node = m_facets_surrounding_node;
 }
 
 
 template<uint32_t dim>
-void FV_IntegrationPointsAndWeights<dim>::EdgePairs( 
-                                    std::vector<std::pair<uint32_t,uint32_t> >&  edges_of_element ) const
+void FV_IntegrationPointsAndWeights<dim>::EdgePairs( vector<pair<uint32_t,uint32_t> >&  edges_of_element ) const
 {
    edges_of_element = m_edges_of_element;
 }
 
 template<uint32_t dim>
-void FV_IntegrationPointsAndWeights<dim>::EdgeMidpoints(std::vector<Point<dim> >& rst_facet_edge_midpoints)
+void FV_IntegrationPointsAndWeights<dim>::EdgeMidpoints( vector<Point<dim> >& rst_facet_edge_midpoints) const
 {
    rst_facet_edge_midpoints = m_facet_edge_midpoints;
 }
 		  
 template<uint32_t dim>
-void FV_IntegrationPointsAndWeights<dim>::Barycenter( Point<dim>& rst_barycenter )
+void FV_IntegrationPointsAndWeights<dim>::Barycenter( Point<dim>& rst_barycenter ) const
 {
 	rst_barycenter = m_barycenter;
 }
 
 template<uint32_t dim>
-void FV_IntegrationPointsAndWeights<dim>::FacetPoints( std::vector<std::vector<Point<dim> > >& rst_facet_points )
+void FV_IntegrationPointsAndWeights<dim>::FacetPoints( vector<vector<Point<dim> > >& rst_facet_points ) const
 {
    rst_facet_points = m_facet_points;
 }
 
 template<uint32_t dim>
-void FV_IntegrationPointsAndWeights<dim>::FacetTypes( std::vector<FV_FACET_TYPE>& facet_types )
+void FV_IntegrationPointsAndWeights<dim>::FacetTypes( vector<FV_FACET_TYPE>& facet_types ) const
 {
    facet_types = m_facet_types;
 }
 
 template<uint32_t dim>
-void FV_IntegrationPointsAndWeights<dim>::SectorPoints(
-                          std::vector<std::vector<Point<dim> > >& rst_sector_points)
+void FV_IntegrationPointsAndWeights<dim>::SectorPoints( vector<vector<Point<dim> > >& rst_sector_points ) const
 {
    rst_sector_points = m_sector_points;
 }    
@@ -259,7 +256,7 @@ void FV_IntegrationPointsAndWeights<dim>::SectorPoints(
 
 template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::SectorEdgePairs( 
-               std::vector<std::vector<std::pair<uint32_t,uint32_t> > >&  edges_of_sector ) const
+               vector<vector<pair<uint32_t,uint32_t> > >&  edges_of_sector ) const
 {
    edges_of_sector = m_edge_of_sectors;
 }
@@ -322,8 +319,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR
 
    m_facet_normal_xforms.resize(1u);
    m_facet_normal_xforms[0].resize(2u);
-   m_facet_normal_xforms[0][0] = std::make_pair(-0.5, -0.5);
-   m_facet_normal_xforms[0][1] = std::make_pair(0.5, 0.5);
+   m_facet_normal_xforms[0][0] = make_pair(-0.5, -0.5);
+   m_facet_normal_xforms[0][1] = make_pair(0.5, 0.5);
 
   m_sector_points[0].resize(2U);
   m_sector_points[0][0] = -1.; 
@@ -402,7 +399,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
       { 7./36., 11./18., 0. }
     }; 
     
-    for(auto i{0U};i<3U;i++)
+    for(uint32_t i{0U};i<3U;i++)
       for( uint32_t j{0U};j<dim; j++) m_volume_integration_points1[i][0][j]=vip[i][j];
       
     // facets surrounding node
@@ -448,7 +445,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
         m_facet_normal_xforms[iFacet].resize(3u);
         for ( uint32_t j = 0; j < 3; ++j) {
             m_facet_normal_xforms[iFacet][j]
-                = std::make_pair(
+                = make_pair(
                         facet_normal_transforms[iFacet][0][j],
                         facet_normal_transforms[iFacet][1][j] * facet_normal_transform_scale[iFacet]);
         }
@@ -586,7 +583,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
          m_facet_normal_xforms[iFacet].resize(4u);
          for ( uint32_t j = 0; j < 4; ++j) {
              m_facet_normal_xforms[iFacet][j]
-                 = std::make_pair(
+                 = make_pair(
                         facet_normal_transforms[iFacet][0][j],
                         facet_normal_transforms[iFacet][1][j]);
          }
@@ -819,7 +816,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     for ( uint32_t f = 0; f < 6u; ++f) {
         m_facet_normal_xforms[f].resize(4u);
         for ( uint32_t n = 0; n < 4u; ++n) {
-            m_facet_normal_xforms[f][n] = std::make_pair(
+            m_facet_normal_xforms[f][n] = make_pair(
                     facet_normal_transforms[f][0][n],
                     facet_normal_transforms[f][1][n]
                 );
@@ -1217,7 +1214,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     for ( uint32_t f = 0; f < 12u; ++f) {
         m_facet_normal_xforms[f].resize(8u);
         for ( uint32_t n = 0; n < 8u; ++n) {
-            m_facet_normal_xforms[f][n] = std::make_pair(
+            m_facet_normal_xforms[f][n] = make_pair(
                     facet_normal_transforms[f][0][n],
                     facet_normal_transforms[f][1][n]
                 );
@@ -1607,7 +1604,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     for ( uint32_t f = 0; f < 9u; ++f) {
         m_facet_normal_xforms[f].resize(6u);
         for ( uint32_t n = 0; n < 6u; ++n) {
-            m_facet_normal_xforms[f][n] = std::make_pair(
+            m_facet_normal_xforms[f][n] = make_pair(
                     facet_normal_transforms[f][0][n],
                     facet_normal_transforms[f][1][n]
                 );
@@ -2305,7 +2302,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     for ( uint32_t f = 0; f < 12u; ++f) {
         m_facet_normal_xforms[f].resize(5u);
         for ( uint32_t n = 0; n < 5u; ++n) {
-            m_facet_normal_xforms[f][n] = std::make_pair(
+            m_facet_normal_xforms[f][n] = make_pair(
                     facet_normal_transforms[f][0][n],
                     facet_normal_transforms[f][1][n]
                 );
