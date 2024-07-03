@@ -4,12 +4,16 @@ nodal fluid volume source	NQV	m3		1	-1.00E+00	1.00E+00	node
 fluid pressure			PF	Pa		1	-1.00E+09	1.00E+09	node
 permeability			k	m2		1	1.00E-25	1.00E+00	element
 conductivity			K	m s-1		1	1.00E-25	1.00E+00	element
-diffusivity				D	m2 s-1	1	1.00E-50	1.00E-05	element
-porosity				PHI	X		1	1.00E-05	1.00E+00	element
-velocity				VT	m s-1		2	-1.00E+02	1.00E+02	element
+diffusivity			D	m2 s-1		1	1.00E-50	1.00E-05	element
+porosity			PHI	X		1	1.00E-05	1.00E+00	element
+storativity			S	m3 m-3 Pa-1	1	1.00E-12	1.00E+06	element
+velocity			VT	m s-1		2	-1.00E+02	1.00E+02	element
 nodal velocity			VTN	m s-1		2	-1.00E+05	1.00E+05	node
 pore velocity			VP	m s-1		2	-1.00E+03	1.00E+03	element
-volume flux				F	m s-1		1	0.00E+00	1.00E+02	element
+volume flux			F	m s-1		1	0.00E+00	1.00E+02	element
 concentration			C	X		1	0.00		1.05E+02	node
-pore volume				PV	m s-1		1	1.00E-20	1.00E+08	element
-
+pore volume			PV	m s-1		1	1.00E-20	1.00E+08	element
+element number			nE	none		1	0.	1e8	element
+face number			nF	none		1	0.	1e8	face
+interface number		nIF	none		1	0.	1e8	interface
+node number			nN	none		1	0.	1e8	node

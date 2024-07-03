@@ -15,7 +15,7 @@
 #include "FaceConstructionData.h"
 
 
-#define MESH_MANAGER_DEBUG
+// #define MESH_MANAGER_DEBUG
 
 using namespace std;
 

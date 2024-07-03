@@ -98,18 +98,25 @@ PropertyDatabase<dim>::PropertyDatabase( const PropertyDatabase<dim>& p )
 template<uint32_t dim>
 void PropertyDatabase<dim>::Initialize( const char* variables_file )
   {
-    if (variables_file) { // this was the pre-existing logic(JEM - July 11-2014)
-        physvarsFile = variables_file; // not sure why it was so, but I left it this way
+      csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
+      
+      if (variables_file) {
+          physvarsFile = variables_file;
 
-        InitializeCount();
+          InitializeCount();
 
-        cout <<"\nPropertyDatabase::Initialize: Initializing database from textfile: ";
-        cout << physvarsFile << endl;
+          cout <<"\nPropertyDatabase::Initialize: Initializing database from textfile: '";
+          cout << physvarsFile <<"'"<< endl;
 
-        TextToBinaryFile( physvarsFile.c_str() );
+          TextToBinaryFile( physvarsFile.c_str() );
 
-        FlushToScreen();
-    }
+          // if the variable list is empty
+          if ( distance( Begin(),End() ) == 0 )
+            csmp_error.Note( ERROR, "PropertyDatabase<dim>::Initialize: from file", variables_file, "did not yield any variables; database is empty" );
+          else
+            FlushToScreen();
+      }
+     else csmp_error.Note( ERROR, "PropertyDatabase<dim>::Initialize", "variables_file name string empty is empty" );
   }
 
 
@@ -606,20 +613,23 @@ Private method of the property database.
 If the property database is empty, a warning message will be reported. 
 */
 template<uint32_t dim>
-void PropertyDatabase<dim>::CountVariables()
+size_t PropertyDatabase<dim>::CountVariables()
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      
      if ( (propList_.empty()) ) {
           csmp_error.Note( WARNING, "PropertyDatabase<dim>::CountVariables", 
                                       "the property list is empty");
-          return;
+          return 0ul;
        }
 
      InitializeCount();
      
      for ( auto& prop : propList_ )
          ++( variableCount_[ prop.second.key.place ] [ prop.second.key.type ] );
+          
+     return propList_.size();
+         
   } // end CountVariables
 
 
@@ -654,8 +664,8 @@ void PropertyDatabase<dim>::AssignVariableIndices()
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      
      if ( (propList_.empty()) ) {
-          csmp_error.Note( WARNING, "PropertyDatabase<dim>::AssignVariableIndices", 
-                                      "the property list is empty");
+          csmp_error.Note( ERROR, "PropertyDatabase<dim>::AssignVariableIndices",
+                                  "the property list is empty");
           return;
        }
           
@@ -730,14 +740,21 @@ void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_text
            return;
         }
      if ( !propList_.empty() ) {
-          cout <<"\nPropertyDatabase::TextToBinaryFile: property list was not empty; overwriting this list."<< endl;
+          cout <<"\nPropertyDatabase::TextToBinaryFile: property list was not empty; overwriting this list"<< endl;
           propList_.erase( propList_.begin(), propList_.end() );
        }  
        
      istreambuf_iterator<char>  ifsBegin(ifs), ifsEnd;
      Delimiters  delimiters("\t<>\n\r"); // check - this may be different from token to token
      TokenIterator<istreambuf_iterator<char>,Delimiters>  propertyIter( ifsBegin, ifsEnd, delimiters ),
-                                                          propertiesEnd;   
+                                                          propertiesEnd;
+     // could any properties be read from file
+     if ( propertyIter == propertiesEnd ) {
+           csmp_error.Note( ERROR, "PropertyDatabase<dim>::TextToBinaryFile",
+                            property_database_textfile, "could not read any text tokens from file" );
+           return;
+        }
+                                                          
      // lets read the first two lines
      bool  place_specified(false), usage_specified(false), explanation_specified(false), reference_specified(false); 
      
@@ -748,7 +765,7 @@ void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_text
     	         else if ( *propertyIter == "reference" )   reference_specified   = true;
     	         else break;
 	          }
-          if ( *propertyIter == "place" ) place_specified = true;
+          if ( *propertyIter == "place" || *propertyIter == "placement" ) place_specified = true;
           propertyIter++;
        }
 
@@ -1741,8 +1758,14 @@ uint32_t PropertyDatabase<dim>::FlaggedArrayLengthTotal( PLACEMENT place ) const
 template<uint32_t dim>
 void PropertyDatabase<dim>::UpdateParametersAndDatabase()
   {
+    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
+  
     // updating the numbering of variables
-    CountVariables();
+    size_t n_variables = CountVariables();
+    if ( n_variables == 0ul ) {
+         csmp_error.Note( ERROR, "PropertyDatabase<dim>::UpdateParametersAndDatabase", "property database is empty; no parameters to update");
+         return;
+      }
 
     // assigning the variable indices to the properties in the list
     AssignVariableIndices();

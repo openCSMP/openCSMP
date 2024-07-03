@@ -54,7 +54,8 @@ ExplicitTransport_Test::~ExplicitTransport_Test()
 Model<3U>*  ExplicitTransport_Test::CreateModel( const char* ansys_input_data )
  {
     delete model_ptr_;
-    model_ptr_ = new ANSYS_Model3D( ansys_input_data, ansys_input_data, "ExplicitTransport_Test-variables.txt" );
+    model_ptr_ = new ANSYS_Model3D( ansys_input_data, ansys_input_data, "VariableSet_TracerTransfer-variables.txt" );
+//    model_ptr_ = new ANSYS_Model3D( ansys_input_data, ansys_input_data, "ExplicitTransport_Test-variables.txt" );
     Point<3U> min_coord, max_coord;
     model_ptr_->MinMaxCoordinates( min_coord, max_coord );
     model_length_ = max_coord[0] - min_coord[0];

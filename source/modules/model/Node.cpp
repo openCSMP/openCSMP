@@ -909,6 +909,7 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
     if (  shared_parents.size() > 1 ) {
     
 // DEBUGGING - visualising the discovered higher dimensional elements
+#ifdef NODE_DEBUG
 Element<dim>* elmt1 = (*shared_parents.begin());
 elmt1->Idx( 1 );
 elmt1->CoordinateMatrix();
@@ -923,10 +924,10 @@ for ( int i{0}; i<elmt2->Nodes(); ++i ) DATA2(0,i) = static_cast<double>(elmt2->
 elmt2->FE()->OutputNodeDataToVTK( "parent_elmt", "node_flag", DATA2 );
 // if there are two elements, are they overlapping?
 if ( interPenetrating<dim>( elmt1, elmt2 ) )
-  ErrorHandler::Instance().Note( ERROR, "parentElement", "more than one element was found",
+  ErrorHandler::Instance().Note( WARNING, "parentElement", "more than one element was found",
                                          "and they are interpenetrating (=partially or fully overlapping)");
-
-         ErrorHandler::Instance().Note( ERROR, "parentElement", "more than one element was found",
+#endif
+         ErrorHandler::Instance().Note( WARNING, "parentElement", "more than one element was found",
                                          "this may be the case for a lower-dimensional element inside the model; use other function");
 
          return make_pair( (*shared_parents.begin()), numeric_limits<size_t>::max() );

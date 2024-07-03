@@ -382,7 +382,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void VelocityAndVolumeFlux<dim,CELL>::TestRangeOfOutputVariables() const
   {
      // velocity, interstitial velocity
-     for ( auto i{0U}; i<dim; i++ )
+     for ( uint32_t i{0U}; i<dim; i++ )
        {
           if ( velo_[i] < minmaxV_.first || velo_[i] > minmaxV_.second )
             throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",

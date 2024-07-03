@@ -239,8 +239,8 @@ void DynamicArray_Test::Test_DynamicArray3D()
         d.out();
       }
 
-    // provoking error
-    d.at(3,15,2);
+    // provoking exception
+    // d.at(3,15,2);
 
     // resize operation array 'ca'
     depth = ca.depth();

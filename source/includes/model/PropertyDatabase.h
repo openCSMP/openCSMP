@@ -298,7 +298,7 @@ class PropertyDatabase  {
    void   InitializeCount();
    void   InitializeVariableTypeCount( std::map<VARIABLE_TYPE,uint32_t>& );
    void   UpdateParametersAndDatabase();
-   void   CountVariables(); 
+   size_t CountVariables(); 
    void   AttachIndices();
    void   UpdateIndexReferences();
    void   DetachIndices( std::string parameterName );
