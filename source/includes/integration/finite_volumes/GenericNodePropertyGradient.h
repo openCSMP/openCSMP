@@ -4,7 +4,6 @@
 #include "PropertyHandle.h"
 #include "ErrorHandler.h"
 #include "FiniteVolumeStencilManager.h"
-#include "FiniteVolumeStencil.h"
 #include "Model.h"
  
 namespace csmp {

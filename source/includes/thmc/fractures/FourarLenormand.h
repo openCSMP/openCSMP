@@ -1,9 +1,6 @@
 #ifndef FOURAR_LENORMAND_H
 #define FOURAR_LENORMAND_H
 
-
-#include <cmath>
-
 #include "TwoPhaseModel.h"
 
 namespace csmp {

@@ -140,12 +140,11 @@ void FV_IntegrationPointsAndWeights<dim>::Resize( uint32_t n_isrf,
       } 
     
 //    m_facet_edge_midpoints.resize( n_isrf );  vector<Point<dim> >(m_facet_edge_midpoints).swap(m_facet_edge_midpoints);
-//    m_facet_points.resize( n_isrf );  vector<vector<Point<dim> > >(m_facet_points).swap(m_facet_points);
-
     // SKM_FIX for each facet there is one edge with 2 subedges
-    m_facet_edge_midpoints.resize( n_isrf*2 );  vector<Point<dim> >(m_facet_edge_midpoints).swap(m_facet_edge_midpoints);
-
-    m_facet_points.resize( n_isrf );  vector<vector<Point<dim> > >(m_facet_points).swap(m_facet_points);
+    m_facet_edge_midpoints.resize( n_isrf*2 );  
+    m_facet_edge_midpoints.shrink_to_fit();
+    
+    m_facet_points.resize( n_isrf );  m_facet_points.shrink_to_fit();
     m_facet_types.resize( n_isrf );
     m_sector_points.resize( n_ivol ); 
     m_edge_of_sectors.resize( n_ivol ); 
@@ -203,8 +202,7 @@ void FV_IntegrationPointsAndWeights<dim>::FacetNormalTransformations(
 }
 
 template<uint32_t dim>
-void FV_IntegrationPointsAndWeights<dim>::FacetNormals( 
-                                                   vector<Point<dim> >&  facet_normals ) const
+void FV_IntegrationPointsAndWeights<dim>::FacetNormals( vector<Point<dim> >&  facet_normals ) const
 {
    facet_normals = m_facet_normals;
 }
@@ -469,7 +467,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
          m_sector_points[iSector][3] = m_facet_edge_midpoints[(2+iSector) % 3];
       }
     
-    // for all sectors  
+    // for all sectors (all sectors have the same number of edges)
     m_edge_of_sectors.resize(3U);
     for ( uint32_t jSector = 0U; jSector < 3U; jSector++ ) {
          m_edge_of_sectors[jSector].resize(4U);
@@ -537,7 +535,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
       {-0.5, 0.5, 0. }
     }; 
     
-   for(auto i{0U}; i<NumOfInternalVolumes; i++)
+   for( uint32_t i{0U}; i<NumOfInternalVolumes; i++)
       for( uint32_t j{0U}; j<dim; j++ ) m_volume_integration_points1[i][0][j]=vip[i][j];
 
    m_facet_normals[0][0]= 1.0; m_facet_normals[0][1]= 0.0;
@@ -581,7 +579,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
          m_facet_types[iFacet] = UNIT_LINEAR_FACET;
 
          m_facet_normal_xforms[iFacet].resize(4u);
-         for ( uint32_t j = 0; j < 4; ++j) {
+         for ( uint32_t j{0u}; j < 4; ++j) {
              m_facet_normal_xforms[iFacet][j]
                  = make_pair(
                         facet_normal_transforms[iFacet][0][j],
@@ -614,7 +612,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
 
     m_edge_of_sectors.resize(4U);
     for ( uint32_t jSector = 0U; jSector < 4U; jSector++ ) {
-        m_edge_of_sectors[jSector].resize(4U);
+        m_edge_of_sectors[jSector].resize(4U); // (all sectors have the same number of edges)
         for ( uint32_t jEdge = 0U; jEdge < 4U; jEdge++ )
           m_edge_of_sectors[jSector][jEdge] = make_pair(jEdge,(jEdge+1)%4); 
       }
@@ -873,7 +871,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     m_edge_of_sectors.resize(4U); 
     for ( uint32_t iSector=0U; iSector<4U; iSector++ )
       { 
-         m_edge_of_sectors[iSector].resize(12U);
+         m_edge_of_sectors[iSector].resize(12U); // (all sectors have the same number of edges)
          for ( uint32_t iLine=0U; iLine<4U; iLine++ )
            m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine+1)%4); 
          for ( uint32_t iLine=4U; iLine<8U; iLine++ )
@@ -1314,7 +1312,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     m_edge_of_sectors.resize(8U);
     for ( uint32_t iSector=0U; iSector<8U; iSector++ )
       { 
-         m_edge_of_sectors[iSector].resize(12U);
+         m_edge_of_sectors[iSector].resize(12U); // (all sectors have the same number of edges)
          for ( uint32_t iLine=0U; iLine<4U; iLine++ )
             m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine+1)%4); 
           for ( uint32_t iLine=4U; iLine<8U; iLine++ )
@@ -1323,7 +1321,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
             m_edge_of_sectors[iSector][iLine]=make_pair(iLine-8,iLine-4);  
       }  
 
-} // CreateDataFor_ISOPARAMETRIC_LINEAR_HEX()
+} // CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
 
 
 
@@ -1501,7 +1499,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_facet_types[0] = QUADRILATERAL_FACET;
 
 	m_facet_points[0].resize(4);
-    vector<Point<dim> >(m_facet_points[0]).swap(m_facet_points[0]);
+    m_facet_points[0].shrink_to_fit();
     m_facet_points[0][0] = pt_c12;
     m_facet_points[0][1] = pt_c123; 
     m_facet_points[0][2] = m_barycenter;
@@ -1510,7 +1508,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_facet_types[1] = QUADRILATERAL_FACET;
 
     m_facet_points[1].resize(4);
-    vector<Point<dim> >(m_facet_points[1]).swap(m_facet_points[1]);
+    m_facet_points[1].shrink_to_fit();
     m_facet_points[1][0] = pt_c123;
     m_facet_points[1][1] = m_barycenter; 
     m_facet_points[1][2] = pt_c2356;
@@ -1519,7 +1517,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_facet_types[2] = QUADRILATERAL_FACET;
 
 	m_facet_points[2].resize(4);
-    vector<Point<dim> >(m_facet_points[2]).swap(m_facet_points[2]);
+    m_facet_points[2].shrink_to_fit();
     m_facet_points[2][0] = pt_c123;
     m_facet_points[2][1] = m_barycenter; 
     m_facet_points[2][2] = pt_c1346;
@@ -1528,7 +1526,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_facet_types[3] = QUADRILATERAL_FACET;
 
 	m_facet_points[3].resize(4);
-    vector<Point<dim> >(m_facet_points[3]).swap(m_facet_points[3]);
+    m_facet_points[3].shrink_to_fit();
     m_facet_points[3][0] = pt_c14;
     m_facet_points[3][1] = pt_c1245; 
     m_facet_points[3][2] = m_barycenter;
@@ -1537,7 +1535,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_facet_types[4] = QUADRILATERAL_FACET;
 
 	m_facet_points[4].resize(4);
-    vector<Point<dim> >(m_facet_points[4]).swap(m_facet_points[4]);
+    m_facet_points[4].shrink_to_fit();
     m_facet_points[4][0] = pt_c25;
     m_facet_points[4][1] = pt_c2356; 
     m_facet_points[4][2] = m_barycenter;
@@ -1546,7 +1544,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_facet_types[5] = QUADRILATERAL_FACET;
 
 	m_facet_points[5].resize(4);
-    vector<Point<dim> >(m_facet_points[5]).swap(m_facet_points[5]);
+    m_facet_points[5].shrink_to_fit();
     m_facet_points[5][0] = pt_c36;
     m_facet_points[5][1] = pt_c1346; 
     m_facet_points[5][2] = m_barycenter;
@@ -1555,7 +1553,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_facet_types[6] = QUADRILATERAL_FACET;
 
 	m_facet_points[6].resize(4);
-    vector<Point<dim> >(m_facet_points[6]).swap(m_facet_points[6]);
+    m_facet_points[6].shrink_to_fit();
     m_facet_points[6][0] = pt_c45;
     m_facet_points[6][1] = pt_c1245; 
     m_facet_points[6][2] = m_barycenter;
@@ -1564,7 +1562,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_facet_types[7] = QUADRILATERAL_FACET;
 
     m_facet_points[7].resize(4);
-    vector<Point<dim> >(m_facet_points[7]).swap(m_facet_points[7]);
+    m_facet_points[7].shrink_to_fit();
     m_facet_points[7][0] = pt_c56;
     m_facet_points[7][1] = pt_c2356; 
     m_facet_points[7][2] = m_barycenter;
@@ -1573,7 +1571,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_facet_types[8] = QUADRILATERAL_FACET;
 
 	m_facet_points[8].resize(4);
-    vector<Point<dim> >(m_facet_points[8]).swap(m_facet_points[8]);
+    m_facet_points[8].shrink_to_fit();
     m_facet_points[8][0] = pt_c46;
     m_facet_points[8][1] = pt_c1346; 
     m_facet_points[8][2] = m_barycenter;
@@ -1682,7 +1680,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_edge_of_sectors.resize(6U); 
     for ( uint32_t iSector=0U; iSector<6U; iSector++ )
       { 
-        m_edge_of_sectors[iSector].resize(12U);
+        m_edge_of_sectors[iSector].resize(12U); // (all sectors have the same number of edges)
         for ( uint32_t iLine=0U; iLine<4U; iLine++ )
           m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine+1)%4);  //   [iSector][iLine] 
         for ( uint32_t iLine=4U; iLine<8U; iLine++ )
@@ -1815,8 +1813,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     m_edges_of_element[6]=make_pair(2U,4U);
     m_edges_of_element[7]=make_pair(3U,4U);            
  
-    //Facet mid-edge points 
-    //Facet mid-edge points 
+    //Facet mid-edge points
     m_facet_edge_midpoints[0][0] = 0.;     m_facet_edge_midpoints[0][1] = -2./3.; m_facet_edge_midpoints[0][2] = 1./3.; 
     m_facet_edge_midpoints[1][0] = 2./3.;  m_facet_edge_midpoints[1][1] = 0.;     m_facet_edge_midpoints[1][2] = 1./3.; 
     m_facet_edge_midpoints[2][0] = 0.;     m_facet_edge_midpoints[2][1] =  2./3.; m_facet_edge_midpoints[2][2] = 1./3.; 
@@ -2006,7 +2003,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
 } // CreateDataFor_ISOPARAMETRIC_LINEAR_PYRAMID()
 
-#else
+#else // now comes PYRAMID_WITH_TRIANGULAR_FACETS
 
 template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR()
@@ -2203,7 +2200,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     m_facet_points[3][2] = m_barycenter;
     m_facet_points[3][3] = pt_c145;    
 
-    // triangular facets
+    // triangular facets (making this a jagged array)
 
     m_facet_types[4] = TRIANGULAR_FACET;
 

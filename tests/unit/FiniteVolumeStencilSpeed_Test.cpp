@@ -32,8 +32,8 @@ void FiniteVolumeStencilSpeed_Test::run()
       Timer timer;
       double ansys_build_time, native_build_time;
 
-//      const string model_name{"Clair"}; // // 799206 elmts, 145178 nodes
-      const string model_name{"prism_test"}; // // 799206 elmts, 145178 nodes
+//      const string model_name{"Clair"};    // 799206 elmts, 145178 nodes
+      const string model_name{"prism_test"}; //  53821 elements, 10831 nodes, 3040 faces
       
       // checking whether there already is a native csmp file set in place
       if ( !isThereFileCalled( model_name + "_variables.dat") )
@@ -41,13 +41,21 @@ void FiniteVolumeStencilSpeed_Test::run()
           // creating the model from ANSYS .asc and .dat files and converting it to CSMP native binary fileset
           ANSYS_Model3D ansys_model( model_name.c_str(), model_name.c_str(), "VariableSet_TracerTransfer-variables.txt", true );
           cout << "\n"<<"FiniteVolumeStencilSpeed_Test::run: time taking to build model from ANSYS: " << (ansys_build_time=timer.StopClock()) << "\n\n\n";
+          printModelDimensions( ansys_model );
           // saving model to disk
           ansys_model.OutputToBinaryFile(model_name.c_str());
         }
       // reading from binary file
       timer.Start();
       Model<3U> model( model_name );
-      cout << "\n\n\nTime taking to build model '"<< model_name <<"' from CSMP binary file set: " << (native_build_time=timer.StopClock()) << "\n\n\n";
+      cout << "\nTime taking to build model '"<< model_name <<"' from CSMP binary file set: " << (native_build_time=timer.StopClock()) << "\n";
+      //model.Database().IndexTrackerOut();
+      cout <<"\n"<<"datadepth of current indices in model:"<< endl;
+      const IndexTracker& indices = model.Database().VariableIndexes();
+      LocalVariables::int_type max_index{0ul};
+      for ( auto it=indices.IndicesBegin(); it!=indices.IndicesEnd(); ++it )
+        max_index = std::max( max_index, static_cast<LocalVariables::int_type>((*it).first->dataDepth + (*it).first->dataOffset) );
+        cout <<"\t\t"<< max_index << endl;
 
       // compute volume, pore volume and prescribed 'total velocity'
       // -----------------------------------------------------------
@@ -59,15 +67,16 @@ void FiniteVolumeStencilSpeed_Test::run()
       // computing flux balance for computed divergence free 'total velocity' field
       // --------------------------------------------------------------------------
       // computing divergence free 'total velocity' field and 'facet flux'
-      DivergenceFreeTotalVelocityField( model, 1.0e7 );
+      DivergenceFreeTotalVelocityField( model, 2.0e5 ); // delta p = 2 bars over 10 meters
       {
         ExplicitTransport<3U>  transport( model, "Model" );
         _equal( transport.IncomingVolumetricFlow(),
-                transport.OutgoingVolumetricFlow(), numeric_limits<double>::epsilon() * transport.IncomingVolumetricFlow() );
+                transport.OutgoingVolumetricFlow(), numeric_limits<double>::epsilon() * transport.IncomingVolumetricFlow() * 1e5 );
       }
       // speed test 1: flow through model with TVD concentration
       // -------------------------------------------------------
-      const bool prescribed_velocity(true);
+      // prescribed would set velocity vector to 1,0,0
+      const bool prescribed_velocity(false);
       timer.Start();
       TestFlowThroughModel( model, prescribed_velocity );
       cout << "\n"<<"FiniteVolumeStencilSpeed_Test::run: "<< timer.StopClock() << endl;
@@ -198,17 +207,9 @@ void  FiniteVolumeStencilSpeed_Test::TestFlowThroughModel( Model<3U>& model, boo
     if ( prescribed_velocity ) {
           VectorVariable<3U>  vc1(ANY,ANY,ANY,1.,0.,0.);
           model.InputPropertyValue( "velocity", vc1 ); // NB: transport scheme uses 'velocity'
-          // TODO: adjust other parameters so that method performs the same when velocity is calculated internally
       }
-    else {
-         Point<3U> xyz_min, xyz_max;
-         model.MinMaxCoordinates( xyz_min, xyz_max );
-         auto model_length = xyz_min.DistanceTo( xyz_max );
-         // left->right pressure gradient and flow (hydrostatic)
-         const double delta_pf( 9.8 * 1000. * model_length );
-         DivergenceFreeTotalVelocityField( model, delta_pf );
-      }
-    velo_magnitude = printRangeOfVariable( model, "velocity" ); 
+    const bool print_vmaximum{false};
+    velo_magnitude = printRangeOfVariable( model, "velocity", print_vmaximum );
     
     // initial and boundary conditions for tracer transport
     // - concentration
@@ -236,7 +237,7 @@ void  FiniteVolumeStencilSpeed_Test::TestFlowThroughModel( Model<3U>& model, boo
     Point<3U> xyz_min, xyz_max;
     model.MinMaxCoordinates( xyz_min, xyz_max ); 
     const double model_length(xyz_max[0]-xyz_min[0]), xsect_area((xyz_max[1]-xyz_min[1]) * (xyz_max[2]-xyz_min[2]));
-    const double time_interval( (model_length/velo_magnitude) / 100. ); // ~10-m travel distance
+    const double time_interval( (model_length/velo_magnitude) * 1e-4 ); // ~10-m travel distance (4 O(M) is difference between fastest and slowest flow speed
     double       duration(0.); // calculated from velocity and model length
 
     // 0. testing whether inflow and outflow from the model have the expected values
@@ -266,8 +267,8 @@ void  FiniteVolumeStencilSpeed_Test::TestFlowThroughModel( Model<3U>& model, boo
 #endif
 
     // 1.3 transporting for trice the time
-    transport.AdvectVariable( time_interval * 3. );
-    duration += time_interval * 3.;
+    transport.AdvectVariable( time_interval );
+    duration += time_interval;
  #ifdef DEBUG
    vtk_output.OutputDataToVTK( model, "concentration", "concentration", 3, true );
  #endif
@@ -276,8 +277,8 @@ void  FiniteVolumeStencilSpeed_Test::TestFlowThroughModel( Model<3U>& model, boo
     _test( max_concentration <= inlet_concentration );
 
     // 1.4 transporting tracer across outflow boundary, verifying that there is no build up
-    transport.AdvectVariable( time_interval * 20. );
-    duration += time_interval * 20.;
+    transport.AdvectVariable( time_interval * 2. );
+    duration += time_interval * 2.;
     _test( printRangeOfVariable( model, "concentration", print_maximum ) <= inlet_concentration );
 #ifdef DEBUG
     vtk_output.OutputDataToVTK( model, "concentration", "concentration", 4, true );

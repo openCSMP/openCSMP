@@ -3,7 +3,6 @@
 #include "Element.h"
 #include "IsoparametricLinearTriangle.h"
 #include "IsoparametricLinearTetrahedron.h"
-#include "FiniteVolumeStencil.h"
 #include "FiniteElementManager.h"
 #include "FiniteVolumeStencilManager.h"
 #include "variableOperations.h"

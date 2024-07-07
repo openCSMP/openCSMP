@@ -5,7 +5,10 @@ namespace csmp {
 
 /// Data class to store physical variable count at given placement
 struct LocalVariables {
-  LocalVariables() 
+
+  using int_type = uint32_t; ///< unsigned integer type that is big enough to hold 'totalDataDepth'
+
+  LocalVariables()
     : scalars           (0),
       vectors           (0),
       tensors           (0),
@@ -17,15 +20,15 @@ struct LocalVariables {
       totalFlagDepth    (0)
   {}
 
-  LocalVariables( uint32_t scalarsVars,
-                  uint32_t vectorVars,
-                  uint32_t tensorVars,
-                  uint32_t array_count,
-                  uint32_t array_length,
-                  uint32_t flag_array_count,
-                  uint32_t flag_array_length,
-                  uint32_t total_data_depth,
-                  uint32_t total_flag_depth )
+  LocalVariables( int_type scalarsVars,
+                  int_type vectorVars,
+                  int_type tensorVars,
+                  int_type array_count,
+                  int_type array_length,
+                  int_type flag_array_count,
+                  int_type flag_array_length,
+                  int_type total_data_depth,
+                  int_type total_flag_depth )
 
     : scalars           (scalarsVars),
       vectors           (vectorVars),
@@ -69,7 +72,7 @@ struct LocalVariables {
 
   bool Empty() const { return ( scalars==0U && vectors==0U && tensors==0U && arrayCount==0U && flaggedArrayCount==0U ); }
 
-  uint32_t  scalars,
+  int_type  scalars,
             vectors,
             tensors,
             arrayCount,

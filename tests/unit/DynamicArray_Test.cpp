@@ -96,7 +96,15 @@ void DynamicArray_Test::Test_DynamicArray2D()
         cout <<"\n"<<"printing array (3x3):\n";
         d.out();
       }
-      
+ 
+ 
+     // construction of square array via vector-style initialiser list
+    DynamicArray2D<double>  d2{ 1., 2., 3., 4. };
+    if ( verbose_ ) {
+         cout <<"\n"<<"printing square array (2x2) created with vector initialiser list:\n";
+         d2.out();
+      }
+ 
     // provoking error
 #ifdef DEBUG
     try {

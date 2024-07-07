@@ -37,11 +37,16 @@
 #include "ConstantFactor.h"
 
 // legacy finite-volume transport scheme
-#include "FiniteVolumeStencil.h"
 #include "StencilProcessor.h"
 #include "ExplicitStencilProcessor.h"
 #include "ExplicitNodeCenteredFiniteVolumeTransport.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
+
+#ifdef FV_STENCIL_TESTING
+#include "FiniteVolumeStencil_refactored.h"
+#else
+#include "FiniteVolumeStencil.h"
+#endif
 
 using namespace std;
 

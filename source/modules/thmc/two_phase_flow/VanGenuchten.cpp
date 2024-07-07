@@ -2,7 +2,12 @@
 #include "VanGenuchten.h"
 #include "PropertyDatabase.h"
 #include "CSMP_mathUtilities.h"
+
+#ifdef FV_STENCIL_TESTING
+#include "FiniteVolumeStencil_refactored.h"
+#else
 #include "FiniteVolumeStencil.h"
+#endif
 
 using namespace std;
 

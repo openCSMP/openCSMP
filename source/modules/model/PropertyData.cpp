@@ -170,10 +170,11 @@ VARIABLE_FLAG& PropertyData::Flag( size_t nth_value, uint32_t ith_dim ) {
     return flags_[ nth_value * flag_stride_ + ith_dim ];
   }
 
+
 /// read flags: vectors and array variables
 VARIABLE_FLAG PropertyData::Flag( size_t nth_value, uint32_t ith_dim ) const {
     assert( Type() == VECTOR or Type() == ARRAY or Type() == FLAGGEDARRAY );
-     assert( !flags_.empty() );
+    assert( !flags_.empty() );
     assert( nth_value < flags_.size() );
     assert( (Type() == VECTOR && ith_dim <= dim_) or (Type() == ARRAY && ith_dim == 0) or (Type() == FLAGGEDARRAY && ith_dim < flag_stride_) );
     return flags_[ nth_value * flag_stride_ + ith_dim ];

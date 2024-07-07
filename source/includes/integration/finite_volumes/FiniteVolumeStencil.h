@@ -9,7 +9,6 @@ namespace csmp {
 
 template<uint32_t> class FiniteVolumeStencilManager;
 
-
 /**
 
 @brief Finite-element specific finite volume stencil (partition into facets and sectors)
@@ -156,15 +155,15 @@ class FiniteVolumeStencil {
     
   private:
     FiniteVolumeStencil() { /* do not use this default constructor */ };
-    // TODO: flatten all these multidimensional arrays for faster access; use specific type for this
+
     std::vector<std::pair<uint32_t,uint32_t> >  edges_of_element;             ///< = facets
-    std::vector<std::vector<uint32_t> >         facets_surrounding_node;      ///< [node][facet]
+    std::vector<std::vector<uint32_t> >         facets_surrounding_node;      ///< jagged array[node][facet - number is variable]
     std::vector<std::vector<Point<dim> > >      facet_integration_points;     ///< [isrf][spts][dim]
     std::vector<std::vector<double> >           facet_integration_weights;    ///< [isrf][spts]
     std::vector<std::vector<double> >           facet_projection_weights;     ///< [isrf][spts]
     std::vector<std::vector<double> >           facet_normals;                ///< [isrf][dim] //[node*3][dim] -3d
     std::vector<Point<dim> >                    facet_parametric_normals;     ///< [isrf][dim] //[node*3][dim] -3d
-    std::vector<std::vector<std::pair<double,double>>> facet_normal_xforms; ///< [isrf][node]
+    std::vector<std::vector<std::pair<double,double>>> facet_normal_xforms;   ///< [isrf][node]
     std::vector<std::vector<Point<dim> > >      sector_integration_points;    ///< [ivol][vpts][dim]
     std::vector<std::vector<double> >           sector_integration_weights;   ///< [ivol][vpts]
     std::vector<Point<dim> >                    facet_edge_midpoints;
@@ -174,7 +173,7 @@ class FiniteVolumeStencil {
     std::vector<FV_FACET_TYPE>                  facet_types;                  ///< [isrf]
     std::vector<std::vector<Point<dim> > >      sector_points_;
     ///< for each sector, for each sector edge, the indices of the end points
-    std::vector<std::vector<std::pair<uint32_t,uint32_t> > >  sector_edges_;
+    std::vector<std::vector<std::pair<uint32_t,uint32_t> > >  sector_edges_;  ///< jagged array [ivol][edges - number is variable][pair]
     std::string                                 parent_element_;              ///< name of parent finite element
     CELL_SHAPE                                  space_dimension_;             ///< line, surface, or volumetric parent element
     

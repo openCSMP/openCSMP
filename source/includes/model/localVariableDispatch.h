@@ -22,6 +22,8 @@ template<uint32_t> class InterFace;
 
 namespace localVariableDispatch {
 
+    using int_type = LocalVariables::int_type;
+
     //=================================================================================================================================================
     // Assert Indexes of Integration Points
 
@@ -60,10 +62,10 @@ namespace localVariableDispatch {
         templatized function to associate LocalVariableStorage with Model, Region, Boundary and SplitBoundary classes which all have no integration points. 
     */
     template<uint32_t dim, template<uint32_t> class STOREE>
-    std::pair<uint32_t, uint32_t> containerNewSize( const STOREE<dim>*, const LocalVariables& lv, const IntegrationPointVariables& )
+    std::pair<int_type,int_type> containerNewSize( const STOREE<dim>*, const LocalVariables& lv, const IntegrationPointVariables& )
       {
-         const uint32_t dataDepth(lv.totalDataDepth);
-         const uint32_t flagDepth(lv.totalFlagDepth);
+         const int_type dataDepth(lv.totalDataDepth);
+         const int_type flagDepth(lv.totalFlagDepth);
          return std::make_pair(dataDepth, flagDepth);
       }
     
@@ -71,42 +73,42 @@ namespace localVariableDispatch {
         templatized function for Element, Face and InterFace classes which have integration points.
     */
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerNewSize(const csmp::Element<dim>* e, const LocalVariables& lv, const IntegrationPointVariables& ipv )
+    std::pair<int_type,int_type> containerNewSize(const csmp::Element<dim>* e, const LocalVariables& lv, const IntegrationPointVariables& ipv )
     {
-        const uint32_t dataDepth(lv.totalDataDepth
-            + e->IntegrationPoints()*ipv.ipvSimplex.totalDataDepth
+        const int_type dataDepth(lv.totalDataDepth
+            + e->IntegrationPoints()*ipv.ipvCell.totalDataDepth
             + e->IntegrationPointsPerSector() * e->Sectors() * ipv.ipvSector.totalDataDepth
             + e->IntegrationPointsPerFacet()  * e->Facets()  * ipv.ipvFacet.totalDataDepth);
-        const uint32_t flagDepth(lv.totalFlagDepth
-            + e->IntegrationPoints()*ipv.ipvSimplex.totalFlagDepth
+        const int_type flagDepth(lv.totalFlagDepth
+            + e->IntegrationPoints()*ipv.ipvCell.totalFlagDepth
             + e->IntegrationPointsPerSector() * e->Sectors() * ipv.ipvSector.totalFlagDepth
             + e->IntegrationPointsPerFacet()  * e->Facets()  * ipv.ipvFacet.totalFlagDepth);
         return std::make_pair(dataDepth, flagDepth);
     }
 
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerNewSize(const csmp::Face<dim>* e, const LocalVariables& lv, const IntegrationPointVariables& ipv)
+    std::pair<int_type,int_type> containerNewSize(const csmp::Face<dim>* e, const LocalVariables& lv, const IntegrationPointVariables& ipv)
     {
-        const uint32_t dataDepth(lv.totalDataDepth
-            + e->IntegrationPoints()*ipv.ipvSimplex.totalDataDepth
+        const int_type dataDepth(lv.totalDataDepth
+            + e->IntegrationPoints()*ipv.ipvCell.totalDataDepth
             + e->IntegrationPointsPerSector() * e->Sectors() * ipv.ipvSector.totalDataDepth
             + e->IntegrationPointsPerFacet()  * e->Facets()  * ipv.ipvFacet.totalDataDepth);
-        const uint32_t flagDepth(lv.totalFlagDepth
-            + e->IntegrationPoints()*ipv.ipvSimplex.totalFlagDepth
+        const int_type flagDepth(lv.totalFlagDepth
+            + e->IntegrationPoints()*ipv.ipvCell.totalFlagDepth
             + e->IntegrationPointsPerSector() * e->Sectors() * ipv.ipvSector.totalFlagDepth
             + e->IntegrationPointsPerFacet()  * e->Facets()  * ipv.ipvFacet.totalFlagDepth);
         return std::make_pair(dataDepth, flagDepth);
     }
 
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerNewSize(const csmp::InterFace<dim>* e, const LocalVariables& lv, const IntegrationPointVariables& ipv)
+    std::pair<int_type,int_type> containerNewSize(const csmp::InterFace<dim>* e, const LocalVariables& lv, const IntegrationPointVariables& ipv)
     {
-        const uint32_t dataDepth(lv.totalDataDepth
-            + e->IntegrationPoints()*ipv.ipvSimplex.totalDataDepth
+        const int_type dataDepth(lv.totalDataDepth
+            + e->IntegrationPoints()*ipv.ipvCell.totalDataDepth
             + e->IntegrationPointsPerSector() * e->Sectors() * ipv.ipvSector.totalDataDepth
             + e->IntegrationPointsPerFacet()  * e->Facets()  * ipv.ipvFacet.totalDataDepth);
-        const uint32_t flagDepth(lv.totalFlagDepth
-            + e->IntegrationPoints()*ipv.ipvSimplex.totalFlagDepth
+        const int_type flagDepth(lv.totalFlagDepth
+            + e->IntegrationPoints()*ipv.ipvCell.totalFlagDepth
             + e->IntegrationPointsPerSector() * e->Sectors() * ipv.ipvSector.totalFlagDepth
             + e->IntegrationPointsPerFacet()  * e->Facets()  * ipv.ipvFacet.totalFlagDepth);
         return std::make_pair(dataDepth, flagDepth);
@@ -116,50 +118,50 @@ namespace localVariableDispatch {
     // Total Depth of new data
     
     template<uint32_t dim, template<uint32_t> class STOREE>
-    std::pair<uint32_t, uint32_t> containerTotalDataDepth( const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index& idx )
+    std::pair<int_type, uint32_t> containerTotalDataDepth( const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index& idx )
       {
-          const uint32_t dataDepth(idx.localVariables.totalDataDepth);
-          const uint32_t flagDepth(idx.localVariables.totalFlagDepth);
+          const int_type dataDepth(idx.localVariables.totalDataDepth);
+          const int_type flagDepth(idx.localVariables.totalFlagDepth);
           return std::make_pair(dataDepth, flagDepth);
       }
 
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerTotalDataDepth(const csmp::Element<dim>* e, const csmp::Index& idx)
+    std::pair<int_type,int_type> containerTotalDataDepth(const csmp::Element<dim>* e, const csmp::Index& idx)
       {
-          const uint32_t dataDepth(idx.localVariables.totalDataDepth
-              + e->IntegrationPoints()*idx.integrationPointVariables.ipvSimplex.totalDataDepth
+          const int_type dataDepth(idx.localVariables.totalDataDepth
+              + e->IntegrationPoints()*idx.integrationPointVariables.ipvCell.totalDataDepth
               + e->IntegrationPointsPerSector() * e->Sectors() * idx.integrationPointVariables.ipvSector.totalDataDepth
               + e->IntegrationPointsPerFacet()  * e->Facets()  * idx.integrationPointVariables.ipvFacet.totalDataDepth);
-          const uint32_t flagDepth(idx.localVariables.totalFlagDepth
-              + e->IntegrationPoints()*idx.integrationPointVariables.ipvSimplex.totalFlagDepth
+          const int_type flagDepth(idx.localVariables.totalFlagDepth
+              + e->IntegrationPoints()*idx.integrationPointVariables.ipvCell.totalFlagDepth
               + e->IntegrationPointsPerSector() * e->Sectors() * idx.integrationPointVariables.ipvSector.totalFlagDepth
               + e->IntegrationPointsPerFacet()  * e->Facets()  * idx.integrationPointVariables.ipvFacet.totalFlagDepth);
           return std::make_pair(dataDepth, flagDepth);
       }
 
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerTotalDataDepth(const csmp::Face<dim>* f, const csmp::Index& idx)
+    std::pair<int_type,int_type> containerTotalDataDepth(const csmp::Face<dim>* f, const csmp::Index& idx)
       {
-          const uint32_t dataDepth(idx.localVariables.totalDataDepth
-              + f->IntegrationPoints()*idx.integrationPointVariables.ipvSimplex.totalDataDepth
+          const int_type dataDepth(idx.localVariables.totalDataDepth
+              + f->IntegrationPoints()*idx.integrationPointVariables.ipvCell.totalDataDepth
               + f->IntegrationPointsPerSector() * f->Sectors() * idx.integrationPointVariables.ipvSector.totalDataDepth
               + f->IntegrationPointsPerFacet()  * f->Facets()  * idx.integrationPointVariables.ipvFacet.totalDataDepth);
-          const uint32_t flagDepth(idx.localVariables.totalFlagDepth
-              + f->IntegrationPoints()*idx.integrationPointVariables.ipvSimplex.totalFlagDepth
+          const int_type flagDepth(idx.localVariables.totalFlagDepth
+              + f->IntegrationPoints()*idx.integrationPointVariables.ipvCell.totalFlagDepth
               + f->IntegrationPointsPerSector() * f->Sectors() * idx.integrationPointVariables.ipvSector.totalFlagDepth
               + f->IntegrationPointsPerFacet()  * f->Facets()  * idx.integrationPointVariables.ipvFacet.totalFlagDepth);
           return std::make_pair(dataDepth, flagDepth);
       }
 
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerTotalDataDepth(const csmp::InterFace<dim>* f, const csmp::Index& idx)
+    std::pair<int_type,int_type> containerTotalDataDepth(const csmp::InterFace<dim>* f, const csmp::Index& idx)
       {
-          const uint32_t dataDepth(idx.localVariables.totalDataDepth
-              + f->IntegrationPoints()*idx.integrationPointVariables.ipvSimplex.totalDataDepth
+          const int_type dataDepth(idx.localVariables.totalDataDepth
+              + f->IntegrationPoints()*idx.integrationPointVariables.ipvCell.totalDataDepth
               + f->IntegrationPointsPerSector() * f->Sectors() * idx.integrationPointVariables.ipvSector.totalDataDepth
               + f->IntegrationPointsPerFacet()  * f->Facets()  * idx.integrationPointVariables.ipvFacet.totalDataDepth);
-          const uint32_t flagDepth(idx.localVariables.totalFlagDepth
-              + f->IntegrationPoints()*idx.integrationPointVariables.ipvSimplex.totalFlagDepth
+          const int_type flagDepth(idx.localVariables.totalFlagDepth
+              + f->IntegrationPoints()*idx.integrationPointVariables.ipvCell.totalFlagDepth
               + f->IntegrationPointsPerSector() * f->Sectors() * idx.integrationPointVariables.ipvSector.totalFlagDepth
               + f->IntegrationPointsPerFacet()  * f->Facets()  * idx.integrationPointVariables.ipvFacet.totalFlagDepth);
           return std::make_pair(dataDepth, flagDepth);
@@ -174,10 +176,10 @@ namespace localVariableDispatch {
                  Master template
     */
     template<uint32_t dim, template<uint32_t> class STOREE>
-    std::pair<uint32_t, uint32_t> containerOffset( const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index& idx )
+    std::pair<int_type,int_type> containerOffset( const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index& idx )
       {
-          const uint32_t dataOffset(idx.dataOffset);
-          const uint32_t flagOffset(idx.flagOffset);
+          const int_type dataOffset(idx.dataOffset);
+          const int_type flagOffset(idx.flagOffset);
           return std::make_pair(dataOffset, flagOffset);
       }
 
@@ -205,16 +207,16 @@ namespace localVariableDispatch {
         @attention Index::offsetFactorSector is zero for sector integration point variables and 1 for facet integration point variables
     */
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerOffset( const csmp::Element<dim>* e, const csmp::Index& idx )
+    std::pair<int_type,int_type> containerOffset( const csmp::Element<dim>* e, const csmp::Index& idx )
       {
-          const uint32_t dataOffset(idx.dataOffset
-              + (idx.ipFactorSimplex + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalDataDepth
-              + idx.offsetFactorSimplex * e->IntegrationPoints() * idx.integrationPointVariables.ipvSimplex.totalDataDepth
+          const int_type dataOffset(idx.dataOffset
+              + (idx.ipFactorCell + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalDataDepth
+              + idx.offsetFactorCell * e->IntegrationPoints() * idx.integrationPointVariables.ipvCell.totalDataDepth
               + idx.offsetFactorSector  * e->IntegrationPointsPerSector() * e->Sectors() * idx.integrationPointVariables.ipvSector.totalDataDepth);
 
-          const uint32_t flagOffset(idx.flagOffset
-              + (idx.ipFactorSimplex + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalFlagDepth
-              + idx.offsetFactorSimplex * e->IntegrationPoints() * idx.integrationPointVariables.ipvSimplex.totalFlagDepth
+          const int_type flagOffset(idx.flagOffset
+              + (idx.ipFactorCell + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalFlagDepth
+              + idx.offsetFactorCell * e->IntegrationPoints() * idx.integrationPointVariables.ipvCell.totalFlagDepth
               + idx.offsetFactorSector  * e->IntegrationPointsPerSector() * e->Sectors() * idx.integrationPointVariables.ipvSector.totalFlagDepth);
 
           return std::make_pair(dataOffset, flagOffset);
@@ -223,15 +225,15 @@ namespace localVariableDispatch {
 
     /// specialisation Face
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerOffset( const csmp::Face<dim>* f, const csmp::Index& idx )
+    std::pair<int_type,int_type> containerOffset( const csmp::Face<dim>* f, const csmp::Index& idx )
       {
-          const uint32_t dataOffset(idx.dataOffset
-              + (idx.ipFactorSimplex + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalDataDepth
-              + idx.offsetFactorSimplex * f->IntegrationPoints() * idx.integrationPointVariables.ipvSimplex.totalDataDepth
+          const int_type dataOffset(idx.dataOffset
+              + (idx.ipFactorCell + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalDataDepth
+              + idx.offsetFactorCell * f->IntegrationPoints() * idx.integrationPointVariables.ipvCell.totalDataDepth
               + idx.offsetFactorSector  * f->IntegrationPointsPerSector() * f->Sectors() * idx.integrationPointVariables.ipvSector.totalDataDepth);
-          const uint32_t flagOffset(idx.flagOffset
-              + (idx.ipFactorSimplex + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalFlagDepth
-              + idx.offsetFactorSimplex * f->IntegrationPoints() * idx.integrationPointVariables.ipvSimplex.totalFlagDepth
+          const int_type flagOffset(idx.flagOffset
+              + (idx.ipFactorCell + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalFlagDepth
+              + idx.offsetFactorCell * f->IntegrationPoints() * idx.integrationPointVariables.ipvCell.totalFlagDepth
               + idx.offsetFactorSector  * f->IntegrationPointsPerSector() * f->Sectors() * idx.integrationPointVariables.ipvSector.totalFlagDepth);
           return std::make_pair(dataOffset, flagOffset);
       }
@@ -240,38 +242,40 @@ namespace localVariableDispatch {
 
     /// specialisation InterFace
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerOffset(const csmp::InterFace<dim>* f, const csmp::Index& idx)
+    std::pair<int_type,int_type> containerOffset(const csmp::InterFace<dim>* f, const csmp::Index& idx)
       {
-          const uint32_t dataOffset(idx.dataOffset
-              + (idx.ipFactorSimplex + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalDataDepth
-              + idx.offsetFactorSimplex * f->IntegrationPoints() * idx.integrationPointVariables.ipvSimplex.totalDataDepth
+          const int_type dataOffset(idx.dataOffset
+              + (idx.ipFactorCell + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalDataDepth
+              + idx.offsetFactorCell * f->IntegrationPoints() * idx.integrationPointVariables.ipvCell.totalDataDepth
               + idx.offsetFactorSector  * f->IntegrationPointsPerSector() * f->Sectors() * idx.integrationPointVariables.ipvSector.totalDataDepth);
-          const uint32_t flagOffset(idx.flagOffset
-              + (idx.ipFactorSimplex + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalFlagDepth
-              + idx.offsetFactorSimplex * f->IntegrationPoints() * idx.integrationPointVariables.ipvSimplex.totalFlagDepth
+          const int_type flagOffset(idx.flagOffset
+              + (idx.ipFactorCell + idx.ipFactorSector + idx.ipFactorFacet) * idx.localVariables.totalFlagDepth
+              + idx.offsetFactorCell * f->IntegrationPoints() * idx.integrationPointVariables.ipvCell.totalFlagDepth
               + idx.offsetFactorSector  * f->IntegrationPointsPerSector() * f->Sectors() * idx.integrationPointVariables.ipvSector.totalFlagDepth);
           return std::make_pair(dataOffset, flagOffset);
       }
 
+
+
     //===================================================================================================================================================
-    // Internal Cycles in new data container ( (1,1) for lvs,  (1,IPs) for ipvSimplex, ( Sectors, IPs ) for ipvSector and ( Facets, IPs ) for ipvFacet )
+    // Internal Cycles in new data container ( (1,1) for lvs,  (1,IPs) for ipvCell, ( Sectors, IPs ) for ipvSector and ( Facets, IPs ) for ipvFacet )
     
     template<uint32_t dim, template<uint32_t> class STOREE>
-    std::pair<int32_t, int32_t> containerIPCycles( const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index& )
+    std::pair<int_type,int_type> containerIPCycles( const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index& )
       {
           return std::make_pair(1u, 1u);
       }
 
     template<uint32_t dim>
-    std::pair<int32_t, int32_t> containerIPCycles( const csmp::Element<dim>* e, const csmp::Index& idx )
+    std::pair<int_type,int_type> containerIPCycles( const csmp::Element<dim>* e, const csmp::Index& idx )
       {
-          const int32_t cycle1((1 - idx.ipFactorSimplex - idx.ipFactorSector - idx.ipFactorFacet)
-              + idx.ipFactorSimplex /* 1 element */
+          const int_type cycle1((1 - idx.ipFactorCell - idx.ipFactorSector - idx.ipFactorFacet)
+              + idx.ipFactorCell /* 1 element */
               + idx.ipFactorSector  * e->Sectors()
               + idx.ipFactorFacet   * e->Facets());
 
-          const int32_t cycle2((1 - idx.ipFactorSimplex - idx.ipFactorSector - idx.ipFactorFacet)
-              + idx.ipFactorSimplex * e->IntegrationPoints()
+          const int_type cycle2((1 - idx.ipFactorCell - idx.ipFactorSector - idx.ipFactorFacet)
+              + idx.ipFactorCell * e->IntegrationPoints()
               + idx.ipFactorSector  * e->IntegrationPointsPerSector()
               + idx.ipFactorFacet   * e->IntegrationPointsPerFacet());
 
@@ -279,15 +283,15 @@ namespace localVariableDispatch {
       }
 
     template<uint32_t dim>
-    std::pair<int32_t, int32_t> containerIPCycles( const csmp::Face<dim>* f, const csmp::Index& idx )
+    std::pair<int_type,int_type> containerIPCycles( const csmp::Face<dim>* f, const csmp::Index& idx )
       {
-          const int32_t cycle1((1 - idx.ipFactorSimplex - idx.ipFactorSector - idx.ipFactorFacet)
-              + idx.ipFactorSimplex /* 1 element */
+          const int_type cycle1((1 - idx.ipFactorCell - idx.ipFactorSector - idx.ipFactorFacet)
+              + idx.ipFactorCell /* 1 element */
               + idx.ipFactorSector  * f->Sectors()
               + idx.ipFactorFacet   * f->Facets());
 
-          const int32_t cycle2((1 - idx.ipFactorSimplex - idx.ipFactorSector - idx.ipFactorFacet)
-              + idx.ipFactorSimplex * f->IntegrationPoints()
+          const int_type cycle2((1 - idx.ipFactorCell - idx.ipFactorSector - idx.ipFactorFacet)
+              + idx.ipFactorCell * f->IntegrationPoints()
               + idx.ipFactorSector  * f->IntegrationPointsPerSector()
               + idx.ipFactorFacet   * f->IntegrationPointsPerFacet());
 
@@ -295,15 +299,15 @@ namespace localVariableDispatch {
       }
 
     template<uint32_t dim>
-    std::pair<int32_t, int32_t> containerIPCycles( const csmp::InterFace<dim>* f, const csmp::Index& idx )
+    std::pair<int_type,int_type> containerIPCycles( const csmp::InterFace<dim>* f, const csmp::Index& idx )
       {
-          const int32_t cycle1((1 - idx.ipFactorSimplex - idx.ipFactorSector - idx.ipFactorFacet)
-              + idx.ipFactorSimplex /* 1 element */
+          const int_type cycle1((1 - idx.ipFactorCell - idx.ipFactorSector - idx.ipFactorFacet)
+              + idx.ipFactorCell /* 1 element */
               + idx.ipFactorSector  * f->Sectors()
               + idx.ipFactorFacet   * f->Facets());
 
-          const int32_t cycle2((1 - idx.ipFactorSimplex - idx.ipFactorSector - idx.ipFactorFacet)
-              + idx.ipFactorSimplex * f->IntegrationPoints()
+          const int_type cycle2((1 - idx.ipFactorCell - idx.ipFactorSector - idx.ipFactorFacet)
+              + idx.ipFactorCell * f->IntegrationPoints()
               + idx.ipFactorSector  * f->IntegrationPointsPerSector()
               + idx.ipFactorFacet   * f->IntegrationPointsPerFacet());
 
@@ -312,45 +316,45 @@ namespace localVariableDispatch {
 
 
     //==================================================================================================================================================
-    // Offset within first cycle ( 0 for lvs and ipvSimplex, TotalIpvDepth for ipvSector and ipvFacet )
+    // Offset within first cycle ( 0 for lvs and ipvCell, TotalIpvDepth for ipvSector and ipvFacet )
     
     template<uint32_t dim, template<uint32_t> class STOREE>
-    std::pair<int32_t, int32_t> containerIPCycle1Offset(const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index&)
+    std::pair<int_type,int_type> containerIPCycle1Offset(const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index&)
       {
           return std::make_pair(static_cast<int32_t>(0), static_cast<int32_t>(0));
       }
 
     template<uint32_t dim>
-    std::pair<int32_t, int32_t> containerIPCycle1Offset(const csmp::Element<dim>* e, const csmp::Index& idx)
+    std::pair<int_type,int_type> containerIPCycle1Offset(const csmp::Element<dim>* e, const csmp::Index& idx)
       {
-          const int32_t cycleDataOffset(idx.ipFactorSector  * e->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalDataDepth
+          const int_type cycleDataOffset(idx.ipFactorSector  * e->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalDataDepth
               + idx.ipFactorFacet   * e->IntegrationPointsPerFacet()  * idx.integrationPointVariables.ipvFacet.totalDataDepth);
 
-          const int32_t cycleFlagOffset(idx.ipFactorSector  * e->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalFlagDepth
+          const int_type cycleFlagOffset(idx.ipFactorSector  * e->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalFlagDepth
               + idx.ipFactorFacet   * e->IntegrationPointsPerFacet()  * idx.integrationPointVariables.ipvFacet.totalFlagDepth);
 
           return std::make_pair(cycleDataOffset, cycleFlagOffset);
       }
 
     template<uint32_t dim>
-    std::pair<int32_t, int32_t> containerIPCycle1Offset(const csmp::Face<dim>* f, const csmp::Index& idx)
+    std::pair<int_type,int_type> containerIPCycle1Offset(const csmp::Face<dim>* f, const csmp::Index& idx)
       {
-          const int32_t cycleDataOffset(idx.ipFactorSector  * f->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalDataDepth
+          const int_type cycleDataOffset(idx.ipFactorSector  * f->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalDataDepth
               + idx.ipFactorFacet   * f->IntegrationPointsPerFacet()  * idx.integrationPointVariables.ipvFacet.totalDataDepth);
 
-          const int32_t cycleFlagOffset(idx.ipFactorSector  * f->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalFlagDepth
+          const int_type cycleFlagOffset(idx.ipFactorSector  * f->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalFlagDepth
               + idx.ipFactorFacet   * f->IntegrationPointsPerFacet()  * idx.integrationPointVariables.ipvFacet.totalFlagDepth);
 
           return std::make_pair(cycleDataOffset, cycleFlagOffset);
       }
 
     template<uint32_t dim>
-    std::pair<int32_t, int32_t> containerIPCycle1Offset(const csmp::InterFace<dim>* f, const csmp::Index& idx)
+    std::pair<int_type,int_type> containerIPCycle1Offset(const csmp::InterFace<dim>* f, const csmp::Index& idx)
       {
-          const int32_t cycleDataOffset(idx.ipFactorSector  * f->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalDataDepth
+          const int_type cycleDataOffset(idx.ipFactorSector  * f->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalDataDepth
               + idx.ipFactorFacet   * f->IntegrationPointsPerFacet()  * idx.integrationPointVariables.ipvFacet.totalDataDepth);
 
-          const int32_t cycleFlagOffset(idx.ipFactorSector  * f->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalFlagDepth
+          const int_type cycleFlagOffset(idx.ipFactorSector  * f->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalFlagDepth
               + idx.ipFactorFacet   * f->IntegrationPointsPerFacet()  * idx.integrationPointVariables.ipvFacet.totalFlagDepth);
 
           return std::make_pair(cycleDataOffset, cycleFlagOffset);
@@ -358,22 +362,22 @@ namespace localVariableDispatch {
 
 
     //===================================================================================================================================================
-    // Offset within second cycle ( 0 for lvs, TotalDepth for ipvSimplex, Depth for ipvSector and ipvFacet )
+    // Offset within second cycle ( 0 for lvs, TotalDepth for ipvCell, Depth for ipvSector and ipvFacet )
     
     template<uint32_t dim, template<uint32_t> class STOREE>
-    std::pair<uint32_t, uint32_t> containerIPCycle2Offset(const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index&)
+    std::pair<int_type,int_type> containerIPCycle2Offset(const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index&)
       {
           return std::make_pair(static_cast<uint32_t>(0), static_cast<uint32_t>(0));
       }
 
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerIPCycle2Offset(const csmp::Element<dim>*, const csmp::Index& idx)
+    std::pair<int_type,int_type> containerIPCycle2Offset(const csmp::Element<dim>*, const csmp::Index& idx)
       {
-          const uint32_t cycleDataOffset(idx.ipFactorSimplex * idx.integrationPointVariables.ipvSimplex.totalDataDepth
+          const int_type cycleDataOffset(idx.ipFactorCell * idx.integrationPointVariables.ipvCell.totalDataDepth
               + idx.ipFactorSector  * idx.dataDepth
               + idx.ipFactorFacet   * idx.dataDepth);
 
-          const uint32_t cycleFlagOffset(idx.ipFactorSimplex * idx.integrationPointVariables.ipvSimplex.totalFlagDepth
+          const int_type cycleFlagOffset(idx.ipFactorCell * idx.integrationPointVariables.ipvCell.totalFlagDepth
               + idx.ipFactorSector  * idx.flagDepth
               + idx.ipFactorFacet   * idx.flagDepth);
 
@@ -381,13 +385,13 @@ namespace localVariableDispatch {
       }
 
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerIPCycle2Offset(const csmp::Face<dim>*, const csmp::Index& idx)
+    std::pair<int_type,int_type> containerIPCycle2Offset(const csmp::Face<dim>*, const csmp::Index& idx)
       {
-          const uint32_t cycleDataOffset(idx.ipFactorSimplex * idx.integrationPointVariables.ipvSimplex.totalDataDepth
+          const int_type cycleDataOffset(idx.ipFactorCell * idx.integrationPointVariables.ipvCell.totalDataDepth
               + idx.ipFactorSector  * idx.dataDepth
               + idx.ipFactorFacet   * idx.dataDepth);
 
-          const uint32_t cycleFlagOffset(idx.ipFactorSimplex * idx.integrationPointVariables.ipvSimplex.totalFlagDepth
+          const int_type cycleFlagOffset(idx.ipFactorCell * idx.integrationPointVariables.ipvCell.totalFlagDepth
               + idx.ipFactorSector  * idx.flagDepth
               + idx.ipFactorFacet   * idx.flagDepth);
 
@@ -395,13 +399,13 @@ namespace localVariableDispatch {
       }
 
     template<uint32_t dim>
-    std::pair<uint32_t, uint32_t> containerIPCycle2Offset(const csmp::InterFace<dim>*, const csmp::Index& idx)
+    std::pair<int_type,int_type> containerIPCycle2Offset(const csmp::InterFace<dim>*, const csmp::Index& idx)
       {
-          const uint32_t cycleDataOffset(idx.ipFactorSimplex * idx.integrationPointVariables.ipvSimplex.totalDataDepth
+          const int_type cycleDataOffset(idx.ipFactorCell * idx.integrationPointVariables.ipvCell.totalDataDepth
               + idx.ipFactorSector  * idx.dataDepth
               + idx.ipFactorFacet   * idx.dataDepth);
 
-          const uint32_t cycleFlagOffset(idx.ipFactorSimplex * idx.integrationPointVariables.ipvSimplex.totalFlagDepth
+          const int_type cycleFlagOffset(idx.ipFactorCell * idx.integrationPointVariables.ipvCell.totalFlagDepth
               + idx.ipFactorSector  * idx.flagDepth
               + idx.ipFactorFacet   * idx.flagDepth);
 

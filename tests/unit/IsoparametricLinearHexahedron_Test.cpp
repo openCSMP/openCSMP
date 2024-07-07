@@ -7,9 +7,15 @@
 #include "Node.h"
 #include "Element.h"
 #include "FV_IntegrationPointsAndWeights.h"
-#include "FiniteVolumeStencil.h"
 #include "FiniteElement.h"
 #include "DenseMatrix.h"
+
+#ifdef FV_STENCIL_TESTING
+#include "FiniteVolumeStencil_refactored.h"
+#else
+#include "FiniteVolumeStencil.h"
+#endif
+
 
 using namespace std;
 

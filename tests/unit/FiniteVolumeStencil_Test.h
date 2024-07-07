@@ -2,9 +2,14 @@
 #define CSP_FINITE_VOLUME_STENCIL_TEST_H
 
 #include "CSMP_definitions.h"
-#include "FiniteVolumeStencil.h"
 #include "FiniteElement.h"
 #include "Test.h"
+
+#ifdef FV_STENCIL_TESTING
+#include "FiniteVolumeStencil_refactored.h"
+#else
+#include "FiniteVolumeStencil.h"
+#endif
 
 namespace csmp {
 
@@ -12,7 +17,7 @@ class FiniteElement;
 
 class FiniteVolumeStencil_Test : public Test {
   public:
-    explicit FiniteVolumeStencil_Test( bool verbose=false );
+    explicit FiniteVolumeStencil_Test( bool verbose=true );
     ~FiniteVolumeStencil_Test();
     void run(); // runs all the tests for the class (register other methods)
     void displayReferenceCoordinates();

@@ -1967,9 +1967,9 @@ void PropertyDatabase<dim>::EstablishPlacementDependentProperties( PLACEMENT pla
         placement == FACE_INTEGRATION_POINT ||
         placement == INTER_FACE_INTEGRATION_POINT  )
       {
-        key.offsetFactorSimplex = 0;
-        key.offsetFactorSector  = 0; 
-        key.ipFactorSimplex     = 1;
+        key.offsetFactorCell    = 0;
+        key.offsetFactorSector  = 0;
+        key.ipFactorCell        = 1;
         key.ipFactorSector      = 0;
         key.ipFactorFacet       = 0;
       }
@@ -1977,9 +1977,9 @@ void PropertyDatabase<dim>::EstablishPlacementDependentProperties( PLACEMENT pla
              placement == FACE_SECTOR_INTEGRATION_POINT ||
              placement == INTER_FACE_SECTOR_INTEGRATION_POINT )
       {
-        key.offsetFactorSimplex = 1;
+        key.offsetFactorCell    = 1;
         key.offsetFactorSector  = 0;
-        key.ipFactorSimplex     = 0;
+        key.ipFactorCell        = 0;
         key.ipFactorSector      = 1;
         key.ipFactorFacet       = 0;
       }
@@ -1987,17 +1987,17 @@ void PropertyDatabase<dim>::EstablishPlacementDependentProperties( PLACEMENT pla
              placement == FACE_FACET_INTEGRATION_POINT ||
              placement == INTER_FACE_FACET_INTEGRATION_POINT )
       {
-        key.offsetFactorSimplex = 1;
+        key.offsetFactorCell    = 1;
         key.offsetFactorSector  = 1;
-        key.ipFactorSimplex     = 0;
+        key.ipFactorCell        = 0;
         key.ipFactorSector      = 0;
         key.ipFactorFacet       = 1;
       }
     else
       {
-        key.offsetFactorSimplex = 0;
-        key.offsetFactorSector  = 0; 
-        key.ipFactorSimplex     = 0;
+        key.offsetFactorCell    = 0;
+        key.offsetFactorSector  = 0;
+        key.ipFactorCell        = 0;
         key.ipFactorSector      = 0;
         key.ipFactorFacet       = 0;
       }

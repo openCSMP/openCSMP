@@ -1,11 +1,8 @@
 #ifndef ECLIPSE_MODEL_UOM_H
 #define ECLIPSE_MODEL_UOM_H
 
-#include <unordered_map>
-
 #include "EclipseInterface.h"
 #include "Model.h"
-
 
 namespace csmp {
 

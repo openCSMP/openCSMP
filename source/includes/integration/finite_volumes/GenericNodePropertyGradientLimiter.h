@@ -4,7 +4,6 @@
 #include "GenericNodePropertyGradient.h"
 #include "finiteVolumeAuxiliaryFunctions.h"
 #include "FiniteVolumeStencilManager.h"
-#include "FiniteVolumeStencil.h"
 #include "PropertyHandle.h"
 #include "ErrorHandler.h"
 

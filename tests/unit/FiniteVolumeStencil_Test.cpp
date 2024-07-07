@@ -38,7 +38,7 @@ FiniteVolumeStencil_Test::FiniteVolumeStencil_Test( bool verbose )
     const uint32_t dim(3U);
     fvs_.reserve(7U);
     vecFEs_.reserve(7U);
-    
+
     // initialize the vector of stencils
     //linear elements
     // 1,2,3D
@@ -51,7 +51,7 @@ FiniteVolumeStencil_Test::FiniteVolumeStencil_Test( bool verbose )
     fvs_.push_back( FiniteVolumeStencil<3>( "ISOPARAMETRIC_LINEAR_PYRAMID" ) );
     fvs_.push_back( FiniteVolumeStencil<3>( "ISOPARAMETRIC_LINEAR_HEXAHEDRON" ) );
     fvs_.push_back( FiniteVolumeStencil<3>( "ISOPARAMETRIC_LINEAR_PRISM" ) );
-     
+
     /*finite volume stencil 0: ISOPARAMETRIC_LINEAR_BAR*/
     vecFEs_.push_back(new IsoparametricLinearLineElement(dim));
     /*finite volume stencil 1: ISOPARAMETRIC_LINEAR_TRIANGLE*/
@@ -66,21 +66,22 @@ FiniteVolumeStencil_Test::FiniteVolumeStencil_Test( bool verbose )
     vecFEs_.push_back(new IsoparametricLinearHexahedron());
 	  /*finite volume stencil 6: ISOPARAMETRIC_LINEAR_PRISM*/
   	vecFEs_.push_back(new IsoparametricLinearPrism());
-  	
+     
   	//load reference coords as physical coords.
     DenseMatrix<DM_MIN> matCoords;
     for(vector<FiniteElement*>::const_iterator vIterFEs = vecFEs_.begin(); vIterFEs != vecFEs_.end(); vIterFEs++)
     {
       (*vIterFEs)->ReferenceCoordinates( matCoords );
-	    for( auto i = 0; i < (*vIterFEs)->Nodes(); i++ )
-	     for( auto d = 0; d < dim; d++ )
+	    for( uint32_t i = 0; i < (*vIterFEs)->Nodes(); i++ )
+	     for( uint32_t d = 0; d < dim; d++ )
 	     {
 	       const double v(matCoords(i,d)); 
 	       (*vIterFEs)->XYZ(i, d, isnan(v)?0.:v);
 	     }
 	  }	 
- }
+ } // end constructor
  
+
 
 FiniteVolumeStencil_Test::~FiniteVolumeStencil_Test()
  {
@@ -88,7 +89,7 @@ FiniteVolumeStencil_Test::~FiniteVolumeStencil_Test()
   	vector<FiniteElement*>::iterator vDelIterFEs;
   	for( vDelIterFEs = vecFEs_.begin(); vDelIterFEs != vecFEs_.end(); vDelIterFEs++)
   	{
-  		delete *vDelIterFEs;
+  		delete (*vDelIterFEs);
   	}
  }
  
@@ -115,7 +116,7 @@ void FiniteVolumeStencil_Test::run() // runs all the tests for the class (regist
 	
 	shapeFunctionDerivativesTest();
 	
-	if ( verbose_ ) cout << "Done...FiniteVolumeStencil_Test::run()" << endl;
+	if ( verbose_ ) cout << "\nDone...FiniteVolumeStencil_Test::run()" << endl;
  }
  
  
@@ -216,8 +217,8 @@ void FiniteVolumeStencil_Test::facetAndSectorNumbersTest() // are they right for
 #endif
      {
   	   uint32_t iInsideNode(0U), iOutsideNode(0U);
-	     for( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
-  	     {	
+	     for( uint32_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
+  	     {
 	   	    //get facet nodes from stencil
 	  	    vIterFVS->FacetEdgeNodes(iFacet, iInsideNode, iOutsideNode);
 	  	    	
@@ -231,8 +232,8 @@ void FiniteVolumeStencil_Test::facetAndSectorNumbersTest() // are they right for
       }
 
   	  // tests which should work for all element types
-	  for( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
-  	  {	
+	  for( uint32_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
+  	  {
         size_t expectedFacetPoints = ~(size_t)0;
         switch (vIterFVS->FacetType(iFacet))
         {
@@ -523,7 +524,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
 			    if(vIterFVS->ParentElement() == "ISOPARAMETRIC_LINEAR_PYRAMID" && iFacet > 3 ) iNrOfFacetPoints = 3;
 			  #endif
 			  
-			    for( auto iPoint = 0; iPoint < iNrOfFacetPoints; iPoint++)
+			    for( uint32_t iPoint = 0; iPoint < iNrOfFacetPoints; iPoint++)
 			    {
 			      vecOfPointsOfTheFacet.push_back(vIterFVS->FacetPoint(iFacet,iPoint));
 			      vecOfPointsOfTheFacet[iPoint].Out();
@@ -543,10 +544,10 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
 			    //3. Test the orientation of the normal in each direction
 			    bool bEquivalent1(true), bEquivalent2(true);
 			
-			    for( auto iVal = 0; iVal < 3; iVal++)
+			    for( uint32_t iVal = 0; iVal < 3; iVal++)
 				    bEquivalent1 &= ( fabs(vecNormal[iVal] - vecGeneratedNormal[iVal]) < 1.e-7 );
 				
-			    for( auto iVal = 0; iVal < 3; iVal++)
+			    for( uint32_t iVal = 0; iVal < 3; iVal++)
 				    bEquivalent2 &= ( fabs(vecNormal[iVal] + vecGeneratedNormal[iVal]) < 1.e-7 );
 				
 		  	  _test(bEquivalent1 || bEquivalent2);
@@ -666,7 +667,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
             const auto iNrOfFacets(vIterFVS->Facets());
             const auto iNrOfNodes((*vIterFEs)->Nodes());
 
-            for( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
+            for( uint32_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
             {
                 if ( verbose_ ) {
                     //get facet
@@ -682,7 +683,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                     Point<3> v0(0,0,0);
                     Point<3> v1(0,0,0);
 
-                    for ( auto iNode = 0U; iNode < iNrOfNodes; ++iNode) {
+                    for ( uint32_t iNode = 0U; iNode < iNrOfNodes; ++iNode) {
                       const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
                       const Point<3u> nt = Point<3u>(A * n.Coordinates()) + translate;
                       auto weights = vIterFVS->FacetNormalTransformationNodeWeights(iFacet, iNode);
@@ -697,7 +698,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                   NRST0.reserve(iNrOfNodes);
                   NRST1.reserve(iNrOfNodes);
 
-                  for ( auto iFacetPt = 0; iFacetPt < iNrFacetPts; ++iFacetPt) {
+                  for ( uint32_t iFacetPt = 0; iFacetPt < iNrFacetPts; ++iFacetPt) {
                     Point<3> rst0 = vIterFVS->FacetPoint(iFacet, iFacetPt);
                     Point<3> rst1 = vIterFVS->FacetPoint(iFacet, (iFacetPt+1) % iNrFacetPts);
 
@@ -718,7 +719,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                     Point<3u> tangent(0,0,0);
                     Point<3u> bitangent(0,0,0);
 
-                    for ( auto iNode = 0U; iNode < iNrOfNodes; ++iNode) {
+                    for ( uint32_t iNode = 0U; iNode < iNrOfNodes; ++iNode) {
                       const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
                       const Point<3u> nt = Point<3u>(A * n.Coordinates()) + translate;
                         auto weights = vIterFVS->FacetNormalTransformationNodeWeights(iFacet, iNode);
@@ -738,7 +739,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                 }
                 else if ((*vIterFEs)->IsLine()) {
                     Point<3u> v0(0,0,0);
-                    for ( auto iNode = 0U; iNode < iNrOfNodes; ++iNode) {
+                    for ( uint32_t iNode = 0U; iNode < iNrOfNodes; ++iNode) {
                         const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
                         const Point<3u> nt = Point<3u>(A * n.Coordinates()) + translate;
 
@@ -830,7 +831,7 @@ void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
 		//for each facet, get the area, and compare it to the weight of the integration point
     //step through each facet to get weight
 		const auto iNrOfFacets(vIterFVS->Facets());
-    for( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
+    for( uint32_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
   	{
   		if(  vIterFVS->ParentElement() == "ISOPARAMETRIC_LINEAR_PYRAMID" ) continue;
   		
@@ -840,8 +841,8 @@ void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
 		  
 		  //TRACE
       if ( verbose_ ) {
-          cout << "PTS::: facet:" << iFacet << ":" <<endl;
-          for(auto i = 0U; i < vecOfPointsOfTheFacet.size(); i++)
+          cout << "PTS::: facet: " << iFacet << ":" <<endl;
+          for(uint32_t i = 0U; i < vecOfPointsOfTheFacet.size(); i++)
           {
             cout << "P"<<i<<": ";
             vecOfPointsOfTheFacet[i].Out();
@@ -850,7 +851,7 @@ void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
   			
 			//get facet weight
 			//sum all facet weights (there should be one integration point per facet)
-			for ( auto j = 0U; j< vIterFVS->IntegrationPointsPerFacet(); j++ )
+			for ( uint32_t j = 0U; j< vIterFVS->IntegrationPointsPerFacet(); j++ )
 			 fFacetWeight += vIterFVS->FacetIntegrationWeight( iFacet, j );
 		
       //TEST WEIGHT
@@ -869,12 +870,12 @@ void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
        else if (iNrOfFacetPoints == 4)
         _test(areaOfPolygon(vecOfPointsOfTheFacet, iDim, fFacetArea));
       
-      if ( verbose_ ) cout << "\nFacet Area" << fFacetArea << " vs " << fFacetWeight;
+      if ( verbose_ ) cout << "\nFacet Area " << fFacetArea << " vs " << fFacetWeight;
       _equal( fFacetArea, fFacetWeight, 1.e-7 );
       //END TEST WEIGHT
       
       //TRACE
-      if ( verbose_ ) cout << "\nFacetArea (computed): " << fFacetArea << " vs Facet Weight (stored):" << fFacetWeight << endl;
+      if ( verbose_ ) cout << "\nFacetArea (computed): " << fFacetArea << " vs Facet Weight (stored): " << fFacetWeight << endl;
         	
       //get facet integration point -first interface
   		Point<3> vecCentroidFacet_I1, vecCentroidFacet_I2;
@@ -903,11 +904,11 @@ void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
         }
 			
       //test first interface
-      for( auto iD = 0U; iD < iDim; iD++)
+      for( uint32_t iD = 0U; iD < iDim; iD++)
 			  if(!isnan(vecCentroidFacet_I1[iD]))
 			   _equal(vecCentroidFacet_I1[iD], vecCentroidGeneratedPointsFacets[iD],1.e-7);
 			//test second interface
-      for( auto iD = 0U; iD < iDim; iD++)
+      for( uint32_t iD = 0U; iD < iDim; iD++)
 			  if(!isnan(vecCentroidFacet_I2[iD]))
 			   _equal(vecCentroidFacet_I2[iD], vecCentroidGeneratedPointsFacets[iD],1.e-7);
 		

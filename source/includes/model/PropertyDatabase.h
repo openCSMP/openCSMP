@@ -198,15 +198,15 @@ class PropertyDatabase  {
    uint32_t         Index( const char* property_name ) const;
    VARIABLE_TYPE    Type( const char* property_name ) const;
    uint32_t         Components( const char* property_name ) const;
-   const char*    Name( const csmp::Index& idx ) const;
-   const char*    Unit( const char* property_name ) const;
-   const char*    Usage( const char* property_name ) const;
-   bool           IsDefined( const char* property_name ) const;
-   bool           IsDefined( const csmp::Index& idx ) const;
-   void           RangeOf( const char* property_name, double& min, double& max ) const;
-   void           SetRangeOf( const char* property_name, double vmin, double vmax );
-   double         LowerLimitOf( const char* property_name ) const;
-   double         UpperLimitOf( const char* property_name ) const;
+   const char*      Name( const csmp::Index& idx ) const;
+   const char*      Unit( const char* property_name ) const;
+   const char*      Usage( const char* property_name ) const;
+   bool             IsDefined( const char* property_name ) const;
+   bool             IsDefined( const csmp::Index& idx ) const;
+   void             RangeOf( const char* property_name, double& min, double& max ) const;
+   void             SetRangeOf( const char* property_name, double vmin, double vmax );
+   double           LowerLimitOf( const char* property_name ) const;
+   double           UpperLimitOf( const char* property_name ) const;
 
    // range checking
    /// prints details of the range check to screen and terminates program is value is out of range
@@ -254,6 +254,8 @@ class PropertyDatabase  {
 
    std::map<PLACEMENT,std::map<VARIABLE_TYPE,uint32_t> >::const_iterator  VariableCountBegin() const;
    std::map<PLACEMENT,std::map<VARIABLE_TYPE,uint32_t> >::const_iterator  VariableCountEnd() const;
+   
+   const IndexTracker& VariableIndexes() const { return indexTracker_; }
 
    void   FlushToScreen() const;
    void   FlushToScreen( const char* propname ) const;
@@ -282,7 +284,11 @@ class PropertyDatabase  {
    /// writes  templatized INDEX variable definitions of the current variables  into header file and instantiates their keys
    void   WriteVariableSetToHeaderFile( const char* header_file, const char* variable_set_name ) const;
 
+   /// write current content of database to screen
    void   Out() const;
+   
+   /// write current Index objects in Model to screen including  state (values of stored variables)
+   void   IndexTrackerOut() const { indexTracker_.Out(); }
 
    bool   BinaryOut( const char* fileName ) const;
    bool   BinaryOut( std::fstream& fp ) const;
@@ -306,11 +312,11 @@ class PropertyDatabase  {
    void   TextToBinaryFile( const char* text_database_file, bool echo_to_screen=false );
    void   EstablishIndexLocalAndIntegrationPointVariables();
    void   EstablishIndexOffsets();
-   void   EstablishScalarOffsets        ( PLACEMENT whithin );
-   void   EstablishVectorOffsets        ( PLACEMENT whithin );
-   void   EstablishTensorOffsets        ( PLACEMENT whithin );
-   void   EstablishArrayOffsets         ( PLACEMENT whithin );
-   void   EstablishFlaggedArrayOffsets  ( PLACEMENT whithin );
+   void   EstablishScalarOffsets( PLACEMENT within );
+   void   EstablishVectorOffsets( PLACEMENT within );
+   void   EstablishTensorOffsets( PLACEMENT within );
+   void   EstablishArrayOffsets( PLACEMENT within );
+   void   EstablishFlaggedArrayOffsets( PLACEMENT within );
    void   EstablishVariableTypeDependentProperties( int vtype, csmp::Index& key ) const;
    void   EstablishVariableTypeDependentProperties( int vtype, uint32_t size, csmp::Index& key ) const;
    void   EstablishVariableTypeDependentProperties( std::string type, csmp::Index& key ) const;

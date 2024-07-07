@@ -58,7 +58,7 @@ class IndexTracker {
       /// Detaches itself from all Index objects; this method is called upon destruction
       void DetachFromAll();
   
-      /// print all the currently registered Index objects
+      /// print all  currently registered Index objects
       void Out() const;
       
     protected:

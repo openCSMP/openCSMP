@@ -27,11 +27,11 @@ known at compile time.
 */
 bool Index::operator<( const csmp::Index& i ) const
  {
-    const uint32_t lhs( (type+1) * (place+1) * (index+1U) * dataDepth * flagDepth
-                      * (offsetFactorSimplex+1) * (offsetFactorSector+1) *(flagOffset+1) );
+    const int_type lhs( (type+1) * (place+1) * (index+1U) * dataDepth * flagDepth
+                      * (offsetFactorCell+1) * (offsetFactorSector+1) *(flagOffset+1) );
    
-    const uint32_t rhs( (i.type+1) * (i.place+1) * (i.index+1U) * i.dataDepth * i.flagDepth
-                      * (i.offsetFactorSimplex+1) * (i.offsetFactorSector+1) * (i.flagOffset+1));
+    const int_type rhs( (i.type+1) * (i.place+1) * (i.index+1U) * i.dataDepth * i.flagDepth
+                      * (i.offsetFactorCell+1) * (i.offsetFactorSector+1) * (i.flagOffset+1));
    
     return (lhs < rhs);
  }
@@ -111,9 +111,9 @@ Index::Index()
     flagDepth(0),
     dataOffset(0),
     flagOffset(0),
-    offsetFactorSimplex(0),
+    offsetFactorCell(0),
     offsetFactorSector(0), 
-    ipFactorSimplex(0),
+    ipFactorCell(0),
     ipFactorSector(0),
     ipFactorFacet(0),
     localVariables(),
@@ -133,11 +133,11 @@ Inline implementation.
 @param idx the index
 
 */
-Index::Index( VARIABLE_TYPE ty, PLACEMENT pl, uint32_t idx )
+Index::Index( VARIABLE_TYPE ty, PLACEMENT pl, int_type idx )
   : type(ty), place(pl),
     index(idx), dataDepth(0), flagDepth(0), dataOffset(0), 
-    flagOffset(0), offsetFactorSimplex(0), offsetFactorSector(0), 
-    ipFactorSimplex(0), ipFactorSector(0), ipFactorFacet(0),
+    flagOffset(0), offsetFactorCell(0), offsetFactorSector(0), 
+    ipFactorCell(0), ipFactorSector(0), ipFactorFacet(0),
     localVariables(), integrationPointVariables(), indexTracker(nullptr)
   {}
 
@@ -157,15 +157,15 @@ Inline implementation.
 @param lvs LocalVariables of placement pl
 @param ivs IntegrationPointVariables of elements
 */
-Index::Index( VARIABLE_TYPE ty, PLACEMENT pl, uint32_t idx,
-              uint32_t datadepth, uint32_t flagdepth, uint32_t dataoffset, uint32_t flagoffset,
+Index::Index( VARIABLE_TYPE ty, PLACEMENT pl, int_type idx,
+              int_type datadepth, int_type flagdepth, int_type dataoffset, int_type flagoffset,
               const LocalVariables& lvs, const IntegrationPointVariables& ivs, 
-              uint32_t offsetfactorsimplex, uint32_t offsetfactorsector, uint32_t ipfactorsimplex,
-              uint32_t ipfactorsector, uint32_t ipfactorfacet )
+              int_type offsetfactorsimplex, int_type offsetfactorsector, int_type ipfactorsimplex,
+              int_type ipfactorsector, int_type ipfactorfacet )
   : type(ty), place(pl),
     index(idx), dataDepth(datadepth), flagDepth(flagdepth), dataOffset(dataoffset), 
-    flagOffset(flagoffset), offsetFactorSimplex(offsetfactorsimplex), offsetFactorSector(offsetfactorsector), 
-    ipFactorSimplex(ipfactorsimplex), ipFactorSector(ipfactorsector), ipFactorFacet(ipfactorfacet),
+    flagOffset(flagoffset), offsetFactorCell(offsetfactorsimplex), offsetFactorSector(offsetfactorsector), 
+    ipFactorCell(ipfactorsimplex), ipFactorSector(ipfactorsector), ipFactorFacet(ipfactorfacet),
     localVariables(lvs), integrationPointVariables(ivs), indexTracker(nullptr)
   {}
 
@@ -181,8 +181,8 @@ Creates an index based on the provided parameter
 Index::Index( const csmp::Index& idx ) 
   : type(idx.type), place(idx.place), index(idx.index),
     dataDepth(idx.dataDepth), flagDepth(idx.flagDepth), dataOffset(idx.dataOffset), flagOffset(idx.flagOffset),
-    offsetFactorSimplex(idx.offsetFactorSimplex), offsetFactorSector(idx.offsetFactorSector), 
-    ipFactorSimplex(idx.ipFactorSimplex), ipFactorSector(idx.ipFactorSector), ipFactorFacet(idx.ipFactorFacet),
+    offsetFactorCell(idx.offsetFactorCell), offsetFactorSector(idx.offsetFactorSector), 
+    ipFactorCell(idx.ipFactorCell), ipFactorSector(idx.ipFactorSector), ipFactorFacet(idx.ipFactorFacet),
     localVariables(idx.localVariables), integrationPointVariables(idx.integrationPointVariables),
     indexTracker(nullptr)
   {
@@ -201,8 +201,8 @@ Index::Index( const csmp::Index& idx )
 Index::Index( csmp::Index&& idx )
   : type(std::move(idx.type)), place(std::move(idx.place)), index(std::move(idx.index)),
     dataDepth(std::move(idx.dataDepth)), flagDepth(std::move(idx.flagDepth)), dataOffset(std::move(idx.dataOffset)), flagOffset(std::move(idx.flagOffset)),
-    offsetFactorSimplex(std::move(idx.offsetFactorSimplex)), offsetFactorSector(std::move(idx.offsetFactorSector)),
-    ipFactorSimplex(std::move(idx.ipFactorSimplex)), ipFactorSector(std::move(idx.ipFactorSector)), ipFactorFacet(std::move(idx.ipFactorFacet)),
+    offsetFactorCell(std::move(idx.offsetFactorCell)), offsetFactorSector(std::move(idx.offsetFactorSector)),
+    ipFactorCell(std::move(idx.ipFactorCell)), ipFactorSector(std::move(idx.ipFactorSector)), ipFactorFacet(std::move(idx.ipFactorFacet)),
     localVariables(std::move(idx.localVariables)), integrationPointVariables(std::move(idx.integrationPointVariables)),
     indexTracker(nullptr)
   {
@@ -230,9 +230,9 @@ Index&  Index::operator=( const csmp::Index& idx )
       flagDepth                 = idx.flagDepth;
       dataOffset                = idx.dataOffset;
       flagOffset                = idx.flagOffset;
-      offsetFactorSimplex       = idx.offsetFactorSimplex;
+      offsetFactorCell       = idx.offsetFactorCell;
       offsetFactorSector        = idx.offsetFactorSector;
-      ipFactorSimplex           = idx.ipFactorSimplex;
+      ipFactorCell           = idx.ipFactorCell;
       ipFactorSector            = idx.ipFactorSector;
       ipFactorFacet             = idx.ipFactorFacet;
       localVariables            = idx.localVariables;
@@ -262,9 +262,9 @@ Index&  Index::operator=( csmp::Index&& idx )
     flagDepth                 = std::move(idx.flagDepth);
     dataOffset                = std::move(idx.dataOffset);
     flagOffset                = std::move(idx.flagOffset);
-    offsetFactorSimplex       = std::move(idx.offsetFactorSimplex);
+    offsetFactorCell       = std::move(idx.offsetFactorCell);
     offsetFactorSector        = std::move(idx.offsetFactorSector);
-    ipFactorSimplex           = std::move(idx.ipFactorSimplex);
+    ipFactorCell           = std::move(idx.ipFactorCell);
     ipFactorSector            = std::move(idx.ipFactorSector);
     ipFactorFacet             = std::move(idx.ipFactorFacet);
     localVariables            = std::move(idx.localVariables);
@@ -305,9 +305,9 @@ void Index::UpdateData( const csmp::Index& idx )
         flagDepth                 = idx.flagDepth;
         dataOffset                = idx.dataOffset;
         flagOffset                = idx.flagOffset;
-        offsetFactorSimplex       = idx.offsetFactorSimplex;
+        offsetFactorCell       = idx.offsetFactorCell;
         offsetFactorSector        = idx.offsetFactorSector;
-        ipFactorSimplex           = idx.ipFactorSimplex;
+        ipFactorCell           = idx.ipFactorCell;
         ipFactorSector            = idx.ipFactorSector;
         ipFactorFacet             = idx.ipFactorFacet;
         localVariables            = idx.localVariables;
@@ -328,7 +328,7 @@ void Index::UpdateData( const csmp::Index& idx )
 bool Index::operator==( const csmp::Index& i ) const 
 {
   return (  type==i.type && place==i.place && index==i.index && dataDepth==i.dataDepth && flagDepth==i.flagDepth && dataOffset==i.dataOffset 
-            && flagOffset==i.flagOffset && offsetFactorSimplex==i.offsetFactorSimplex && offsetFactorSector==i.offsetFactorSector );
+            && flagOffset==i.flagOffset && offsetFactorCell==i.offsetFactorCell && offsetFactorSector==i.offsetFactorSector );
 }
 
 
@@ -341,7 +341,7 @@ bool Index::operator==( const csmp::Index& i ) const
 bool Index::operator!=( const csmp::Index& i ) const 
 {
   return ( type!=i.type || place!=i.place || index!=i.index || dataDepth!=i.dataDepth || flagDepth!=i.flagDepth || dataOffset!=i.dataOffset 
-           || flagOffset!=i.flagOffset || offsetFactorSimplex!=i.offsetFactorSimplex || offsetFactorSector!=i.offsetFactorSector );
+           || flagOffset!=i.flagOffset || offsetFactorCell!=i.offsetFactorCell || offsetFactorSector!=i.offsetFactorSector );
 }
 
 
@@ -394,9 +394,9 @@ void Index::Out() const
   cout <<"\n\t\tflag depth:       "<< flagDepth;
   cout <<"\n\t\tdata offset:      "<< dataOffset;
   cout <<"\n\t\tflag offset:      "<< flagOffset;
-  cout <<"\n\t\toffset factor si: "<< offsetFactorSimplex;
+  cout <<"\n\t\toffset factor si: "<< offsetFactorCell;
   cout <<"\n\t\toffset factor se: "<< offsetFactorSector;
-  cout <<"\n\t\tip factor FE:     "<< ipFactorSimplex <<" (number of integration points for finite element).";
+  cout <<"\n\t\tip factor FE:     "<< ipFactorCell <<" (number of integration points for finite element).";
   cout <<"\n\t\tip factor sector: "<< ipFactorSector <<" (number of integration points per finite volume sector).";
   cout <<"\n\t\tip factor facet:  "<< ipFactorFacet<<" (number of integration points per finite volume facet).";
   cout << endl;
@@ -405,8 +405,8 @@ void Index::Out() const
 
 bool Index::Out( std::fstream& fp ) const
 {
-  const uint32_t flag_size = sizeof( int32_t );
-  const uint32_t data_size = sizeof( uint32_t );
+  const auto flag_size = sizeof( VARIABLE_FLAG );
+  const auto data_size = sizeof( int_type );
   const int32_t var_type( type );
   const int32_t place_type( place );
 
@@ -417,9 +417,9 @@ bool Index::Out( std::fstream& fp ) const
   fp.write( (char*)&flagDepth, data_size );
   fp.write( (char*)&dataOffset, data_size );
   fp.write( (char*)&flagOffset, data_size );
-  fp.write( (char*)&offsetFactorSimplex, data_size );
+  fp.write( (char*)&offsetFactorCell, data_size );
   fp.write( (char*)&offsetFactorSector, data_size );
-  fp.write( (char*)&ipFactorSimplex, data_size );
+  fp.write( (char*)&ipFactorCell, data_size );
   fp.write( (char*)&ipFactorSector, data_size );
   fp.write( (char*)&ipFactorFacet, data_size );
   fp.write( (char*)&localVariables.scalars, data_size ); // LocalVariables
@@ -431,15 +431,15 @@ bool Index::Out( std::fstream& fp ) const
   fp.write( (char*)&localVariables.flaggedArrayLength, data_size );
   fp.write( (char*)&localVariables.totalDataDepth, data_size );
   fp.write( (char*)&localVariables.totalFlagDepth, data_size );
-  fp.write( (char*)&integrationPointVariables.ipvSimplex.scalars, data_size ); // IntegrationPointVariables: Simplex
-  fp.write( (char*)&integrationPointVariables.ipvSimplex.vectors, data_size );
-  fp.write( (char*)&integrationPointVariables.ipvSimplex.tensors, data_size );
-  fp.write( (char*)&integrationPointVariables.ipvSimplex.arrayCount, data_size );
-  fp.write( (char*)&integrationPointVariables.ipvSimplex.arrayLength, data_size );
-  fp.write( (char*)&integrationPointVariables.ipvSimplex.flaggedArrayCount, data_size );
-  fp.write( (char*)&integrationPointVariables.ipvSimplex.flaggedArrayLength, data_size );
-  fp.write( (char*)&integrationPointVariables.ipvSimplex.totalDataDepth, data_size );
-  fp.write( (char*)&integrationPointVariables.ipvSimplex.totalFlagDepth, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvCell.scalars, data_size ); // IntegrationPointVariables: Simplex
+  fp.write( (char*)&integrationPointVariables.ipvCell.vectors, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvCell.tensors, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvCell.arrayCount, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvCell.arrayLength, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvCell.flaggedArrayCount, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvCell.flaggedArrayLength, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvCell.totalDataDepth, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvCell.totalFlagDepth, data_size );
   fp.write( (char*)&integrationPointVariables.ipvSector.scalars, data_size ); // IntegrationPointVariables: Sector
   fp.write( (char*)&integrationPointVariables.ipvSector.vectors, data_size );
   fp.write( (char*)&integrationPointVariables.ipvSector.tensors, data_size );
@@ -465,8 +465,8 @@ bool Index::Out( std::fstream& fp ) const
 
 bool Index::In( fstream& fp )
 {
-  const uint32_t flag_size = sizeof( int32_t );
-  const uint32_t data_size = sizeof( uint32_t );
+  const auto flag_size = sizeof( VARIABLE_FLAG );
+  const auto data_size = sizeof( int_type );
   int32_t var_type ( SCALAR );
   int32_t place_type( NODE );
 
@@ -480,9 +480,9 @@ bool Index::In( fstream& fp )
   fp.read( (char*)&flagDepth, data_size );
   fp.read( (char*)&dataOffset, data_size );
   fp.read( (char*)&flagOffset, data_size );
-  fp.read( (char*)&offsetFactorSimplex, data_size );
+  fp.read( (char*)&offsetFactorCell, data_size );
   fp.read( (char*)&offsetFactorSector, data_size );
-  fp.read( (char*)&ipFactorSimplex, data_size );
+  fp.read( (char*)&ipFactorCell, data_size );
   fp.read( (char*)&ipFactorSector, data_size );
   fp.read( (char*)&ipFactorFacet, data_size );
 
@@ -495,15 +495,15 @@ bool Index::In( fstream& fp )
   fp.read( (char*)&localVariables.flaggedArrayLength, data_size );
   fp.read( (char*)&localVariables.totalDataDepth, data_size );
   fp.read( (char*)&localVariables.totalFlagDepth, data_size );
-  fp.read( (char*)&integrationPointVariables.ipvSimplex.scalars, data_size ); // IntegrationPointVariables: Simplex
-  fp.read( (char*)&integrationPointVariables.ipvSimplex.vectors, data_size );
-  fp.read( (char*)&integrationPointVariables.ipvSimplex.tensors, data_size );
-  fp.read( (char*)&integrationPointVariables.ipvSimplex.arrayCount, data_size );
-  fp.read( (char*)&integrationPointVariables.ipvSimplex.arrayLength, data_size );
-  fp.read( (char*)&integrationPointVariables.ipvSimplex.flaggedArrayCount, data_size );
-  fp.read( (char*)&integrationPointVariables.ipvSimplex.flaggedArrayLength, data_size );
-  fp.read( (char*)&integrationPointVariables.ipvSimplex.totalDataDepth, data_size );
-  fp.read( (char*)&integrationPointVariables.ipvSimplex.totalFlagDepth, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvCell.scalars, data_size ); // IntegrationPointVariables: Simplex
+  fp.read( (char*)&integrationPointVariables.ipvCell.vectors, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvCell.tensors, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvCell.arrayCount, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvCell.arrayLength, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvCell.flaggedArrayCount, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvCell.flaggedArrayLength, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvCell.totalDataDepth, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvCell.totalFlagDepth, data_size );
   fp.read( (char*)&integrationPointVariables.ipvSector.scalars, data_size ); // IntegrationPointVariables: Sector
   fp.read( (char*)&integrationPointVariables.ipvSector.vectors, data_size );
   fp.read( (char*)&integrationPointVariables.ipvSector.tensors, data_size );
@@ -565,9 +565,9 @@ ostream& operator<<( ostream& stream, const csmp::Index& o )
     stream <<" flag depth: "<< o.flagDepth <<" ";
     stream <<" data offset: "<< o.dataOffset <<" ";
     stream <<" flag offset: "<< o.flagOffset <<" ";
-    stream <<" offset factor si: "<< o.offsetFactorSimplex <<" ";
+    stream <<" offset factor si: "<< o.offsetFactorCell <<" ";
     stream <<" offset factor se: "<< o.offsetFactorSector <<" ";
-    stream <<" ip factor si: "<< o.ipFactorSimplex <<" ";
+    stream <<" ip factor si: "<< o.ipFactorCell <<" ";
     stream <<" ip factor se: "<< o.ipFactorSector <<" ";
     stream <<" ip factor fa: "<< o.ipFactorFacet <<" ";
 #endif
@@ -612,11 +612,11 @@ istream& operator>>( istream& stream, csmp::Index& o )
     // offset
     stream >> o.dataOffset;
     stream >> o.flagOffset;
-    stream >> o.offsetFactorSimplex;
+    stream >> o.offsetFactorCell;
     stream >> o.offsetFactorSector;
-    stream >> o.ipFactorSimplex;
+    stream >> o.ipFactorCell;
     stream >> o.ipFactorSector;
-    stream >> o.ipFactorSimplex;
+    stream >> o.ipFactorCell;
 
     return stream;     
  } // end 

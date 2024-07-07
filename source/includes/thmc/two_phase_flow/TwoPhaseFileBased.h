@@ -1,5 +1,5 @@
-#ifndef TWOPHASEFILEBASED_H
-#define TWOPHASEFILEBASED_H
+#ifndef TWO_PHASE_FILE_BASED_H
+#define TWO_PHASE_FILE_BASED_H
 
 #include "TwoPhaseModel.h"
 #include "CubicSpline.h"
@@ -112,4 +112,4 @@ seff      krw     krn     pc
 
 } // end namespace csmp
 
-#endif // TWOPHASEFILEBASED_H
+#endif // TWO_PHASE_FILE_BASED_H

@@ -10,8 +10,9 @@
 #include "SplitBoundary.h"
 #include "Model.h"
 
-namespace csmp {
+using namespace std;
 
+namespace csmp {
 
 // ---------------------------------------------------------------
 //       CONSTRUCTORS
@@ -86,7 +87,7 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariabl
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariables& lv, const IntegrationPointVariables& ipv )
   {
-    const std::pair<uint32_t, uint32_t> newContainerSize = localVariableDispatch::containerNewSize( static_cast<const STOREE<dim>*>(this), lv, ipv );
+    const pair<uint32_t, uint32_t> newContainerSize = localVariableDispatch::containerNewSize( static_cast<const STOREE<dim>*>(this), lv, ipv );
     ResizePropertyStorage(newContainerSize.first, newContainerSize.second);
 
 // initialise auxiliary parameters for debugging
@@ -98,7 +99,7 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariabl
 
 /// Resizes the storage preserving original values if any (this is where all ResizePropertyStorage end up)
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( uint32_t newDataComponentCount, uint32_t newFlagComponentCount )
+void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( int_type newDataComponentCount, int_type newFlagComponentCount )
   {
     // needed?
     if( data_.flags.size() == newFlagComponentCount && data_.data.size() == newDataComponentCount )
@@ -106,11 +107,11 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( uint32_t newDataCo
 
     // resizing
     data_.flags.resize( newFlagComponentCount, ANY );
-    data_.data.resize( newDataComponentCount, std::numeric_limits<double>::quiet_NaN() );
+    data_.data.resize( newDataComponentCount, numeric_limits<double>::quiet_NaN() );
 
     // trimming excess capacity
-    std::vector<VARIABLE_FLAG>( data_.flags ).swap( data_.flags );
-    std::vector<double>( data_.data ).swap( data_.data );
+    vector<VARIABLE_FLAG>( data_.flags ).swap( data_.flags );
+    vector<double>( data_.data ).swap( data_.data );
   }
 
 
@@ -174,7 +175,7 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     /// @todo (2-F) Asserts missing
 
     // Resize to new state (this already supports ip vars)
-    const std::pair<uint32_t,uint32_t> newTotaDataDepth = localVariableDispatch::containerTotalDataDepth( storeePtr, prop_key );
+    const pair<uint32_t,uint32_t> newTotaDataDepth = localVariableDispatch::containerTotalDataDepth( storeePtr, prop_key );
     ResizePropertyStorage( newTotaDataDepth.first, newTotaDataDepth.second );
     const uint32_t dataSize = static_cast<uint32_t>(data_.data.size());
     const uint32_t flagSize = static_cast<uint32_t>(data_.flags.size());
@@ -182,7 +183,7 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     /// Roman, 2013: with ipvs support
 
     // Offset
-    const std::pair<uint32_t,uint32_t> newOffset = localVariableDispatch::containerOffset( storeePtr, prop_key );
+    const pair<uint32_t,uint32_t> newOffset = localVariableDispatch::containerOffset( storeePtr, prop_key );
     const uint32_t dataOffset         ( newOffset.first       );
     const uint32_t flagOffset         ( newOffset.second      );
 
@@ -191,23 +192,23 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     const uint32_t flagDepth          ( prop_key.flagDepth    );
 
     // Cycles
-    const std::pair<int,int> newCycles = localVariableDispatch::containerIPCycles( storeePtr, prop_key );
-    const int nipCycles1            ( newCycles.first       );
-    const int nipCycles2            ( newCycles.second      );
+    const pair<int_type,int_type> newCycles = localVariableDispatch::containerIPCycles( storeePtr, prop_key );
+    const int_type nipCycles1            ( newCycles.first       );
+    const int_type nipCycles2            ( newCycles.second      );
 
-    const std::pair<int,int> newCycles1Data = localVariableDispatch::containerIPCycle1Offset( storeePtr, prop_key );
-    const int ipCycle1DataOffset    ( newCycles1Data.first  );
-    const int ipCycle1FlagOffset    ( newCycles1Data.second );
+    const pair<int_type,int_type> newCycles1Data = localVariableDispatch::containerIPCycle1Offset( storeePtr, prop_key );
+    const int_type ipCycle1DataOffset    ( newCycles1Data.first  );
+    const int_type ipCycle1FlagOffset    ( newCycles1Data.second );
 
-    const std::pair<int,int> newCycles2Data = localVariableDispatch::containerIPCycle2Offset( storeePtr, prop_key );
-    const int ipCycle2DataOffset    ( newCycles2Data.first  );
-    const int ipCycle2FlagOffset    ( newCycles2Data.second );
+    const pair<int_type,int_type> newCycles2Data = localVariableDispatch::containerIPCycle2Offset( storeePtr, prop_key );
+    const int_type ipCycle2DataOffset    ( newCycles2Data.first  );
+    const int_type ipCycle2FlagOffset    ( newCycles2Data.second );
 
     // Data and Flag Bounds
-    std::vector<std::vector<std::pair<uint32_t,uint32_t> > > dataBounds( nipCycles1, std::vector<std::pair<uint32_t,uint32_t> >(nipCycles2+1,std::pair<uint32_t,uint32_t>(0,0)) );
-    for (int cycle1=0; cycle1<nipCycles1; ++cycle1  )
+    vector<vector<pair<int_type,int_type> > > dataBounds( nipCycles1, vector<pair<int_type,int_type> >(nipCycles2+1,pair<int_type,int_type>(0,0)) );
+    for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
     {
-        for (int cycle2=0; cycle2<nipCycles2; ++cycle2  )
+        for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
         {
             dataBounds[cycle1][cycle2].first  = dataOffset+cycle1*ipCycle1DataOffset + cycle2*ipCycle2DataOffset;
             dataBounds[cycle1][cycle2].second = dataBounds[cycle1][cycle2].first + dataDepth;
@@ -218,10 +219,10 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     dataBounds[nipCycles1-1][nipCycles2].first  = dataSize;
     dataBounds[nipCycles1-1][nipCycles2].second = dataSize;
 
-    std::vector<std::vector<std::pair<uint32_t,uint32_t> > > flagBounds( nipCycles1, std::vector<std::pair<uint32_t,uint32_t> >(nipCycles2+1,std::pair<uint32_t,uint32_t>(0,0)) );
-    for (int cycle1=0; cycle1<nipCycles1; ++cycle1  )
+    vector<vector<pair<int_type,int_type> > > flagBounds( nipCycles1, vector<pair<int_type,int_type> >(nipCycles2+1,pair<int_type,int_type>(0,0)) );
+    for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
     {
-        for (int cycle2=0; cycle2<nipCycles2; ++cycle2  )
+        for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
         {
             flagBounds[cycle1][cycle2].first  = flagOffset+cycle1*ipCycle1FlagOffset + cycle2*ipCycle2FlagOffset;
             flagBounds[cycle1][cycle2].second = flagBounds[cycle1][cycle2].first + flagDepth;
@@ -233,33 +234,33 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     flagBounds[nipCycles1-1][nipCycles2].second = flagSize;
 
     // Moving data (same for all types)
-    for (int cycle1=nipCycles1-1U; cycle1>=0; --cycle1  ){
-        for (int cycle2=nipCycles2-1U; cycle2>=0; --cycle2  ){
-            const uint32_t dataStart  ( dataBounds[ cycle1 ][ cycle2     ].second - 1 );
-            const uint32_t dataEnd    ( dataBounds[ cycle1 ][ cycle2 + 1 ].second - 1 );
-            for ( uint32_t i=dataEnd; i>dataStart; --i )
+    for (int cycle1=nipCycles1-1; cycle1>=0; --cycle1  ){
+        for (int cycle2=nipCycles2-1; cycle2>=0; --cycle2  ){
+            const int dataStart = dataBounds[ cycle1 ][ cycle2     ].second - 1;
+            const int dataEnd   = dataBounds[ cycle1 ][ cycle2 + 1 ].second - 1;
+            for ( int i=dataEnd; i>dataStart; --i )
               data_.data[i] = data_.data[i-(cycle1+1)*(cycle2+1)*dataDepth];
         }
     }
     // Moving flags (same for all types)
-    for (int cycle1=nipCycles1-1U; cycle1>=0; --cycle1  ){
-        for (int cycle2=nipCycles2-1U; cycle2>=0; --cycle2  ){
-            const uint32_t flagsStart ( flagBounds[ cycle1 ][ cycle2     ].second - 1 );
-            const uint32_t flagsEnd   ( flagBounds[ cycle1 ][ cycle2 + 1 ].second - 1 );
-            for ( uint32_t i=flagsEnd; i>flagsStart; --i )
+    for (int cycle1=nipCycles1-1; cycle1>=0; --cycle1  ){
+        for (int cycle2=nipCycles2-1; cycle2>=0; --cycle2  ){
+            const int flagsStart = flagBounds[ cycle1 ][ cycle2     ].second - 1;
+            const int flagsEnd   = flagBounds[ cycle1 ][ cycle2 + 1 ].second - 1;
+            for ( int i=flagsEnd; i>flagsStart; --i )
                 data_.flags[i] = data_.flags[i-(cycle1+1)*(cycle2+1)*flagDepth];
         }
     }
 
     // Adding non-initialized data of new variable
     for (int cycle1=0; cycle1<nipCycles1; ++cycle1  )
-        for (int cycle2=0; cycle2<nipCycles2; ++cycle2  )
-            for ( uint32_t i=dataBounds[cycle1][cycle2].first; i<dataBounds[cycle1][cycle2].second; ++i )
-                data_.data[i] = std::numeric_limits<double>::quiet_NaN();
+        for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
+            for ( int_type i=dataBounds[cycle1][cycle2].first; i<dataBounds[cycle1][cycle2].second; ++i )
+                data_.data[i] = numeric_limits<double>::quiet_NaN();
     // Adding non-initialized flags of new variable
-    for (int cycle1=0; cycle1<nipCycles1; ++cycle1  )
-        for (int cycle2=0; cycle2<nipCycles2; ++cycle2  )
-            for ( uint32_t i=flagBounds[cycle1][cycle2].first; i<flagBounds[cycle1][cycle2].second; ++i )
+    for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
+        for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
+            for ( int_type i=flagBounds[cycle1][cycle2].first; i<flagBounds[cycle1][cycle2].second; ++i )
                 data_.flags[i] = ANY;
 
 
@@ -279,38 +280,38 @@ void LocalVariableStorage<dim,STOREE>::DeleteProperty( const csmp::Index& prop_k
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
 
     /// @todo (2-F) Asserts missing
-    const uint32_t flagSize = static_cast<uint32_t>(data_.flags.size());
-    const uint32_t dataSize = static_cast<uint32_t>(data_.data.size());
+    const auto flagSize = data_.flags.size();
+    const auto dataSize = data_.data.size();
 
         /// Roman, 2013: with ipvs support
 
         // Offset
-        const std::pair<uint32_t,uint32_t> newOffset = localVariableDispatch::containerOffset( storeePtr, prop_key );
-        const uint32_t dataOffset         ( newOffset.first       );
-        const uint32_t flagOffset         ( newOffset.second      );
+        const pair<int_type,int_type> newOffset = localVariableDispatch::containerOffset( storeePtr, prop_key );
+        const int_type dataOffset         ( newOffset.first       );
+        const int_type flagOffset         ( newOffset.second      );
 
         // DataDepth
-        const uint32_t dataDepth          ( prop_key.dataDepth    );
-        const uint32_t flagDepth          ( prop_key.flagDepth    );
+        const int_type dataDepth          ( prop_key.dataDepth    );
+        const int_type flagDepth          ( prop_key.flagDepth    );
 
         // Cycles
-        const std::pair<int,int> newCycles = localVariableDispatch::containerIPCycles( storeePtr, prop_key );
-        const int nipCycles1            ( newCycles.first       );
-        const int nipCycles2            ( newCycles.second      );
+        const pair<int_type,int_type> newCycles = localVariableDispatch::containerIPCycles( storeePtr, prop_key );
+        const int_type nipCycles1            ( newCycles.first       );
+        const int_type nipCycles2            ( newCycles.second      );
 
-        const std::pair<int,int> newCycles1Data = localVariableDispatch::containerIPCycle1Offset( storeePtr, prop_key );
-        const int ipCycle1DataOffset    ( newCycles1Data.first  );
-        const int ipCycle1FlagOffset    ( newCycles1Data.second );
+        const pair<int_type,int_type> newCycles1Data = localVariableDispatch::containerIPCycle1Offset( storeePtr, prop_key );
+        const int_type ipCycle1DataOffset    ( newCycles1Data.first  );
+        const int_type ipCycle1FlagOffset    ( newCycles1Data.second );
 
-        const std::pair<int,int> newCycles2Data = localVariableDispatch::containerIPCycle2Offset( storeePtr, prop_key );
-        const int ipCycle2DataOffset    ( newCycles2Data.first  );
-        const int ipCycle2FlagOffset    ( newCycles2Data.second );
+        const pair<int_type,int_type> newCycles2Data = localVariableDispatch::containerIPCycle2Offset( storeePtr, prop_key );
+        const int_type ipCycle2DataOffset    ( newCycles2Data.first  );
+        const int_type ipCycle2FlagOffset    ( newCycles2Data.second );
 
         // Data and Flag Bounds
-        std::vector<std::vector<std::pair<uint32_t,uint32_t> > > dataBounds( nipCycles1, std::vector<std::pair<uint32_t,uint32_t> >(nipCycles2+1,std::pair<uint32_t,uint32_t>(0,0)) );
-        for (int cycle1=0; cycle1<nipCycles1; ++cycle1  )
+        vector<vector<pair<int_type,int_type> > > dataBounds( nipCycles1, vector<pair<int_type,int_type> >(nipCycles2+1,pair<int_type,int_type>(0,0)) );
+        for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
         {
-            for (int cycle2=0; cycle2<nipCycles2; ++cycle2  )
+            for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
             {
                 dataBounds[cycle1][cycle2].first  = dataOffset+cycle1*ipCycle1DataOffset + cycle2*ipCycle2DataOffset;
                 dataBounds[cycle1][cycle2].second = dataBounds[cycle1][cycle2].first + dataDepth;
@@ -321,10 +322,10 @@ void LocalVariableStorage<dim,STOREE>::DeleteProperty( const csmp::Index& prop_k
         dataBounds[nipCycles1-1][nipCycles2].first  = dataSize;
         dataBounds[nipCycles1-1][nipCycles2].second = dataSize;
 
-        std::vector<std::vector<std::pair<uint32_t,uint32_t> > > flagBounds( nipCycles1, std::vector<std::pair<uint32_t,uint32_t> >(nipCycles2+1,std::pair<uint32_t,uint32_t>(0,0)) );
-        for (int cycle1=0; cycle1<nipCycles1; ++cycle1  )
+        vector<vector<pair<int_type,int_type> > > flagBounds( nipCycles1, vector<pair<int_type,int_type> >(nipCycles2+1,pair<int_type,int_type>(0,0)) );
+        for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
         {
-            for (int cycle2=0; cycle2<nipCycles2; ++cycle2  )
+            for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
             {
                 flagBounds[cycle1][cycle2].first  = flagOffset+cycle1*ipCycle1FlagOffset + cycle2*ipCycle2FlagOffset;
                 flagBounds[cycle1][cycle2].second = flagBounds[cycle1][cycle2].first + flagDepth;
@@ -337,35 +338,35 @@ void LocalVariableStorage<dim,STOREE>::DeleteProperty( const csmp::Index& prop_k
 
 
         // Shifting data (same for all types)
-        for (int cycle1=0; cycle1<nipCycles1; ++cycle1  )
+        for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
         {
-            for (int cycle2=0; cycle2<nipCycles2; ++cycle2  )
+            for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
             {
-                const uint32_t dataStart  ( dataBounds[ cycle1 ][ cycle2     ].first - (cycle1*nipCycles2+cycle2)*dataDepth );
-                const uint32_t dataEnd    ( dataBounds[ cycle1 ][ cycle2 + 1 ].first - (cycle1*nipCycles2+cycle2+1)*dataDepth);
-                for ( uint32_t i=dataStart; i<dataEnd; ++i )
+                const int_type dataStart  ( dataBounds[ cycle1 ][ cycle2     ].first - (cycle1*nipCycles2+cycle2)*dataDepth );
+                const int_type dataEnd    ( dataBounds[ cycle1 ][ cycle2 + 1 ].first - (cycle1*nipCycles2+cycle2+1)*dataDepth);
+                for ( int_type i=dataStart; i<dataEnd; ++i )
                   data_.data[i] = data_.data[i+(cycle1*nipCycles2+cycle2+1)*dataDepth];
             }
         }
         // Shifting flags (same for all types)
-        for (int cycle1=0; cycle1<nipCycles1; ++cycle1  )
+        for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
         {
-            for (int cycle2=0; cycle2<nipCycles2; ++cycle2  )
+            for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
             {
-                const uint32_t flagsStart ( flagBounds[ cycle1 ][ cycle2     ].first - (cycle1*nipCycles2+cycle2)*flagDepth );
-                const uint32_t flagsEnd   ( flagBounds[ cycle1 ][ cycle2 + 1 ].first - (cycle1*nipCycles2+cycle2+1)*flagDepth);
-                for ( uint32_t i=flagsStart; i<flagsEnd; ++i )
+                const int_type flagsStart ( flagBounds[ cycle1 ][ cycle2     ].first - (cycle1*nipCycles2+cycle2)*flagDepth );
+                const int_type flagsEnd   ( flagBounds[ cycle1 ][ cycle2 + 1 ].first - (cycle1*nipCycles2+cycle2+1)*flagDepth);
+                for ( int_type i=flagsStart; i<flagsEnd; ++i )
                     data_.flags[i] = data_.flags[i+(cycle1*nipCycles2+cycle2+1)*flagDepth];
             }
         }
 
         // trim excessive
-        const uint32_t newDataSize ( dataSize - nipCycles1*nipCycles2*dataDepth );
-        const uint32_t newFlagSize ( flagSize - nipCycles1*nipCycles2*flagDepth );
+        const int_type newDataSize ( dataSize - nipCycles1*nipCycles2*dataDepth );
+        const int_type newFlagSize ( flagSize - nipCycles1*nipCycles2*flagDepth );
         ResizePropertyStorage( newDataSize, newFlagSize );
 
      #ifndef NDEBUG
-        if( ( prop_key.ipFactorSimplex + prop_key.ipFactorSector + prop_key.ipFactorFacet ) == 0 )
+        if( ( prop_key.ipFactorCell + prop_key.ipFactorSector + prop_key.ipFactorFacet ) == 0 )
         {
             if( prop_key.type       == SCALAR )
                 --data_.scalars;
@@ -407,68 +408,68 @@ void LocalVariableStorage<dim,STOREE>::OutLVS() const
   {
     #ifndef NDEBUG
     const PLACEMENT varPlacement = parsePlacement<dim,STOREE>(); 
-    std::cout <<"\nLocalVariableStorage<" << dim << ">::Out: ";
-    std::cout <<"\n\tstored scalar variables: ";
+    cout <<"\nLocalVariableStorage<" << dim << ">::Out: ";
+    cout <<"\n\tstored scalar variables: ";
     if ( data_.scalars > 0U ) {
       csmp::Index  idx(SCALAR,varPlacement,0U);
       while ( idx.index < data_.scalars ) {
         double sc = Read( idx );
-        std::cout << std::endl <<"\t\t"<< sc;
+        cout << endl <<"\t\t"<< sc;
         idx.index++;
         idx.dataOffset++;
         }
       }
 
     if ( data_.vectors > 0U ) {
-      std::cout <<"\n\n\tstored vector variables: ";
+      cout <<"\n\n\tstored vector variables: ";
       csmp::Index  idx(VECTOR,varPlacement,0U);
       VectorVariable<dim>  vc;
       while ( idx.index < data_.vectors ) {
         Read( idx, vc );
-        std::cout << std::endl <<"\t\t"<< vc;
+        cout << endl <<"\t\t"<< vc;
         idx.index++;
         idx.dataOffset += idx.dataDepth;
         }
       }
 
     if ( data_.tensors > 0U ) {
-      std::cout <<"\n\n\tstored tensor variables: ";
+      cout <<"\n\n\tstored tensor variables: ";
       const uint32_t  tensors( data_.tensors );
       csmp::Index  idx(TENSOR,varPlacement,0U);
       TensorVariable<dim>  ts;
       while ( idx.index < tensors ) {
         Read( idx, ts );
-        std::cout << std::endl <<"\t\t"<< ts;
+        cout << endl <<"\t\t"<< ts;
         idx.index++;
         idx.dataOffset += idx.dataDepth;
         }
       }
       
     if ( data_.arrays > 0U ) {
-        std::cout <<"\n\n\tstored array variables: ";
+        cout <<"\n\n\tstored array variables: ";
         const uint32_t  array_variables( data_.arrays );
         for ( auto i{0U}; i<array_variables; ++i )
           {
              csmp::Index    idx(ARRAY,varPlacement,i);
              ArrayVariable  ary( idx.dataDepth ); 
              Read( idx, ary );
-             std::cout << std::endl <<"\t\t"<< ary;
+             cout << endl <<"\t\t"<< ary;
           }
       }
       
     if ( data_.flaggedArrays > 0U ) {
-        std::cout <<"\n\n\tstored array variables: ";
+        cout <<"\n\n\tstored array variables: ";
         const uint32_t  flaggged_array_variables( data_.flaggedArrays );
         for ( auto i{0U}; i<flaggged_array_variables; ++i )
           {
              csmp::Index           idx(FLAGGEDARRAY,varPlacement,i);
              FlaggedArrayVariable  ary( idx.dataDepth ); 
              Read( idx, ary );
-             std::cout << std::endl <<"\t\t"<< ary;
+             cout << endl <<"\t\t"<< ary;
           }
       }
 
-    std::cout << std::endl;
+    cout << endl;
     #endif
   }
 
@@ -566,7 +567,7 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx )
 
 /// Vector, Tensor, FlaggedArray variable flag
 template<uint32_t dim, template<uint32_t> class STOREE>
-VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx, uint32_t i ) const
+VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx, int_type i ) const
  {
  #ifndef NDEBUG
   AssertPlacement(idx);
@@ -596,7 +597,7 @@ void LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx, VARIABLE_
  
 /// Vector,Tensor, FlaggedArray variable flag
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx, uint32_t i, VARIABLE_FLAG flag )
+void LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx, int_type i, VARIABLE_FLAG flag )
  {
 #ifndef NDEBUG
  AssertPlacement(idx);
@@ -825,7 +826,7 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( const csmp::Index& idx,
       return fa.IsWithinRange( vmin, vmax );
       }
 
-    std::cerr <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< std::endl;
+    cerr <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< endl;
     return false;
   }
 
@@ -844,7 +845,7 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( const csmp::Index& idx,
 template<uint32_t dim, template<uint32_t> class STOREE>
 double LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx ) const
   {
-    const uint32_t offset(DATA_OFFSET_IP);
+    const int_type offset(DATA_OFFSET_IP);
 
 #ifndef NDEBUG
   AssertIntegrationPointPlacement(idx);
@@ -860,8 +861,8 @@ double LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& i
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx, ScalarVariable& sc ) const
   {
-    const uint32_t offset(DATA_OFFSET_IP);
-    const uint32_t flagOffset(FLAG_OFFSET_IP);
+    const int_type offset(DATA_OFFSET_IP);
+    const int_type flagOffset(FLAG_OFFSET_IP);
 
 #ifndef NDEBUG
   AssertIntegrationPointPlacement(idx);
@@ -879,8 +880,8 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& idx, const ScalarVariable& sc )
   {
-    const uint32_t offset(DATA_OFFSET_IP);
-    const uint32_t flagOffset(FLAG_OFFSET_IP);
+    const int_type offset(DATA_OFFSET_IP);
+    const int_type flagOffset(FLAG_OFFSET_IP);
 
 #ifndef NDEBUG
   AssertIntegrationPointPlacement(idx);
@@ -898,7 +899,7 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& id
 template<uint32_t dim, template<uint32_t> class STOREE>
 VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& idx ) const
   {
-    const uint32_t flagOffset(FLAG_OFFSET_IP);
+    const int_type flagOffset(FLAG_OFFSET_IP);
 
 #ifndef NDEBUG
   AssertIntegrationPointPlacement(idx);
@@ -912,9 +913,9 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp:
 
 /// Vector, Tensor, FlaggedArray variable flag at integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& idx, uint32_t i ) const
+VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& idx, int_type i ) const
   {
-    const uint32_t flagOffset(FLAG_OFFSET_IP);
+    const int_type flagOffset(FLAG_OFFSET_IP);
 
 #ifndef NDEBUG
     AssertIntegrationPointPlacement(idx);
@@ -931,7 +932,7 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp:
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& idx, VARIABLE_FLAG flag )
   {
-    const uint32_t flagOffset(FLAG_OFFSET_IP);
+    const int_type flagOffset(FLAG_OFFSET_IP);
 
 #ifndef NDEBUG
   AssertIntegrationPointPlacement(idx);
@@ -945,9 +946,9 @@ void LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& i
 
 /// Vector, Tensor, FlaggedArray variable flag at integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& idx, uint32_t i, VARIABLE_FLAG flag )
+void LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& idx, int_type i, VARIABLE_FLAG flag )
   {
-    const uint32_t flagOffset(FLAG_OFFSET_IP);
+    const int_type flagOffset(FLAG_OFFSET_IP);
 
 #ifndef NDEBUG
   AssertIntegrationPointPlacement(idx);
@@ -964,8 +965,8 @@ void LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& i
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& idx, const VectorVariable<dim>& vc )
   {
-    const uint32_t offset(DATA_OFFSET_IP);
-    const uint32_t flagOffset(FLAG_OFFSET_IP);
+    const int_type offset(DATA_OFFSET_IP);
+    const int_type flagOffset(FLAG_OFFSET_IP);
 
 #ifndef NDEBUG
   AssertIntegrationPointPlacement(idx);
@@ -1171,7 +1172,7 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t ip, const csmp::I
       Read( ip, idx, fa );
       return fa.IsWithinRange( vmin, vmax );
       }
-    std::cout <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< std::endl;
+    cout <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< endl;
     return false;
   }
 
@@ -1205,7 +1206,7 @@ double LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
     // offset to first instance of idx variable in the data vector
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
+    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
@@ -1227,7 +1228,7 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, ScalarVariable& sc ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
+    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
@@ -1258,7 +1259,7 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const ScalarVariable& sc )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
@@ -1290,7 +1291,7 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
@@ -1310,11 +1311,11 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet
 
 /// Vector, Tensor, FlaggedArray variable flag at integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, uint32_t i ) const
+VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, int_type i ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
-    const uint32_t flagOffset(offsetData.second);
+    const pair<int_type,int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
+    const int_type flagOffset(offsetData.second);
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
@@ -1338,8 +1339,8 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, VARIABLE_FLAG flag )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const uint32_t flagOffset(offsetData.second);
+    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const int_type flagOffset(offsetData.second);
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
@@ -1358,10 +1359,10 @@ void LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_
 
 /// Vector, Tensor, FlaggedArray variable flag at integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, uint32_t i, VARIABLE_FLAG flag )
+void LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, int_type i, VARIABLE_FLAG flag )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
@@ -1386,9 +1387,9 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const VectorVariable<dim>& vc )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const uint32_t offset(offsetData.first);
-    const uint32_t flagOffset(offsetData.second);
+    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const int_type offset(offsetData.first);
+    const int_type flagOffset(offsetData.second);
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
@@ -1397,11 +1398,11 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t
   assert( offset+dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
-    const uint32_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
@@ -1419,9 +1420,9 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, VectorVariable<dim>& vc ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const uint32_t offset(offsetData.first);
-    const uint32_t flagOffset(offsetData.second);
+    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const int_type offset(offsetData.first);
+    const int_type flagOffset(offsetData.second);
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
@@ -1430,11 +1431,11 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
   assert( offset+dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
-    const uint32_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
@@ -1452,7 +1453,7 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const TensorVariable<dim>& ts )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
     const uint32_t offset(offsetData.first);
     const uint32_t flagOffset(offsetData.second);
 
@@ -1484,9 +1485,9 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, TensorVariable<dim>& ts ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const uint32_t offset(offsetData.first);
-    const uint32_t flagOffset(offsetData.second);
+    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const int_type offset(offsetData.first);
+    const int_type flagOffset(offsetData.second);
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
@@ -1495,15 +1496,15 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
   assert( offset+dim*dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
-    const uint32_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
-    for ( auto i{0U}; i<dim; ++i ) {
+    for ( uint32_t i{0U}; i<dim; ++i ) {
           ts.Flag(i) = data_.flags[flagOffset + sector_ip_flag_offset + i];
           for ( uint32_t j{0U}; j<dim; ++j )
             ts(i,j) = data_.data[ offset + sector_ip_offset + i*dim + j ];
@@ -1516,11 +1517,11 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const ArrayVariable& av )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const uint32_t offset(offsetData.first);
-    const uint32_t flagOffset(offsetData.second);
+    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const int_type offset(offsetData.first);
+    const int_type flagOffset(offsetData.second);
 
-    const uint32_t arraySize( idx.dataDepth );
+    const int_type arraySize( idx.dataDepth );
 
 #ifndef NDEBUG
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
@@ -1530,15 +1531,15 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset< data_.flags.size() );
 #endif
-    const uint32_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
-    for ( uint32_t i(0); i < arraySize; ++i )
+    for ( uint32_t i(0u); i < arraySize; ++i )
       data_.data[ offset + sector_ip_offset + i ]     = av[i];
     data_.flags[ flagOffset + sector_ip_flag_offset ] = av.Flag();
   }
@@ -1552,11 +1553,11 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, ArrayVariable& av ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const uint32_t offset(offsetData.first);
-    const uint32_t flagOffset(offsetData.second);
+    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const int_type offset(offsetData.first);
+    const int_type flagOffset(offsetData.second);
 
-    const uint32_t arraySize( idx.dataDepth );
+    const int_type arraySize( idx.dataDepth );
     av.Resize( idx.dataDepth );
 
 #ifndef NDEBUG
@@ -1567,11 +1568,11 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset< data_.flags.size() );
 #endif
-    const uint32_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
@@ -1587,11 +1588,11 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const FlaggedArrayVariable& av )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const uint32_t offset(offsetData.first);
-    const uint32_t flagOffset(offsetData.second);
+    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const int_type offset(offsetData.first);
+    const int_type flagOffset(offsetData.second);
 
-    const uint32_t arraySize( idx.dataDepth );
+    const int_type arraySize( idx.dataDepth );
 
 #ifndef NDEBUG  
   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
@@ -1601,15 +1602,15 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset+arraySize-1 < data_.flags.size() );
 #endif
-    const uint32_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
-    for ( uint32_t i(0); i < arraySize; ++i ) {
+    for ( uint32_t i(0u); i < arraySize; ++i ) {
          data_.data[ offset     + sector_ip_offset + i ]      = av[i];
          data_.flags[flagOffset + sector_ip_flag_offset + i ] = av.Flag(i);
       }
@@ -1622,11 +1623,11 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, FlaggedArrayVariable& av ) const
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const std::pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const uint32_t offset(offsetData.first);
-    const uint32_t flagOffset(offsetData.second);
+    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const int_type offset(offsetData.first);
+    const int_type flagOffset(offsetData.second);
 
-    const uint32_t arraySize( idx.dataDepth );
+    const int_type arraySize( idx.dataDepth );
     av.Resize( idx.dataDepth );
 
 #ifndef NDEBUG
@@ -1637,11 +1638,11 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset+arraySize-1 < data_.flags.size() );
 #endif
-    const uint32_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
@@ -1695,14 +1696,14 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t sector_or_facet, 
          return fa.IsWithinRange( vmin, vmax );
       }
 
-    std::cout <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< std::endl;
+    cout <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< endl;
     return false;
   }
   
   
   
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::StoreArrayEntry( const csmp::Index& idx, double value, uint32_t array_elmt )
+void LocalVariableStorage<dim,STOREE>::StoreArrayEntry( const csmp::Index& idx, double value, int_type array_elmt )
   {
     assert( idx.type == ARRAY );
 #ifndef NDEBUG
@@ -1715,7 +1716,7 @@ void LocalVariableStorage<dim,STOREE>::StoreArrayEntry( const csmp::Index& idx, 
     // SKM 1/11/23
 /// reads single double element inside of the target array
 template<uint32_t dim, template<uint32_t> class STOREE>
-double LocalVariableStorage<dim,STOREE>::ReadArrayEntry( const csmp::Index& idx, uint32_t array_elmt ) const
+double LocalVariableStorage<dim,STOREE>::ReadArrayEntry( const csmp::Index& idx, int_type array_elmt ) const
  {
     assert( idx.type == ARRAY );
 #ifndef NDEBUG

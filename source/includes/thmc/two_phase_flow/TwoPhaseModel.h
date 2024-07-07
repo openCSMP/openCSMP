@@ -5,7 +5,6 @@
 #include "Element.h"
 #include "PropertyDatabase.h"
 #include "Exception.h"
-#include "FiniteVolumeStencil.h"
 #include "TensorVariable.h"
 #include "TensorVariable1.h"
 #include "TensorVariable2.h"

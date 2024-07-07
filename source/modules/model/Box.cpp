@@ -1262,7 +1262,7 @@ void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
            throw csmp::Exception( ERROR, "recreateBoxBoundaryFlagsForHexahedralModel", "this method only works for quadrilateral elements");
            
          // DEFAULT (not at any boundary)
-         for ( auto i{0U}; i<(*it)->Nodes(); ++i )
+         for ( uint32_t i{0U}; i<(*it)->Nodes(); ++i )
            (*it)->N(i)->AtBoundary( NOT );
            
          // BOTTOM 

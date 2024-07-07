@@ -87,13 +87,16 @@ class IndexTracker;
  
 */
 struct Index {
-    Index(); 
-    Index( VARIABLE_TYPE, PLACEMENT, uint32_t idx );
+
+    using int_type = LocalVariables::int_type;
+
+    Index();
+    Index( VARIABLE_TYPE, PLACEMENT, int_type idx );
   
-    Index( VARIABLE_TYPE, PLACEMENT, uint32_t idx, uint32_t dataDepth, uint32_t flagDepth, uint32_t dataOffset, uint32_t flagOffset,
+    Index( VARIABLE_TYPE, PLACEMENT, int_type idx, int_type dataDepth, int_type flagDepth, int_type dataOffset, int_type flagOffset,
            const LocalVariables&, const IntegrationPointVariables& = IntegrationPointVariables(),
-           uint32_t offsetFactorObject = 0, uint32_t offsetFactorSector = 0,
-           uint32_t ipFactorObject = 0, uint32_t ipFactorSector = 0, uint32_t ipFactorFacet = 0 );
+           int_type offsetFactorObject = 0, int_type offsetFactorSector = 0,
+           int_type ipFactorObject = 0, int_type ipFactorSector = 0, int_type ipFactorFacet = 0 );
   
     Index( const csmp::Index& );
     Index( csmp::Index&& );
@@ -117,16 +120,16 @@ struct Index {
     // TODO: make all these uint8_t (same size as the flags?
     VARIABLE_TYPE               type;
     PLACEMENT                   place;
-    uint32_t                    index = UNSPECIFIED;        ///< For Scalars, Vectors, Tensors, Arrays, FlaggedArrays: the how many'th variable of its kind at specified placement
-    uint32_t                    dataDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim*dim, Array:Size, FlaggedArray:Size
-    uint32_t                    flagDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim, Array:1, FlaggedArray:Size
-    uint32_t                    dataOffset;                 ///< Index in data container where data start
-    uint32_t                    flagOffset;                 ///< Index in flag container where data start
-    uint32_t                    offsetFactorSimplex;        ///< Factors used in integration point variable index arithmetic
-    uint32_t                    offsetFactorSector;         ///< Factors used in integration point variable index arithmetic
-    uint32_t                    ipFactorSimplex;            ///< Factors used in integration point variable index arithmetic
-    uint32_t                    ipFactorSector;             ///< Factors used in integration point variable index arithmetic
-    uint32_t                    ipFactorFacet;              ///< Factors used in integration point variable index arithmetic
+    int_type                    index = UNSPECIFIED;        ///< For Scalars, Vectors, Tensors, Arrays, FlaggedArrays: the how many'th variable of its kind at specified placement
+    int_type                    dataDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim*dim, Array:Size, FlaggedArray:Size
+    int_type                    flagDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim, Array:1, FlaggedArray:Size
+    int_type                    dataOffset;                 ///< Index in data container where data start
+    int_type                    flagOffset;                 ///< Index in flag container where data start
+    int_type                    offsetFactorCell;           ///< Factors used in integration point variable index arithmetic
+    int_type                    offsetFactorSector;         ///< Factors used in integration point variable index arithmetic
+    int_type                    ipFactorCell;               ///< Factors used in integration point variable index arithmetic
+    int_type                    ipFactorSector;             ///< Factors used in integration point variable index arithmetic
+    int_type                    ipFactorFacet;              ///< Factors used in integration point variable index arithmetic
     LocalVariables              localVariables;             ///< Description of state of physical variables at given placement (variables count etc..)
     IntegrationPointVariables   integrationPointVariables;  ///< Description of state of physical variables at given placement (variables count etc..)
     IndexTracker*               indexTracker;               ///< IndexTracker used for runtime updates of offsets (addition/removal of variables)
@@ -140,17 +143,17 @@ struct INDEX : public Index {
    static constexpr PLACEMENT VariablePlacement = pl;
 
    /// compile time construction of index to be used in factory implementations
-   INDEX( uint32_t idx, uint32_t dataDepth, uint32_t flagDepth, uint32_t dataOffset, uint32_t flagOffset,
+   INDEX( int_type idx, int_type dataDepth, int_type flagDepth, int_type dataOffset, int_type flagOffset,
           const LocalVariables& lvars, const IntegrationPointVariables& ivars = IntegrationPointVariables(),
-          uint32_t offsetFactorObject = 0, uint32_t offsetFactorSector = 0,
-          uint32_t ipFactorObject = 0, uint32_t ipFactorSector = 0, uint32_t ipFactorFacet = 0 )
+          int_type offsetFactorObject = 0, int_type offsetFactorSector = 0,
+          int_type ipFactorObject = 0, int_type ipFactorSector = 0, int_type ipFactorFacet = 0 )
     : Index( ty, pl, idx, dataDepth, flagDepth, dataOffset, flagOffset,
              lvars, ivars,
              offsetFactorObject, offsetFactorSector,
              ipFactorObject, ipFactorSector, ipFactorFacet ) {}
               
    INDEX() : Index() {}
-   explicit INDEX( uint32_t i ) : Index(ty,pl,i) {}
+   explicit INDEX( int_type i ) : Index(ty,pl,i) {}
    explicit INDEX( csmp::Index& idx ) : Index(idx) {}
    explicit INDEX( csmp::Index&& idx ) : Index(idx) {}
 };

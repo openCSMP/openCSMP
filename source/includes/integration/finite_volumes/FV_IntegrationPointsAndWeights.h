@@ -97,7 +97,7 @@ class FV_IntegrationPointsAndWeights {
     std::vector<std::vector<double> >          m_volume_integration_weights;    ///< [ivol][vpts]
     std::vector<std::vector<double> >          m_projection_weights;            ///< [isrf][spts]
     std::vector<std::vector<Point<dim> > >     m_par_volume_integration_points; ///< [ivol][vpts][dim]
-    std::vector<Point<dim> >                   m_facet_edge_midpoints;          ///< points where the facet touches the finite element edges
+    std::vector<Point<dim> >                   m_facet_edge_midpoints;          ///< [isrf] points where the facet touches the finite element edges
     Point<dim>					                       m_barycenter;                    ///< center of gravity of finite element in parametric space
     std::vector< std::vector<Point<dim> > >    m_facet_points;                  ///< corner points of facet (counter-clockwise looking in),  starting with B.C.
     std::vector< FV_FACET_TYPE >               m_facet_types;                   ///< types of facet

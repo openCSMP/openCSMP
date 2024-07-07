@@ -41,11 +41,16 @@
 #include "LinearTwoPhaseModel.h"
 
 // Finite-Volume calculation tools
-#include "FiniteVolumeStencil.h"
 #include "StencilProcessor.h"
 #include "ExplicitStencilProcessor.h"
 #include "TwoPhaseExplicitNodeCenteredFVTransport.h"
 #include "TwoPhaseImplicitNodeCenteredFVTransport.h"
+
+#ifdef FV_STENCIL_TESTING
+#include "FiniteVolumeStencil_refactored.h"
+#else
+#include "FiniteVolumeStencil.h"
+#endif
 
 // Output
 #include "VTU_Interface.h"

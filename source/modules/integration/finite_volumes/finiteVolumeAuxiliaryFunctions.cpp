@@ -604,7 +604,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
          // --------------------------------
          // (scaled by the cell thickness attribute=1 for volumetric elements)
          const double phi = (*it)->Read( phi_key ) * (*it)->Read( thi_key );
-         for ( auto i{0U}; i<sectors; ++i ) {
+         for ( uint32_t i{0U}; i<sectors; ++i ) {
               // sector pore volume
               const double sector_volume = (*it)->SectorVolume(i);
               (*it)->Store( i, 0U, sv_key, makeScalar( PLAIN, sector_volume ) );
@@ -621,7 +621,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
 
          // 2. computing facet normals and areas
          // ------------------------------------
-         for ( auto j{0U}; j<facets; ++j ) {
+         for ( uint32_t j{0U}; j<facets; ++j ) {
               // computing facet areas
               const double facet_area = (*it)->FacetArea(j);
               (*it)->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
@@ -657,7 +657,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
              // computing facet normals and areas
              // ---------------------------------
              const auto facets(eptr->Facets());
-             for ( auto j{0U}; j<facets; ++j ) {
+             for ( uint32_t j{0U}; j<facets; ++j ) {
                   // computing facet areas
                   const double facet_area = eptr->FacetArea(j);
                   eptr->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
@@ -673,7 +673,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
              // ---------------------------------------
              const double porosity = eptr->Read( phi_key ) * eptr->Read( thi_key );
              const auto sectors(eptr->Sectors());
-             for ( auto j{0U}; j<sectors; ++j ) {
+             for ( uint32_t j{0U}; j<sectors; ++j ) {
                   const double sector_volume = eptr->SectorVolume(j);
                   eptr->Store( j, 0U, sv_key, makeScalar( PLAIN, sector_volume ) );
                   eptr->Store( j, 0U, spv_key, makeScalar( PLAIN, sector_volume * porosity ) );
@@ -693,10 +693,10 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
             {
                const auto parent_elements((*nit)->Parents());
                double flux_balance(0.);
-               for ( auto i{0U}; i<parent_elements; ++i ) {
+               for ( uint32_t i{0U}; i<parent_elements; ++i ) {
                     const Element<dim>* const eptr = (*nit)->Parent(i);
                     const auto sector_node = (*nit)->ParentNodeNumber(i);
-                    for ( auto j{0U}; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
+                    for ( uint32_t j{0U}; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                          const auto facet  = eptr->FV()->FacetSurroundingSector( sector_node, j );
                          const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                          const double facet_flux = sign * eptr->Read( facet, 0U, ff_key );
@@ -742,7 +742,7 @@ pair<double,double>  diameterAndVerticalExtentOfLowerDimensional_FV( const Node<
           if constexpr ( dim == 3U ) {
               if ( nptr->Parent(i)->IsSurface() ) {
                    const auto n_nodes{ nptr->Parent(i)->Nodes() };
-                   for ( auto j{0u}; j<n_nodes; j++ )
+                   for ( uint32_t j{0u}; j<n_nodes; j++ )
                      // for the nodes surrounding the current node
                      if ( nptr->Parent(i)->N(j) != nptr  )
                        ptrs_unique_nodes.insert( nptr->Parent(i)->N(j) );
@@ -752,7 +752,7 @@ pair<double,double>  diameterAndVerticalExtentOfLowerDimensional_FV( const Node<
           else if constexpr ( dim == 2U ) {
               if ( nptr->Parent(i)->IsLine() ) {
                    const auto n_nodes{ nptr->Parent(i)->Nodes() };
-                   for ( auto j{0u}; j<n_nodes; j++ )
+                   for ( uint32_t j{0u}; j<n_nodes; j++ )
                      // for the nodes surrounding the current node
                      if ( nptr->Parent(i)->N(j) != nptr  )
                        ptrs_unique_nodes.insert( nptr->Parent(i)->N(j) );

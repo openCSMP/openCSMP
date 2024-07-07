@@ -1,7 +1,6 @@
 #include "TwoPhaseFileBased.h"
 #include "PropertyDatabase.h"
 #include "CSMP_mathUtilities.h"
-#include "FiniteVolumeStencil.h"
 
 using namespace std;
 

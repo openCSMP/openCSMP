@@ -119,7 +119,6 @@ class DynamicArray3D
         m_cols((*std::next(vals.begin(),1)).size()), // within inner list
         m_data(m_rows*m_cols*m_depth,0)
     {
-       assert( m_rows*m_cols*m_depth == vals.size() );
        // assigning the values
        size_type dij = 0;
        for ( const auto& dep : vals )
@@ -218,13 +217,15 @@ class DynamicArray3D
     data_type m_data{};
   };
   
-  template<class T>
-  void swap(DynamicArray3D<T>& lhs, DynamicArray3D<T>& rhs)
+
+template<class T>
+inline void swap(DynamicArray3D<T>& lhs, DynamicArray3D<T>& rhs)
   {
     lhs.swap(rhs);
   }
-  template<class T>
-  bool operator==( const DynamicArray3D<T>& a, const DynamicArray3D<T>& b )
+
+template<class T>
+inline bool operator==( const DynamicArray3D<T>& a, const DynamicArray3D<T>& b )
   {
     if (a.rows() != b.rows() || a.cols() != b.cols() || a.depth() != b.depth() )
     {
@@ -232,8 +233,9 @@ class DynamicArray3D
     }
     return std::equal(a.begin(), a.end(), b.begin(), b.end());
   }
-  template<class T>
-  bool operator!= (DynamicArray3D<T> const &a, DynamicArray3D<T> const &b)
+  
+template<class T>
+inline bool operator!=( DynamicArray3D<T> const &a, DynamicArray3D<T> const &b )
   {
     return !(a == b);
   }

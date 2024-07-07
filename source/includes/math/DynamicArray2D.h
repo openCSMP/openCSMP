@@ -53,9 +53,8 @@ class DynamicArray2D
     */
     DynamicArray2D( std::initializer_list<data_type> vals )
       : m_rows(vals.size()), m_cols((*std::next(vals.begin(),0)).size()),
-        m_data(m_rows*m_cols,0.)
+        m_data(m_rows*m_cols,0)
       {
-         assert( m_rows*m_cols == vals.size() );
          // assigning the values
          size_type ij = 0;
          for ( const auto& row : vals )
@@ -65,14 +64,13 @@ class DynamicArray2D
 
 
     /// construction of square array via vector-style initialiser list
-    /*
     DynamicArray2D( std::initializer_list<T> vals )
-      : m_rows(std::sqrt(vals.size())), m_cols(std::sqrt(vals.size()), m_data(vals)
-    {
-       assert( m_rows*m_cols() == vals.size() );
-    }
-    */
-    
+      : m_rows(std::sqrt(vals.size())), m_cols(std::sqrt(vals.size())), m_data(vals)
+      {
+         assert( (m_rows*m_cols) == m_data.size() );
+      }
+
+
     // 1d-iterators
     iterator begin() { return m_data.begin(); }
     iterator end() { return m_data.end(); }
@@ -150,21 +148,22 @@ class DynamicArray2D
     size_type m_cols{ 0u };
     data_type m_data{};
   };
-  
-  template<class T>
-  void swap( DynamicArray2D<T>& lhs, DynamicArray2D<T>& rhs ) {
+
+
+template<class T>
+inline void swap( DynamicArray2D<T>& lhs, DynamicArray2D<T>& rhs ) {
       lhs.swap(rhs);
     }
     
-  template<class T>
-  bool operator==( const DynamicArray2D<T>& a, const DynamicArray2D<T>& b )
+template<class T>
+inline bool operator==( const DynamicArray2D<T>& a, const DynamicArray2D<T>& b )
     {
       if (a.rows() != b.rows() || a.cols() != b.cols()) return false;
       return std::equal(a.begin(), a.end(), b.begin(), b.end());
     }
 
-  template<class T>
-  bool operator!=( const DynamicArray2D<T>& a, const DynamicArray2D<T>& b )
+template<class T>
+inline bool operator!=( const DynamicArray2D<T>& a, const DynamicArray2D<T>& b )
     {
       return !(a == b);
     }

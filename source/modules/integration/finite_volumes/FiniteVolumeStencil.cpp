@@ -57,6 +57,7 @@ FiniteVolumeStencil<dim>::FiniteVolumeStencil( const FiniteVolumeStencil<dim>& f
    facet_integration_weights(fvs.facet_integration_weights),
    facet_normals(fvs.facet_normals),
    facet_parametric_normals(fvs.facet_parametric_normals),
+   facet_projection_weights(fvs.facet_projection_weights),
    facet_normal_xforms(fvs.facet_normal_xforms),
    sector_integration_points(fvs.sector_integration_points),
    sector_integration_weights(fvs.sector_integration_weights),
@@ -92,6 +93,7 @@ FiniteVolumeStencil<dim>&  FiniteVolumeStencil<dim>::operator=( const FiniteVolu
           facet_integration_points   = fvs.facet_integration_points;  // [isrf][spts][dim]
           facet_integration_weights  = fvs.facet_integration_weights; // [isrf][spts]
           facet_normals              = fvs.facet_normals;             // [isrf][dim]
+          facet_projection_weights   = fvs.facet_projection_weights;
           facet_normal_xforms        = fvs.facet_normal_xforms;       // [isrf][node]
           facet_parametric_normals   = fvs.facet_parametric_normals;  // [isrf][dim]
           sector_integration_points  = fvs.sector_integration_points;   // [ivol][vpts][dim]
@@ -100,7 +102,7 @@ FiniteVolumeStencil<dim>&  FiniteVolumeStencil<dim>::operator=( const FiniteVolu
           facet_edge_midpoints       = fvs.facet_edge_midpoints;
      	    barycenter                 = fvs.barycenter;
     	    facet_points  		         = fvs.facet_points;
-    	    facet_types  		         = fvs.facet_types;
+    	    facet_types  		           = fvs.facet_types;
     	    sector_points_             = fvs.sector_points_;
      	    sector_edges_              = fvs.sector_edges_;
           space_dimension_           = fvs.space_dimension_;
@@ -325,8 +327,8 @@ const Point<dim>&  FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32_t iFa
 
 template<uint32_t dim>
 void FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32_t iFacet,
-                                                             uint32_t ip,
-                                                             std::vector<double>& rst ) const
+                                                      uint32_t ip,
+                                                      vector<double>& rst ) const
  {
     assert( iFacet < Facets() );
     assert( ip < IntegrationPointsPerFacet(iFacet) );
@@ -338,8 +340,8 @@ void FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32_t iFacet,
 // SKM addon
 template<uint32_t dim>
 double FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32_t iFacet,
-                                                                 uint32_t ip,
-                                                                 uint32_t rst ) const
+                                                        uint32_t ip,
+                                                         uint32_t rst ) const
  {
     assert( iFacet < Facets() );
     assert( ip < IntegrationPointsPerFacet(iFacet) );
@@ -417,7 +419,7 @@ FVPEM method is working with 1 facet integration point only.
 */
 template<uint32_t dim>
 const Point<dim>&  FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iSector,
-                                                                            uint32_t ip ) const
+                                                                     uint32_t ip ) const
 {
     assert( iSector < Sectors() );
     assert( ip < IntegrationPointsPerSector(iSector) );
@@ -428,8 +430,8 @@ const Point<dim>&  FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iS
 
 template<uint32_t dim>
 void FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iSector,
-                                                              uint32_t ip,
-                                                              std::vector<double>& rst ) const
+                                                       uint32_t ip,
+                                                       vector<double>& rst ) const
 {
     assert( iSector < Sectors() );
     assert( ip < IntegrationPointsPerSector(iSector) );
@@ -441,8 +443,8 @@ void FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iSector,
 
 template<uint32_t dim>
 double FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iSector,
-                                                                  uint32_t ip,
-                                                                  uint32_t rst ) const
+                                                         uint32_t ip,
+                                                         uint32_t rst ) const
 {
     assert( iSector < Sectors() );
     assert( ip < IntegrationPointsPerSector(iSector) );
@@ -472,7 +474,7 @@ FVPEM method is working with 1 facet integration point only.
 */    
 template<uint32_t dim>
 double FiniteVolumeStencil<dim>::FacetIntegrationWeight( uint32_t iFacet,
-                                                           uint32_t ip ) const
+                                                         uint32_t ip ) const
  {
     assert( iFacet < Facets() );
     assert( ip < IntegrationPointsPerFacet(iFacet) );
@@ -587,7 +589,7 @@ const Point<dim>& FiniteVolumeStencil<dim>::UnitParametricNormalTo( uint32_t iFa
 
 template<uint32_t dim>
 double FiniteVolumeStencil<dim>::UnitParametricNormalComponent( uint32_t iFacet,
-                                                                         uint32_t x_or_y_or_z ) const
+                                                                uint32_t x_or_y_or_z ) const
 {
     assert( iFacet < edges_of_element.size() );
 
@@ -725,7 +727,6 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
    uint32_t NumOfIPperVolume=1U;
    uint32_t NumOfIPperFacet=1U;
    
-   
    if ( csp_fem_type == parseFiniteElementType(ISOPARAMETRIC_LINEAR_BAR) ) {
 
           NumOfInternalFacets=1U;
@@ -784,7 +785,6 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
           Resize(NumOfInternalFacets, NumOfInternalFacetsPerNode, 
                  NumOfInternalVolumes, NumOfIPperVolume, NumOfIPperFacet );
 
-             
           FV_IntegrationPointsAndWeights<dim> FV(ISOPARAMETRIC_LINEAR_TRIANGLE);
              
           FV.SectorIntegrationWeights(sector_integration_weights); 
@@ -978,7 +978,6 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
       }
     if ( csp_fem_type == parseFiniteElementType(ISOPARAMETRIC_LINEAR_PYRAMID) ) {
 
- 
  #ifdef PYRAMID_TRIANGULAR_FACETS
           NumOfInternalFacets=12U;
           NumOfInternalFacetsPerNode=8U; // Special case of the Pyramid vertex require 8

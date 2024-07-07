@@ -1696,8 +1696,8 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
     
     // 1. converting Elements into Faces
     // ---------------------------------
-    size_t n_elements = elements_.size();
-    size_t n_faces    = faces_.size();
+//    size_t n_elements = elements_.size();
+//    size_t n_faces    = faces_.size();
     size_t face_idx{0};
     // remembering the first iterator
     auto first2{ first };

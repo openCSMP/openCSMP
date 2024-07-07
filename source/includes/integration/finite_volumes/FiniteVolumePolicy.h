@@ -3,7 +3,11 @@
 
 #include "Index.h"
 #include "Point.h"
+#ifdef FV_STENCIL_TESTING
+#include "FiniteVolumeStencil_refactored.h"
+#else
 #include "FiniteVolumeStencil.h"
+#endif
 #include "Node.h"
 
 #include "QuadrilateralFacet.h"
