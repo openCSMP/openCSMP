@@ -163,21 +163,25 @@ void Box_Test::run()
   _test( parseBoundary( EDGE11 ) == "EDGE11" );
   _test( parseBoundary( EDGE12 ) == "EDGE12" );
   _test( parseBoundary( INTERNAL ) == "INTERNAL" );
+  
+  // intToBOX_BOUNDARY - non automatic conversion
+  _test( intToBOX_BOUNDARY( static_cast<int8_t>(LEFT_OUTSIDE) ) == LEFT );
+  _test( intToBOX_BOUNDARY( -8 ) == CNR_MIN );
+  _test( intToBOX_BOUNDARY( static_cast<int8_t>(-28) ) == REGION_BOUNDARY );
 
-  // for vsetMaker model Pyra_Hexa with mixed element types (32elmts, 64 nodes): TODO: fails
+  // for vsetMaker model Pyra_Hexa with mixed element types (32elmts, 64 nodes): SKM tested bflags: OK (6/7/24)
   _test( TestWhetherSideBoundaryFlagsArePresent() );
   
   // _test( TestWhetherAllBoxFlagsArePresent() ); // fails because the corners are missing
   _test( TestBoundaryFlagging() ); // model Tetra
-  _test( TestWhetherBoundaryFlagsArePreservedInBinaryFile1() ); // model Prism_Hexa  TODO: fail
+  _test( TestWhetherBoundaryFlagsArePreservedInBinaryFile1() ); // model Prism_Hexa
   
   // tests whether the function recreateBoxBoundaryFlags() manages to reconstruct edges and boundaries correctly
-  // TODO: fail
-//  _test( TestBoundaryFlagRecreation() );
+  // TODO: nodal flag comparison fails; isStrictlyBoxShaped is OK
+  _test( TestBoundaryFlagRecreation() );
   
   // tests whether the boundaries of a 2D box model and an ANSYS model are assigned correctly
-  // TODO: bring back
-//  _test( TestBoundaryFlagAssigment2D() );
+  _test( TestBoundaryFlagAssigment2D() );
 
   // fail
   TestWhetherElementNormalsAreOutwardPointing();
@@ -698,7 +702,7 @@ bool Box_Test::TestBoundaryFlagRecreation()
     // building model with boundaries, converting surface elements to faces
     const bool create_boundaries_from_surf_elmts{ true };
     Model<3U> model( topo, vset, "CSMP-variables.txt", create_boundaries_from_surf_elmts );
-    _test( model.Mesh().Elements() + model.Mesh().Faces() == vset.Elements() );
+    _test( model.Mesh().Elements() + model.Mesh().Faces() == vset.Cells() );
     _test( model.Mesh().Nodes() == vset.Vertices() );
 
     if ( verbose_ ) {
@@ -729,9 +733,10 @@ bool Box_Test::TestBoundaryFlagRecreation()
     const csmp::Index nn_key = model.Database().StorageKey("node number");
     // testing that the boundary flags match
     for ( size_t i{0U}; i<vset.Vertices(); i++ ) { // converting variable value into integer
-         _test( vset.BFlag(i) == model_domain.N( static_cast<size_t>(model_domain.N(i)->Read(nn_key)) )->AtBoundary() );
-         if ( vset.BFlag(i) != model_domain.N( static_cast<size_t>(model_domain.N(i)->Read(nn_key)) )->AtBoundary() ) {
-              cout <<"\nnode "<< model_domain.N(i)->Idx() <<": "<< parseBoundary( model_domain.N( static_cast<size_t>(model_domain.N(i)->Read(nn_key)) )->AtBoundary() );
+         BOX_BOUNDARY nodal_bflag = model_domain.N( static_cast<size_t>(model_domain.N(i)->Read(nn_key)) )->AtBoundary();
+         _test( vset.BFlag(i) == static_cast<int8_t>(nodal_bflag) );
+         if ( verbose_ && vset.BFlag(i) != static_cast<int8_t>(nodal_bflag) ) {
+              cout <<"\nnode "<< model_domain.N(i)->Idx() <<": "<< parseBoundary( nodal_bflag );
               cout <<" vs. "<< parseBoundary( static_cast<BOX_BOUNDARY>(vset.BFlag(i)) ) << endl;
            }
       }

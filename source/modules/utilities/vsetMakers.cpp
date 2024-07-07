@@ -1750,9 +1750,9 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	{
   	  int8_t bBoundary = NOT;
   	  
-  	  if(k==0)
+  	  if(k==0) // back-plane
   	  {
-  	    if(j==0)
+  	    if(j==0) // along edge1
   	    {
           if(i==0) bBoundary=CNR1;
           else if(i==(iDim_i-1)) bBoundary=CNR2;
@@ -1760,8 +1760,8 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	    }
   	    else if(j==(iDim_j-1))
   	    {
-          if(j==0) bBoundary=CNR4;
-          else if(j==(iDim_j-1)) bBoundary=CNR3;
+          if(i==0) bBoundary=CNR4;
+          else if(i==(iDim_i-1)) bBoundary=CNR3;
           else bBoundary=EDGE3;
   	    }
   	    else //j is in the middle

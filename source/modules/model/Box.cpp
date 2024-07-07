@@ -2108,7 +2108,7 @@ bool hasAllSideBoundaries( const Model<3U>& model )
   for ( const auto& i : flags3d )
     if ( flags_of_model.count(i) < 1 ) return false;
 
-  return false;
+  return true;
 }
 
 
