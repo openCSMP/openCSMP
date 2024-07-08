@@ -563,7 +563,8 @@ void Model<dim>::Initialize( VSet<dim>& vset )
          vset.EstablishElementConnectivity3D();
     }
   // 2. checking whether BOX_BOUNDARY flags are there which are essential for a model without boundary domains
-  if ( vset.BFlags() <= 2 ) {
+  if ( *min_element(vset.BFlagsBegin(),vset.BFlagsEnd()) ==  *max_element(vset.BFlagsBegin(),vset.BFlagsEnd()) ) {
+       // TODO: replace this code with:  recreateBoxBoundaryFlags( *this );  after construction is complete
        // computing a tolerance for the identification of BOX boundaries from the model coordinates
        double tolerance = fabs( vset.X_Range().second );
        tolerance = max( tolerance, fabs( vset.Y_Range().second ) );

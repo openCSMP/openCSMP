@@ -1996,15 +1996,8 @@ all nodes are considered.
 */
 bool isStrictlyBoxShaped( const Model<2U>& model )
 {
-  set<BOX_BOUNDARY> flags2d, flags_of_model;
-  flags2d.insert( LEFT );
-  flags2d.insert( RIGHT );
-  flags2d.insert( TOP );
-  flags2d.insert( BOTTOM );
-  flags2d.insert( CNR1 );
-  flags2d.insert( CNR2 );
-  flags2d.insert( CNR3 );
-  flags2d.insert( CNR4 );
+  set<BOX_BOUNDARY> flags2d{ LEFT, RIGHT, TOP, BOTTOM, CNR1, CNR2, CNR3, CNR4, EDGE1, EDGE2, EDGE3, EDGE4 },
+                    flags_of_model;
 
   const Region<2>&  model_domain( model.Region( "Model" ) );
   for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
@@ -2036,54 +2029,35 @@ tests (only) if all boundary identifiers are there
 */
 bool isStrictlyBoxShaped( const Model<3U>& model )
 {
-  set<BOX_BOUNDARY> flags3d, flags_of_model;
-  flags3d.insert( LEFT );
-  flags3d.insert( RIGHT );
-  flags3d.insert( TOP );
-  flags3d.insert( BOTTOM );
-  flags3d.insert( FRONT );
-  flags3d.insert( BACK );
+  const set<BOX_BOUNDARY> flags3d{ LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK, CNR1, CNR2, CNR3, CNR4, CNR5, CNR6, CNR7, CNR8,
+                                   EDGE1, EDGE2, EDGE3, EDGE4, EDGE5, EDGE6, EDGE7, EDGE8, EDGE9, EDGE10, EDGE11, EDGE12 };
 
-  flags3d.insert( CNR1 );
-  flags3d.insert( CNR2 );
-  flags3d.insert( CNR3 );
-  flags3d.insert( CNR4 );
-  flags3d.insert( CNR5 );
-  flags3d.insert( CNR6 );
-  flags3d.insert( CNR7 );
-  flags3d.insert( CNR8 );
-
-  flags3d.insert( EDGE1 );
-  flags3d.insert( EDGE2 );
-  flags3d.insert( EDGE3 );
-  flags3d.insert( EDGE4 );
-  flags3d.insert( EDGE5 );
-  flags3d.insert( EDGE6 );
-  flags3d.insert( EDGE7 );
-  flags3d.insert( EDGE8 );
-  flags3d.insert( EDGE9 );
-  flags3d.insert( EDGE10 );
-  flags3d.insert( EDGE11 );
-  flags3d.insert( EDGE12 );
+  set<BOX_BOUNDARY>  flags_of_model;
 
   const Region<3>&  model_domain( model.Region( "Model" ) );
   for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
-    if ( (*it)->AtBoundary() != NOT )
-      flags_of_model.insert( (*it)->AtBoundary() );
+    flags_of_model.insert( (*it)->AtBoundary() );
 
   // searching for flags2d in flags_of_model
-  auto it = flags_of_model.begin();
-  for ( auto i = flags3d.begin(); i != flags3d.end() && it != flags_of_model.end(); ++i )
-  {
-    it = std::lower_bound( it, flags_of_model.end(), (*i) );
-    // make sure the found item is a match
-    if ( it != flags_of_model.end() && *i < *it )
-      it = flags_of_model.end(); // break out early
-  }
-  if ( it != flags_of_model.end() ) return true;
+  size_t flags_not_found{0U};
+  bool   first_error{true};
+  for ( const auto& i : flags3d )
+    if ( flags_of_model.count(i) == 0 ) {
+         if ( first_error ) {
+              cerr <<"\n"<<"isStrictlyBoxShaped: NO! - model misses nodes flagged";
+              first_error = false;
+           }
+         cerr <<" "<< parseBoundary(i);
+         flags_not_found++;
+      }
+  if ( !first_error ) cout << endl;
 
+  if ( flags_not_found == 0U ) return true;
   return false;
-}
+  
+} // end isStrictlyBoxShaped
+
+
 
 
 /**
@@ -2091,13 +2065,7 @@ returns true if the model contains all the side boundary identifiers of the box
 */
 bool hasAllSideBoundaries( const Model<3U>& model )
 {
-  set<BOX_BOUNDARY> flags3d, flags_of_model;
-  flags3d.insert( LEFT );
-  flags3d.insert( RIGHT );
-  flags3d.insert( TOP );
-  flags3d.insert( BOTTOM );
-  flags3d.insert( FRONT );
-  flags3d.insert( BACK );
+  set<BOX_BOUNDARY> flags3d{ LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK}, flags_of_model;
 
   const Region<3>&  model_domain( model.Region( "Model" ) );
   for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
@@ -2117,11 +2085,7 @@ bool hasAllSideBoundaries( const Model<3U>& model )
 /// 2D side boudaries only
 bool hasAllSideBoundaries( const Model<2U>& model )
 {
-  set<BOX_BOUNDARY> flags3d, flags_of_model;
-  flags3d.insert( LEFT );
-  flags3d.insert( RIGHT );
-  flags3d.insert( TOP );
-  flags3d.insert( BOTTOM );
+  set<BOX_BOUNDARY> flags2d{ LEFT, RIGHT, TOP, BOTTOM }, flags_of_model;
 
   const Region<2>&  model_domain( model.Region( "Model" ) );
   for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
@@ -2130,7 +2094,7 @@ bool hasAllSideBoundaries( const Model<2U>& model )
 
   // searching for flags2d in flags_of_model
   auto it = flags_of_model.begin();
-  for ( auto i = flags3d.begin(); i != flags3d.end() && it != flags_of_model.end(); ++i )
+  for ( auto i = flags2d.begin(); i != flags2d.end() && it != flags_of_model.end(); ++i )
   {
     it = std::lower_bound( it, flags_of_model.end(), (*i) );
     // make sure the found item is a match

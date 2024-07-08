@@ -22,6 +22,8 @@ class Box_Test : public Test
     
     bool TestBoundaryFlagging();
   
+    bool TestBoundaryVersusBOX_BOUNDARY_Flagging();
+
     bool TestBoundaryFlagRecreation();
     
     bool TestWhetherBoundaryFlagsArePreservedInBinaryFile();

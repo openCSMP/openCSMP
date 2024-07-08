@@ -1442,7 +1442,7 @@ void create_SlitRectangle_VSet( VSet<2U>& vset, int x_dimension, int y_dimension
     - 32 elements (26 hex + 6 pyramids)
     - 64 nodes
     
-    @test
+    @test boundary flags not correct yet
 */
 void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 {
@@ -1738,7 +1738,7 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
   	
-  	//------------------------------------------NODE BOUNDARIES
+  	//------------------------------------------NODE BOUNDARY FLAGS
   	//define node boundaries
   	//nodes at corners:
     //nodes at edges:
@@ -1746,11 +1746,12 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     // tested: SKM 27/5/2024
   	for(size_t k{0U}; k < iDim_k; k++) //z
   	for(size_t j{0U}; j < iDim_j; j++) //y
-  	for(auto i{0U}; i < iDim_i; i++) //x
+  	for(size_t i{0U}; i < iDim_i; i++) //x
   	{
-  	  int8_t bBoundary = NOT;
+  	  BOX_BOUNDARY bBoundary = NOT;
   	  
-  	  if(k==0) // back-plane
+     // back
+  	  if(k==0)
   	  {
   	    if(j==0) // along edge1
   	    {
@@ -1758,7 +1759,7 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
           else if(i==(iDim_i-1)) bBoundary=CNR2;
           else bBoundary=EDGE1;
   	    }
-  	    else if(j==(iDim_j-1))
+  	    else if(j==(iDim_j-1)) // along edge3
   	    {
           if(i==0) bBoundary=CNR4;
           else if(i==(iDim_i-1)) bBoundary=CNR3;
@@ -1768,20 +1769,21 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	    {
   	      if(i==0) bBoundary=EDGE4;
           else if(i==(iDim_i-1)) bBoundary=EDGE2;
-          else bBoundary=BACK_OUTSIDE;
+          else bBoundary=BACK;
   	    }
   	  }
+      // front
       else if(k==(iDim_k-1))
   	  {
   	    if(j==0)
   	    {
-          if(i==0) bBoundary=CNR5;
+          if(i==0) bBoundary=CNR5; // along edge9
           else if(i==(iDim_i-1)) bBoundary=CNR6;
           else bBoundary=EDGE9;
   	    }
   	    else if(j==(iDim_j-1))
   	    {
-          if(i==0) bBoundary=CNR8;
+          if(i==0) bBoundary=CNR8; // along edge11
           else if(i==(iDim_i-1)) bBoundary=CNR7;
           else bBoundary=EDGE11;
   	    }
@@ -1789,37 +1791,37 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	    {
   	      if(i==0) bBoundary=EDGE12;
           else if(i==(iDim_i-1)) bBoundary=EDGE10;
-          else bBoundary=FRONT_OUTSIDE;
+          else bBoundary=FRONT;
   	    }
   	  }
+
   	  else //k is in the middle
   	  {
   	   if(j==0)
   	    {
           if(i==0) bBoundary=EDGE5;
           else if(i==(iDim_i-1)) bBoundary=EDGE6;
-          else bBoundary=BOTTOM_OUTSIDE;
+          else bBoundary=BOTTOM;
   	    }
   	    else if(j==(iDim_j-1))
   	    {
           if(i==0) bBoundary=EDGE8;
           else if(i==(iDim_i-1)) bBoundary=EDGE7;
-          else bBoundary=TOP_OUTSIDE;
+          else bBoundary=TOP;
   	    }
   	    else //j in the middle
   	    {
-  	      if(i==0) bBoundary=LEFT_OUTSIDE;
-          else if(i==(iDim_i-1)) bBoundary=RIGHT_OUTSIDE;
+  	      if(i==0) bBoundary=LEFT;
+          else if(i==(iDim_i-1)) bBoundary=RIGHT;
           else ;//do nothing: no boundary
   	    }
   	  }
-  	
-      if(bBoundary!=NOT)
-      {
-        // SKM FIX const size_t iNode((iDim_k2*k+(iDim_j)*j+i)+1);
-        const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-        vset.BFlag( iNode, bBoundary);
-      }
+
+      // SKM FIX - all flags must be captured and different indexing is required
+      const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
+      vset.BFlag( iNode, bBoundary );
+// TESTING
+//      cout <<" "<< iNode <<":"<< parseBoundary( bBoundary );
   	}
   	
     //-------------------------MATERIALS
@@ -1828,7 +1830,7 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 
     vset.EstablishZeroBasedNumbering();
     
-    // vset.Out();
+//    vset.Out();
     
 } // end create_Pyramid_Hexa_VSet
 
@@ -2336,30 +2338,30 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     vset.AddPfverts( deqElementNeighborsSKM.begin(), deqElementNeighborsSKM.end() );
   	
     
-  	//------------------------------------------NODE BOUNDARIES
+  	//------------------------------------------NODE BOUNDARY FLAGS
   	//define node boundaries
   	//nodes at corners:
     //nodes at edges:
   	//nodes at faces:
     // retested: SKM: 27/5/24
-  	for(size_t k{0U}; k < iDim_k; k++) //z
-  	for(size_t j{0U}; j < iDim_j; j++) //y
-  	for(size_t i{0U}; i < iDim_i; i++) //x
+  	for(size_t k{0U}; k < iDim_k; k++) //z -> Y in CSMP
+  	for(size_t j{0U}; j < iDim_j; j++) //y -> X
+  	for(size_t i{0U}; i < iDim_i; i++) //x -> Z
   	{
   	  int8_t bBoundary = NOT;
   	  
   	  if(k==0)
   	  {
-  	    if(j==0)
+  	    if(j==0) // along edge1
   	    {
           if(i==0) bBoundary=CNR1;
           else if(i==(iDim_i-1)) bBoundary=CNR2;
           else bBoundary=EDGE1;
   	    }
-  	    else if(j==(iDim_j-1))
+  	    else if(j==(iDim_j-1)) // along edge3
   	    {
-          if(j==0) bBoundary=CNR4;
-          else if(j==(iDim_j-1)) bBoundary=CNR3;
+          if(i==0) bBoundary=CNR4;
+          else if(i==(iDim_i-1)) bBoundary=CNR3;
           else bBoundary=EDGE3;
   	    }
   	    else //j is in the middle
@@ -2412,12 +2414,9 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
   	    }
   	  }
   	
-      if(bBoundary!=NOT)
-      {
-        // SKM_FIX const size_t iNode((iDim_k2*k+(iDim_j)*j+i)+1);
-        const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
-        vset.BFlag( iNode, bBoundary);
-      }
+      // SKM_FIX -1
+      const size_t iNode((iDim_k2*k+(iDim_j)*j+i));
+      vset.BFlag( iNode, bBoundary );
   	}
 
     vset.EstablishZeroBasedNumbering();
@@ -2435,7 +2434,7 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     vset.AddData( "element number", elmt_nums );
     
     cout <<"\n"<<"create_Prism_Hexa_VSet: model 'Prism_Hexa': "<< endl;
-    vset.Out();
+    //vset.Out();
 
 } // end create_Prism_Hexa_VSet
 
@@ -7340,21 +7339,21 @@ deque<vector<int64_t> >  pfverts( 1872 );
   
 // MATERIAL PROPERTIES
 
-  const int32_t  material_identifier{1};
+  const int32_t   material_identifier{1};
   vector<int32_t> pmtrl( vset.Elements(), material_identifier );
   vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 
   PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
   elmt_nums.Reserve( vset.Elements() );
 
-  for ( auto i{0U}; i<vset.Elements(); ++i )
+  for ( size_t i{0U}; i<vset.Elements(); ++i )
     pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );
   vset.AddData( "element number", elmt_nums );
 
   PropertyData node_nums( NODE, SCALAR, 3U );
   node_nums.Reserve( vset.Vertices() );
 
-  for ( auto i{0U}; i<vset.Vertices(); ++i )
+  for ( size_t i{0U}; i<vset.Vertices(); ++i )
     pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
   vset.AddData( "node number", node_nums );
 

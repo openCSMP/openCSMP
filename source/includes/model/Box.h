@@ -27,37 +27,36 @@ This also includes stand-alone functions for the processing of Boundary flags an
 */
 
 /// fixed boundary identifiers; @attention do not alter numbering or sequence because it is used in iterations
-enum : std::int8_t {
-  IRREGULAR_OUTSIDE = -1,
-  LEFT_OUTSIDE = -2,  ///< model boundary flags
-  RIGHT_OUTSIDE = -3,  ///< ...
-  BOTTOM_OUTSIDE = -4,
-  TOP_OUTSIDE = -5,
-  FRONT_OUTSIDE = -6,
-  BACK_OUTSIDE = -7,
-  CNR_MIN = -8,  ///< min-x, min-y, min-z
-  CNR_MAX = -9,  ///< max-x, max-y, max-z
-  CNR_MIN_MAXX = -10, ///< see users guide
-  CNR_MIN_MAXXZ = -11,
-  CNR_MIN_MAXZ = -12,
-  CNR_MAX_MINXZ = -13,
-  CNR_MAX_MAXX = -14,
-  CNR_MAX_MAXZ = -15,
-  BACK_BOTTOM = -16, ///< model edges: BACK and BOTTOM
-  BACK_RIGHT = -17, ///< BACK and RIGHT
-  BACK_TOP = -18, ///< BACK and TOP
-  BACK_LEFT = -19, ///< BACK and LEFT
-  BOTTOM_RIGHT = -20, ///< BOTTOM and RIGHT
-  TOP_RIGHT = -21, ///< TOP and RIGHT
-  TOP_LEFT = -22, ///< TOP and LEFT
-  BOTTOM_LEFT = -23, ///< BOTTOM and LEFT
-  FRONT_BOTTOM = -24, ///< FRONT and BOTTOM
-  FRONT_RIGHT = -25, ///< FRONT and RIGHT
-  FRONT_TOP = -26, ///< FRONT and TOP
-  FRONT_LEFT = -27, ///< FRONT and LEFT
-  REGION_BOUNDARY = -28, ///
-  MULTIPLE_BOUNDARIES = -29
-};
+static constexpr std::int8_t
+    IRREGULAR_OUTSIDE{-1},
+    LEFT_OUTSIDE{-2},  ///< model boundary flags
+    RIGHT_OUTSIDE{-3},  ///< ...
+    BOTTOM_OUTSIDE{-4},
+    TOP_OUTSIDE{-5},
+    FRONT_OUTSIDE{-6},
+    BACK_OUTSIDE{-7},
+    CNR_MIN{-8},       ///< min-x, min-y, min-z
+    CNR_MAX{-9},       ///< max-x, max-y, max-z
+    CNR_MIN_MAXX{-10}, ///< see users guide
+    CNR_MIN_MAXXZ{-11},
+    CNR_MIN_MAXZ{-12},
+    CNR_MAX_MINXZ{-13},
+    CNR_MAX_MAXX{-14},
+    CNR_MAX_MAXZ{-15},
+    BACK_BOTTOM{-16}, ///< model edges: BACK and BOTTOM
+    BACK_RIGHT{-17},  ///< BACK and RIGHT
+    BACK_TOP{-18},    ///< BACK and TOP
+    BACK_LEFT{-19},   ///< BACK and LEFT
+    BOTTOM_RIGHT{-20},///< BOTTOM and RIGHT
+    TOP_RIGHT{-21},   ///< TOP and RIGHT
+    TOP_LEFT{-22},    ///< TOP and LEFT
+    BOTTOM_LEFT{-23}, ///< BOTTOM and LEFT
+    FRONT_BOTTOM{-24},///< FRONT and BOTTOM
+    FRONT_RIGHT{-25}, ///< FRONT and RIGHT
+    FRONT_TOP{-26},   ///< FRONT and TOP
+    FRONT_LEFT{-27},  ///< FRONT and LEFT
+    REGION_BOUNDARY{-28}, 
+    MULTIPLE_BOUNDARIES{-29};
 
 /// @enum BOX_BOUNDARY uniquely identifies placement of nodes on the boundary of a box-shaped model
 enum BOX_BOUNDARY : std::int8_t {

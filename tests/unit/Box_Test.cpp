@@ -6,6 +6,7 @@
 #include "VTU_Interface.h"
 #include "vsetMakers.h"
 #include "CSMP_mathUtilities.h"
+#include "compareFloats.h"
 
 using namespace std;
 
@@ -175,6 +176,7 @@ void Box_Test::run()
   // _test( TestWhetherAllBoxFlagsArePresent() ); // fails because the corners are missing
   _test( TestBoundaryFlagging() ); // model Tetra
   _test( TestWhetherBoundaryFlagsArePreservedInBinaryFile1() ); // model Prism_Hexa
+  _test( TestBoundaryVersusBOX_BOUNDARY_Flagging() ); // model FracBox
   
   // tests whether the function recreateBoxBoundaryFlags() manages to reconstruct edges and boundaries correctly
   // TODO: nodal flag comparison fails; isStrictlyBoxShaped is OK
@@ -336,9 +338,9 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
     const bool bSkewed{false};
     create_Prism_Hexa_VSet( vset, bSkewed );
 
-// checking the Face nodes of element 1
-const size_t element{1ul};
-printNeighboursOfElement( vset, element );
+    // checking the Face nodes of element 1
+    const size_t element{1ul};
+    printNeighboursOfElement( vset, element );
 
     // checking whether original nbor connectivity is correct
     VSet<3U>  vset_test(vset);
@@ -670,15 +672,15 @@ bool Box_Test::TestWhetherAllBoxFlagsArePresent()
     return isStrictlyBoxShaped( model );
 }
   
+  
 
-/**
-   tests whether method recreateBoxBoundaryFlags() which  allows to recreate boundary flags works correctly
-*/
-bool Box_Test::TestBoundaryFlagRecreation()
+bool Box_Test::TestBoundaryVersusBOX_BOUNDARY_Flagging()
  {
     VSet<3U>      vset;
     ModelTopology topo;
-    create_FracBox( topo, vset );
+    create_FracBox( topo, vset ); // NOT SUITABLE because Bflags are wrong
+    //const bool bSkewed{false};
+    //create_Prism_Hexa_VSet( vset, bSkewed ); // used because boundary flags have been verified
     
     // adding 'node number' as a variable
     PropertyData node_nums( NODE, SCALAR, 3U );
@@ -704,11 +706,17 @@ bool Box_Test::TestBoundaryFlagRecreation()
     Model<3U> model( topo, vset, "CSMP-variables.txt", create_boundaries_from_surf_elmts );
     _test( model.Mesh().Elements() + model.Mesh().Faces() == vset.Cells() );
     _test( model.Mesh().Nodes() == vset.Vertices() );
+    // creating some Face numbers
+    const csmp::Index face_key = model.Database().StorageKey("face number");
+    size_t n_face{0u};
+    for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit, ++n_face ) {
+         (*fit).Store( face_key, makeScalar(ANY,n_face) );
+      }
 
     if ( verbose_ ) {
-         const bool vtk_output{ false };
+         const bool vtk_output{ true };
          if ( vtk_output ) {
-             VTU_Interface<3U> vtu_output( model );
+             VTU_Interface<3U> vtu_output( model ); // checked: SKM 6/7/24 (these are the correct boundaries)
              vtu_output.OutputDataToVTU( "BoxTest_BACK_fn",   "face number", model.Boundary("BACK"), 0 );
              vtu_output.OutputDataToVTU( "BoxTest_BOTTOM_fn", "face number", model.Boundary("BOTTOM"), 0 );
              vtu_output.OutputDataToVTU( "BoxTest_RIGHT_fn",  "face number", model.Boundary("RIGHT"), 0 );
@@ -726,37 +734,100 @@ bool Box_Test::TestBoundaryFlagRecreation()
          cout <<"\nFRONT "<< model.Boundary("FRONT").E(0)->UnitNormal();
          cout << endl;
       }
+   
+    // testing that the normals are correct
+    {
+      auto ba_n = model.Boundary("BACK").E(0)->UnitNormal();
+      auto bo_n = model.Boundary("BOTTOM").E(0)->UnitNormal();
+      auto ri_n = model.Boundary("RIGHT").E(0)->UnitNormal();
+      auto to_n = model.Boundary("TOP").E(0)->UnitNormal();
+      auto le_n = model.Boundary("LEFT").E(0)->UnitNormal();
+      auto fr_n = model.Boundary("FRONT").E(0)->UnitNormal();
+      _test( approximatelyEqual(le_n[0],-1) && approximatelyEqual(le_n[1],0) && approximatelyEqual(le_n[2],0) );
+      _test( approximatelyEqual(ri_n[0],1) && approximatelyEqual(ri_n[1],0) && approximatelyEqual(ri_n[2],0) );
+      _test( approximatelyEqual(bo_n[0],0) && approximatelyEqual(bo_n[1],-1) && approximatelyEqual(bo_n[2],0) );
+      _test( approximatelyEqual(to_n[0],0) && approximatelyEqual(to_n[1],1) && approximatelyEqual(to_n[2],0) );
+      _test( approximatelyEqual(ba_n[0],0) && approximatelyEqual(ba_n[1],0) && approximatelyEqual(ba_n[2],-1) );
+      _test( approximatelyEqual(fr_n[0],0) && approximatelyEqual(fr_n[1],0) && approximatelyEqual(fr_n[2],1) );
+    }
+
+   // checking that the BoxBoundary flags match the boundary names
+   {
+      Boundary<3U>& left   = model.Boundary("LEFT");
+      for ( const auto& nit : left.NodeVector() )
+       _test( isLEFT( nit->AtBoundary() ) && isLEFT( left.AtBoundary() ) );
+      Boundary<3U>& right  = model.Boundary("RIGHT");
+      for ( const auto& nit : right.NodeVector() )
+       _test( isRIGHT( nit->AtBoundary() ) && isRIGHT( right.AtBoundary() ) );
+      Boundary<3U>& bottom = model.Boundary("BOTTOM");
+      for ( const auto& nit : bottom.NodeVector() )
+       _test( isBOTTOM( nit->AtBoundary() ) && isBOTTOM( bottom.AtBoundary() ) );
+      Boundary<3U>& top    = model.Boundary("TOP");
+      for ( const auto& nit : top.NodeVector() )
+       _test( isTOP( nit->AtBoundary() ) && isTOP( top.AtBoundary() ) );
+      Boundary<3U>& back   = model.Boundary("BACK");
+      for ( const auto& nit : back.NodeVector() )
+       _test( isBACK( nit->AtBoundary() ) && isBACK( back.AtBoundary() ) );
+      Boundary<3U>& front  = model.Boundary("FRONT");
+      for ( const auto& nit : front.NodeVector() )
+       _test( isFRONT( nit->AtBoundary() ) && isFRONT( front.AtBoundary() ) );
+   }
+   
+   return true;
+   
+} // end Boundary vs BOX_BOUNDARY flagging
+  
+  
+
+/**
+   tests whether method recreateBoxBoundaryFlags() which  allows to recreate boundary flags works correctly
+   
+   @note also tests EstablishBoxBoundariesFromNodeFlags()
+*/
+bool Box_Test::TestBoundaryFlagRecreation()
+ {
+    VSet<3U>   vset;
+    const bool bSkewed{false};
+    create_Pyramid_Hexa_VSet( vset, bSkewed ); // used because boundary flags have been verified
     
+    // adding 'node number' as a variable
+    PropertyData node_nums( NODE, SCALAR, 3U );
+    node_nums.Reserve( vset.Vertices() );
+    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    vset.AddData( "node number", node_nums );
+
+    // building model (usin constructor that does not attempt to recreate boundary flags)
+    Model<3U> model( vset, "CSMP-variables.txt" );
+    model.Name("Pyramid_Hexa_without_regions_file");
+    _test( model.Mesh().Elements() + model.Mesh().Faces() == vset.Cells() );
+    _test( model.Mesh().Nodes() == vset.Vertices() );
+    const bool recreate_box_boundary_flags_before{false}; // do not change any node flags
+    model.EstablishBoxBoundariesFromNodeFlags( recreate_box_boundary_flags_before );
+    _test( isStrictlyBoxShaped( model ) );
+
     // testing whether the reflagging works correctly
     recreateBoxBoundaryFlags( model );
+    
     const Region<3U>& model_domain = model.Region("Model");
+    model_domain.RenumberNodes();
     const csmp::Index nn_key = model.Database().StorageKey("node number");
     // testing that the boundary flags match
-    for ( size_t i{0U}; i<vset.Vertices(); i++ ) { // converting variable value into integer
-         BOX_BOUNDARY nodal_bflag = model_domain.N( static_cast<size_t>(model_domain.N(i)->Read(nn_key)) )->AtBoundary();
-         _test( vset.BFlag(i) == static_cast<int8_t>(nodal_bflag) );
-         if ( verbose_ && vset.BFlag(i) != static_cast<int8_t>(nodal_bflag) ) {
-              cout <<"\nnode "<< model_domain.N(i)->Idx() <<": "<< parseBoundary( nodal_bflag );
-              cout <<" vs. "<< parseBoundary( static_cast<BOX_BOUNDARY>(vset.BFlag(i)) ) << endl;
+    for ( size_t i{0U}; i<vset.Vertices(); i++ ) { // converting double value into integer
+         size_t       node_number = static_cast<size_t>(model_domain.N(i)->Read(nn_key));
+         BOX_BOUNDARY nodal_bflag = model_domain.N(i)->AtBoundary();
+         // IMPORTANT: because the nodes in regions are sorted by pointer values, 'node number' is needed to find the corresponding bflag in VSet
+         BOX_BOUNDARY vset_bflag  = static_cast<BOX_BOUNDARY>(vset.BFlag(node_number));
+         _test( vset_bflag == nodal_bflag );
+         if ( verbose_ && vset_bflag != nodal_bflag ) {
+              cout <<"\nnode "<< node_number <<", idx "<< model_domain.N(node_number)->Idx() <<": "<< parseBoundary( vset_bflag );
+              cout <<"(vset) vs. "<< parseBoundary( nodal_bflag ) <<"(rebuilt)"<< endl;
            }
       }
 
+    // repeat on model with recreated boundary conditions
     return isStrictlyBoxShaped( model );
- }
-
-/* does not work because element numbers are affected by face creation
-
-    // numbering the faces that were newly created
-    const csmp::Index fn_key = model.Database().StorageKey("face number");
-    size_t fcount{ model.Mesh().Elements() };
-    for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit )
-      (*fit).Store( fn_key, makeScalar(PLAIN, static_cast<double>(fcount++) ) );
-      
-    // creating VSet for testing
-    VSet<3U>  vset2;
-    const bool preserve_original_numbering{ true };
-    model.OutputMeshTo( vset2, preserve_original_numbering );
-*/
+    
+ } // end TestBoundaryFlagRecreation
 
 
 

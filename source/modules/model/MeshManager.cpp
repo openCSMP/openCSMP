@@ -266,7 +266,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 
   cout << "\nMeshManager<" << dim << ">::Initialize: ";
   cout << "input VSet contains the following finite element types:\n\t";
-  for ( auto iit : input_etypes ) {
+  for ( const auto& iit : input_etypes ) {
       cout << parseFiniteElementType( iit ) << "  ";
       if ( !fem_manager_.ContainsElementType( iit ) ) {
         cerr << "\n\n\tFinite element type not available: " << parseFiniteElementType( iit ) << endl;
@@ -296,7 +296,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       vector<double> coord( dim );
       const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
       for ( size_t idx = 0U; idx < vset.Vertices(); ++idx ) {
-           for ( auto j{0U}; j<dim; ++j ) coord[j] = vset.P( j, idx );
+           for ( uint32_t j{0U}; j<dim; ++j ) coord[j] = vset.P( j, idx );
            nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars,
                                       static_cast<BOX_BOUNDARY>(vset.BFlag(idx)),
                                       static_cast<TOPOTYPE>(vset.BREP_Flag(idx)) ) );

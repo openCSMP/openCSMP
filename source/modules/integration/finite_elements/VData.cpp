@@ -1751,10 +1751,17 @@ void VData::Out() const
        
      // gflags
      // ------
-     if ( !bflags.empty() ) cout <<"\nGeometry classification flags 'gflags' (TOPOTYPE):"<< endl;
-     n_node = 0U;
-     for ( auto gf=gflags_.begin(); gf!=gflags_.end(); gf++ )
-       cout << n_node++ <<": \t"<< parseTopology( static_cast<TOPOTYPE>(*gf) ) << endl;
+     if ( !gflags_.empty() ) {
+         auto min = *min_element( gflags_.begin(), gflags_.end() );
+         auto max = *max_element( gflags_.begin(), gflags_.end() );
+         if ( min < max ) {
+             cout <<"\nGeometry classification flags 'gflags' (TOPOTYPE):"<< endl;
+             n_node = 0U;
+             for ( auto gf=gflags_.begin(); gf!=gflags_.end(); gf++ )
+               cout << n_node++ <<": \t"<< parseTopology( static_cast<TOPOTYPE>(*gf) ) << endl;
+           }
+         else cout <<"\n"<<"Warning: geometry classification flags 'gflags'(TOPOTYPE) are all the same."<< endl;
+       }
        
      // node manifolds, if any
      // ----------------------

@@ -29,7 +29,9 @@ Node<dim>::Node()
     Initialises everything except for parent element related vectors.
 */
 template<uint32_t dim>
-Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs,
+Node<dim>::Node( size_t idx,
+                 const Point<dim>& pt,
+                 const LocalVariables& lvs,
                  BOX_BOUNDARY boundary_flag, TOPOTYPE topotype )
  : LocalVariableStorage<dim,Node>(lvs),
    xyz_(pt),
