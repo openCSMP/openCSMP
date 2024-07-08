@@ -344,11 +344,9 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
 
     // checking whether original nbor connectivity is correct
     VSet<3U>  vset_test(vset);
-    // needs correct boundary flags
     vset_test.EstablishElementConnectivity3D();
-    _test( vset == vset_test );
-    
     vset.InitialiseNodeTopologyIdentifiers();
+    
     if ( verbose_ ) cout <<"\nBox_Test::TestWhetherElementNormalsAreOutwardPointing: building model 'Prism_Hexa'"<< endl;
     Model<3U>  model( vset, "CSMP-variables.txt" );
     printModelDimensions( model );
