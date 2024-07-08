@@ -337,15 +337,11 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
     VSet<3U>  vset;
     const bool bSkewed{false};
     create_Prism_Hexa_VSet( vset, bSkewed );
+    vset.InitialiseNodeTopologyIdentifiers();
 
     // checking the Face nodes of element 1
     const size_t element{1ul};
     printNeighboursOfElement( vset, element );
-
-    // checking whether original nbor connectivity is correct
-    VSet<3U>  vset_test(vset);
-    vset_test.EstablishElementConnectivity3D();
-    vset.InitialiseNodeTopologyIdentifiers();
     
     if ( verbose_ ) cout <<"\nBox_Test::TestWhetherElementNormalsAreOutwardPointing: building model 'Prism_Hexa'"<< endl;
     Model<3U>  model( vset, "CSMP-variables.txt" );
