@@ -23,31 +23,33 @@ private:
   void runCurrent(); // Ansys models
 
   template<uint32_t dim>
-  size_t InputElementAreaAsVolumeVariable( Model<dim>& model, Boundary<dim>& boundary, const char* variableName );
+  size_t InputElementAreaAsVolumeVariable( Model<dim>&, Boundary<dim>&, const char* variableName );
 
   template<uint32_t dim>
-  void TestBoxBoundary( Model<dim>& model, const std::string& boundary, VTU_Interface<dim>& vtu );
+  void TestBoxBoundary( Model<dim>&, const std::string& boundary, VTU_Interface<dim>& );
 
   template<uint32_t dim>
-  void CheckFaceNeighbors( const Boundary<dim>& boundary );
+  void CheckFaceNeighbors( const Boundary<dim>& );
 
   template<uint32_t dim>
-  void CheckNodeFlags( const Boundary<dim>& boundary, BOX_BOUNDARY flag, bool interiorOnly = false );
+  void CheckNodeFlags( const Boundary<dim>&, BOX_BOUNDARY flag, bool interiorOnly = false );
 
   template<uint32_t dim>
-  void CheckFaceUnitNormalOrientation( const Boundary<dim>& boundary );
+  void CheckFaceUnitNormalOrientation( const Boundary<dim>& );
   
   /// using prism_test because it has a host of element types
   void UnitNormalTest3D();
 
   template<uint32_t dim>
-  void CheckNodeParents( const Boundary<dim>& boundary );
+  void CheckNodeParents( const Boundary<dim>& );
 
   template<uint32_t dim>
-  void ElementNodes( const csmp::Region<dim>& region );
+  void ElementNodes( const csmp::Region<dim>& );
 
   template<uint32_t dim>
-  void NoSurfaceElementsAsNodeParents( const Region<dim>& region );
+  void NoSurfaceElementsAsNodeParents( const Region<dim>& );
+
+  bool Test_ChangeBoundaryStatus();
 };
 
 } // csmp

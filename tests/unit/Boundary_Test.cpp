@@ -8,6 +8,7 @@
 #include "VTU_Interface.h"
 #include "ANSYS_Interface.h"
 #include "variableOperations.h"
+#include "vsetMakers.h"
 
 
 using namespace std;
@@ -72,6 +73,7 @@ void Boundary_Test::run()
   runLegacy();
   runCurrent();
   UnitNormalTest3D();
+  _test(Test_ChangeBoundaryStatus());
 }
 
 
@@ -613,5 +615,51 @@ void Boundary_Test::runCurrent()
       }
 
   } // end runCurrent
+  
+
+/*
+    sets the flags of node variables on a boundary and tests whether this was accomplished.
+*/
+bool Boundary_Test::Test_ChangeBoundaryStatus()
+ {
+    VSet<3U>  vset;
+    create_Prism_Hexa_VSet( vset, false );
+    vset.InitialiseNodeTopologyIdentifiers();
+    Model<3U>  model( vset, "CSMP-variables.txt" );
+    const bool recreate_box_boundary_flags_before{false}; // do not change any node flags
+    model.EstablishBoxBoundariesFromNodeFlags( recreate_box_boundary_flags_before );
+    model.InputPropertyValue( "nodal variable", makeScalar(ANY,0.) );
+    model.InputPropertyValue( "nodal vector", makeVector(ANY,ANY,ANY,0.,0.,0.) );
+    
+    const VARIABLE_FLAG test_flag{ DIRICH };
+    Boundary<3U>& front(model.Boundary("FRONT"));
+    front.ChangePropertyStatus("nodal variable", test_flag, INTERIOR );
+    const  csmp::Index nsc_key = model.Database().StorageKey("nodal variable");
+    
+    // testing
+    size_t errors{0ul};
+    if ( verbose_ ) {
+        cout<<"\n"<<"Boundary_Test::Test_ChangeBoundaryStatus: new values:\n";
+        cout <<"INTERIOR flags:\n";
+        for ( auto nit=front.NodesBegin(); nit!=front.PerimeterNodesBegin(); ++nit ) {
+             ScalarVariable sc;
+             (*nit)->Read( nsc_key, sc );
+             cout <<" "<< parseStatus( sc.Flag() ) <<":"<< parseBoundary( (*nit)->AtBoundary() );
+             if ( test_flag != sc.Flag() ) errors++;
+          }
+        cout <<"\n"<<"PERIMETER flags:\n";
+        for ( auto nit=front.PerimeterNodesBegin(); nit!=front.NodesEnd(); ++nit ) {
+             ScalarVariable sc;
+             (*nit)->Read( nsc_key, sc );
+             cout <<" "<< parseStatus( sc.Flag() ) <<":"<< parseBoundary( (*nit)->AtBoundary() );
+             if ( test_flag != ANY ) errors++;
+          }
+      }
+      
+    if ( errors != 0u ) return false;
+    return true;
+    
+ } // end Test_ChangeBoundaryStatus
+
 
 } // csmp
