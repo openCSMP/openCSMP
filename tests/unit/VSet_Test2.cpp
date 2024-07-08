@@ -1,25 +1,25 @@
-#include "VSet_TestCase.h"
+#include "VSet_Test2.h"
 #include "Boundary.h"
 #include "Region.h"
+#include "Model.h"
 #include "ModelTopology.h"
 #include "ScalarVariable.h"
 #include "ArrayVariable.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "vsetMakers.h"
 #include "VTK_Interface.h"
-#include "ANSYS_Interface.h"
 
 using namespace std;
 
 namespace csmp {
-VSet_TestCase::VSet_TestCase( bool verbose )
+VSet_Test2::VSet_Test2( bool verbose )
  : verbose_(verbose)
 {
-    this->setName("VSet_TestCase");
+    this->setName("VSet_Test2");
 }
 
 
-VSet_TestCase::~VSet_TestCase()
+VSet_Test2::~VSet_Test2()
 {
 }
 
@@ -28,18 +28,18 @@ VSet_TestCase::~VSet_TestCase()
       Testing whether processing of the VSet produces valid model with correct line-element normal
       orientations etc.
 */
-void VSet_TestCase::run()
+void VSet_Test2::run()
 {
    _test( Test_EstablishElementConnectivity2D() );
    _test( Test_EstablishElementConnectivity3D() );
    _test( Test_ModelConstructionAndSaving2D() );
    Test_ModelConstructionAndSaving3D(); // uses FracBox and other models
     
-} // end VSet_TestCase
+} // end VSet_Test2
 
 
 
-bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
+bool VSet_Test2::Test_ModelConstructionAndSaving2D()
   {
     enum{DIM=2U};
     if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
@@ -77,7 +77,7 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     // ----------------------------------------------------
     {
       const bool vset_only_contains_elements{ false };
-      Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", vset_only_contains_elements );
+      Model<DIM>  model( mesh_topology, vset, "VSet_Test2-variables.txt", vset_only_contains_elements );
       printModelDimensions( model, true );
       _test( printRangeOfVariable( model, "element number" ) <= vset.Elements() );
       _test( printRangeOfVariable( model, "node number" ) <= vset.Vertices() );
@@ -129,7 +129,7 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
       // model consists only of elements
       mesh_topology = create_MeshPatchWithLineElements_VSet( vset );
       const bool vset_only_contains_elements{ true };
-      Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", vset_only_contains_elements );
+      Model<DIM>  model( mesh_topology, vset, "VSet_Test2-variables.txt", vset_only_contains_elements );
       printModelDimensions( model, true );
       // checking single element regions
       //model.RegionsOut();
@@ -162,7 +162,7 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
  
   
 // various input models from vsetMakers.h
-void VSet_TestCase::Test_ModelConstructionAndSaving3D()
+void VSet_Test2::Test_ModelConstructionAndSaving3D()
   {
     enum{DIM=3U};
   
@@ -184,7 +184,7 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
     if ( verbose_ ) cout <<"Building ModelOutput (only regions)..."<<endl;
     VSet<3U> vset;
     create_Tetra_VSet( vset );
-    Model<3U>    modelOutput1( vset, "VSet_TestCase-variables.txt" );
+    Model<3U>    modelOutput1( vset, "VSet_Test2-variables.txt" );
     Region<3U>&  model_domain{ modelOutput1.Region("Model") };
     const size_t elementCount1( model_domain.Cells() );
     const size_t nodeCount1( model_domain.Nodes() );
@@ -222,7 +222,7 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
         ModelTopology topology;
         VSet<3U>      vset;
         create_FracBox( topology, vset );
-        Model<3U>    modelOutput2( topology, vset, "VSet_TestCase-variables.txt", true );
+        Model<3U>    modelOutput2( topology, vset, "VSet_Test2-variables.txt", true );
         
         const Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
         const Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");
@@ -276,7 +276,7 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
     {
       VSet<3U> vset;
       create_Tetra_VSet( vset );
-      Model<3U> modelOutput3( vset, "VSet_TestCase-variables.txt" );
+      Model<3U> modelOutput3( vset, "VSet_Test2-variables.txt" );
       
       // 'diffusity' for FV scheme
       csmp::Index diff_key = modelOutput3.CreateProperty( "diffusivity", "D", "m2/s", SCALAR, ELEMENT );
@@ -309,13 +309,13 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
           ePtr->Read( s, sip, seipTensorKey, tvPlain );
           _test( tvPlain == tv );
         }
-      modelOutput3.OutputToBinaryFile("VSet_TestCase_modelOutput3");
+      modelOutput3.OutputToBinaryFile("VSet_Test2_modelOutput3");
     }
     
     // bringing the model back from disk
     // ---------------------------------
     {
-      Model<3> modelInput3( string("VSet_TestCase_modelOutput3") );
+      Model<3> modelInput3( string("VSet_Test2_modelOutput3") );
 
       const Index faipVectorKey( modelInput3.Database().StorageKey("faip vector 1") );
       const Index seipTensorKey( modelInput3.Database().StorageKey("seip tensor 1") );
@@ -354,7 +354,7 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
      uses specific line element model from vset_makers
      SKM 1/10/2022
 */
-bool VSet_TestCase::Test_EstablishElementConnectivity2D()
+bool VSet_Test2::Test_EstablishElementConnectivity2D()
  {
     VSet<2U> vset;
     create_MeshPatchWithLineElements_VSet( vset );
@@ -366,7 +366,7 @@ bool VSet_TestCase::Test_EstablishElementConnectivity2D()
     vset.EstablishElementConnectivity2D();
 
     // comparison
-    cout <<"\nVSet_TestCase::Test_EstablishElementConnectivity2D: errors if any: ";
+    cout <<"\nVSet_Test2::Test_EstablishElementConnectivity2D: errors if any: ";
     auto itb=backup_vset.PfvertsBegin();
     auto elmt{0U}, vec_mismatches{0U};
     for ( auto it=vset.PfvertsBegin(); it!=vset.PfvertsEnd(); ++it, ++itb ) {
@@ -394,7 +394,7 @@ bool VSet_TestCase::Test_EstablishElementConnectivity2D()
 
 
 
-bool VSet_TestCase::Test_EstablishElementConnectivity3D()
+bool VSet_Test2::Test_EstablishElementConnectivity3D()
  {
     VSet<3U> vset;
     create_Prism_Hexa_VSet( vset);
@@ -408,7 +408,7 @@ bool VSet_TestCase::Test_EstablishElementConnectivity3D()
     vset.EstablishElementConnectivity3D();
 
     // comparison - but only checking for the existing element neighbors since atBoundary(elmt) is not used further
-    cout <<"\nVSet_TestCase::Test_EstablishElementConnectivity3D: errors if any: ";
+    cout <<"\nVSet_Test2::Test_EstablishElementConnectivity3D: errors if any: ";
     auto itb=backup_vset.PfvertsBegin();
     auto elmt{0U}, vec_mismatches{0U};
     for ( auto it=vset.PfvertsBegin(); it!=vset.PfvertsEnd(); ++it, ++itb ) {
@@ -437,7 +437,7 @@ bool VSet_TestCase::Test_EstablishElementConnectivity3D()
 /**
    Creates model and writes boundary flags to 'nodal variable' variable
 */
-void VSet_TestCase::BoundaryFlagsToVTK( VSet<3>& vset )
+void VSet_Test2::BoundaryFlagsToVTK( VSet<3>& vset )
  {
     const string variable_file{"CSMP-variables.txt"};
     Model<3> model( vset, variable_file.c_str() );

@@ -244,8 +244,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   cout <<"\nMeshManager<"<< dim <<">::Initialize: building mesh with "<< vset.Elements() <<" elements, "<< vset.Vertices() <<" nodes, ";
   cout << vset.Faces() <<" faces, and "<< vset.Interfaces() <<" interfaces.\n";
   if ( vset.HybridElementTypeMesh() ) cout <<"mesh consists of multiple element types.\n";
-  if ( vset.Faces() > 0 ) cout <<"mesh contains 'Boundary' objects.\n";
-  if ( vset.Interfaces() > 0 ) cout <<"mesh contains 'SplitBoundary' objects.\n";
+  if ( vset.Faces() > 0 ) cout <<"mesh contains "<< vset.Faces() <<"'Boundary' objects.\n";
+  if ( vset.Interfaces() > 0 ) cout <<"mesh contains "<< vset.Interfaces() <<"'SplitBoundary' objects.\n";
   cout << endl;
 
   // ------------------------------------------------------------------------------------
@@ -584,7 +584,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
               
               // 1. Assigning equidimensional InterFace-type neighbors first
               // -----------------------------------------------------------
-              const auto neighbors( itf.Neighbors() );
+              const auto neighbors{ itf.Neighbors() };
               for ( uint32_t j{0U}; j<neighbors; ++j )
                 {
                    // if there is a neighbor (as is the case if the stored index is greater than zero)
@@ -601,8 +601,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                      }
 
                    // NB: the interface number in the container is the number from the VSet - elements - faces
-                   // because the interface container indexes from 0..n-1
-                   const int64_t neighbor_idx = index - static_cast<int64_t>(n_elmts - n_faces);
+                   // because the interface container indexes from 0..n-1 (int64_t ~long used by next() )
+                   const int64_t neighbor_idx = index - static_cast<int64_t>(n_elmts + n_faces);
                    itf.Assign( j, &(*next(interfaces_.begin(),neighbor_idx)) );
                 }
 

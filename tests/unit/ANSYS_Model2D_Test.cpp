@@ -287,7 +287,7 @@ void ANSYS_Model2D_Test::Test_ANSYS_ModelConstructionAndSaving2D( const std::str
 
     // build model from mesh
     const bool get_domain_info_from_regions_file{true};
-    Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", get_domain_info_from_regions_file );
+    Model<DIM>  model( mesh_topology, vset, "VSet_Test2-variables.txt", get_domain_info_from_regions_file );
     printModelDimensions( model, true );
     
     // saving model to binary

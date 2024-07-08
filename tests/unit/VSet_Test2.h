@@ -1,23 +1,23 @@
-#ifndef VSET_TESTCASE_H
-#define VSET_TESTCASE_H
+#ifndef CSMP_VSET_TEST_2_H
+#define CSMP_VSET_TEST_2_H
 
-#include "Model.h"
 #include "Test.h"
 
 namespace csmp {
 
+template<uint32_t> class VSet;
 template<uint32_t> class Model;
 
-/**
-       Tests the use of VSet in model construction 
+/**  Second test focussing on the VSet's extended functionality (higher level)
+       Tests the use of VSet in model construction
        storage to disk,
        and reconstruction from binary file.
 */
-class VSet_TestCase : public Test
+class VSet_Test2 : public Test
   {
     public:
-      explicit VSet_TestCase( bool verbose=false );
-      ~VSet_TestCase();
+      explicit VSet_Test2( bool verbose=false );
+      ~VSet_Test2();
       
       virtual void run();
     
@@ -40,4 +40,4 @@ class VSet_TestCase : public Test
 
 } // csmp
 
-#endif // VSET_TESTCASE_H
+#endif // CSMP_VSET_TEST_2_H

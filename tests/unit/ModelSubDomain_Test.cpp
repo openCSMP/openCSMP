@@ -24,17 +24,11 @@ namespace csmp {
 
 
 /**
-     Questions
-     - are the flags correctly assigned
-     - establish clear responsibility sharing between MeshManager and AllElements region !
-
      Observations
      - AllElements in single domain model is non-unique, but should be unique
-     
-     
-     TODO: so far (4/1/17), this test only checks the writing and reading of the model from file;
+      
+     TODO: test wide ranging functionality of ModelSubDomain: so far (4/1/17), this test only checks the writing and reading of the model from file;
      add tests for the other important parts of the functionality.
- 
 */
 void ModelSubDomain_Test::run()
   {
@@ -54,29 +48,32 @@ void ModelSubDomain_Test::run()
          VSet<3U>   vset;
          const bool skewed(false);
          create_Prism_Hexa_VSet( vset, skewed );
+         vset.RemoveData("element number");
          Model<3U>   model1( vset );
         
-         //model1.CreateProperty( "box flag", "none", SCALAR, NODE );
-         //model1.CreateProperty( "box flag element", "none", SCALAR, ELEMENT );
-         //boxFlagsToVariable( model1, "box flag", "box flag element" );
-         //VTK_Interface<3U>  vtk_output;
-         //vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 0 );
-         //vtk_output.OutputDataToVTK( model1, "element_flag", "box flag element", 0 );
-        
+         model1.CreateProperty( "box flag", "bFn", "none", SCALAR, NODE );
+         model1.CreateProperty( "box flag element", "bFe", "none", SCALAR, ELEMENT );
+         boxFlagsToVariable( model1, "box flag", "box flag element" );
+         if ( verbose_ ) {
+              VTK_Interface<3U>  vtk_output;
+              vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 0 );
+              vtk_output.OutputDataToVTK( model1, "element_flag", "box flag element", 0 );
+           }
+           
          cerr <<"\nModelSubDomain_Test::run: original model.";
-         // TODO: numbering of boundary nodes does not seem to be correct
-         //vset.Out();
-         //if ( verbose ) model1.Out();
+         if ( verbose_ ) model1.Out();
         
          model1.OutputToBinaryFile("ModelSubDomain_Test");
         
          // testing: model2.InputFromBinaryFile("ModelSubDomain_Test");
          Model<3U>  model2( string("ModelSubDomain_Test") );
-         //vtk_output.OutputDataToVTK( model2, "node_flag", "box flag", 1 );
-         //vtk_output.OutputDataToVTK( model2, "element_flag", "box flag element", 1 );
-        
+         if ( verbose_ ) {
+              VTK_Interface<3U>  vtk_output;
+              vtk_output.OutputDataToVTK( model2, "node_flag", "box flag", 1 );
+              vtk_output.OutputDataToVTK( model2, "element_flag", "box flag element", 1 );
+           }
          cerr <<"\nModelSubDomain_Test::run: model reconstructed from disk.";
-         //if ( verbose ) model2.Out();
+         if ( verbose_ ) model2.Out();
         
         // TESTING
          _test( CompareModelSubdomains( model1.Region("Model"), model2.Region("Model"), verbose ) );

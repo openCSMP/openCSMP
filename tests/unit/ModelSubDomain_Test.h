@@ -108,7 +108,6 @@ namespace csmp {
 */
 class ModelSubDomain_Test : public Test {
   public:
-  
     virtual void run();
 
     /// tests method that creates neighbor connectivity inside of CSMP
@@ -119,6 +118,8 @@ class ModelSubDomain_Test : public Test {
     bool CompareModelSubdomains( const ModelSubDomain<dim,simplicial_complex>&,
                                  const ModelSubDomain<dim,simplicial_complex>&,
                                  bool verbose );
+  private:
+    const bool verbose_ = false;
 };
 
 } // end csmp
