@@ -41,6 +41,7 @@ void FiniteElementPolicy_Test::InitialiseModel()
  {
     VSet<3U> vset;
     create_Prism_Hexa_VSet( vset, false );
+    vset.RemoveData("element number");
     model_ptr_ = new Model<3U>( vset, "Variables_Test.txt" );
     e_ptr_     = model_ptr_->Region("Model").E(0);
  }

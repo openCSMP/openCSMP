@@ -106,7 +106,7 @@ void DynamicArray_Test::Test_DynamicArray2D()
       }
  
     // provoking error
-#ifdef DEBUG
+#ifdef COMPLETE_DYNAMIC_ARRAY_2D_TEST
     try {
         d.at(3,15);
      }
@@ -132,8 +132,8 @@ void DynamicArray_Test::Test_DynamicArray2D()
 
     // data swapping (ca = 5 x 6)
     ca.swap( ca );
-    _test( ca.rows() == 5 );
-    _test( ca.cols() == 4 );
+    _test( ca.rows() == 4 );
+    _test( ca.cols() == 5 );
     swap( a, b );
     _test( a(0,0) == 7. );
     

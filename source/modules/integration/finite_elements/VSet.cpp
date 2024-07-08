@@ -400,6 +400,11 @@ bool VSet<dim>::AddData( const char* s, const PropertyData& data )
 template<uint32_t dim>
 void VSet<dim>::RemoveData( const char* s )
 {
+   if ( property_map_.empty() || property_map_.count(s) == 0 ) {
+        cerr <<"\n"<<"VSet<dim>::RemoveData: WARNING: vset does not contain property '";
+        cerr << s <<"''; nothing was done"<< endl;
+        return;
+     }
    property_map_.erase(s);
 
 } // end RemoveData
