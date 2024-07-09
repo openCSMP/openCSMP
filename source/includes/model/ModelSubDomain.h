@@ -308,6 +308,7 @@ class ModelSubDomain {
     /// establishes interior vs. exterior simplices and nodes; returns index of first boundary cell
     size_t  PartitionCellVector();
     size_t  PartitionCellVectorForBoundary();
+    size_t  PartitionCellVectorForSplitBoundary();
 
     const PropertyDatabase<dim>&        pref_;
     std::string                         subdomain_name_;         ///< passed down when domain is created so that it can be referred to

@@ -194,16 +194,16 @@ void ANSYS_Interface::ReadMeshBinary( const string&  meshfile,
     ifstream ifs_asc( asc_name.c_str() );
     if ( !ifs_asc.is_open() )
          csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                    "ASCII geometry input file with extension '.asc' could not be opened");
+                                  "ASCII geometry input file with extension '.asc' could not be opened");
     
     if ( !ReadTitleASCII( ifs_asc, file_header_ ) )
       csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                 "File header not read correctly");
+                               "File header not read correctly");
 
     // initialise object_specs_ that is used in the construction of the model topology further below
     if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) )
       csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                 "Region and element type information not read correctly");
+                               "Region and element type information not read correctly");
    
     convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_, dim );
     ifs_asc.close(); // '*.asc' geometry file
@@ -215,7 +215,7 @@ void ANSYS_Interface::ReadMeshBinary( const string&  meshfile,
 
     if ( (ifs_dat=fopen( dat_name.c_str(), "rb" )) == NULL )
       csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                     "DAT input file with extension '.dat' could not be opened");
+                               "DAT input file with extension '.dat' could not be opened");
 
     if( csmp_error.Verbose() )
     {
@@ -225,36 +225,36 @@ void ANSYS_Interface::ReadMeshBinary( const string&  meshfile,
 
     if ( !ReadNodeCoordinatesBinary( ifs_dat, vset ) ) {
          csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                       "Node coordinates not read correctly");
+                                  "Node coordinates not read correctly");
       }
     if ( !ReadBoundaryFlagsAndConditionsBinary( ifs_dat, vset ) ) {
          csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                       "Boundary flags and conditions not read correctly");
+                                  "Boundary flags and conditions not read correctly");
       }
     if ( !ReadPelementBinary( ifs_dat, vset ) ) {
          csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                       "Element types not read correctly");
+                                  "Element types not read correctly");
       }
     convert_ANSYS_To_CSMP_FiniteElementTypes( vset, isoparametric_ );
 
     if ( !ReadPlistBinary( ifs_dat, vset ) ) {
          csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                       "Nodes per element information not read correctly");
+                                  "Nodes per element information not read correctly");
       }
     if ( !ReadPfvertsBinary( ifs_dat, vset ) ) {
          csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                       "Element neighbor information not read correctly");
+                                  "Element neighbor information not read correctly");
       }
     if ( !ReadPmaterialBinary( ifs_dat, vset ) ) {
          csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                       "Material property identifiers for elements not read correctly");
+                                  "Material property identifiers for elements not read correctly");
       }
     fclose( ifs_dat ); // '*.dat' pdata file
 
     if ( object_specs_.size() != object_elements_.size() )
     {
       csmp_error.Note( ERROR, "ANSYS_Interface::ReadMeshBinary():",
-                                "Mismatch in object names and object specifiers");
+                              "Mismatch in object names and object specifiers");
     }
     else if( csmp_error.Verbose() )
     {

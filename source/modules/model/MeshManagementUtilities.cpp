@@ -145,7 +145,10 @@ size_t detectDuplicateCells( typename vector<CELL<dim>*>::const_iterator first,
          // creating cell keys from their node pointers
          set<Node<dim>*> node_set;
          const auto n_nodes{ (*first)->Nodes() };
-         for ( auto i{0U}; i<n_nodes; i++ ) node_set.insert( (*first)->N(i) );
+         if constexpr( is_same<CELL<dim>,InterFace<dim>>::value )
+           for ( uint32_t i{0U}; i<n_nodes/2u; i++ ) node_set.insert( (*first)->N(i) );
+         else
+           for ( uint32_t i{0U}; i<n_nodes; i++ ) node_set.insert( (*first)->N(i) );
          // recording the cells
          auto it = potential_duplicates.insert( make_pair( node_set, set<CELL<dim>*>{(*first)} ) );
          // if there is a cell with the same nodes but a different pointer, it is recorded
