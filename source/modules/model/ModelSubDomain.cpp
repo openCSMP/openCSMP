@@ -456,14 +456,22 @@ pair<CELL_SHAPE,bool>  ModelSubDomain<dim,CELL>::SingleCellShapeDomain() const
 template<uint32_t dim, template<uint32_t> class CELL>
 void  ModelSubDomain<dim,CELL>::IdentifyPerimeter()
  {
-    // 0. recreate Pfverts information for testing
-    //EstablishNeighborConnectivity();
-   
-    // 1. putting the perimeter cells at the end of the elmt_vec and sorting
+    // 1. REGION case: putting the perimeter cells at the end of the elmt_vec and sorting
     //    interior and perimeter cell ranges subsequently
     // ----------------------------------------------------
-    const size_t first_bd_elmt = PartitionCellVector();
-    assert( first_bd_elmt <= cell_vec_.size() );
+    if constexpr ( is_same<CELL<dim>,Element<dim> >::value ) {
+        const size_t first_bd_elmt = PartitionCellVector();
+        assert( first_bd_elmt <= cell_vec_.size() );
+      }
+
+    // 2. BOUNDARY case: same as above but for lower-dim region
+    // --------------------------------------------------------
+    if constexpr ( is_same<CELL<dim>,Face<dim> >::value ) {
+        const size_t first_bd_elmt = PartitionCellVectorForBoundary();
+        assert( first_bd_elmt <= cell_vec_.size() );
+      }
+
+    // no node vectors in SplitBoundary
 
  } // end IdentifyPerimeter
 
@@ -892,6 +900,168 @@ cout.flush();
     return cell_vec_.size() - boundary_elmts.size();
 
  } // end PartitionCellVector
+
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t  ModelSubDomain<dim,CELL>::PartitionCellVectorForBoundary()
+ {
+    ErrorHandler&  csmp_error(ErrorHandler::Instance());
+
+    if ( cell_vec_.empty() )
+      throw logic_error( (string("ModelSubDomain<dim>::PartitionCellVectorForBoundary: method called on empty boundary: ") + Name()).c_str() );
+
+    sort( cell_vec_.begin(), cell_vec_.end() );
+
+    // -----------------------------------------------------------------
+    // 1. distinguishing boundary from interior cells, same for nodes
+    //   (at this point the cells and nodes are already known)
+    // -----------------------------------------------------------------
+    set<CELL<dim>*> interior_cells, perimeter_cells;
+    set<Node<dim>*>                 perimeter_nodes;
+    set<pair<CELL<dim>*,uint32_t> > perimeter_faces;
+
+    // 1.1 If all cells have the same spatial dimension
+    // ---------------------------------------------------
+      {
+        for ( auto& eit : cell_vec_ )
+          {
+            if constexpr( dim == 2u ) {
+                 if ( !eit->IsLine() )
+                   throw logic_error( (string("ModelSubDomain<dim>::PartitionCellVectorForBoundary: line elements required for a 2D-boundary: ") + Name()).c_str() );
+              }
+            else if constexpr( dim == 3u ) {
+                 // boundaries in 3D models must consist out of surface or line elements
+                 if ( !eit->IsVolume() )
+                   throw logic_error( (string("ModelSubDomain<dim>::PartitionCellVectorForBoundary: surface elements required for a 3D-boundary: ") + Name()).c_str() );
+              }
+            // identifying the boundary faces and their nodes
+            // (each face potentially has a neighbor cell)
+            auto nbors_that_belong_to_group{ eit->Neighbors() };
+            const auto n_faces{ eit->Faces() };
+            for ( auto i{0U}; i<n_faces; i++ )
+              // if the face is at a model boundary or has a neighbor that does not belong to the region
+              if ( !eit->Neighbor(i) || !binary_search( cell_vec_.begin(), cell_vec_.end(), eit->Neighbor(i)) )
+                {
+                  perimeter_faces.insert( make_pair( eit, i ) );
+                  assert( eit->FE() != nullptr );
+                  for ( const auto& j : eit->FE()->NodesOfFace(i) ) {
+                       assert( eit->N(j) );
+                       perimeter_nodes.insert( eit->N(j) );
+                    }
+                  // counting neighbors
+                  nbors_that_belong_to_group--;
+                }
+
+            // storing the distinguished cells in the respective vectors
+            // ------------------------------------------------------------
+            // interior cells
+              if ( nbors_that_belong_to_group == eit->Neighbors() )
+                interior_cells.insert( eit );
+              // cells with at least one face on the region boundary
+              else
+                perimeter_cells.insert( eit );
+          }
+
+       } // end identifying the perimeter cells of the Boundary
+
+
+    // --------------------------------------------------
+    // 2. rebuilding the cell vector
+    // --------------------------------------------------
+    assert( perimeter_cells.size() + interior_cells.size() == cell_vec_.size() );
+    // appending the boundary cell vector<double> to the interior cell vector
+    cell_vec_.assign( interior_cells.begin(), interior_cells.end() );
+    back_insert_iterator<vector<CELL<dim>*> >  back_it(cell_vec_);
+    copy( perimeter_cells.begin(), perimeter_cells.end(), back_it );
+
+    // trim excess memory from end of vector
+    cell_vec_.shrink_to_fit();
+
+
+    // --------------------------------------------------
+    // 3. creating the boundary face vector
+    // --------------------------------------------------
+    if ( !bd_face_vec_.empty() ) bd_face_vec_.clear();
+    // bd_face_vec_ is only available if there are boundary cells
+    if (perimeter_cells.size() > 0)
+      {
+        bd_face_vec_.reserve(cell_vec_.size() - perimeter_cells.size());
+        //       parent cell of face, face
+        typename set<pair<CELL<dim>*,uint32_t> >::const_iterator  bfit(perimeter_faces.begin());
+        typename set<pair<CELL<dim>*,uint32_t> >::const_iterator  ffit(perimeter_faces.begin());
+        vector<uint32_t>  bface_data;
+        size_t            counter(0U);
+
+        while ( bfit != perimeter_faces.end() ) {
+            assert((*ffit).first == cell_vec_[counter + interior_cells.size()]);
+            bface_data.reserve(3);
+            // as long as we considering faces of the same cell
+            while ( (*bfit).first == (*ffit).first ) {
+                bface_data.push_back((*bfit).second);
+                bfit++;
+                if ( bfit == perimeter_faces.end() ) break;
+              }
+            ffit = bfit;
+            assert( bface_data.size() > 0 );
+            bd_face_vec_.push_back(bface_data);
+            bface_data.clear();
+            counter++;
+          }
+        bd_face_vec_.shrink_to_fit();
+        // debug checks
+        for ( auto it=bd_face_vec_.begin(); it!=bd_face_vec_.end(); ++it )
+          assert( (*it).size() >= 1 );
+        assert(bd_face_vec_.size() == Cells() - InteriorCells());
+     }
+
+
+    // --------------------------------------------------
+    // 4. building and partitioning the node vector
+    //   (which SplitBoundary objects do not have)
+    // --------------------------------------------------
+    if ( !node_vec_.empty() )
+      {
+        assert( node_vec_.size() >= perimeter_nodes.size() );
+        first_bd_node_ = node_vec_.size() - perimeter_nodes.size();
+        
+        // rebuilding and sorting the node vector (noting that set nodes are already sorted)
+        // ---------------------------------------------------------------------------------
+        sort( node_vec_.begin(), node_vec_.end() );
+        // a temporary new node vector is created
+        vector<csmp::Node<dim>*>  temp;
+        temp.reserve(node_vec_.size());
+        // all nodes that are not in the boundary node vector are considered as interior nodes
+        for ( const auto& nit : node_vec_ ) {
+              assert( nit );
+              if ( perimeter_nodes.find(nit) == perimeter_nodes.end() )
+                temp.push_back( nit );
+          }
+        // second, the already sorted perimeter nodes are appended
+        for ( const auto& nit : perimeter_nodes )
+          temp.push_back( nit );
+        // now the temporary vector is assigned to the permanent one
+        assert( temp.size() == node_vec_.size() );
+        node_vec_ = std::move( temp );
+        node_vec_.shrink_to_fit();
+        
+        assert( first_bd_node_ <= node_vec_.size() );
+      }
+#ifdef MODEL_SUBDOMAIN_DEBUG
+cout <<"\nModelSubDomain<dim,CELL>::PartitionCellVectorForBoundary: '"<< Name() <<"': of the ";
+cout << cell_vec_.size() <<" cells, "<< boundary_elmts.size() <<" lie at the domain boundary."<< endl;
+cout.flush();
+#endif
+
+    return cell_vec_.size() - perimeter_cells.size();
+
+ } // end PartitionCellVectorForBoundary
+
+
+
 
 
 

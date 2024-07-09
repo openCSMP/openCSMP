@@ -17,7 +17,7 @@ public:
   virtual void run();
 
 private:
-  const static bool verbose_ = false;
+  const static bool verbose_ = true;
 
   void runLegacy(); // Ansys models TODO: refactor to use CSMP native models
   void runCurrent(); // Ansys models

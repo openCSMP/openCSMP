@@ -637,7 +637,7 @@ bool Boundary_Test::Test_ChangeBoundaryStatus()
     const  csmp::Index nsc_key = model.Database().StorageKey("nodal variable");
     
     // testing
-    size_t errors{0ul};
+    size_t interior_errors{0ul};
     if ( verbose_ ) {
         cout<<"\n"<<"Boundary_Test::Test_ChangeBoundaryStatus: new values:\n";
         cout <<"INTERIOR flags:\n";
@@ -645,18 +645,47 @@ bool Boundary_Test::Test_ChangeBoundaryStatus()
              ScalarVariable sc;
              (*nit)->Read( nsc_key, sc );
              cout <<" "<< parseStatus( sc.Flag() ) <<":"<< parseBoundary( (*nit)->AtBoundary() );
-             if ( test_flag != sc.Flag() ) errors++;
+             if ( test_flag != sc.Flag() ) interior_errors++;
           }
         cout <<"\n"<<"PERIMETER flags:\n";
         for ( auto nit=front.PerimeterNodesBegin(); nit!=front.NodesEnd(); ++nit ) {
              ScalarVariable sc;
              (*nit)->Read( nsc_key, sc );
              cout <<" "<< parseStatus( sc.Flag() ) <<":"<< parseBoundary( (*nit)->AtBoundary() );
-             if ( test_flag != ANY ) errors++;
+             if ( test_flag != ANY ) interior_errors++;
           }
       }
-      
-    if ( errors != 0u ) return false;
+ 
+    // PERIMETER
+    model.InputPropertyValue( "nodal variable", makeScalar(ANY,0.) ); // resetting flags
+    size_t perimeter_errors{0ul};
+    front.ChangePropertyStatus("nodal variable", test_flag, PERIMETER );
+    if ( verbose_ ) {
+        cout<<"\n"<<"Boundary_Test::Test_ChangeBoundaryStatus: new values:\n";
+        cout <<"COMPLETE flags:\n";
+        for ( auto nit=front.PerimeterNodesBegin(); nit!=front.NodesEnd(); ++nit ) {
+             ScalarVariable sc;
+             (*nit)->Read( nsc_key, sc );
+             cout <<" "<< parseStatus( sc.Flag() ) <<":"<< parseBoundary( (*nit)->AtBoundary() );
+             if ( test_flag != sc.Flag() ) perimeter_errors++;
+          }
+      }
+    // COMPLETE
+    model.InputPropertyValue( "nodal variable", makeScalar(ANY,0.) ); // resetting flags
+    size_t complete_errors{0ul};
+    front.ChangePropertyStatus("nodal variable", test_flag, COMPLETE );
+    if ( verbose_ ) {
+        cout<<"\n"<<"Boundary_Test::Test_ChangeBoundaryStatus: new values:\n";
+        cout <<"COMPLETE flags:\n";
+        for ( auto nit=front.NodesBegin(); nit!=front.NodesEnd(); ++nit ) {
+             ScalarVariable sc;
+             (*nit)->Read( nsc_key, sc );
+             cout <<" "<< parseStatus( sc.Flag() ) <<":"<< parseBoundary( (*nit)->AtBoundary() );
+             if ( test_flag != sc.Flag() ) complete_errors++;
+          }
+      }
+ 
+    if ( interior_errors != 0u || perimeter_errors != 0 || complete_errors != 0 ) return false;
     return true;
     
  } // end Test_ChangeBoundaryStatus
