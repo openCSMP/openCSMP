@@ -11,13 +11,16 @@ namespace csmp {
  
         @author P. Lang
         @date 2011
+
+        @author SKM (adding extra tests)
+        @date 2024
  */
 class Boundary_Test : public Test {
 public:
   virtual void run();
 
 private:
-  const static bool verbose_ = true;
+  const static bool verbose_ = false;
 
   void runLegacy(); // Ansys models TODO: refactor to use CSMP native models
   void runCurrent(); // Ansys models
@@ -49,6 +52,7 @@ private:
   template<uint32_t dim>
   void NoSurfaceElementsAsNodeParents( const Region<dim>& );
 
+  /// checks that variable flags are set correctly for INTERIOR, PERIMETER and COMPLETE discriminators
   bool Test_ChangeBoundaryStatus();
 };
 

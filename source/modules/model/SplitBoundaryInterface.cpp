@@ -395,6 +395,9 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
 */
 
 
+
+
+
 /// container of juxtaposed element pairs for SplitBoundary creation:
 template<uint32_t dim>
 struct SplitBoundaryElementSets : public
@@ -432,7 +435,11 @@ string SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryNa
     return string( "\0" );
   }
 
-  // making a set of boundary names
+  return split_boundary_name;
+
+} // end CreateSplitBoundaryName
+
+  // TESTING making a set of boundary names
   /*
   const size_t substrings_used_in_search(intersected_regions.size());
   for ( auto it=SplitBoundariesBegin(); it!=SplitBoundariesEnd(); ++it ) {
@@ -446,9 +453,6 @@ string SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryNa
   }
   return string("\0");
   */
-  return split_boundary_name;
-
-} // end CreateSplitBoundaryName
 
 
 
@@ -558,6 +562,10 @@ bool SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::AddSplitBoundary( const 
  {
     SPLITBOUNDARY_COMPLEX<dim>* const splitBoundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>* const>(this) );
     assert( splitBoundaryComplex != nullptr );
+    assert( ifacesBegin != ifacesEnd );
+    
+    // creating the neighbor connectivity among interfaces
+    splitBoundaryComplex->Mesh().template BuildConnectivity<InterFace>( ifacesBegin, ifacesEnd );
 
     // inserting boundary if it does not existing yet
     auto it = splitBoundaryMap_.insert( make_pair( split_boundary_name, csmp::SplitBoundary<dim>( split_boundary_name,
@@ -1322,32 +1330,6 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
 
 
 
-
-/* OLD VERSION THAT DID NOT UPDATE ADJACENT REGIONS
-
-template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom( const char* dim_1_region )
- {
-    SPLITBOUNDARY_COMPLEX<dim>* model( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
-  
-    // 1. Converting the lower dimensional region into a single Boundary or multiple Boundaries (patches of juxtaposed rocks)
-    //    CreateInternalBoundaryFrom checks whether dim_1_region actually exists
-    pair<set<string>,bool> boundary_names = model->CreateInternalBoundaryFrom( dim_1_region );
-    if ( boundary_names.second == false )
-      return boundary_names;
-    
-    set<string>  split_boundary_names;
-    for ( set<string>::const_iterator it=boundary_names.first.begin(); it!=boundary_names.first.end(); ++it ) {
-          Boundary<dim>& boundary = model->Boundary( (*it) );
-          // CreateSplitBoundaryFrom removes the boundary from which the split boundary was created
-          split_boundary_names.insert( CreateSplitBoundaryFrom( boundary ).first );
-       }
-       
-    return make_pair( split_boundary_names, true );
-       
- } // end CreateSplitBoundaryFrom
-
-*/
 
 
 

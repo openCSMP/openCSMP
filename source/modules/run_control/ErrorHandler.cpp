@@ -293,7 +293,7 @@ void ErrorHandler::Note( CSMP_MESSAGE err_type, const string& source,
                          const string& message1, const string& message2 )
  {
      string  msg(message1);
-     msg +=", ";
+     msg +=" ";
      msg += message2;
      Note( err_type, source, msg );
    

@@ -906,13 +906,19 @@ cout.flush();
 
 
 
+
+
+
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  ModelSubDomain<dim,CELL>::PartitionCellVectorForBoundary()
  {
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
 
-    if ( cell_vec_.empty() )
-      throw logic_error( (string("ModelSubDomain<dim>::PartitionCellVectorForBoundary: method called on empty boundary: ") + Name()).c_str() );
+    if ( cell_vec_.empty() ) {
+         csmp_error.Note( WARNING, "ModelSubDomain<dim>::PartitionCellVectorForBoundary",
+                                   "method called on empty boundary: ", Name().c_str() );
+         return cell_vec_.size();
+      }
 
     sort( cell_vec_.begin(), cell_vec_.end() );
 
@@ -934,15 +940,15 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVectorForBoundary()
                    throw logic_error( (string("ModelSubDomain<dim>::PartitionCellVectorForBoundary: line elements required for a 2D-boundary: ") + Name()).c_str() );
               }
             else if constexpr( dim == 3u ) {
-                 // boundaries in 3D models must consist out of surface or line elements
-                 if ( !eit->IsVolume() )
+                 // in 3D models, boundaries must consist out of surface or line elements
+                 if ( eit->IsVolume() )
                    throw logic_error( (string("ModelSubDomain<dim>::PartitionCellVectorForBoundary: surface elements required for a 3D-boundary: ") + Name()).c_str() );
               }
             // identifying the boundary faces and their nodes
             // (each face potentially has a neighbor cell)
             auto nbors_that_belong_to_group{ eit->Neighbors() };
             const auto n_faces{ eit->Faces() };
-            for ( auto i{0U}; i<n_faces; i++ )
+            for ( uint32_t i{0U}; i<n_faces; i++ )
               // if the face is at a model boundary or has a neighbor that does not belong to the region
               if ( !eit->Neighbor(i) || !binary_search( cell_vec_.begin(), cell_vec_.end(), eit->Neighbor(i)) )
                 {
@@ -957,7 +963,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVectorForBoundary()
                 }
 
             // storing the distinguished cells in the respective vectors
-            // ------------------------------------------------------------
+            // ---------------------------------------------------------
             // interior cells
               if ( nbors_that_belong_to_group == eit->Neighbors() )
                 interior_cells.insert( eit );
@@ -968,6 +974,14 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVectorForBoundary()
 
        } // end identifying the perimeter cells of the Boundary
 
+    if ( perimeter_cells.empty() ) {
+         csmp_error.Note( ERROR, "ModelSubDomain<dim>::PartitionCellVectorForBoundary",
+                                 "failed to detect perimeter cells in boundary: ", Name().c_str() );
+         return 0U;
+      }
+    if ( interior_cells.empty() )
+         csmp_error.Note( WARNING, "ModelSubDomain<dim>::PartitionCellVectorForBoundary",
+                                   "failed to detect interior cells in boundary: ", Name().c_str() );
 
     // --------------------------------------------------
     // 2. rebuilding the cell vector

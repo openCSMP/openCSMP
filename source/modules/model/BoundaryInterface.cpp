@@ -2125,7 +2125,11 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
 
 
 
-// helper function for method below
+
+/** Helper function for method below
+     
+    Creates desired range of faces and interconnects them with one-another.
+*/
 template<uint32_t dim>
 void createBoundaryFaces( MeshManager<dim>& mesh, const PropertyDatabase<dim>& dbase,
                           const set<pair<Element<dim>*,uint32_t> >& face_set, vector<Face<dim>*>& boundary_faces )
@@ -2137,10 +2141,13 @@ void createBoundaryFaces( MeshManager<dim>& mesh, const PropertyDatabase<dim>& d
     const LocalVariables             lvars( dbase.LocalVariablesAt(FACE) );
     const IntegrationPointVariables  ivars(dbase.IntegrationPointVariablesAt(FACE) );
 
+    // creating the faces
     for ( auto& it : face_set ) {
          // building the face info structure
          boundary_faces.push_back( mesh.AddBoundaryFace( it.first, it.second, lvars, ivars ) );
       }
+    // connecting the faces
+    mesh.template BuildConnectivity<Face>( boundary_faces.begin(), boundary_faces.end() );
 
 } // end createBoundaryFaces
 

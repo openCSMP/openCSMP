@@ -129,8 +129,6 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 
 
 
-
-
 template<uint32_t dim>
 IntegrationPointVariables Boundary<dim>::FaceIntegrationPointVariables() const
 { return this->pref_.IntegrationPointVariablesAt( FACE ); }
@@ -138,6 +136,8 @@ IntegrationPointVariables Boundary<dim>::FaceIntegrationPointVariables() const
 template<uint32_t dim>
 LocalVariables Boundary<dim>::FaceVariables() const
 { return this->pref_.LocalVariablesAt( FACE ); }
+
+
 
 
 
@@ -165,6 +165,8 @@ Boundary<dim>::Boundary( const string& boundary_name,
   // initialize BOX_BOUNDARY of nodes
   InitializeBoundaryFlags( boxBoundary );
 }
+
+
 
 
 /**
