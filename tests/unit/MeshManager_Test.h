@@ -40,7 +40,12 @@ class MeshManager_Test : public Test {
   
   private:
   
+    const bool verbose_ = true; // turn on or off for detailed reporting
+  
     void TestBasics();
+    
+    /// check that the nodes of an element face are the ones shared with the corresponding element neighbor
+    bool TestNeigbourVersusFaceConsistency();
  
     bool TestElementDeletionAndInsertion();
     bool TestFaceDeletionAndInsertion();
@@ -52,10 +57,6 @@ class MeshManager_Test : public Test {
     bool TestEntityNumberingFunction( Model<3>& );
     
     bool TestEraseAllPrimitives();
-
-    // create test models that are subsequently used for the testing
-    void Create_ANSYS2D_Model( bool reconstruct_from_CSMP_binary_file );
-    void Create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_CSMP_binary_file );
 
     // checks whether all nodes, elements etc can be reached
     bool CheckConnectivityOfModel3D( Model<3>& );

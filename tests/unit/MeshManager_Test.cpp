@@ -9,11 +9,14 @@
 #include "CSMP_definitions.h"
 #include "MeshManager_Test.h"
 #include "MeshManagementUtilities.h"
+#include "ErrorHandler.h"
 #include "vsetMakers.h"
 #include "VTU_Interface.h"
 #include "Region.h"
 #include "Element.h"
 #include "compareFloats.h"
+
+#include "ANSYS_Model3D.h"
 
 #include "IsoparametricLinearPyramid.h"
 #include "VTK_Interface.h"
@@ -127,7 +130,10 @@ void MeshManager_Test::run()
       TestBasics();
       // ==========
    }
-   
+
+  // testing hex element consistency for meshes from ANSYS
+  _test(TestNeigbourVersusFaceConsistency());
+
   _test(Test_BuiltElementConnectivity2D()); // OK
   _test(Test_BuiltElementConnectivity3D()); // OK
 
@@ -784,66 +790,73 @@ bool MeshManager_Test::TestEraseAllPrimitives()
 
 
 
-/**
-      Finding the neighbors nodes of each node.
-      
-      This method is equivalent to creating a sparsity pattern for an accumulation.
-      However, only up to a single mid-side node per segment is handled.
-      
-      @test OK SKM 8/12/21
-*/
-template<uint32_t dim>
-void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neighbors )
+bool MeshManager_Test::TestNeigbourVersusFaceConsistency()
  {
-    if ( !node_neighbors.empty() ) node_neighbors.clear();
-    node_neighbors.resize( subdomain.Nodes() );
+    ErrorHandler& csmp_error{ ErrorHandler::Instance() };
+    const string model_name("box1x1x1_hexa_struct");
+    if ( verbose_ ) {
+         cout <<"\n"<<"MeshManager_Test::TestNeigbourVersusFaceConsistency: "<<this->getName()<<endl<<endl;
+         cout <<"Building Model: '"<< model_name <<"'"<< endl;
+      }
+    const string variablesFile("MeshManager_Test-variables.txt");
+    constexpr uint32_t dim{3u};
+    //                   fileset             regions-file
+    ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), true );
+    Region<dim>&   model_domain(model.Region("Model"));
+    model_domain.UpdateMemberIndexes();
+ //   VTK_Interface<3U>  vtk_output;
+ //   VTU_Interface<3U>  vtu_output( model );
+
+    size_t errors{0ul};
     
-    // 1. get continuous indices to access the sets contained in the node_neighbor vectors
-    subdomain.RenumberNodes();
- 
-    vector<uint32_t> segm_nodes;
+    // checking that the corner elements have the right neighbors on each model side
+    // and that the node numbers match
+    size_t n_corner_elmts_found{0ul};
+    for ( const auto& nit : model_domain.NodeVector() )
+      if ( isCorner(nit->AtBoundary()) )
+        {
+           // verify that this is a corner node
+           _test( nit->Parents() == 1u );
 
-    const auto elmtsEnd{ subdomain.CellsEnd() };
-    for ( auto it=subdomain.CellsBegin(); it!=elmtsEnd; ++it ) {
-         const uint32_t n_segments{ (*it)->Segments() };
-         for ( uint32_t segm_id{0u}; segm_id < n_segments; ++segm_id ) {
-              (*it)->FE()->NodesOfSegment( segm_id, segm_nodes );
-              // replacing local with global node ids
-              for ( auto& sit : segm_nodes ) sit = static_cast<uint32_t>((*it)->N(sit)->Idx());
-              // corner nodes
-              size_t segm_node1{ subdomain.N(*segm_nodes.begin())->Idx() };
-              size_t segm_node2{ subdomain.N(*next(segm_nodes.begin(),1))->Idx() };
-              node_neighbors[ segm_node1 ].insert( segm_node2 );
-              node_neighbors[ segm_node2 ].insert( segm_node1 );
-              // if there is a mid-side node
-              if ( segm_nodes.size() == 3U ) {
-                   size_t segm_node3{ subdomain.N(*next(segm_nodes.begin(),2))->Idx() };
-                   node_neighbors[ segm_node1 ].insert( segm_node3 );
-                   node_neighbors[ segm_node3 ].insert( segm_node1 );
-                }
-              // if there are two midside nodes
-              if ( segm_nodes.size() > 3U )
-                throw csmp::Exception( ERROR, "nodeNeighbors", "method only handles a single segment midside node" );
-           }
-      }
+           // getting the parent element of this node
+           const Element<3u>* const eptr = nit->Parent(0u);
+           if ( verbose_ ) {
+                cout <<"\n"<<"Discovered corner element:";
+                eptr->Out();
+             }
+           // corner hex should have 3 outside faces (6-3=3)
+           _test( eptr->ConnectedNeighbors() == 3u );
+           
+           // for the element faces at model boundary get the face nodes and verify that they match the expected nodes of the face
+           for ( uint32_t face_id{0u}; face_id<eptr->Neighbors(); ++face_id )
+             // for each element face at the boundary
+             if ( eptr->Neighbor(face_id) == nullptr ) {
+                  vector<uint32_t> fnids = eptr->FE()->CornerNodesOfFace( face_id );
+                  // All face nodes must:
+                  //  - reside at model boundary
+                  for ( const auto& local_node : fnids ) _test( eptr->N(local_node)->AtBoundary() != NOT );
+                  //  - match the local node numbers returned for them from parent element
+                  for ( const auto& local_node : fnids ) {
+                       // for the face node, find parent element that is equal to corner element
+                       Element<dim>* eptr_p{nullptr};
+                       uint32_t      eparent{0u};
+                       while ( eparent<eptr->N(local_node)->Parents() ) {
+                            eptr_p = eptr->N(local_node)->Parent(eparent);
+                            // once the parent element of interest has been found
+                            if ( eptr_p == eptr ) break;
+                            ++eparent;
+                         }
+                       assert( eptr_p != nullptr );
+                       auto local_node_number_in_parent_elmt = eptr->N(local_node)->ParentNodeNumber(eparent);
+                       _test( local_node_number_in_parent_elmt == local_node );
+                       if ( local_node_number_in_parent_elmt != local_node ) errors++;
+                    }
+               }
+            n_corner_elmts_found++;
+        }
+    _test( n_corner_elmts_found == 8u );
       
-    // printing the node-neighbor vector for testing
-    /*
-    cout <<"\n\nnodeNeighbors: connectivity created for "<< node_neighbors.size() <<" nodes:";
-    size_t node{0};
-    for ( auto nit : node_neighbors ) {
-         cout <<"\n\t" << node <<": ";
-         for (  auto i : nit )
-           cout << subdomain.N(i)->Idx() <<" ";
-         cout <<" ("<< parseBoundary( subdomain.N(node)->AtBoundary() ) <<")";
-         node++;
-      }
-    */
-      
- } // end nodeNeighbors
-
-template void nodeNeighbors( const Region<3>&, vector<set<size_t>>& );
-template void nodeNeighbors( const Region<2>&, vector<set<size_t>>& );
-
+     return ( errors == 0U );
+ }
 
 } // end csmp
