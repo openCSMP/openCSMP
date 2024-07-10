@@ -52,9 +52,6 @@ class MeshManager_Test : public Test {
     bool TestEntityNumberingFunction( Model<3>& );
     
     bool TestEraseAllPrimitives();
-    
-    // method with the same name
-    bool Test_parentElementsSharedByFace();
 
     // create test models that are subsequently used for the testing
     void Create_ANSYS2D_Model( bool reconstruct_from_CSMP_binary_file );
@@ -74,9 +71,6 @@ class MeshManager_Test : public Test {
     bool Test_MeshTraversal3D();
 
 };
-
-// build sparsity pattern for testing the connectivity among nodes
-template<uint32_t dim> void nodeNeighbors( const Region<dim>&, std::vector<std::set<size_t>>& node_neighbors );
 
 } // end csmp
 

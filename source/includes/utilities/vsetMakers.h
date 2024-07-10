@@ -11,15 +11,19 @@ namespace csmp {
     
     // 2D single element-type meshes
     // -----------------------------
+    
+    /// mesh patch with 10 triangles
     void create_TrianglePatch_VSet( VSet<2U>& );
     
-    void create_One_Square_VSet(VSet<2U>&, double length_of_sides, bool bSkewed=false );
+    void create_1Square_VSet(VSet<2U>&, double length_of_sides, bool bSkewed=false );
     
-    void create_Square_VSet( VSet<2U>&, int size_sides, double dimension, bool skewed=false );
-    
+    /// creates a  mesh of rectangles the dimensions of which are defined by the user. The model has a zero width slit in the middle where nodes are duplicated
     void create_SlitRectangle_VSet( VSet<2U>&, int x_dimension, int y_dimension, double x_length,
                                     double y_length, int depth_of_slit, bool bSkewed=false );
                                         
+    /// creates either 1 square or 1 split rectangle mesh using the methods above
+    void create_Square_VSet( VSet<2U>&, int size_sides, double dimension, bool skewed=false );
+
     // 2D poly-element type meshes wirh topology info
     // ----------------------------------------------
     ///  Rectangle-shaped MODEL_TINY, consisting of 1 line element two triangles, 1 quadrilateral and 6 face object marking the box boundary.
@@ -36,17 +40,20 @@ namespace csmp {
     /// Rubik cube of 27 hexahedra, three XY planes of 3x3 elements, numbered from the left to the right (x=0..3), from the bottom to the top (y=0..3)
     void create_RubikCube( VSet<3U>& );
 
-    /// 6 tets from a cube, no midside nodes
+    /// 6 four-noded tetrahedra filling a cube, no midside nodes
     void create_Tetra_VSet( VSet<3U>& );
     
-    void create_Pyramid_VSet( VSet<3U>&, bool bSkewed=false );
+    /// 27 pyramids packed into cube
+    void create_Pyramids_VSet( VSet<3U>&, bool bSkewed=false );
     
-    void create_One_Hexahedra_VSet( VSet<3U>&, bool bSkewed = false );
+    /// single 8-noded hexahedron
+    void create_1Hexahedron_VSet( VSet<3U>&, bool bSkewed = false );
     
-    /// mesh with 27 hexahedra forming a Ruby cube
+    /// 27 hexahedra forming a  cube
     void create_Hexahedra_VSet( VSet<3U>&, bool bSkewed=false );
     
-    void create_One_Prism_VSet( VSet<3U>&, bool bSkewed=false );
+    /// single 6-noded prism element
+    void create_1Prism_VSet( VSet<3U>&, bool bSkewed=false );
     
     /// mesh with 54 prism elements
     void create_Prism_VSet( VSet<3U>&, bool bSkewed=false );

@@ -136,8 +136,8 @@ VSet<2U> create_Quadrilateral_VSet()
 
 
 
-void create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed )
-{    
+void create_1Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed )
+{
   	IsoparametricLinearQuadrilateral iso_quad;
   	
   	//elements hexahedrons
@@ -208,8 +208,12 @@ void create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed
   	vset.BFlag( 4, CNR4);
   	
     vset.EstablishZeroBasedNumbering();
-    vset.Out();
-}
+    //vset.Out();
+    
+} // end create_1Square_VSet
+
+
+
 
 
 /**
@@ -874,26 +878,13 @@ ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
 
 
 
-void create_One_Hexahedra_VSet( VSet<3U>& vset, bool bSkewed )
+void create_1Hexahedron_VSet( VSet<3U>& vset, bool bSkewed )
 {
   	IsoparametricLinearHexahedron iso_hexahedron;
   	
   	//elements hexahedrons
-    size_t nodes(8);         //number of nodes
-  	deque<uint32_t>  npes(1);  //number of nodes per element
-    deque<uint32_t>  epes(1);  //elements per element
-    deque<int8_t>  etypes(1,ISOPARAMETRIC_LINEAR_HEXAHEDRON);
-    
-    npes[0]=iso_hexahedron.Nodes();
-  	epes[0]=iso_hexahedron.Neighbors();
-  	
-    //--------------------------ELEMENT TYPES
-  	//add element types
-    vector<int8_t> vecElementTypes(1);
-    vecElementTypes[0]= ISOPARAMETRIC_LINEAR_HEXAHEDRON;
-  	
-  	vset.Resize( etypes, npes, epes, nodes, 0, 0 );
-  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
+    const size_t nodes(8);  
+    vset.Resize( nodes, 6, ISOPARAMETRIC_LINEAR_HEXAHEDRON, 8, 1 );
 
   	//-----------------------NODES
   	//define nodes
@@ -1182,7 +1173,7 @@ void create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
 void create_Square_VSet( VSet<2U>& vset, int size_sides, double dimension, bool bSkewed )
 {
   if(size_sides==1)
-    create_One_Square_VSet( vset, dimension, bSkewed );
+    create_1Square_VSet( vset, dimension, bSkewed );
   else
     create_SlitRectangle_VSet( vset, size_sides, size_sides, dimension, dimension, 0, bSkewed );
 }
@@ -1211,14 +1202,12 @@ void create_SlitRectangle_VSet( VSet<2U>& vset, int x_dimension, int y_dimension
   	
   size_t iNrOfElements( (iDim_i-1)*(iDim_j-1) );
     
-  //elements hexahedrons
-  size_t nodes(iDim_i*iDim_j);  //number of nodes: 64 on a 4x4x4 grid
+  //elements
+  size_t nodes(iDim_i*iDim_j); // number of nodes
   
   cout <<"\ncreate_SlitRectangle_VSet:\n";
   cout << "\n\tDim i: " << iDim_i << " Dim j: " << iDim_j << " nr of elements: " << iNrOfElements << " nodes: " << nodes;
      
-  //------------------------CREATE VSET
-  //this is a 3D model, it is a cube of hexahedron with six pyramid elements in the middle 	
   vset.Resize( iso_quadrilateral.Nodes(),
                iso_quadrilateral.Neighbors(),
                iso_quadrilateral.ElementType(), 
@@ -1842,6 +1831,96 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 
 
 
+void create_1Prism_VSet(VSet<3U> & vset, bool bSkewed )
+{
+  	IsoparametricLinearPrism iso_prism;
+  	
+  	//elements
+    size_t nodes(iso_prism.Nodes());         //number of nodes
+  	deque<uint32_t>  npes(1);  //number of nodes per element
+    deque<uint32_t>  epes(1);  //elements per element
+    deque<int8_t>  etypes(1,ISOPARAMETRIC_LINEAR_PRISM);
+
+    npes[0]=iso_prism.Nodes();
+  	epes[0]=iso_prism.Neighbors();
+  	
+    //--------------------------ELEMENT TYPES
+  	//add element types
+    vector<int8_t> vecElementTypes(1);
+    vecElementTypes[0]= ISOPARAMETRIC_LINEAR_PRISM;
+  	
+  	vset.Resize( etypes, npes, epes, nodes, 0, 0 );
+  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
+
+  	//-----------------------NODES
+  	//define nodes
+  	deque<double> px(nodes);
+  	deque<double> py(nodes);
+  	deque<double> pz(nodes);
+  	
+  	px[0]=0;py[0]=0;pz[0]=0;
+  	px[1]=1;py[1]=0;pz[1]=0;
+  	px[2]=1;py[2]=1;pz[2]=0;
+  	px[3]=0;py[3]=0;pz[3]=1;
+  	px[4]=1;py[4]=0;pz[4]=1;
+  	px[5]=1;py[5]=1;pz[5]=1;
+  	
+  	if( bSkewed )
+  	 for ( size_t i = 0ul; i < 6; i++)
+  	  {
+  	    px[i]+= (rand()%2000)*PERTURBATION;
+  	    py[i]+= (rand()%2000)*PERTURBATION;
+  	    pz[i]+= (rand()%2000)*PERTURBATION;
+  	  }
+  	  
+  	//load nodes
+  	vset.AddXYZ( px, py, pz );
+    vset.ResizeBFlags();
+  	
+  	//--------------------------ELEMENTS
+    //define prism element, assign nodes per element
+    deque<vector<size_t> > deqElements(1);
+    deqElements[0].resize(6);
+  	 
+    deqElements[0][0]= 1;
+    deqElements[0][1]= 2;
+    deqElements[0][2]= 3;
+    deqElements[0][3]= 4;
+    deqElements[0][4]= 5;
+    deqElements[0][5]= 6;
+  	vset.AddPlist( deqElements.begin(),deqElements.end());
+
+     //---------------------------------NEIGHBORS
+    //define neighbors
+    deque<vector<int64_t> > deqElementNeighbors(1);
+    deqElementNeighbors[0].resize(6);
+  	deqElementNeighbors[0][0]= BACK_OUTSIDE;
+  	deqElementNeighbors[0][1]= BOTTOM_OUTSIDE;
+  	deqElementNeighbors[0][2]= RIGHT_OUTSIDE;
+  	deqElementNeighbors[0][3]= TOP_OUTSIDE/*or LEFT_OUTSIDE*/;
+  	deqElementNeighbors[0][4]= FRONT_OUTSIDE;
+
+    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
+  	
+  	//----------------------------NODE BOUNDARIES
+  	vset.BFlag( 1, CNR1);
+  	vset.BFlag( 2, CNR2);
+  	vset.BFlag( 3, CNR3);
+  	vset.BFlag( 4, CNR5);
+  	vset.BFlag( 5, CNR6);
+  	vset.BFlag( 6, CNR7);
+    
+    //-------------------------MATERIALS
+    vector<int32_t> pmtrl( vset.Elements(), 1 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+
+    vset.EstablishZeroBasedNumbering();
+    vset.Out();
+    
+} // end create_1Prism_VSet
+
+
+
 
 
 
@@ -1850,6 +1929,8 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     The model can be distorted on demand.
     
     @note model comes with the correct box boundary flags.
+    
+    TODO: element neighbor connectivity does not match, nodes-per-face convention of CSMP (9/7/24)
 */
 void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
 {
@@ -2264,79 +2345,10 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     vecNeighbors[3]=1+26;
     vecNeighbors[4]=TOP_OUTSIDE;
     deqElementNeighbors[25]=vecNeighbors;
-    
-    // SKM adjustment according to CSMP_FEM_conventions.pdf (27/5/24)
-    // (assuming that the base plane of the hex is the xz plane)
-    deque<vector<int64_t> >    // first vertical plane (z=0)
-                               // --------------------------
-    deqElementNeighborsSKM = { {BOTTOM, 10, 1, BACK, LEFT, 3},   //  0
-                               {BOTTOM, 11, 2, BACK, 0, 4},      //  1
-                               {BOTTOM, 12, RIGHT, BACK, 1, 6},  //  2
-                               // row 2(back)
-                               {0,      13, 14, BACK, LEFT, 7},  //  3
-                               // prisms (elemts 4, 5)
-                               {BACK, 3, 1, 5, 14},              //  4
-                               {BACK, 4, 6, 8, 15},              //  5
-                               // hexahedra
-                               {2,  16, RIGHT, BACK, 5, 9},      //  6
-                               // top row
-                               {3, 17, 8, BACK, LEFT, TOP},      //  7
-                               {5, 18, 9, BACK, 7, TOP},         //  8
-                               {6, 19, RIGHT, BACK, 8, TOP},     //  9  (10 elmts because one hex is plit into 2 prisms)
-                               // ---------------------------
-                               // second plane (middle layer)
-                               // ---------------------------
-                               {BOTTOM, 20, 11, 0, LEFT, 13},    // 10
-                               {BOTTOM, 21, 12, 1, 10, 14},      // 11
-                               {BOTTOM, 22, RIGHT, 2, 11, 16},   // 12
-                               // middle row
-                               {10, 23, 14, 3, LEFT, 17},        // 13
-                               // prims 14, 15
-                               {4, 13, 11, 15, 24},              // 14
-                               {5, 14, 16, 18, 25},              // 14
-                               // ----------------
-                               {12, 26, RIGHT, 6, 15, 19},       // 16
-                               // top row (middle layer)
-                               {13, 27, 18, 7, LEFT, TOP},       // 17
-                               {15, 28, 19, 8, 17, TOP},         // 18
-                               {16, 29, RIGHT, 9, 18, TOP},      // 19
-                               // -------------------
-                               // third plane (front)
-                               // -------------------
-                               {BOTTOM, FRONT, 21, 10, LEFT, 23},
-                               {BOTTOM, FRONT, 22, 11, 20, 24},
-                               {BOTTOM, FRONT, RIGHT, 12, 21, 26},
-                               // row 2
-                               {20, FRONT, 24, 13, LEFT, 27},
-                               // prism elements 24, 25
-                               {14, 23, 21, 25, FRONT},
-                               {15, 24, 26, 28, FRONT},
-                               // -------------------
-                               {22, FRONT, RIGHT, 16, 25, 29},
-                               // top row
-                               {23, FRONT, 28, 17, LEFT, TOP},
-                               {25, FRONT, 29, 18, 27, TOP},
-                               {26, FRONT, RIGHT, 19, 28, TOP} };
-                               
-    // modify neighbor sequence because in Adriana's labelling the XY plane is the base plane of the hex
-    for ( auto& eit : deqElementNeighborsSKM ) {
-         // copy current entry
-         vector<int64_t> swapvec = eit;
-         // if it refers to hex, write it out in new order
-         if ( swapvec.size() == 6 ) {
-              eit[0] = swapvec[3];
-              eit[1] = swapvec[0];
-              // eit[2] = no change required
-              eit[3] = swapvec[5];
-              // eit[4] = no change required
-              eit[5] = swapvec[1];
-           }
-      }
-    
-    assert( deqElementNeighborsSKM.size() == deqElementNeighbors.size() );
-// SKM fix    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
-    vset.AddPfverts( deqElementNeighborsSKM.begin(), deqElementNeighborsSKM.end() );
-  	
+ 
+     assert( deqElementNeighbors.size() == deqElementNeighbors.size() );
+     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
+ 
     
   	//------------------------------------------NODE BOUNDARY FLAGS
   	//define node boundaries
@@ -2494,100 +2506,81 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
                                {26, FRONT, RIGHT, 19, 28, TOP} };
 */
 
+// SKM attempted adjustment to CSMP_FEM_conventions.pdf (27/5/24)
+// (assuming that the base plane of the hex is the xz plane)
+ /*
+    deque<vector<int64_t> >    // first vertical plane (z=0)
+                               // --------------------------
+    deqElementNeighborsSKM = { {BOTTOM, 10, 1, BACK, LEFT, 3},   //  0
+                               {BOTTOM, 11, 2, BACK, 0, 4},      //  1
+                               {BOTTOM, 12, RIGHT, BACK, 1, 6},  //  2
+                               // row 2(back)
+                               {0,      13, 14, BACK, LEFT, 7},  //  3
+                               // prisms (elemts 4, 5)
+                               {BACK, 3, 1, 5, 14},              //  4
+                               {BACK, 4, 6, 8, 15},              //  5
+                               // hexahedra
+                               {2,  16, RIGHT, BACK, 5, 9},      //  6
+                               // top row
+                               {3, 17, 8, BACK, LEFT, TOP},      //  7
+                               {5, 18, 9, BACK, 7, TOP},         //  8
+                               {6, 19, RIGHT, BACK, 8, TOP},     //  9  (10 elmts because one hex is plit into 2 prisms)
+                               // ---------------------------
+                               // second plane (middle layer)
+                               // ---------------------------
+                               {BOTTOM, 20, 11, 0, LEFT, 13},    // 10
+                               {BOTTOM, 21, 12, 1, 10, 14},      // 11
+                               {BOTTOM, 22, RIGHT, 2, 11, 16},   // 12
+                               // middle row
+                               {10, 23, 14, 3, LEFT, 17},        // 13
+                               // prims 14, 15
+                               {4, 13, 11, 15, 24},              // 14
+                               {5, 14, 16, 18, 25},              // 14
+                               // ----------------
+                               {12, 26, RIGHT, 6, 15, 19},       // 16
+                               // top row (middle layer)
+                               {13, 27, 18, 7, LEFT, TOP},       // 17
+                               {15, 28, 19, 8, 17, TOP},         // 18
+                               {16, 29, RIGHT, 9, 18, TOP},      // 19
+                               // -------------------
+                               // third plane (front)
+                               // -------------------
+                               {BOTTOM, FRONT, 21, 10, LEFT, 23},
+                               {BOTTOM, FRONT, 22, 11, 20, 24},
+                               {BOTTOM, FRONT, RIGHT, 12, 21, 26},
+                               // row 2
+                               {20, FRONT, 24, 13, LEFT, 27},
+                               // prism elements 24, 25
+                               {14, 23, 21, 25, FRONT},
+                               {15, 24, 26, 28, FRONT},
+                               // -------------------
+                               {22, FRONT, RIGHT, 16, 25, 29},
+                               // top row
+                               {23, FRONT, 28, 17, LEFT, TOP},
+                               {25, FRONT, 29, 18, 27, TOP},
+                               {26, FRONT, RIGHT, 19, 28, TOP} };
+                               
+    // modify neighbor sequence because in Adriana's labelling the XY plane is the base plane of the hex
+    for ( auto& eit : deqElementNeighborsSKM ) {
+         // copy current entry
+         vector<int64_t> swapvec = eit;
+         // if it refers to hex, write it out in new order
+         if ( swapvec.size() == 6 ) {
+              eit[0] = swapvec[3];
+              eit[1] = swapvec[0];
+              // eit[2] = no change required
+              eit[3] = swapvec[5];
+              // eit[4] = no change required
+              eit[5] = swapvec[1];
+           }
+      }
 
-
-
-
-
-
-
-
-void create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
-{    
-  	IsoparametricLinearPrism iso_prism;
+    assert( deqElementNeighborsSKM.size() == deqElementNeighbors.size() );
+    vset.AddPfverts( deqElementNeighborsSKM.begin(), deqElementNeighborsSKM.end() );
   	
-  	//elements hexahedrons
-    size_t nodes(iso_prism.Nodes());         //number of nodes
-  	deque<uint32_t>  npes(1);  //number of nodes per element
-    deque<uint32_t>  epes(1);  //elements per element
-    deque<int8_t>  etypes(1,ISOPARAMETRIC_LINEAR_PRISM);
+*/
 
-    npes[0]=iso_prism.Nodes();
-  	epes[0]=iso_prism.Neighbors();
-  	
-    //--------------------------ELEMENT TYPES
-  	//add element types
-    vector<int8_t> vecElementTypes(1);
-    vecElementTypes[0]= ISOPARAMETRIC_LINEAR_PRISM;
-  	
-  	vset.Resize( etypes, npes, epes, nodes, 0, 0 );
-  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
 
-  	//-----------------------NODES
-  	//define nodes
-  	deque<double> px(nodes);
-  	deque<double> py(nodes);
-  	deque<double> pz(nodes);
-  	
-  	px[0]=0;py[0]=0;pz[0]=0;
-  	px[1]=1;py[1]=0;pz[1]=0;
-  	px[2]=1;py[2]=1;pz[2]=0;
-  	px[3]=0;py[3]=0;pz[3]=1;
-  	px[4]=1;py[4]=0;pz[4]=1;
-  	px[5]=1;py[5]=1;pz[5]=1;
-  	
-  	if( bSkewed )
-  	 for ( size_t i = 0ul; i < 6; i++)
-  	  {
-  	    px[i]+= (rand()%2000)*PERTURBATION;
-  	    py[i]+= (rand()%2000)*PERTURBATION;
-  	    pz[i]+= (rand()%2000)*PERTURBATION;
-  	  }
-  	  
-  	//load nodes
-  	vset.AddXYZ( px, py, pz );
-    vset.ResizeBFlags();
-  	
-  	//--------------------------ELEMENTS
-    //define prism element, assign nodes per element
-    deque<vector<size_t> > deqElements(1);
-    deqElements[0].resize(6);
-  	 
-    deqElements[0][0]= 1;
-    deqElements[0][1]= 2;
-    deqElements[0][2]= 3;
-    deqElements[0][3]= 4;
-    deqElements[0][4]= 5;
-    deqElements[0][5]= 6;
-  	vset.AddPlist( deqElements.begin(),deqElements.end());
-
-     //---------------------------------NEIGHBORS
-    //define neighbors
-    deque<vector<int64_t> > deqElementNeighbors(1);
-    deqElementNeighbors[0].resize(6);
-  	deqElementNeighbors[0][0]= BACK_OUTSIDE;
-  	deqElementNeighbors[0][1]= BOTTOM_OUTSIDE;
-  	deqElementNeighbors[0][2]= RIGHT_OUTSIDE;
-  	deqElementNeighbors[0][3]= TOP_OUTSIDE/*or LEFT_OUTSIDE*/;
-  	deqElementNeighbors[0][4]= FRONT_OUTSIDE;
-
-    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
-  	
-  	//----------------------------NODE BOUNDARIES
-  	vset.BFlag( 1, CNR1);
-  	vset.BFlag( 2, CNR2);
-  	vset.BFlag( 3, CNR3);
-  	vset.BFlag( 4, CNR5);
-  	vset.BFlag( 5, CNR6);
-  	vset.BFlag( 6, CNR7);
-    
-    //-------------------------MATERIALS
-    vector<int32_t> pmtrl( vset.Elements(), 1 );
-    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
-
-    vset.EstablishZeroBasedNumbering();
-    vset.Out();
-}
 
 
 
@@ -2826,7 +2819,6 @@ void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 
     // SKM_FIX add ons
     // ---------------
-    // additional must haves
     // adding corresponding materials to VSet
     vector<int32_t> pmtrl(vset.Elements(),1); // matrix
     // fill( next(pmtrl.begin(),42), pmtrl.end(), 7 );
@@ -2835,6 +2827,9 @@ void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 //    vset.Out();
 
 } // end
+
+
+
 
 
 

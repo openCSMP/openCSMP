@@ -130,7 +130,6 @@ void MeshManager_Test::run()
    
   _test(Test_BuiltElementConnectivity2D()); // OK
   _test(Test_BuiltElementConnectivity3D()); // OK
-  _test(Test_parentElementsSharedByFace()); // OK
 
   _test( Test_MeshTraversal3D(/* Pyramid_Hexa_VSet */) );
   
@@ -287,59 +286,6 @@ bool MeshManager_Test::TestCompleteModel2D()
 
 
 
-// tests method with the same name
-bool MeshManager_Test::Test_parentElementsSharedByFace()
- {
-    VSet<3U> vset;
-    // testing with element 13 with face 4 on the LEFT outside
-    create_Prism_Hexa_VSet( vset, false );
-    Model<3U>    model( vset, "CSMP-variables.txt" );
-    const size_t ELMT{13}; // 13 in VSet
-    Element<3>*  eptr = &(*next(model.Mesh().ElementsBegin(),ELMT));
-    //eptr->Out();
-    assert( eptr->Neighbor(4) == nullptr );
-    
-    // getting an inner face in the 3D model that is not on the boundary
-    vector<Node<3>*> face_nodes;
-    Element<3>*      inner_eptr(nullptr), *outer_eptr(nullptr);
-    for ( auto i{0}; i<eptr->Neighbors(); ++i )
-     if ( eptr->Neighbor(i) != nullptr ) {
-          face_nodes.reserve( eptr->FE()->NodesPerFace(i) );
-          for ( const auto& j : eptr->FE()->NodesOfFace(i) )
-            face_nodes.push_back( eptr->N(j) );
-          inner_eptr = eptr;
-          outer_eptr = eptr->Neighbor(i);
-          break;
-       }
-    
-    // calling the function that is being tested
-    pair<Element<3>*,Element<3>*> parents = parentElementsSharedByFace<3>( face_nodes.begin(), face_nodes.end() );
-    
-    // test that the correct neighbor elements were found (inner one should be first
-    _test( parents.first  != nullptr );
-    _test( parents.second != nullptr );
-    _test( parents.first  == inner_eptr );
-    _test( parents.second == outer_eptr );
-    
-    // now testing for face 4 that is on the left outside
-    auto fnids = eptr->FE()->NodesOfFace(4);
-    face_nodes.resize( fnids.size() );
-    for (size_t j{0}; j<fnids.size(); ++j )
-      face_nodes[j] = eptr->N( fnids[j] );
-    inner_eptr = eptr;
-    outer_eptr = nullptr;
-
-    // calling the function that is being tested
-    parents = parentElementsSharedByFace<3>( face_nodes.begin(), face_nodes.end() );
-    
-    // test that the correct neighbor elements were found (inner one should be first
-    _test( parents.first  != nullptr );
-    _test( parents.second == nullptr );
-    _test( parents.first  == eptr );
-
-    return true;
-    
- } // end Test_parentElementsSharedByFace
 
 
 

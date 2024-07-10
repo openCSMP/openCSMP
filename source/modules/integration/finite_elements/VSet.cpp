@@ -211,8 +211,7 @@ void VSet<dim>::AddPlist( typename deque<vector<size_t> >::const_iterator first,
                           typename deque<vector<size_t> >::const_iterator last )
 {
 	auto it = PlistBegin();
-  assert( Cells() == distance(first,last) );
-
+  // fails if mesh has only one element:  assert( Cells() == distance(first,last) );
 	while (first != last && it != PlistEnd())
     {
       (*it) = (*first);

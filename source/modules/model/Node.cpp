@@ -748,25 +748,35 @@ template class Node<3U>;
  // NON-MEMBER FUNCTIONS
  
 /**
-   returns parent elements shared by nodes of face, inner side is reported first; outer next else application: give nodes of lower-dimensional face to find element on either side
+   Returns  the element(s) that  share the face nodes which are supplied to the function via node iterators.
+   The inside element is reported first; the outer one next. A nullptr is returned second if only the inside element is found.
+   Since the function uses node numbers, it does not depend on a valid element neighbor connectivity.
+   
+   Application: give nodes of lower-dimensional face to find element on either side
    
    @todo method probably sill contains a large number of redundant operations.
+   
+   @attention in the case of quadratic FEs, this function must be given only the corner nodes of the element face
 */
 template<uint32_t dim>
 pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<Node<dim>*>::const_iterator first,
                                                                typename vector<Node<dim>*>::const_iterator last )
  {
     assert( first != last );
-    // create sets of the parent elements of the face nodes checking which ones are shared
-    const typename vector<Node<dim>*>::const_iterator nodesEnd{last};
-    typename vector<Node<dim>*>::const_iterator nit{first};
+    // 1. creating sets of the parent elements of the face nodes, testing which ones are shared
+    // ----------------------------------------------------------------------------------------
+    //const auto nodes_of_face = distance(first,last); // 1 for line, 2-for surface, 3 or 4 for volume
+    const auto nodesEnd{last};
+    auto       nit{first};
 
     // creating a set of the parent elements of the first node
     assert( (*nit)->Parents() > 0 );
     const auto n_parents{(*nit)->Parents()};
     set<Element<dim>*> shared_parents;
-    for ( auto i{0U}; i<n_parents; ++i ) {
-         assert( (*nit)->Parent(i) != nullptr );
+    // first node
+    for ( uint32_t i{0U}; i<n_parents; ++i ) {
+         if ( (*nit)->Parent(i) == nullptr ) continue;
+         // only considering equi-dimensional elements
          if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
          if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
          shared_parents.insert( (*nit)->Parent(i) );
@@ -775,27 +785,34 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
     // advancing the node iterator
     nit++;
 
-    // searching for shared parent elements in the following nodes
+    // searching for shared parent elements in subsequent nodes
     while ( nit != nodesEnd ) {
          set<Element<dim>*> temp;
          const auto parents{(*nit)->Parents()};
-         for ( auto i{0U}; i<parents; ++i ) {
-              assert( (*nit)->Parent(i) != nullptr );
+         for ( uint32_t i{0U}; i<parents; ++i ) {
+              if ( (*nit)->Parent(i) == nullptr ) continue;
               if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
               if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
               if ( shared_parents.find( (*nit)->Parent(i) ) != shared_parents.end() )
                 temp.insert( (*nit)->Parent(i) );
            }
          shared_parents = temp;
+         if ( shared_parents.size() == 2U ) break;
          nit++;
       }
       
-    // drawing the results together
-    assert( !shared_parents.empty() );
+    // 2. analysing the results and determining the inside element if there are two
+    // ----------------------------------------------------------------------------
+    if ( shared_parents.empty() ) {
+         cerr << endl << endl <<"input nodes: ";
+         while ( first != last ) { cerr << (*first)->Idx() <<" "; first++; }
+         throw csmp::Exception( ERROR, "parentElementsSharedByFace", "no shared parent elements found" );
+      }
+       
+    // if there is only one element that shares the nodes it must be located on the inside of a boundary
     if ( shared_parents.size() == 1U ) return make_pair( (*shared_parents.begin()), nullptr );
     
-    // if two parent elements were found, the one on the inside needs to be determined
-    assert( shared_parents.size() == 2U );
+    // once two parent elements were found, the one on the inside needs to be determined
     // initial guess
     pair<Element<dim>*,Element<dim>*> result( (*shared_parents.begin()), (*shared_parents.rbegin()) );
     

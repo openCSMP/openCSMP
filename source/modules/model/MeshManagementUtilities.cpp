@@ -2579,4 +2579,68 @@ template void printNodeCoordinates<2U>( typename vector<Node<2U>*>::const_iterat
 template void printNodeCoordinates<1U>( typename vector<Node<1U>*>::const_iterator, typename vector<Node<1U>*>::const_iterator );
 
 
+/**
+      Finding the neighbors nodes of each node.
+      
+      This method is equivalent to creating a sparsity pattern for an accumulation.
+      However, only up to a single mid-side node per segment is handled.
+      
+      @test OK SKM 8/12/21
+*/
+template<uint32_t dim>
+void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neighbors, bool verbose )
+ {
+    if ( !node_neighbors.empty() ) node_neighbors.clear();
+    node_neighbors.resize( subdomain.Nodes() );
+    
+    // 1. get continuous indices to access the sets contained in the node_neighbor vectors
+    subdomain.RenumberNodes();
+ 
+    vector<uint32_t> segm_nodes;
+
+    const auto elmtsEnd{ subdomain.CellsEnd() };
+    for ( auto it=subdomain.CellsBegin(); it!=elmtsEnd; ++it ) {
+         const uint32_t n_segments{ (*it)->Segments() };
+         for ( uint32_t segm_id{0u}; segm_id < n_segments; ++segm_id ) {
+              (*it)->FE()->NodesOfSegment( segm_id, segm_nodes );
+              // replacing local with global node ids
+              for ( auto& sit : segm_nodes ) sit = static_cast<uint32_t>((*it)->N(sit)->Idx());
+              // corner nodes
+              size_t segm_node1{ subdomain.N(*segm_nodes.begin())->Idx() };
+              size_t segm_node2{ subdomain.N(*next(segm_nodes.begin(),1))->Idx() };
+              node_neighbors[ segm_node1 ].insert( segm_node2 );
+              node_neighbors[ segm_node2 ].insert( segm_node1 );
+              // if there is a mid-side node
+              if ( segm_nodes.size() == 3U ) {
+                   size_t segm_node3{ subdomain.N(*next(segm_nodes.begin(),2))->Idx() };
+                   node_neighbors[ segm_node1 ].insert( segm_node3 );
+                   node_neighbors[ segm_node3 ].insert( segm_node1 );
+                }
+              // if there are two midside nodes
+              if ( segm_nodes.size() > 3U )
+                throw csmp::Exception( ERROR, "nodeNeighbors", "method only handles a single segment midside node" );
+           }
+      }
+      
+    // printing the node-neighbor vector for testing
+    if ( verbose ) {
+      cout <<"\n\nnodeNeighbors: connectivity created for "<< node_neighbors.size() <<" nodes:";
+      size_t node{0};
+      for ( auto nit : node_neighbors ) {
+           cout <<"\n\t" << node <<": ";
+           for (  auto i : nit )
+             cout << subdomain.N(i)->Idx() <<" ";
+           cout <<" ("<< parseBoundary( subdomain.N(node)->AtBoundary() ) <<")";
+           node++;
+        }
+      }
+      
+ } // end nodeNeighbors
+
+template void nodeNeighbors( const Region<3>&, vector<set<size_t>>&, bool );
+template void nodeNeighbors( const Region<2>&, vector<set<size_t>>&, bool );
+
+
+
+
 } // end csmp

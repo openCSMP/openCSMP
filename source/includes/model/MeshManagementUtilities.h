@@ -158,6 +158,10 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const );
 template<uint32_t dim>
 void updateParentElementConnectivity( Node<dim>* const );
 
+/// finds the neighbors of each node in the target region returning the sparsity pattern of the mesh
+template<uint32_t dim>
+void nodeNeighbors( const Region<dim>& subdomain, std::vector<std::set<size_t>>& node_neighbors, bool verbose=false );
+
 /// Using the parent elements of its nodes, finds its higher-dimensional neighbor on inside or outside
 template<uint32_t dim>
 Element<dim>* const findInnerHigherDimensionalNeighborFromNodes( Element<dim>* const, INTERFACE_SIDE );
