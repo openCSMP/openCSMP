@@ -569,6 +569,9 @@ pair<int32_t, int32_t>  SplitBoundary<dim>::InterFaceSpatialDimensions() const
 
 
 
+
+
+// TODO: mesh generation should be left to MeshManager
 template<uint32_t dim>
 size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
                                                vector<size_t>& cell_ids )
@@ -617,6 +620,9 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
 } // end AccumulateByNumber
 
 
+
+
+
 // helper function for method below
 template<uint32_t dim>
 static size_t countDisconnectedCells( typename vector<InterFace<dim>*>::const_iterator first,
@@ -639,6 +645,7 @@ template<uint32_t dim>
 bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::const_iterator ifacesBegin,
                                      const typename vector<InterFace<dim>*>::const_iterator ifacesEnd )
 {
+  // the incoming InterFaces were already interconnected by MeshManager
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
   if ( distance(ifacesBegin,ifacesEnd) == 0U ) {
@@ -654,46 +661,8 @@ bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::con
     
   this->cell_vec_.assign( ifacesBegin, ifacesEnd );
 
-  // NB: a SplitBoundary only has a cell vector, but not a node-pointer vector
-  this->IdentifyPerimeter();
-
   return true;
 }
-
-
-/**
-    Creates a split boundary from a boundary. 
-    
-    @attention this will prompt the MeshManager to delete the faces that the boundary consists of, i.e., destroy the boundary.
-    
-    @author SKM 1/11/2013
-    @author SKM 21/9/2021
-*/
-/* DEPRECATED together with the possibility to create SplitBoundaries from Boundaries
-
-template<uint32_t dim>
-bool  SplitBoundary<dim>::CreateFrom( const PropertyDatabase<dim>& dbase,
-                                      MeshManager<dim>& mesh,
-                                      Boundary<dim>& boundary )
-{
-  //LVS
-  const LocalVariables lvsInterFace( InterFaceVariables() );
-  const IntegrationPointVariables lvsIntegrationPoint( InterFaceIntegrationPointVariables() );
-
-  // this method already updates the connectivity of all elements, nodes etc.
-  this->cell_vec_ =  mesh.ReplaceFacesByInterFaces( dbase, boundary.CellVector().begin(),
-                                                    next(boundary.CellVector().begin(),boundary.InteriorCells()),
-                                                    boundary.CellVector().end(),
-                                                    boundary.PerimeterNodesBegin(),
-                                                    boundary.NodesEnd());
-
-  // NB: a SplitBoundary only has a cell vector, but not a node-pointer vector
-  this->IdentifyPerimeter();
-
-  return true;
-  
-} // CreateFrom
-*/
 
 
 
