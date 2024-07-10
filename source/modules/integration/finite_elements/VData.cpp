@@ -3810,7 +3810,7 @@ void VData::EstablishElementConnectivity3D()
                        cerr <<", all node boundary flags have value: NOT; setting neighor to IRREGULAR"<< endl;
                        pfverts[elmt][boundary_face] = IRREGULAR;
                     }
-                  else pfverts[elmt][boundary_face] = atBoundary<3>( bflag_set );
+                  else pfverts[elmt][boundary_face] = atBoundary<3>( bflag_set, n_face_nodes );
                 }
           }
 

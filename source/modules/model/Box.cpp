@@ -1858,16 +1858,19 @@ template BOX_BOUNDARY atBoundary( const Element<3U>* const );
 
 /// identifying the boundary that a lower dimensional element is located on from the BOX_BOUNDARY flags assigned to its nodes
 template<uint32_t dim>
-BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& node_flags )
+BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& node_flags, uint32_t boundary_face_corner_nodes )
  {
+    static_assert( dim != 1U, "use atBoundary( const set<BOX_BOUNDARY>&, uint32_t ): only for 2 or 3D models");
+    assert( boundary_face_corner_nodes >= 2U );
+    
     if ( node_flags.empty() ) return NOT;
     
-    // TWO-DIMENSIONAL MODELS
+    const auto n_flags = node_flags.size();
+   
+    // TWO-DIMENSIONAL MODELS - lower-dim elements are line elements
     if constexpr ( dim == 2U ) {
-         // else there is a problem
-         assert( node_flags.size() <= 2 );
          // one flag
-         if ( node_flags.size() == 1 ) {
+         if ( n_flags == 1U) {
               switch( (*node_flags.begin())  ) {
                    case LEFT:
                      return LEFT;
@@ -1877,15 +1880,39 @@ BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& node_flags )
                      return BOTTOM;
                    case TOP:
                      return TOP;
+                   // edges
+                   case EDGE1:
+                     return EDGE1;
+                   case EDGE2:
+                     return EDGE2;
+                   case EDGE3:
+                     return EDGE3;
+                   case EDGE4:
+                     return EDGE4;
                    default:
                      return IRREGULAR;
                 }
            }
-         else { // 2 flags since there is a corner flag
-             const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ (*node_flags.rbegin()) };
+         else if ( n_flags == 2U ) { // set with 2 flags must contain a corner flag
+             const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ *next(node_flags.begin(),1) };
              // the higher bflag value would be the corner value
              if ( isCorner(b2) ) {
                   switch( b1 ) {
+                       // edges have lower negative int values than corners
+                       case EDGE1:
+                         return EDGE1;
+                       case EDGE2:
+                         return EDGE2;
+                       case EDGE3:
+                         return EDGE3;
+                       case EDGE4:
+                         return EDGE4;
+                       default:
+                         return IRREGULAR;
+                    }
+               }
+             else if ( isCorner(b1) ) {
+                  switch( b2 ) {
                        case LEFT:
                          return LEFT;
                        case RIGHT:
@@ -1899,93 +1926,238 @@ BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& node_flags )
                     }
               }
           }
-         // error
-         cerr <<"\n"<<"BOX_BOUNDARY atBoundary<2>( const set<BOX_BOUNDARY>& ): Error: could not resolve boundary status."<< endl;
+         else { // error
+            cerr <<"\n"<<"BOX_BOUNDARY atBoundary<2>( const set<BOX_BOUNDARY>&, face_cnr_nodes ): Error: could not resolve boundary status."<< endl;
+            cerr <<"\t"<<"input data: corner nodes of element face: "<< boundary_face_corner_nodes << endl;
+            cerr <<"\t"<<"boundary node flags:\n";
+            for ( const auto& fit : node_flags ) cerr <<" "<< parseBoundary(fit);
+            cerr << endl;
+          }
+          
       } // end 2D
       
-    // THREE-DIMENSIONAL MODELS
-    if constexpr ( dim == 3 ) {
-         assert( node_flags.size() <= 4 );
-         // all node flags are the same (size 1)
-         if ( node_flags.size() == 1 ) {
-                switch( (*node_flags.begin())  ) {
-                     case LEFT:
-                       return LEFT;
-                     case RIGHT:
-                       return RIGHT;
-                     case BOTTOM:
-                       return BOTTOM;
-                     case TOP:
-                       return TOP;
-                     case FRONT:
-                       return FRONT;
-                     case BACK:
-                       return BACK;
-                     default:
-                       return IRREGULAR;
+      
+    // THREE-DIMENSIONAL MODELS - lower dimensional elements are line or surface elements
+    if constexpr ( dim == 3U ) {
+         if ( boundary_face_corner_nodes == 2U ) { // line element case
+             // all node flags are the same (size 1)
+             if ( n_flags == 1U ) {
+                    switch( (*node_flags.begin())  ) {
+                         case EDGE1:
+                           return EDGE1;
+                         case EDGE2:
+                           return EDGE2;
+                         case EDGE3:
+                           return EDGE3;
+                         case EDGE4:
+                           return EDGE4;
+                         case EDGE5:
+                           return EDGE5;
+                         case EDGE6:
+                           return EDGE6;
+                         case EDGE7:
+                           return EDGE7;
+                         case EDGE8:
+                           return EDGE8;
+                         case EDGE9:
+                           return EDGE9;
+                         case EDGE10:
+                           return EDGE10;
+                         case EDGE11:
+                           return EDGE11;
+                         case EDGE12:
+                           return EDGE12;
+                         case LEFT:
+                           return LEFT;
+                         case RIGHT:
+                           return RIGHT;
+                         case BOTTOM:
+                           return BOTTOM;
+                         case TOP:
+                           return TOP;
+                         case FRONT:
+                           return FRONT;
+                         case BACK:
+                           return BACK;
+                         default:
+                           return IRREGULAR;
+                      }
+               }
+             // two node flags (line segments)
+             else if ( n_flags == 2U ) {
+                 const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ *next(node_flags.begin(),1) };
+                 // when the higher bflag value is the corner flag value
+                 if ( isCorner(b2) ) {
+                      switch( b1 ) {
+                           // edges have lower negative int values than corners
+                           case EDGE1:
+                             return EDGE1;
+                           case EDGE2:
+                             return EDGE2;
+                           case EDGE3:
+                             return EDGE3;
+                           case EDGE4:
+                             return EDGE4;
+                           case EDGE5:
+                             return EDGE5;
+                           case EDGE6:
+                             return EDGE6;
+                           case EDGE7:
+                             return EDGE7;
+                           case EDGE8:
+                             return EDGE8;
+                           case EDGE9:
+                             return EDGE9;
+                           case EDGE10:
+                             return EDGE10;
+                           case EDGE11:
+                             return EDGE11;
+                           case EDGE12:
+                             return EDGE12;
+                           default:
+                             return IRREGULAR;
+                        }
+                   }
+                 // 2 different flags and the corner flag value has a lower value than these boundary flags
+                 else if ( isCorner(b1) ) {
+                      switch( b2 ) {
+                           case LEFT:
+                             return LEFT;
+                           case RIGHT:
+                             return RIGHT;
+                           case BOTTOM:
+                             return BOTTOM;
+                           case TOP:
+                             return TOP;
+                           case FRONT:
+                             return FRONT;
+                           case BACK:
+                             return BACK;
+                           default:
+                             return IRREGULAR;
+                        }
                   }
-           }
-         // two node flags
-         else if ( node_flags.size() == 2 ) {
-              const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ (*node_flags.rbegin()) };
-              // the higher bflag value would be the corner value
-              if ( isCorner(b2) ) {
-                  switch( b1 ) {
-                       case LEFT:
-                         return LEFT;
-                       case RIGHT:
-                         return RIGHT;
-                       case BOTTOM:
-                         return BOTTOM;
-                       case TOP:
-                         return TOP;
-                       case FRONT:
-                         return FRONT;
-                       case BACK:
-                         return BACK;
-                       default:
-                         return IRREGULAR;
-                    }
-                }
-           }
-         // three different node flags
-         else if ( node_flags.size() == 3 ) {
-              const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ *next(node_flags.begin(),1) }, b3{ *next(node_flags.begin(),2) };
-              if ( isLEFT(b1) && isLEFT(b2) && isLEFT(b3) ) return LEFT;
-              if ( isRIGHT(b1) && isRIGHT(b2) && isRIGHT(b3) ) return RIGHT;
-              if ( isBOTTOM(b1) && isBOTTOM(b2) && isBOTTOM(b3) ) return BOTTOM;
-              if ( isTOP(b1) && isTOP(b2) && isTOP(b3) ) return TOP;
-              if ( isFRONT(b1) && isFRONT(b2) && isFRONT(b3) ) return FRONT;
-              if ( isBACK(b1) && isBACK(b2) && isBACK(b3) ) return BACK;
-              return IRREGULAR;
+               }
            }
            
-         // >=4? - there could be an error
-         else if ( node_flags.size() == 4 ) {
-              const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ *next(node_flags.begin(),1) },
-                                 b3{ *next(node_flags.begin(),2) }, b4{ *next(node_flags.begin(),3) };
-              if ( isLEFT(b1) && isLEFT(b2) && isLEFT(b3) && isLEFT(b4) ) return LEFT;
-              if ( isRIGHT(b1) && isRIGHT(b2) && isRIGHT(b3) && isRIGHT(b4) ) return RIGHT;
-              if ( isBOTTOM(b1) && isBOTTOM(b2) && isBOTTOM(b3) && isBOTTOM(b4) ) return BOTTOM;
-              if ( isTOP(b1) && isTOP(b2) && isTOP(b3) && isTOP(b4) ) return TOP;
-              if ( isFRONT(b1) && isFRONT(b2) && isFRONT(b3) && isFRONT(b4) ) return FRONT;
-              if ( isBACK(b1) && isBACK(b2) && isBACK(b3) && isBACK(b4) ) return BACK;
-              return IRREGULAR;
-           }
-         else if ( node_flags.size() > 4 ) {
-              cerr <<"\n"<<"BOX_BOUNDARY atBoundary<3>( const set<BOX_BOUNDARY>& ): Error: more than 4 flags cannot be handled yet."<< endl;
-           }
+         // when the element face at the boundary is a surface
+         else if ( boundary_face_corner_nodes > 2U )
+           {
+             if ( n_flags == 1U ) {
+                    switch( (*node_flags.begin())  ) {
+                         case EDGE1:
+                           return EDGE1;
+                         case EDGE2:
+                           return EDGE2;
+                         case EDGE3:
+                           return EDGE3;
+                         case EDGE4:
+                           return EDGE4;
+                         case EDGE5:
+                           return EDGE5;
+                         case EDGE6:
+                           return EDGE6;
+                         case EDGE7:
+                           return EDGE7;
+                         case EDGE8:
+                           return EDGE8;
+                         case EDGE9:
+                           return EDGE9;
+                         case EDGE10:
+                           return EDGE10;
+                         case EDGE11:
+                           return EDGE11;
+                         case EDGE12:
+                           return EDGE12;
+                         case LEFT:
+                           return LEFT;
+                         case RIGHT:
+                           return RIGHT;
+                         case BOTTOM:
+                           return BOTTOM;
+                         case TOP:
+                           return TOP;
+                         case FRONT:
+                           return FRONT;
+                         case BACK:
+                           return BACK;
+                         default:
+                           return IRREGULAR;
+                      }
+               }
+             // two node flags (surfaces)
+             else if ( n_flags == 2U ) {
+                 const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ *next(node_flags.begin(),1) };
+                 // edge flags are lower than side flags
+                 if ( isEdge(b1) ) {
+                      switch( b2 ) {
+                           // edges have lower negative int values than corners
+                           case BACK:
+                             return BACK;
+                           case FRONT:
+                             return FRONT;
+                           case LEFT:
+                             return LEFT;
+                           case RIGHT:
+                             return RIGHT;
+                           case TOP:
+                             return TOP;
+                           case BOTTOM:
+                             return BOTTOM;
+                           default:
+                             return IRREGULAR;
+                        }
+                   }
+               }
+             // three node flags (surfaces)
+             else if ( n_flags == 3U ) {
+                  const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ *next(node_flags.begin(),1) }, b3{ *next(node_flags.begin(),2) };
+                  if ( isLEFT(b1) && isLEFT(b2) && isLEFT(b3) ) return LEFT;
+                  if ( isRIGHT(b1) && isRIGHT(b2) && isRIGHT(b3) ) return RIGHT;
+                  if ( isBOTTOM(b1) && isBOTTOM(b2) && isBOTTOM(b3) ) return BOTTOM;
+                  if ( isTOP(b1) && isTOP(b2) && isTOP(b3) ) return TOP;
+                  if ( isFRONT(b1) && isFRONT(b2) && isFRONT(b3) ) return FRONT;
+                  if ( isBACK(b1) && isBACK(b2) && isBACK(b3) ) return BACK;
+                  return IRREGULAR;
+               }
+             // boundary face is a quadrilateral (surface) containing a corner node
+             else if ( n_flags == 4U ) {
+                  const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ *next(node_flags.begin(),1) },
+                                     b3{ *next(node_flags.begin(),2) }, b4{ *next(node_flags.begin(),3) };
+                  if ( isLEFT(b1) && isLEFT(b2) && isLEFT(b3) && isLEFT(b4) ) return LEFT;
+                  if ( isRIGHT(b1) && isRIGHT(b2) && isRIGHT(b3) && isRIGHT(b4) ) return RIGHT;
+                  if ( isBOTTOM(b1) && isBOTTOM(b2) && isBOTTOM(b3) && isBOTTOM(b4) ) return BOTTOM;
+                  if ( isTOP(b1) && isTOP(b2) && isTOP(b3) && isTOP(b4) ) return TOP;
+                  if ( isFRONT(b1) && isFRONT(b2) && isFRONT(b3) && isFRONT(b4) ) return FRONT;
+                  if ( isBACK(b1) && isBACK(b2) && isBACK(b3) && isBACK(b4) ) return BACK;
+                  return IRREGULAR;
+               }
+             else { // error
+                  cerr <<"\n"<<"BOX_BOUNDARY atBoundary<3>(): Error: face can have a maximum of 4 flags."<< endl;
+                  cerr <<"\t"<<"input data: corner nodes of element face: "<< boundary_face_corner_nodes << endl;
+                  cerr <<"\t"<<"boundary node flags:\n";
+                  for ( const auto& fit : node_flags ) cerr <<" "<< parseBoundary(fit);
+                  cerr << endl;
+                  return IRREGULAR;
+               }
+             
+           } // end for surface faces
 
-         // error
-         cerr <<"\n"<<"BOX_BOUNDARY atBoundary<3>( const set<BOX_BOUNDARY>& ): Error: could not resolve boundary status."<< endl;
-      }
+      } // end 3D
 
-    return IRREGULAR;
+  // error
+  cerr <<"\n"<<"BOX_BOUNDARY atBoundary<3>( const set<BOX_BOUNDARY>& ): Error: could not resolve boundary status."<< endl;
+  cerr <<"\t"<<"input data: corner nodes of element face: "<< boundary_face_corner_nodes << endl;
+  cerr <<"\t"<<"boundary node flags:\n";
+  for ( const auto& fit : node_flags ) cerr <<" "<< parseBoundary(fit);
+  cerr << endl;
 
- } // end atBoundary(set<BOX_BOUNDARY>)
+  return IRREGULAR;
 
-template BOX_BOUNDARY atBoundary<2>( const set<BOX_BOUNDARY>& );
-template BOX_BOUNDARY atBoundary<3>( const set<BOX_BOUNDARY>& );
+} // end atBoundary(set<BOX_BOUNDARY>)
+
+template BOX_BOUNDARY atBoundary<2>( const set<BOX_BOUNDARY>&, uint32_t );
+template BOX_BOUNDARY atBoundary<3>( const set<BOX_BOUNDARY>&, uint32_t );
 
 
 

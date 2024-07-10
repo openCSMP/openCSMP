@@ -140,28 +140,22 @@ void create_1Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed )
 {
   	IsoparametricLinearQuadrilateral iso_quad;
   	
-  	//elements hexahedrons
-    size_t           nodes(4); // number of nodes
-  	deque<uint32_t>  npes(1);  // number of nodes per element
-    deque<uint32_t>  epes(1);  // elements per element
-    deque<int8_t>    etypes(1,ISOPARAMETRIC_LINEAR_QUADRILATERAL);
-
-    npes[0] = iso_quad.Nodes();
-  	epes[0] = iso_quad.Neighbors();
-  	
     //--------------------------ELEMENT TYPES
   	//add element types
     vector<int8_t> vecElementTypes(1);
     vecElementTypes[0]= ISOPARAMETRIC_LINEAR_QUADRILATERAL;
-  	
-  	vset.Resize( etypes, npes, epes, nodes, 0, 0 );
+ 
+    const size_t   n_nodes(4), n_elmts{1};
+    const uint32_t nodes_per_elmt{4}, nbors_per_elmt{4};
+  	vset.Resize( nodes_per_elmt, nbors_per_elmt, ISOPARAMETRIC_LINEAR_QUADRILATERAL, n_nodes, n_elmts );
+ 
   	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
 
   	//-----------------------NODES
   	//define nodes
-  	deque<double> px(nodes);
-  	deque<double> py(nodes);
-  	deque<double> pz(nodes);
+  	deque<double> px(n_nodes);
+  	deque<double> py(n_nodes);
+  	deque<double> pz(n_nodes);
   	
   	px[0]=0;                py[0]=0;                  pz[0]=0;
   	px[1]=length_of_sides;  py[1]=0;                  pz[1]=0;
@@ -180,9 +174,9 @@ void create_1Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed )
   	vset.AddXYZ( px, py, pz );
   	
   	//--------------------------ELEMENTS
-    //define hexahedron elements (elements 0->26), assign nodes per element
+    //define quadrilateral elements (elements 0->26), assign nodes per element
     deque< vector<size_t> > deqElements(1);
-    deqElements[0].resize(nodes);
+    deqElements[0].resize(n_nodes);
   	 
     deqElements[0][0]= 1;
     deqElements[0][1]= 2;
@@ -194,18 +188,18 @@ void create_1Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed )
     //define neighbors
     deque<vector<int64_t> > deqElementNeighbors(1);
     deqElementNeighbors[0].resize(4);
-  	deqElementNeighbors[0][0]= BACK_OUTSIDE;
-  	deqElementNeighbors[0][1]= BOTTOM_OUTSIDE;
-  	deqElementNeighbors[0][2]= RIGHT_OUTSIDE;
-  	deqElementNeighbors[0][3]= TOP_OUTSIDE;
+  	deqElementNeighbors[0][0]= BOTTOM_OUTSIDE;
+  	deqElementNeighbors[0][1]= RIGHT_OUTSIDE;
+  	deqElementNeighbors[0][2]= TOP_OUTSIDE;
+  	deqElementNeighbors[0][3]= LEFT_OUTSIDE;
   	
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
   	
   	//----------------------------NODE BOUNDARIES
-  	vset.BFlag( 1, CNR1);
-  	vset.BFlag( 2, CNR2);
-  	vset.BFlag( 3, CNR3);
-  	vset.BFlag( 4, CNR4);
+  	vset.BFlag( 0, CNR1);
+  	vset.BFlag( 1, CNR2);
+  	vset.BFlag( 2, CNR3);
+  	vset.BFlag( 3, CNR4);
   	
     vset.EstablishZeroBasedNumbering();
     //vset.Out();
@@ -964,7 +958,9 @@ void create_1Hexahedron_VSet( VSet<3U>& vset, bool bSkewed )
 
 
 
-
+/**
+    @test SKM 10/7/2024 - nbor connectivity and node flags are consistent with CSMP conventions
+*/
 void create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
 {
     const size_t iNrOfElements(27);
@@ -1091,8 +1087,8 @@ void create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   	    }
   	    else if(j==(iDim_j-1))
   	    {
-          if(j==0) bBoundary=CNR4; //shouldn't this be i?
-          else if(j==(iDim_j-1)) bBoundary=CNR3; //shouldn't this be i?
+          if(i==0) bBoundary=CNR4; //shouldn't this be i?
+          else if(i==(iDim_i-1)) bBoundary=CNR3; //shouldn't this be i?
           else bBoundary=EDGE3;
   	    }
   	    else //j is in the middle
@@ -1184,7 +1180,7 @@ void create_Square_VSet( VSet<2U>& vset, int size_sides, double dimension, bool 
 
 
 
-
+// TODO: nbor connectivity and node flags are inconsistent with CSMP conventions
 void create_SlitRectangle_VSet( VSet<2U>& vset, int x_dimension, int y_dimension,
                                 double x_length, double y_length, int depth_of_slit, bool bSkewed )
 {
@@ -2841,6 +2837,7 @@ void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
       @author SKM
       @date 31/5/2024
 */
+// TODO: nbor connectivity and node flags are inconsistent with CSMP conventions
 void create_RubikCube( VSet<3U>& vset )
   {
     // Rubik cube 3 x 3 x 3, starting element numbering from the origin in the back plane (XY), moving left to right, from bottom to top

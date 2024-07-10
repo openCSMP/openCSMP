@@ -475,12 +475,47 @@ void VData_Test::Test_RecreateConnectivityOfTetrahedralMesh()
     /// reestablishes neighbor connectivity for 3D model Rubik cube
 void VData_Test::Test_RecreateConnectivityOfHexahedralMesh()
  {
-    VSet<3U> vset;
-    create_RubikCube( vset );
-    VSet<3U> vset_backup = vset;
-    vset.EstablishElementConnectivity3D();
-    if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'RubikCube'..."<< endl;
-    _test( vset == vset_backup );
+    // 2D test cases
+    {
+      VSet<2U> vset;
+      // quadrilateral mesh
+      const int    size_sides{1}; // one square VSet
+      const double dimension{5.};
+      const bool   skewed=false;
+      create_Square_VSet( vset, size_sides, dimension, skewed );
+      VSet<2U> vset_backup = vset;
+      vset.EstablishElementConnectivity2D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'Square(quadrilaterals)'..."<< endl;
+      _test( vset == vset_backup );
+      // triangular mesh, OK 10/7/24
+      VSet<2U> vset2;
+      create_TrianglePatch_VSet( vset2 );
+      vset_backup = vset2;
+      vset2.EstablishElementConnectivity2D();
+      if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'Triangle(triangles)'..."<< endl;
+      _test( vset2 == vset_backup );
+    }
+    // 3D test cases
+    {
+      // all hexahedral model
+      {
+        VSet<3U> vset;
+        create_Hexahedra_VSet( vset );
+        VSet<3U> vset_backup = vset;
+        vset.EstablishElementConnectivity3D();
+        if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'Hexahedra'..."<< endl;
+        _test( vset == vset_backup );
+      }
+      // mixed pyramids and hexahedra
+      {
+        VSet<3U> vset;
+        create_Pyramid_Hexa_VSet( vset );
+        VSet<3U> vset_backup = vset;
+        vset.EstablishElementConnectivity3D();
+        if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfHexahedralMesh: testing model 'Pyramid_Hexa'..."<< endl;
+        _test( vset == vset_backup );
+      }
+    }
  }
 
 

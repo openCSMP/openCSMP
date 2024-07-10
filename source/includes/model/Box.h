@@ -149,17 +149,17 @@ bool canBeIRREGULAR( BOX_BOUNDARY );
 /// returns nodes that are either flagged  CNR1 or CNR2 from one-dimensional model
 Node<1U>* const cornerFlaggedNode( Model<1U>&, BOX_BOUNDARY );
 
-/// infers from node flags, and cell types, which boundary the element face lies on including INTERNAL ones
+/// infers from node flags and cell type, which boundary the element face lies on including INTERNAL boundaries
 template<uint32_t dim, template<uint32_t> class CELL>
 BOX_BOUNDARY atBoundary( const CELL<dim>* const, uint32_t boundary_face );
 
-/// returns whether the cell is at the model boundary as inferred if all nodes of a line or surface element are flagged boundary or one face of a volume element is
+/// is the cell located at a model boundary? - for line or surface element in 3D models  this is inferred when all their nodes are on boundary; for volume elements all nodes of one face must be
 template<uint32_t dim, template<uint32_t> class CELL>
 bool atBoundary( const CELL<dim>* const );
 
-/// identifying the boundary that a lower dimensional element is located on from the BOX_BOUNDARY flags assigned to its nodes
+/// identifies which boundary a lower dimensional element is located on using the node  flags of this element
 template<uint32_t dim>
-BOX_BOUNDARY atBoundary( const std::set<BOX_BOUNDARY>& node_flags );
+BOX_BOUNDARY atBoundary( const std::set<BOX_BOUNDARY>& node_flags, uint32_t boundary_face_corner_nodes );
 
 /// prints a summary of the current flags of the nodes and elements to screen.
 template<uint32_t dim> void printBoxBoundaryFlags( const Model<dim>& );
