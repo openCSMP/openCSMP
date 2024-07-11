@@ -1021,8 +1021,8 @@ void Model<dim>::IndexByPropertyValues()
                }
           }
         else {
-             csmp_error.Note( ERROR, "Model::IndexByPropertyValues:",
-                                     "'face number' is not defined; default unique contiguous numbering will be used" );
+             csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
+                                       "'face number' is not defined; default unique contiguous numbering will be used" );
              mesh.AssignUniqueNumbers( in_a_single_sequence );
              return;
           }

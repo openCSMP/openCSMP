@@ -2614,7 +2614,7 @@ void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
 
 
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
+size_t RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
  {
      cout <<"\n\nRegionInterface<"<< dim <<",Region<Element>>::RegionsOut:\n";
      cout <<"\n\tUnique regions of model:\n";
@@ -2644,6 +2644,8 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
           cout <<", range of element spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << endl;
        }
      cout << endl << endl;
+     
+     return distance( RegionsBegin(), RegionsEnd() );
  }
 
 

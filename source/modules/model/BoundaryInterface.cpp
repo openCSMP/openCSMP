@@ -2281,12 +2281,12 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromNodeFlag
 
 
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
-void BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
+size_t BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
  {
      cout <<"\nBoundaryInterface<"<< dim <<",Boundary<Face>>::BoundariesOut: ";
      if ( Boundaries() == 0U ) {
           cout <<"\tmodel does not contain any boundaries.\n\n";
-          return;
+          return 0ul;
        }
      cout <<"boundaries of ";
      if ( BoxShaped() ) cout <<"box-shaped model:\n";
@@ -2304,6 +2304,7 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
        }
      cout << endl << endl;
      cout.flush();
+     return distance( BoundariesBegin(), BoundariesEnd() );
  }
 
 

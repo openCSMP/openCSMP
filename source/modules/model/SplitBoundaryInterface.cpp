@@ -1782,14 +1782,14 @@ set<string>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertLowerDime
 Prints current SplitBoundaries to screen
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() const
+size_t SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() const
   {
      const SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<const SPLITBOUNDARY_COMPLEX<dim>*>(this));
 
      cout <<"\nSplitBoundaryInterface<"<< dim <<",SplitBoundary<InterFace>>::SplitBoundariesOut: ";
      if ( SplitBoundaries() == 0U ) {
           cout <<"\tmodel does not contain any split boundaries.\n\n";
-          return;
+          return 0U;
        }
      cout <<"split boundaries of ";
      if ( model->BoxShaped() ) cout <<"box-shaped model:\n";
@@ -1807,6 +1807,8 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() co
        }
      cout << endl << endl;
      cout.flush();
+
+     return distance( SplitBoundariesBegin(), SplitBoundariesEnd() );
 
 } // end Out
 

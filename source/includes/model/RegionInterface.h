@@ -93,7 +93,7 @@ class RegionInterface {
     //  Input/output
     // -----------------------------------------------
 
-    void RegionsOut() const;
+    size_t RegionsOut() const;
 
     /// writes unique and non-unique regions to binary file, including, interior/perimeter/boundary face information; relies on unique indexes
     void OutputRegionsToBinary( const char* file_name ) const;
