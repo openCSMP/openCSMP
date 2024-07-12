@@ -163,7 +163,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
              pz.resize( n_vertices );
           }
 
-        // Print tge extracted vertex coordinates
+        // Print the extracted vertex coordinates
         if ( verbose ) {
             cout <<"\n"<<"Extracted Point Coordinates:" << endl;
             for ( size_t i{0u}; i<px.size(); ++i ) {

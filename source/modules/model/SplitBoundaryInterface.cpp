@@ -829,7 +829,8 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
   topo.OutputSplitBoundaries( split_boundaries );
 
   // 2. assigning the regions to groups in the Model
-  cout << "\nSplitBoundaryInterface::FormSplitBoundariesFrom: Forming the split boundaries: ";
+  if ( !split_boundaries.empty() ) cout << "\nSplitBoundaryInterface::FormSplitBoundariesFrom: Forming the split boundaries: ";
+  else return 0;
 
   size_t new_split_boundaries{0};
   for ( auto lit = split_boundaries.begin(); lit != split_boundaries.end(); lit++ )

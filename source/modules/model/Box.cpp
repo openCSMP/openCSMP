@@ -1250,16 +1250,24 @@ void recreateBoxBoundaryFlagsForQuadrilateralModel( Model<2U>& model )
 */ 
 void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
  { 
-    Region<3U>&    modeldomain(model.Region("Model"));
+    ErrorHandler&    csmp_error( ErrorHandler::Instance() );
+
+    Region<3U>&      modeldomain(model.Region("Model"));
     vector<uint32_t> fnids;
+    bool non_hex_cells_found{false};
     
-    for ( vector<Element<3U>*>::const_iterator it=modeldomain.CellsBegin(); it!=modeldomain.CellsEnd(); ++it )
+    for ( auto it=modeldomain.CellsBegin(); it!=modeldomain.CellsEnd(); ++it )
       {
          // current version only works for linear hexahedra
          assert( (*it)->Nodes() <= 9 );
 
-         if ( !isHexahedral( (*it)->FE_Type() ) )
-           throw csmp::Exception( ERROR, "recreateBoxBoundaryFlagsForHexahedralModel", "this method only works for quadrilateral elements");
+         if ( !isHexahedral( (*it)->FE_Type() ) ) {
+              if ( !non_hex_cells_found ) {
+                   csmp_error.Note( WARNING, "recreateBoxBoundaryFlagsForHexahedralModel", "this method only works for hexahedral elements");
+                   non_hex_cells_found = true;
+                }
+              continue;
+           }
            
          // DEFAULT (not at any boundary)
          for ( uint32_t i{0U}; i<(*it)->Nodes(); ++i )

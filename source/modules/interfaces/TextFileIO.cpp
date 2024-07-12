@@ -507,6 +507,7 @@ bool isYES( const std::string& text_line )
   // it is definite yes
   if ( yes.find( text_line ) != yes.end() )
     return true;
+    
   return false;
 }
 
@@ -534,7 +535,7 @@ bool isNO( const std::string& text_line )
   if ( no.find( text_line ) != no.end() )
     return false;
 
-  throw csmp::Exception( FATAL_ERROR,
+  throw csmp::Exception( WARNING,
                          "yes_or_no:",
                          "The answer is uncertain!",
                          text_line );

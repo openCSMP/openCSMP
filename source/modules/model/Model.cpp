@@ -3,6 +3,7 @@
 #include "SplitBoundary.h"
 #include "VSet.h"
 #include "VSetConverter.h"
+#include "TextFileIO.h"
 #include "ModelTopology.h"
 #include "Face.h"
 #include "InterFace.h"
@@ -330,6 +331,10 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
          csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "'pfverts' array is missing.");
 
     // 2. building the finite element mesh and property storage
+    // potential extra variables in VSet
+    const bool verbose{true};
+    createVariablesInVSetThatAreMissingFromDatabase( database_, vset, verbose );
+    // finite volume variables
     const bool with_FV_variables = (finiteVolumeVariables(Database()) > 0 ) ? true : false;
     mesh_manager_.Initialize( Database(), vset, with_FV_variables );
     const bool contiguous_model( mesh_manager_.IsContiguous() );
@@ -416,6 +421,65 @@ if ( mesh_manager_.InterFaces() > 0 )
 
 
 
+/**
+  Helper function that checks whether the variables in the VSet are already contained in the propery data base and adds them if they are not.
+  @param verbose true will prompt the user to authorise the creation of the new variables
+  @return number of variables created by the function
+*/
+template<uint32_t dim>
+int createVariablesInVSetThatAreMissingFromDatabase( PropertyDatabase<dim>& dbase, const VSet<dim>& vset, bool verbose )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    // which properties are missing?
+    set<string> missing_properties;
+    for ( auto pit=vset.PropertyValuesBegin(); pit!=vset.PropertyValuesEnd(); ++pit )
+      if ( !dbase.IsDefined( (*pit).first.c_str() ) )
+        missing_properties.insert( (*pit).first );
+    
+    // getting authorisation from the user
+    if ( verbose && !missing_properties.empty() ) {
+         cout <<"\n"<<"createVariablesInVSetThatAreMissingFromDatabase: found properties not in PropertyDataBase:\n";
+         for ( const auto& pit : missing_properties )
+           cout <<"\t\t'"<< pit <<"'"<< endl;
+         if ( !Standard_IO_Handler().YesNo( "Add these properties to database" ) )
+           return 0;
+      }
+  
+    // adding the missing properties
+    const bool dbase_status = dbase.Verbose();
+    dbase.Verbose(verbose);
+    int vars_added{0u};
+    for ( auto pit=vset.PropertyValuesBegin(); pit!=vset.PropertyValuesEnd(); ++pit )
+      if ( !dbase.IsDefined( (*pit).first.c_str() ) ) {
+          // checking the value range, is isNaN the variable is not added
+           double vmin, vmax;
+           (*pit).second.MinMaxOf( vmin, vmax );
+           if ( isnan(vmin) || isnan(vmax) ) {
+                csmp_error.Note( WARNING, "createVariablesInVSetThatAreMissingFromDatabase:", "Property data contains NaN values; property is not added");
+                continue;
+             }
+           if ( vmin == vmax )
+             csmp_error.Note( WARNING, "createVariablesInVSetThatAreMissingFromDatabase):", "all values are the same");
+           // creating notation from first 2 letters and number of variable added
+           string notation{ (*pit).first.substr(0,2) };
+           notation += vars_added;
+           // adding the property
+           dbase.AddProperty( (*pit).first.c_str(), // name
+                               notation.c_str(),
+                               "not specified", // unit
+                               (*pit).second.Type(),
+                               (*pit).second.Placement(),
+                               (*pit).second.Components(),
+                               vmin, vmax );
+           vars_added++;
+        }
+   dbase.Verbose(dbase_status); // returning back to original state
+  
+   return vars_added;
+       
+ } // end
+
 
 /**
     NEW (2022)! - builds model assuming that all information about regions, boundaries or split boundaries is stored in from ModelTopology.
@@ -437,7 +501,11 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
      if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
          csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
 
-    // 1. building the finite element mesh and property storage
+    // 1. building finite element mesh and property storage
+    // extra properties stored in the VSet
+    const bool verbose{true};
+    createVariablesInVSetThatAreMissingFromDatabase( database_, vset, verbose );
+    // finite volume variables
     const bool with_FV_variables = (finiteVolumeVariables(Database()) > 0 ) ? true : false;
     mesh_manager_.Initialize( Database(), vset, with_FV_variables );
     const bool contiguous_model( mesh_manager_.IsContiguous() );

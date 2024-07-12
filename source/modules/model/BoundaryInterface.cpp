@@ -339,7 +339,8 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FormBoundariesFrom( const ModelT
   topo.OutputBoundaries( boundaries );
 
   // 2. assigning the regions to groups in the Model
-  cout << "\nBoundaryInterface::FormBoundariesFrom: Forming the boundaries: ";
+  if ( !boundaries.empty() ) cout << "\nBoundaryInterface::FormBoundariesFrom: Forming the boundaries: ";
+  else return 0;
 
   size_t new_boundaries{0};
   for ( const auto& lit : boundaries )
@@ -1834,7 +1835,7 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
     model->RemoveRegion( dimension_minus1_region, erase_elements );
     model->UpdateRegions();
 
-	  cout <<"\n\n"<<"BoundaryInterface::CreateExternalBoundaryFrom: removed input region."<< endl;
+	  cout <<"\n\n"<<"BoundaryInterface::CreateExternalBoundaryFrom: created boundary '"<< boundary_name <<"', and removed input region."<< endl;
 
 	  return make_pair( boundary_name, true );
 
