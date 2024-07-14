@@ -9,6 +9,7 @@ class PropertyConstraints;
 class ModelTopology;
 template<uint32_t> class Region;
 template<uint32_t> class Element;
+template<uint32_t> class Node;
 template<uint32_t> class Point;
 
 /**
@@ -128,7 +129,7 @@ class RegionInterface {
     size_t                    UniqueRegions() const;
 
     // -----------------------------------------------
-    // Regions creation
+    // Region creation
     // -----------------------------------------------
 
     /// builds master region 'Model' (discontigous or not) including all elements (line, surface, or volume if any); this regions is then used to build others
@@ -166,6 +167,9 @@ class RegionInterface {
     /// ; returns number of elements
     template<template<uint32_t> class ElementComp>
     size_t FormRegionFrom( const char* regionname, ElementComp<dim> const& elementComp, const char* hostRegion = "Model" );
+
+    /// Assuming that the supplied n-nodes are in sequence of a polyline, method forms n-1 line elements putting them into a now limer-dimensional region
+    size_t FormRegionFrom( const char* regionname, std::vector<Node<dim>*>& nodes, bool is_unique=true );
 
 
     // -----------------------------------------------

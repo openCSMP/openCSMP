@@ -27,7 +27,7 @@ namespace csmp {
     // 2D poly-element type meshes wirh topology info
     // ----------------------------------------------
     ///  Rectangle-shaped MODEL_TINY, consisting of 1 line element two triangles, 1 quadrilateral and 6 face object marking the box boundary.
-    ModelTopology  test_CreateSimplestPolyElement2DModel( VSet<2U>& );
+    ModelTopology  create_SimplePolyElement2DModel( VSet<2U>& );
 
     /// Rectangle shaped mixed model with 2 intersecting line element regions
     ModelTopology  create_MeshPatchWithLineElements_VSet( VSet<2U>& );

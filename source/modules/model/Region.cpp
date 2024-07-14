@@ -1818,98 +1818,6 @@ void  Region<dim>::Add( const Region<dim>& grp )
 
 
 
-/**
-Method builds a new region of elements between the argument regions.
-
-@author P. Lang
-@author R. Manasipov
-@date 22/8/2014
-
-This method assumes that elements are uniquely and throughgoingly numbered.
-The Elements are build so that their normals point from region 1 to region 2.
-Variable storage is assigned for both, the elements and region itself.
-*/
-/* TODO: refactor using new functionality
-template<uint32_t dim>
-bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
-                                 const FiniteElementManager& finiteElementManager,
-                                 const Region<dim>& region1,
-                                 const Region<dim>& region2,
-                                 int32_t material_id )
-{
-
-  // LVS
-  const LocalVariables lvsElements( ElementVariables() );
-  const IntegrationPointVariables lvsIntegrationPoints( ElementIntegrationPointVariables() );
-
-  // pointer to running element, fem type of new faces
-  Element<dim>*       ePtr( NULL );
-  Element<dim>*       ePtrNeighbor( NULL );
-  FiniteElement*      femPtr( NULL );
-  std::vector<uint32_t> face_node_ids;
-
-  // reserving storage for boundary elements (logic: the number of faces created cannot be
-  // larger than the minimum number boundary elements of the two neighboring groups)
-  this->cell_vec_.reserve( std::min( region1.PerimeterCells(),
-                           region2.PerimeterCells() ) );
-
-  // searching for elements of region1 that are neighbors of ones in group1.
-  // If so, there is a shared boundary and faces or interfaces are constructed.
-  const size_t n_elements( region1.Cells() );
-
-  for ( auto i = region1.InteriorCells(); i < n_elements; ++i )
-    {
-      ePtr = region1.E( i );
-      const auto perimeter_faces( region1.PerimeterFaces( i ) );
-      for ( auto j{0U}; j < perimeter_faces; ++j )
-        {
-          const auto face = region1.PerimeterFace( i, j );
-          ePtrNeighbor = ePtr->Neighbor( face );
-
-          // checking whether neighbor element forms part of the boundary of group2
-          if ( ePtrNeighbor != nullptr )
-            if ( region2.IsPerimeterCell( ePtrNeighbor ) )
-              {
-                // if the neighbor is in the boundary, the new Face is build
-                femPtr = finiteElementManager.E( ePtr->FE()->ElementTypeOfFace( face ) );
-
-                // the new face is connected to the elements it is sandwiched between
-                // this assignment also includes connecting the element to its nodes
-                // inner/outer  element w.r.t. to normal of face
-                face_node_ids.clear();
-                face_node_ids.resize( ePtr->FE()->NodesPerFace( face ) );
-                ePtr->FE()->NodesOfFace( face, face_node_ids );
-                const size_t face_size = face_node_ids.size();
-                vector<Node<dim>*>  nodes;
-                nodes.reserve( face_size );
-                for ( size_t nid = 0U; nid < face_size; ++nid )
-                  nodes.push_back( ePtr->N( face_node_ids[nid] ) );
-
-                // getting the mesh manager to construct a new element
-                Element<dim>* elmtObj = meshManager.AddElement( femPtr->ElementType(),
-                                                                lvsElements, lvsIntegrationPoints,
-                                                                nodes, material_id );
-                // added to boundary
-                this->cell_vec_.push_back( elmtObj );
-
-              } // neighboring elements
-
-        } // perimeter faces
-
-    } // perimeter elements
-
-    // free
-  vector<csmp::Element<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
-
-  this->CreateNodePointerVector();
-  this->IdentifyPerimeter();
-  this->UpdateMemberIndexes();
-
-  //done
-  return true;
-
-} // CreateBetween
-*/
 
 
 
@@ -1954,6 +1862,9 @@ size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
   return res.Cells();
 
 } // end groupUnion
+
+
+
 
 
 

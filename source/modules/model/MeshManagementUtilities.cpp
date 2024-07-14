@@ -2579,6 +2579,88 @@ template void printNodeCoordinates<2U>( typename vector<Node<2U>*>::const_iterat
 template void printNodeCoordinates<1U>( typename vector<Node<1U>*>::const_iterator, typename vector<Node<1U>*>::const_iterator );
 
 
+
+
+/**
+      returns the maximum distance between the nodes in the provided range
+*/
+template<uint32_t dim>
+double maximumNodeSpacing( typename vector<Node<dim>*>::const_iterator first,
+                           typename vector<Node<dim>*>::const_iterator last )
+ {
+    double node_spacing{0.};
+    while( first != last ) {
+          for ( uint32_t i{0u}; i<(*first)->Neighbors(); ++i  )
+            node_spacing = max( node_spacing, (*first)->Coordinate().DistanceTo( (*first)->Neighbor(i)->Coordinate() ) );
+          first++;
+       }
+    
+    return node_spacing;
+       
+ } // end maximumNodeSpacing
+
+template double maximumNodeSpacing<1U>( typename vector<Node<1U>*>::const_iterator,
+                                        typename vector<Node<1U>*>::const_iterator );
+template double maximumNodeSpacing<2U>( typename vector<Node<2U>*>::const_iterator,
+                                        typename vector<Node<2U>*>::const_iterator );
+template double maximumNodeSpacing<3U>( typename vector<Node<3U>*>::const_iterator,
+                                        typename vector<Node<3U>*>::const_iterator );
+
+
+
+template<uint32_t dim>
+double minimumNodeSpacing( typename vector<Node<dim>*>::const_iterator first,
+                           typename vector<Node<dim>*>::const_iterator last )
+ {
+    double node_spacing{0.};
+    while( first != last ) {
+          for ( uint32_t i{0u}; i<(*first)->Neighbors(); ++i  )
+            node_spacing = max( node_spacing, (*first)->Coordinate().DistanceTo( (*first)->Neighbor(i)->Coordinate() ) );
+          first++;
+       }
+    
+    return node_spacing;
+       
+ } // end minimumNodeSpacing
+
+template double minimumNodeSpacing<1U>( typename vector<Node<1U>*>::const_iterator,
+                                        typename vector<Node<1U>*>::const_iterator );
+template double minimumNodeSpacing<2U>( typename vector<Node<2U>*>::const_iterator,
+                                        typename vector<Node<2U>*>::const_iterator );
+template double minimumNodeSpacing<3U>( typename vector<Node<3U>*>::const_iterator,
+                                        typename vector<Node<3U>*>::const_iterator );
+
+
+
+
+
+
+/// checks whether point is contained in any of the elements in supplied region returning 'nullptr' or the element in which it is contained
+template<uint32_t dim>
+const Element<dim>* isContainedIn( const Region<dim>& subdomain, const Point<dim>& search_point ) {
+     vector<double> xyz = search_point.Coordinates();
+     vector<double> N;
+     // testing containment by a linear search that diagnoses whether point is contained
+     // by determining whether all element interpolation function values are between zero and one.
+     for ( const auto& it : subdomain.CellVector() ) {
+           it->N_AtGlobalPoint( N, xyz );
+           size_t counter{0ul};
+           for( const auto& nval : N ) {
+                if ( nval < 0. || nval > 1. ) break;
+                counter++;
+             }
+           // if all N values are within [0..1] the point has been found
+           if ( counter == N.size() )
+             return it;
+       }
+     return nullptr;
+  }
+
+template const Element<2U>* isContainedIn( const Region<2U>&, const Point<2U>& );
+template const Element<3U>* isContainedIn( const Region<3U>&, const Point<3U>& );
+
+
+
 /**
       Finding the neighbors nodes of each node.
       

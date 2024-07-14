@@ -214,7 +214,7 @@ void create_1Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed )
     Model TINY, consisting of 1 line element two triangles, 1 quadrilateral and 6 face object at the box boundary.
     Model is rectangle shaped
 */
-ModelTopology  test_CreateSimplestPolyElement2DModel( VSet<2U>& vset )
+ModelTopology  create_SimplePolyElement2DModel( VSet<2U>& vset )
  {
     //--------------------------ELEMENT TYPES
   	//add element types
@@ -319,7 +319,7 @@ ModelTopology  test_CreateSimplestPolyElement2DModel( VSet<2U>& vset )
     
     return mesh_topology;
     
- } // end test_CreateSimplestPolyElement2DModel
+ } // end create_SimplePolyElement2DModel
  
  
 

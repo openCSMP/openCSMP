@@ -106,7 +106,7 @@ PDE_Integrator_Test::PDE_Integrator_Test()
 : model_( nullptr ), delete_model_( true ) {
     // 0. creates test model with 4 elements and 6 Face objects for the box boundaries
     VSet<2U> vset;
-    ModelTopology topo = test_CreateSimplestPolyElement2DModel( vset );
+    ModelTopology topo = create_SimplePolyElement2DModel( vset );
     const bool treat_regions_as_boundaries{false};
     model_ = new Model<2U>( topo, vset, "CSMP-1phase-variables.txt", treat_regions_as_boundaries );
 }

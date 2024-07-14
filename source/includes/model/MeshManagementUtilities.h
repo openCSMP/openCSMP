@@ -245,7 +245,16 @@ size_t  printLineElementRegion( const Model<dim>&, const char* region_name, bool
 template<uint32_t dim>
 void printNodeCoordinates( typename std::vector<Node<dim>*>::const_iterator first,
                            typename std::vector<Node<dim>*>::const_iterator last );
+template<uint32_t dim>
+double minimumNodeSpacing( typename std::vector<Node<dim>*>::const_iterator first,
+                           typename std::vector<Node<dim>*>::const_iterator last );
+template<uint32_t dim>
+double maximumNodeSpacing( typename std::vector<Node<dim>*>::const_iterator first,
+                           typename std::vector<Node<dim>*>::const_iterator last );
 
+/// checks whether point is contained in any of the elements in supplied region returning 'nullptr' or the element in which it is contained
+template<uint32_t dim>
+const Element<dim>* isContainedIn( const Region<dim>& subdomain, const Point<dim>& );
 
 } // end csmp
 

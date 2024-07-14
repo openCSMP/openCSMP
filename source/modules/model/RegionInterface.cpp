@@ -857,6 +857,48 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionN
 
 
 
+/** Assuming that the supplied n-nodes are in sequence of a polyline, method forms n-1 line elements putting them into a now limer-dimensional region
+ */
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
+size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionName, vector<Node<dim>*>& nodes, bool is_unique )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( !ContainsRegion("Model") )
+      csmp_error.Note( FATAL_ERROR, "RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues:",
+                        "method relies on the existence of region 'Model', which does not exist");
+
+    REGION_COMPLEX<dim>* model( static_cast<REGION_COMPLEX<dim>*>(this) );
+    MeshManager<dim>&    mesh = model->Mesh();
+
+    // getting the MeshManager to create the required number of line elements
+    assert( mesh.FiniteElements().InterpolationOrder() == 1 );
+    const CSMP_FEM_TYPE fe_type = (mesh.FiniteElements().UsesElementsWithLocalCoordinateSystem()==true) ? ISOPARAMETRIC_LINEAR_BAR : LINEAR_BAR;
+    const LocalVariables            lvsElementVars( model->Database().LocalVariablesAt(ELEMENT) );
+    const IntegrationPointVariables lvsIntegrationPointVars( model->Database().IntegrationPointVariablesAt(ELEMENT) );
+    int32_t                         material_ID{5U}; // TODO: should be the domain index
+    
+    // forming element vector (the elements get their material from the domain index
+    vector<Element<dim>*> elmts;
+    elmts.reserve( nodes.size() - 1u );
+    for ( auto nit1=nodes.begin(), nit2=next(nodes.begin(),1); nit2!=nodes.end(); ++nit1, ++nit2 )
+      elmts.push_back( mesh.AddElement( fe_type, lvsElementVars, lvsIntegrationPointVars,
+                                        vector<Node<dim>*>{ (*nit1), (*nit2) }, material_ID ) );
+                                        
+    // connectiong the elements with one another
+    mesh.template BuildLineConnectivity<Element>( elmts.begin(), elmts.end() );
+ 
+    // forming the region from the new line element vector
+    return FormRegionFrom( regionName, elmts.begin(), elmts.end(), is_unique );
+
+ } // end FormRegionFrom(nodes)
+
+
+
+
+
+
+
   /// forms unique or non-unique region from range of elements; returns reference to it
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionname,
