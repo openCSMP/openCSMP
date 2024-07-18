@@ -236,6 +236,10 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
 template<uint32_t dim>
 std::pair<Point<dim>,Point<dim>>  boundingBox( typename std::vector<Node<dim>*>::const_iterator first,
                                                typename std::vector<Node<dim>*>::const_iterator last );
+/// array-based version
+template<uint32_t dim>
+std::pair<std::array<double,dim>,std::array<double,dim>>  boundingBox1( typename std::vector<Node<dim>*>::const_iterator first,
+                                                                        typename std::vector<Node<dim>*>::const_iterator last );
 
 /// pretty prints line elements as a chain from beginning to end; returns number of elements printed
 template<uint32_t dim>
@@ -254,7 +258,7 @@ double maximumNodeSpacing( typename std::vector<Node<dim>*>::const_iterator firs
 
 /// checks whether point is contained in any of the elements in supplied region returning 'nullptr' or the element in which it is contained
 template<uint32_t dim>
-const Element<dim>* isContainedIn( const Region<dim>& subdomain, const Point<dim>& );
+const Element<dim>* isContainedIn( const Region<dim>& subdomain, const std::array<double,dim>& search_point );
 
 } // end csmp
 

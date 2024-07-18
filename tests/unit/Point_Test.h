@@ -20,6 +20,10 @@ class Point_Test : public Test {
     void Test_1D_Point();
     void Test_2D_Point();
     void Test_3D_Point();
+    
+    // less than and greater than
+    void TestPointComparitors2D();
+    void TestPointComparitors3D();
 };
 
 } // end 

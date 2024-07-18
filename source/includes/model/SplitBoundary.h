@@ -171,7 +171,10 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
 
     /// output length(2D) or area(3d) of the split boundary=lower dimensional region; middle refers to bisector if nodes are displaced
     double  Area( INTERFACE_SIDE=INSIDE ) const;
-  
+
+    /// output length(of a split boundary that consists of line elements; middle refers to bisector if nodes are displaced
+    double  Length( INTERFACE_SIDE=INSIDE ) const;
+
     /// outputs length of perimeter curve of a 3D split boundary; no meaning in 1 or 2D models
     double  Perimeter( INTERFACE_SIDE=INSIDE ) const;
   

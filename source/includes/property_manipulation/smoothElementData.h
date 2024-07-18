@@ -1,5 +1,5 @@
 //
-//  smoothData.hpp
+//  smoothElementData.h
 //  CSMP_FECFVM_Simulator
 //
 //  Created by Stephan Matthai on 4/2/20.

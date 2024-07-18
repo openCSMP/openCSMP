@@ -346,7 +346,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
         // ---------------------------------------------------------
         cout <<"\n"<<"readVTU_File: setting up a csmp::VSet with the polygonal mesh data from the VTU file."<< endl;
         // getting number of neighbor elements per element from CSMP
-        deque<uint32_t> n_neighbors_per_element; // no pfverts values, they will be created by CSMP elmt_specs;
+        deque<uint32_t> n_neighbors_per_element; // no pfverts values, they will be created according to 'CSMP_FEM_conventions.pdf'
         for ( const auto& cit : valueCellTypes )
           n_neighbors_per_element.push_back( CSMP_ElementSpecifications::NeighborsPerElementOfType( cit ) );
         
@@ -369,6 +369,12 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
         vset.AddPlist( plist.begin(), plist.end() );
         plist.clear();
         
+        // bflags: flagging all the nodes of the lower-dimensional (quadrilateral cells) as IRREGULAR outside
+        for ( size_t i{0ul}; i<vset.Cells(); ++i )
+          if ( CSMP_ElementSpecifications::SurfaceElement( vset.ElementType(i) ) )
+            for ( uint32_t j{0ul}; j<vset.PlistSize(i); ++j )
+              vset.BFlag( vset.Plist(i,j), IRREGULAR );
+
         // creating element neighbor information
         vset.EstablishElementConnectivity3D();
         const uint32_t MODEL_DIMENSION = vset.SpatialDimension();

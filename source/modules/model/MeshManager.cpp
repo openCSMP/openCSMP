@@ -2326,6 +2326,9 @@ vector<Face<dim>*>  MeshManager<dim>::CreateFacesBetweenNodeSharingElements( con
                                        lvars, ivars ) );
       }
 
+     // connectiving the newly created faces with one another
+     BuildSurfaceConnectivity<Face>( face_ptrs.begin(),face_ptrs.end() );
+
      // 2. cleaning up inter-CELL and node to parent connectivity
      // ---------------------------------------------------------
      // TODO: these are global changes! - do this only for nodes that are affected
@@ -2528,7 +2531,10 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
        auto parent_elmt = old_node_unassigned_element.second;
        old_node->Unassign(parent_elmt);
      }
-
+     
+     // connectiving the newly created interfaces with one another
+     BuildSurfaceConnectivity<InterFace>( interface_ptrs.begin(),interface_ptrs.end() );
+     
      // TODO: these are global changes! - do this only for nodes that are affected
      UpdateConnectivity();
      

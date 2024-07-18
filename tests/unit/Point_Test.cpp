@@ -22,6 +22,8 @@ void Point_Test::run()
     Test_1D_Point();
     Test_2D_Point();
     Test_3D_Point();
+    TestPointComparitors2D();
+    TestPointComparitors3D();
  }
 
 
@@ -436,5 +438,58 @@ void Point_Test::Test_3D_Point()
     _equal( res[2], 1., numeric_limits<double>::epsilon() );
 
  } // end 3D test
+
+
+
+void Point_Test::TestPointComparitors2D()
+{
+   const uint32_t dim{2U};
+   Point<dim> p1(0.,0.), p2(1.,1.), p2b(1.,1.), p3(1.1,1.), p4(1.1,1.);
+   // basic
+   _test( p1 < p2 );
+   _test( p2 > p1 );
+   // different by one of the values
+   _test( p2 < p3 );
+   _test( p2 < p4 );
+   _test( p3 > p2 );
+   _test( p4 > p2 );
+   // if points are the same comparison should fail
+   _test( !(p2 < p2b) );
+   _test( !(p2b > p2) );
+   _test( !(p2 < p2) );
+   _test( !(p2 > p2) );
+   _test( !(p1 < p1) );
+   _test( !(p1 > p1) );
+
+} // end TestPointComparitors2D
+
+
+
+
+void Point_Test::TestPointComparitors3D()
+{
+   const uint32_t dim{3U};
+   Point<dim> p1(0.,0.,0.), p2(1.,1.,1.), p2b(1.,1.,1.), p3(1.,1.,1.1), p4(1.1,1.,1.), p5(1.,1.1,1.);
+   // basic
+   _test( p1 < p2 );
+   _test( p2 > p1 );
+   // different by one of the values
+   _test( p2 < p3 );
+   _test( p2 < p4 );
+   _test( p2 < p5 );
+   _test( p3 > p2 );
+   _test( p4 > p2 );
+   _test( p5 > p2 );
+   // if points are the same comparison should fail
+   _test( !(p2 < p2b) );
+   _test( !(p2b > p2) );
+   _test( !(p2 < p2) );
+   _test( !(p2 > p2) );
+   _test( !(p1 < p1) );
+   _test( !(p1 > p1) );
+
+} // end TestPointComparitors3D
+
+
 
 } // csmp

@@ -1026,7 +1026,6 @@ void SplitBoundaryInterface_Test<dim>::Detect_and_create_splitboundaries_from_co
 template<uint32_t dim>
 void SplitBoundaryInterface_Test<dim>::run()
 {
-
   //THE ONLY RIGOROUS TEST
   Test_splitboundary_from_lower_dim_region();
 

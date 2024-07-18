@@ -53,26 +53,21 @@ void scaleRegion( Region<dim>& region, double xScale, double yScale, double zSca
 template<uint32_t dim>
 class SplitBoundaryInterface_Test : public Test
     {
-    public:
+   public:
       virtual void run();
 
       // CURRENTLY RUNNING:
       void Test_splitboundary_from_lower_dim_region(); //E.P Implemented and Tested - Contains RIGOROUS checking of nodes, elements, and interfaces correctly calibrated
-
 
       //RUNNING, BUT WITH NO DIAGNOSTICS: Just checks methods dont crash - TODO: Add quantitative checks/tests to each of these
       void Test_splitboundary_between_regions( const std::string& model_name );
       void Detect_and_create_splitboundaries( const std::string& model_name );
       void Detect_and_create_splitboundaries_from_constructor( const std::string& model_name );
 
-
       //Visualisation functions
       void VisualiseSplitBoundaries( csmp::Model<dim>&, const std::string&test_name  );
 
-
-
-
-protected:
+    protected:
 
       // CreateFromRegion Test Added by E.P
       bool Test_NodeCorrespondance_2D(const char* mesh_file );
@@ -80,8 +75,7 @@ protected:
       bool Test_NodeAndElementsCorrespondance_3D_X_Intersection( const char* mesh_file);
       bool Test_NodeAndElementsCorrespondance_3D_X_Intersection_Reverse( const char* mesh_file);
 
-
-      private:
+    private:
         static const bool verbose_ = true;
   };
 

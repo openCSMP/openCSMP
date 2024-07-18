@@ -140,6 +140,9 @@ class Boundary : public ModelSubDomain<dim, Face>,
     //  geometric properties and integrals
     // ----------------------------------------
 
+    /// in case the boundary consists of line segments
+    double  Length() const;
+
     /// surface area of the boundary
     double  Area() const;
 

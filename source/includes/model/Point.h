@@ -90,6 +90,7 @@ class Point {
   
     /// returns point coordinates into an STL vector
     std::vector<double> Coordinates() const;
+    std::array<double,dim> CoordinateArray() const;
   
     /// prints point cooordinates to screen
     void  Out() const;
@@ -180,6 +181,8 @@ class Point<1U> {
     bool   CoincidesWithWithinTolerance( const Point<1U>&, double tolerance=1.0e-5 ) const;
     bool   IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double> Coordinates() const;
+    std::array<double,1U> CoordinateArray() const { return std::array<double,1U>{ x_ }; }
+
     void   Out() const;
 
     friend Point<1U> operator-( double, const Point<1U>& );
@@ -235,6 +238,7 @@ class Point<2U> {
     bool   CoincidesWithWithinTolerance( const Point&, double tolerance=1.0e-5 ) const;
     bool   IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double> Coordinates() const;
+    std::array<double,2U> CoordinateArray() const { return std::array<double,2U>{ x_, y_ }; }
     void   Out() const;
   
     friend Point<2U> operator-( double, const Point<2U>& );
@@ -293,6 +297,7 @@ class Point<3U> {
     bool   CoincidesWithWithinTolerance( const Point&, double tolerance=1.0e-5 ) const;
     bool   IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double> Coordinates() const;
+    std::array<double,3U> CoordinateArray() const { return std::array<double,3U>{ x_, y_, z_ }; }
     void   Out() const;
  
     friend Point<3U> operator-( double, const Point<3U>& );

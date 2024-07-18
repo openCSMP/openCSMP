@@ -758,11 +758,14 @@ bool Point<3U>::operator!=( const Point<3U>& pt ) const
 
 bool Point<3U>::operator<( const Point<3U>& p )  const
  {
+    // this code does not implement a strict weak ordering and might cause undefined behaviour if used in a map
+    // TODO: implement point with std::array which already has this operator
     return x_<p.x_ || (x_==p.x_ && y_<p.y_) || (x_==p.x_ &&  y_==p.y_ && z_<p.z_);
  }
 
 bool Point<3U>::operator>( const Point<3U>& p )  const
  {
+    // this code does not implement a strict weak ordering and might cause undefined behaviour if used in a map
     return x_>p.x_ || (x_==p.x_ && y_>p.y_) || (x_==p.x_ && y_==p.y_ && z_>p.z_);
  }
 

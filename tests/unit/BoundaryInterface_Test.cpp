@@ -176,6 +176,8 @@ void BoundaryInterface_Test::run()
 		  }
 		  if (model.ContainsBoundary(boundary_name))
 			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
+   
+      if ( verbose_ ) model.BoundariesOut();
 	  }
 
 	  
@@ -230,7 +232,9 @@ void BoundaryInterface_Test::run()
       // 3. testing supporting functionality
       // -----------------------------------
       _test( TestRegionContactDetection(model) );
-        
+      
+      if ( verbose_ ) model.BoundariesOut();
+
   } // end run
   
   

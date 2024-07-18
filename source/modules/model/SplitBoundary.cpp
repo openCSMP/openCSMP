@@ -174,6 +174,8 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
   // 4. sorting interfaces and nodes and building the boundary interface vector
   // ---------------------------------------------------------------------------------------------------
   this->IdentifyPerimeter();
+  this->cell_vec_.shrink_to_fit();
+
 
   // 5. allocating the storage for subdomain properties
   // --------------------------------------------------
@@ -660,6 +662,10 @@ bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::con
     }
     
   this->cell_vec_.assign( ifacesBegin, ifacesEnd );
+  
+    // distinguishing interior from perimeter cells
+  this->IdentifyPerimeter();
+  this->cell_vec_.shrink_to_fit();
 
   return true;
 }
@@ -715,14 +721,47 @@ double  SplitBoundary<dim>::Area( INTERFACE_SIDE side ) const
 
   if constexpr ( dim == 3U ) {
       for ( auto it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
-        if ( (*it)->FE()->IsSurface() )
+        if ( (*it)->IsSurface() )
           integrated_area += (*it)->Area(side);
     }
   
   if constexpr ( dim == 2U ) {
       for ( typename vector<InterFace<dim>*>::const_iterator
             it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
-        if ( (*it)->FE()->IsLine() )
+        if ( (*it)->IsLine() )
+          integrated_area += (*it)->Area(side);
+    }
+  
+  if constexpr ( dim == 1U ) {
+       // TODO: should be a static assert
+       csmp_error.Note( ERROR, "SplitBoundary<dim>::Area", "not defined in 1D" );
+    }
+
+  return integrated_area;
+}
+
+
+
+/**
+Is calculated on the basis of the Splitboundary bisector if the split nodes were
+moved apart in the simulation process; else a particular side is used.
+*/
+template<uint32_t dim>
+double  SplitBoundary<dim>::Length( INTERFACE_SIDE side ) const
+{
+  double  integrated_area( 0. );
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if constexpr ( dim == 3U ) {
+      for ( auto it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
+        if ( (*it)->IsLine() )
+          integrated_area += (*it)->Area(side);
+    }
+  
+  if constexpr ( dim == 2U ) {
+      for ( typename vector<InterFace<dim>*>::const_iterator
+            it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
+        if ( (*it)->IsLine() )
           integrated_area += (*it)->Area(side);
     }
   

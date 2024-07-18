@@ -2288,6 +2288,39 @@ template pair<Point<2>,Point<2>>  boundingBox( vector<Node<2>*>::const_iterator,
 template pair<Point<1>,Point<1>>  boundingBox( vector<Node<1>*>::const_iterator, vector<Node<1>*>::const_iterator );
 
 
+// array-based version
+template<uint32_t dim>
+pair<array<double,dim>,array<double,dim>>  boundingBox1( typename vector<Node<dim>*>::const_iterator first,
+                                                         typename vector<Node<dim>*>::const_iterator last )
+ {
+    if ( first == last ) return make_pair( array<double,dim>{}, array<double,dim>{} );
+    
+    array<double,dim> pmin, pmax;
+    if constexpr ( dim == 3U ) {
+         pmin[0]=1.0e30;  pmin[1]=1.0e30;  pmin[2]=1.0e30;
+         pmax[0]=-1.0e30; pmax[1]=-1.0e30; pmax[2]=-1.0e30;
+      }
+    else if constexpr ( dim == 2U ) {
+         pmin[0]=1.0e30; pmin[1]=1.0e30;
+         pmax[0]=-1.0e30; pmax[1]=-1.0e30;
+      }
+    else { pmin[0]=1.0e30; pmax[0]=-1.0e30; }
+    
+    while ( first != last ) {
+         pmin = min( pmin, (*first)->Coordinate().CoordinateArray() );
+         pmax = max( pmax, (*first)->Coordinate().CoordinateArray() );
+         first++;
+      }
+    
+    return make_pair( pmin, pmax );
+    
+ } // end boundingBox
+
+template pair<array<double,3>,array<double,3>>  boundingBox1<3>( vector<Node<3>*>::const_iterator, vector<Node<3>*>::const_iterator );
+template pair<array<double,2>,array<double,2>>  boundingBox1<2>( vector<Node<2>*>::const_iterator, vector<Node<2>*>::const_iterator );
+template pair<array<double,1>,array<double,1>>  boundingBox1<1>( vector<Node<1>*>::const_iterator, vector<Node<1>*>::const_iterator );
+
+
 
 
 
@@ -2612,10 +2645,21 @@ template<uint32_t dim>
 double minimumNodeSpacing( typename vector<Node<dim>*>::const_iterator first,
                            typename vector<Node<dim>*>::const_iterator last )
  {
-    double node_spacing{0.};
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    assert( first != last );
+    
+    double node_spacing{ 1.0e30 };
     while( first != last ) {
-          for ( uint32_t i{0u}; i<(*first)->Neighbors(); ++i  )
-            node_spacing = max( node_spacing, (*first)->Coordinate().DistanceTo( (*first)->Neighbor(i)->Coordinate() ) );
+          for ( uint32_t i{0u}; i<(*first)->Neighbors(); ++i  ) {
+               node_spacing = min( node_spacing, (*first)->Coordinate().DistanceTo( (*first)->Neighbor(i)->Coordinate() ) );
+               if ( node_spacing <= numeric_limits<double>::epsilon() ) {
+                    cerr <<"\n\t"<<"minimumNodeSpacing: found collocated nodes:\n";
+                    cerr <<"\n\t\t"<< (*first)->Idx() <<": "<< (*first)->Coordinate() << endl;
+                    cerr <<"\n\t\t"<< (*first)->Neighbor(i)->Idx() <<": "<< (*first)->Neighbor(i)->Coordinate() << endl;
+                    csmp_error.Note( ERROR, "minimumNodeSpacing", "found collocated nodes" );
+                    node_spacing = 1e30;
+                 }
+            }
           first++;
        }
     
@@ -2637,8 +2681,8 @@ template double minimumNodeSpacing<3U>( typename vector<Node<3U>*>::const_iterat
 
 /// checks whether point is contained in any of the elements in supplied region returning 'nullptr' or the element in which it is contained
 template<uint32_t dim>
-const Element<dim>* isContainedIn( const Region<dim>& subdomain, const Point<dim>& search_point ) {
-     vector<double> xyz = search_point.Coordinates();
+const Element<dim>* isContainedIn( const Region<dim>& subdomain, const array<double,dim>& search_point ) {
+     vector<double> xyz( search_point.begin(), search_point.end() );
      vector<double> N;
      // testing containment by a linear search that diagnoses whether point is contained
      // by determining whether all element interpolation function values are between zero and one.
@@ -2656,8 +2700,8 @@ const Element<dim>* isContainedIn( const Region<dim>& subdomain, const Point<dim
      return nullptr;
   }
 
-template const Element<2U>* isContainedIn( const Region<2U>&, const Point<2U>& );
-template const Element<3U>* isContainedIn( const Region<3U>&, const Point<3U>& );
+template const Element<2U>* isContainedIn<2U>( const Region<2U>&, const array<double,2U>& );
+template const Element<3U>* isContainedIn<3U>( const Region<3U>&, const array<double,3U>& );
 
 
 

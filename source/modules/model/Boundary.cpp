@@ -164,6 +164,11 @@ Boundary<dim>::Boundary( const string& boundary_name,
   
   // initialize BOX_BOUNDARY of nodes
   InitializeBoundaryFlags( boxBoundary );
+  
+  // distinguishing interior from perimeter cells
+  this->IdentifyPerimeter();
+  this->cell_vec_.shrink_to_fit();
+  this->node_vec_.shrink_to_fit();
 }
 
 
@@ -1020,14 +1025,33 @@ double  Boundary<dim>::Perimeter() const
 }
 
 
+/**
+    Sums the length of line elements in the boundary, if any.
+*/
+template<uint32_t dim>
+double  Boundary<dim>::Length() const
+{
+  double  integrated_area( 0. );
 
+  for ( const auto& it  : this->cell_vec_ )
+    if ( it->IsLine() )
+      integrated_area += it->Area();
+
+  return integrated_area;
+}
+
+
+/**
+    Sums the area of surface elements in the boundary, if any.
+*/
 template<uint32_t dim>
 double  Boundary<dim>::Area() const
 {
   double  integrated_area( 0. );
 
   for ( const auto& it  : this->cell_vec_ )
-    integrated_area += it->Area();
+    if ( it->IsSurface() )
+      integrated_area += it->Area();
 
   return integrated_area;
 }

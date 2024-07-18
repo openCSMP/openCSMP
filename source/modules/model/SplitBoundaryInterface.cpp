@@ -1800,11 +1800,16 @@ size_t SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() 
           cout <<" "<< (*bit).second.Cells() <<" interfaces, ";
           // in 3D a boudary is a surface
            if constexpr ( dim == 3U ) {
-                cout <<"area (m2): "<< (*bit).second.Area();
-                cout <<", perimeter length (m): "<< (*bit).second.Perimeter();
+                const pair<CELL_SHAPE,bool> cell_type = (*bit).second.SingleCellShapeDomain();
+                assert( cell_type.second == true );
+                if ( cell_type.first == SURFACE ) {
+                     cout <<"area (m2): "<< (*bit).second.Area();
+                     cout <<", perimeter length (m): "<< (*bit).second.Perimeter();
+                  }
+                else cout <<"length (m): "<< (*bit).second.Area();
              }
            if constexpr ( dim == 2U )
-             cout <<" length (m): "<< (*bit).second.Area();
+             cout <<"length (m): "<< (*bit).second.Area();
        }
      cout << endl << endl;
      cout.flush();

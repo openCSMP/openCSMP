@@ -3806,7 +3806,8 @@ void VData::EstablishElementConnectivity3D()
                          bflag_set.insert( static_cast<BOX_BOUNDARY>( bflags[nidx] ) );
                     }
                   if ( bflag_set.empty() ) {
-                       cerr <<"\n"<<"VData::EstablishElementConnectivity3D: although element "<< elmt <<" has no neighbor at face "<< boundary_face;
+                       cerr <<"\n"<<"VData::EstablishElementConnectivity3D: although element "<< elmt <<"(";
+                       cerr << parseAbbreviated_FE_Type(etype) <<") has no neighbor at face "<< boundary_face;
                        cerr <<", all node boundary flags have value: NOT; setting neighor to IRREGULAR"<< endl;
                        pfverts[elmt][boundary_face] = IRREGULAR;
                     }

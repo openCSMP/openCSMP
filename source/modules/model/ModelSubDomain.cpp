@@ -5335,14 +5335,19 @@ size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
     if ( n_cells_new < n_cells ) BuildPerimeterFaceVector( n_interior_cells_new );
     
     // removing node pointers if any
-    size_t nodes_removed = node_vec_.size();
-    node_vec_.erase( remove( node_vec_.begin(), node_vec_.end(), nullptr ), node_vec_.end() );
-    nodes_removed -= node_vec_.size();
-    
-    if ( n_cells_new < n_cells == 0 && nodes_removed > 0 )
-      csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::RemoveNullPointerCells",
-                        "removed nodes but not cells? - subdomain may be corrupt now.");
-    
+    if ( !node_vec_.empty() ) {
+         size_t nodes_removed = node_vec_.size();
+         node_vec_.erase( remove( node_vec_.begin(), node_vec_.end(), nullptr ), node_vec_.end() );
+         nodes_removed -= node_vec_.size();
+      
+         if ( n_cells_new < n_cells == 0 && nodes_removed > 0 )
+           csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::RemoveNullPointerCells",
+                                   "removed nodes but not cells? - subdomain may be corrupt now.");
+      }
+     
+    // reacreate partitioning
+    IdentifyPerimeter();
+
     return n_cells - n_cells_new;
  }
 
