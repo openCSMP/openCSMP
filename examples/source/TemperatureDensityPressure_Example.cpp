@@ -123,7 +123,7 @@ void TemperatureDensityPressure_Example::Run()
 
     // 4. compute vertical temperature profile
     // -------------------------------------------------------------
-    #ifdef USE_SAMG_SOLVER
+    #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Solver solver;
     PDE_Integrator<1U,Element>  temperature( solver );
     #else
@@ -162,7 +162,7 @@ void TemperatureDensityPressure_Example::Run()
 
     // 7. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
     // --------------------------------------------------------------------------------------------
-#ifdef USE_SAMG_SOLVER
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings;
     SAMG_Solver    samg_solver(&settings);
     PDE_Integrator<1U,Element>  hydrostatic_pressure(samg_solver);
@@ -171,7 +171,7 @@ void TemperatureDensityPressure_Example::Run()
     settings.Set_iout2( 0 );
     settings.Set_idmp( -1 );
 #else
-    EigenSolver  linear_solver;
+    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
     PDE_Integrator<1U,Element>  hydrostatic_pressure(linear_solver);
 #endif
 

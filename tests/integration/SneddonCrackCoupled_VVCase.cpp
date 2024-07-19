@@ -14,7 +14,6 @@
 #include "NumIntegral_PT_op_dS.h"
 #include "ModelSubDomain.h"
 #include "Fracture.h"
-#include <stdio.h>
 #include <functional>
 #include <cmath>
 
@@ -210,7 +209,7 @@ void SneddonCrackCoupled_VVCase::run()
     //settings.Set_napproach(2); // this is important because it sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
                                // which is needed for deformation simulations
     //SAMG_Solver samgSolver(&settings);
-    EigenSolver eigen;
+    CSMP_DEFAULT_LINEAR_SOLVER  eigen;
     PDE_Integrator<dim,Element> Coupled_HM (eigen);
 
     // Adding stiffness to the LHS list:

@@ -177,7 +177,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
     /// Elasticity Equations
     ///==================================================================
     // setting up integrator
-    EigenSolver eigenSolver;
+    CSMP_DEFAULT_LINEAR_SOLVER  eigenSolver;
     PDE_Integrator<dim,Element> deformation (eigenSolver);
 
     // Adding stiffness to the LHS list:

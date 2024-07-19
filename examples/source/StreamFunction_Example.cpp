@@ -156,11 +156,11 @@ void StreamFunction_Example::Run()
  // ------------------------------------------------------------------------------------
  // 3. Steady-state fluid pressure computation [K]{p} = {Q}
  // ------------------------------------------------------------------------------------
-   #ifdef USE_SAMG_SOLVER
+   #ifdef CSMP_WITH_SAMG_SOLVER
    SAMG_Solver solver;
    PDE_Integrator<2U,Element>  fluid_pressure(solver);
    #else
-   EigenSolver solver;
+   CSMP_DEFAULT_LINEAR_SOLVER  solver;
    PDE_Integrator<2U,Element>  fluid_pressure(solver);
    #endif
 
@@ -540,11 +540,11 @@ void StreamFunction_Example::computeStreamFunction( Model<2U>& sg,
     sg.InputBoundaryValue( boundary0, stream_func_var, makeScalar(DIRICH, 0.) );
     sg.InputBoundaryValue( boundary1, stream_func_var, makeScalar(DIRICH, total_flux) );
 
-#ifdef USE_SAMG_SOLVER
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Solver  samg_solver;
     PDE_Integrator<2U,Element>  stream_function(samg_solver);
 #else
-    EigenSolver  linear_solver;
+    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
     PDE_Integrator<2U,Element>  stream_function(linear_solver);
 #endif
 

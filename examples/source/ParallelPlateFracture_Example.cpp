@@ -202,11 +202,11 @@ void ParallelPlateFracture_Example::Run()
     //     fluxes (by setting the boolean variable in the constructor of the post-
     //     processor to true, the element velocities are averaged to the nodes)
     // --------------------------------------------------------------------------------------
-#ifdef USE_SAMG_SOLVER
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Solver                samg_solver;
     PDE_Integrator<2U,Element>  total_pressure_quadratic(samg_solver);
 #else
-    EigenSolver  linear_solver;
+    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
     PDE_Integrator<2U,Element>  total_pressure_quadratic(linear_solver);
 #endif
 

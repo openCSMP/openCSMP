@@ -147,7 +147,7 @@ void QuadraticPressure_parallelPlatePermeability_Example::Run()
     //    fluid fluxes (by setting the boolean variable in the constructor of the post-
     //    processor to true, the element velocities are averaged to the nodes)
     // --------------------------------------------------------------------------------------
-#ifdef USE_SAMG_SOLVER
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings; // all settings according to Klaus
     settings.Set_ncgtyp(5);
     settings.Set_nxtyp(0);

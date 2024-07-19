@@ -20,7 +20,7 @@
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
 #else
-#include "EigenSolver.h"
+#include "LinearSolver.h"
 #endif
 
 // PDE
@@ -488,7 +488,7 @@ void DES2PhaseSlightlyCompressibleFlow_Example::ComputeSteadyStatePressure( Mode
     SAMG_Solver                 samg_solver( &settings );
     PDE_Integrator<dim,Element>  steady_pressure(samg_solver);
 #else
-    EigenSolver linear_solver;
+    CSMP_DEFAULT_LINEAR_SOLVER   linear_solver;
     PDE_Integrator<dim,Element>  steady_pressure(linear_solver);
 #endif
     NumIntegral_dNT_op_dN_dV<dim>  conductance( mdl.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );

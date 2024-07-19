@@ -186,11 +186,11 @@ void Tutorial2_Example::Run()
     // ------------------------------------------------------------------------------------------
 
     // create the CSMP FE Algorithm with SAMG solver
-#ifdef USE_SAMG_SOLVER
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Solver  samg_solver;
     PDE_Integrator<2U,Element>  fluid_pressure(samg_solver);
 #else
-    EigenSolver  linear_solver;
+    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
     PDE_Integrator<2U,Element>  fluid_pressure(linear_solver);
 #endif
 

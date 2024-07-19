@@ -643,7 +643,7 @@ template void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowPropertie
     SAMG_Solver                  samg_solver( &settings );
     PDE_Integrator<dim,Element>  steady_pressure(samg_solver);
 #else
-    EigenSolver linear_solver;
+    CSMP_DEFAULT_LINEAR_SOLVER   linear_solver;
     PDE_Integrator<dim,Element>  steady_pressure(linear_solver);
 #endif
     NumIntegral_dNT_op_dN_dV<dim>  conductance( mdl.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );

@@ -237,7 +237,7 @@ namespace csmp
       //settings.Set_napproach(2); // needed apparently
       //settings.Set_ncycle(1000); // Depending on the type of problem, it may take many iterations to converge for anisotropic cases.
       //SAMG_Solver samgSolver(&settings);
-      EigenSolver eigen;
+      CSMP_DEFAULT_LINEAR_SOLVER  eigen;
       PDE_Integrator<DIM,Element> deformation (eigen);
 
 

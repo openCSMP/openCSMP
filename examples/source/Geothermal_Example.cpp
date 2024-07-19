@@ -6,9 +6,14 @@
 #include "Boundary.h"
 #include "VTU_Interface.h"
 #include "ANSYS_Model2D.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
+#else
+#include "LinearSolver.h"
+#endif
+
 #include "CSMP_highLevelUtilities.h"
-#include "LUdcmp_Solver.h"
 #include "ComputationalSettings.h"
 
 // finite volumes 

@@ -170,9 +170,8 @@ void SneddonCrack_VVCase::run()
     //settings.Set_napproach(2); // this is important because it sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
                                // which is needed for deformation simulations
     //SAMG_Solver samgSolver(&settings);
-    EigenSolver eigen;
-
-    PDE_Integrator<dim,Element> deformation (eigen);
+    CSMP_DEFAULT_LINEAR_SOLVER  eigen;
+    PDE_Integrator<dim,Element> deformation(eigen);
 
     // Adding stiffness to the LHS list:
     NumIntegral_BT_D_B_dV<dim> stiffnessMatrix( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );

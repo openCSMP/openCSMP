@@ -8,7 +8,7 @@
 
 #include "SKUA_Example.h"
 #include "ModelTopology.h"
-#include "EigenSolver.h"
+#include "LinearSolver.h"
 
 #include "Model.h"
 #include "Boundary.h"
@@ -360,7 +360,7 @@ static void RunTutorial1OnSetUpModel( Model<3U>& model ) {
     // ------------------------------------------------------------------------------------------
 
     // create the CSMP FE Algorithm with Eigen solver to invert linear system
-    EigenSolver solver;
+    CSMP_DEFAULT_LINEAR_SOLVER  solver;
     PDE_Integrator<3U,Element>  fluid_pressure(solver);
 
     // LHS stiffness matrix                              operand         basis function    test function

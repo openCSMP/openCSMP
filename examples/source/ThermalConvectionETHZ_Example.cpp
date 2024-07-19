@@ -15,9 +15,11 @@
 #include "ANSYS_Model3D.h"
 #include "CSMP_highLevelUtilities.h"
 
-#ifdef USE_SAMG_SOLVER
+#ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
+#else
+#include "LinearSolver.h"
 #endif
 
 #include "ModelTime.h"
@@ -136,15 +138,15 @@ namespace csmp {
     //! 2. Temperature and pressure initialisation
     //! -------------------------------------------------------------
     H2OLookup  water;
-    #ifdef USE_SAMG_SOLVER
+    #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings settings;
     #endif
     {
-      #ifdef USE_SAMG_SOLVER
+      #ifdef CSMP_WITH_SAMG_SOLVER
       PDE_Integrator<DIM,Element>  heat_conductor( *(new SAMG_Solver(&settings)));
       #else
-      EigenSolver eigen_solver;
-      PDE_Integrator<DIM,Element>  heat_conductor(eigen_solver);
+      CSMP_DEFAULT_LINEAR_SOLVER   solver;
+      PDE_Integrator<DIM,Element>  heat_conductor(solver);
       #endif
     
       NumIntegral_dNT_op_dN_dV<DIM> conductance( model->Database(), "thermal conductivity", "temperature", "temperature");
@@ -155,7 +157,7 @@ namespace csmp {
       heat_conductor.Add( &heat_source );
       heat_conductor.AddBoundaryIntegral(&basal_hfu);
 
-      #ifdef USE_SAMG_SOLVER
+      #ifdef CSMP_WITH_SAMG_SOLVER
       // solve down to round-off
       settings.Set_eps(0.); // absolute criterion
       #endif
@@ -166,10 +168,10 @@ namespace csmp {
       printRangeOfVariable( *model, "temperature");
 
       //! computation of initial steady-state fluid pressure
-      #ifdef USE_SAMG_SOLVER
+      #ifdef CSMP_WITH_SAMG_SOLVER
       PDE_Integrator<DIM,Element>     steady_state_pressure( *(new SAMG_Solver(&settings) ));
       #else
-      PDE_Integrator<DIM,Element>     steady_state_pressure( eigen_solver );
+      PDE_Integrator<DIM,Element>     steady_state_pressure( solver );
       #endif
       NumIntegral_dNT_op_dN_dV<DIM>  p_conductance( model->Database(), "mass conductivity", "fluid pressure", "fluid pressure" );
       NumIntegral_dNT_op_dV<DIM>     gravity( model->Database(), "gravity term times density", "fluid pressure" );
@@ -177,7 +179,7 @@ namespace csmp {
       steady_state_pressure.Add( &p_conductance );                           
       steady_state_pressure.Add( &gravity );
 
-      #ifdef USE_SAMG_SOLVER
+      #ifdef CSMP_WITH_SAMG_SOLVER
       // iout is reduced to bare minimum
       settings.Set_iout1( 0 );
       settings.Set_iout2( 0 );
@@ -207,13 +209,13 @@ namespace csmp {
     //! 3. Algorithms for transient pressure and temperature
     //! -------------------------------------------------------------
     // fluid pressure
-    #ifdef USE_SAMG_SOLVER
+    #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings pressure_settings;
     //pressure_settings.SetSolverInstance(1);
     PDE_Integrator<DIM,Element>  transient_pressure( *(new SAMG_Solver(&settings)) );
     #else
-    EigenSolver eigen_solver;
-    PDE_Integrator<DIM,Element>  transient_pressure(eigen_solver);
+    CSMP_DEFAULT_LINEAR_SOLVER   solver;
+    PDE_Integrator<DIM,Element>  transient_pressure(solver);
     #endif
     NumIntegral_dNT_op_dN_dV<DIM>  p_conductance( model->Database(), "mass conductivity", "fluid pressure", "fluid pressure" );
 
@@ -244,13 +246,13 @@ namespace csmp {
     transient_pressure.Add( &storage_rhs );
 
     // temperature
-    #ifdef USE_SAMG_SOLVER
+    #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings temperature_settings;
     //temperature_settings.SetSolverInstance(2);
     PDE_Integrator<DIM,Element>  transient_temperature( *(new SAMG_Solver(&temperature_settings)) );
     #else
-    EigenSolver eigen_solver2;
-    PDE_Integrator<DIM,Element>  transient_temperature(eigen_solver2);
+    CSMP_DEFAULT_LINEAR_SOLVER   solver2;
+    PDE_Integrator<DIM,Element>  transient_temperature(solver2);
     #endif
     NumIntegral_dNT_op_dN_dV<DIM>  T_conductance( model->Database(), "thermal conductivity", "temperature", "temperature" );
     //NumIntegral_NT_op_N_dV<DIM>    heat_source( model->Database(), "heat source", "temperature" );

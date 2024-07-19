@@ -155,7 +155,7 @@ void PressureDiffusion_Example::Run()
 
     // 7.  Building the steady-state FE Algorithm "fluid_pressure"
     // -----------------------------------------------------------
-#ifdef USE_SAMG_SOLVER
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings;
     settings.Set_eps(0.);
     SAMG_Solver  samg_solver(&settings);
@@ -282,7 +282,7 @@ void PressureDiffusion_Example::Run()
     // 14. Transient loop: Compute fluid pressure during each time-step and output the results for each time step
     // -----------------------------------------------------------------------------------------------------------
     // iout: for the transient loop, the screen output from SAMG solver is reduced
-    #ifdef USE_SAMG_SOLVER
+    #ifdef CSMP_WITH_SAMG_SOLVER
     settings.Set_iout1( 0 );
     settings.Set_iout2( 0 );
     settings.Set_idmp( -1 );

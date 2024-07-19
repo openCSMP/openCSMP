@@ -32,7 +32,6 @@
 
 // Solver
 #include "LUdcmp_Solver.h"
-#include "EigenSolver.h"
 
 // Output
 #include "VTU_Interface.h"
