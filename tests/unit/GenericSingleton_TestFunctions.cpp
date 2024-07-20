@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp{
 
-void accessSingletonGloballyExternalFile()
+static void accessSingletonGloballyExternalFile()
 {
   TestSingleton& single( TestSingleton::Instance() );
   single.i = 500;

@@ -2675,6 +2675,39 @@ template double minimumNodeSpacing<3U>( typename vector<Node<3U>*>::const_iterat
                                         typename vector<Node<3U>*>::const_iterator );
 
 
+// Arithmetic mean: node that the obtained value will be affected by how many times a particular spacing gets evaluated
+template<uint32_t dim>
+double averageNodeSpacing( typename vector<Node<dim>*>::const_iterator first,
+                           typename vector<Node<dim>*>::const_iterator last )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    assert( first != last );
+    
+    const long n_nodes{ distance(first,last) };
+    double     sum_of_node_spacings{ 0. };
+    
+    while( first != last ) {
+          double     nbor_spacing_average{0.};
+          const auto n_nbor_nodes{ (*first)->Neighbors() };
+          for ( uint32_t i{0u}; i<n_nbor_nodes; ++i  )
+               nbor_spacing_average += (*first)->Coordinate().DistanceTo( (*first)->Neighbor(i)->Coordinate() );
+          nbor_spacing_average /= static_cast<double>(n_nbor_nodes);
+          sum_of_node_spacings += nbor_spacing_average;
+          first++;
+       }
+    
+    // finding the arithmetic mean
+    return sum_of_node_spacings / static_cast<double>(n_nodes);
+       
+ } // end averageNodeSpacing
+
+template double averageNodeSpacing<1U>( typename vector<Node<1U>*>::const_iterator,
+                                        typename vector<Node<1U>*>::const_iterator );
+template double averageNodeSpacing<2U>( typename vector<Node<2U>*>::const_iterator,
+                                        typename vector<Node<2U>*>::const_iterator );
+template double averageNodeSpacing<3U>( typename vector<Node<3U>*>::const_iterator,
+                                        typename vector<Node<3U>*>::const_iterator );
+
 
 
 

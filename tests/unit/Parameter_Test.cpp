@@ -18,8 +18,6 @@ namespace csmp
         t_param->min=100000;
         t_param->max=1000000000;
         t_param->usage=NODE;
-
-
     }
 
     Parameter_Test::~Parameter_Test()
@@ -56,7 +54,6 @@ namespace csmp
         _test(t_param->name=="absolute fluid pressure");
         IsWithinRangeTest();
         RangeTest();
-
     }
 }
 

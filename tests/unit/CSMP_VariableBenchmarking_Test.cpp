@@ -16,7 +16,7 @@ using namespace std;
 namespace csmp {
 
 // LOOSER - cannot use move constructor
-inline const ScalarVariable&  makeScalarConstRef( const VARIABLE_FLAG flag, const double val )
+inline const ScalarVariable  makeScalarConstRef( const VARIABLE_FLAG flag, const double val )
   {
      return ScalarVariable(flag,val);
   }
@@ -28,7 +28,7 @@ inline ScalarVariable  makeScalar2( const VARIABLE_FLAG flag, const double val )
   }
 
 // not inlined version
-ScalarVariable  makeScalarNotInlined( const VARIABLE_FLAG flag, const double val )
+static ScalarVariable  makeScalarNotInlined( const VARIABLE_FLAG flag, const double val )
   {
      return makeScalar(flag,val);
   }

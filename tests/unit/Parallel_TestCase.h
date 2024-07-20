@@ -9,6 +9,7 @@ namespace csmp{
   template<uint32_t> class Model;
   template<uint32_t> class TwoPhaseModel;
 
+// TODO: run! - not clear what this test does other than start transport simulation
   class Parallel_TestCase : public Test
     {
     public:

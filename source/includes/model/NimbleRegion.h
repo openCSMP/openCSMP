@@ -62,7 +62,7 @@ class NimbleRegion : public ModelSubDomain<dim,Element>,
                   typename std::vector<Node<dim>*>::const_iterator first,
                   typename std::vector<Node<dim>*>::const_iterator last );
 
-/* CARRY OUT DIAGNOSTICS WHETHER THESE INTERFACES ARE WORTH IMPLEMENTING
+/* TODO: ANALYSE WHETHER THESE INTERFACES ARE WORTH IMPLEMENTING
 
     /// adjust to arbitrary yet small shape modifications, where most of the region stays the same; argument new current nodes
     void ChangeShape( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
@@ -74,12 +74,6 @@ class NimbleRegion : public ModelSubDomain<dim,Element>,
     /// removes nodes and elements that might have become disconnected from the region
     void Shrink( std::vector<Node<dim>*>& );
 */
-    /// resize to zero while keeping the memory
-    void Clear();
-  
-    /// removing storage
-    void Erase();
-
     /// Local variable storage interface
     virtual PLACEMENT Placement() const { return REGION; }
 
@@ -99,7 +93,13 @@ class NimbleRegion : public ModelSubDomain<dim,Element>,
 
     const Element<dim>* const E(size_t) const;
     const Node<dim>* const N(size_t) const;
+
+    /// resize to zero while keeping the memory
+    void Clear();
   
+    /// removing storage
+    void Erase();
+
     /// writes the current element and node memberships to the console
     void Out() const;
 
@@ -116,7 +116,7 @@ class NimbleRegion : public ModelSubDomain<dim,Element>,
   
   private:
     // current implementation based on idea that vectors are resized with little overhead as long as their capacity is not changed
-    const bool                  verbose_ = true;    ///< flag for testing and reporting
+    const bool verbose_ = true;    ///< flag for testing and reporting
                        
     friend class NimbleRegion_Test;
 };

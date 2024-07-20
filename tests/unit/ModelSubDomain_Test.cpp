@@ -14,7 +14,6 @@
 #include "CSMP_highLevelUtilities.h"
 #include "VTK_Interface.h"
 #include "vsetMakers.h"
-//#include "ModelComparator.h"
 #include "Element.h"
 #include "Box.h"
 
@@ -37,8 +36,6 @@ void ModelSubDomain_Test::run()
      _test( Test_EstablishNeighborConnectivity() );
   
      bool test_binary_file_recovery1(true),
-          test_binary_file_recovery2(true), // with boundaries
-          test_binary_file_recovery3(true), // complex model with multiple regions
           verbose(true);
     
      // Test 1: subdomain storage to file and recreation in a new model

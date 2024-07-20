@@ -291,7 +291,7 @@ void ANSYS_Model2D_Test::Test_ANSYS_ModelConstructionAndSaving2D( const std::str
     printModelDimensions( model, true );
     
     // saving model to binary
-    model.OutputToBinaryFile( string( string(model.Name()) + "Vset_TestCase" ).c_str() );
+    model.OutputToBinaryFile( string( string(model.Name()) + "Vset_Test2" ).c_str() );
     
   } // end Test_ANSYS_ModelConstructionAndSaving2D
  

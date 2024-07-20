@@ -148,6 +148,7 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
    ^
    This number counts as a "DataDepth" for the array
    
+   @code
    array<array<double,2>,2> a_ = {{{{0.5,0.25}},{{0.25,0.5}}}} ;
    array<array<double,2>,2> c_ = {{{{3.0,3.0}},{{-2.0,-2.0}}}} ;
    
@@ -156,7 +157,7 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
   
   array<array<double,2>,2> a_ =  {{{{0.634,0.858}},{{9.58e+00,4.48}}}} ;
   array<array<double,2>,2> c_ =  {{{{0.606,0.315}},{{-1.6e-13,-5.e-07}}}} ;
-  
+  @endcode
   */
   
   array<array<double,2>,2> a_ = {{{{0.52,0.26}},{{0.24,0.4}}}} ;

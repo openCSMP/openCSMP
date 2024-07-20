@@ -296,15 +296,6 @@ bool BoundaryInterface_Test::TestRegionContactDetection( const Model<3U>& model 
 
 
 
-
-
-
-
-
- 
-  
-  
-// TRANSFERRED
 /**
     numbers the unique regions of the models, labeling their elements with the region number
     as "region identifier".
@@ -339,9 +330,10 @@ template size_t countAndLabelRegions( Model<3U>&, const char*, std::vector<std::
 
 
 
-//TRANSFERRED
+
+
 /**
-    loops over the surface cells of the model subdomain, 
+    loops over the surface cells of the model subdomain,
     checking whether any of the projections of the normals of the neighbor 
     cells onto the normal of the current element are negative.
     
@@ -391,7 +383,8 @@ static bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  sub
 
 
 
-// TRANSFERRED
+
+
 /**
      creates underscore-separated unique names for the region patches based on the juxtapositions relationships
      across the lower-dimensional regions, the names are composed of:
@@ -430,7 +423,7 @@ static std::string internalBoundaryNameFrom( const FaceConstructionData<dim>& fd
 
 
 
-// TRANSFERRED
+
 /**
      Returns name of the first Boundary (patch) that contains the supplied
      region name strings or any other other strings in an arbitrary order.

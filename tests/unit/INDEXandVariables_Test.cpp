@@ -11,7 +11,7 @@ using namespace std;
 namespace csmp {
 
 /**
-     SPLIT22_BASIC   is the test model model name.
+     SPLIT22_BASIC   is the test model model name created by vsetMakers..
      
      The test model should contain Boundary and SplitBoundary objects
 */
@@ -31,7 +31,6 @@ struct IndexTrackerTestStruct
 
 void INDEXandVariables_Test::run()
   {
-    // Run Test for 3D Model constructed by ANSYS mesh reader
 	  string variables_filename = (string)(this->getName() + ".txt");
     VSet<2U>       vset;
     ModelTopology  model_topo = create_BoundarySplitBoundaryPatch( vset );

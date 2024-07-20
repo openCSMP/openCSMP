@@ -61,7 +61,7 @@ namespace csmp {
 
 
 		//VSet<2U>   vset=readTextPixelData();
-		Model<2U>  model(mesh_container, "tutorial1_variables.txt" );
+		Model<2U>  model(mesh_container, "Tutorial1-variables.txt" );
 		const PropertyDatabase<2>& p_ref(model.Database());  // constand reference to the property database
 		Region<2U>& region = model.Region("Model");
 		// give the model dimensions

@@ -8,8 +8,8 @@ Methods OffsetNumbering,SetRowToZero,RemoveRowAndColumn,RemoveRowsFromMatrix are
 not used and therefore not tested. They probably exist in the TODO list.
 
 */
-#ifndef COMPRESSEDROWMATRIX_TEST_H
-#define COMPRESSEDROWMATRIX_TEST_H
+#ifndef COMPRESSED_ROW_MATRIX_TEST_H
+#define COMPRESSED_ROW_MATRIX_TEST_H
 
 #include "CompressedRowMatrix.h"
 #include "Test.h"
@@ -39,4 +39,4 @@ namespace csmp
   */
 } // end namespace csmp
 
-#endif // COMPRESSEDROWMATRIX_TEST_H
+#endif // COMPRESSED_ROW_MATRIX_TEST_H

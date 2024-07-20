@@ -256,6 +256,12 @@ template<uint32_t dim>
 double maximumNodeSpacing( typename std::vector<Node<dim>*>::const_iterator first,
                            typename std::vector<Node<dim>*>::const_iterator last );
 
+/// arithmetic mean of the node spacing in the provided range of nodes
+template<uint32_t dim>
+double averageNodeSpacing( typename std::vector<Node<dim>*>::const_iterator first,
+                           typename std::vector<Node<dim>*>::const_iterator last );
+
+
 /// checks whether point is contained in any of the elements in supplied region returning 'nullptr' or the element in which it is contained
 template<uint32_t dim>
 const Element<dim>* isContainedIn( const Region<dim>& subdomain, const std::array<double,dim>& search_point );

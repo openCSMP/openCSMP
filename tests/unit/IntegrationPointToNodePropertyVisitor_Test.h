@@ -7,10 +7,10 @@ namespace csmp{
 
   template<uint32_t> class Model;
 
-class ConstraintPointToNodePropertyVisitor_Test : public Test
+class IntegrationPointToNodePropertyVisitor_Test : public Test
 {
 public:
-  explicit ConstraintPointToNodePropertyVisitor_Test( Model<3U>& model );
+  explicit IntegrationPointToNodePropertyVisitor_Test( Model<3U>& model );
   virtual void run();
 
 private:

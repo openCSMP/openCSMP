@@ -47,7 +47,7 @@ int flux_mismatch( bool bPrescribedVelocity )
    //(g)
   // create_Prism_Hexa_VSet(mesh_container, true);
    
-   Model<3U>  sg( mesh_container, "example15.txt" ); 
+   Model<3U>  sg( mesh_container, "FluxMismatch_Test-variables.txt" ); 
    mesh_container.Erase();
 
    //Initialize properties (depends on what you need...):

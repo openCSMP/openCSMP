@@ -156,7 +156,7 @@ for ( auto nit2(first); nit2!=nodes_end; ++nit2 )
 */
 template<uint32_t dim>
 void NimbleRegion<dim>::Update2( typename vector<Node<dim>*>::const_iterator first,
-                                      typename vector<Node<dim>*>::const_iterator last )
+                                 typename vector<Node<dim>*>::const_iterator last )
  {
     const size_t n_target_nodes( distance(first,last));
     if (  n_target_nodes == 0U )

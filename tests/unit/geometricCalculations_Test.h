@@ -13,7 +13,7 @@
 
 namespace csmp {
 
-class geometricCalculations_Test : public csmp::Test {
+class GeometricCalculations_Test : public csmp::Test {
   public:
     /// here all the code for the testing goes
     virtual void run();

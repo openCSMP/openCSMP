@@ -690,9 +690,7 @@ void RegionMonitor_Test::RegionMonitorScalarPropertyIntegrals3D()
     fin.close();
     std::remove("RM_out.txt");
     
-    region_monitor.Reset();
-
-    
+    region_monitor.Reset();    
 }
 
 

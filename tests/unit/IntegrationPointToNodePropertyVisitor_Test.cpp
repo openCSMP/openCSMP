@@ -1,4 +1,4 @@
-#include "ConstraintPointToNodePropertyVisitor_Test.h"
+#include "IntegrationPointToNodePropertyVisitor_Test.h"
 #include "Model.h"
 #include "Region.h"
 #include "PropertyHandle.h"
@@ -9,13 +9,13 @@ using namespace std;
 namespace csmp{
 
   
-ConstraintPointToNodePropertyVisitor_Test::ConstraintPointToNodePropertyVisitor_Test( Model<3U>& model )
+IntegrationPointToNodePropertyVisitor_Test::IntegrationPointToNodePropertyVisitor_Test( Model<3U>& model )
   : model_( model )
 {
 
 }
 
-void ConstraintPointToNodePropertyVisitor_Test::run()
+void IntegrationPointToNodePropertyVisitor_Test::run()
 {
   enum{DIM=3U};
   // Assuring nodes numbered from 0..n-1

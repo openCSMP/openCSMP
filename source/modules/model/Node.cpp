@@ -1231,5 +1231,40 @@ template pair<vector<Element<3>*>,vector<Element<3>*>>  parentElementsAdjacentTo
 template pair<vector<Element<2>*>,vector<Element<2>*>>  parentElementsAdjacentTo( const Node<2>* const );
 
 
+
+
+/**
+    For the rectangular of cube-shaped bounding box defined by its min/max corner coordinates, determine whether the Node is contained
+    @code
+      if ( !(p.x < box.left || p.x > box.right || p.y > box.bottom || p.y < box.top || ... )
+    @endcode
+*/
+template<>
+bool isWithinBoundingBox( const Point<3U>& pmin, const Point<3U>& pmax, const Node<3U>* const nptr )
+ {
+    assert( nptr != nullptr );
+    Point<3U> pt = nptr->Coordinate();
+    if ( !(pt[0] < pmin[0] || pt[0] > pmax[0] || pt[1] < pmin[1] || pt[1] > pmax[1] || pt[2] < pmin[2] || pt[2] > pmax[2]) ) return true;
+    return false;
+ }
+template<>
+bool isWithinBoundingBox( const Point<2U>& pmin, const Point<2U>& pmax, const Node<2U>* const nptr )
+ {
+    assert( nptr != nullptr );
+    Point<2U> pt = nptr->Coordinate();
+    if ( !( pt[0] < pmin[0] || pt[0] > pmax[0] || pt[1] < pmin[1] || pt[1] > pmax[1] ) ) return true;
+    return false;
+ }
+template<>
+bool isWithinBoundingBox( const Point<1U>& pmin, const Point<1U>& pmax, const Node<1U>* const nptr )
+ {
+    assert( nptr != nullptr );
+    Point<1U> pt = nptr->Coordinate();
+    if ( !( pt[0] < pmin[0] || pt[0] > pmax[0] ) ) return true;
+    return false;
+ }
+
+
+
 } // end namespace csmp
 

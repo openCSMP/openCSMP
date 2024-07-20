@@ -173,10 +173,6 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBackWithInterfaces()
  } // TestWriteModelToDiskAndReadBackWithInterfaces
 
 
-
-
-
-
   
 } // end csmp
 

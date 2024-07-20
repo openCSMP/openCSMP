@@ -12,7 +12,7 @@ using namespace std;
 namespace csmp {
 
 PropertyHandle_Test::PropertyHandle_Test( double tolerance, bool verbose )
-    : model( new ANSYS_Model3D("BoxHalfs3D", "PH_test-variables.txt") ),
+    : model( new ANSYS_Model3D("BoxHalfs3D", "PropertyHandle_Test-variables.txt") ),
       TOLERANCE(tolerance),
       elementVariable1( *model, "element variable 1", SCALAR, ELEMENT ),
       elementVariable2( *model, "element variable 2", SCALAR, ELEMENT ),

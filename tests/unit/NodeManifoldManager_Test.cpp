@@ -54,7 +54,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
   dimension += ostr.str();
   dimension += "D";
 
-  if ( verbose_ ) std::cerr << "\nStart " << dimension << " NodeManifoldManager Test: Test_nodemanifolds_created_from_splitboundaries_between_regions \n"; 
+  if ( verbose_ ) std::cerr << "\nStart " << dimension << " NodeManifoldManager_Test: Test_nodemanifolds_created_from_splitboundaries_between_regions \n"; 
 
   // load Model
   const std::string variables_file( "NodeManifoldManager_Test-variables.txt" );

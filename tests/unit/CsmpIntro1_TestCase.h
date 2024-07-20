@@ -5,6 +5,8 @@
 
 namespace csmp {
 
+// TODO: purpose of this test is not clear and it is not being run. Deprecate?
+
 class  CsmpIntro1_TestCase : public Test {
   public:
     CsmpIntro1_TestCase( bool verbose ) : verbose_(verbose) {}

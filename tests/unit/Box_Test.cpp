@@ -831,10 +831,6 @@ bool Box_Test::TestBoundaryFlagRecreation()
 */
 bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
  {
-    //const bool irregular_mesh(true);
-    //const bool binary_file(true);
-    //ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
-    
     VSet<3U>  vset;
     const bool bSkewed{false};
     create_Prism_Hexa_VSet( vset, bSkewed );
@@ -920,8 +916,6 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
     if ( elmt_flags_after != elmt_flags_before ) return false;
     return true;
  }
-
-
 
 
 } // csmp

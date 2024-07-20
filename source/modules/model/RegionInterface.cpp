@@ -852,6 +852,59 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionN
 }
 
 
+/**
+  Forms a region on the basis of its node coordinates.
+  
+  @param regionName unique name for the region that shall be formed
+  @param cnr_min minimum x,y,z of bounding box
+  @param cnr_max maximum coordinate of bounding box
+  @param all_nodes_must_be_within to choose whether just a single node of the targeted elements must be within the bbox or all of them
+  @return the number of elements found inside of the bounding box added to the target region
+*/
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
+size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionInBoundingBox( const char* regionName,
+                                                                      const Point<dim>& cnr_min, const Point<dim>& cnr_max,
+                                                                      bool all_nodes_must_be_within )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( !ContainsRegion("Model") )
+    csmp_error.Note( FATAL_ERROR, "RegionInterface<dim, REGION_COMPLEX>::FormRegionInBoundingBox:",
+                      "method relies on the existence of region 'Model', which does not exist");
+
+  csmp::Region<dim>&     model_domain(Region("Model"));
+  vector<Element<dim>*>  inside_elmts;
+  
+  if ( all_nodes_must_be_within ) {
+       for ( const auto& it : model_domain.CellVector() ) {
+            bool elmt_is_inside{ true };
+            for ( auto nit=it->NodesBegin(); nit!=it->NodesEnd(); ++nit )
+              if ( !isWithinBoundingBox<dim>( cnr_min, cnr_max, (*nit) ) ) {
+                   elmt_is_inside = false;
+                   break;
+                }
+            if ( elmt_is_inside ) inside_elmts.push_back( it );
+         }
+    }
+  // if only a single element node is required to lie withing the bounding box
+  // we add all parent elements for nodes that are contained in it
+  else {
+       for ( const auto& nit : model_domain.NodeVector() )
+         if ( !isWithinBoundingBox<dim>( cnr_min, cnr_max, nit ) )
+           for ( uint32_t i{0u}; i<nit->Parents(); ++ i )
+             if ( nit->Parent(i) )
+               inside_elmts.push_back( nit->Parent(i) );
+       // since this initialisation of the vector leads to duplicates it has to be sorted and made unique
+       sort( inside_elmts.begin(), inside_elmts.end() );
+       inside_elmts.erase( unique( inside_elmts.begin(), inside_elmts.end() ), inside_elmts.end() );
+    }
+
+  // this region will always overlap other ones
+  const bool unique{ false };
+  return FormRegionFrom( regionName, inside_elmts.begin(), inside_elmts.end(), unique );
+}
+
+
 
 
 
@@ -1154,9 +1207,9 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionn
 /**
 @author P Lang
 
-This forms a region from elements eligible as reported from elementComp.
+This forms a region from elements eligible as reported by elementComp.
 
-ElementComp is a model of binary predicate, i.e.
+ElementComp is a model of binary predicates, i.e.
 @code
 template<uint32_t dim>
 struct ElementsLessX

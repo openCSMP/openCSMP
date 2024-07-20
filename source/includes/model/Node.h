@@ -188,6 +188,10 @@ class Node : public LocalVariableStorage<dim,Node> {
 
 // FUNCTIONS INVOLVING NODES
 
+/// checks whether the Node is contained in the rectangular (or cubic) bounding box defined by the corner points provided
+template<uint32_t dim>
+bool isWithinBoundingBox( const Point<dim>& pmin, const Point<dim>& pmax, const Node<dim>* const nptr );
+
 /// returns  elements that share face, inner side is reported first; outer next; face-nodes must be in correct order. Application: from nodes of lower-dimensional face find elements on in- and outside
 template<uint32_t dim>
 std::pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename std::vector<Node<dim>*>::const_iterator first,

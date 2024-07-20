@@ -6,8 +6,8 @@
 //  Copyright © 2017 Stephan Matthai. All rights reserved.
 //
 
-#ifndef GenericFiniteVolumeTransport_Test_h
-#define GenericFiniteVolumeTransport_Test_h
+#ifndef CSMP_GENERIC_FINITE_VOLUME_TRANSPORT_TEST_H
+#define CSMP_GENERIC_FINITE_VOLUME_TRANSPORT_TEST_H
 
 #include "Test.h"
 
@@ -26,4 +26,4 @@ class GenericFiniteVolumeTransport_Test : public Test {
 } // end csmp
 
 
-#endif /* GenericFiniteVolumeTransport_Test_h */
+#endif /* CSMP_GENERIC_FINITE_VOLUME_TRANSPORT_TEST_H */

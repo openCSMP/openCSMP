@@ -171,6 +171,10 @@ class RegionInterface {
     /// Assuming that the supplied n-nodes are in sequence of a polyline, method forms n-1 line elements putting them into a now limer-dimensional region
     size_t FormRegionFrom( const char* regionname, std::vector<Node<dim>*>& nodes, bool is_unique=true );
 
+    size_t FormRegionInBoundingBox( const char* regionName,
+                                    const Point<dim>& cnr_min, const Point<dim>& cnr_max,
+                                    bool all_nodes_must_be_within );
+                                    
 
     // -----------------------------------------------
     // Manipulations with already existed Regions
