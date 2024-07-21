@@ -1,5 +1,5 @@
-#ifndef CONSTRAINTPOINTTONODEPROPERTYVISITOR_TEST_H
-#define CONSTRAINTPOINTTONODEPROPERTYVISITOR_TEST_H
+#ifndef CSMP_INTEGRATION_POINT_TO_NODE_PROPERTY_VISITOR_TEST_H
+#define CSMP_INTEGRATION_POINT_TO_NODE_PROPERTY_VISITOR_TEST_H
 
 #include "Test.h"
 
@@ -10,15 +10,19 @@ namespace csmp{
 class IntegrationPointToNodePropertyVisitor_Test : public Test
 {
 public:
-  explicit IntegrationPointToNodePropertyVisitor_Test( Model<3U>& model );
+  
+  // uses model prism test
   virtual void run();
 
 private:
-  Model<3U>& model_;
+  
+  void Test_NodeToIntegrationPointInterpolation( Model<3U>& model );
+  void Test_IntegrationPointToNodePropertyVisitor( Model<3U>& model );
+  void Test_CoordinateInterpolationToBaryCenter( Model<3U>& model );
 
 };
 
 
 } // csmp
 
-#endif // CONSTRAINTPOINTTONODEPROPERTYVISITOR_TEST_H
+#endif // CSMP_INTEGRATION_POINT_TO_NODE_PROPERTY_VISITOR_TEST_H

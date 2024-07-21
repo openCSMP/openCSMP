@@ -27,20 +27,18 @@ class ANSYS_Model2D : public Model<2U> {
                  const char* icem_file_set,
                  const char* variable_file,
                  bool binary_file = true,               /* true = binary, false = ascii */
-                 bool use_regions_file = true );        /* true = reduce regions according to regions file, false = does not redure regions */
+                 bool use_regions_file = true );        /* true = reduce regions according to regions file, false = does not reduce regions */
 
   /// input from ANSYS *.asc, *.dat and *-variable.txt files
-  ANSYS_Model2D(
-    const char* icem_file_set,
-    const char* variable_file,
-    bool binary_file = true,               /* true = binary, false = ascii */
-    bool use_regions_file = true );        /* true = reduce regions according to regions file, false = does not redure regions */
+  ANSYS_Model2D( const char* icem_file_set,
+                 const char* variable_file,
+                 bool binary_file = true,               /* true = binary, false = ascii */
+                 bool use_regions_file = true );        /* true = reduce regions according to regions file, false = does not redure regions */
 
   /// input from ANSYS *.asc, *.dat files; creates empty property database
-  ANSYS_Model2D(
-    const char* icem_file_set,
-    bool binary_file = true,               /* true = binary, false = ascii */
-    bool use_regions_file = true );        /* true = reduce regions according to regions file, false = does not redure regions */
+  ANSYS_Model2D( const char* icem_file_set,
+                 bool binary_file = true,               /* true = binary, false = ascii */
+                 bool use_regions_file = true );        /* true = reduce regions according to regions file, false = does not redure regions */
 
   virtual ~ANSYS_Model2D();
 

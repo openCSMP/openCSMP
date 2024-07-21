@@ -17,14 +17,14 @@ namespace csmp{
       // COMPARING ANSYS model generation with reading model from CSMP native binary file
       {
         timer.Start();
-        ANSYS_Model3D ansys_model( "Clair", "Clair", "VariablesTutorial.txt", true ); // 799206 elmts, 145178 nodes
+        ANSYS_Model3D ansys_model( "HeuristicModel1coarse", "HeuristicModel1coarse", "VariablesTutorial.txt", true );
         cout << "\n\n\nTime taking to build model from ANSYS: " << (ansys_build_time=timer.StopClock()) << "\n\n\n";
         // saving model to disk
-        ansys_model.OutputToBinaryFile("Clair");
+        ansys_model.OutputToBinaryFile("HeuristicModel1coarse");
       }
       // reading from binary file
       timer.Start();
-      Model<3U> m0( string("Clair") );
+      Model<3U> m0( string("HeuristicModel1coarse") );
       cout << "\n\n\nTime taking to build model from CSMP binary file set: " << (native_build_time=timer.StopClock()) << "\n\n\n";
 
       ScalarVariable sv( PLAIN, 1. );
@@ -141,8 +141,6 @@ namespace csmp{
 
       // TODO: - compared static dispatching with dynamic dispatching
       // TODO: - compare access of variables stored at FE integration points
-
-      cin.get();
       
     } // end run
 

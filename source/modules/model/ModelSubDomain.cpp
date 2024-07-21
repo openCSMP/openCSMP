@@ -980,11 +980,11 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVectorForBoundary()
        } // end identifying the perimeter cells of the Boundary
 
     if ( perimeter_cells.empty() ) {
-         csmp_error.Note( ERROR, "ModelSubDomain<dim>::PartitionCellVectorForBoundary",
-                                 "failed to detect perimeter cells in boundary: ", Name().c_str() );
+         csmp_error.Note( INFO, "ModelSubDomain<dim>::PartitionCellVectorForBoundary",
+                          Name().c_str(), "failed to detect perimeter cells in boundary, it may be a closed loop (2D) or hull (3D)" );
          return 0U;
       }
-    if ( interior_cells.empty() )
+    if ( cell_vec_.size() > 2 && interior_cells.empty() )
          csmp_error.Note( WARNING, "ModelSubDomain<dim>::PartitionCellVectorForBoundary",
                                    "failed to detect interior cells in boundary: ", Name().c_str() );
 
@@ -1149,11 +1149,11 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVectorForSplitBoundary()
        } // end identifying the perimeter cells of the Boundary
 
     if ( perimeter_cells.empty() ) {
-         csmp_error.Note( ERROR, "ModelSubDomain<dim>::PartitionCellVectorForSplitBoundary",
-                                 "failed to detect perimeter cells in boundary: ", Name().c_str() );
+         csmp_error.Note( INFO, "ModelSubDomain<dim>::PartitionCellVectorForSplitBoundary",
+                         "no perimeter cells; split boundary appears to be a closed loop(2D) or hull(3D): ", Name().c_str() );
          return 0U;
       }
-    if ( interior_cells.empty() )
+    if ( cell_vec_.size() > 2 && interior_cells.empty() )
          csmp_error.Note( WARNING, "ModelSubDomain<dim>::PartitionCellVectorForSplitBoundary",
                                    "failed to detect interior cells in boundary: ", Name().c_str() );
 

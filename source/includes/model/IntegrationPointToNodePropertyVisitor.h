@@ -10,7 +10,9 @@ template<uint32_t> class PropertyDatabase;
 template<uint32_t> class Node;
 template<uint32_t> class Element;
 
-/** replaces value of property a with propery b
+/**
+    Replaces value of FE-integratiion-point property 'a' with node property value 'b',
+    testing (for the case where all the node values are the same) whether the FE interpolation returns the same value.
 
 @todo (1) IntegrationPointToNodePropertyVisitor is not extrapolating correctly (A)
 @todo (1) SKM: consider using the element specific method ExtrapolateIntegrationPointToNodeProperty for this task

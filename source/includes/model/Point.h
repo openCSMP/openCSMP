@@ -129,6 +129,9 @@ Point<dim>  crossProduct( const Point<dim>&, const Point<dim>& );
 template<uint32_t dim>
 double angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const std::pair<Point<dim>,Point<dim> >& edge2 );
 
+/// between two points
+template<uint32_t dim>
+double distance( const Point<dim>&, const Point<dim>& );
 
 // specialisations
 
@@ -193,6 +196,8 @@ class Point<1U> {
     double x_;
 };
 
+double distance( const Point<1U>&, const Point<1U>& );
+
 
 
 template<>
@@ -251,6 +256,7 @@ class Point<2U> {
 
 Point<2U> crossProduct( const Point<2U>& p1, const Point<2U>& p2 );
 
+double    distance( const Point<2U>&, const Point<2U>& );
 
 
 
@@ -313,6 +319,8 @@ template<uint32_t dim>
 double exteriorProductLength( const Point<dim>& p1, const Point<dim>& p2 );
 
 Point<3U> crossProduct( const Point<3U>& p1, const Point<3U>& p2 );
+
+double    distance( const Point<3U>&, const Point<3U>& );
 
 std::ostream&   operator<<( std::ostream& stream, const Point<1U>& pt );
 

@@ -946,6 +946,17 @@ Point<1U> crossProduct( const Point<1U>& p1, const Point<1U>& p2 )
      return (Point<1U>( p1[0U] * p2[0U] ));
   }
 
+/// distance between the two points
+double distance( const Point<1U>& a, const Point<1U>& b ) {
+     return fabs( b[0] - a[0] );
+  }
+double distance( const Point<2U>& a, const Point<2U>& b ) {
+     return sqrt( (b[0]-a[0])*(b[0]-a[0]) + (b[1]-a[1])*(b[1]-a[1]) );
+  }
+double distance( const Point<3U>& a, const Point<3U>& b ) {
+     return sqrt( (b[0]-a[0])*(b[0]-a[0]) + (b[1]-a[1])*(b[1]-a[1]) + (b[2]-a[2])*(b[2]-a[2]) );
+  }
+
 
 
 template<>

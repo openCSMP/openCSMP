@@ -1495,9 +1495,7 @@ IsoparametricLinearPyramid::ExtrapolateIntegrationPointVariableToNodes(
                                                                 )
 const
 {
- assert( gpe == 1);
- assert( IVAR.size() >= (gpe*nvars) );
-
+   assert( IVAR.size() >= (gpe*nvars) );
    NVAR.resize( npe * nvars );
   // Define nodal values as bi-linear variation of the integration points values
   // See Zienkewitch, pp. 351, for example

@@ -15,6 +15,8 @@ class  PropertyStorageSpeed_Test : public Test {
   public:
     explicit PropertyStorageSpeed_Test( std::ostream* osptr );
     virtual void run();
+    
+    const bool verbose_ = false; // should be off to get diagnostic value
 };
 
 } // end csmp

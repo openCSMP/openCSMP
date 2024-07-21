@@ -922,8 +922,7 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
           for ( ; first!=last; ++first )
             printParents( (*first) );
           ErrorHandler::Instance().Note( ERROR, "parentElement", "no suitable parent element was found" );
-
-          return make_pair( (*shared_parents.begin()), numeric_limits<size_t>::max() );
+          return make_pair( nullptr, numeric_limits<size_t>::max() );
        }
     if (  shared_parents.size() > 1 ) {
     
@@ -948,8 +947,6 @@ if ( interPenetrating<dim>( elmt1, elmt2 ) )
 #endif
          ErrorHandler::Instance().Note( WARNING, "parentElement", "more than one element was found",
                                          "this may be the case for a lower-dimensional element inside the model; use other function");
-
-         return make_pair( (*shared_parents.begin()), numeric_limits<size_t>::max() );
       }
     
     

@@ -103,10 +103,10 @@ class FiniteElementPolicy {
   
     /// returns the value of any property interpolated to the integration point of interest
     template<class Var>
-    void    PropertyValueAtIntegrationPoint( const csmp::Index&, uint32_t integration_point, Var& ) const;
+    void    PropertyValueAtIntegrationPoint( const csmp::Index& node_prop, uint32_t integration_point, Var& ) const;
 
     /// returns the value of a scalar property interpolated to the integration point of interest
-    double  PropertyValueAtIntegrationPoint( const csmp::Index&, uint32_t integration_point ) const;
+    double  PropertyValueAtIntegrationPoint( const csmp::Index& node_prop, uint32_t integration_point ) const;
 
     /// returns property values at the integration points
     template<class Var>

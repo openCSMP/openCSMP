@@ -620,15 +620,15 @@ Used by the public interfaces of the class.
 */
 bool ANSYS_Interface::ReadRegionsAndElementTypesASCII( ifstream& ifs )
  {
-    char                       text_line[INFO_STRING];
-    const char* const          delims =" ,\t,:,\n,\r";
-    string                object_name;
-    string                elmt_specifier;
-    int32_t                    n_regions(0), region(0);
-    size_t                     n, n_elements;
-    int32_t                    material;
-    vector<size_t>        empty_list;
-    set<string>      excluded_elmts;
+    char              text_line[INFO_STRING];
+    const char* const delims =" ,\t,:,\n,\r";
+    string            object_name;
+    string            elmt_specifier;
+    int32_t           n_regions(0), region(0);
+    size_t            n, n_elements;
+    int32_t           material;
+    vector<size_t>    empty_list;
+    set<string>       excluded_elmts;
     
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
@@ -740,11 +740,11 @@ bool ANSYS_Interface::ReadRegionsAndElementTypesASCII( ifstream& ifs )
             cout <<"\nANSYS_Interface::ReadRegionsAndElementTypesASCII ";
             cout <<"Input file contains the geometric objects: "<< endl;
             for ( multimap<string,string>::const_iterator
-               it=object_specs_.begin(); it!=object_specs_.end(); it++, it2++ )
-            {
-                cout <<"\n\t"<< (*it2).second.size() <<" "<< (*it).second <<" elements ";
-                cout <<"\tforming region: '"<< (*it).first <<"'";
-            }
+                 it=object_specs_.begin(); it!=object_specs_.end(); it++, it2++ )
+              {
+                  cout <<"\n\t"<< (*it2).second.size() <<" "<< (*it).second <<" elements ";
+                  cout <<"\tforming region: '"<< (*it).first <<"'";
+              }
             cout << endl << endl;
         }
         return true;

@@ -1454,7 +1454,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
          return make_pair("split boundary not created",false);
       }
         
-    // creating the necessary interfaces and nodes, and updates the connectivity of the mesh
+    // creating the necessary interfaces and nodes, and establishing the connectivity of the faces while updating the mesh
     const bool create_manifolds_on_perimeter{true};
     vector<InterFace<dim>*>  interfaces = modelComplex->Mesh().CreateInterfacesBetweenNodeSharingElements( modelComplex->Database(),
                                                                                                            matched_elmts,

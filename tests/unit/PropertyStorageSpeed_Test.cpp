@@ -20,9 +20,7 @@ void PropertyStorageSpeed_Test::run()
    cout <<" Property Storage I/O benchmark\n";
    cout << endl;
    cout <<"******************************************************************************************\n";
-   // cout <<"\n\nmain: Enter name of input variables file: ";
    string  var_file("PropertyStorage_test1.txt");
-   //cin >> var_file;
    
    ANSYS_Model3D  model( "PropertyStorage_test", var_file.c_str() );
    
@@ -41,13 +39,14 @@ void PropertyStorageSpeed_Test::run()
    unsigned int seed(stop_watch.Second());
    // cin >> seed;
    srand(seed);
-   double            va;
-   ScalarVariable      sc;  
+   double              va;
+   ScalarVariable      sc;
    VectorVariable<3U>  vc;  
    TensorVariable<3U>  ts;  
    
    // timing the operations
-   for ( int i=0; i<25000; i++ )
+   auto t0 = chrono::high_resolution_clock::now();
+   for ( size_t i=0; i<100; i++ )
      {
         // initialising the input properties
         sc() = static_cast<double>(rand()) / 3.;
@@ -62,18 +61,21 @@ void PropertyStorageSpeed_Test::run()
           }
         // reading properties including some manipulations
         double pmin, pmax;  
-        cout <<"\n\nmain: property ranges: ";
+        if ( verbose_ ) cout <<"\n\nmain: property ranges: ";
         for ( map<string,csmp::Index>::const_iterator it=properties.begin(); it!=properties.end(); it++ ) {
              model.MinMaxOf( (*it).first.c_str(), pmin, pmax );
-             cout <<"\nmain: min/max of '"<< (*it).first <<"': "<< pmin <<" - "<< pmax;
+             if ( verbose_ ) cout <<"\nmain: min/max of '"<< (*it).first <<"': "<< pmin <<" - "<< pmax;
           }
-        cout <<"\n\nmain: property averages: ";
+        if ( verbose_ ) cout <<"\n\nmain: property averages: ";
         for ( map<string,csmp::Index>::const_iterator it=properties.begin(); it!=properties.end(); it++ ) {
              va = model.Region("Model").Average( (*it).first.c_str() );
-             cout <<"\nmain: average of '"<< (*it).first <<"': "<< va;
+             if ( verbose_ ) cout <<"\nmain: average of '"<< (*it).first <<"': "<< va;
           }
      }
-   cout <<"\nmain: Completed property read/write in "<< stop_watch.delta(BE_Time()) <<" secs."<< endl;
+   auto t1 = chrono::high_resolution_clock::now();
+   cout <<"\n\n"<<"PropertyStorageSpeed_Test::run: Completed property read/write in ";
+   cout << chrono::duration_cast<chrono::milliseconds>(t1-t0).count();
+   cout <<" milliseconds."<< endl;
  
 } // end run 
 

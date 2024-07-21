@@ -1307,7 +1307,7 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
    // is face indeed a boundary face?
    if ( eptr->Neighbor(local_face_id) != nullptr ) {
         cout <<"\n"<<"Element "<< eptr->Idx() <<": face "<< local_face_id << endl;
-        csmp_error.Note( ERROR, "MeshManager<dim>::AddBoundaryFace", "requested face does not lie on model boundary");
+        csmp_error.Note( ERROR, "MeshManager<dim>::AddBoundaryFace", "requested element face does not lie on model boundary");
         return nullptr;
      }
 
@@ -1733,6 +1733,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
          // finding higher dimensional neighbor and its face idx
          pair<Element<dim>* const,uint32_t> pelmt = parentElement<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
          // creating Face, storing a pointer to it
+         //                                    element ptr  local element ID in face
          face_ptrs.push_back( AddBoundaryFace( pelmt.first, pelmt.second, lvars, ivars ) );
          // numbering new Face consecutively
          face_ptrs.back()->Idx( face_idx++ );

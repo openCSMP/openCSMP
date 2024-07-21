@@ -19,27 +19,10 @@ namespace csmp
 // TODO: run 2 and 3D versions
 void NodeManifoldManager_Test::run()
 {
-  //Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "BoxHalfs2D" );
-  /*
-  Test_nodemanifolds_created_from_splitboundaries_between_regions<3U>( "BoxHalfs3D" );
-  Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "ThreeZones2D" );
-  Test_nodemanifolds_created_from_splitboundaries_between_regions<3U>( "ThreeZones3D" );
-  Test_nodemanifolds_created_from_splitboundaries_between_regions<3U>( "lamination" );
-  Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "kueper_one_interface" );
-  */
-  //test_create_nodemanifolds_from_splitboundaries<3U>( "Dyke_Split" );
-
-  //Test_nodemanifolds_created_from_splitboundaries_around_regions<2U>( "UnitSquareFracs_xline" );
-  //Test_nodemanifolds_created_from_splitboundaries_around_regions<2U>( "UnitSquareFracs_yline" );
-  //Test_nodemanifolds_created_from_splitboundaries_around_regions<2U>( "UnitSquareFracs_orthogonal" );
-  //Test_nodemanifolds_created_from_splitboundaries_around_regions<2U>( "UnitSquareFracs_irregular" );
-  //Test_nodemanifolds_created_from_splitboundaries_around_regions<3U>( "FracBox" );
-
-  //Test_nodemanifolds_created_from_splitboundaries_around_regions<2U>( "BoxHalfs2D" );
+  // NB: test is written in such a way that the model must contain a volumetric region "FAULT"
+  //     there is currently no 3D model that matches this requirement
   Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "box2d_fault" );
-  //Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "kueper_one_interface" );
-  //Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "lens2D" );
-  //Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "UnitSquareFracs_yline" );
+  //Test_nodemanifolds_created_from_splitboundaries_between_regions<3U>( "..." );
 }
 
 
@@ -61,8 +44,9 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
 
   Model<dim>* modelIN(nullptr);
 
+  const bool with_regions_file{true};
   if ( dim == 2U )
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, with_regions_file ));
   else if ( dim == 3U )
     modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
 
@@ -690,8 +674,7 @@ void NodeManifoldManager_Test::Create_splitboundary_between_regions( Model<dim>&
   regions.reserve( modelIN.UniqueRegions() );
 
   const auto  model_dim = modelIN.Region( "Model" ).SpatialDimensions();
-  for ( typename std::map<std::string, csmp::Region<dim> >::iterator
-        it = modelIN.UniqueRegionsBegin(); it != modelIN.UniqueRegionsEnd(); ++it ) {
+  for ( auto it = modelIN.UniqueRegionsBegin(); it != modelIN.UniqueRegionsEnd(); ++it ) {
     const auto  sub_dim = (*it).second.SpatialDimensions();
     if ( sub_dim.second == model_dim.second ) // check whether the highest dimension of the region is equal to the highest dimension of the model
       regions.push_back( (*it).second.Name() );
