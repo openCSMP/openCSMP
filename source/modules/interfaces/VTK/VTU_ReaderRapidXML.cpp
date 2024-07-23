@@ -157,7 +157,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
         }
         if ( px.size() != n_vertices || py.size() != n_vertices || pz.size() != n_vertices ) {
              cout <<"\n\t"<<"n_vertices= "<< n_vertices <<" vs. "<< px.size() <<" vertices read."<< endl;
-             csmp_error.Note( ERROR, "readVTU_File", "number of node points read does not match the number in the node attribute specification; trimming dequeues.");
+             csmp_error.Note( ERROR, "readVTU_File", "number of node points read do not match the number in the node attribute specification; trimming dequeues.");
              px.resize( n_vertices );
              py.resize( n_vertices );
              pz.resize( n_vertices );
@@ -376,7 +376,6 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
               vset.BFlag( vset.Plist(i,j), IRREGULAR );
 
         // creating element neighbor information
-        vset.EstablishElementConnectivity3D();
         const uint32_t MODEL_DIMENSION = vset.SpatialDimension();
         if ( MODEL_DIMENSION != dim )
           csmp_error.Note( INFO, "readVTU_File", to_string(MODEL_DIMENSION), "= spatial dimension of the model in the file is different from that expected by the reader.");
@@ -407,7 +406,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
         else topologyDataArray = getSiblingNode( cellDataArray, "attribute" );
 
         if ( !findSiblingNamed( cellDataArray, "region id" ) )
-          csmp_error.Note( INFO, "readVTU_File", "the VTU file does not contain 'region id' to create ModelTopology (regions) from");
+          csmp_error.Note( INFO, "readVTU_File", "the VTU file does not contain 'region id' data");
         else topologyDataArray = getSiblingNode( cellDataArray, "region id" );
  
         if ( !topologyDataArray )
@@ -415,11 +414,11 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
 
          // Accessing attributes
         if ( topologyDataArray ) {
-              cout <<"\n"<<"VTU file contains 'attribute' or 'region id' data that will be used to initialise csmp::ModelTopology..." << endl;
+              cout <<"\n"<<"VTU file contains 'attribute'='region id' data that will be used to initialise csmp::ModelTopology..." << endl;
               const char* typeAttrCellPropertyData = topologyDataArray->first_attribute("type")->value();
               const char* nameAttrCellPropertyData = topologyDataArray->first_attribute("Name")->value();
               const char* numComponentsAttrCellPropertyData = ( topologyDataArray->first_attribute("NumberOfComponents") ) ?
-                                                               topologyDataArray->first_attribute("NumberOfComponents")->value() : nullptr;
+                                                                topologyDataArray->first_attribute("NumberOfComponents")->value() : nullptr;
               const char* formatAttrCellPropertyData = topologyDataArray->first_attribute("format")->value();
 
               if ( verbose ) {
@@ -455,7 +454,7 @@ int read_VTU_File( const char* fname, VSet<dim>& vset, ModelTopology& topology, 
                     for ( const auto& rit : model_regions ) {
                          region_cells.assign( rit.second.begin(), rit.second.end() );
                          // identifying the element type of the region assuming that they all consist of a single type of cell type (VTK_TYPE)
-                         const int8_t fe_type = ( vset.HybridElementTypeMesh() == true ) ? vset.ElementType( region_cells[0u] ) : vset.ElementType(0u);
+                         const int8_t fe_type = ( vset.HybridElementTypeMesh() == true ) ? vset.ElementType( region_cells[rit.first] ) : vset.ElementType(0u);
                          topology.AddDomain( (string("region") + to_string(rit.first)).c_str(), set<string>{parseFiniteElementType(fe_type)}, region_cells );
                          region_cells.clear();
                      }

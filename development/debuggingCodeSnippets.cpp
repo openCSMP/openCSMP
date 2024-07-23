@@ -254,3 +254,99 @@ for ( auto it : cell_pairs ) {
     }
 // FACE NUMBERING
 
+
+
+// CUT OUT BECAUSE BETTER DONE WITH HELP OF OCTREE
+  /// only if there is not already a node at this location a new node is created, else a pointer to the nearest node is returned, no parent element  gets connected
+  Node<dim>* const		 AddNodeAtUniqueLocation( const Point<dim>&, size_t nearby_node,
+                                                const LocalVariables& node_variables,
+                                                BOX_BOUNDARY = NOT,
+                                                TOPOTYPE = MESH_VERTEX );
+
+/**
+    Inserts  a new Node at the desired point, but only if there is not already a Node there.
+    
+    @param nearby_node a node which the new node will be connected with.
+    @param nvars the nodal variables this node will have to store
+    @param bflag the boundary flag of the node (NOT if not at a boundary)
+    @param topo the topological flag for the new node, i.e., whether it will be part of the models BREP
+    @return if there is already a node at the point location, a pointer to that node is returned
+    
+    Search algorithm for a collocated node uses  "nearby" node as a starting point.
+        
+      Idea: start from nearby Node
+        - loop over the neighbor nodes of the node ranking them in terms of their proximity from the target point
+        - move to closest node and then repeat (remembering the shortest distance)
+        - repeat until node is found while the distance decreases
+        - if distance increases, the node does not exist and will be created
+        - allow  to move across manifold member nodes in order to cross split boundaries
+*/
+template<uint32_t dim>
+Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt,
+                                                            size_t nearby_node,
+                                                            const LocalVariables& nvars,
+                                                            BOX_BOUNDARY bflag,
+                                                            TOPOTYPE topo )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+ 
+   // if the node location needs to be compared with existing ndes
+   if ( nearby_node >=nodes_.size() ) {
+        csmp_error.Note( WARNING, "MeshManager<dim>::AddNodeAt",
+                          "nearby Node not contained in Mesh:", to_string(nearby_node) );
+        // using the last node
+        nearby_node = nodes_.size() - 1U;
+     }
+
+   // searching the mesh tree for a node with the same location (using the provided point as a start location)
+   Node<dim>*          nptr( &(*next(nodes_.begin(),static_cast<long>(nearby_node))) );
+   double              new_distance(pt.DistanceTo(nptr->Coordinate())), old_distance(1e30);
+   map<double,size_t>  distances;
+   // estimating a tolerance on the basis of the distance of the point to the node and the first node
+   const double tolerance = 1.0e-7 * (new_distance + pt.DistanceTo((*nodes_.begin()).Coordinate())) / 2.;
+   while ( old_distance > new_distance )
+     {
+        // tree traversal: looping the neighbor nodes of the current node, finding the one that is the closest to the point
+        const size_t n_nbors( nptr->Neighbors() );
+        for ( uint32_t i{0U}; i<n_nbors; ++i )
+          distances.insert( make_pair( pt.DistanceTo( nptr->Neighbor(i)->Coordinate() ), i ) );
+        // since map defaults to less, its first entry is the node we want
+        nptr = nptr->Neighbor( static_cast<uint32_t>((*distances.begin()).second) );
+        old_distance = new_distance;
+        new_distance = (*distances.begin()).first;
+        assert( nptr != nullptr );
+     }
+   // TODO: deal with NodeManifolds - if IsManifold()...
+   // if a node matching the point location was found, a pointer to it is returned
+   if ( fabs(new_distance) < tolerance ) return nptr;
+  
+   // else a new node is created
+   typename plf::colony<Node <dim>>::iterator
+     nit = nodes_.emplace( Node<dim>( nodes_.size(), pt, nvars, bflag, topo ) );
+     
+   return &(*nit);
+}
+
+
+    // converting lower-dimensional regions to boundaries if they consist of two-dimensional elements located on the model boundary
+    // - finding potential 2-dimensional regions
+    {
+      set<string> twoDimRegions;
+      for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit ) {
+           const auto spatialDim = (*rit).second.ElementSpatialDimensions();
+           assert( spatialDim.first == 1U ); // making sure that all elements in the region have the same spatial dimension
+           if ( spatialDim.second == 2U )    // highest spatial dimension of elements in region
+             twoDimRegions.insert( (*rit).first );
+        }
+      // converting these vertical side boundary faces into a single boundary
+      if ( !twoDimRegions.empty() ) {
+           model.MergeRegions( twoDimRegions, "SIDES" );
+           // setting all boundary nodes to IRREGULAR as is needed by CreateExternalBoundaryFrom()
+           Region<3U>& sides = model.Region("SIDES");
+           for ( auto& nit : sides.NodeVector() ) nit->AtBoundary( IRREGULAR );
+           const bool check_topo_attributes_of_nodes{false};
+           model.CreateExternalBoundaryFrom( "SIDES", check_topo_attributes_of_nodes );
+           // the input region gets removed automatically
+        }
+    }
+

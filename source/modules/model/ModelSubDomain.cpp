@@ -131,7 +131,7 @@ string  ModelSubDomain<dim,CELL>::Name() const
     return subdomain_name_;
  }
 
-
+// watch out! - this name is the same as the key for the subdomain in the region,boundary,splitboundary map
 template<uint32_t dim, template<uint32_t> class CELL>
 void  ModelSubDomain<dim,CELL>::Name( const string& name )
  {

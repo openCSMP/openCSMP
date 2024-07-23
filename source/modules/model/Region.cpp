@@ -1212,7 +1212,7 @@ size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh )
 /**
     Accumulates range of elements supplied as a vector. Assumes that there are no duplicate Element pointers in vector.
     
-        @attention uses vector rather than set to create nodes vector.
+        @attention needs the input elements to be interconnected correctly already.
 */
 template<uint32_t dim>
 size_t Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_iterator start,
@@ -1221,7 +1221,7 @@ size_t Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_iter
   if ( start == end )
     throw csmp::Exception( ERROR, "Region<dim>::Accumulate (vector)",
                            "supplied element range is empty. Nothing is done." );
-
+                           
   this->cell_vec_.assign( start, end );
   
   this->CreateNodePointerVector();

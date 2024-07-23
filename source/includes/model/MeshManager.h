@@ -23,13 +23,15 @@ template<uint32_t,template<uint32_t> class> class ModelSubDomain;
 template<uint32_t> class FaceConstructionData;
 
 /**
-    @brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
-    internal application is hidden and may vary between models (tree-storage is default).
+    @brief Helps  Model taking care of the creation, deletion and storage of Element, Face and InterFace objects while maintaing their connectivity.
+    Contains and updates FiniteElementManager, FiniteVolumeStencilManager, and NodeManifoldManager accordingly.
+    
+    @attention MESHMANAGER IS AGNOSTIC ABOUT REGIONS, BOUNDARIES, AND SPLIT BOUNDARIES ; it only cares about connectivity!
 
     @author S.K. Matthai
     @date 2021 (complete rewrite)
 
-    @remark gain access via Mesh() public interface of Model.
+    @remark gain access to mesh using Mesh() public interface of Model.
 
     @attention the MeshManager takes care of the creation and destruction of Elements, Faces or Interfaces.
     Region or Boundary objects merely contain pointers to these.
@@ -175,12 +177,6 @@ public:
   /// by location only, no parent element  gets connected
   Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&,
                                   BOX_BOUNDARY = NOT, TOPOTYPE = MESH_VERTEX );
-
-  /// only if there is not already a node at this location, else a pointer to that node is returned, no parent element  gets connected
-  Node<dim>* const		 AddNodeAtUniqueLocation( const Point<dim>&, size_t nearby_node,
-                                                const LocalVariables& node_variables,
-                                                BOX_BOUNDARY = NOT,
-                                                TOPOTYPE = MESH_VERTEX );
 
    /// duplicates Node, automatically creating a node manifold or adding it to an existing one; manifold type is established
   Node<dim>* const     Duplicate( Node<dim>* const nptr_inside, const LocalVariables& lvars );

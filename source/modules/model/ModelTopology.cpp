@@ -69,14 +69,18 @@ void  ModelTopology::Out() const
            cout <<" finite elements";
          cout <<"\nNumber of elements in region: "<< (*it).second.second.size();
          cout <<"\nCell ID numbers (0..n-1): "<< endl;
-         for ( auto lit=(*it).second.second.begin(); lit!=(*it).second.second.end(); lit++ )
-           cout << (*lit) <<" ";
+         // print elements only for regions with less than 100 cells
+         if ( distance( (*it).second.second.begin(), (*it).second.second.end() ) <= 100 ) {
+             for ( auto lit=(*it).second.second.begin(); lit!=(*it).second.second.end(); lit++ )
+               cout << (*lit) <<" ";
+           }
+         else cout << *(*it).second.second.begin() <<".."<< *(*it).second.second.rbegin();
          cout << endl;
       }
 
     cout << endl;
 
- } // end Out()
+ } // end Out
 
 
 /**

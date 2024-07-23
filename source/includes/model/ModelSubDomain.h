@@ -43,11 +43,19 @@ struct SubDomainInfo {
 
 
 
-/**
-    Blueprint for domains and model boundaries; the latter are
-    represented by lower-dimensional cells than the rest of the model.
-    - Internal boundaries are named by domains they interface which each other
-    - External boundaries have names corresponding to the sides of box-shaped
+/** @brief Storage of Node and Cell pointers to subdomains of the overall computational model.
+    Distinguishes interior from perimeter nodes (located on subdomain boundary) and interior and perimeter cells
+    which have at least a single Face on the subdomain boundary.
+    Base class to Region, Boundary and SplitBoundary.
+    
+    @attention Region, Bounday, SplitBoundary ARE AGNOSTIC ABOUT MESH CONNECTIVITY.
+    ModelSubDomain objects do not create Nodes, Elements, Faces or Interfaces. This is the role of the MeshManager
+    that is agnostic about subdomains but maintains and updates the mesh.
+ 
+    @note Boundary and SplitBoundare are ModelSubDomain subclasses consisting of lower-dimensional Face and
+    InterFace objects.
+    - SplitBoundaries are Internal boundaries connecting node-matched but disconnected mesh patches
+    - Boundaries tend to be external boundaries with names corresponding to the sides of box-shaped
       models or other unique names.
 */
 template<uint32_t dim,template<uint32_t> class CELL>

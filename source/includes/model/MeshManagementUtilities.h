@@ -126,10 +126,6 @@ void printNodes( const CELL<dim>& );
 
 // MESHING UTILITIES FOR INDIVIDUAL ELEMENTS/FACES/INTERFACES
 
-// TODO: implement
-//template<uint32_t dim,template<uint32_t> class CELL>
-//size_t detectDisconnectedCells( const MeshManager<dim>&, std::set<uint32_t>& );
-
 /// loops over the valid neighbors of the cell and sets their neighbor pointers to point to this cell to nullptr
 template<uint32_t dim, template<uint32_t> class CELL>
 void detachNeighborsFrom( CELL<dim>* const cell_to_detach_neighbors_from );
@@ -183,9 +179,6 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
 template<uint32_t dim>
 void eraseElementPointerFromVector( std::vector<csmp::Element<dim>*>&, const Element<dim>* );
 
-/// by comparison of node locations, finds overlapping cells and reports them
-bool findCollocatedCells(); // TODO: not implemented yet
-
 /// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (faster)
 template<uint32_t dim>
 std::pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 );
@@ -207,6 +200,12 @@ csmp::Element<3u>* const pointInVolumeElement( Region<3U>& region, const Point<3
 /// detect degenerate elements by using the node coordinates to check whether some nodes have the same location
 template<uint32_t dim>
 size_t collocatedNodes( const Element<dim>* const );
+
+/// by comparison of barycentre locations, finds overlapping cells and reports them
+template<uint32_t dim, template<uint32_t> class CELL>
+bool findCollocatedCells( typename std::vector<CELL<dim>*>::const_iterator first,
+                          typename std::vector<CELL<dim>*>::const_iterator last,
+                          std::vector<CELL<dim>*>& collocated_cells_to_eliminate );
 
 
 // UTILITIES FOR TESTING ETC

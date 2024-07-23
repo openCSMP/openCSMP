@@ -1914,6 +1914,62 @@ template void printNodes( const InterFace<3U>& );
 
 
 
+/**
+    by comparison of barycentre locations, finds overlapping cells and reports them; returns true if collocated cells were found.
+    
+    @param collocated_cells_to_eliminate pointers to duplicate cells so that these can be eliminated
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+bool findCollocatedCells( typename std::vector<CELL<dim>*>::const_iterator first,
+                          typename std::vector<CELL<dim>*>::const_iterator last,
+                          std::vector<CELL<dim>*>& collocated_cells_to_eliminate )
+ {
+     collocated_cells_to_eliminate.clear();
+     
+     map<Point<dim>,set<CELL<dim>*>> collocated_cell_map;
+     
+     while( first != last ) {
+          Point<dim> bctr = (*first)->BaryCenter();
+          auto insertion = collocated_cell_map.insert( make_pair( bctr, set{ (*first) } ) );
+          // if there is already a cell with this barycentre, the pointer to it is added to this key
+          if ( insertion.second == false ) (*insertion.first).second.insert( (*first) );
+          first++;
+       }
+     
+     // analysing results
+     bool found_collocated_cells{ false };
+     for ( const auto& it : collocated_cell_map )
+       // if there are collacated cells
+       if ( it.second.size() > 1 )
+         {  // recording these extra cells
+            for ( auto cit=next(it.second.begin(),1); cit!=it.second.end(); ++cit )
+              collocated_cells_to_eliminate.push_back( (*cit) );
+            // reporting them
+             if ( !found_collocated_cells ) {
+                  cout <<"\n"<<"findCollocatedCells: detected collocated cells:"<< endl;
+                  found_collocated_cells= true;
+               }
+             cout << it.first <<" cell indices: ";
+             for ( const auto& c : it.second )
+               cout << c->Idx() <<" ";
+         }
+     
+     // the duplicated cells are expected to be unique
+     if ( !collocated_cells_to_eliminate.empty() )
+       collocated_cells_to_eliminate.shrink_to_fit();
+     
+     if ( collocated_cells_to_eliminate.empty() ) return false;
+     return true;
+ }
+
+template
+bool findCollocatedCells( typename vector<Element<3U>*>::const_iterator,
+                          typename vector<Element<3U>*>::const_iterator,
+                          vector<Element<3U>*>& );
+
+
+
+
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
@@ -2478,7 +2534,7 @@ size_t collocatedNodes( const Element<dim>* const eptr )
     set<Point<dim> > node_points;
     
     // set admits only unique node coordinates
-    for ( auto i{0U}; i<n_nodes; ++i )
+    for ( uint32_t i{0U}; i<n_nodes; ++i )
       node_points.insert( eptr->N(i)->Coordinate() );
  
     return n_nodes - node_points.size();

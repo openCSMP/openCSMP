@@ -56,6 +56,48 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::UniqueRegions() const
 { return uniqueRegionMap_.size(); }
 
 
+
+
+
+
+/**
+    Changes the subdomain name and the search key in the region map with deletion or copying of elements
+    @return reports on whether the name change was successful.
+*/
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
+bool  RegionInterface<dim, REGION_COMPLEX>::RenameRegion( const string& old_name, const string& new_name )
+ {
+    // does the region to be renamed exist
+    const auto uniqueRegionIterator = uniqueRegionMap_.find(old_name);
+    const auto regionIterator       = regionMap_.find(old_name);
+    if ( uniqueRegionIterator == uniqueRegionMap_.end() && regionIterator == regionMap_.end() ) return false;
+    
+    // renaming the corresponding model subdomain
+    if ( uniqueRegionIterator != uniqueRegionMap_.end() )
+      (*uniqueRegionIterator).second.Name(new_name );
+    else
+      (*regionIterator).second.Name(new_name );
+         
+    // moving the unique region according to its new key
+    if ( uniqueRegionMap_.find(old_name) != uniqueRegionMap_.end() ) {
+         auto regionHandler = uniqueRegionMap_.extract(old_name);
+         regionHandler.key() = new_name;
+         uniqueRegionMap_.insert(std::move(regionHandler));
+      }
+
+    // moving the region according to its new key
+    if ( regionMap_.find(old_name) != regionMap_.end() ) {
+         auto regionHandler = regionMap_.extract(old_name);
+         regionHandler.key() = new_name;
+         regionMap_.insert(std::move(regionHandler));
+      }
+
+    return true;
+ }
+
+
+
+
 /**
 Method first searches the Region in the unique region map, then in the
 non-unique region map list where regions may overlap. If the desired region
@@ -354,7 +396,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
   csmp::Region<dim>&    region = this->Region( regionName );
 
   if ( erase_elmts_and_update_connectivity )
-    // getting the mesh manager to delete elements and nodes and fix up the connectivity
+    // get mesh manager to delete elements and nodes and fix up the connectivity
     regionComplex.Mesh().DeleteCellsAndRepairConnnectivity( region.CellVector().begin(), region.CellVector().end() );
 
   // finding the region in the corresponding map
@@ -1949,6 +1991,10 @@ void RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const set<string>& inpu
       // eliminating duplicate entries from pointer vector
       sort( element_ptrs.begin(), element_ptrs.end() );
       element_ptrs.erase( unique( element_ptrs.begin(), element_ptrs.end() ), element_ptrs.end() );
+      
+      // rebuilding the inter-element connectivity
+      //REGION_COMPLEX<dim>& model( static_cast<REGION_COMPLEX<dim>&>(*this) );
+      //model.Mesh().template BuildConnectivity<Element>( element_ptrs.begin(), element_ptrs.end() );
       
       // making a non-unique new region
       pair<typename map<string, csmp::Region<dim> >::iterator, bool>

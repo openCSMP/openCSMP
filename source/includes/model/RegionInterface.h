@@ -127,6 +127,10 @@ class RegionInterface {
     size_t                    Regions() const;
     /// number of regions that are space eclusive like the subvolumes of a water tight CAD model
     size_t                    UniqueRegions() const;
+    
+    /// changes the subdomain name and the search key in the region map with deletion or copying of elements
+    bool                      RenameRegion( const std::string& old_name, const std::string& new_name );
+
 
     // -----------------------------------------------
     // Region creation

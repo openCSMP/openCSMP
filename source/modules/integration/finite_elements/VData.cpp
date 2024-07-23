@@ -3808,7 +3808,7 @@ void VData::EstablishElementConnectivity3D()
                   if ( bflag_set.empty() ) {
                        cerr <<"\n"<<"VData::EstablishElementConnectivity3D: although element "<< elmt <<"(";
                        cerr << parseAbbreviated_FE_Type(etype) <<") has no neighbor at face "<< boundary_face;
-                       cerr <<", all node boundary flags have value: NOT; setting neighor to IRREGULAR"<< endl;
+                       cerr <<", all node boundary flags have value: NOT; setting neighbor to IRREGULAR"<< endl;
                        pfverts[elmt][boundary_face] = IRREGULAR;
                     }
                   else pfverts[elmt][boundary_face] = atBoundary<3>( bflag_set, n_face_nodes );

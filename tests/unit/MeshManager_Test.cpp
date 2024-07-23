@@ -137,14 +137,17 @@ void MeshManager_Test::run()
   _test(Test_BuiltElementConnectivity2D()); // OK
   _test(Test_BuiltElementConnectivity3D()); // OK
 
-  _test( Test_MeshTraversal3D(/* Pyramid_Hexa_VSet */) );
-  
 	cout << "\n----------------------------------------------------";
-	cout << "\nMeshManager_Test::TestCompleteModel2D";
+	cout << "\nMeshManager_Test::TestSavedElementFaceInterfaceModel2D()";
 	cout << "\n(elements,faces,interfaces,regions,boundaries, split boundaries)";
 	cout << "\n----------------------------------------------------";
-  _test( TestCompleteModel2D() );
+  _test( TestSavedElementFaceInterfaceModel2D() );
 
+  // tests whether traversal works for contiguous model
+  _test( Test_MeshTraversal3D(/* Pyramid_Hexa_VSet */) );
+  // TODO: add test for discontiguous model 'Dyke_Split'
+  
+  
   // building more complex 'FracBox' model with Boundaries and lower-dimensional elements for further testing
   VSet<3U>      vset;
   ModelTopology topology;
@@ -158,6 +161,13 @@ void MeshManager_Test::run()
 	cout << "\nMeshManager_Test::CheckConnectivityOfModel3D";
 	cout << "\n----------------------------------------------------";
   _test( CheckConnectivityOfModel3D(model) );
+
+	cout << "\n------------------------------------------------";
+	cout << "\nMeshManager_Test::TestEntityNumberingFunction";
+	cout << "\n------------------------------------------------";
+	_test(TestEntityNumberingFunction( model ) ); // originally using 'prism_test'
+
+// MESH MODIFICATION AND REMESHING
 
 	cout << "\n----------------------------------------------------";
 	cout << "\nMeshManager_Test::TestElementDeletionAndInsertion";
@@ -174,11 +184,6 @@ void MeshManager_Test::run()
 	cout << "\n------------------------------------------------------";
 	_test(TestInterFaceDeletionAndInsertion());
 
-	cout << "\n------------------------------------------------";
-	cout << "\nMeshManager_Test::TestEntityNumberingFunction";
-	cout << "\n------------------------------------------------";
-	_test(TestEntityNumberingFunction( model ) ); // originally using 'prism_test'
-
 	_test(TestEraseAllPrimitives());
  
   cout << endl;
@@ -190,7 +195,7 @@ void MeshManager_Test::run()
 
 
 /**
-Checks that numbers of elements etc. in mesh manager do indeed reflect those of input model
+    Checks that numbers of elements etc. in mesh manager do indeed reflect those of input model
 */
 void MeshManager_Test::TestBasics()
 {
@@ -255,7 +260,7 @@ void MeshManager_Test::TestBasics()
        @author SKM
        @date 19/3/22
 */
-bool MeshManager_Test::TestCompleteModel2D()
+bool MeshManager_Test::TestSavedElementFaceInterfaceModel2D()
  {
     VSet<2U>       vset;
     ModelTopology  topo = create_BoundarySplitBoundaryPatch( vset );
@@ -270,10 +275,12 @@ bool MeshManager_Test::TestCompleteModel2D()
     _test( approximatelyEqual(analytic_model_area,computed_model_area,tolerance) );
     
     // can such a model be output to VTU?
-    VTU_Interface<2>  vtu_out( model );
-    printRangeOfVariable( model, "permeability" );
-    vtu_out.OutputDataToVTU( "SPLIT22_BASIC", "permeability", "Model", 0 );
-    
+    if ( verbose_ ) {
+        VTU_Interface<2>  vtu_out( model );
+        printRangeOfVariable( model, "permeability" );
+        vtu_out.OutputDataToVTU( "SPLIT22_BASIC", "permeability", "Model", 0 );
+      }
+      
     // saving model to disk and bringing it back
     model.OutputToBinaryFile( model.Name() );
     set<string>  subset_variables; // all variables
@@ -295,12 +302,11 @@ bool MeshManager_Test::TestCompleteModel2D()
 
 
 
-
-// using VSetMakers to create and compare input data
+// TODO: extend to Face and InterFace connectivity
 bool MeshManager_Test::Test_BuiltElementConnectivity2D()
  {
-    // 2D functionality
     VSet<2U> vset, vset_orig;
+    // using VSetMakers to create and compare input data
     create_TrianglePatch_VSet( vset );
     vset_orig = vset;
     Model<2> model( vset, "CSMP-variables.txt" );
@@ -322,10 +328,10 @@ bool MeshManager_Test::Test_BuiltElementConnectivity2D()
 
 
 
-// using VSetMakers to create and compare input data
+
+// TODO: extend to Face and InterFace connectivity
 bool MeshManager_Test::Test_BuiltElementConnectivity3D()
  {
-    // 2D functionality
     VSet<3U> vset, vset_orig;
     create_Pyramid_Hexa_VSet( vset, false );
     vset_orig = vset;
@@ -542,13 +548,18 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	LocalVariables				     node_vars = model.Database().LocalVariablesAt(NODE);
 	LocalVariables				     elmt_vars = model.Database().LocalVariablesAt(ELEMENT);
 	IntegrationPointVariables	 intp_vars = model.Database().IntegrationPointVariablesAt(ELEMENT);
-  // copy the first node
-  Node<3U>      n1(*mesh.NodesBegin());
-  const size_t  nearby_node(4);
-	Node<3U>*		  ptr_n1 = mesh.AddNodeAtUniqueLocation( n1.Coordinate(), nearby_node, node_vars );
+
+  // the first node
+  Node<3U>& n1 = (*mesh.NodesBegin());
+  // get a poiner to the first node
+  Node<3U>* const ptr_n1 = &(*mesh.NodesBegin());
+  const size_t nearby_node(4);
+  // should return a pointer to the existing node n1 rather than creating a new node
+  // TODO: rethink logic of this test
+	Node<3U>* n_ptr = mesh.AddNodeAt( ptr_n1->Coordinate(), node_vars );
   //                     ----------------------------
   // method must return pointer to node 1 pointer
-  _test( ptr_n1 == &(*mesh.NodesBegin()) );
+  _test( n_ptr == ptr_n1 );
 
   // create new nodes and return pointers to them
 	Node<3U>*		ptr_n2 = mesh.AddNodeAt( Point<3U>(26., 27., 0.0), node_vars, NOT );

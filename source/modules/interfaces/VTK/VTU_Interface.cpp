@@ -2895,7 +2895,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
 
   // points node
   connectivityFile.OpenNode( "Points" );
-  connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+  connectivityFile.OpenNode( "DataArray type=\"Float64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
   // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
   size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
   bool newLine( false );
@@ -3139,7 +3139,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileBCPC( XML_Document& connectivi
 
   // points node
   connectivityFile.OpenNode( "Points" );
-  connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+  connectivityFile.OpenNode( "DataArray type=\"Float64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
   // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
   size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
   bool newLine( false );
@@ -3270,7 +3270,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileRPC( XML_Document& connectivit
 
     // points node
     connectivityFile.OpenNode( "Points" );
-    connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+    connectivityFile.OpenNode( "DataArray type=\"Float64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
     // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
     size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
     bool newLine( false );
@@ -3396,7 +3396,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFEIP( XML_Document& connectivi
 
     // points node
     connectivityFile.OpenNode( "Points" );
-    connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+    connectivityFile.OpenNode( "DataArray type=\"Float64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
     // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
     size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
     bool newLine( false );
@@ -3530,7 +3530,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVSIP( XML_Document& connectiv
 
     // points node
     connectivityFile.OpenNode( "Points" );
-    connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+    connectivityFile.OpenNode( "DataArray type=\"Float64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
     // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
     size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
     bool newLine( false );
@@ -3670,7 +3670,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVFIP( XML_Document& connectiv
 
     // points node
     connectivityFile.OpenNode( "Points" );
-    connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+    connectivityFile.OpenNode( "DataArray type=\"Float64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
     // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
     size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
     bool newLine( false );

@@ -1792,11 +1792,9 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
          return make_pair( string(dimension_minus1_region) + " not lower dimensional", false );
       }
     // is the region located at the outer boundary of the model
-    if ( !formsPartOfExternalBoundary(subdomain,check_topo_attributes_of_nodes) ) {
+    if ( !formsPartOfExternalBoundary(subdomain,check_topo_attributes_of_nodes) )
          csmp_error.Note( WARNING, "BoundaryInterface::CreateExternalBoundaryFrom",
                           dimension_minus1_region, "is not entirely located on an external boundary of the model");
-         return make_pair( string(dimension_minus1_region) + " not on external boundary", false );
-       }
     
     // 1. making a map of the region's elements that will be converted to faces
     // -----------------------------------------------------------------------
@@ -1807,7 +1805,11 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
 
     // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------
-    assert( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) == 0 ); // zero means that there are no issues
+#ifndef NDEBUG
+    if ( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) != 0 ) // zero means that there are no issues
+         csmp_error.Note( WARNING, "BoundaryInterface::CreateExternalBoundaryFrom",
+                          dimension_minus1_region, "element-connectivity problem detected in input region");
+#endif
     vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                              elmts_to_become_faces.begin(),
                                                                              elmts_to_become_faces.end() );

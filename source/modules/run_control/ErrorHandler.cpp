@@ -1,6 +1,7 @@
-#include "ErrorHandler.h"
 #include <iostream>
 #include <fstream>
+#include "ErrorHandler.h"
+#include "Standard_IO_Handler.h"
 
 using namespace std;
 
@@ -270,9 +271,9 @@ void ErrorHandler::Note( CSMP_MESSAGE err_type,
         else cout <<"\n"<< message << endl; 
         cout.flush();
 #ifndef NDEBUG 
-        if ( err_type < WARNING ) {
-             cerr <<"\nErrorHandler: Hit return to continue."<< endl;
-             getchar();
+        if ( err_type != WARNING && err_type != INFO ) {
+             cerr <<"\nErrorHandler: ";
+             Standard_IO_Handler().YesNo("\tDo you want to continue");
           }
 #endif
      }

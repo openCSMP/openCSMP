@@ -663,7 +663,7 @@ void printBoxBoundaryFlags( const Model<dim>& model )
  {
     const Region<dim>& modeldomain(model.Region("Model"));
     
-    cout <<"\n\nprintBoxBoundaryFlags: Current flags and numbers assigned to node and element objects:\n";
+    cout <<"\n\nprintBoxBoundaryFlags: Current flags and numbers assigned to node objects:\n";
     size_t equal_entries(0);
     multiset<BOX_BOUNDARY> node_flags;
     for ( auto nit=modeldomain.NodesBegin(); nit!=modeldomain.NodesEnd(); ++nit )
@@ -1263,7 +1263,7 @@ void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
 
          if ( !isHexahedral( (*it)->FE_Type() ) ) {
               if ( !non_hex_cells_found ) {
-                   csmp_error.Note( WARNING, "recreateBoxBoundaryFlagsForHexahedralModel", "this method only works for hexahedral elements");
+                   csmp_error.Note( INFO, "recreateBoxBoundaryFlagsForHexahedralModel", "note that this method works only for hexahedra.");
                    non_hex_cells_found = true;
                 }
               continue;
