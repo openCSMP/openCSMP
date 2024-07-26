@@ -598,7 +598,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	_test( mesh.Elements() == n_original_elmts );
 
 	// 2. deleting these nodes again
-	mesh.DeleteCellsAndRepairConnnectivity( nodes.begin(), nodes.end() );
+	mesh.DeleteNodesAndRepairConnnectivity( nodes.begin(), nodes.end() );
 	_test( mesh.Nodes() == n_original_nodes );
 
 // TODO: test insertion / deletion / connection of Face and InterFace objects
@@ -813,7 +813,7 @@ bool MeshManager_Test::TestNeigbourVersusFaceConsistency()
     constexpr uint32_t dim{3u};
     //                   fileset             regions-file
     ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), true );
-    Region<dim>&   model_domain(model.Region("Model"));
+    Region<dim>&  model_domain(model.Region("Model"));
     model_domain.UpdateMemberIndexes();
  //   VTK_Interface<3U>  vtk_output;
  //   VTU_Interface<3U>  vtu_output( model );

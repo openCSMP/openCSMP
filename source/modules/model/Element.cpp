@@ -408,7 +408,7 @@ template<uint32_t dim>
 void Element<dim>::Unassign( const Element<dim>* const e_ptr )
   {
     if ( e_ptr == nullptr ) return;
-    for ( auto i{0U}; i < elmt_connector_.size(); ++i )
+    for ( uint32_t i{0U}; i < elmt_connector_.size(); ++i )
       if ( e_ptr == elmt_connector_[i] ) {
           elmt_connector_[i] = nullptr;
           break;
@@ -432,7 +432,7 @@ template<uint32_t dim>
 void Element<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
   {
     if ( nd_ptr == nullptr ) return;
-    for ( auto i{0U}; i < node_connector_.size(); i++ )
+    for ( uint32_t i{0U}; i < node_connector_.size(); i++ )
       if ( nd_ptr == node_connector_[i] ) {
           node_connector_[i] = nullptr;
           break;

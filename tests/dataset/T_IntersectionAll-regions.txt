@@ -1,9 +1,0 @@
-CSMP test model
-no properties
-MATRIX
-FRAC_ALL
-FRACTURE_PATH
-LEFT
-RIGHT
-TOP
-BOTTOM

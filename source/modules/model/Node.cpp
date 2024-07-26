@@ -345,7 +345,7 @@ uint32_t  Node<dim>::AssignNodeNeighbors()
     set<Node<dim>*>  current_nbors;
     const auto       n_parents{ Parents() };
     
-    for ( auto i{0U}; i < n_parents; ++i )
+    for ( uint32_t i{0U}; i < n_parents; ++i )
       // only considering parent elements with the same dimensions as the model
       if ( Parent(i) && Parent(i)->IsEquidimensional() ) {
            for ( auto& j :  Parent(i)->CornerNodesConnectedTo( ParentNodeNumber(i) ) )
@@ -405,11 +405,17 @@ void  Node<dim>::AddNeighbor( Node<dim>* neighbor_node )
  }
 
 
-/// just moves the unwanted element to the end of the vector, use UpdateNeighbors to shrink vector to new size
+/**
+    Moves  unwanted element to the end of the vector before erasing it.
+    @attention Use UpdateNeighbors to shrink vector to new size.
+*/
 template<uint32_t dim>
-void  Node<dim>::RemoveNeighbor( const Node<dim>* const neighbor_node )
+void Node<dim>::RemoveNeighbor( const Node<dim>* const neighbor_node )
  {
-    auto removed = remove( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), neighbor_node );
+    auto it = remove( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), neighbor_node );
+//    neighbor_node_pointers_.erase( remove( neighbor_node_pointers_.begin(),
+//                                           neighbor_node_pointers_.end(), neighbor_node ),
+//                                   neighbor_node_pointers_.end() );
  }
  
  
@@ -1025,7 +1031,8 @@ TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<dim>* const node )
    if ( BREP_defining_node ) {
        // ! works only if the topology defining cells are elements because node has no connection to Face or InterFace
        if ( n_parent_elmts > 0U ) {
-           for ( uint32_t i{0U}; i<n_parent_elmts; i++ ) {
+           for ( uint32_t i{0U}; i<n_parent_elmts; i++ )
+             if ( node->Parent(i) ) {
                 if ( node->Parent(i)->IsLine() )
                   part_of_line++;
                 else if ( node->Parent(i)->IsSurface() )

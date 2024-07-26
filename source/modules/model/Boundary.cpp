@@ -166,7 +166,11 @@ Boundary<dim>::Boundary( const string& boundary_name,
   InitializeBoundaryFlags( boxBoundary );
   
   // distinguishing interior from perimeter cells
+  // (sorts node and cell vectors into interior and exterior ranges;
+  //  initialises boundary face vector bd_face_vec_)
   this->IdentifyPerimeter();
+  
+  // trimming off extra capacity
   this->cell_vec_.shrink_to_fit();
   this->node_vec_.shrink_to_fit();
 }
@@ -660,10 +664,6 @@ void Boundary<dim>::InitializeBoundaryFlags( BOX_BOUNDARY boxBoundary )
   for ( auto& nit : this->node_vec_ )
     if ( nit->AtBoundary() == NOT )
       nit->AtBoundary( boxBoundary );
-  
-  // sorts node and cell vectors into interior and exterior ranges;
-  // initialises boundary face vector bd_face_vec_
-  this->IdentifyPerimeter();
 
 } // end InitializeBoundaryFlags
 
@@ -835,6 +835,11 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
   // initialize BOX_BOUNDARY of nodes
   InitializeBoundaryFlags( boxBoundary );
 
+  // distinguishing interior from perimeter cells
+  // (sorts node and cell vectors into interior and exterior ranges;
+  //  initialises boundary face vector bd_face_vec_)
+  this->IdentifyPerimeter();
+
   // done
   return true;
 
@@ -974,6 +979,11 @@ bool Boundary<dim>::CreateFrom( const typename vector<Face<dim>*>::const_iterato
   // initialize BOX_BOUNDARY of nodes
   InitializeBoundaryFlags( boundaryFlag_ );
   
+  // distinguishing interior from perimeter cells
+  // (sorts node and cell vectors into interior and exterior ranges;
+  //  initialises boundary face vector bd_face_vec_)
+  this->IdentifyPerimeter();
+
   return true;
 }
 

@@ -465,7 +465,7 @@ vector<NodeManifold<dim>*> SplitBoundary<dim>::NodeManifolds() const
 
 
 /**
-    Sorted Node Vector with perimeter nodes identified by BOX_BOUNDARY flags and non-manifold status.
+    Generates sorted Node Vector with perimeter nodes identified by BOX_BOUNDARY flags and non-manifold status.
 */
 template<uint32_t dim>
 pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::InsideNodes() const
@@ -480,7 +480,7 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::InsideNodes() const
     // creating the inside node vector
     for ( auto& it : this->cell_vec_ ) {
          const auto n_nodes{ it->FE()->Nodes() };
-         for ( auto i{0U}; i<n_nodes; i++ )
+         for ( uint32_t i{0U}; i<n_nodes; i++ )
            inside_nodes.push_back( it->N( i, INSIDE ) );
       }
 
@@ -492,10 +492,10 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::InsideNodes() const
      // partitioning vector into interior and perimeter nodes
      vector<Node<dim>*> interior_nodes, perimeter_nodes;
      interior_nodes.reserve( inside_nodes.size() );
-     //perimeter_nodes.reserve();
-     // node that sorting is retained
+     // node sorting is retained
      for ( const auto& nit : inside_nodes )
-       if ( !nit->IsManifold() || nit->AtBoundary() != NOT )
+       // TODO: wrong assumption? - perimeter is indicated by absence of manifolds
+       if ( !nit->IsManifold() || ( nit->AtBoundary() != NOT && nit->AtBoundary() != INTERNAL ) )
          perimeter_nodes.push_back( nit );
        else
          interior_nodes.push_back( nit );
@@ -524,7 +524,7 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::OutsideNodes() const
     // creating the inside node vector
     for ( auto& it : this->cell_vec_ ) {
          const auto n_nodes{ it->FE()->Nodes() };
-         for ( auto i{0U}; i<n_nodes; i++ )
+         for ( uint32_t i{0U}; i<n_nodes; i++ )
            outside_nodes.push_back( it->N( i, INSIDE ) );
       }
 
@@ -536,10 +536,9 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::OutsideNodes() const
      // partitioning vector into interior and perimeter nodes
      vector<Node<dim>*> interior_nodes, perimeter_nodes;
      interior_nodes.reserve( outside_nodes.size() );
-     //perimeter_nodes.reserve();
      // node that sorting is retained
      for ( const auto& nit : outside_nodes )
-       if ( !nit->IsManifold() || nit->AtBoundary() != NOT )
+       if ( !nit->IsManifold() || ( nit->AtBoundary() != NOT && nit->AtBoundary() != INTERNAL ) )
          perimeter_nodes.push_back( nit );
        else
          interior_nodes.push_back( nit );

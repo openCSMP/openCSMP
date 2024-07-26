@@ -1,6 +1,0 @@
-name	MParameter	unit	index	min.	max.	place
-node number		nn	none	1	-1.0e30	1e30	node
-node variable		nv	none	1	-1.0e30	1e30	node
-element number	ev	node	1	-1e30	1e30	element
-element variable	ev	node	1	-1e30	1e30	element
-

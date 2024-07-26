@@ -1,6 +1,0 @@
-name	notation	unit	index	min.	max.	place									
-permeability		k	m2		1	1.00E-25	1.00E+00	element
-element number	nE	none		1	0.	1e8	element
-face number		nF	none		1	0.	1e8	face
-interface number	nIF	none		1	0.	1e8	interface
-node number		nN	none		1	0.	1e8	node

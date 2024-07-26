@@ -1,8 +1,0 @@
-SmallRectangle unit test model
-no properties
-MATRIX
-LEFT
-RIGHT
-TOP
-BOTTOM
-

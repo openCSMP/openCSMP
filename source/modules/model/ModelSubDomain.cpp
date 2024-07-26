@@ -5592,9 +5592,6 @@ template size_t sharedPerimeterNodes( const ModelSubDomain<3U,InterFace>&, const
 
 
 
-
-
-
 /**
        Finds the higher-dimensional perimeter cells that share their perimeter faces on the touching two subdomains.
        

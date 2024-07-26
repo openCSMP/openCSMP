@@ -1,8 +1,0 @@
-UnitSquareFracs_irregular
-no properties
-MATRIX
-FRACS
-LEFT
-RIGHT
-TOP
-BOTTOM

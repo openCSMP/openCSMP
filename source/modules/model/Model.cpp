@@ -308,8 +308,10 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
        csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
                          "method works only for vsets without Face or InterFace objects as it creates them by itself from lower-dimensiona regions.");
       
-     if ( !vset.WithNeighbourConnectivity() )
-       csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "'pfverts' array is missing.");
+    // 0. is the neighbor information for the elements already there?
+    const bool vset_contains_neighbor_connectivity{ vset.WithNeighbourConnectivity() };
+    if ( !vset_contains_neighbor_connectivity )
+      csmp_error.Note( WARNING, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
 
     // 1. eliminating unwanted mesh regions from topology and vset, rebuilding boundary flags, check   element numbering etc.
     string prefix( regions_file_prefix );
@@ -326,10 +328,6 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
           }
       }
       
-     // the VSet must be correct calling initialise
-     if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
-         csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "'pfverts' array is missing.");
-
     // 2. building the finite element mesh and property storage
     // potential extra variables in VSet
     const bool verbose{true};
@@ -337,6 +335,8 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     // finite volume variables
     const bool with_FV_variables = (finiteVolumeVariables(Database()) > 0 ) ? true : false;
     mesh_manager_.Initialize( Database(), vset, with_FV_variables );
+    if ( !vset_contains_neighbor_connectivity )
+      mesh_manager_.UpdateConnectivity();
     const bool contiguous_model( mesh_manager_.IsContiguous() );
     if ( !contiguous_model )
       csmp_error.Note( INFO, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
@@ -356,16 +356,21 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     this->FormRegionsFrom( mesh_topology, ignore_domain_identification_by_name );
 	
     // 6. forming Boundaries
-    //    if the model is box-shaped (albeit perhaps with an irregular top surface)
+    //    - for box-shaped models (albeit perhaps with an irregular top surface)
     if (  (dim == 2 && mesh_topology.RectangleShapedModel()) || (dim == 3 && mesh_topology.BoxShapedModel()) ) {
          this->EstablishBoxBoundaries();
+         // TODO: see whether this can be done more locally
+         mesh_manager_.UpdateConnectivity();
          // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
          cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";
       }
-    // irregularly shaped models
+    //    - for irregularly shaped models
     else {
-          if ( contiguous_model )
-            this->EstablishBoundariesFromRegions();
+          if ( contiguous_model ) {
+               this->EstablishBoundariesFromRegions();
+               // TODO: see whether this can be done more locally
+               mesh_manager_.UpdateConnectivity();
+            }
           else
             csmp_error.Note( ERROR, "Model::Intialise(regionfile,ModelTopology,VSet)", "discontiguous model not handled yet");
 
@@ -377,6 +382,8 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     // 7. forming SplitBoundaries if a discontiguous model was detected
     if ( !contiguous_model ) {
          this->DetectAndCreateSplitBoundaries();
+         // TODO: see whether this can be done more locally
+         mesh_manager_.UpdateConnectivity();
          // reporting which boundaries were created
          this->SplitBoundariesOut();
       }
@@ -478,7 +485,9 @@ int createVariablesInVSetThatAreMissingFromDatabase( PropertyDatabase<dim>& dbas
   
    return vars_added;
        
- } // end
+ } // end createVariablesInVSetThatAreMissingFromDatabase
+ 
+ 
 
 
 /**
@@ -494,13 +503,11 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    if ( !vset.WithNeighbourConnectivity() )
-      csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
-
-     // the VSet must be correct calling initialise
-     if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
-         csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
-
+    // 0. Does the VSet contain the element neighbor information
+    const bool vset_contains_neighbor_connectivity{ vset.WithNeighbourConnectivity() };
+    if ( !vset_contains_neighbor_connectivity )
+      csmp_error.Note( WARNING, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
+      
     // 1. building finite element mesh and property storage
     // extra properties stored in the VSet
     const bool verbose{true};
@@ -508,6 +515,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     // finite volume variables
     const bool with_FV_variables = (finiteVolumeVariables(Database()) > 0 ) ? true : false;
     mesh_manager_.Initialize( Database(), vset, with_FV_variables );
+    if ( !vset_contains_neighbor_connectivity )
+      mesh_manager_.UpdateConnectivity();
     const bool contiguous_model( mesh_manager_.IsContiguous() );
     if ( !contiguous_model )
       csmp_error.Note( INFO, "Model<dim>::Initialize(ModelTopology,VSet):",
@@ -528,7 +537,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
             old_and_new_elmtids.clear();
           }
       }
-
+      
     // 4. forming default computational domain called "Model" and regions
     const bool place_into_unique_regions{ mesh_topology.ModelDomains() == 0 };
     const size_t elmts = this->FormModelRegion( place_into_unique_regions );
@@ -539,6 +548,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     this->FormRegionsFrom( mesh_topology );
     this->FormBoundariesFrom( mesh_topology );
     this->FormSplitBoundariesFrom( mesh_topology );
+    // TODO: see whether this can be done more locally
+    mesh_manager_.UpdateConnectivity();
 	
     this->RegionsOut();
     this->BoundariesOut();
@@ -624,7 +635,7 @@ void Model<dim>::Initialize( VSet<dim>& vset )
   // 1. checking for neighbor connectivity and boundary flags
   // the VSet must be correct calling initialise
   if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) ) {
-       csmp_error.Note( WARNING, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing; establishing it now.");
+       csmp_error.Note( WARNING, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing; establishing it now using VSet functionality.");
        if constexpr ( dim == 2 )
          vset.EstablishElementConnectivity2D();
        if constexpr ( dim == 3 )

@@ -1,7 +1,0 @@
-CSMP Basic Box model
-no properties
-MATRIX
-LEFT
-RIGHT
-TOP
-BOTTOM

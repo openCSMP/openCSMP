@@ -1,7 +1,0 @@
-name					MParameter	unit	index		min.	max.	place
-displacement				u	SI	2	-1.00E+10	1.00E+10	node
-fluid pressure				p	SI	1	-1.0E+10	1.00E+10	node
-Young's modulus				ym	SI	1	0.0		1.0E+15	element
-Poisson's ratio				nu	SI	1	0.0		0.5	element
-aperture				w	SI	1	0.0		1.0E+5	node
-critical stress intensity factor	Kc	Pa m0.5	1	0.0		1.0E+12	element

@@ -570,8 +570,8 @@ bool SplitBoundaryInterface_Test<DIM>::Test_NodeAndElementsCorrespondance_3D_X_I
 
   ///Testing splitboundary creation
   //Region -> SplitBoundary
-  std::set<string> sb_names_2  = (model1.CreateSplitBoundaryFrom( "FRACTURE_DIAGONAL" ) ).first ;
-  std::set<string> sb_names    = (model1.CreateSplitBoundaryFrom( "FRACTURE_PLANAR" ) ).first ;
+  set<string> sb_names_2  = (model1.CreateSplitBoundaryFrom( "FRACTURE_DIAGONAL" ) ).first ;
+  set<string> sb_names    = (model1.CreateSplitBoundaryFrom( "FRACTURE_PLANAR" ) ).first ;
 
   //Need to find node on perimeter that was split by diagonal fracture
   Node<dim>* second_split_perimeter_node = nullptr;

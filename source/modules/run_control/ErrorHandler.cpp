@@ -273,7 +273,8 @@ void ErrorHandler::Note( CSMP_MESSAGE err_type,
 #ifndef NDEBUG 
         if ( err_type != WARNING && err_type != INFO ) {
              cerr <<"\nErrorHandler: ";
-             Standard_IO_Handler().YesNo("\tDo you want to continue");
+             if ( Standard_IO_Handler().YesNo("\tDo you want to continue") == false )
+               throw std::exception();
           }
 #endif
      }

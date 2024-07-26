@@ -2493,14 +2493,17 @@ uint32_t  VData::OrderOfFiniteElementInterpolationFunctions() const
 
 
 /**
-    Runs a series of tests to establish whether there is a plausible PFverts array
-    without checking the actual inter-element connectivity.
-    Certainty is built via negative discrimination.
+    Searches 'pfverts' for elements without neighbors; returns false in that case,
+    else returns true
 */
 bool VData::WithNeighbourConnectivity() const
  {
-     // empty
-     if ( pfverts.empty() ) return false;
+    for ( const auto& it : pfverts ) {
+         uint32_t count{0u};
+         for ( const auto pfit : it )
+           if ( pfit < 0 ) count++;
+         if ( count == it.size() ) return false;
+      }
     return true;
  }
 

@@ -168,7 +168,7 @@ public:
   std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
                                            const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >&,
                                            bool multiplicate_perimeter_nodes,
-                                           Region<dim>& out_region );
+                                           std::unordered_set<Element<dim>*>& outside_elmts );
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary node manifolds and InterFace connectivity; inside elements are first in pair
   std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeMatchingElements( const PropertyDatabase<dim>&,
@@ -256,7 +256,7 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
   // --------------------------------------------
   // NB: elements are responsible for their nodes, nodes for their manifolds
 
-  /// updates all connectivity (elements, faces, interfaces, nodes to parents); however, node manifolds are not reconstructed
+  /// updates all connectivity (elements, faces, interfaces, nodes to parents); rebulding node manifolds if necessary
   void UpdateConnectivity();
 
   /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements & Faces)
@@ -298,7 +298,7 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
                                             typename std::vector<InterFace<dim>*>::iterator last );
 
   /// disconnects nodes from potential manifolds and deletes the latter
-  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<Node<dim>*>::iterator first,
+  size_t DeleteNodesAndRepairConnnectivity( typename std::vector<Node<dim>*>::iterator first,
                                             typename std::vector<Node<dim>*>::iterator last );
 
   /// method to test the connectivity of a mesh

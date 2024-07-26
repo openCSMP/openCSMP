@@ -1,4 +1,0 @@
-no properties
-MATRIX
-LEFT
-RIGHT

@@ -428,6 +428,8 @@ void NodeManifoldManager_Test::Create_splitboundary_around_regions( Model<dim>& 
    for ( std::set<string>::const_iterator it = interface_basic_sets.begin(); it != interface_basic_sets.end(); it++ )
        model.CreateSplitBoundaryFrom( (*it).c_str());
  }
+// TODO: build this in
+model.UpdateConnectivity();
  
   /*
   const bool remove_dim_minus1_region(false);
@@ -737,6 +739,8 @@ void NodeManifoldManager_Test::Create_splitboundary_between_regions( Model<dim>&
   for ( auto it : region_final_pairs ) {// for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
      modelIN.CreateSplitBoundaryBetween( it.first.c_str(), it.second.c_str() );
   }
+// TODO: build this in
+modelIN.Mesh().UpdateConnectivity();
   
   // create lower-dimensional stand-alone meshes from SplitBoundary objects, and 
   // insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')

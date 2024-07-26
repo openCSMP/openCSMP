@@ -330,9 +330,9 @@ void detachNeighborsFrom( CELL<dim>* const eptr )
  {
     // nulling the connections of neighbor neighbor elements to this element
     // (neighbor pointer to this element is nulled)
-    for ( auto i{0U}; i<eptr->Neighbors(); ++i )
+    for ( uint32_t i{0U}; i<eptr->Neighbors(); ++i )
       if ( eptr->Neighbor(i) != nullptr )
-        for ( auto j{0U}; j<eptr->Neighbor(i)->Neighbors(); ++j )
+        for ( uint32_t j{0U}; j<eptr->Neighbor(i)->Neighbors(); ++j )
         if ( eptr->Neighbor(i)->Neighbor(j) == eptr )
           eptr->Neighbor(i)->Neighbor(j)->Unassign( eptr );
  }
@@ -2234,7 +2234,7 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
           int n_connected_neighbors{0};
           
           // 1. checking that elements have equivalent types as neighbors
-          for ( auto i{0U}; i<(*first)->Neighbors(); ++i )
+          for ( uint32_t i{0U}; i<(*first)->Neighbors(); ++i )
             if ( (*first)->Neighbor(i) ) {
                  if constexpr ( dim == 3U ) {
                       if ( (*first)->IsVolume() && !(*first)->Neighbor(i)->IsVolume() ) {
@@ -2290,7 +2290,7 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
             }
           
           if ( isQuadrilateral(etype) || isPrism(etype) ) {
-                if ( n_connected_neighbors < 2 ) {
+                if ( n_connected_neighbors <= 2 ) {
                     cerr <<"\nconnectivityCheck: ERROR: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
                     cerr <<" has only "<< n_connected_neighbors <<" neighbor(s).";
                     issues++;
@@ -2298,7 +2298,7 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
             }
           
           if ( isHexahedral(etype) || isPyramid(etype) ) {
-                if ( n_connected_neighbors < 3 ) {
+                if ( n_connected_neighbors <= 3 ) {
                     cerr <<"\nconnectivityCheck: ERROR: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
                     cerr <<" has only "<< n_connected_neighbors <<" neighbor(s).";
                     issues++;

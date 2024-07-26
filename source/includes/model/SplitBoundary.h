@@ -136,10 +136,10 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     /// generates a vector of NodeManifold pointers that can be iterated over
     std::vector<NodeManifold<dim>*>  NodeManifolds() const;
     
-    /// returns sorted node pointer vector partitioned into an interior and perimenter range; perimeter starts at size_t number of nodes in returned pair
+    /// returns sorted node pointer vector partitioned into an interior and perimeter range; perimeter starts at size_t number of nodes in returned pair
     std::pair<std::vector<Node<dim>*>,size_t>  InsideNodes() const;
 
-    /// returns sorted node pointer vector partitioned into an interior and perimenter range; perimeter starts at size_t number of nodes in returned pair
+    /// returns sorted node pointer vector partitioned into an interior and perimeter range; perimeter starts at size_t number of nodes in returned pair
     std::pair<std::vector<Node<dim>*>,size_t>  OutsideNodes() const;
 
     /// NEW: input constat node variable value on a specific side of the split boundary (options INSIDE or OUTSIDE)

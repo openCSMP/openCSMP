@@ -407,13 +407,15 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
     BOUNDARY_COMPLEX<dim>* const boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>* const>(this) );
     assert( boundaryComplex != nullptr );
 
-    // inserting boundary if it does not existing yet
+    // inserting boundary if it does not existing yet, distinguishing interior from perimeter
     auto it = boundaryMap_.insert( make_pair( boundary_name, csmp::Boundary<dim>( boundary_name,
                                                                                   boundaryComplex->Database(),
                                                                                   facesBegin, facesEnd, bflag ) ) );
     if ( it.second ) {
+#ifndef NDEBUG
          cout << "\nBoundaryInterface<"<< dim <<">::AddBoundary: successfully created boundary '";
          cout << boundary_name <<"' from input faces.";
+#endif
       }
     else {
          ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1810,6 +1812,7 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
          csmp_error.Note( WARNING, "BoundaryInterface::CreateExternalBoundaryFrom",
                           dimension_minus1_region, "element-connectivity problem detected in input region");
 #endif
+    // new faces are already interconnected when returned and input elements have been deleted
     vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                              elmts_to_become_faces.begin(),
                                                                              elmts_to_become_faces.end() );
@@ -1826,14 +1829,11 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
                           boundary_name.c_str(), "could not be created");
          return make_pair( string(dimension_minus1_region) + " could not be created", false );
       }
-    cout << "\n\nBoundaryInterface::CreateExternalBoundaryFrom: created external boundary '";
-    cout <<" "<< boundary_name <<"' successfully.";
-    cout << endl;
 
 	  // 4. removing the original regions from which the boundaries were created
     // ------------------------------------------------------------------------------------
     // (no flagging for rebuilt of regions is necessary as they will be completely removed)
-    const bool erase_elements{ true };
+    const bool erase_elements{ false }; // ATTENTION: the elements were already removed by 'ReplaceBoundaryElementsByFaces()'
     model->RemoveRegion( dimension_minus1_region, erase_elements );
     model->UpdateRegions();
 

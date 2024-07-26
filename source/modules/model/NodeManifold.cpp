@@ -474,7 +474,7 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf )
     // 0. getting the TOPOTYPES of the nodes
     const auto collocated_nodes = nmf.Branches();
     set<TOPOTYPE> node_attributes;
-    for ( auto i{0U}; i<collocated_nodes; i++ )
+    for ( uint32_t i{0U}; i<collocated_nodes; i++ )
       node_attributes.insert( nmf.N(i)->Attribute() );
 
     // 1. diagnostics: if there is only one topotype
@@ -567,7 +567,7 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf )
     // 2. Checking each node to see whether its status matches its original geometric identifier
     // -----------------------------------------------------------------------------------------
     TOPOTYPE node_topology{MESH_VERTEX};
-    for ( auto i{0U}; i<collocated_nodes; i++ )
+    for ( uint32_t i{0U}; i<collocated_nodes; i++ )
       if ( (node_topology=checkModelPartThatNodeBelongsTo( nmf.N(i) )) != nmf.N(i)->Attribute() )
         {
            // reporting
