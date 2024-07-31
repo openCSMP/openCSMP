@@ -1052,12 +1052,18 @@ void  FiniteElementPolicy<dim,CELL>::UnitNormalToFace( uint32_t face, VectorVari
 
     /// outputs finite element and discretised variable to VTK file
 template<uint32_t dim, template<uint32_t> class CELL>
-void  FiniteElementPolicy<dim,CELL>::OutputPropertyToVTK( const csmp::Index& key, const char* file_name, const char* var_name ) const
+void  FiniteElementPolicy<dim,CELL>::OutputPropertyToVTK( const csmp::Index& key,
+                                                          const char* file_name, const char* var_name ) const
   {
     const CELL<dim>* cell( static_cast<const CELL<dim>*>(this) );
-
+    
+    // to trigger creation of coordinate matrix
+    auto idx = cell->Idx();
+    cell->Idx( idx+1 );
     assert( fptr_ != nullptr );
     CoordinateMatrix();
+    // resetting
+    cell->Idx( idx-1 );
 
     // put property value into dense matrix (variable dimensions x nodes)
     assert( key.place != REGION );
@@ -1067,46 +1073,43 @@ void  FiniteElementPolicy<dim,CELL>::OutputPropertyToVTK( const csmp::Index& key
     
     DenseMatrix<DM_MIN> PROPMAT;
     
-		if ( key.place == ELEMENT )
+		if ( key.place == ELEMENT || key.place == FACE || key.place == INTER_FACE )
       {
         if ( key.type == SCALAR ) {
-             PROPMAT.Resize(1,cell->Nodes());
+             PROPMAT.Resize(1,1);
              double val = cell->Read( key );
              for ( uint32_t i{0U}; i<cell->Nodes(); ++i )
                PROPMAT(0,i) = val;
           }
         else if ( key.type == VECTOR ) {
+             PROPMAT.Resize(dim,1);
              VectorVariable<dim>  vc;
              cell->Read( key, vc );
-             for ( uint32_t i{0U}; i<cell->Nodes(); ++i )
-               for ( uint32_t j{0U}; j<dim; ++j )
-                 PROPMAT(j,i) = vc[j];
+             for ( uint32_t j{0U}; j<dim; ++j )
+               PROPMAT(j,0) = vc[j];
           }
         else if ( key.type == TENSOR ) {
+             PROPMAT.Resize(dim*dim,1);
              TensorVariable<dim>  ts;
              cell->Read( key, ts );
-             for ( uint32_t i{0U}; i<cell->Nodes(); ++i ) {
-                  uint32_t count{ 0U };
-                  for ( uint32_t j{0U}; j<dim; ++j )
-                    for ( uint32_t k{0U}; k<dim; ++k )
-                      PROPMAT(count++,i) = ts(j,k);
-               }
+             uint32_t count{ 0U };
+             for ( uint32_t j{0U}; j<dim; ++j )
+               for ( uint32_t k{0U}; k<dim; ++k )
+                 PROPMAT(count++,0) = ts(j,k);
           }
         else if ( key.type == ARRAY ) {
              ArrayVariable ar( key.dataDepth );
              cell->Read( key, ar );
-             for ( uint32_t i{0U}; i<cell->Nodes(); ++i ) {
-                  for ( uint32_t j{0U}; j<ar.Size(); ++j )
-                    PROPMAT(j,i) = ar(j);
-               }
+             PROPMAT.Resize(ar.Size(),1);
+             for ( uint32_t j{0U}; j<ar.Size(); ++j )
+               PROPMAT(j,0) = ar(j);
           }
         else if ( key.type == FLAGGEDARRAY ) {
              FlaggedArrayVariable far( key.dataDepth );
              cell->Read( key, far );
-             for ( uint32_t i{0U}; i<cell->Nodes(); ++i ) {
-                  for ( uint32_t j{0U}; j<far.Size(); ++j )
-                    PROPMAT(j,i) = far(j);
-               }
+             PROPMAT.Resize(far.Size(),1);
+            for ( uint32_t j{0U}; j<far.Size(); ++j )
+              PROPMAT(j,0) = far(j);
           }
       }
 		else if ( key.place == NODE ) // if the operand is placed on the constraint-points
@@ -1117,6 +1120,7 @@ void  FiniteElementPolicy<dim,CELL>::OutputPropertyToVTK( const csmp::Index& key
                PROPMAT(0,i) = cell->N(i)->Read( key );
           }
         else if ( key.type == VECTOR ) {
+             PROPMAT.Resize(dim,cell->Nodes());
              VectorVariable<dim>  vc;
              for ( uint32_t i{0U}; i<cell->Nodes(); ++i ) {
                    cell->N(i)->Read( key, vc );
@@ -1125,6 +1129,7 @@ void  FiniteElementPolicy<dim,CELL>::OutputPropertyToVTK( const csmp::Index& key
                }
           }
         else if ( key.type == TENSOR ) {
+             PROPMAT.Resize(dim*dim,cell->Nodes());
              TensorVariable<dim>  ts;
              for ( uint32_t i{0U}; i<cell->Nodes(); ++i ) {
                   cell->N(i)->Read( key, ts );
@@ -1138,12 +1143,14 @@ void  FiniteElementPolicy<dim,CELL>::OutputPropertyToVTK( const csmp::Index& key
              ArrayVariable ar( key.dataDepth );
              for ( uint32_t i{0U}; i<cell->Nodes(); ++i ) {
                   cell->N(i)->Read( key, ar );
+                  PROPMAT.Resize(ar.Size(),cell->Nodes());
                   for ( uint32_t j{0U}; j<ar.Size(); ++j )
                     PROPMAT(j,i) = ar(j);
                }
           }
         else if ( key.type == FLAGGEDARRAY ) {
              FlaggedArrayVariable far( key.dataDepth );
+             PROPMAT.Resize(far.Size(),cell->Nodes());
              for ( uint32_t i{0U}; i<cell->Nodes(); ++i ) {
                   cell->N(i)->Read( key, far );
                   for ( uint32_t j{0U}; j<far.Size(); ++j )

@@ -803,7 +803,7 @@ bool MeshManager_Test::TestEraseAllPrimitives()
 
 bool MeshManager_Test::TestNeigbourVersusFaceConsistency()
  {
-    ErrorHandler& csmp_error{ ErrorHandler::Instance() };
+    // ErrorHandler& csmp_error{ ErrorHandler::Instance() };
     const string model_name("box1x1x1_hexa_struct");
     if ( verbose_ ) {
          cout <<"\n"<<"MeshManager_Test::TestNeigbourVersusFaceConsistency: "<<this->getName()<<endl<<endl;

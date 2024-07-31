@@ -175,7 +175,7 @@ public:
   /// sets all ij values to val or sc
   TensorVariable&  operator=( double val );
 
-  /// sets all ij values to sc (value and flags of diagonal elements)
+  /// sets all ii values to sc (value and flags of diagonal elements)
   TensorVariable&  operator=( const ScalarVariable& );
 
   /// assigns vector to diagonal elements of tensor, off-diagonal elements are set to zero
@@ -197,30 +197,32 @@ public:
 
 
   /// returns the flag of the diagonal tensor element of choice
-  VARIABLE_FLAG     Flag( uint32_t i = 0 ) const;
+  VARIABLE_FLAG    Flag( uint32_t i = 0 ) const;
 
   /// returns smallest element in tensor (this is zero if the tensor is diagonal)
-  double          MinElement() const;
+  double           MinElement() const;
 
   /// returns largest element in tensor
-  double          MaxElement() const;
+  double           MaxElement() const;
 
-  double          Determinant() const;
+  double           Determinant() const;
 
   /// returns the sum of the diagonal values of the tensor
-  double          Trace() const;
+  double           Trace() const;
 
   /// returns the conjugate transpose of the tensor (commonly denoted M^(H))
-  TensorVariable    Adjoint()     const;
+  TensorVariable   Adjoint() const;
 
   /// returns a tensor the product of which with the original tensor gives the identity matrix
-  TensorVariable    Inverse()     const;
+  TensorVariable   Inverse() const;
 
   /// returns the transposed of the tensor into a new tensor variable
-  TensorVariable    Transposed()  const;
+  TensorVariable   Transposed()  const;
 
   /// assuming that the tensor is symmetric and positive definite, method returns its sorted Eigen values (largest to smallest)
-  bool              EigenValuesPositiveDefiniteSymmetricMatrix( double& eigenValue0, double& eigenValue1, double& eigenValue2 ) const;
+  bool             EigenValuesPositiveDefiniteSymmetricMatrix( double& eigenValue0,
+                                                               double& eigenValue1,
+                                                               double& eigenValue2 ) const;
 
   /// alternative Eigen decomposition that should also work for non-symmetric matrices
   bool              EigenNonSymmetric( VectorVariable<3U>& eigenVals, TensorVariable<3U>& eigenVecs ) const;

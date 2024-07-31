@@ -243,7 +243,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
     /// is element located at an outside or internal model boundary; if it shares a face with a boundary, this is true
     BOX_BOUNDARY AtBoundary( uint32_t boundary_face ) const;
     
-    /// unique material identifier that matches number of parent unique region
+    /// unique material identifier used to store 'rocktype' or ModelSubDomain::domain_idx_
     int32_t Material_ID() const;
     void Material_ID( int32_t id );
 
@@ -281,6 +281,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
     std::vector<Element<dim>*>     elmt_connector_; ///< neighbors
     std::vector<csmp::Node<dim>*>  node_connector_; ///< nodes
     int32_t                        material_id_;    ///< unique identifier, equal to number of unique region that  element belongs or rocktype indentifier
+    // TODO: add uint32_t region_id_;  ///< for quick identification of regions across boundaries
 };
 
 

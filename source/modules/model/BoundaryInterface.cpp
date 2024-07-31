@@ -189,13 +189,13 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FindBoundaryByNames( const set<s
     // if the substring set is empty
     if ( intersected_regions.empty() ) {
          ErrorHandler::Instance().Note( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::FindBoundaryByNames:",
-                                         "supplied set of substrings is empty; returning '\0'." );
+                                         "supplied set of substrings is empty; returning number 0." );
          return 0U;
       }
     // if the model has no boundaries
     if ( boundaryComplex.Boundaries() == 0 ) {
          ErrorHandler::Instance().Note( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::FindBoundaryByNames:",
-                                         "model has no boundaries; returning '\0'." );
+                                         "model has no boundaries; returning number 0." );
          return 0U;
       }
     region_patches_found.clear();
@@ -516,12 +516,12 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
          return make_pair( set<string>({creation_failed}), false );
       }
     // checking that the region is not already an internal boundary
-    size_t nodes_flagged_internal_boundary{0U}, nodes_flagged_external_boundary{0U};
+    long nodes_flagged_internal_boundary{0U}, nodes_flagged_external_boundary{0U};
     for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
          if ( (*nit)->AtBoundary() == INTERNAL ) nodes_flagged_internal_boundary++;
          else if ( (*nit)->AtBoundary() != NOT ) nodes_flagged_external_boundary++;
       }
-    if ( nodes_flagged_internal_boundary >= subdomain.Nodes() - nodes_flagged_external_boundary ) {
+    if ( nodes_flagged_internal_boundary > static_cast<long>(subdomain.Nodes()) - nodes_flagged_external_boundary ) {
          ErrorHandler::Instance().Note( WARNING, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region,
                                                    "region may already be a boundary; nothing was done." );
          return make_pair( set<string>({creation_failed}), false );
@@ -659,7 +659,10 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
                                                                         lvsFaces, lvsIntegrationPoints ) );
               // remembering which faces make up the patch
               face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
+              
            }
+         // connecting the new faces in the patch with eachother
+         model.Mesh().template BuildConnectivity<Face>( face_vector.begin(), face_vector.end() );
          patch_counter++;
       }
     patch_data.clear();
@@ -675,7 +678,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     //      - this method also updates node to parent element connectivity
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // TODO: these are global changes! - not sure how to improve this because so many regions are affected
-    model.Mesh().UpdateConnectivity();
+    // model.Mesh().UpdateConnectivity();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 4. Create Boundary objects for each of the mesh patches established above
@@ -1818,8 +1821,9 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
                                                                              elmts_to_become_faces.end() );
     // 3. creating the Boundary from the faces
     // ---------------------------------------
-    // create boundary name by appending '_BOUNDARY' to the original name of the region
-    const string boundary_name( string(dimension_minus1_region) + "_BOUNDARY" );
+    // either taking BOX-B name or appending '_BOUNDARY' to the original name of the region
+    const string boundary_name = ( isDiagnosticBoxBoundaryClassifier(dimension_minus1_region) ) ?
+                                            dimension_minus1_region : string(dimension_minus1_region) + "_BOUNDARY";
     
     // create boundary and trying to find suitable  BOX_BOUNDARY flag for it
     BOX_BOUNDARY boundary_flag = parseBoundary( boundary_name.c_str() );

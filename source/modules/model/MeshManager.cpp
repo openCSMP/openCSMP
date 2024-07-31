@@ -1245,8 +1245,8 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
    // is face indeed a boundary face?
    if ( eptr->Neighbor(local_face_id) != nullptr ) {
         cout <<"\n"<<"Element "<< eptr->Idx() <<" "<< parseAbbreviated_FE_Type(eptr->FE_Type()) <<": face "<< local_face_id << endl;
-        cout <<"\t"<<"outside element:";
-        eptr->Neighbor(local_face_id)->Out();
+        cout <<"\t"<<"outside element: "<< eptr->Neighbor(local_face_id)->Idx() <<": ";
+        cout << parseAbbreviated_FE_Type( eptr->Neighbor(local_face_id)->FE_Type() ) << endl;
         csmp_error.Note( WARNING, "MeshManager<dim>::AddBoundaryFace", "requested element face does not lie on model boundary");
         // advancing Face Idx until face without neighbor is found
         bool boundary_face_found{ false };
@@ -1671,22 +1671,18 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
                                       "supplied element is not a line element and cannot be converted to Face.");
              }
         
-         // 1.2 construction of Face at model boundary
-#ifndef NDEBUG
-         bool boundary_dim_m1_elmt{true};
-         for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); ++nit )
-           if ( (*nit)->AtBoundary() == NOT ) {
-                boundary_dim_m1_elmt = false;
-                break;
-             }
-         assert( boundary_dim_m1_elmt == true );
-#endif
-         // finding higher dimensional neighbor and its face idx
+         // 1.2 constructing Faces at model boundary
+         // finding higher dimensional neighbor of the face-element and its face idx
          pair<Element<dim>* const,uint32_t> pelmt = parentElement<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
          // creating Face, storing a pointer to it
          //                                    element ptr  local element ID in face
          face_ptrs.push_back( AddBoundaryFace( pelmt.first, pelmt.second, lvars, ivars ) );
          // numbering new Face consecutively
+         if ( face_ptrs.back() == nullptr ) {
+              pelmt.first->Out();
+              throw csmp::Exception( ERROR, "MeshManager<dim>::ReplaceBoundaryElementsByFaces",
+                                    "could not create suitable face matching element");
+           }
          face_ptrs.back()->Idx( face_idx++ );
            
          // NOTE: no Element erasure yet because this would invalidate node parent vector, corrupting this functionality

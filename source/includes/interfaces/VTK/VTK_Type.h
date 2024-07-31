@@ -191,6 +191,61 @@ enum CSMP_FEM_TYPE : std::int8_t { UNKNOWN,
   } // end
  
 
+
+inline int nodesPer_VTK_TYPE( VTK_TYPE type_id )
+  {
+    switch( type_id ) {
+        case VTK_VERTEX:
+      return 1;
+        case VTK_POLY_VERTEX:
+      return UNSPECIFIED;
+        case VTK_LINE:
+      return 2;
+        case VTK_POLYLINE:
+      return UNSPECIFIED;
+        case VTK_TRIANGLE:
+      return 3;
+        case VTK_TRIANGLE_STRIP:
+      return UNSPECIFIED;
+        case VTK_POLYGON:
+      return UNSPECIFIED;
+        case VTK_QUAD:
+      return 4;
+        case VTK_TETRA:
+      return 4;
+        case VTK_HEXAHEDRON:
+      return 8;
+        case VTK_WEDGE:
+      return 6;
+        case VTK_PYRAMID:
+      return 5;
+        case VTK_QUADRATIC_EDGE:
+      return 3;
+        case VTK_QUADRATIC_TRIANGLE:
+      return 6;
+        case VTK_QUADRATIC_QUAD:
+      return 8;
+        case VTK_QUADRATIC_TETRA:
+      return 8;
+        case VTK_QUADRATIC_HEXAHEDRON:
+      return 20;
+        case VTK_QUADRATIC_WEDGE:
+      return 15;
+        case VTK_QUADRATIC_PYRAMID:
+      return 13;
+        case VTK_BIQUADRATIC_QUAD:
+      return 9;
+        case VTK_BIQUADRATIC_TRIANGLE:
+      return 7;
+        default:
+          throw std::logic_error( "ERROR nodesPer_VTK_TYPE: VTK_Type not recognised");
+      }
+    return UNSPECIFIED;
+    
+  } // end nodesPer_VTK_TYPE
+
+
+
 // TODO: put the conversions for the attributes integer and floating-point types here as well
 
 } // csmp

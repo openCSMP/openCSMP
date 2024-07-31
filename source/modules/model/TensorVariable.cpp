@@ -1438,7 +1438,7 @@ To shorten the code and to not to cause any issues with previously written code,
 this new function has been added which calculates eigenvalues as scalar variables.
 
 The old functions now only call this new function and output the eigenvalues as a vector or as an object of a VectorVariable.
-The new code also sorts the eigenvalues.
+The new code also sorts the eigenvalues in descending order.
 
 Also all the pow (1./3.) calls are replaced with cbrt(). The pow (1./.3) does not produce a result when used with negative values and it is slow.
 The source for solving the cubic equation is: http://mathworld.wolfram.com/CubicFormula.html

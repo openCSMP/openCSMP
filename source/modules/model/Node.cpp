@@ -879,58 +879,78 @@ template pair<Element<1>*,Element<1>*>  parentElementsSharedByFace( typename vec
 
 
 
+
+
+
+
 /**
-       Returns pointer to element with the supplied face nodes.
-       For use in the case where only one parent is expected, for instance, when the Face is at a model boundary.
+       Returns pointer to element that has a face with with the supplied range of nodes.
+       When more than a single element is found, this may mean that the Element found is not on a model boundary.
+       If so, the method selects the element with the least number of neighbors as the return value.
        
        @param first and last are iterators to the nodes of the Face.
        
-       @return pair of Element and the face or segment of the element that has the same nodes.
+       @return pair of Element and  the number of its face which shares the supplied nodes.
        
        @attention method works only if all the parent element pointers that the node stores are valid.
+       @attention method only returns single element even if there are multiple ones that need covering
+       but there can always only be a single element that matches the input lower-dim element that has the supplied nodes.
 */
 template<uint32_t dim>
 pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_iterator first,
                                            typename vector<Node<dim>*>::const_iterator last )
  {
-    // ascertain that there are multiple nodes
-    assert( first != last );
+    assert( next(first,1) != last );
+    // back-up node iterator
+    auto nit{ first };
     
-    // 1. create set of higher-dimensional parent elements that share all face nodes
-    // -----------------------------------------------------------------------------
-    const typename vector<Node<dim>*>::const_iterator nodesEnd{last};
-    typename vector<Node<dim>*>::const_iterator       nit{first};
+    // the vectors must be sorted for the intersection algorithm
+    (*first)->SortParents();
+    (*next(first,1))->SortParents();
 
-    // for all equidimensional parents elements of first node, select the ones that also are parents of the other nodes
-    assert( nit != nodesEnd );
-    assert( (*nit)->Parents() > 0 );
-    const auto         n_parents{(*nit)->Parents()};
-    set<Element<dim>*> shared_parents;
+    vector<Element<dim>*>  shared_elmts, isect;
+    // store the elements shared between the first and the second node in 'isect'
+    set_intersection( (*first)->ParentElementsBegin(), (*first)->ParentElementsEnd(),
+                      (*next(first,1))->ParentElementsBegin(), (*next(first,1))->ParentElementsEnd(),
+                      back_inserter(shared_elmts) );
+    first++;
+    first++;
+    
+    // find the shared parent elements for all the supplied nodes
+    while ( first != last ) {
+         (*first)->SortParents();
+         set_intersection( shared_elmts.begin(), shared_elmts.end(),
+                           (*first)->ParentElementsBegin(), (*first)->ParentElementsEnd(),
+                           back_inserter(isect) );
+         shared_elmts = isect;
+         isect.clear();
+         first++;
+      }
+    
+    // 1. eliminating potential lower-dimensional elements or nullprts from result vector
+    // ----------------------------------------------------------------------------------
+    auto new_end = remove_if( shared_elmts.begin(), shared_elmts.end(),
+                              []( const Element<dim>* eit )
+                               {
+                                  if constexpr ( dim == 3U )
+                                    return ( eit==nullptr || !eit->IsVolume() );
+                                  else if constexpr ( dim == 2U )
+                                    return ( eit==nullptr || !eit->IsSurface() );
+                                  else
+                                    return ( eit==nullptr );
+                               } );
 
-    // creating set of parent elements shared by first and second node
-    for ( auto i{0U}; i<n_parents; ++i )
-      if ( (*nit)->Parent(i) != nullptr ) {
-           if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
-           if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
-           // is this parent also one of the first node
-           bool parent_to_all{true};
-           for ( auto nit2=first; nit2!=nodesEnd; ++nit2 )
-             if ( !(*nit2)->IsParent( (*nit)->Parent(i) ) ) {
-                  parent_to_all = false;
-                  break;
-               }
-           if ( parent_to_all )
-             shared_parents.insert( (*nit)->Parent(i) );
-        }
-      
+    shared_elmts.erase( new_end, shared_elmts.end() );
+    
     // verifying that the results are as expected
-    if (  shared_parents.empty() ) {
+    if (  shared_elmts.empty() ) {
           for ( ; first!=last; ++first )
             printParents( (*first) );
           ErrorHandler::Instance().Note( ERROR, "parentElement", "no suitable parent element was found" );
           return make_pair( nullptr, numeric_limits<size_t>::max() );
        }
-    if (  shared_parents.size() > 1 ) {
+    if ( shared_elmts.size() > 1 )
+      {
     
 // DEBUGGING - visualising the discovered higher dimensional elements
 #ifdef NODE_DEBUG
@@ -951,55 +971,45 @@ if ( interPenetrating<dim>( elmt1, elmt2 ) )
   ErrorHandler::Instance().Note( WARNING, "parentElement", "more than one element was found",
                                          "and they are interpenetrating (=partially or fully overlapping)");
 #endif
-         ErrorHandler::Instance().Note( WARNING, "parentElement", "more than one element was found",
-                                         "this may be the case for a lower-dimensional element inside the model; use other function");
-      }
-    
-    
-    // 2. find the element's face that matches the nodes
-    // -------------------------------------------------
-    Element<dim>*  eptr{ (*shared_parents.begin()) };
-    vector <Node<dim>*> face_nodes( first, last );
-    sort( face_nodes.begin(), face_nodes.end() );
+        // gets resolved: ErrorHandler::Instance().Note( WARNING, "parentElement", "more than one element was found; function failed" );
+        
+        // finding the element with the least neighbors to go forward, eliminating all other ones
+        uint32_t min_number_of_nbors{6u};
+        for ( const auto& it : shared_elmts )
+          min_number_of_nbors = min( min_number_of_nbors, it->ConnectedNeighbors() );
+        
+        shared_elmts.erase( remove_if( shared_elmts.begin(), shared_elmts.end(),
+                                      [min_number_of_nbors](const Element<dim>* eptr) {
+                                           return ( eptr->ConnectedNeighbors() != min_number_of_nbors );
+                                         }  ), shared_elmts.end() );
+     }
+        
+    // 2. find the shared element's face that matches the nodes
+    // --------------------------------------------------------
+    Element<dim>*    eptr{ (*shared_elmts.begin()) };
+    set<Node<dim>*>  face_nodes( nit, last );
     
     // are the corner nodes of the faces contained in the input node pointer range?
     const auto n_faces{ eptr->Faces() };
-    for ( auto face{0}; face < n_faces; ++face ) {
-         vector<uint32_t> fnids = eptr->FE()->CornerNodesOfFace(face);
-         const auto n_cnr_nodes{ fnids.size() };
-         bool all_nodes_are_contained{true};
-         for ( uint32_t j{0}; j<n_cnr_nodes; ++j )
-           if ( !binary_search( face_nodes.begin(), face_nodes.end(), eptr->N( fnids[j] ) ) ) {
-                all_nodes_are_contained = false;
-                break;
+    uint32_t   face_id{ numeric_limits<uint32_t>::max() };
+    for ( uint32_t face{0u}; face < n_faces; ++face ) {
+                auto face_nodes2 = eptr->CornerNodesOfFace( face );
+                if ( face_nodes == face_nodes2 ) {
+                     face_id = face;
+                     break;
+                  }
              }
-         // when the face has been found the result is returned
-         if ( all_nodes_are_contained )
-           return make_pair( eptr, face );
+     // when the face has been found the result is returned
+     if ( face_id != numeric_limits<uint32_t>::max() )
+       return make_pair( eptr, face_id );
              
-      }
+ 
+   ErrorHandler::Instance().Note( ERROR, "parentElement", "could not find face shared with higher dimensional element");
+
+   // nothing useful
+   return make_pair( nullptr, numeric_limits<uint32_t>::max() );
     
-     // 3. if none of the faces contains all nodes, perhaps a segment will
-    // -------------------------------------------------------------------
-    const auto n_segments{ eptr->Segments() };
-    for ( uint32_t segm{0}; segm < n_segments; ++segm ) {
-         vector<uint32_t> snids;
-         eptr->FE()->NodesOfSegment( segm, snids );
-         const auto n_segm_nodes{ snids.size() };
-         bool all_nodes_are_contained{true};
-         for ( auto j{0U}; j<n_segm_nodes; ++j )
-           if ( !binary_search( face_nodes.begin(), face_nodes.end(), eptr->N( snids[j] ) ) ) {
-                all_nodes_are_contained = false;
-                break;
-             }
-         // when the face has been found the result is returned
-         if ( all_nodes_are_contained )
-           return make_pair( eptr, segm );
-      }
-   
-    return make_pair( nullptr, numeric_limits<uint32_t>::max() );
-    
- } // end parentElement
+ } // end parentElement1
 
 template pair<Element<3>*,size_t> parentElement( typename vector<Node<3>*>::const_iterator,
                                                  typename vector<Node<3>*>::const_iterator );
@@ -1007,6 +1017,8 @@ template pair<Element<2>*,size_t> parentElement( typename vector<Node<2>*>::cons
                                                  typename vector<Node<2>*>::const_iterator );
 template pair<Element<1>*,size_t> parentElement( typename vector<Node<1>*>::const_iterator,
                                                  typename vector<Node<1>*>::const_iterator );
+
+
 
 
 

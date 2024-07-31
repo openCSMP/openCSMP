@@ -2178,6 +2178,73 @@ bool VData::DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes )
 
 
 /**
+       Detect cellls that have the identical set of nodes, report them and eleminate them from the polygonal dataset.
+       
+       @param verbose to report back detailed results.
+       @return whether duplicates were found and eliminated or not.
+ */
+bool VData::DetectAndEliminateDuplicateCells( bool verbose )
+ {
+     // reading the plist into a multimap
+     size_t cell_idx{0ul}; 
+     //  key         cells-with-that-key
+     map<set<size_t>,set<size_t>>  potential_duplicates;
+     const size_t n_elmts_plus_faces{ Cells() };
+     
+     // looking through the plist
+     for ( const auto& it : plist ) {
+          if ( cell_idx == n_elmts_plus_faces ) break;
+          // making the search key
+          set<size_t> key( it.begin(), it.end() );
+          // inserting the cell into the map
+          auto insert = potential_duplicates.insert( make_pair( key, set<size_t>{cell_idx} ) );
+          // if the key already exists, no new insertion is made but the cell with that key is added to the corresponding value set
+          if ( insert.second == false ) (*insert.first).second.insert( cell_idx );
+          cell_idx++;
+       }
+       
+     // analysing the results
+     bool no_duplicates_found{true};
+     for ( const auto& it : potential_duplicates )
+       if ( it.second.size() > 1 ) {
+            no_duplicates_found = false;
+            break;
+         }
+         
+     if ( no_duplicates_found ) {
+          if ( verbose ) {
+               cout <<"\n"<<"VData::DetectAndEliminateDuplicateCells: ";
+               cout <<"each cell in the range 'elements' + 'faces' is unique."<< endl;
+            }
+          return false;
+       }
+       
+    // if there are duplicate cells they are collected into a set that is returned
+    if ( !no_duplicates_found ) {
+         set<size_t> non_unique_cells;
+         // collecting duplicate or multiplicated instances
+         for ( const auto& it : potential_duplicates )
+           if ( it.second.size() > 1 )
+             for ( auto cit=next(it.second.begin(),1); cit!=it.second.end(); ++cit )
+               non_unique_cells.insert( (*cit) );
+        
+         if ( verbose ) {
+              cout <<"\n"<<"VData::DetectAndEliminateDuplicateCells: the following non-unique cells were found:"<< endl;
+              for ( const auto cit : non_unique_cells )
+                cout <<" "<< cit;
+              cout << endl;
+           }
+         throw csmp::Exception( ERROR, "VData::DetectAndEliminateDuplicateCells", "cell elimination not implemented yet");
+      }
+       
+    return true;
+     
+ } // end DetectAndEliminateDuplicateCells
+
+
+
+
+/**
  
 The original VSet is condensed to the elements stored as keys (first arg)
 in the supplied map. Also, only the nodes connected to these elements
@@ -3510,7 +3577,7 @@ void VData::EstablishElementConnectivity3D()
          
           const auto faces(CSMP_ElementSpecifications::FacesPerElementOfType(etype));
           pfverts[elmt_idx].resize(faces,IRREGULAR);
-          for ( auto face=0U; face<faces; ++face )
+          for ( uint32_t face=0U; face<faces; ++face )
             {
                // creating face key of node pointers from indices of face nodes
                set<size_t> key;
@@ -4685,6 +4752,105 @@ void elementToVTK( const VData& vdata, size_t eidx, const char* outfile )
  } // end elementToVTK
 
 
+
+
+
+/// prints node coordinates  projected into the origin of the model
+void printCell( const VData& vdata, size_t cell_id )
+  {
+     assert( cell_id < vdata.Cells() );
+     const auto default_precision = cout.precision();
+     cout <<"\n"<<"Cell: "<< cell_id <<" nodes="<< vdata.PlistSize(cell_id) << endl;
+     cout <<"\t"<<"node idx, x, y, z (normalised): ";
+     if ( vdata.SpatialDimension() == 3U ) {
+          // local x, y, and z ranges
+          double min_x, min_y, min_z, max_x, max_y, max_z, ctr_x{0.}, ctr_y{0.}, ctr_z{0.};
+          min_x = min_y = min_z =  1.0e30;
+          max_x = max_y = max_z = -1.0e30;
+          for ( uint32_t i{0u}; i<vdata.PlistSize(cell_id); ++i ) {
+               min_x = min( min_x, vdata.Px( vdata.Plist(cell_id,i) ) );
+               min_y = min( min_y, vdata.Py( vdata.Plist(cell_id,i) ) );
+               min_z = min( min_z, vdata.Pz( vdata.Plist(cell_id,i) ) );
+               max_x = max( max_x, vdata.Px( vdata.Plist(cell_id,i) ) );
+               max_y = max( max_y, vdata.Py( vdata.Plist(cell_id,i) ) );
+               max_z = max( max_z, vdata.Pz( vdata.Plist(cell_id,i) ) );
+               ctr_x += vdata.Px( vdata.Plist(cell_id,i) );
+               ctr_y += vdata.Py( vdata.Plist(cell_id,i) );
+               ctr_z += vdata.Pz( vdata.Plist(cell_id,i) );
+            }
+          ctr_x /= static_cast<double>(vdata.PlistSize(cell_id));
+          ctr_y /= static_cast<double>(vdata.PlistSize(cell_id));
+          ctr_z /= static_cast<double>(vdata.PlistSize(cell_id));
+          cout <<" "<<"dx="<< (max_x-min_x) <<", dy="<< (max_y-min_y) <<", dz="<< (max_z-min_z);
+          cout <<", "<<"barycenter: "<< ctr_x <<" "<< ctr_y <<" "<< ctr_z << endl;
+          for ( uint32_t i{0u}; i<vdata.PlistSize(cell_id); ++i ) {
+               cout <<"\t\t"<< i <<": "<< setprecision(2);
+               cout << (vdata.Px( vdata.Plist(cell_id,i) ) - min_x) / (max_x-min_x) <<" ";
+               cout << (vdata.Py( vdata.Plist(cell_id,i) ) - min_y) / (max_y-min_y) <<" ";
+               cout << (vdata.Pz( vdata.Plist(cell_id,i) ) - min_z) / (max_z-min_z) << endl;
+            }
+          cout << setprecision( (int)default_precision) << endl;
+          return;
+       }
+       
+     if ( vdata.SpatialDimension() == 2U ) {
+          double min_x, min_y, min_z, max_x, max_y, max_z, ctr_x{0.}, ctr_y{0};
+          min_x = min_y = min_z =  1.0e30;
+          max_x = max_y = max_z = -1.0e30;
+          for ( uint32_t i{0u}; i<vdata.PlistSize(cell_id); ++i ) {
+               min_x = min( min_x, vdata.Px( vdata.Plist(cell_id,i) ) );
+               min_y = min( min_y, vdata.Py( vdata.Plist(cell_id,i) ) );
+               max_x = max( max_x, vdata.Px( vdata.Plist(cell_id,i) ) );
+               max_y = max( max_y, vdata.Py( vdata.Plist(cell_id,i) ) );
+               ctr_x += vdata.Px( vdata.Plist(cell_id,i) );
+               ctr_y += vdata.Py( vdata.Plist(cell_id,i) );
+            }
+          cout <<" "<<"dx="<< (max_x-min_x) <<", dy="<< (max_y-min_y);
+          cout <<", "<<"barycenter: "<< ctr_x <<" "<< ctr_y << endl;
+          for ( uint32_t i{0u}; i<vdata.PlistSize(cell_id); ++i ) {
+               cout <<"\t\t"<< i <<": "<< setprecision(2);
+               cout << (vdata.Px( vdata.Plist(cell_id,i) ) - min_x) / (max_x-min_x) <<" ";
+               cout << (vdata.Py( vdata.Plist(cell_id,i) ) - min_y) / (max_y-min_y) << endl;
+            }
+          cout << setprecision( (int)default_precision) << endl;
+          return;
+       }
+
+      // 1D
+      double min_x(1.0e30), max_x(-1.0e30), ctr_x{0.};
+      for ( uint32_t i{0u}; i<vdata.PlistSize(cell_id); ++i ) {
+           min_x = min( min_x, vdata.Px( vdata.Plist(cell_id,i) ) );
+           max_x = max( max_x, vdata.Px( vdata.Plist(cell_id,i) ) );
+           ctr_x += vdata.Px( vdata.Plist(cell_id,i) );
+        }
+      cout <<" "<<"dx="<< (max_x-min_x) <<", "<<"barycenter: "<< ctr_x << endl;
+      for ( uint32_t i{0u}; i<vdata.PlistSize(cell_id); ++i ) {
+           cout <<"\t\t"<< i <<": "<< setprecision(2);
+           cout << (vdata.Px( vdata.Plist(cell_id,i) ) - min_x) / (max_x-min_x) << endl;
+        }
+ 
+      cout << setprecision( (int)default_precision) << endl;
+     
+  } // end printCellAbbreviated
+
+
+
+
+array<double,3> cellBaryCenter( const VData& vdata, size_t cell_id )
+ {
+    array<double,3> bctr{ 0., 0., 0. };
+    const auto plist_nodes = vdata.PlistSize(cell_id);
+    for ( uint32_t i{0u}; i<plist_nodes; ++i ) {
+         bctr[0] += vdata.Px( vdata.Plist(cell_id,i) );
+         bctr[1] += vdata.Py( vdata.Plist(cell_id,i) );
+         bctr[2] += vdata.Pz( vdata.Plist(cell_id,i) );
+      }
+    bctr[0] /= static_cast<double>(plist_nodes);
+    bctr[1] /= static_cast<double>(plist_nodes);
+    bctr[2] /= static_cast<double>(plist_nodes);
+    
+    return bctr;
+ }
 
 
  

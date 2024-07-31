@@ -24,6 +24,13 @@ template<uint32_t dim>
 void outputNodeDataToVTK( const Element<dim>&, const csmp::Index&,
                           const char* file_name, const char* var_name );
 
+/// prints element or node data to file
+void outputDataToVTK( const char* file_name, const char* var_name,
+                      VTK_TYPE vtk_type,
+                      size_t cell_idx,
+                      const DenseMatrix<DM_MIN>& XY,
+                      const DenseMatrix<DM_MIN>& DATA );
+                      
 /// prints the face normals scaled by element size to file
 template<uint32_t dim>
 void outputFaceNormalsToVTK( const Element<dim>&, const char* file );

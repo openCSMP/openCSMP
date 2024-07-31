@@ -4,6 +4,7 @@
 #include "Node.h"
 #include "Element.h"
 #include "Exception.h"
+#include "VTK_Interface.h"
 
 using namespace std;
 
@@ -1740,84 +1741,13 @@ IsoparametricLinearHexahedron::OutputNodeDataToVTK( const char* file_name,
                                                     const char* var_name,
                                                     DenseMatrix<DM_MIN>& DATA ) const
   {
-     char  outfile[NAME_STRING], elmt[30];
-     strcpy( outfile, file_name );
-     snprintf( elmt, sizeof(elmt), "%lu", CurrentID() );
-     strcat( outfile, elmt );
-     strcat( outfile, ".vtk" );
-
-     // 0. opening data output file in ascii format
-     ofstream ofs;
-     ofs.open( outfile, ios::out|ios::trunc );
-     if ( !ofs )
-       {
-           cout <<"\nIsoparametricLinearHexahedron::OutputNodeDataToVTK ";
-           cout <<"Output file could not be opened."<< endl;
-           return;
-       }
-
-     // 1. writing the file header
-     // --------------------------
-     ofs <<"# vtk DataFile Version 2.0"<< endl;
-     ofs <<"Finite-element dataset (CSMP): variable: "<< var_name << endl;
-     ofs <<"ASCII"<< endl << endl;
-
-     // 2. writing node coordinates
-     // ---------------------------
-     DenseMatrix<DM_MIN> COORD(XY);
-     ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
-     ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( auto i{0U}; i<npe; i++ )
-       {
-          for ( auto j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
-          ofs << endl;
-       }
-     ofs << endl;
-
-     // 3. writing CELLS (cell-size and member nodes (point)) -corect
-     // Cells
-     // -----------------------------------------------------
-     ofs <<"CELLS "<< 1 <<" "<< 9 << endl;
-     // (1+4)X8
-     // the 4 corner hexahedra
-     ofs << 8 <<" 0 1 2 3 4 5 6 7" << endl;
-     ofs << endl;
-
-     // 4. writing CELL_TYPES - for the
-     // ---------------------
-     ofs <<"CELL_TYPES "<< 1 << endl;
-     ofs << 12 << endl; // VTK_HEX
-     ofs << endl;
-
-     // 5. writing POINT_DATA point-type data values
-     // --------------------------------------------
-     // Unfortunately the data can only be output as nodal variables
-     ofs <<"POINT_DATA "<< npe << endl;
-     ofs.setf( ios::scientific );
-
-     if ( DATA.Rows() == 1 )
-       {
-           ofs <<"SCALARS "<< var_name <<" float"<< endl;
-           ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
-           // matrix DATA is 1x9
-           for ( auto i{0U}; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
-           ofs << endl;
-       }
-     else
-       {
-          ofs <<"VECTORS "<< var_name <<" float"<< endl;
-          // variables have always 3 components since view screen is 3D
-          // matrix DATA is vec-dim x 10
-          for ( auto i{0U}; i<DATA.Cols(); i++ ) {
-               for ( auto j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
-               ofs << endl;
-            }
-       }
-     ofs << endl;
-     ofs.close();
-     cout <<"\nIsoparametricLinearHexahedron::OutputNodeDataToVTK: file '"<< outfile <<"' written successfully."<< endl;
+     // NB: Coordinate matrix must already be initialised
+     outputDataToVTK( file_name, var_name, VTK_HEXAHEDRON, CurrentID(), XY, DATA );
 
  } // end OutputNodeDataToVTK
+
+
+
 
 // The analytical integration is correct for aligned or rotated cuboids
 void IsoparametricLinearHexahedron::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K)

@@ -130,7 +130,7 @@ class VSet : public VData {
     bool  ParallelOutputTo( const char* bin_file, double time, size_t first_outerhalo ) const;
     bool  ParallelInputFrom( const char* bin_file, double& time, size_t& first_outerhalo );
 
-    /// select elements specific elements from the VSet that shall be retained while all others are deleted (including nodes)
+    /// selects specific elements from the VSet that shall be retained while all others are deleted (including nodes), returns new range
     void  ReduceTo( const std::map<size_t,size_t>& old_and_new_consecutive_element_ids );
     
     /// updates pmtrl and property storage to size changes in VData

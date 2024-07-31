@@ -2289,7 +2289,7 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
                   }
             }
           
-          if ( isQuadrilateral(etype) || isPrism(etype) ) {
+          if ( isPrism(etype) ) {
                 if ( n_connected_neighbors <= 2 ) {
                     cerr <<"\nconnectivityCheck: ERROR: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
                     cerr <<" has only "<< n_connected_neighbors <<" neighbor(s).";

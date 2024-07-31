@@ -24,10 +24,10 @@ class CubicSpline {
                      const std::vector<double>&,
                      const double, const double );
     
-    double Value( double x ) const;
+    double Value( const double x ) const;
     
     /// computes derivative using a forward finite difference approach @todo improve by using analytic derivative
-    double Derivative( double x ) const;
+    double Derivative( const double x ) const;
     
     /// computes the maximum value of the second derivative of the spline function; use for checking whether there are enough data points to get satisfactory curve
     double MaxDerivative() const;

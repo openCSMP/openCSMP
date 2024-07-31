@@ -2858,6 +2858,157 @@ void csmpBinaryToVTK( const char* modelBinFIleName )
 
 
 
+
+/**
+    Writes a VTK file outputting the shape and element or node property values (scalar,vector,tensor only accessible to the current element.
+    
+    @param file_name of the the VTK file
+    @param var_name the name of the variable in VTK
+    @param cell_idx number of the cell inside the CSMP model
+    @param XY element coordinate matrix with rows = nodes, columns = spatial dimensions
+    @param DATA the element or node data that will be stored as CELL or POINT properties, respectively.
+*/
+void outputDataToVTK( const char* file_name, const char* var_name,
+                      VTK_TYPE vtk_type,
+                      size_t cell_idx,
+                      const DenseMatrix<DM_MIN>& XY,
+                      const DenseMatrix<DM_MIN>& DATA )
+  {
+     // making sure that node number is matching
+     if ( DATA.Cols() > 1 ) assert( XY.Rows() == DATA.Cols() );
+     const uint32_t dimension = XY.Cols();
+     assert( dimension >= 1 && dimension <= 3 );
+     const uint32_t npe = nodesPer_VTK_TYPE( vtk_type );
+     assert( npe >= 2 && npe <= 27 );
+  
+     char  outfile[NAME_STRING], elmt[30];
+     strcpy( outfile, file_name );
+     snprintf( elmt, sizeof(elmt), "%lu", cell_idx );
+     strcat( outfile, elmt );
+     strcat( outfile, ".vtk" );
+
+     // 0. opening data output file in ascii format
+     ofstream ofs;
+     ofs.open( outfile, ios::out|ios::trunc );
+     if ( !ofs )
+       {
+           cout <<"\noutputDataToVTK: ";
+           cout <<"Output file could not be opened."<< endl;
+           return;
+       }
+
+     // 1. writing the file header
+     // --------------------------
+     ofs <<"# vtk DataFile Version 2.0"<< endl;
+     ofs <<"Finite-element dataset (CSMP): variable: "<< var_name << endl;
+     ofs <<"ASCII"<< endl << endl;
+
+     // 2. writing node coordinates
+     // ---------------------------
+     DenseMatrix<DM_MIN> COORD(XY);
+     ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
+     ofs <<"POINTS " << npe <<" double"<< endl;
+     for ( uint32_t i{0U}; i<npe; i++ )
+       {
+          for ( uint32_t j{0U}; j<dimension; j++ )
+            ofs << setprecision(17) << COORD(i,j) <<" ";
+          ofs << endl;
+       }
+     ofs << endl;
+
+     // 3. writing CELLS (cell-size and member nodes (point)) -corect
+     // Cells
+     // -----------------------------------------------------
+     ofs <<"CELLS "<< 1 <<" "<< 9 << endl;
+     // (1+4)X8
+     // the 4 corner hexahedra
+     ofs << 8 <<" 0 1 2 3 4 5 6 7" << endl;
+     ofs << endl;
+
+     // 4. writing CELL_TYPES - for the
+     // ---------------------
+     ofs <<"CELL_TYPES "<< 1 << endl;
+     ofs << static_cast<int>(vtk_type) << endl; // VTK_HEX
+     ofs << endl;
+
+     // 5. writing data values
+     // ----------------------
+     if ( DATA.Cols() == 1 ) {
+         ofs <<"CELL_DATA 1"<< endl;
+         ofs.setf( ios::scientific );
+         if ( DATA.Rows() == 1 )
+           {
+               ofs <<"SCALARS "<< var_name <<" double"<< endl;
+               ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
+               // matrix DATA is 1x1
+               for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+               ofs << endl;
+           }
+         else if ( DATA.Rows() == dimension )
+           {
+              ofs <<"VECTORS "<< var_name <<" double"<< endl;
+              // variables have always 3 components since view screen is 3D
+              // matrix DATA is vec-dim x 1
+              for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,0) <<"  ";
+              ofs << endl;
+           }
+         else if ( DATA.Rows() == dimension*dimension ) { // TENSORS
+              ofs <<"TENSORS "<< var_name <<" double"<< endl;
+              // variables have always 3 components since view screen is 3D
+              // matrix DATA is tensor-dim*dim x 1
+              for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,0) <<"  ";
+              ofs << endl;
+           }
+         else throw csmp::Exception( ERROR, "outputDataToVTK",
+                                     "only scalar, vector and tensor cell data are handled so far");
+       }
+     // PONT_DATA ON NODES
+     else {
+         assert( DATA.Cols() == npe );
+         ofs <<"POINT_DATA "<< npe << endl;
+         ofs.setf( ios::scientific );
+         if ( DATA.Rows() == 1 )
+           {
+               ofs <<"SCALARS "<< var_name <<" double"<< endl;
+               ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
+               // matrix DATA is 1x nodes
+               for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+               ofs << endl;
+           }
+         else if ( DATA.Rows() == dimension )
+           {
+              ofs <<"VECTORS "<< var_name <<" double"<< endl;
+              // variables have always 3 components since view screen is 3D
+              // matrix DATA is vec-dim x nodes
+              for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) {
+                   for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+                   ofs << endl;
+                }
+           }
+         else if ( DATA.Rows() == dimension*dimension )
+           {
+              ofs <<"TENSORS "<< var_name <<" double"<< endl;
+              // variables have always 3 components since view screen is 3D
+              // matrix DATA is tensor-dim*dim x nodes
+              for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) {
+                   for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+                   ofs << endl;
+                }
+           }
+         else throw csmp::Exception( ERROR, "outputDataToVTK",
+                                     "only scalar, vector and tensor node data are handled so far");
+       }
+     ofs << endl;
+     ofs.close();
+     cout <<"\noutputDataToVTK: file '"<< outfile <<"' written successfully."<< endl;
+
+ } // end outputDataToVTK
+
+
+
+
+
+
 } // end namespace csmp
 
 

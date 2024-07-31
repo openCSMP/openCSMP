@@ -331,6 +331,9 @@ class VData {
     
     /// eliminate nodes that are not connected to any element, face or interface; report whether there were any
     bool DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes=true );
+
+    /// eliminate cells with identical nodes, except for interfaces
+    bool DetectAndEliminateDuplicateCells( bool verbose=true );
       
     /// clear the container
     void Erase();
@@ -399,7 +402,13 @@ void splitCornerTetrahedron( VData&, size_t cnr, size_t only_neighbor );
 std::array<double,3>  boundingBox( const VData&, size_t elmt );
 
 /// thus far, only writes tetrahedra to file, appending the element number to the name
-void elementToVTK( const VData& vdata, size_t eidx, const char* outfile );
+void elementToVTK( const VData&, size_t eidx, const char* outfile );
+
+/// prints number of nodes, barycentre, and  node coordinates  placed in the origin and normalised to 1
+void printCell( const VData&, size_t cell_id );
+
+/// returns the barycentre of the celll which always has three dimensions but the higher ones will be zero in 2 and 1D models
+std::array<double,3> cellBaryCenter( const VData&, size_t cell_id );
 
 } // csmp
 

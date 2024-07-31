@@ -92,7 +92,9 @@ class Node : public LocalVariableStorage<dim,Node> {
     uint32_t ParentNodeNumber( uint32_t parent_element ) const;
     /// checks whether Element is a parent of the node
     bool IsParent( const Element<dim>* const ) const;
-    
+  
+    typename std::vector<Element<dim>*>::const_iterator ParentElementsBegin() const { return parent_element_pointers_.begin(); }
+    typename std::vector<Element<dim>*>::const_iterator ParentElementsEnd() const { return parent_element_pointers_.end(); }
     
     // node manifolds (where nodes have been multiplicated at material interfaces)
     
@@ -133,6 +135,9 @@ class Node : public LocalVariableStorage<dim,Node> {
     
     /// access to any of the neighbor nodes
     Node<dim>* Neighbor( uint32_t ) const;
+    
+    typename std::vector<Node<dim>*>::const_iterator NeighborsBegin() const { return neighbor_node_pointers_.begin(); }
+    typename std::vector<Node<dim>*>::const_iterator NeighborsEnd() const { return neighbor_node_pointers_.end(); }
 
 
     // basic functionality of the Node

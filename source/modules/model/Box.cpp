@@ -1936,7 +1936,7 @@ BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& node_flags, uint32_t boundary_
           }
          else { // error
             cerr <<"\n"<<"BOX_BOUNDARY atBoundary<2>( const set<BOX_BOUNDARY>&, face_cnr_nodes ): Error: could not resolve boundary status."<< endl;
-            cerr <<"\t"<<"input data: corner nodes of element face: "<< boundary_face_corner_nodes << endl;
+            cerr <<"\t"<<"input data: corner node flags of element face: "<< boundary_face_corner_nodes << endl;
             cerr <<"\t"<<"boundary node flags:\n";
             for ( const auto& fit : node_flags ) cerr <<" "<< parseBoundary(fit);
             cerr << endl;
@@ -1991,7 +1991,7 @@ BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& node_flags, uint32_t boundary_
                            return IRREGULAR;
                       }
                }
-             // two node flags (line segments)
+             // line segments with two node flags (line segments)
              else if ( n_flags == 2U ) {
                  const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ *next(node_flags.begin(),1) };
                  // when the higher bflag value is the corner flag value
@@ -2029,18 +2029,31 @@ BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& node_flags, uint32_t boundary_
                  // 2 different flags and the corner flag value has a lower value than these boundary flags
                  else if ( isCorner(b1) ) {
                       switch( b2 ) {
-                           case LEFT:
-                             return LEFT;
-                           case RIGHT:
-                             return RIGHT;
-                           case BOTTOM:
-                             return BOTTOM;
-                           case TOP:
-                             return TOP;
-                           case FRONT:
-                             return FRONT;
-                           case BACK:
-                             return BACK;
+                           // edges have lower negative int values than corners
+                           case EDGE1:
+                             return EDGE1;
+                           case EDGE2:
+                             return EDGE2;
+                           case EDGE3:
+                             return EDGE3;
+                           case EDGE4:
+                             return EDGE4;
+                           case EDGE5:
+                             return EDGE5;
+                           case EDGE6:
+                             return EDGE6;
+                           case EDGE7:
+                             return EDGE7;
+                           case EDGE8:
+                             return EDGE8;
+                           case EDGE9:
+                             return EDGE9;
+                           case EDGE10:
+                             return EDGE10;
+                           case EDGE11:
+                             return EDGE11;
+                           case EDGE12:
+                             return EDGE12;
                            default:
                              return IRREGULAR;
                         }
@@ -2048,35 +2061,11 @@ BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& node_flags, uint32_t boundary_
                }
            }
            
-         // when the element face at the boundary is a surface
+         // when the element face at the boundary is a triangle or quadrilateral
          else if ( boundary_face_corner_nodes > 2U )
            {
              if ( n_flags == 1U ) {
                     switch( (*node_flags.begin())  ) {
-                         case EDGE1:
-                           return EDGE1;
-                         case EDGE2:
-                           return EDGE2;
-                         case EDGE3:
-                           return EDGE3;
-                         case EDGE4:
-                           return EDGE4;
-                         case EDGE5:
-                           return EDGE5;
-                         case EDGE6:
-                           return EDGE6;
-                         case EDGE7:
-                           return EDGE7;
-                         case EDGE8:
-                           return EDGE8;
-                         case EDGE9:
-                           return EDGE9;
-                         case EDGE10:
-                           return EDGE10;
-                         case EDGE11:
-                           return EDGE11;
-                         case EDGE12:
-                           return EDGE12;
                          case LEFT:
                            return LEFT;
                          case RIGHT:
@@ -2093,12 +2082,39 @@ BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& node_flags, uint32_t boundary_
                            return IRREGULAR;
                       }
                }
-             // two node flags (surfaces)
+             // two node flags
              else if ( n_flags == 2U ) {
                  const BOX_BOUNDARY b1{ (*node_flags.begin()) }, b2{ *next(node_flags.begin(),1) };
-                 // edge flags are lower than side flags
+                  // corners
+                  if ( isCorner(b1) || isCorner(b2) ) {
+                      cerr <<"\n"<<"BOX_BOUNDARY atBoundary<3>(): Error: corner face must have a mininum of 3 different flags."<< endl;
+                      cerr <<"\t"<<"input data: corner node flags of element face: "<< boundary_face_corner_nodes << endl;
+                      cerr <<"\t"<<"boundary node flags:\n";
+                      for ( const auto& fit : node_flags ) cerr <<" "<< parseBoundary(fit);
+                      cerr << endl;
+                    }
+                 // edge flags should be discerned by lower values than side flags
                  if ( isEdge(b1) ) {
                       switch( b2 ) {
+                           // edges have lower negative int values than corners
+                           case BACK:
+                             return BACK;
+                           case FRONT:
+                             return FRONT;
+                           case LEFT:
+                             return LEFT;
+                           case RIGHT:
+                             return RIGHT;
+                           case TOP:
+                             return TOP;
+                           case BOTTOM:
+                             return BOTTOM;
+                           default:
+                             return IRREGULAR;
+                        }
+                   }
+                 if ( isEdge(b2) ) {
+                      switch( b1 ) {
                            // edges have lower negative int values than corners
                            case BACK:
                              return BACK;
@@ -2142,7 +2158,7 @@ BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& node_flags, uint32_t boundary_
                }
              else { // error
                   cerr <<"\n"<<"BOX_BOUNDARY atBoundary<3>(): Error: face can have a maximum of 4 flags."<< endl;
-                  cerr <<"\t"<<"input data: corner nodes of element face: "<< boundary_face_corner_nodes << endl;
+                  cerr <<"\t"<<"input data: corner node flags of element face: "<< boundary_face_corner_nodes << endl;
                   cerr <<"\t"<<"boundary node flags:\n";
                   for ( const auto& fit : node_flags ) cerr <<" "<< parseBoundary(fit);
                   cerr << endl;

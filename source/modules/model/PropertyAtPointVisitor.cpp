@@ -11,7 +11,7 @@ namespace csmp {
 */
 template<uint32_t dim>
 PropertyAtPointVisitor<dim>::PropertyAtPointVisitor( const Model<dim>& m,
-                                                     const map <size_t, vector<double> > & inXYZ,
+                                                     const map<size_t,vector<double> > & inXYZ,
                                                      const char *propertyName )
     : pref_(m.Database()),
       maxElementsInTheMesh_(m.Region("Model").Cells()),  // Number of elements in the mesh
@@ -467,7 +467,7 @@ bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double>
 
 
 template<uint32_t dim>
-void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
+void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e )
 {
     if( continueSearch_ )
     {
