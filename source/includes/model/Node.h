@@ -193,29 +193,30 @@ class Node : public LocalVariableStorage<dim,Node> {
 
 // FUNCTIONS INVOLVING NODES
 
-/// checks whether the Node is contained in the rectangular (or cubic) bounding box defined by the corner points provided
+/// checks whether  Node is contained in the rectangular (or cubic) bounding box defined by the corner points provided
 template<uint32_t dim>
 bool isWithinBoundingBox( const Point<dim>& pmin, const Point<dim>& pmax, const Node<dim>* const nptr );
 
-/// returns  elements that share face, inner side is reported first; outer next; face-nodes must be in correct order. Application: from nodes of lower-dimensional face find elements on in- and outside
+/// finds the 2 higher-dim parent elements that share face identified by its nodes, inner element is reported first; outer next; face-nodes of dim-1 element must be in correct order
 template<uint32_t dim>
-std::pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename std::vector<Node<dim>*>::const_iterator first,
-                                                                    typename std::vector<Node<dim>*>::const_iterator last );
+std::pair<Element<dim>*,Element<dim>*>  parentElements( typename std::vector<Node<dim>*>::const_iterator first,
+                                                        typename std::vector<Node<dim>*>::const_iterator last );
 
-/// if there is only one parent element expected, then use this method instead of 'parentElementsSharedByFace'
+///finds higher-dim parent element of element face on model outside, throws if  face is within the model // USED
 template<uint32_t dim>
-std::pair<Element<dim>*,size_t>  parentElement( typename std::vector<Node<dim>*>::const_iterator first,
-                                                typename std::vector<Node<dim>*>::const_iterator last );
+std::pair<Element<dim>*,uint32_t>  parentElement( typename std::vector<Node<dim>*>::const_iterator first,
+                                                  typename std::vector<Node<dim>*>::const_iterator last );
 
-/// for a node that lies on an internal surface, method reports which of volumetric parent elements lie on the inside and which on the outside of this surface; throws if assumptions are not met
+// TODO: not used; deprecate?
+/// for single node on an internal surface,  reports which equidimensional parent elements lie on the inside of the surface and which on the outside; throws if assumptions are not met
 template<uint32_t dim>
 std::pair<std::vector<Element<dim>*>,std::vector<Element<dim>*>>  parentElementsAdjacentTo( const Node<dim>* const low_dim_node );
 
-/// determines role of Node (simple mesh node vs. geometric constraint), using BOX_BOUNDARY flagging and parent element connectivity,
+/// determines topological role of Node (simple mesh node vs. geometric constraint), using TOPOTYPE and  BOX_BOUNDARY flagging and parent element connectivity,
 template<uint32_t dim>
 TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<dim>* const );
 
-/// prints Idx and boundary flag values of the nodes that this node is connected with
+/// prints Idx of node and boundary flag values of the nodes that this node is connected with
 template<uint32_t dim>
 void printNeighbors( const Node<dim>* const );
 
@@ -223,7 +224,7 @@ void printNeighbors( const Node<dim>* const );
 template<uint32_t dim>
 void printParents( const Node<dim>* const );
 
-/// calculates the size of the Node excluding the dynamic contribution to the stored variables
+/// estimates size of the Node class including dynamically allocated parts
 template<uint32_t dim>
 size_t sizeOf( const Node<dim>* const );
 

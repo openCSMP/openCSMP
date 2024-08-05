@@ -2528,7 +2528,7 @@ double  Region<dim>::SurfaceArea() const
                                 this->cell_vec_[i]->N( fnids[3U] )->Coordinate() );
           // linear face
           else if ( isLineElement(etype) ) {
-            area += this->cell_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
+            area += distance( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(), this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
             //csmp_error.Note( WARNING, "Region<dim>::SurfaceArea", "line-element thickness on perimeter is assumed to be one." );
           }
           // additional case of point face where a line-element is perpendicular to a boundary node
@@ -2541,7 +2541,7 @@ double  Region<dim>::SurfaceArea() const
         if ( this->cell_vec_[i]->FE()->IsSurface() )
           for ( size_t j{0U}; j<(*bit).size(); j++ ) {
             auto fnids = this->cell_vec_[i]->FE()->NodesOfFace( (*bit)[j] );
-            area += this->cell_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
+            area += distance( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(), this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
           }
     }
 

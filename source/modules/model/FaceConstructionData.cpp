@@ -211,15 +211,15 @@ FaceConstructionData<dim>  higherDimensionalNeighbors( Element<dim>& e, const cs
      // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
      // ----------------------------------------------------------------------------------------------------------------------------
      
-     // making a set of element nodes to later identify faces by comparison
+     // making a set of element nodes to serve as a key for later identification of faces
      set<Node<dim>*> node_set;
      const auto nodes(e.Nodes());
      for ( uint32_t i{0U}; i<nodes; ++i ) node_set.insert( e.N(i) );
      // neighbor elements and their faces
      map<Element<dim>*,uint32_t>  nbor_elmts;
-     for ( auto i{0U}; i<nodes; i++ ) {
+     for ( uint32_t i{0U}; i<nodes; i++ ) {
           const auto parents{ e.N(i)->Parents() };
-          for ( auto j{0U}; j<parents; ++j ) {
+          for ( uint32_t j{0U}; j<parents; ++j ) {
                assert( e.N(i)->Parent(j) );
                const auto faces{ e.N(i)->Parent(j)->Faces() };
                for ( uint32_t k{0U}; k<faces; ++k ) {

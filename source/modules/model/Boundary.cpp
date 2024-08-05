@@ -779,7 +779,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
       if constexpr ( dim == 3u ) if ( (*it)->IsLine() ) continue;
 
       // finding the higher-dimensional element(s) that sit(s) adjacent to the lower-dimensional one
-      pair<Element<dim>*,Element<dim>*>  inner_outer_elements = parentElementsSharedByFace<dim>( (*it)->NodesBegin(), (*it)->NodesEnd() );
+      pair<Element<dim>*,Element<dim>*>  inner_outer_elements = parentElements<dim>( (*it)->NodesBegin(), (*it)->NodesEnd() );
 
       // if there is an outer element
       if ( inner_outer_elements.second != nullptr ) {

@@ -116,7 +116,7 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack()
      // testing fundamental assumption made working with default initialisations of 'size_t'
      uint32_t default_uint = std::numeric_limits<uint32_t>::max();
      _test( std::numeric_limits<size_t>::max() != UINT_MAX ); // false because UINT_MAX is not for size_t
-     _test( hasDefaultValueForUnassignedInteger( default_uint ) );
+     _test( isUninitialisedInteger( default_uint ) );
      _test( default_uint == UINT_MAX );
      
      // some visual QC, using VTK
@@ -162,7 +162,7 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBackWithInterfaces()
      // testing fundamental assumption made working with default initialisations of 'size_t'
      uint32_t default_uint = std::numeric_limits<uint32_t>::max();
      _test( std::numeric_limits<size_t>::max() != UINT_MAX ); // false because UINT_MAX is not for size_t
-     _test( hasDefaultValueForUnassignedInteger( default_uint ) );
+     _test( isUninitialisedInteger( default_uint ) );
      _test( default_uint == UINT_MAX );
      
      // some visual QC, using VTK

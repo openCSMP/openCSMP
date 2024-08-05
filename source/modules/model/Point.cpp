@@ -61,10 +61,6 @@ ostream&  operator<<( ostream& stream, const Point<3U>& pt )
 // MEMBER DEFINITIONS
 
 // ---------------------------------------------------------------------------
-template<uint32_t dim>
-Point<dim>::~Point()
- {
- }
 
 /*
 template<uint32_t dim>
@@ -97,6 +93,11 @@ Point<1U>::Point( const Point<1U>& pt ) : x_(pt.x_)
  {
  }
 
+Point<1U>::Point( const array<double,1U>& v )
+ : x_(v[0])
+ {
+ }
+
 Point<1U>::Point( const vector<double>& v )
  : x_(v[0])
  {
@@ -119,8 +120,15 @@ const double& Point<1U>::operator[]( uint32_t) const
  }
 
 
+void Point<1U>::Set( const array<double,1U>& v )
+ {
+    x_ = v[0];
+ }
+
+
 void Point<1U>::Set( const vector<double>& v )
  {
+    assert( v.size() >= 1 );
     x_ = v[0];
  }
 
@@ -348,6 +356,13 @@ const double& Point<2U>::operator[]( uint32_t i ) const
  }
 
 
+void Point<2U>::Set( const array<double,2U>& v )
+ {
+    x_ = v[0];
+    y_ = v[1];
+ }
+
+
 void Point<2U>::Set( const vector<double>& v )
  {
     assert( v.size() == 2U );
@@ -524,14 +539,14 @@ void Point<2U>::NormalizeLengthTo( double len )
 
 double  Point<2U>::DistanceTo( const Point<2U>& pt ) const
  {
-    return Point<2U>(pt - *this).Length();
+    return hypot(x_ - pt.x_, y_ - pt.y_);
  }
 
 
 bool Point<2U>::CoincidesWithWithinTolerance( const Point<2U>& pt, 
                                               double tolerance ) const
  {
-    if ( Point<2U>(pt - *this).Length() > tolerance ) return false;
+    if ( hypot(x_ - pt.x_, y_ - pt.y_) > tolerance ) return false;
     return true;
  }
 
@@ -580,10 +595,16 @@ Point<3U>::Point( const Point<3U>& pt ) : x_(pt.x_), y_(pt.y_), z_(pt.z_)
  {
  }
 
+
+Point<3U>::Point( const array<double,3U>& v )
+ : x_(v[0]), y_(v[1]), z_(v[2])
+ {
+ }
+
+
 Point<3U>::Point( const vector<double>& v )
  : x_(v[0]), y_(v[1]), z_(v[2])
  {
-    assert( v.size() == 3U );
  }
 
 Point<3U>::~Point()
@@ -598,6 +619,14 @@ double& Point<3U>::operator[]( uint32_t i )
 const double& Point<3U>::operator[]( uint32_t i ) const
  {
     return ((i==0U) ? x_ : ((i==1U) ? y_ : z_));
+ }
+
+
+void Point<3U>::Set( const array<double,3U>& v )
+ {
+    x_ = v[0];
+    y_ = v[1];
+    z_ = v[2];
  }
 
 
@@ -790,14 +819,14 @@ void Point<3U>::NormalizeLengthTo( double len )
 
 double  Point<3U>::DistanceTo( const Point<3U>& pt ) const
  {
-    return Point<3U>(pt - *this).Length(); 
+    return hypot(hypot(x_-pt.x_,y_-pt.y_),z_-pt.z_);
  }
 
 
 bool Point<3U>::CoincidesWithWithinTolerance( const Point<3U>& pt, 
-                                                     double tolerance ) const
+                                              double tolerance ) const
  {
-    if ( Point<3U>(pt - *this).Length() > tolerance ) return false;
+    if ( hypot(hypot(x_-pt.x_,y_-pt.y_),z_-pt.z_) > tolerance ) return false;
     return true;
  }
 
@@ -833,13 +862,19 @@ void Point<3U>::Out() const
 //    GENERIC INLINE FUNCTIONS
 //
 // -------------------------------------------------------------------------------
+/*
+template<uint32_t dim>
+Point<dim>::Point()
+ {
+    static_assert( dim <= 3, "Point<dim>::Point: default constructor: wrong template parameter value" );
+ }
+
 template<uint32_t dim>
 double  Point<dim>::DistanceTo( const Point& pt ) const
  {
     return Point<dim>( pt - *this ).Length();
  }
 
-/*
 template<uint32_t dim>
 Point<dim> operator-( double val, const Point<dim>& pt )
  {
@@ -951,11 +986,40 @@ double distance( const Point<1U>& a, const Point<1U>& b ) {
      return fabs( b[0] - a[0] );
   }
 double distance( const Point<2U>& a, const Point<2U>& b ) {
-     return sqrt( (b[0]-a[0])*(b[0]-a[0]) + (b[1]-a[1])*(b[1]-a[1]) );
+     return hypot( a[0]-b[0], a[1]-b[1] );
   }
 double distance( const Point<3U>& a, const Point<3U>& b ) {
-     return sqrt( (b[0]-a[0])*(b[0]-a[0]) + (b[1]-a[1])*(b[1]-a[1]) + (b[2]-a[2])*(b[2]-a[2]) );
+     // hypot(hypot(x1-x2,y1-y2),z1-z2) avoids potential roundoff-related degeneracy after squaring
+     return hypot(hypot(a[0]-b[0],a[1]-b[1]),a[2]-b[2]);
   }
+
+
+/// distance between point, A, and line segment BC, does not check case where projection of A is outside of segment BC
+template<uint32_t dim>
+double distanceFromLine( const Point<dim>& A, const Point<dim>& B, const Point<dim>& C )
+ {
+    // find direction vector BC
+    const double length_BC = distance( C, B );
+    Point<dim> dirVec = (C - B) / length_BC;
+    // vector connecting A with B
+    Point<dim> Vec = A - B;
+    // distance of projection A onto BC from B
+    const double t = dotProduct( dirVec, Vec );
+    
+    // if the projection of A on BC hits BC beyond endpoints
+    if ( t <= 0. )
+      return distance( A, B );
+    else if ( t > length_BC )
+      return distance( A, C );
+
+    // projection P of A onto BC
+    Point<dim> P = B + (dirVec * t);
+    // distance of point A from line BC
+    return distance( P, A );
+ }
+template double distanceFromLine( const Point<3U>&, const Point<3U>&, const Point<3U>& );
+template double distanceFromLine( const Point<2U>&, const Point<2U>&, const Point<2U>& );
+
 
 
 

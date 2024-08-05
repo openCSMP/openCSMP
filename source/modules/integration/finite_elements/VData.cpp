@@ -2214,7 +2214,7 @@ bool VData::DetectAndEliminateDuplicateCells( bool verbose )
      if ( no_duplicates_found ) {
           if ( verbose ) {
                cout <<"\n"<<"VData::DetectAndEliminateDuplicateCells: ";
-               cout <<"each cell in the range 'elements' + 'faces' is unique."<< endl;
+               cout <<"each cell in the range 'elements + faces + interfaces' is unique."<< endl;
             }
           return false;
        }

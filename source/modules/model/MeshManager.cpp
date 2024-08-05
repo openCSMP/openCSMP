@@ -894,30 +894,30 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
                                   fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars, material_id ) ) :
                elements_.emplace( Element<dim>( elements_.size(),
                                   fem_manager_.E(etype), static_cast<FiniteVolumeStencil<dim>*>(nullptr), lvars, ivars, material_id ) );
-   // 2. assigning nodes
-   const size_t n_nodes(nodes.size());
-   for ( auto i{0U}; i<n_nodes; ++i )
-     (*eit).Assign( i, nodes[i] );
 
+   // 2. assigning nodes
+   const auto n_nodes{ nodes.size() };
+   for ( uint32_t i{0U}; i<n_nodes; ++i ) {
+        (*eit).Assign( i, nodes[i] );
+        // assigning the element as a new parent element of the node
+        nodes[i]->Assign( i, &(*eit) );
+     }
 
   // 3. trying to establish neighbor information from the nodes assuming if they have parent connectivity
   // ----------------------------------------------------------------------------------------------------
   //    checking whether the nodes have the necessary parent element information
   bool valid_parent_info(true);
-  for ( auto i{0U}; i<n_nodes; ++i )
+  for ( uint32_t i{0U}; i<n_nodes; ++i )
     if ( (*eit).N(i)->Parents() == 0U ) {
          cerr <<"\n\tnode "<< i;
          valid_parent_info = false;
-         csmp_error.Note( INFO, "MeshManager<dim>::AddElement",
+         csmp_error.Note( WARNING, "MeshManager<dim>::AddElement",
                           "neighbor information could not be created because node(s) miss parent element info");
          return &(*eit);
       }
       
-   // 4. if the nodes have parents, this method tries to find and connect the neighbors
-   // ---------------------------------------------------------------------------------
-   if ( connectNeighborsUsingNodeParents( &(*eit) ) < (*eit).FE()->Faces()-1 )
-     csmp_error.Note( INFO, "MeshManager<dim>::AddElement", "could not find neighbors for all element faces");
-   
+   // 4. connect new element to its neighbors: this gets done only after a range of elements were created.
+     
    return &(*eit);
   
 } // AddElement
@@ -1579,7 +1579,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceInteriorElementsByFaces( const Prop
              }
         
          // 1.2 construction of Face object in the interior of a model where both neighbors are present
-         pair<Element<dim>*,Element<dim>*>  pelmts = parentElementsSharedByFace<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
+         pair<Element<dim>*,Element<dim>*>  pelmts = parentElements<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
          assert( pelmts.first  != nullptr );
          assert( pelmts.second != nullptr );
          // finding the face numbers of the parent elements
@@ -1616,7 +1616,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceInteriorElementsByFaces( const Prop
 
 
 /**
-   replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards, setting input pointers to NULL
+   Replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards, setting input pointers to NULL
    
       the Node flags of the Element are used to determine whether this is a boundary face
       
@@ -1647,8 +1647,6 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
     
     // 1. converting Elements into Faces
     // ---------------------------------
-//    size_t n_elements = elements_.size();
-//    size_t n_faces    = faces_.size();
     size_t face_idx{0};
     // remembering the first iterator
     auto first2{ first };
@@ -1656,6 +1654,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
     while( first != last )
       {
          // 1.1 initial checks and labeling
+         // -------------------------------
          // (input range must not contain any nullptrs)
          assert( (*first) != nullptr );
          if constexpr ( dim == 3U )
@@ -1671,9 +1670,17 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
                                       "supplied element is not a line element and cannot be converted to Face.");
              }
         
-         // 1.2 constructing Faces at model boundary
-         // finding higher dimensional neighbor of the face-element and its face idx
+         // 1.2 constructing Faces at model boundary, verifying that the supplied elemnent actually is located on the boundary
+         // ------------------------------------------------------------------------------------------------------------------
+         // trying to find higher dimensional neighbor of the face-element and its face idx
          pair<Element<dim>* const,uint32_t> pelmt = parentElement<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
+         
+         // if this is unsuccesful, boundary face creation is stopped, but element will be deleted
+         if ( pelmt.first == nullptr ) {
+              first++;
+              continue;
+           }
+           
          // creating Face, storing a pointer to it
          //                                    element ptr  local element ID in face
          face_ptrs.push_back( AddBoundaryFace( pelmt.first, pelmt.second, lvars, ivars ) );
@@ -1779,7 +1786,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
    @author E.P
    @date 18/8/22
 
-   //TODO: Take away dependency on PerimeterNodes iterators when the TOPO flags can be relied upon
+   // TODO: Take away dependency on PerimeterNodes iterators when the TOPO flags can be relied upon
 
 */
 template<uint32_t dim>
@@ -1840,7 +1847,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          inside_parents.insert( inside_elmt );
 
          // 1.2 duplicating the nodes creating manifolds as necessary and adding boundary flags
-         // ---------------------------------------------------------
+         // -----------------------------------------------------------------------------------
          //getting vector of inside nodes to iterater
          vector<uint32_t> inside_fnids = inside_elmt->FE()->NodesOfFace( first->InnerElementFace() );
          map<Node<dim>*, Node<dim>*> in_out_nodes;
@@ -1888,7 +1895,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          //Need to assign outside nodes to OuterParent element
          vector<uint32_t> outside_fnids = outside_elmt->FE()->NodesOfFace( first->OuterElementFace() );
          for ( uint32_t n : outside_fnids){
-           assert( fabs(outside_elmt->N(n)->Coordinate().DistanceTo(in_out_nodes[outside_elmt->N(n)]->Coordinate()))< 0.001 ) ;
+           // TODO: find a meaningful number rather than this is arbitrary tolerance!
+           assert( distance( outside_elmt->N(n)->Coordinate(), in_out_nodes[outside_elmt->N(n)]->Coordinate()) < 0.001 );
            outside_elmt->Assign(n, in_out_nodes[outside_elmt->N(n)] );
          }
 
@@ -1945,7 +1953,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
      //3.0 Update existing Interfaces which were intersected
      // ---------------------------------------------------------
      //3.1 For each duplicated node that was already a manifold (intersection)
-     for ( auto nit : new_nodes_with_existing_manifold){
+     for ( auto& nit : new_nodes_with_existing_manifold ) {
        Node<dim>* old_node = nit.first;
        const auto interfaces = old_node->Manifold()->InterFaces(old_node);
        //iterate over all interfaces of the node

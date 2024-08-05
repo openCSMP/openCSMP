@@ -416,42 +416,6 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
 
 
 
-/* NOW IN MESHMANAGER
-
-  // 1. looking at the parent elements of the regions perimeter nodes to determine which elements must be updated
-  //    after the deletion
-  if ( delete_elmts_and_update_connectivity )
-    {
-       // 1.1 remembering elements and nodes that will need to be updated
-       vector<Element<dim>*> elmts_to_update;
-       vector<Node<dim>*>    nodes_to_update;
-       elmts_to_update.reserve( region.Cells() );
-       nodes_to_update.reserve( region.PerimeterNodes() );
-       
-       // since perimeter nodes are shared between regions, they will not be deleted
-       for ( auto nit=region.PerimeterNodesBegin(); nit!=region.NodesEnd(); ++nit ) {
-             nodes_to_update.push_back( (*nit) );
-             for ( auto i{0U}; i<(*nit)->Parents(); i++ ) {
-                assert( (*nit)->Parent(i) != nullptr );
-                // recording elements, but only if they do not belong to the region
-                if ( !region.Contains( (*nit)->Parent(i) ) )
-                  elmts_to_update.push_back( (*nit)->Parent(i) );
-             }
-         }
-       // making the element vector unique
-       sort( elmts_to_update.begin(), elmts_to_update.end() );
-       elmts_to_update.erase( unique( elmts_to_update.begin(), elmts_to_update.end() ), elmts_to_update.end() );
-       
-       // 1.2 getting the mesh manager to delete the elements
-       regionComplex.Mesh().DeleteAndRepairConnnectivity( region.CellVector().begin(), region.CellVector().end() );
-       
-       // 1.3 updating the connectivity
-       regionComplex.Mesh().ConnectNodesToParentsAndNeighbors( elmts_to_update.begin(), elmts_to_update.end() );
-    }
-*/
-
-
-
 // DEBUG - check element vector for duplicates (OK)
 //set<const csmp::Element<dim>*> elmts( subdomain.CellsBegin(), subdomain.CellsEnd() );
 //assert( elmts.size() == subdomain.Cells() );
@@ -973,7 +937,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionN
     const CSMP_FEM_TYPE fe_type = (mesh.FiniteElements().UsesElementsWithLocalCoordinateSystem()==true) ? ISOPARAMETRIC_LINEAR_BAR : LINEAR_BAR;
     const LocalVariables            lvsElementVars( model->Database().LocalVariablesAt(ELEMENT) );
     const IntegrationPointVariables lvsIntegrationPointVars( model->Database().IntegrationPointVariablesAt(ELEMENT) );
-    int32_t                         material_ID{5U}; // TODO: should be the domain index
+    int32_t                         material_ID=numeric_limits<int32_t>::max(); // TODO: should be the domain index
     
     // forming element vector (the elements get their material from the domain index
     vector<Element<dim>*> elmts;

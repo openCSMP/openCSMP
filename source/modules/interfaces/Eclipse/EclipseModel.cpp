@@ -10,9 +10,9 @@ using namespace std;
 namespace csmp {
 
 /// Model constructor with provided "variables_file.txt" file is used
-EclipseModel::EclipseModel(EclipseModelSettings& settings,
-	const string& model_name,
-	const string& variables_file)
+EclipseModel::EclipseModel( EclipseModelSettings& settings,
+                            const string& model_name,
+                            const string& variables_file )
 	: csmp::Model<3U>(variables_file.c_str()),
 	eclipse_model_settings_(settings)
 {
@@ -22,8 +22,8 @@ EclipseModel::EclipseModel(EclipseModelSettings& settings,
 
 
 /// Default Model constructor with empty property data base is called
-EclipseModel::EclipseModel(EclipseModelSettings& settings,
-	const string& model_name)
+EclipseModel::EclipseModel( EclipseModelSettings& settings,
+                            const string& model_name )
 	: csmp::Model<3U>(),
 	eclipse_model_settings_(settings)
 {

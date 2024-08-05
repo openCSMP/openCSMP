@@ -29,9 +29,9 @@ namespace csmp {
 
 CornerPointGrid::CornerPointGrid()
   : NX_( 0 ),
-  NY_( 0 ),
-  NZ_( 0 ),
-  NX_x_NY_( 0 )
+    NY_( 0 ),
+    NZ_( 0 ),
+    NX_x_NY_( 0 )
 {
 }
 

@@ -820,7 +820,7 @@ bool  InterFace<dim>::AreNodesCollocated(double tolerance) const
  {
     const uint32_t n_nodes{ this->FE()->Nodes() };
     for ( uint32_t i{0U}; i<n_nodes; i++ )
-      if ( !approximatelyEqual( this->MatchingN(i,INSIDE)->Coordinate().DistanceTo( this->MatchingN(i,OUTSIDE)->Coordinate() ), 0., tolerance ) )
+      if ( !approximatelyEqual( distance( this->MatchingN(i,INSIDE)->Coordinate(), this->MatchingN(i,OUTSIDE)->Coordinate() ), 0., tolerance ) )
         return false;
       
     return true;
@@ -1222,7 +1222,7 @@ double InterFace<dim>::NodeSpacing( uint32_t n ) const
   {
     const uint32_t n_nodes{ this->FE()->Nodes() };
     assert( n < n_nodes );
-    return MatchingN(n,INSIDE)->Coordinate().DistanceTo( MatchingN(n,OUTSIDE)->Coordinate() );
+    return distance( MatchingN(n,INSIDE)->Coordinate(), MatchingN(n,OUTSIDE)->Coordinate() );
   }
 
 

@@ -111,7 +111,7 @@ Until Dezember 2021,  CSMP++ had to be licensed and the official contact point w
      (example: raw size_t's in CSMP are initialised to UINT_MAX, just as floating point values are initialised to a quiet NaN).
  */
  template<typename T>
- bool constexpr hasDefaultValueForUnassignedInteger( T i ) {
+ bool constexpr isUninitialisedInteger( T i ) {
      static_assert( std::is_integral<T>::value, "hasIntegerUnitialisedDefaultValue: inappropriate argument type for this function." );
      static_assert( std::is_arithmetic<T>::value, "hasIntegerUnitialisedDefaultValue: inappropriate argument type for this function." );
      static_assert( std::is_unsigned<T>::value, "hasIntegerUnitialisedDefaultValue: inappropriate argument type for this function." );

@@ -11,7 +11,6 @@
 
 namespace csmp {
 
-// TODO: replace returned vector by std::array<double,dim>
 /**
     @brief Generic class that is used in CSMP to stored Node coordinate values
     and to manipulate them efficiently.
@@ -25,10 +24,11 @@ class Point {
   public:
     /// initialises point to default position of zero
     explicit Point( double = 0. );
-    ~Point();
+    ~Point() = default;
   
     /// construct point from an STL vector of coordinate values
     explicit Point( const std::vector<double>& );
+    explicit Point( const std::array<double,dim>& );
     Point( const Point& );
     Point( Point&& ) = default;
     Point& operator=( const Point& );
@@ -69,6 +69,7 @@ class Point {
   
     /// change the coordinates of an existing point to those stored in the supplied STL vector
     void Set( const std::vector<double>& );
+    void Set( const std::array<double,dim>& );
   
     /// returns the offset of th point from the origin of the coordinate system
     double Length() const;
@@ -148,6 +149,7 @@ class Point<1U> {
   public:
     Point( double = 0. ); ///< explicit keyword is not required because conversion is desired
     ~Point();
+    explicit Point( const std::array<double,1>& );
     explicit Point( const std::vector<double>& );
     Point( const Point<1U>& );
     Point( Point<1U>&& ) = default;
@@ -176,6 +178,7 @@ class Point<1U> {
     bool   operator!=( const Point<1U>& ) const;
     bool   operator<( const Point<1U>& ) const;
     bool   operator>( const Point<1U>& ) const;
+    void   Set( const std::array<double,1U>& );
     void   Set( const std::vector<double>& );
     double Length() const;
     double SquaredLength() const;
@@ -206,6 +209,7 @@ class Point<2U> {
     explicit Point( double = 0. );
     ~Point();
     Point( double, double );
+    explicit Point( const std::array<double,2U>& );
     explicit Point( const std::vector<double>& );
     Point( const Point& );
     Point( Point&& ) = default;
@@ -234,6 +238,7 @@ class Point<2U> {
     bool   operator!=( const Point<2U>& ) const;
     bool   operator<( const Point<2U>& ) const;
     bool   operator>( const Point<2U>& ) const;
+    void   Set( const std::array<double,2U>& );
     void   Set( const std::vector<double>& );
     void   Set( double, double );
     double Length() const;
@@ -258,6 +263,9 @@ Point<2U> crossProduct( const Point<2U>& p1, const Point<2U>& p2 );
 
 double    distance( const Point<2U>&, const Point<2U>& );
 
+/// distance between point, A, and line segment BC, does not check case where projection of A is outside of segment BC
+double    distanceFromLine( const Point<2U>& A, const Point<2U>& B, const Point<2U>& C );
+
 
 
 template<>
@@ -266,6 +274,7 @@ class Point<3U> {
     explicit Point( double = 0. );
     ~Point();
     Point( double, double, double );
+    explicit Point( const std::array<double,3U>& );
     explicit Point( const std::vector<double>& );
     Point( const Point& );
     Point( Point&& ) = default;
@@ -294,6 +303,7 @@ class Point<3U> {
     bool   operator!=( const Point<3U>& ) const;
     bool   operator<( const Point<3U>& ) const;
     bool   operator>( const Point<3U>& ) const;
+    void   Set( const std::array<double,3U>& );
     void   Set( const std::vector<double>& );
     void   Set( double, double, double );
     double Length() const;
@@ -320,7 +330,12 @@ double exteriorProductLength( const Point<dim>& p1, const Point<dim>& p2 );
 
 Point<3U> crossProduct( const Point<3U>& p1, const Point<3U>& p2 );
 
+/// distance between 2 points in 3D space
 double    distance( const Point<3U>&, const Point<3U>& );
+
+/// distance between point, A, and line segment BC (2D and 3D only), if projection of A on BC falls outside of this segment, ditance to nearest end-point is returned
+template<uint32_t dim>
+double    distanceFromLine( const Point<dim>& A, const Point<dim>& B, const Point<dim>& C );
 
 std::ostream&   operator<<( std::ostream& stream, const Point<1U>& pt );
 

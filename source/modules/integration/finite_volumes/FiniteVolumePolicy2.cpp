@@ -528,7 +528,7 @@ double  FiniteVolumePolicy<2U,CELL>::FacetArea( uint32_t iFacet ) const
 
     assert( e != nullptr );
     if ( e->IsSurface() )
-      return e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)).DistanceTo( e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
+      return distance( e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)), e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
     
     return 1.; // if it is a line element
 } // end FacetArea

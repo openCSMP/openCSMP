@@ -7,6 +7,7 @@
 #include <limits>
 #include "Point.h"
 #include "Point_Test.h"
+#include "compareFloats.h"
 
 using namespace std;
 
@@ -436,6 +437,41 @@ void Point_Test::Test_3D_Point()
     _equal( res[0], 0., numeric_limits<double>::epsilon() );
     _equal( res[1], 0., numeric_limits<double>::epsilon() );
     _equal( res[2], 1., numeric_limits<double>::epsilon() );
+
+    // testing distanceFromLine
+    {
+      Point<3> A(1.,1.,0.), B(0.,0.,0.), C(2.,0.,0.);
+      double dist = distanceFromLine( A, B, C );
+      _test( approximatelyEqual(dist,1.) );
+    }
+    {
+      // beyond beginning
+      Point<3> A(3.,0.,0.), B(0.,0.,0.), C(2.,0.,0.);
+      double dist = distanceFromLine( A, B, C );
+      _test( approximatelyEqual(dist,distance(A,C)) );
+    }
+    {
+      // beyond end-point
+      Point<3> A(-1.,0.,0.), B(0.,0.,0.), C(2.,0.,0.);
+      double dist = distanceFromLine( A, B, C );
+      _test( approximatelyEqual(dist,distance(A,B)) );
+    }
+    {
+      // small difference which should have no effect
+      Point<3> A(1.,1.,0.), B(0.,0.,1.0e-13), C(2.,0.,-1.0e-13);
+      double dist = distanceFromLine( A, B, C );
+      _test( approximatelyEqual(dist,1.) );
+    }
+    {
+      // distance vs DistanceTo
+      Point<3> A(1.,1.,1.), B(3.,3.,3.0e10);
+      double dist1 = A.DistanceTo( B );
+      double dist2 = distance( A, B );
+      _test( approximatelyEqual(dist1,dist2) );
+    }
+
+
+
 
  } // end 3D test
 

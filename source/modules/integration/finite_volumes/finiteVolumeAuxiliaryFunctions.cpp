@@ -769,16 +769,16 @@ pair<double,double>  diameterAndVerticalExtentOfLowerDimensional_FV( const Node<
        }
 
      // 2. computing the distances and averaging them
-     double distance{ 0. }, min_y{ 1e+30 }, max_y{ -1e+30 };
+     double pt_distance{ 0. }, min_y{ 1e+30 }, max_y{ -1e+30 };
      for ( const auto& sit : ptrs_unique_nodes ) {
           // computing values at the segment midpoints
-          distance += nptr->Coordinate().DistanceTo( sit->Coordinate() ) / 2.;
+          pt_distance += distance( nptr->Coordinate(), sit->Coordinate() ) / 2.;
           min_y = min( min_y, (nptr->y() + sit->y()) / 2. );
           max_y = max( max_y, (nptr->y() + sit->y()) / 2. );
        }
      
      //                          diameter                                             vertical extent
-     return make_pair( 2. * distance / static_cast<double>(ptrs_unique_nodes.size()), max_y - min_y );
+     return make_pair( 2. * pt_distance / static_cast<double>(ptrs_unique_nodes.size()), max_y - min_y );
  
  } // end diameterAndHeightOfLowerDimensional_FV
 

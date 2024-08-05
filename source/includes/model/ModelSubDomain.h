@@ -333,7 +333,7 @@ class ModelSubDomain {
     ModelSubDomain();
 };
 
-/// distinguishes between Region, Boundary and SplitBoundary on the basis of the name string
+/// uses subdomain name to distinguish between Region, Boundary and SplitBoundary
 PLACEMENT modelSubdomainType( const std::string& subdomain_name );
 
 /// returns number of nodes that are shared by the two subdomains (matches by pointers)

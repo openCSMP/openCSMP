@@ -890,7 +890,7 @@ double FiniteElementPolicy<dim,CELL>::SegmentLength( uint32_t segm ) const
     fptr_->NodesOfSegment( segm, snids );
 
     assert( snids.size() == 2U );
-    return eptr->N(snids[1])->Coordinate().DistanceTo( eptr->N(snids[0])->Coordinate() );
+    return distance( eptr->N(snids[1])->Coordinate(), eptr->N(snids[0])->Coordinate() );
 
   } // end BoundarySegmentLength
 

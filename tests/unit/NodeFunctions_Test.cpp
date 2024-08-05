@@ -105,7 +105,7 @@ bool NodeFunctions_Test::Test_parentElementsSharedByFace()
          }
       
       // calling the function that is being tested
-      pair<Element<3>*,Element<3>*> parents = parentElementsSharedByFace<3>( face_nodes.begin(), face_nodes.end() );
+      pair<Element<3>*,Element<3>*> parents = parentElements<3>( face_nodes.begin(), face_nodes.end() );
       
       // test that the correct neighbor elements were found (inner one should be first)
       _test( parents.first  != nullptr );
@@ -135,7 +135,7 @@ bool NodeFunctions_Test::Test_parentElementsSharedByFace()
          }
 
       // calling the function that is being tested
-      auto parents = parentElementsSharedByFace<3>( face_nodes.begin(), face_nodes.end() );
+      auto parents = parentElements<3>( face_nodes.begin(), face_nodes.end() );
       
       // test that the correct neighbor elements were found (inner one should be first
       _test( parents.first  == inner_eptr );

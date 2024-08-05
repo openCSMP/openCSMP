@@ -765,8 +765,8 @@ template class Node<3U>;
    @attention in the case of quadratic FEs, this function must be given only the corner nodes of the element face
 */
 template<uint32_t dim>
-pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<Node<dim>*>::const_iterator first,
-                                                               typename vector<Node<dim>*>::const_iterator last )
+pair<Element<dim>*,Element<dim>*>  parentElements( typename vector<Node<dim>*>::const_iterator first,
+                                                   typename vector<Node<dim>*>::const_iterator last )
  {
     assert( first != last );
     // 1. creating sets of the parent elements of the face nodes, testing which ones are shared
@@ -812,7 +812,7 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
     if ( shared_parents.empty() ) {
          cerr << endl << endl <<"input nodes: ";
          while ( first != last ) { cerr << (*first)->Idx() <<" "; first++; }
-         throw csmp::Exception( ERROR, "parentElementsSharedByFace", "no shared parent elements found" );
+         throw csmp::Exception( ERROR, "parentElements", "no shared parent elements found" );
       }
        
     // if there is only one element that shares the nodes it must be located on the inside of a boundary
@@ -870,18 +870,123 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
 
     return result;
     
- } // end parentElementsSharedByFace
+ } // end parentElements
 
-template pair<Element<3>*,Element<3>*>  parentElementsSharedByFace( typename vector<Node<3>*>::const_iterator, typename std::vector<Node<3>*>::const_iterator );
-template pair<Element<2>*,Element<2>*>  parentElementsSharedByFace( typename vector<Node<2>*>::const_iterator, typename std::vector<Node<2>*>::const_iterator );
-template pair<Element<1>*,Element<1>*>  parentElementsSharedByFace( typename vector<Node<1>*>::const_iterator, typename std::vector<Node<1>*>::const_iterator );
-
-
+template pair<Element<3>*,Element<3>*>  parentElements( typename vector<Node<3>*>::const_iterator, typename std::vector<Node<3>*>::const_iterator );
+template pair<Element<2>*,Element<2>*>  parentElements( typename vector<Node<2>*>::const_iterator, typename std::vector<Node<2>*>::const_iterator );
+template pair<Element<1>*,Element<1>*>  parentElements( typename vector<Node<1>*>::const_iterator, typename std::vector<Node<1>*>::const_iterator );
 
 
 
+/**
+      Find all parent elements that contain the supplied range of nodes.
+      
+  @return subset of parent elements that share all the supplied nodes
+*/
+template<uint32_t dim>
+vector<Element<dim>*> parentElementsContaining( typename vector<Node<dim>*>::const_iterator first,
+                                                typename vector<Node<dim>*>::const_iterator last )
+ {
+    // the supplied range of nodes must contain at least two nodes
+    assert( next(first,1) != last );
+    
+    // sorting parent element vectors for the intersection algorithm
+    (*first)->SortParents();
+    (*next(first,1))->SortParents();
+
+    vector<Element<dim>*>  elmts_with_all_nodes, isect;
+    // store the elements shared between the first and the second node in 'isect'
+    set_intersection( (*first)->ParentElementsBegin(), (*first)->ParentElementsEnd(),
+                      (*next(first,1))->ParentElementsBegin(), (*next(first,1))->ParentElementsEnd(),
+                      back_inserter(elmts_with_all_nodes) );
+    first++;
+    first++;
+    
+    // find the shared parent elements for all the supplied nodes
+    while ( first != last ) {
+         (*first)->SortParents();
+         set_intersection( elmts_with_all_nodes.begin(), elmts_with_all_nodes.end(),
+                           (*first)->ParentElementsBegin(), (*first)->ParentElementsEnd(),
+                           back_inserter(isect) );
+         elmts_with_all_nodes = isect;
+         isect.clear();
+         first++;
+      }
+      
+    return elmts_with_all_nodes;
+      
+  } // end parentElementsContaining
+
+template vector<Element<3U>*> parentElementsContaining( typename vector<Node<3U>*>::const_iterator,
+                                                        typename vector<Node<3U>*>::const_iterator );
+template vector<Element<2U>*> parentElementsContaining( typename vector<Node<2U>*>::const_iterator,
+                                                        typename vector<Node<2U>*>::const_iterator );
+template vector<Element<1U>*> parentElementsContaining( typename vector<Node<1U>*>::const_iterator,
+                                                        typename vector<Node<1U>*>::const_iterator );
 
 
+/**
+    Eliminates surface and line elements from cell range in 3D, and line elements from cell range in 2D.
+    
+    @param elmt_pointers range to elements of potentially different types
+    @return number of remaining cells
+    
+    @attention access to entire vector is necessary because erase() is a member  function of vector
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t eraseLowerDimensionalOrInvalidCells( vector<CELL<dim>*>& elmt_pointers )
+ {
+    if ( elmt_pointers.empty() ) return 0ul;
+    
+    // eliminating potential lower-dimensional elements or nullprts from result vector
+    auto new_end = remove_if( elmt_pointers.begin(), elmt_pointers.end(),
+                              []( const Element<dim>* eit )
+                               {
+                                  if constexpr ( dim == 3U )
+                                    return ( eit==nullptr || !eit->IsVolume() );
+                                  else if constexpr ( dim == 2U )
+                                    return ( eit==nullptr || !eit->IsSurface() );
+                                  else
+                                    return ( eit==nullptr );
+                               } );
+                               
+    // deleting cells beyond the vectors new end
+    elmt_pointers.erase( new_end, elmt_pointers.end() );
+
+    return elmt_pointers.size();
+    
+ } // end eraseLowerDimensionalOrInvalidCells
+
+//template size_t eraseLowerDimensionalOrInvalidCells( vector<Element<3>*>& );
+
+
+
+
+/**
+     Finds the number of the cell face which consists of the supplied range of nodes.
+     
+     @return the local face number 0..faces-1, or uint32_t::max
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+uint32_t faceWithCornerNodes( const CELL<dim>* const cell_ptr,
+                              typename vector<Node<dim>*>::const_iterator first,
+                              typename vector<Node<dim>*>::const_iterator last )
+  {
+     assert( cell_ptr != nullptr );
+     
+     set<Node<dim>*> node_set( first, last );
+     for ( uint32_t face{0u}; face<cell_ptr->Faces(); ++face )
+       if ( cell_ptr->CornerNodesOfFace(face) == node_set ) return face;
+        
+     return numeric_limits<uint32_t>::max();
+     
+  } // end faceWithCornerNodes
+      
+template uint32_t faceWithCornerNodes( const Element<3U>* const,
+                                       typename vector<Node<3U>*>::const_iterator,
+                                       typename vector<Node<3U>*>::const_iterator );
+     
+      
 
 /**
        Returns pointer to element that has a face with with the supplied range of nodes.
@@ -897,126 +1002,84 @@ template pair<Element<1>*,Element<1>*>  parentElementsSharedByFace( typename vec
        but there can always only be a single element that matches the input lower-dim element that has the supplied nodes.
 */
 template<uint32_t dim>
-pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_iterator first,
-                                           typename vector<Node<dim>*>::const_iterator last )
+pair<Element<dim>*,uint32_t> parentElement( typename vector<Node<dim>*>::const_iterator first,
+                                            typename vector<Node<dim>*>::const_iterator last )
  {
-    assert( next(first,1) != last );
-    // back-up node iterator
-    auto nit{ first };
+    ErrorHandler& csmp_error( ErrorHandler::Instance() );
     
-    // the vectors must be sorted for the intersection algorithm
-    (*first)->SortParents();
-    (*next(first,1))->SortParents();
+    // 0. Find all parent elements that contain the supplied range of nodes
+    // --------------------------------------------------------------------
+    vector<Element<dim>*>  elmts_with_all_nodes = parentElementsContaining<dim>( first, last );
 
-    vector<Element<dim>*>  shared_elmts, isect;
-    // store the elements shared between the first and the second node in 'isect'
-    set_intersection( (*first)->ParentElementsBegin(), (*first)->ParentElementsEnd(),
-                      (*next(first,1))->ParentElementsBegin(), (*next(first,1))->ParentElementsEnd(),
-                      back_inserter(shared_elmts) );
-    first++;
-    first++;
-    
-    // find the shared parent elements for all the supplied nodes
-    while ( first != last ) {
-         (*first)->SortParents();
-         set_intersection( shared_elmts.begin(), shared_elmts.end(),
-                           (*first)->ParentElementsBegin(), (*first)->ParentElementsEnd(),
-                           back_inserter(isect) );
-         shared_elmts = isect;
-         isect.clear();
-         first++;
-      }
-    
-    // 1. eliminating potential lower-dimensional elements or nullprts from result vector
-    // ----------------------------------------------------------------------------------
-    auto new_end = remove_if( shared_elmts.begin(), shared_elmts.end(),
-                              []( const Element<dim>* eit )
-                               {
-                                  if constexpr ( dim == 3U )
-                                    return ( eit==nullptr || !eit->IsVolume() );
-                                  else if constexpr ( dim == 2U )
-                                    return ( eit==nullptr || !eit->IsSurface() );
-                                  else
-                                    return ( eit==nullptr );
-                               } );
-
-    shared_elmts.erase( new_end, shared_elmts.end() );
-    
-    // verifying that the results are as expected
-    if (  shared_elmts.empty() ) {
-          for ( ; first!=last; ++first )
-            printParents( (*first) );
-          ErrorHandler::Instance().Note( ERROR, "parentElement", "no suitable parent element was found" );
-          return make_pair( nullptr, numeric_limits<size_t>::max() );
-       }
-    if ( shared_elmts.size() > 1 )
-      {
-    
-// DEBUGGING - visualising the discovered higher dimensional elements
-#ifdef NODE_DEBUG
-Element<dim>* elmt1 = (*shared_parents.begin());
-elmt1->Idx( 1 );
-elmt1->CoordinateMatrix();
-DenseMatrix<DM_MIN>  DATA1( 1, elmt1->Nodes() );
-for ( int i{0}; i<elmt1->Nodes(); ++i ) DATA1(0,i) = static_cast<double>(elmt1->N(i)->AtBoundary());
-elmt1->FE()->OutputNodeDataToVTK( "parent_elmt", "node_flag", DATA1 );
-Element<dim>* elmt2 = (*shared_parents.rbegin());
-elmt2->Idx( 2 );
-elmt2->CoordinateMatrix();
-DenseMatrix<DM_MIN>  DATA2( 1, elmt2->Nodes() );
-for ( int i{0}; i<elmt2->Nodes(); ++i ) DATA2(0,i) = static_cast<double>(elmt2->N(i)->AtBoundary());
-elmt2->FE()->OutputNodeDataToVTK( "parent_elmt", "node_flag", DATA2 );
-// if there are two elements, are they overlapping?
-if ( interPenetrating<dim>( elmt1, elmt2 ) )
-  ErrorHandler::Instance().Note( WARNING, "parentElement", "more than one element was found",
-                                         "and they are interpenetrating (=partially or fully overlapping)");
-#endif
-        // gets resolved: ErrorHandler::Instance().Note( WARNING, "parentElement", "more than one element was found; function failed" );
-        
-        // finding the element with the least neighbors to go forward, eliminating all other ones
-        uint32_t min_number_of_nbors{6u};
-        for ( const auto& it : shared_elmts )
-          min_number_of_nbors = min( min_number_of_nbors, it->ConnectedNeighbors() );
-        
-        shared_elmts.erase( remove_if( shared_elmts.begin(), shared_elmts.end(),
-                                      [min_number_of_nbors](const Element<dim>* eptr) {
-                                           return ( eptr->ConnectedNeighbors() != min_number_of_nbors );
-                                         }  ), shared_elmts.end() );
-     }
-        
-    // 2. find the shared element's face that matches the nodes
+    // 1. If more than a single parent element shares all nodes
     // --------------------------------------------------------
-    Element<dim>*    eptr{ (*shared_elmts.begin()) };
-    set<Node<dim>*>  face_nodes( nit, last );
+    if ( elmts_with_all_nodes.size() > 1 )
+      {
+#ifndef NDEBUG
+         csmp_error.Note( WARNING, "parentElement()", "more than one element containing all nodes found.");
+#endif
+         // 1.1 trying erasing potential lower-dimensional elements or nullprts from result vector
+         if ( eraseLowerDimensionalOrInvalidCells( elmts_with_all_nodes ) == 0 ) {
+             if  constexpr( dim == 3 ) {
+                   csmp_error.Note( ERROR, "parentElement",
+                                           "no volume element containing all of the nodes in the supplied range found");
+                   return make_pair( nullptr, numeric_limits<uint32_t>::max() );
+                }
+             else if  constexpr( dim == 2 ) {
+                   csmp_error.Note( ERROR, "parentElement",
+                                           "no surface element containing all of the nodes in the supplied range found");
+                   return make_pair( nullptr, numeric_limits<uint32_t>::max() );
+                }
+           }
+         // 1.2 extra diagnostics if more than a single higher-dimensional element was found this message is unsuitable,
+         //     but diagnostics will be offered before returning
+         if ( elmts_with_all_nodes.size() == 2 )
+           {
+                 string node_numbers;
+                 while ( first != last ) { node_numbers += to_string( (*first)->Idx() ); node_numbers +=","; first++; }
+                 // checking whether the nodes belong to a face inside of the model
+                 auto faces = findAdjacentFacesFromNeighbors( elmts_with_all_nodes[0], // FASTER
+                                                              elmts_with_all_nodes[1] );
+                                                              
+                cout <<"\n"<<"parentElement: supplied nodes "<< node_numbers <<" lie on the model inside between "<< endl;
+                cout <<"\t"<< parseAbbreviated_FE_Type(elmts_with_all_nodes[0]->FE_Type());
+                cout <<":"<< elmts_with_all_nodes[0]->Idx() <<" face:"<< faces.first;
+                cout <<" and "<< parseAbbreviated_FE_Type(elmts_with_all_nodes[1]->FE_Type());
+                cout <<":"<< elmts_with_all_nodes[1]->Idx() <<" face:"<< faces.second << endl;
+                cout.flush();
+                   
+                csmp_error.Note( WARNING, "parentElement: two valid parents found:",
+                                "use parentElements() to handle model-interior Face with 2 equidimensional parent elements");
+
+                return make_pair( nullptr, numeric_limits<uint32_t>::max() );
+            }
+            
+      } // end more than one parent case
+
+    assert( elmts_with_all_nodes.size() == 1U );
     
-    // are the corner nodes of the faces contained in the input node pointer range?
-    const auto n_faces{ eptr->Faces() };
-    uint32_t   face_id{ numeric_limits<uint32_t>::max() };
-    for ( uint32_t face{0u}; face < n_faces; ++face ) {
-                auto face_nodes2 = eptr->CornerNodesOfFace( face );
-                if ( face_nodes == face_nodes2 ) {
-                     face_id = face;
-                     break;
-                  }
-             }
+    
+    // 2. Find the parent element's face that consists of the nodes
+    // ------------------------------------------------------------
+    uint32_t face_id = faceWithCornerNodes( elmts_with_all_nodes[0], first, last );
+                              
      // when the face has been found the result is returned
      if ( face_id != numeric_limits<uint32_t>::max() )
-       return make_pair( eptr, face_id );
-             
+       return make_pair( elmts_with_all_nodes[0], face_id );
  
-   ErrorHandler::Instance().Note( ERROR, "parentElement", "could not find face shared with higher dimensional element");
+   csmp_error.Note( ERROR, "parentElement", "could not find face shared with higher dimensional element");
 
    // nothing useful
    return make_pair( nullptr, numeric_limits<uint32_t>::max() );
     
  } // end parentElement1
 
-template pair<Element<3>*,size_t> parentElement( typename vector<Node<3>*>::const_iterator,
-                                                 typename vector<Node<3>*>::const_iterator );
-template pair<Element<2>*,size_t> parentElement( typename vector<Node<2>*>::const_iterator,
-                                                 typename vector<Node<2>*>::const_iterator );
-template pair<Element<1>*,size_t> parentElement( typename vector<Node<1>*>::const_iterator,
-                                                 typename vector<Node<1>*>::const_iterator );
+template pair<Element<3>*,uint32_t> parentElement( typename vector<Node<3>*>::const_iterator,
+                                                   typename vector<Node<3>*>::const_iterator );
+template pair<Element<2>*,uint32_t> parentElement( typename vector<Node<2>*>::const_iterator,
+                                                   typename vector<Node<2>*>::const_iterator );
+template pair<Element<1>*,uint32_t> parentElement( typename vector<Node<1>*>::const_iterator,
+                                                   typename vector<Node<1>*>::const_iterator );
 
 
 
@@ -1181,7 +1244,19 @@ size_t sizeOf( const Node<dim>* const nptr )
     // dynamic allocation
     total_size += nptr->Parents() * sizeof( Element<dim>* );
     total_size += nptr->Parents() * sizeof( ONE_BYTE_NUMBER );
+    // neighbor nodes
+    total_size += nptr->Neighbors() * sizeof( Node<dim>* );
+    // manifold
+    total_size += sizeof( NodeManifold<dim>* );
+    // coordinates
+    total_size += sizeof( Point<dim> );
+    // idx
+    total_size += sizeof(size_t);
+    // flags
+    total_size += sizeof(BOX_BOUNDARY);
+    total_size += sizeof(TOPOTYPE);
     // + local variable storage
+    total_size += sizeof(nptr->LVS());
     
     return total_size;
 
@@ -1194,7 +1269,7 @@ template size_t sizeOf( const Node<1>* const );
 
 
 /**
-    For a node that lies on an internal surface, method finds it volumetric (3D) or surface (2D) parent elements on the inside or outside of this lower dimensional feature.
+    For a single node that lies on an internal surface, method finds it volumetric (3D) or surface (2D) parent elements on the inside or outside of this lower dimensional feature.
     functions throws if assumptions are not met, i.e., the node does not lie in the interior of a lower dimensional feature.
     
     @attention the inside outside classification is based on a geometric average of the normals of the surface elements that the node forms part of.
