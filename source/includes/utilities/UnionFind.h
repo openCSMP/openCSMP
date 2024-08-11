@@ -21,8 +21,7 @@ class UnionFind {
   public:
       // This code assumes that passing around and storing an Item is very cheap.
       // Violating this could cause performance issues.
-      static_assert(sizeof(Item) <= 2 * sizeof(size_t),
-              "Item may be too large");
+      static_assert(sizeof(Item) <= 2 * sizeof(size_t), "Item may be too large");
 
       /// Say that two items are in the same subset.
       void SameComponent(Item x, Item y);
@@ -31,7 +30,7 @@ class UnionFind {
       template<typename Container>
       void Components( Container& container ) const
       {
-          for (auto component : components_) {
+          for (auto& component : components_) {
               auto& rec = records_[component];
               container.push_back(std::make_pair(rec.size_, rec.item_));
           }

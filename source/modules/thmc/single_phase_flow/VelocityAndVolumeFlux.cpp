@@ -526,8 +526,8 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
               // interpolation function derivatives at the nodes
               e.dN_AtBaryCenter( DERIV_ );
               velo_ = 0.;
-              for ( auto i{0U}; i<e.Nodes(); i++ )
-                for ( auto j{0U}; j<dim; j++ )
+              for ( uint32_t i{0U}; i<e.Nodes(); i++ )
+                for ( uint32_t j{0U}; j<dim; j++ )
                   velo_(j) += PF_[i]() * -DERIV_(j,i) * MathOperatorLHS<dim,CELL>::MTRL[0](j,j);
               
               if ( with_gravity_ )
@@ -560,7 +560,7 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
              // collecting averadge data for element variables
              velo_ = ivelo_ = flux_ = 0.;
              
-             for ( auto i{0U}; i<e.IntegrationPoints(); i++ )
+             for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ )
                {
                   // if density driven flow is computed, calculate rho * g * z
                   // comput density at integration points and any multiplier as well
@@ -572,7 +572,7 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
                           else {
                                e.N_AtIntegrationPoint( i, IPOL_ );
                                mult_fac_=0.;
-                               for ( auto j{0U}; j<e.Nodes(); j++ )
+                               for ( uint32_t j{0U}; j<e.Nodes(); j++ )
                                  mult_fac_ += IPOL_[j] * mult_vec_[j]();
                             }
                         }                      
@@ -599,13 +599,13 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
                   fill( VELOFLUX_.begin(), VELOFLUX_.end(), 0.0 );
                   
                   if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
-                    for ( auto n=0; n<e.Nodes(); n++ )
-                      for ( auto j{0U}; j<dim; j++ )
+                    for ( uint32_t n=0; n<e.Nodes(); n++ )
+                      for ( uint32_t j{0U}; j<dim; j++ )
                         // -DERIV because fluid flows down pressure
                         VELOFLUX_[j] += PF_[n]() * -DERIV_(j,n) * MathOperatorLHS<dim,CELL>::MTRL[0](j,j);
                   else
-                     for ( auto n=0; n<e.Nodes(); n++ )
-                      for ( auto j{0U}; j<dim; j++ )
+                     for ( uint32_t n=0u; n<e.Nodes(); n++ )
+                      for ( uint32_t j{0U}; j<dim; j++ )
                         VELOFLUX_[j] += PF_[n]() * -DERIV_(j,n) * MathOperatorLHS<dim,CELL>::MTRL[i](j,j);
             
                   if ( with_gravity_ ) VELOFLUX_[VERTICAL_AXIS_] -= ac_gravity_ *
@@ -613,7 +613,7 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
                                                                  mult_fac_;
 
                   // interstitial velocity & volume flux
-                  for ( auto n=0; n<dim; n++ ) {
+                  for ( uint32_t n=0u; n<dim; n++ ) {
                        IVELOFLUX_[n]   = VELOFLUX_[n]/phi_();
                        VELOFLUX_[dim] += VELOFLUX_[n]*VELOFLUX_[n];
                        // summing integration point values for later averaging
@@ -634,7 +634,7 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
                        // inserting velocity, volume flux, and interstitial velocity  
                        // into single STL vector:
                        // velocity & volume flux
-                       for ( auto k=0; k<dim; k++ ) { 
+                       for ( uint32_t k=0u; k<dim; k++ ) {
                             IPVF_[ i*components_ + k ] = VELOFLUX_[k];
                             IPVF_[ i*components_ + dim + 1 + k ] = IVELOFLUX_[k];
                          }
@@ -654,14 +654,14 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
              if ( e.Interpolation() == 1 and
                   e.IntegrationPoints() == 0 )
                {
-                  for ( auto k=0; k<dim; k++ )
+                  for ( uint32_t k=0; k<dim; k++ )
                     {
                        veloflux_[k]           = velo_[k];
                        veloflux_[dim + 1 + k] = ivelo_[k];
                     }
                   veloflux_[dim] = flux_();
                     
-                  for ( auto i{0U}; i<e.Nodes(); i++ )
+                  for ( uint32_t i{0U}; i<e.Nodes(); i++ )
                     temp_veloflux_[ e.N(i)->Idx() ].push_back( veloflux_ );
                }
              else
@@ -671,9 +671,9 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
                   // ---------------------------------------------------
                   e.ExtrapolateIntegrationPointVariableToNodes( components_, IPVF_, NVF_ );
      
-                  for ( auto i{0U}; i<e.Nodes(); i++ )
+                  for ( uint32_t i{0U}; i<e.Nodes(); i++ )
                     {
-                       for ( auto k=0; k<components_; k++ ) veloflux_[k] = NVF_[ i*components_ + k ];
+                       for ( uint32_t k=0; k<components_; k++ ) veloflux_[k] = NVF_[ i*components_ + k ];
                        temp_veloflux_[ e.N(i)->Idx() ].push_back( veloflux_ );
                     }
                }
@@ -691,7 +691,7 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
           // duplicate calculations are avoided via the boolean vector
           if ( !node_output_[ e.N(i)->Idx() ] )
             {
-               for ( auto j{0U}; j<components_; j++ )
+               for ( uint32_t j{0U}; j<components_; j++ )
                  {  
                     // averaging velocity/flux components
                     sum_=0.0;
@@ -746,7 +746,7 @@ void VelocityAndVolumeFlux<dim,CELL>::WriteOperands( CELL<dim>& e )
     if ( MathOperatorLHS<dim,CELL>::ApplicationCycle() == 2 )
       {
          if ( nodal_averaging_ )
-           for ( auto i{0U}; i<e.Nodes(); i++ )
+           for ( uint32_t i{0U}; i<e.Nodes(); i++ )
              // doing this operation only once per node
              if ( !node_output_[ e.N(i)->Idx() ] )
                {

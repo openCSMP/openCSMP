@@ -1074,6 +1074,12 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 		else
 */
 //crmat_.Out("test-compressed-row-matrix.txt");
+// TESTING TODO:
+iout = 2;
+idump = 0;
+int i{1};
+SAMG_SET_MODE_MESS(&i);
+cerr <<"\n..................................................................."<< endl;
 
 			SAMG( &nnu_, &nna_, &nsys_,
               &crmat_.ia[0], &crmat_.ja[0], &crmat_.a[0], &f_[0], &u_[0],
@@ -1094,6 +1100,12 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 #ifdef NO_PRIMARY_SOLVER_CONTROL
         CheckCycleCriterion( iswtch );
 #endif
+// TESTING TODO:
+iout = 2;
+idump = 0;
+int i{1};
+SAMG_SET_MODE_MESS(&i);
+cerr <<"\n..................................................................."<< endl;
 
         SAMG1( &nnu_, &nna_, &nsys_,
                &crmat_.ia[0], &crmat_.ja[0], &crmat_.a[0], &f_[0], &u_[0],
@@ -1170,6 +1182,12 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 #ifdef NO_PRIMARY_SOLVER_CONTROL
         CheckCycleCriterion( iswtch );
 #endif
+// TESTING TODO:
+iout = 2;
+idump = 0;
+int i{1};
+SAMG_SET_MODE_MESS(&i);
+cerr <<"\n..................................................................."<< endl;
 
         SAMG5( &nnu_, &nna_, &nsys_,
                &crmat_.ia[0], &crmat_.ja[0], &crmat_.a[0], &f_[0], &u_[0],

@@ -1541,7 +1541,6 @@ void ModelTopology::RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset )
         }
         if( !remove_eids.empty() || !remove_types.empty() )
         {
-            //if( csmp_error.Verbose() ){
             cerr <<"\nModelTopology::RemoveLowDimCellsFromDomains: ";
             cerr << remove_eids.size();
             cerr <<" elements of types: ";
@@ -1550,7 +1549,6 @@ void ModelTopology::RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset )
                 cerr << remove_types[ i ];
             }
             cerr <<" were excluded from region "<< (*rit).first << endl;
-            //}
             for( size_t i{0ul}; i< remove_types.size(); ++i )
               (*rit).second.first.erase( remove_types[i] );
             for( size_t i{0ul}; i < remove_eids.size(); ++i )

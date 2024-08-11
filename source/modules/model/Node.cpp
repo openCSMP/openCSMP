@@ -1268,60 +1268,6 @@ template size_t sizeOf( const Node<1>* const );
 
 
 
-/**
-    For a single node that lies on an internal surface, method finds it volumetric (3D) or surface (2D) parent elements on the inside or outside of this lower dimensional feature.
-    functions throws if assumptions are not met, i.e., the node does not lie in the interior of a lower dimensional feature.
-    
-    @attention the inside outside classification is based on a geometric average of the normals of the surface elements that the node forms part of.
-    If any of these normals diverges by more that 90o from the others the result is inconclusive
-    
-    @param node on the interior of a surface inside of the model
-    
-    @return vectors of pointers to the equidimensional elements on the inside and the outside of the surface that the node lies in the interior of.
-    
-*/
-template<uint32_t dim>
-pair<vector<Element<dim>*>,vector<Element<dim>*>>  parentElementsAdjacentTo( const Node<dim>* const node )
- {
-    // 0. checking prerequities
-    assert( node != nullptr );
-    assert( node->AtBoundary() == INTERNAL || node->AtBoundary() == NOT );
-    assert( node->Parents() >= 2U ); // must be initialised
- 
-    // 1. verifying that the node lies on an internal surface and determining unit normal to it by averaging
-    Point<dim>  avg_nrml;
-    if ( !node->UnitNormal( avg_nrml ) )
-      throw csmp::Exception( ERROR, "parentElementsAdjacentTo",
-                            "supplied node does not lie in the interior of a surface");
-    
-    vector<Element<dim>*> inside_elmt_ptrs, outside_elmt_ptrs;
-    uint32_t              e_count{ 0U };
-    
-    // 2. for the volumetric parent elements of the node, determine which side of the surface they lie on
-    //   (assumption: if dot product between node and barycentre of these elements is negative they lie on the inside)
-    for ( auto i{0U}; i<node->Parents(); i++ )
-      if ( node->Parent(i) && node->Parent(i)->IsEquidimensional() ) {
-           // find distance between node and barycentre of volumetric/surface element
-           Point<dim> bctr_vec = node->Parent(i)->BaryCenter() - node->Coordinate();
-           // inside elements are found
-           if ( dotProduct( avg_nrml, bctr_vec ) < 0. )
-             inside_elmt_ptrs.push_back( node->Parent(i) );
-           else
-             outside_elmt_ptrs.push_back( node->Parent(i) );
-           e_count++;
-       }
-       
-    if ( e_count >= 1 )
-    return make_pair( inside_elmt_ptrs, outside_elmt_ptrs );
-    
-    return pair<vector<Element<dim>*>,std::vector<Element<dim>*>>{};
-     
- } // end parentElementsInsideAndOutsideOfSurface
-
-template pair<vector<Element<3>*>,vector<Element<3>*>>  parentElementsAdjacentTo( const Node<3>* const );
-template pair<vector<Element<2>*>,vector<Element<2>*>>  parentElementsAdjacentTo( const Node<2>* const );
-
-
 
 
 /**

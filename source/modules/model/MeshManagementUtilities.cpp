@@ -6,6 +6,7 @@
 //  Copyright © 2021 Stephan Matthai. All rights reserved.
 //
 
+#include <unordered_set>
 #include "MeshManagementUtilities.h"
 #include "MeshManager.h"
 #include "MeshPatch.h"
@@ -15,6 +16,7 @@
 #include "Node.h"
 #include "ErrorHandler.h"
 #include "Box.h"
+#include "plf_colony.h"
 
 using namespace std;
 
@@ -527,8 +529,14 @@ template size_t  findContiguousMeshPatches( plf::colony<InterFace<1U>>::iterator
 
 
 
+
+
 /**
-      tested:OK
+      For the user-defined starting Node, finds the nodes which are connected to it.
+      
+      @param nptr pointer from which the breadth first search for neighbor nodes is started
+      @param contiguous_set_of_nodes the  nodes forming an interconnected cluster
+      @return how many nodes are in the interconnected cluster that was found
 */
 template<uint32_t dim>
 size_t findInterconnectedNodeCluster( Node<dim>* const nptr, std::set<Node<dim>*>& contiguous_set_of_nodes )
@@ -550,30 +558,32 @@ size_t findInterconnectedNodeCluster( Node<dim>* const nptr, std::set<Node<dim>*
       {
         for ( const auto& nit : node_neighbors )
           {
-             const size_t n_node_nbors{ nit->Neighbors() };
+             const auto n_node_nbors{ nit->Neighbors() };
              new_node_nbors.reserve( n_node_nbors );
-             for ( auto i{0U}; i < n_node_nbors; ++i ) {
+             for ( uint32_t i{0U}; i < n_node_nbors; ++i ) {
                  Node<dim>* nbor_ptr = nit->Neighbor(i);
                  assert( nbor_ptr != nullptr );
+                 // if the neighbor-node is not part of the cluster yet, it is added
                  if ( contiguous_set_of_nodes.find( nbor_ptr ) == contiguous_set_of_nodes.end() ) {
-                      new_node_nbors.push_back( nbor_ptr );
                       contiguous_set_of_nodes.insert( nbor_ptr );
+                      // remembering the new nodes for the next search
+                      new_node_nbors.push_back( nbor_ptr );
                       // cerr <<" "<< nbor_ptr->Idx();
                    }
                }
            }
         node_neighbors = new_node_nbors;
         new_node_nbors.clear();
-     }
+      }
     
   return contiguous_set_of_nodes.size();
       
 } // end findInterconnectedNodeCluster
 
-
 template size_t findInterconnectedNodeCluster( Node<3>* const nptr, set<Node<3>*>& contiguous_set_of_nodes );
 template size_t findInterconnectedNodeCluster( Node<2>* const nptr, set<Node<2>*>& contiguous_set_of_nodes );
 template size_t findInterconnectedNodeCluster( Node<1>* const nptr, set<Node<1>*>& contiguous_set_of_nodes );
+
 
 
 template<uint32_t dim>
@@ -596,6 +606,106 @@ size_t countCornerNodes(typename plf::colony<Element<dim>>::const_iterator elmts
 template size_t countCornerNodes<3>( typename plf::colony<Element<3>>::const_iterator , typename plf::colony<Element<3>>::const_iterator  );
 template size_t countCornerNodes<2>( typename plf::colony<Element<2>>::const_iterator , typename plf::colony<Element<2>>::const_iterator  );
 template size_t countCornerNodes<1>( typename plf::colony<Element<1>>::const_iterator , typename plf::colony<Element<1>>::const_iterator  );
+
+
+
+
+/**
+    Recursive Depth-First Search (DFS) traversal function of mesh based on its node connectivity.
+    Node connectivity-based traversal of mesh.
+*/
+/*
+template<uint32_t dim>
+void depthFirstSearch( const Node<dim>* node, std::unordered_set<const Node<dim>*>& visited )
+ {
+    if ( !node || visited.count(node) ) {
+        return; // If node is null or already visited, return
+      }
+
+    // Mark the current node as visited
+    visited.insert(node);
+
+    // Recur for all the neighbors of this node
+    for ( auto nit=node->NeighborsBegin(); nit!=node->NeighborsEnd(); ++nit ) {
+         depthFirstSearch( (*nit), visited );
+      }
+      
+} // end depthFirstSearch
+
+template void depthFirstSearch<3>( const Node<3>*, std::unordered_set<const Node<3>*>& );
+template void depthFirstSearch<2>( const Node<2>*, std::unordered_set<const Node<2>*>& );
+template void depthFirstSearch<1>( const Node<1>*, std::unordered_set<const Node<1>*>& );
+*/
+
+/**
+      Relying on the node-to-node connectivity, discovers all nodes in the supplied mesh.
+*/
+/*
+template<uint32_t dim>
+size_t findInterconnectedNodes( const plf::colony<Node<dim>>& nodes ) {
+    std::unordered_set<const Node<dim>*> visited; // To keep track of visited nodes
+    if (!nodes.empty()) {
+         // Start DFS from the first node in the vector
+         depthFirstSearch<dim>( (&(*nodes.begin())), visited );
+      }
+   return nodes.size();
+}
+
+template size_t findInterconnectedNodes( const plf::colony<Node<3>>& );
+template size_t findInterconnectedNodes( const plf::colony<Node<2>>& );
+template size_t findInterconnectedNodes( const plf::colony<Node<1>>& );
+*/
+
+
+// Template function to traverse the tree
+template <uint32_t dim>
+void depthFirstFilteredSearch( const Node<dim>* node, std::unordered_set<const Node<dim>*>& visited,
+                               std::set<std::pair<const Node<dim>*, const Node<dim>*>>& validEdges ) {
+    // Mark the current node as visited
+    visited.insert(node);
+
+    // Process the node (e.g., print it)
+    // process(node);
+
+    // Recur for all the nodes adjacent to this node that are connected by valid edges
+    //for (auto& neighbor : node->neighbors) {
+    for ( auto neighbor=node->NeighborsBegin(); neighbor!=node->NeighborsEnd(); ++neighbor ) {
+        auto edge        = make_pair( node, (*neighbor) );
+        //auto reverseEdge = make_pair( (*neighbor), node ); // For undirected trees
+        //if (validEdges.count(edge) || validEdges.count(reverseEdge) ) {
+        if ( validEdges.count(edge) ) {
+            if (visited.find(*neighbor) == visited.end()) {
+                depthFirstFilteredSearch( (*neighbor), visited, validEdges );
+            }
+        }
+    }
+}
+
+template void depthFirstFilteredSearch<3>( const Node<3>*, unordered_set<const Node<3>*>&, set<pair<const Node<3>*,const Node<3>*>>& );
+template void depthFirstFilteredSearch<2>( const Node<2>*, unordered_set<const Node<2>*>&, set<pair<const Node<2>*,const Node<2>*>>& );
+template void depthFirstFilteredSearch<1>( const Node<1>*, unordered_set<const Node<1>*>&, set<pair<const Node<1>*,const Node<1>*>>& );
+
+
+
+/**
+      Relying on the node-to-node connectivity, discovers all nodes in the supplied mesh.
+*/
+template<uint32_t dim>
+size_t findInterconnectedNodes( const plf::colony<Node<dim>>& nodes,
+                                set<pair<const Node<dim>*,const Node<dim>*>>& validEdges )
+ {
+    std::unordered_set<const Node<dim>*> visited; // To keep track of visited nodes
+    if (!nodes.empty()) {
+         // Start DFS from the first node in the vector
+         depthFirstFilteredSearch<dim>( (&(*nodes.begin())), visited, validEdges );
+      }
+   return nodes.size();
+ }
+
+template size_t findInterconnectedNodes( const plf::colony<Node<3>>&, set<pair<const Node<3>*,const Node<3>*>>& );
+template size_t findInterconnectedNodes( const plf::colony<Node<2>>&, set<pair<const Node<2>*,const Node<2>*>>& );
+template size_t findInterconnectedNodes( const plf::colony<Node<1>>&, set<pair<const Node<1>*,const Node<1>*>>& );
+
 
 
 
@@ -795,14 +905,14 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    set<set<Node<dim>*> > outer_elmt_faces;
 
    const auto n_outer_elmt_faces(outer_nbor->Faces());
-   for ( auto i{0U}; i<n_outer_elmt_faces; ++i ) {
+   for ( uint32_t i{0U}; i<n_outer_elmt_faces; ++i ) {
         // creating and recording the search key and face number
         outer_elmt_faces.insert( outer_nbor->CornerNodesOfFace(i) );
      }
      
    // 2. Searching the faces of the inner element that matches this face
    const auto n_inner_elmt_faces(inner_nbor->Faces());
-   for ( auto i{0U}; i<n_inner_elmt_faces; ++i ) {
+   for ( uint32_t i{0U}; i<n_inner_elmt_faces; ++i ) {
         // creating the search key and performing the search
         auto search_it = outer_elmt_faces.find( inner_nbor->CornerNodesOfFace(i) );
         // if a matching face is found
@@ -855,12 +965,12 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    map<Point<dim>,pair<uint32_t,uint32_t> > outer_elmt_nodes;
    // OUTER ELEMENT
    const auto n_nodes_outer_elmt(outer_nbor->Nodes());
-   for ( auto i{0U}; i<n_nodes_outer_elmt; ++i )
+   for ( uint32_t i{0U}; i<n_nodes_outer_elmt; ++i )
      outer_elmt_nodes.insert( make_pair( outer_nbor->N(i)->Coordinate(), make_pair(numeric_limits<uint32_t>::max(),i) ) );
    
    // 2. searching for the shared nodes
    const auto n_nodes_inner_elmt(inner_nbor->Nodes());
-   for ( auto i{0U}; i<n_nodes_inner_elmt; ++i ) {
+   for ( uint32_t i{0U}; i<n_nodes_inner_elmt; ++i ) {
         auto search_it=outer_elmt_nodes.find( inner_nbor->N(i)->Coordinate() );
         // if the node is shared between the elements its local id is stored
         if ( search_it != outer_elmt_nodes.end() )
@@ -879,7 +989,7 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    // INNER ELEMENT
    const auto n_inner_elmt_faces(inner_nbor->Faces());
    bool  inner_face_found(false);
-   for ( auto i{0U}; i<n_inner_elmt_faces; ++i ) {
+   for ( uint32_t i{0U}; i<n_inner_elmt_faces; ++i ) {
         auto fnids = inner_nbor->FE()->NodesOfFace(i);
         // creating and recording the search key
         set<uint32_t> face_nodes( fnids.begin(), fnids.end() );
@@ -899,7 +1009,7 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    // OUTER ELEMENT
    const auto n_outer_elmt_faces(outer_nbor->Faces());
    bool  outer_face_found(false);
-   for ( auto i{0U}; i<n_outer_elmt_faces; ++i ) {
+   for ( uint32_t i{0U}; i<n_outer_elmt_faces; ++i ) {
         auto fnids = outer_nbor->FE()->NodesOfFace( i );
         // creating and recording the search key
         set<uint32_t> face_nodes( fnids.begin(), fnids.end() );

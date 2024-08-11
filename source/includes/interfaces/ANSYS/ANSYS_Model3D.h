@@ -54,13 +54,13 @@ class ANSYS_Model3D : public Model<3U> {
 
 private:
     void InitializeANSYS( const char* mesh_file_set,
-                           const char* regions_file_prefix,
-                           bool binary_input_file );
+                          const char* regions_file_prefix,
+                          bool binary_input_file );
 
     void InitializeANSYS( bool isoparametric,
-                           const char* mesh_file_set,
-                           const char* regions_file_prefix,
-                           bool binary_file );
+                          const char* mesh_file_set,
+                          const char* regions_file_prefix,
+                          bool binary_file );
 
     std::vector<Point<3U> > node_coords_;        ///< node coordinates in VSet order to re-establish original node numbering if necessary
 };

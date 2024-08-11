@@ -1,6 +1,5 @@
 #include "NumIntegral_DNT_op_DN_NT_v_DN_dV.h"
 #include "PropertyDatabase.h"
-#include "Operand.h"
 #include "Exception.h"
 #include "Element.h"
 #include "Face.h"

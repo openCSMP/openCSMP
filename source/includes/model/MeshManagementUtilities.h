@@ -55,7 +55,7 @@ size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::c
                                              std::map<CELL<dim>*,MeshPatch<dim>>& );
 
 
-// DIAGNOSTICS
+// MESH DIAGNOSTICS TODO: move to analysis/MeshDiagnostics
 
 /// calculates the number of model cells that fall into the cell category indicated by placement; returns total number of cells in the model
 template<uint32_t dim>
@@ -69,21 +69,18 @@ bool isoparametricElementMesh( const Model<dim>& );
 template<uint32_t dim>
 size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>&, std::set<size_t>& );
 
-/// finds cells that have the same nodes and reports their numbers; verbose reports the duplicate cells
+/// finds cells sharing the same nodes and reports their numbers; verbose reports the duplicate cells
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t detectDuplicateCells( typename std::vector<CELL<dim>*>::const_iterator begin,
                              typename std::vector<CELL<dim>*>::const_iterator end,
                              bool verbose );
     
-/// finds nodes that are not connected to any elements, faces or interfaces. If there are any, it returns their number and pointers to them into the argument set
-template<uint32_t dim>
-size_t detectOrphanNodes( MeshManager<dim>&, std::set<Node<dim>*>& orphan_nodes );
-  
 /// Computes parent element barycentre-to-node distances for range of nodes;  returns them into vector [e1,e2...e_n,e_sum] with a length of parent elements+1
 template<uint32_t dim>
 void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,
                           typename std::vector<Node<dim>*>::const_iterator nodes_end,
                           std::vector<std::vector<double> >& distances_and_weight );
+
 
 /// container of element pointers and local face ids of elements contacting each other across a split boundary
 typedef std::pair<std::pair<Element<3U>*, uint32_t>, std::pair<Element<3U>*, uint32_t> > OppositeElements;
@@ -116,15 +113,37 @@ size_t  findNode( const Model<2U>&, double nx, double ny, double tolerance );
 /// 3D version
 size_t  findNode( const Model<3U>&, double nx, double ny, double nz, double tolerance );
 
-/// prints sorted global element node numbers in a compact way
-template<uint32_t dim, template<uint32_t> class CELL>
-void printNodes( const CELL<dim>& );
+/// finds nodes that are not connected to any elements, faces or interfaces. If there are any, it returns their number and pointers to them into the argument set
+template<uint32_t dim>
+size_t detectOrphanNodes( MeshManager<dim>&, std::set<Node<dim>*>& orphan_nodes );
+
+/// traverses mesh via node neighbors and collects nodes into argument set; @return number of discovered nodes; requires node to parent connectivity
+template<uint32_t dim>
+size_t findInterconnectedNodeCluster( Node<dim>* const, std::set<Node<dim>*>& contiguous_set_of_nodes );
+
+/// Relying on the node-to-node connectivity, uses a recursive depth first traversal to discover the interconnected nodes in the supplied range; set of node pairs defining the cel segments must be input
+template<uint32_t dim>
+size_t findInterconnectedNodes( const plf::colony<Node<dim>>& nodes, std::set<std::pair<const Node<dim>*,const Node<dim>*>>& validEdges );
+
+template<uint32_t dim>
+double minimumNodeSpacing( typename std::vector<Node<dim>*>::const_iterator first,
+                           typename std::vector<Node<dim>*>::const_iterator last );
+template<uint32_t dim>
+double maximumNodeSpacing( typename std::vector<Node<dim>*>::const_iterator first,
+                           typename std::vector<Node<dim>*>::const_iterator last );
+
+/// arithmetic mean of the node spacing in the provided range of nodes
+template<uint32_t dim>
+double averageNodeSpacing( typename std::vector<Node<dim>*>::const_iterator first,
+                           typename std::vector<Node<dim>*>::const_iterator last );
+
+/// checks whether point is contained in any of the elements in supplied region returning 'nullptr' or the element in which it is contained
+template<uint32_t dim>
+const Element<dim>* isContainedIn( const Region<dim>& subdomain, const std::array<double,dim>& search_point );
 
 
-// MESHING UTILITIES
 
-
-// MESHING UTILITIES FOR INDIVIDUAL ELEMENTS/FACES/INTERFACES
+// FUNCTIONALITY FOR INDIVIDUAL ELEMENTS/FACES/INTERFACES
 
 /// loops over the valid neighbors of the cell and sets their neighbor pointers to point to this cell to nullptr
 template<uint32_t dim, template<uint32_t> class CELL>
@@ -138,19 +157,15 @@ double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* cons
 template<uint32_t dim, template<uint32_t> class CELL>
 double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 );
 
-/// traverses mesh via node neighbors and collects nodes into argument set; @return number of discovered nodes; requires node to parent connectivity
-template<uint32_t dim>
-size_t findInterconnectedNodeCluster( Node<dim>* const, std::set<Node<dim>*>& contiguous_set_of_nodes );
-
 ///Loops over begin and end iterators of an element colony and counts all the corner nodes
 template<uint32_t dim>
 size_t countCornerNodes( typename plf::colony<Element<dim>>::const_iterator elmts_begin, typename plf::colony<Element<dim>>::const_iterator elmts_end  );
 
-/// relying on the parent element information from its nodes, method finds higher-dim neighbors of each element face and connects itself with them and vice versa; returns # found
+/// relying on the parent element information of its nodes,  finds equidimensional neighbors of element face and connects itself with them and vice versa; returns number of neighbors found
 template<uint32_t dim>
 size_t connectNeighborsUsingNodeParents( Element<dim>* const );
 
-// TODO: implement: not sure how to do this in a generic way
+// TODO: not implement yet: not sure how to do this in a generic way
 template<uint32_t dim>
 void updateParentElementConnectivity( Node<dim>* const );
 
@@ -158,24 +173,20 @@ void updateParentElementConnectivity( Node<dim>* const );
 template<uint32_t dim>
 void nodeNeighbors( const Region<dim>& subdomain, std::vector<std::set<size_t>>& node_neighbors, bool verbose=false );
 
-/// Using the parent elements of its nodes, finds its higher-dimensional neighbor on inside or outside
-template<uint32_t dim>
-Element<dim>* const findInnerHigherDimensionalNeighborFromNodes( Element<dim>* const, INTERFACE_SIDE );
-
-/// Connects nodes to Face, finding them by matching the faces of the supplied higher dimensional elements
+/// Connects nodes to Face, finding them by matching the faces of the supplied higher dimensional elements (NOT USED YET)
 template<uint32_t dim>
 void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
                                              Element<dim>* const outer_neighbor,
                                              Face<dim>* const );
 
-/// Connects nodes to InterFace, finding them by matching the faces of the supplied higher dimensional elements; face IDs are set as well
+/// Connects nodes to InterFace, finding them by matching the faces of the supplied higher dimensional elements; face IDs are set as well  (NOT USED YET)
 template<uint32_t dim>
 void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
                                              Element<dim>* const outer_neighbor,
                                              InterFace<dim>* const );
 
-
 /// Surt's method to efficiently erase vector Element from a pointer vector.
+// TODO: generalise to CELL type and Node templates
 template<uint32_t dim>
 void eraseElementPointerFromVector( std::vector<csmp::Element<dim>*>&, const Element<dim>* );
 
@@ -187,7 +198,7 @@ std::pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const ept
 template<uint32_t dim>
 std::pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element<dim>* const eptr2 );
 
-/// returns true if the elements contain each others barycentre
+/// returns true if the supplied elements contain each other's barycentre
 template<uint32_t dim>
 bool interPenetrating( const Element<dim>* const, const Element<dim>* const );
 
@@ -248,22 +259,10 @@ size_t  printLineElementRegion( const Model<dim>&, const char* region_name, bool
 template<uint32_t dim>
 void printNodeCoordinates( typename std::vector<Node<dim>*>::const_iterator first,
                            typename std::vector<Node<dim>*>::const_iterator last );
-template<uint32_t dim>
-double minimumNodeSpacing( typename std::vector<Node<dim>*>::const_iterator first,
-                           typename std::vector<Node<dim>*>::const_iterator last );
-template<uint32_t dim>
-double maximumNodeSpacing( typename std::vector<Node<dim>*>::const_iterator first,
-                           typename std::vector<Node<dim>*>::const_iterator last );
 
-/// arithmetic mean of the node spacing in the provided range of nodes
-template<uint32_t dim>
-double averageNodeSpacing( typename std::vector<Node<dim>*>::const_iterator first,
-                           typename std::vector<Node<dim>*>::const_iterator last );
-
-
-/// checks whether point is contained in any of the elements in supplied region returning 'nullptr' or the element in which it is contained
-template<uint32_t dim>
-const Element<dim>* isContainedIn( const Region<dim>& subdomain, const std::array<double,dim>& search_point );
+/// prints sorted global element node numbers in a compact way
+template<uint32_t dim, template<uint32_t> class CELL>
+void printNodes( const CELL<dim>& );
 
 } // end csmp
 

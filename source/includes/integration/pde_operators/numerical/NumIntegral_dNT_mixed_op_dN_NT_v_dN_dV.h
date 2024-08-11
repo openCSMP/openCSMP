@@ -8,6 +8,8 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /// advection-dispersion matrices @note v-term is calculated from 'grad' test operand x multiplier
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim,CELL> {
@@ -33,6 +35,8 @@ class NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim,CELL> 
     virtual void ComputeContribution( const CELL<dim>& );
     
     void SpatialDerivative( uint32_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
+
+    virtual NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>* clone() const { return new NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>(*this); }
 
   private:
 

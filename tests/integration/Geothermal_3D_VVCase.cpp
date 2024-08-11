@@ -144,7 +144,7 @@ void Geothermal_3D_VVCase::ComputeMassGravityTerm (Model<3U>& model)
 
     //! Thermal Visitor
     ThermalVisitor<DIM>   thermal_equilibrator( model);
-	SourceVisitor<DIM>    source_calculator(model);
+	  SourceVisitor<DIM>    source_calculator(model);
 
     //! get nodal rock properties
     model.ExtrapolateCellToNodeProperty("porosity", "nodal porosity");
@@ -262,7 +262,7 @@ void Geothermal_3D_VVCase::ComputeMassGravityTerm (Model<3U>& model)
     thermal_equilibrator.SetInitialProperties(&model );
     model.InterpolateNodeToCellProperty("nodal total heat capacity", "total heat capacity");
     model.InterpolateNodeToCellProperty("nodal total compressibility", "total compressibility");
-	model.InterpolateNodeToCellProperty("density liquid", "density liquid element");
+	  model.InterpolateNodeToCellProperty("density liquid", "density liquid element");
     
     ComputeMassConductivity(model);
     ComputeMassGravityTerm (model);
@@ -271,7 +271,7 @@ void Geothermal_3D_VVCase::ComputeMassGravityTerm (Model<3U>& model)
     thermal_equilibrator.SetInitialProperties(&model );
     model.InterpolateNodeToCellProperty("nodal total heat capacity", "total heat capacity");
     model.InterpolateNodeToCellProperty("nodal total compressibility", "total compressibility");
-	model.InterpolateNodeToCellProperty("density liquid", "density liquid element");
+	  model.InterpolateNodeToCellProperty("density liquid", "density liquid element");
   
     //!important
     //! set mt and hCl (advected properties) to Dirich at the boundaries where p, t are dirichlet
@@ -311,28 +311,28 @@ void Geothermal_3D_VVCase::ComputeMassGravityTerm (Model<3U>& model)
 	  }
       
       
-      model.Accept(thermal_equilibrator);
+    model.Accept(thermal_equilibrator);
 	  model.Accept(source_calculator);
 
-      model.InterpolateNodeToCellProperty("nodal total heat capacity", "total heat capacity");
-      model.InterpolateNodeToCellProperty("nodal total compressibility", "total compressibility");
+    model.InterpolateNodeToCellProperty("nodal total heat capacity", "total heat capacity");
+    model.InterpolateNodeToCellProperty("nodal total compressibility", "total compressibility");
 	  model.InterpolateNodeToCellProperty("density liquid", "density liquid element");
       
-      //! conductivity and gravity term depend on "density liquid"
-      ComputeMassConductivity(model);
-      ComputeMassGravityTerm (model);
+    //! conductivity and gravity term depend on "density liquid"
+    ComputeMassConductivity(model);
+    ComputeMassGravityTerm (model);
 
-      transient_pressure.TimeIncrement( time_increment );
-      model.Apply (transient_pressure);
+    transient_pressure.TimeIncrement( time_increment );
+    model.Apply (transient_pressure);
 
-      outputToVTU( model, config_name, output_props, time_step );
+    outputToVTU( model, config_name, output_props, time_step );
 
-      global_time += time_increment;
-      time_step ++;
-    }
-
-    
-    return;
+    global_time += time_increment;
+    time_step ++;
   }
+
+  
+  return;
+}
 
 }//end csmp

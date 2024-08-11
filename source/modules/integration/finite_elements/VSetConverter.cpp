@@ -2185,8 +2185,12 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
 
 
 
-// brute force approach: based on their position the nodes are flagged as boundary nodes
+/**
+     Applies box boundary flags assuming that the model stored in the VSet is box-shaped.
+     Brute force approach: based on the position the nodes are flagged as boundary nodes
+     
 // tested: O.K.
+*/
 template<uint32_t dim>
 void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, double tol )
  {

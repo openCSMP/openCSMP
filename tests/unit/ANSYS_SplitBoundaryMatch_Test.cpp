@@ -35,7 +35,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
 
 
 /**
-      Model 'Dyke_Split' contains several volumetric domains disconnected along node-matched split boundaries.
+      Model 'DykePartiallySplit' contains several volumetric domains disconnected along node-matched split boundaries.
       These domains are called:
       
       GEOL1_VOL

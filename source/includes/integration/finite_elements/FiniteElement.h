@@ -294,11 +294,10 @@ class FiniteElement {
     virtual   void    dN( DenseMatrix<DM_MIN>& );
   
     /// returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well
-    // REMOVE: only RST should be supported; use XYZtoRST (ParametricToPhysical) to compute point location, so far only FiniteVolumePolicy::RstToXYZ() exists
+    // TODO: REMOVE: only RST should be supported; use XYZtoRST (ParametricToPhysical) to compute point location, so far only FiniteVolumePolicy::RstToXYZ() exists
     virtual   double  dN_At( DenseMatrix<DM_MIN>&, const std::vector<double>& xyz );
 
     /// returns first derivative of interpolaton functions at quadrature point; determinant of the Jacobian is returned as well
-    // RENAME dN_AtPoint();
     virtual   double  dN_AtIntegrationPoint( DenseMatrix<DM_MIN>&, uint32_t gauss_point );
 
     /// returns first derivative of interpolaton functions at node; determinant of the Jacobian is returned as well

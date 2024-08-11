@@ -1051,7 +1051,7 @@ void SplitBoundaryInterface_Test<dim>::run()
       // test splitboundary from constructor of ansys model
       // JC: working on the QC process which is requried for the following models
       //detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
-      Detect_and_create_splitboundaries_from_constructor( "Dyke_Split" );
+      Detect_and_create_splitboundaries_from_constructor( "DykePartiallySplit" );
       // test splitboundary for complex ansys models
       Test_splitboundary_between_regions( "lamination" ); VERY SLOWWWW and negative jacobians warning ...
       */

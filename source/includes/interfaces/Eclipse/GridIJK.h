@@ -14,7 +14,7 @@ namespace csmp {
 
 template<uint32_t> class Element;
 
-// TODO: work in progress; a suitable constructor is missing
+// TODO: refactoring of EclipseInterface in progress; suitable constructor is missing for this extracted functionality
 /**
       Index mapper for the retrieval of cells by the I,J,K coordinates of the original model.
       

@@ -51,8 +51,9 @@ class MeshDiagnostics {
 
 
 /// checks input mesh for duplicate elements
+/// TODO: generalise to cells
 template<uint32_t dim>
-bool detectDuplicateElements( const Model<dim>& );
+bool detectCollocatedElements( const Model<dim>& );
 
 
 

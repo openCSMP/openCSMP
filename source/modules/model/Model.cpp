@@ -488,6 +488,8 @@ int createVariablesInVSetThatAreMissingFromDatabase( PropertyDatabase<dim>& dbas
  } // end createVariablesInVSetThatAreMissingFromDatabase
  
  
+ 
+ 
 
 
 /**
@@ -632,25 +634,27 @@ void Model<dim>::Initialize( VSet<dim>& vset )
        vset.Interfaces() > 0 )
     csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Face and InterFace objects not handled by this method.");
 
-  // 1. checking for neighbor connectivity and boundary flags
-  // the VSet must be correct calling initialise
-  if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) ) {
-       csmp_error.Note( WARNING, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing; establishing it now using VSet functionality.");
-       if constexpr ( dim == 2 )
-         vset.EstablishElementConnectivity2D();
-       if constexpr ( dim == 3 )
-         vset.EstablishElementConnectivity3D();
-    }
-  // 2. checking whether BOX_BOUNDARY flags are there which are essential for a model without boundary domains
+  // 1. checking whether BOX_BOUNDARY flags are there which are essential for a model without boundary domains
   if ( *min_element(vset.BFlagsBegin(),vset.BFlagsEnd()) ==  *max_element(vset.BFlagsBegin(),vset.BFlagsEnd()) ) {
-       // TODO: replace this code with:  recreateBoxBoundaryFlags( *this );  after construction is complete
        // computing a tolerance for the identification of BOX boundaries from the model coordinates
        double tolerance = fabs( vset.X_Range().second );
        tolerance = max( tolerance, fabs( vset.Y_Range().second ) );
        tolerance = max( tolerance, fabs( vset.Z_Range().second ) );
        tolerance *= 1.0e-5;
        csmp_error.Note( WARNING, "Model<dim>::Initialize(VSet):", "'BOX_BOUNDARY' flags are incomplete.");
-       VSetConverter<dim>().EstablishBoundaryFlagsForBoxModel( vset, tolerance );
+       // assigning box flags based on vertex locations assuming that model edges are aligned with coordinate axes
+       establishBoundaryFlagsForBoxModel( vset, tolerance );
+    }
+
+  // 2. checking for neighbor connectivity and boundary flags
+  // the VSet must be correct calling initialise
+  auto vset_contains_neighbor_connectivity{ vset.WithNeighbourConnectivity() };
+  if ( !vset_contains_neighbor_connectivity ) {
+       csmp_error.Note( WARNING, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing; establishing it now using VSet functionality.");
+       if constexpr ( dim == 2 )
+         vset.EstablishElementConnectivity2D();
+       if constexpr ( dim == 3 )
+         vset.EstablishElementConnectivity3D();
     }
 
   // 3. building the finite element mesh and property storage

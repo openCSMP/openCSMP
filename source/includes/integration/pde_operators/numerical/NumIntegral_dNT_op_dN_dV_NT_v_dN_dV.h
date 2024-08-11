@@ -7,6 +7,8 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /// advection-dispersion matrices @note v-term is calculated from 'grad' test operand x multiplier)
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV : public MathOperatorLHS<dim,CELL> {

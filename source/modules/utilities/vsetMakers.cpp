@@ -639,7 +639,7 @@ ModelTopology create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     deqElementNeighbors[43] = { 44, 42 };
     deqElementNeighbors[44] = { 33, 43 };
   	
-    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
+    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end() );
 
     // creating a matching model topology
     ModelTopology mesh_topology( "create_MeshPatchWithLineElements_VSet", true );
@@ -728,6 +728,87 @@ ModelTopology create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     
 } // end create_MeshPatchWithLineElements_VSet
 
+
+
+    /// 2D rectangular model the two halfs of each are offset from one another
+void create_Disconnected2D_VSet( VSet<2U>& vset )
+ {
+    //--------------------------ELEMENT TYPES
+  	//add element types
+    const CSMP_FEM_TYPE T(ISOPARAMETRIC_LINEAR_TRIANGLE), Q(ISOPARAMETRIC_LINEAR_QUADRILATERAL);
+    deque<int8_t> vecElementTypes = { Q,Q,T,T,Q };
+    const int n_cells{5};
+  	assert( vecElementTypes.size() == n_cells );
+    const size_t     n_nodes(12); // number of nodes
+  	deque<uint32_t>  npes{ 4, 4, 3, 3, 4 };  // number of nodes per element
+    deque<uint32_t>  epes{ 4, 4, 3, 3, 4 };  // nbors per element
+    // 0 = no faces nor interfaces
+  	vset.Resize( vecElementTypes, npes, epes, n_nodes, 0, 0 );
+  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
+
+  	//-----------------------NODES (12)
+  	//define node coordinates
+  	deque<double> px = { 1., 4., 1., 4., 1., 4., 5., 7., 5., 7., 5., 7. };
+    assert( px.size() == n_nodes );
+  	deque<double> py = { 5., 5., 3., 3., 1., 1., 5., 5., 3., 3., 1., 1. };
+    assert( py.size() == n_nodes );
+  	deque<double> pz(n_nodes,0.);
+  	  	  	
+  	vset.AddXYZ( px, py, pz );
+
+  	//--------------------------NODE BOUNDARY FLAGS (12)
+    const BOX_BOUNDARY B{BOTTOM}, R{RIGHT}, U{TOP}, L{LEFT}, I{INTERNAL};
+    vector<int8_t> bflags = { CNR4, U, L, I, CNR1, B, U, CNR3, I, R, B, CNR2 };
+    assert( bflags.size() == n_nodes );
+    
+    vset.AddBFlags( bflags.begin(), bflags.end() );
+    
+    //--------------------------TOPOTYPE NODE FLAGS (12)
+    const TOPOTYPE v{MESH_VERTEX}, e{EXTERIOR_POINT};
+    //                        0  1  2  3  4  5  6  7  8  9 10 11
+    vector<int8_t> gflags = { e, e, e, v, e, e, e, e, v, e, e, e };
+    assert( gflags.size() == n_nodes );
+    vset.AddBREP_Flags( gflags.begin(), gflags.end() );
+
+  	//--------------------------ELEMENTS (5)
+  	// define nodes per element
+    deque< vector<size_t> >  plist = { {2,3,1,0}, {4,5,3,2}, {6,9,7}, {6,8,9}, {10,11,9,8} };
+    assert( plist.size() == n_cells );
+    vset.AddPlist( plist.begin(), plist.end() );
+
+     //---------------------------------NEIGHBORS
+    //define neighbors per element
+    deque<vector<int64_t> > pfverts = { {1,I,U,L}, {B,I,0,L}, {4,2,I}, {R,U,3}, {B,R,3,I} };
+    assert( pfverts.size() == n_cells );
+    vset.AddPfverts( pfverts.begin(), pfverts.end() );
+
+     //---------------------------------MATERIALS
+    const size_t n_elements{5};
+    vector<int32_t> pmtrl = { 1,1,2,2,2 };
+    assert( pmtrl.size() == n_elements );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+    
+     //---------------------------------ELEMENT & NODE NUMBERS
+    PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+    elmt_nums.Reserve( vset.Elements() );
+    for ( size_t n{0U}; n<vset.Elements(); ++n ) pushBack( elmt_nums, makeScalar( ANY, n ) );
+    vset.AddData( "element number", elmt_nums );
+    // node numbers
+    PropertyData node_nums( NODE, SCALAR, 2U );
+    node_nums.Reserve( vset.Vertices() );
+    for ( size_t n{0U}; n<vset.Vertices(); ++n ) pushBack( node_nums, makeScalar( ANY, n ) );
+    vset.AddData( "node number", node_nums );
+    
+     //---------------------------------PERMEABILITY
+/*
+    PropertyData perm( ELEMENT, SCALAR, 2U );
+    perm.Reserve( vset.Elements() );
+    for ( size_t n{0U}; n<5; ++n ) pushBack( perm, makeScalar( ANY, 1.0e-13 ) );
+    vset.AddData( "permeability", perm );
+*/
+    vset.Out();
+
+ } // end create_Disconnected2D_VSet
 
 
 
@@ -3411,6 +3492,71 @@ void create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
     vset.Out();
     
 } // end create_Pyramid_VSet
+
+
+
+// helper Function to generate the corner points for a 3D corner-point grid
+static  vector<array<Point<3U>,8>> generateCornerPointGrid( double dx, double dy, double dz )
+  {
+      // Define the dimensions of the grid
+      constexpr int I = 6; // Number of cells in the I-direction
+      constexpr int J = 8; // Number of cells in the J-direction
+      constexpr int K = 4; // Number of cells in the K-direction
+      
+      vector<array<Point<3U>, 8>> grid;
+
+      // Loop over each cell in the grid
+      for (int k = 0; k < K; ++k) {
+          for (int j = 0; j < J; ++j) {
+              for (int i = 0; i < I; ++i) {
+                  // Calculate the coordinates of the 8 corner points of the current cell
+                  array<Point<3U>,8> corners = {
+                      Point<3U>{ i * dx,     j * dy,     k * dz     }, // (0, 0, 0)
+                      Point<3U>{ (i+1) * dx, j * dy,     k * dz     }, // (1, 0, 0)
+                      Point<3U>{ (i+1) * dx, (j+1) * dy, k * dz     }, // (1, 1, 0)
+                      Point<3U>{ i * dx,     (j+1) * dy, k * dz     }, // (0, 1, 0)
+                      Point<3U>{ i * dx,     j * dy,     (k+1) * dz }, // (0, 0, 1)
+                      Point<3U>{ (i+1) * dx, j * dy,     (k+1) * dz }, // (1, 0, 1)
+                      Point<3U>{ (i+1) * dx, (j+1) * dy, (k+1) * dz }, // (1, 1, 1)
+                      Point<3U>{ i * dx,     (j+1) * dy, (k+1) * dz }  // (0, 1, 1)
+                  };
+
+                  // Add the corners to the grid
+                  grid.push_back(corners);
+              }
+          }
+      }
+
+    return grid;
+      
+ } // end generateCornerPointGrid
+
+
+
+/**
+    Basic hexahedral grid for mesh-modifcation tests
+*/
+void create_CornerPointGrid_6i_8j_4k( VSet<3U>& vset )
+ {
+     // Define the cell dimensions
+     double dx = 1.0;
+     double dy = 1.0;
+     double dz = 1.0;
+
+     // Generate the corner-point grid
+     vector<array<Point<3U>,8>> grid = generateCornerPointGrid(dx, dy, dz);
+
+      // Print the corner points for each cell
+      for (size_t cellIndex = 0; cellIndex < grid.size(); ++cellIndex) {
+          cout << "Cell " << cellIndex << " corner points:\n";
+          for (const auto& corner : grid[cellIndex]) {
+              cout << "(" << corner[0] << ", " << corner[1] << ", " << corner[2] << ")\n";
+          }
+          cout << "\n";
+      }
+
+ } // end create_CornerPointGrid
+
 
 
 

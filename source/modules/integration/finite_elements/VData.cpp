@@ -2560,18 +2560,22 @@ uint32_t  VData::OrderOfFiniteElementInterpolationFunctions() const
 
 
 /**
-    Searches 'pfverts' for elements without neighbors; returns false in that case,
-    else returns true
+    Searches 'pfverts' for elements that have all their neighbors; returns false if not a single one can be found.
+    
+    @note a simple yet stricter check is not possible based on the neighbor connectivity because their may
+    always be legitimate cells without any neighbors like standalone line or surface elements.
 */
 bool VData::WithNeighbourConnectivity() const
  {
+    if ( pfverts.empty() ) return false;
+    // if cells are contained that have all their neighbors
     for ( const auto& it : pfverts ) {
-         uint32_t count{0u};
-         for ( const auto pfit : it )
-           if ( pfit < 0 ) count++;
-         if ( count == it.size() ) return false;
+         uint32_t valid_nbors{0u};
+         for ( const auto& pfit : it )
+           if ( pfit >= 0 ) valid_nbors++;
+         if ( valid_nbors == it.size() ) return true;
       }
-    return true;
+    return false;
  }
 
 
@@ -3981,7 +3985,7 @@ void VData::EstablishNodeNeighborConnectivity( vector<set<size_t>>& pnode ) cons
     // all cells involving nodes: elements, faces, interfaces
     const size_t n_cells{ plist.size() };
     // looping over the elements to get the corner nodes of their segments
-    for ( size_t elmt{0}; elmt < n_cells; ++elmt ) {
+    for ( size_t elmt{0ul}; elmt < n_cells; ++elmt ) {
          // getting the element type
          const auto CSMP_FE_type = (HybridElementTypeMesh()) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
          if ( CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) > 2 ) {

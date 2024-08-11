@@ -1546,6 +1546,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
         { 
             Update_TDS((*it),time_increment); //update to time level: time + time_increment
             
+            // TODO: rather than reading entire array, consider modifying component in situ using new LVS method
             ArrayVariable array;
             (*it)->getNode()->Read(this->key_time, array);
             array.Component(7, time - time_increment); //previous time stamp

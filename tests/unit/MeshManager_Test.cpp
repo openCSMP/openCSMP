@@ -17,6 +17,8 @@
 #include "compareFloats.h"
 
 #include "ANSYS_Model3D.h"
+#include "ANSYS_Interface.h"
+#include "ModelTopology.h"
 
 #include "IsoparametricLinearPyramid.h"
 #include "VTK_Interface.h"
@@ -36,6 +38,48 @@ uses "CSMP-1phase-variables.txt"
 MeshManager_Test::MeshManager_Test()
 {
 }
+
+
+/**
+   Construct raw model using only the regions specified in -regions.txt file and eliminating lower-dim elements from these regions
+*/
+void MeshManager_Test::ConstructANSYS_ModelWithoutModification( const char* model_name )
+ {
+    const string mesh_file_set{ model_name };
+    VSet<3U>  vset;
+    bool isoparametric_elements( true );
+
+    ModelTopology   mesh_topology( isoparametric_elements );
+    ANSYS_Interface mesh_interface( isoparametric_elements );
+
+    // 1. reading the mesh from ANSYS-CSMP-input files
+    const bool binary_input_file{true};
+    mesh_interface.Read_ANSYS_Mesh( mesh_file_set, vset, mesh_topology, binary_input_file );
+    
+    // 2. ATTENTION (comment from SKM): Since ANSYS does not output the neighbour connectivity correctly,
+    //    the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
+    //    later on this connectivity will be recreated inside of the Model where suitable machinery exists.
+    vset.RemovePfverts();
+
+    // 3. keeping only the highest-dimensional elements in regions which have been specified in regions file
+     {
+        mesh_topology.RemoveLowDimCellsFromDomains( vset );
+        mesh_topology.ReduceToDomains( model_name );
+        //    reducing the element data to the desired elements specified in the topology object
+        //    if the element numbers in the two are different.
+        if ( mesh_topology.Cells() != vset.Elements() + vset.Faces() + vset.Interfaces() ) {
+            map<size_t,size_t>  old_and_new_elmtids;
+            mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
+            vset.ReduceTo( old_and_new_elmtids );
+            old_and_new_elmtids.clear();
+          }
+      }
+
+   // constructor that ignores regions, but recreates box boundary flags for box-shaped tetrahedral models
+   delete model3D_ptr_; // any earlier 3D model
+   model3D_ptr_ = new Model<3U>( vset, "MeshManager_Test-variables.txt" );
+   
+ } // end
 
 
 
@@ -145,8 +189,6 @@ void MeshManager_Test::run()
 
   // tests whether traversal works for contiguous model
   _test( Test_MeshTraversal3D(/* Pyramid_Hexa_VSet */) );
-  // TODO: add test for discontiguous model 'Dyke_Split'
-  
   
   // building more complex 'FracBox' model with Boundaries and lower-dimensional elements for further testing
   VSet<3U>      vset;
@@ -196,6 +238,7 @@ void MeshManager_Test::run()
 
 /**
     Checks that numbers of elements etc. in mesh manager do indeed reflect those of input model
+    Tests: Nodes(), Elements(), Faces(), InterFaces(), HybridElementMesh(), IsContiguous(), OutputMeshTo(vset) and node-nbor connectivity
 */
 void MeshManager_Test::TestBasics()
 {
@@ -213,6 +256,9 @@ void MeshManager_Test::TestBasics()
 
   // returns true if the mesh consists of multiple element types
   _test(mesh.HybridElementMesh() == true);
+  
+  // see whether manager correctly detects model that consists of disconnected mesh patches
+  _test( Test_IsContiguous() );
 
   // counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
   set<size_t> test_set;
@@ -247,9 +293,78 @@ void MeshManager_Test::TestBasics()
   // do all nodes have the expected neighbors?
   vector<set<size_t>>  node_neighbors;
   nodeNeighbors( model_domain, node_neighbors );
-  // testing using the connectivity from the VSet
+  
+  // testing OutputMeshTo(vset) and the node-neighbor connectivity from the VSet
+  VSet<2> test_vset;
+  const bool get_indices_from_stored_variables{true};
+  model2D.OutputMeshTo( test_vset, get_indices_from_stored_variables );
+  vector<set<size_t>> pnode1, pnode2;
+  vset2D.EstablishNodeNeighborConnectivity( pnode1 );
+  test_vset.EstablishNodeNeighborConnectivity( pnode2 );
+  _test( pnode1.size() == pnode2.size() );
+  for ( size_t i{0ul}; i<pnode1.size(); ++i )
+    _test( pnode1[i].size() == pnode2[i].size() );
+    
+  // testing HasNodeManifolds()
+  _test( !model2D.Mesh().HasNodeManifolds() );
+  // example mesh with manifolds
+  {
+    VSet<2> vset_with_manifolds;
+    ModelTopology  topo = create_BoundarySplitBoundaryPatch( vset_with_manifolds );
+    Model<2> split_model( topo, vset_with_manifolds, "CSMP-variables.txt", false );
+    split_model.Name("BoundarySplitBoundaryPatch");
+    // using vsetMaker's SPLIT22_BASIC for testing
+    _test( split_model.Mesh().HasNodeManifolds() );
+    _test( distance( split_model.Mesh().NodeManifoldsBegin(), split_model.Mesh().NodeManifoldsEnd() ) == 6 );
+  }
 
 } // end TestBasics
+
+
+
+
+
+
+/**
+      For discontiguous model 'DykePartiallySplit' and contiguous model '' tests whether contiguity is correctly diagonosed
+*/
+bool MeshManager_Test::Test_IsContiguous()
+ {
+     bool correct_diagnosis{true};
+     
+     // 3D discontiguous model DykeAllLayersSplit (1785 nodes) vs. DykeAllLayersSplit (1302 nodes)
+     {
+       const string model_name{"DykeAllLayersSplit"};
+       // ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), "MeshManager_Test-variables.txt", true );
+       // IMPORTANT - model needs to be build differenty to avoid any modification before testing
+       ConstructANSYS_ModelWithoutModification( model_name.c_str() );
+        _test( model3D_ptr_->Mesh().IsContiguous() == false );
+        if ( model3D_ptr_->Mesh().IsContiguous() ) correct_diagnosis = false;
+     }
+     // 2D discontiguous model
+     {
+        VSet<2> vset;
+        create_Disconnected2D_VSet( vset );
+        Model<2> model( vset, "CSMP-variables.txt" );
+        _test( model.Mesh().IsContiguous() == false );
+        // diagnostics for debugging
+        if ( model.Mesh().IsContiguous() ) {
+             Region<2> reg = model.Region("Model");
+             for ( const auto& nit : reg.NodeVector() ) printNeighbors( nit );
+             correct_diagnosis = false;
+          }
+     }
+     // 2D model which should be contiguous
+     {
+        VSet<2> vset;
+        create_MeshPatchWithLineElements_VSet( vset );
+        Model<2> model( vset, "CSMP-variables.txt" );
+        _test( model.Mesh().IsContiguous() == true );
+        if ( !model.Mesh().IsContiguous() ) correct_diagnosis = false;
+     }
+     
+     return correct_diagnosis;
+ }
 
 
 

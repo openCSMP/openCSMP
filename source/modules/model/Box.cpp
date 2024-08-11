@@ -5,6 +5,7 @@
 #include "Model.h"
 #include "ErrorHandler.h"
 #include "Exception.h"
+#include "compareFloats.h"
 
 using namespace std;
 
@@ -2742,6 +2743,307 @@ double linearInterpolate( const pair<Point<3U>,double>& p1, // endpoint1, value1
     return p1.second + (dist * dval) / dx;
 
 } // end
+
+
+
+
+
+
+/**
+     Finds edges in boxed shaped model and gibes them a BOX_BOUDARY_FLAG
+     dependent on their location.
+*/
+template<uint32_t dim>
+void flagEdges( VSet<dim>& vset, double tol, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax )
+ {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+     // finding min-max of x, and y coordinates of boundary nodes
+     map<size_t,double>  bflags;
+
+     // 3D CASE finding the edges on the basis of their coordinates
+     // and flagging them accordingly. note there is no 2D case since in 2D we
+     // are splitting up triangles that belong to two boundaries so that
+     // they belong to only one side
+     size_t n_node(0U);
+     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++, n_node++ )
+       {
+          // no flagging at all
+          if ( (*bit) == 0 || (*bit) == IRREGULAR )
+            {
+               csmp_error.Note( ERROR, "flagEdges",
+                               "Skipping node, the boundary flag of which could not be identified" );
+               cout <<"\nNode "<< n_node <<", flagged: "<< (*bit) << endl;
+            }
+          
+          // Edges along the back side (Edges 1 to 4)
+          if ( approximatelyEqual(vset.Pz( n_node ),zmin,tol) )
+             {
+                // EDGE1
+                if ( approximatelyEqual(vset.Py( n_node ),ymin,tol) &&
+                     vset.Px( n_node ) > xmin && vset.Px( n_node ) < xmax )
+                     (*bit) = BACK_BOTTOM;
+                // EDGE2
+                if ( approximatelyEqual(vset.Px( n_node ),xmax,tol) &&
+                     vset.Py( n_node ) > ymin && vset.Py( n_node ) < ymax )
+                     (*bit) = BACK_RIGHT;
+                // EDGE3
+                if ( approximatelyEqual(vset.Py( n_node ),ymax,tol) &&
+                     vset.Px( n_node ) > xmin && vset.Px( n_node ) < xmax )
+                     (*bit) = BACK_TOP;
+                // EDGE4
+                if ( approximatelyEqual(vset.Px( n_node ),xmin,tol) &&
+                     vset.Py( n_node ) > ymin && vset.Py( n_node ) < ymax )
+                     (*bit) = BACK_LEFT;
+             }
+             
+          // Edges along the front side (Edges 9 to 12)
+          if ( approximatelyEqual(vset.Pz( n_node ),zmax) )
+             {
+                // EDGE9
+                if ( approximatelyEqual(vset.Py( n_node ),ymin,tol) &&
+                     vset.Px( n_node ) > xmin && vset.Px( n_node ) < xmax )
+                     (*bit) = FRONT_BOTTOM;
+                // EDGE10
+                if ( approximatelyEqual(vset.Px( n_node ),xmax,tol) &&
+                     vset.Py( n_node ) > ymin && vset.Py( n_node ) < ymax )
+                     (*bit) = FRONT_RIGHT;
+                // EDGE11
+                if ( approximatelyEqual(vset.Py( n_node ),ymax,tol) &&
+                     vset.Px( n_node ) > xmin && vset.Px( n_node ) < xmax )
+                     (*bit) = FRONT_TOP;
+                // EDGE12
+                if ( approximatelyEqual(vset.Px( n_node ),xmin,tol) &&
+                     vset.Py( n_node ) > ymin && vset.Py( n_node ) < ymax )
+                     (*bit) = FRONT_LEFT;
+             }
+          
+          // Edges along the right side (Edges 6 and 7)
+          if ( approximatelyEqual(vset.Px( n_node ),xmax)  )
+             {
+                // EDGE6
+                if ( approximatelyEqual(vset.Py( n_node ),ymin,tol) &&
+                     vset.Pz( n_node ) > zmin && vset.Pz( n_node ) < zmax )
+                     (*bit) = BOTTOM_RIGHT;
+                // EDGE7
+                if ( approximatelyEqual(vset.Py( n_node ),ymax,tol) &&
+                     vset.Pz( n_node ) > zmin && vset.Pz( n_node ) < zmax )
+                     (*bit) = TOP_RIGHT;
+             }
+          
+          // Edges along the left side (Edges 5 and 8)
+          if ( approximatelyEqual(vset.Px( n_node ),xmin)  )
+             {
+                // EDGE5
+                if ( approximatelyEqual(vset.Py( n_node ),ymin,tol) &&
+                     vset.Pz( n_node ) > zmin && vset.Pz( n_node ) < zmax )
+                     (*bit) = BOTTOM_LEFT;
+                // EDGE8
+                if ( approximatelyEqual(vset.Py( n_node ),ymax,tol) &&
+                     vset.Pz( n_node ) > zmin && vset.Pz( n_node ) < zmax )
+                     (*bit) = TOP_LEFT;
+             }
+       }
+       
+ } // end flagEdges
+
+
+
+
+
+template<uint32_t dim>
+void flagCornerNodes( VSet<dim>& vset, double tol, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax )
+ {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+     // finding min-max of x, and y coordinates of boundary nodes
+     map<size_t,int8_t>  bflags;
+     size_t              flagging_count(0U);
+     
+     // 2D CASE finding corners nodes on the basis of their coordinates
+     // and flagging them accordingly
+     if constexpr ( dim != 3 )
+       {
+         size_t n_node(0U);
+         for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++, n_node++ )
+           {
+              if ( (*bit) < INTERNAL ) {
+                   csmp_error.Note( WARNING, "VSetConverter<dim>::FlagCornerNodes (2D case)",
+                                     "Skipping node, the BOX_boundary flag of which could not be identified" );
+                   cerr <<"\nNode "<< n_node <<", flagged: "<< parseBoundary( static_cast<BOX_BOUNDARY>(*bit) ) << endl;
+                }
+              else if ( (*bit) != NOT )
+                {
+                   // CNR1
+                   if ( approximatelyEqual( vset.Px( n_node ), xmin, tol ) && approximatelyEqual( vset.Py( n_node ), ymin ) )
+                     { (*bit) = CNR_MIN; flagging_count++; }
+                   // CNR2
+                   else if ( approximatelyEqual( vset.Px( n_node ), xmax, tol ) && approximatelyEqual( vset.Py( n_node ), ymin ) )
+                     { (*bit) = CNR_MIN_MAXX; flagging_count++; }
+                   // CNR3
+                   else if ( approximatelyEqual( vset.Px( n_node ), xmax, tol ) && approximatelyEqual( vset.Py( n_node ), ymax ) )
+                     { (*bit) = CNR_MAX_MAXX; flagging_count++; }
+                   // CNR4
+                   else if ( approximatelyEqual( vset.Px( n_node ), xmin, tol ) && approximatelyEqual( vset.Py( n_node ), ymax ) )
+                     { (*bit) = CNR_MAX_MINXZ; flagging_count++; }
+                }
+           }
+         if ( flagging_count < 4U ) {
+              csmp_error.Note( WARNING, "flagCornerNodes (2D case)",
+                                          "Less than 4 corner nodes could be flagged" );
+              cout <<"\nNumber of flagged nodes: "<< flagging_count << endl;
+           }
+         return;
+       } // end 2D case
+
+     // 3D CASE finding corners nodes on the basis of their coordinates
+     // and flagging them accordingly
+     if constexpr( dim == 3 )
+       {
+         size_t n_node(0U);
+         for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++, n_node++ )
+           {
+              if ( (*bit) < INTERNAL ) {
+                   csmp_error.Note( WARNING, "flagCornerNodes (3D case)",
+                                             "Skipping node, the boundary flag of which could not be identified" );
+                   cout <<"\nNode "<< n_node <<", flagged: "<< (*bit) << endl;
+                }
+              else if ( (*bit) != NOT )
+                {
+                   if ( approximatelyEqual( vset.Pz( n_node ), zmin, tol ) )
+                     {
+                        // CNR1
+                        if ( approximatelyEqual(vset.Px( n_node ),xmin,tol) && approximatelyEqual(vset.Py( n_node ),ymin,tol) )
+                          { (*bit) = CNR_MIN; flagging_count++; }
+                        // CNR2
+                        else if ( approximatelyEqual(vset.Px( n_node ),xmax,tol) && approximatelyEqual(vset.Py( n_node ),ymin,tol) )
+                          { (*bit) = CNR_MIN_MAXX; flagging_count++; }
+                        // CNR3
+                        else if ( approximatelyEqual(vset.Px( n_node ),xmax,tol) && approximatelyEqual(vset.Py( n_node ),ymax,tol) )
+                          { (*bit) = CNR_MAX_MAXX; flagging_count++; }
+                        // CNR4
+                        else if ( approximatelyEqual(vset.Px( n_node ),xmin,tol) && approximatelyEqual(vset.Py( n_node ),ymax,tol) )
+                          { (*bit) = CNR_MAX_MINXZ; flagging_count++; }
+                     }
+                   else if ( approximatelyEqual( vset.Pz( n_node ), zmax, tol ) )
+                     {
+                        // CNR5
+                        if ( approximatelyEqual(vset.Px( n_node ),xmin,tol) && approximatelyEqual(vset.Py( n_node ),ymin,tol) )
+                          { (*bit) = CNR_MIN_MAXZ; flagging_count++; }
+                        // CNR6
+                        else if ( approximatelyEqual(vset.Px( n_node ),xmax,tol) && approximatelyEqual(vset.Py( n_node ),ymin,tol) )
+                          { (*bit) = CNR_MIN_MAXXZ; flagging_count++; }
+                        // CNR7
+                        else if ( approximatelyEqual(vset.Px( n_node ),xmax,tol) && approximatelyEqual(vset.Py( n_node ),ymax,tol) )
+                          { (*bit) = CNR_MAX; flagging_count++; }
+                        // CNR8
+                        else if ( approximatelyEqual(vset.Px( n_node ),xmin,tol) && approximatelyEqual(vset.Py( n_node ),ymax,tol) )
+                          { (*bit) = CNR_MAX_MAXZ; flagging_count++; }
+                     }
+                }
+           }
+
+         if ( flagging_count < 8U ) {
+              csmp_error.Note( WARNING, "flagCornerNodes (3D case)",
+                                         "Less than 8 nodes were identified as model corners" );
+              cout <<"\nNumber of flagged nodes: "<< flagging_count << endl;
+           }
+           
+      } // end 3D
+        
+ } // end FlagCornerNodes
+
+
+
+
+
+/**
+     Applies box boundary flags assuming that the model stored in the VSet is box-shaped.
+     Brute force approach: based on the position the nodes are flagged as boundary nodes
+     
+     @param tol gives the precision with which the nodes must be matched.
+     
+// tested: O.K.
+*/
+template<uint32_t dim>
+void establishBoundaryFlagsForBoxModel( VSet<dim>& vset, double tol )
+ {
+     // 0. getting rid of the existing boundary conditions
+     // --------------------------------------------------
+     vset.RemoveBflags();
+
+     // 1. finding the dimensions of the box-shaped model
+     //    assuming that the boundary have been identified
+     //    but the flags are incorrect thus far
+     // -------------------------------------------------
+     double xmin, xmax, ymin, ymax, zmin, zmax;
+     xmin = xmax = vset.Px(0);
+     ymin = ymax = vset.Py(0);
+     zmin = zmax = vset.Pz(0);
+
+     double  x, y, z;
+
+     for ( size_t i{0U}; i<vset.Vertices(); i++ )
+       {
+          x = vset.Px(i);
+          y = vset.Py(i);
+          z = vset.Pz(i);
+          if ( x < xmin ) xmin = x;
+          if ( x > xmax ) xmax = x;
+          if ( y < ymin ) ymin = y;
+          if ( y > ymax ) ymax = y;
+          if ( z < zmin ) zmin = z;
+          if ( z > zmax ) zmax = z;
+       }
+
+     // making new boundary conditions
+     vector<std::int8_t>  new_bflags( vset.Vertices(), 0 );
+
+     for ( size_t i{0U}; i<vset.Vertices(); i++ )  
+       if ( approximatelyEqual(vset.Px(i),xmin,tol) ||
+            approximatelyEqual(vset.Px(i),xmax,tol) ||
+            approximatelyEqual(vset.Py(i),ymin,tol) ||
+            approximatelyEqual(vset.Py(i),ymax,tol) ||
+            approximatelyEqual(vset.Pz(i),zmin,tol) ||
+            approximatelyEqual(vset.Pz(i),zmax,tol) )
+         { 
+            new_bflags[ i ] = UNSPECIFIED;
+         }
+
+     vset.AddBFlags( new_bflags.begin(), new_bflags.end() );
+
+               
+     // 2. flagging the sides of the model using the user-defined
+     //    tolerances (the edges are dealt with later)
+     // ---------------------------------------------------------
+     size_t n_node(0U);
+     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++, n_node++ )
+       {
+          // bottom (y=ymin)
+          if      ( approximatelyEqual(vset.Py( n_node ),ymin,tol) ) (*bit) = BOTTOM_OUTSIDE;
+          // top    (y=ymax)
+          else if ( approximatelyEqual(vset.Py( n_node ),ymax,tol) ) (*bit) = TOP_OUTSIDE;
+          // left   (x=xmin)
+          else if ( approximatelyEqual(vset.Px( n_node ),xmin,tol) ) (*bit) = LEFT_OUTSIDE;
+          // right  (x=xmax)
+          else if ( approximatelyEqual(vset.Px( n_node ),xmax,tol) ) (*bit) = RIGHT_OUTSIDE;
+          // back   (z=zmin)
+          else if ( approximatelyEqual(vset.Pz( n_node ),zmin,tol) ) (*bit) = BACK_OUTSIDE;
+          // front  (z=zmax)
+          else if ( approximatelyEqual(vset.Pz( n_node ),zmax,tol) ) (*bit) = FRONT_OUTSIDE;
+       }
+       
+     // 3. now the corners & edges are flagged
+     // --------------------------------------
+     flagEdges( vset, tol, xmin, xmax, ymin, ymax, zmin, zmax );  
+     flagCornerNodes( vset, tol, xmin, xmax, ymin, ymax, zmin, zmax );
+       
+ } // end
+
+template void establishBoundaryFlagsForBoxModel( VSet<3U>&, double );
+template void establishBoundaryFlagsForBoxModel( VSet<2U>&, double );
+template void establishBoundaryFlagsForBoxModel( VSet<1U>&, double );
+
+
 
 
 } // end namespace csmp

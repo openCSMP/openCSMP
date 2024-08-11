@@ -222,8 +222,8 @@ namespace csmp {
     NumIntegral_dNT_op_dV<DIM>     gravity( model->Database(), "gravity term times density", "fluid pressure" );
     gravity.AddAccumulateLater();
     gravity.MultiplyWithTimeIncrement(true);
-    //NumIntegral_NT_op_N_dV<DIM>    element_fluid_source( model->Database(), "fluid volume source", "fluid pressure" );
-    //element_fluid_source.AddAccumulateLater();
+    NumIntegral_NT_op_N_dV<DIM>    element_fluid_source( model->Database(), "fluid volume source", "fluid pressure" );
+    element_fluid_source.AddAccumulateLater();
     // to account for absolute nodal fluid contributions due to PVT property effects
     PointSource_rhsop<DIM>         node_total_source( model->Database(), "nodal fluid volume source", "fluid pressure" );
     node_total_source.MultiplyWithTimeIncrement(false);
@@ -240,7 +240,7 @@ namespace csmp {
 
     transient_pressure.Add( &p_conductance );
     transient_pressure.Add( &gravity);
-//    transient_pressure.Add( &element_fluid_source);
+    transient_pressure.Add( &element_fluid_source);
     transient_pressure.Add( &node_total_source);
     transient_pressure.Add( &storage_lhs );
     transient_pressure.Add( &storage_rhs );
@@ -255,8 +255,8 @@ namespace csmp {
     PDE_Integrator<DIM,Element>  transient_temperature(solver2);
     #endif
     NumIntegral_dNT_op_dN_dV<DIM>  T_conductance( model->Database(), "thermal conductivity", "temperature", "temperature" );
-    //NumIntegral_NT_op_N_dV<DIM>    heat_source( model->Database(), "heat source", "temperature" );
-    //heat_source.AddAccumulateLater();
+    NumIntegral_NT_op_N_dV<DIM>    heat_source( model->Database(), "heat source", "temperature" );
+    heat_source.AddAccumulateLater();
 
     PointSource_rhsop<DIM>         node_heat_source( model->Database(), "nodal heat source", "temperature" );
     node_heat_source.AddAccumulateLater();
@@ -275,7 +275,7 @@ namespace csmp {
     basal_hfu.AddAccumulateLater();
 
     transient_temperature.Add( &T_conductance );
-    //transient_temperature.Add( &heat_source);
+    transient_temperature.Add( &heat_source);
     transient_temperature.Add( &node_heat_source);
     transient_temperature.Add( &thermal_capacitance_rhs );
     transient_temperature.Add( &thermal_capacitance_lhs );

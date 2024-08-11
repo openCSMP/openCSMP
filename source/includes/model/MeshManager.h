@@ -23,10 +23,36 @@ template<uint32_t,template<uint32_t> class> class ModelSubDomain;
 template<uint32_t> class FaceConstructionData;
 
 /**
-    @brief Helps  Model taking care of the creation, deletion and storage of Element, Face and InterFace objects while maintaing their connectivity.
-    Contains and updates FiniteElementManager, FiniteVolumeStencilManager, and NodeManifoldManager accordingly.
+    @brief Manages the creation, deletion, storage and connectivity of Element, Face and InterFace objects.
+    
+    Contains and updates FiniteElementManager, FiniteVolumeStencilManager, and NodeManifoldManager.
+    
+    @pre nodes must be assigned to the elements as specified in CSMP_FEM_conventions.pdf following a right-hand coordinate system
+    @pre the elements must be compatible with one-another
+    @pre no hanging nodes
+    @pre no degenerate elements with collocated nodes, non-manifold vertices, triangle boxes etc. must be contained in the input mesh
+    @pre no interpenetrating elements
+    
+    The connectivity that is maintained at all times consists of:
+
+    -  cells (Element, Face, InterFace) are connected to their equidimensional neighbors; Elements to Elements, Faces to Faces etc.
+
+    -  there is only one such neighbor per cell; potential manifolds that can arise for lower-dimensional cells are disambiguated by choosing the most closely aligned line segments or surfaces with the nearest normal orientation
+
+    - nodes are connected to their neighbors except for NodeManifolds connecting collocated but topologically separated nodes
+
+    - nodes know their parent Element objects (not Faces nor Interfaces)
+
+    - Face objects are connected to their higher dimensional Element neighbors; if located on the outside of the model, their inner neighbor will be connected so that their normal points outside of the model
+
+    - InterFace objects can only occur on the inside of the model, being connected to two higher-dimensional Element neighbors
+    
+    When the MeshManager creates or deletes cells, the connectivity in the surroundings is updated
     
     @attention MESHMANAGER IS AGNOSTIC ABOUT REGIONS, BOUNDARIES, AND SPLIT BOUNDARIES ; it only cares about connectivity!
+    
+    @attention Changes in the mesh affect Region, Boundary and SplitBoundary objects meaning that they may need to be updated, using
+    corresponding functionality of ModelSubdomain and the Region-, Boundary- and SplitBoundary interfaces (policies) of Model.
 
     @author S.K. Matthai
     @date 2021 (complete rewrite)

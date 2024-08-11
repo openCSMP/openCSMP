@@ -34,6 +34,10 @@ namespace csmp {
 
     /// model SPLIT22_BASIC with box boundaries (Faces) and one through-going and one internal crossing split boundary
     ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& );
+    
+    /// 2D rectangular model the two halfs of each are offset from one another
+    void create_Disconnected2D_VSet( VSet<2U>& );
+    
 
     // 3D single-element-type meshes
     // -----------------------------

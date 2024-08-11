@@ -498,7 +498,7 @@ bool MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU( Model<dim>& mode
 
 
 /**
-    tests for negative element volumes
+    tests for negative element volume / area / length
 */
 template<uint32_t dim>
 bool MeshDiagnostics<dim>::DetectPotentiallyMisnumberedElements( const Model<dim>& model ) const
@@ -684,9 +684,11 @@ template class MeshDiagnostics<3>;
 
 
 
-///@return true if there are duplicate elements in the model
+/**
+    Tries to identify duplicate elements by collocated barycentres true if there are duplicate elements in the model
+*/
 template<uint32_t dim>
-bool detectDuplicateElements( const Model<dim>& m )
+bool detectCollocatedElements( const Model<dim>& m )
  {
     set<csmp::Point<dim> >  element_barycenters;
     bool                    coincident_barycenters(false);
@@ -710,11 +712,11 @@ bool detectDuplicateElements( const Model<dim>& m )
  
     return coincident_barycenters;
  
- } // detectDuplicateElement
+ } // detectCollocatedElements
  
- template bool detectDuplicateElements( const Model<1U>& );
- template bool detectDuplicateElements( const Model<2U>& );
- template bool detectDuplicateElements( const Model<3U>& );
+ template bool detectCollocatedElements( const Model<1U>& );
+ template bool detectCollocatedElements( const Model<2U>& );
+ template bool detectCollocatedElements( const Model<3U>& );
 
 
 

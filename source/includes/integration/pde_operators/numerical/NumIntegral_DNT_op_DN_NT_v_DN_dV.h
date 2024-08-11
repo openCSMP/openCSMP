@@ -1,12 +1,11 @@
-#ifndef NUM_INTEGRAL_DNT_OP_DN_NT_V_DN_DV_H
-#define NUM_INTEGRAL_DNT_OP_DN_NT_V_DN_DV_H
+#ifndef CSMP_NUM_INTEGRAL_DNT_OP_DN_NT_V_DN_DV_H
+#define CSMP_NUM_INTEGRAL_DNT_OP_DN_NT_V_DN_DV_H
 
 #include "MathOperatorLHS.h"
-#include "VectorVariable.h"
 
 namespace csmp {
 
-template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Element;
 
 /// advection-dispersion integral, see Istok (1989), use to obtain steady-state solutions for small Peclet number flows
 template<uint32_t dim, template<uint32_t> class CELL=Element>
@@ -21,16 +20,18 @@ class NumIntegral_DNT_op_DN_NT_v_DN_dV : public MathOperatorLHS<dim,CELL> {
     virtual void GetOperands( const CELL<dim>& );
     virtual void ComputeContribution( const CELL<dim>& );
 
+    virtual NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>* clone() const { return new NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>(*this); }
+
   private:
-    DenseMatrix<DM_MIN>    DN, DNT, VIP, NT3; 
+    DenseMatrix<DM_MIN>  DN, DNT, VIP, NT3;
     std::vector<double>  IPOL;    ///< basis function values (at integration point)
-    VectorVariable<dim>    velo_;   ///< Darcy flow velocity
-    csmp::Index            adv_key; ///< index of the variable that shall be advected
+    VectorVariable<dim>  velo_;   ///< Darcy flow velocity
+    csmp::Index          adv_key; ///< index of the variable that shall be advected
 };
 
 } // csmp
 
-#endif
+#endif /* CSMP_NUM_INTEGRAL_DNT_OP_DN_NT_V_DN_DV_H */
 
 
 

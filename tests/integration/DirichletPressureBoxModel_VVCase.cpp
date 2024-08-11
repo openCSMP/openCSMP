@@ -11,7 +11,8 @@
 #include "ANSYS_Model3D.h"
 #include "MeshDiagnostics.h"
 #include "ModelTopology.h"
-#include "CSMP_highLevelUtilities.h"
+//#include "CSMP_highLevelUtilities.h"
+#include "MeshManagementUtilities.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"
@@ -71,7 +72,9 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS()
     // testing
     // ------------------------------
     // 1. duplicate elements
-    _test( !detectDuplicateElements(model) );
+    Region<DIM> model_domain = model.Region("Model");
+    size_t duplicates = detectDuplicateCells<DIM,Element>( model_domain.CellsBegin(), model_domain.CellsEnd(), false );
+    _test( duplicates == 0 );
 
     MeshDiagnostics<3U>  diagnostics;
    
@@ -95,8 +98,6 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS()
    
      // 4. inactive elements (all nodes have constraint status
      _test( !diagnostics.DetectOverConstrainedElements( model, "fluid pressure"  ) );
-
-      Region<DIM>& model_domain(model.Region("Model"));
  
 #ifdef CSMP_WITH_SAMG_SOLVER
       SAMG_Settings settings;

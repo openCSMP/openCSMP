@@ -16,12 +16,12 @@
 namespace csmp {
 
 enum ADE_TERM : std::int8_t { ADVECTION,
-                FE_DIFFUSION,
-                DISPERSION,
-                SOURCE_SINK,
-                COMPRESSIBILITY,
-                SORPTION,
-                DECAY };
+                              FE_DIFFUSION,
+                              DISPERSION,
+                              SOURCE_SINK,
+                              COMPRESSIBILITY,
+                              SORPTION,
+                              DECAY };
                 
 template<uint32_t> class PropertyDatabase;
 

@@ -207,12 +207,7 @@ template<uint32_t dim>
 std::pair<Element<dim>*,uint32_t>  parentElement( typename std::vector<Node<dim>*>::const_iterator first,
                                                   typename std::vector<Node<dim>*>::const_iterator last );
 
-// TODO: not used; deprecate?
-/// for single node on an internal surface,  reports which equidimensional parent elements lie on the inside of the surface and which on the outside; throws if assumptions are not met
-template<uint32_t dim>
-std::pair<std::vector<Element<dim>*>,std::vector<Element<dim>*>>  parentElementsAdjacentTo( const Node<dim>* const low_dim_node );
-
-/// determines topological role of Node (simple mesh node vs. geometric constraint), using TOPOTYPE and  BOX_BOUNDARY flagging and parent element connectivity,
+/// for Node in manifold finds which TOPOTYPE node has, also using the node's  BOX flag and parent element connectivity
 template<uint32_t dim>
 TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<dim>* const );
 

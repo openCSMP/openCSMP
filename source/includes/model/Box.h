@@ -6,6 +6,7 @@
 
 namespace csmp {
 
+template<uint32_t> class VSet;
 template<uint32_t> class Node;
 template<uint32_t> class Element;
 template<uint32_t> class Model;
@@ -177,6 +178,10 @@ void boundaryMinMaxCoordinates( BOX_BOUNDARY, csmp::Point<3U>&, csmp::Point<3U>&
 
 /// compares the supplied string with valid BOX_BOUNDARY classifications; returns true if it is among them
 bool isDiagnosticBoxBoundaryClassifier( const std::string& );
+
+/// Applies box boundary flags assuming that the model stored in the VSet is box-shaped with the sides aligned with the coordinate axes.
+template<uint32_t dim>
+void establishBoundaryFlagsForBoxModel( VSet<dim>& vset, double tolerance );
 
 /// using existing Boundary objects, establish node and element BOX_BOUNDARY flagging
 void recreateBoxBoundaryFlags( Model<1U>& );

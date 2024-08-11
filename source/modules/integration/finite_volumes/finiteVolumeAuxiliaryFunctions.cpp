@@ -628,16 +628,16 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
               // computing facet normals
               nrml = (*it)->FacetNormal(j);
               fnrml(0) = nrml[0];
-              if ( dim != 1U ) fnrml(1) = nrml[1];
-              if ( dim == 3U ) fnrml(2) = nrml[2];
+              if constexpr ( dim != 1U ) fnrml(1) = nrml[1];
+              if constexpr ( dim == 3U ) fnrml(2) = nrml[2];
               (*it)->Store( j, 0U, fn_key, fnrml );
            
               // 3. computing total facet fluxes and flux balance
               // ------------------------------------------------
               if ( initialize_flux ) {
                    double facet_flux(nrml[0] * vt[0]);
-                   if ( dim != 1U ) facet_flux += nrml[1] * vt[1];
-                   if ( dim == 3U ) facet_flux += nrml[2] * vt[2];
+                   if constexpr ( dim != 1U ) facet_flux += nrml[1] * vt[1];
+                   if constexpr ( dim == 3U ) facet_flux += nrml[2] * vt[2];
                    facet_flux *= facet_area;
                    (*it)->Store( j, 0U, ff_key, makeScalar((*it)->Status( j, 0U, ff_key),facet_flux) );
                 }
@@ -651,7 +651,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
    
    for ( typename vector<Node<dim>*>::const_iterator nit=gref.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
         const auto parent_elements((*nit)->Parents());
-        for ( auto i{0U}; i<parent_elements; ++i ) {
+        for ( uint32_t i{0U}; i<parent_elements; ++i ) {
              Element<dim>* const eptr = (*nit)->Parent(i);
              // ---------------------------------
              // computing facet normals and areas
@@ -664,8 +664,8 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
                   // computing facet normals
                   nrml = eptr->FacetNormal(j);
                   fnrml(0) = nrml[0];
-                  if ( dim != 1U ) fnrml(1) = nrml[1];
-                  if ( dim == 3U ) fnrml(2) = nrml[2];
+                  if constexpr ( dim != 1U ) fnrml(1) = nrml[1];
+                  if constexpr ( dim == 3U ) fnrml(2) = nrml[2];
                   eptr->Store( j, 0U, fn_key, fnrml );
                }
              // ---------------------------------------
@@ -716,6 +716,110 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
 // explicit instantiation of function template in 2 and 3D
 template void initializeFiniteVolumeProperties( Model<2U>&, Region<2U>&, bool );
 template void initializeFiniteVolumeProperties( Model<3U>&, Region<3U>&, bool );
+
+
+
+
+// TODO: merge with other initialise function, the only extra for the one above is the flux initialisation
+template<uint32_t dim>
+void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
+ {
+    // input variables
+    const csmp::Index phi_key = model.Database().StorageKey("porosity");
+    const csmp::Index thi_key = model.Database().StorageKey("thickness");
+
+    // output variables
+    const csmp::Index pv_key  = model.Database().StorageKey("FV pore volume");
+    const csmp::Index spv_key = model.Database().StorageKey("sector pore volume");
+    const csmp::Index fa_key  = model.Database().StorageKey("facet area");
+    const csmp::Index fn_key  = model.Database().StorageKey("facet normal");
+
+    Point<dim>           nrml;
+    VectorVariable<dim>  fnrml;
+ 
+    // 0. zeroing sector pore volumes for accumulation in element loop
+    // ---------------------------------------------------------------
+    gref.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
+ 
+    // For the interior elements of the region compute relevant variable values
+    const auto it_end(gref.CellsEnd());
+    for ( auto it=gref.CellsBegin(); it!=it_end; ++it )
+      {
+         const auto sectors((*it)->Sectors());
+         const auto facets((*it)->Facets());
+
+         // 1. computing sector pore volumes and sector rock compressibilities
+         // ------------------------------------------------------------------
+         // (scaled by the cell thickness attribute=1 for volumetric elements)
+         const double phi = (*it)->Read( phi_key ) * (*it)->Read( thi_key );
+         for ( uint32_t i{0U}; i<sectors; ++i ) {
+              // sector pore volume
+              const double sector_volume = (*it)->SectorVolume(i);
+              (*it)->Store( i, 0U, spv_key, makeScalar( PLAIN, phi * sector_volume ) );
+              // sector volume is added to  pore volume of FV's containing this sector
+              double pore_volume  = (*it)->N(i)->Read( pv_key );
+              // sector volume from FV traits
+              pore_volume   += phi * sector_volume;
+              (*it)->N(i)->Store( pv_key, makeScalar(PLAIN,pore_volume) );
+              // accumulating 'total rock compressibility' from the 'compressibility rock' values on the sectors
+           }
+
+         // 2. computing facet normals and areas
+         // ------------------------------------
+         for ( uint32_t j{0U}; j<facets; ++j ) {
+              // computing facet areas
+              const double facet_area = (*it)->FacetArea(j);
+              (*it)->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
+              // computing facet normals
+              nrml = (*it)->FacetNormal(j);
+              fnrml(0) = nrml[0];
+              if constexpr ( dim != 1U ) fnrml(1) = nrml[1];
+              if constexpr ( dim == 3U ) fnrml(2) = nrml[2];
+              (*it)->Store( j, 0U, fn_key, fnrml );
+           }
+      }
+
+   // 4. initialising facet area, facet normals, sector volume (/pore volume) in the elements surrounding perimeter nodes
+   // -------------------------------------------------------------------------------------------------------------------
+   // (here the pore volumes do not include the sectors outside the region)
+   const typename vector<Node<dim>*>::const_iterator nit_end(gref.NodesEnd());
+ 
+   for ( typename vector<Node<dim>*>::const_iterator nit=gref.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
+        const auto parent_elements((*nit)->Parents());
+        for ( uint32_t i{0U}; i<parent_elements; ++i ) {
+             Element<dim>* const eptr = (*nit)->Parent(i);
+             // ---------------------------------
+             // computing facet normals and areas
+             // ---------------------------------
+             const auto facets(eptr->Facets());
+             for ( uint32_t j{0U}; j<facets; ++j ) {
+                  // computing facet areas
+                  const double facet_area = eptr->FacetArea(j);
+                  eptr->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
+                  // computing facet normals
+                  nrml = eptr->FacetNormal(j);
+                  fnrml(0) = nrml[0];
+                  if constexpr ( dim != 1U ) fnrml(1) = nrml[1];
+                  if constexpr ( dim == 3U ) fnrml(2) = nrml[2];
+                  eptr->Store( j, 0U, fn_key, fnrml );
+               }
+             // ---------------------------------------
+             // computing sector volumes & pore volumes
+             // ---------------------------------------
+             const double porosity = eptr->Read( phi_key );
+             const auto sectors(eptr->Sectors());
+             for ( uint32_t j{0U}; j<sectors; ++j ) {
+                  const double sector_volume = eptr->SectorVolume(j);
+                  eptr->Store( j, 0U, spv_key, makeScalar( PLAIN, sector_volume * porosity ) );
+               }
+          }
+     }
+ 
+ } // end initializeFiniteVolumeProperties
+
+// explicit instantiation of function template in 2 and 3D
+template void initializeBasicFiniteVolumeProperties( Model<2U>&, Region<2U>& );
+template void initializeBasicFiniteVolumeProperties( Model<3U>&, Region<3U>& );
 
 
 
@@ -814,109 +918,5 @@ double sectorFlux( const Element<dim>* const eptr, uint32_t sector, const csmp::
 
 template double sectorFlux( const Element<2U>* const, uint32_t, const csmp::Index& );
 template double sectorFlux( const Element<3U>* const, uint32_t, const csmp::Index& );
-
-
-
-
-template<uint32_t dim>
-void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
- {
-    // input variables
-    const csmp::Index phi_key = model.Database().StorageKey("porosity");
-    const csmp::Index thi_key = model.Database().StorageKey("thickness");
-
-    // output variables
-    const csmp::Index pv_key  = model.Database().StorageKey("FV pore volume");
-    const csmp::Index spv_key = model.Database().StorageKey("sector pore volume");
-    const csmp::Index fa_key  = model.Database().StorageKey("facet area");
-    const csmp::Index fn_key  = model.Database().StorageKey("facet normal");
-
-    Point<dim>           nrml;
-    VectorVariable<dim>  fnrml;
- 
-    // 0. zeroing sector pore volumes for accumulation in element loop
-    // ---------------------------------------------------------------
-    gref.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
- 
-    // For the interior elements of the region compute relevant variable values
-    const auto it_end(gref.CellsEnd());
-    for ( auto it=gref.CellsBegin(); it!=it_end; ++it )
-      {
-         const auto sectors((*it)->Sectors());
-         const auto facets((*it)->Facets());
-
-         // 1. computing sector pore volumes and sector rock compressibilities
-         // ------------------------------------------------------------------
-         // (scaled by the cell thickness attribute=1 for volumetric elements)
-         const double phi = (*it)->Read( phi_key ) * (*it)->Read( thi_key );
-         for ( auto i{0U}; i<sectors; ++i ) {
-              // sector pore volume
-              const double sector_volume = (*it)->SectorVolume(i);
-              (*it)->Store( i, 0U, spv_key, makeScalar( PLAIN, phi * sector_volume ) );
-              // sector volume is added to  pore volume of FV's containing this sector
-              double pore_volume  = (*it)->N(i)->Read( pv_key );
-              // sector volume from FV traits
-              pore_volume   += phi * sector_volume;
-              (*it)->N(i)->Store( pv_key, makeScalar(PLAIN,pore_volume) );
-              // accumulating 'total rock compressibility' from the 'compressibility rock' values on the sectors
-           }
-
-         // 2. computing facet normals and areas
-         // ------------------------------------
-         for ( auto j{0U}; j<facets; ++j ) {
-              // computing facet areas
-              const double facet_area = (*it)->FacetArea(j);
-              (*it)->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
-              // computing facet normals
-              nrml = (*it)->FacetNormal(j);
-              fnrml(0) = nrml[0];
-              if ( dim != 1U ) fnrml(1) = nrml[1];
-              if ( dim == 3U ) fnrml(2) = nrml[2];
-              (*it)->Store( j, 0U, fn_key, fnrml );
-           }
-      }
-
-   // 4. initialising facet area, facet normals, sector volume (/pore volume) in the elements surrounding perimeter nodes
-   // -------------------------------------------------------------------------------------------------------------------
-   // (here the pore volumes do not include the sectors outside the region)
-   const typename vector<Node<dim>*>::const_iterator nit_end(gref.NodesEnd());
- 
-   for ( typename vector<Node<dim>*>::const_iterator nit=gref.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
-        const auto parent_elements((*nit)->Parents());
-        for ( auto i{0U}; i<parent_elements; ++i ) {
-             Element<dim>* const eptr = (*nit)->Parent(i);
-             // ---------------------------------
-             // computing facet normals and areas
-             // ---------------------------------
-             const auto facets(eptr->Facets());
-             for ( auto j{0U}; j<facets; ++j ) {
-                  // computing facet areas
-                  const double facet_area = eptr->FacetArea(j);
-                  eptr->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
-                  // computing facet normals
-                  nrml = eptr->FacetNormal(j);
-                  fnrml(0) = nrml[0];
-                  if ( dim != 1U ) fnrml(1) = nrml[1];
-                  if ( dim == 3U ) fnrml(2) = nrml[2];
-                  eptr->Store( j, 0U, fn_key, fnrml );
-               }
-             // ---------------------------------------
-             // computing sector volumes & pore volumes
-             // ---------------------------------------
-             const double porosity = eptr->Read( phi_key );
-             const auto sectors(eptr->Sectors());
-             for ( auto j{0U}; j<sectors; ++j ) {
-                  const double sector_volume = eptr->SectorVolume(j);
-                  eptr->Store( j, 0U, spv_key, makeScalar( PLAIN, sector_volume * porosity ) );
-               }
-          }
-     }
- 
- } // end initializeFiniteVolumeProperties
-
-// explicit instantiation of function template in 2 and 3D
-template void initializeBasicFiniteVolumeProperties( Model<2U>&, Region<2U>& );
-template void initializeBasicFiniteVolumeProperties( Model<3U>&, Region<3U>& );
-
 
 } // end namespace csmp
