@@ -396,6 +396,7 @@ template<uint32_t dim>
 void Element<dim>::Assign( uint32_t i, Element<dim>* const e_ptr )
 {
   assert( i < elmt_connector_.size() );
+  // assert( e_ptr != nullptr ); null is a legitimate assignment if their is no neighbor
   elmt_connector_[i] = e_ptr;
 }
 
@@ -422,6 +423,7 @@ template<uint32_t dim>
 void Element<dim>::Assign( uint32_t i, csmp::Node<dim>* const nd_ptr )
 {
   assert( i < node_connector_.size() );
+  assert( nd_ptr != nullptr );
   node_connector_[i] = nd_ptr;
 }
 

@@ -352,7 +352,7 @@ template size_t findContiguousMeshPatch( InterFace<3U>* const, set<InterFace<3U>
 
 
 
-
+// TODO: belongs into MeshManager
 /** loops over the valid neighbors of the cell and sets their neighbor pointers to point to this cell to nullptr
  */
 template<uint32_t dim, template<uint32_t> class CELL>
@@ -803,12 +803,14 @@ template size_t  findPointersToStandAloneMeshPatches( vector<InterFace<3U>*>::co
 
 
 
-/** relying on the parent element information from its nodes, method finds the neighbor elements for each Face (or boundary) and connects itself them
+/**
+   Relying on the parent element information from its corner nodes, method tries finds  neighbor elements for each element Face (or boundary).
+   If a neighbor can be found, the function connects the element to it.
  
-        @return the number of neighbors that were identified
+   @return the number of neighbors that were identified
  */
 template<uint32_t dim>
-size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
+uint32_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( eptr == nullptr ) {
@@ -816,63 +818,53 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
                                "invalid element pointer" );
             return 0U;
         }
-        
-     // making search keys from the nodes
-     set<Node<dim>*>  node_keys( eptr->NodesBegin(), eptr->NodesEnd() );
-     //  key             face
-     map<set<Node<dim>*>,uint32_t>  face_keys;
-     const auto n_nbors(eptr->Neighbors());
-     for ( uint32_t i{0U}; i<n_nbors; ++i ) {
-          face_keys.insert( make_pair( eptr->CornerNodesOfFace(i), i ) );
-          // setting nbor pointers to null
-          eptr->Assign( i, static_cast<Element<dim>*>(nullptr) );
-       }
-       
-     // finding the neighbor elements opposite to the element's faces
-     // -------------------------------------------------------------
-     uint32_t nbors_found(0U);
-     // making a subset of the parent elements that share a sufficient number of nodes to qualify
-     set<Element<dim>*> potential_nbors;
-     uint32_t min_face_nodes = (dim != 3) ? 2 : 3;
-     if ( dim == 1 ) min_face_nodes = 1;
-     // using the element's nodes to find the neighbors
-     for ( auto nit=eptr->NodesBegin(); nit!=eptr->NodesEnd(); ++nit )
-       for ( uint32_t i{0U}; i<(*nit)->Parents(); ++i )
-         {
-            uint32_t counter(0U);
-            for ( auto it=(*nit)->Parent(i)->NodesBegin(); it!=(*nit)->Parent(i)->NodesEnd(); ++it )
-              if ( node_keys.find(*it) != node_keys.end() ) counter++;
-            // if the element shares an equal or greater number of nodes than face nodes it is a potential neighbor
-            if ( counter >= min_face_nodes ) potential_nbors.insert( (*nit)->Parent(i) );
-         }
-     
-     // searching the subset of elements
-     for ( auto& it : potential_nbors )
+    
+     vector<Node<dim>*> face_nodes;
+     uint32_t nbors_found{0u};
+
+     const auto n_faces(eptr->Faces());
+     for ( uint32_t i{0U}; i<n_faces; ++i )
        {
-          // loop over faces until matching face is found; else report
-          const auto n_faces(it->Neighbors());
-          for ( uint32_t i{0U}; i<n_faces; ++i ) {
-              // searching & assigning neighbors found
-              auto nbor_it(face_keys.find(eptr->CornerNodesOfFace(i)));
-              if ( nbor_it != face_keys.end() ) {
-                   // assigning the neighbor
-                   eptr->Assign( (*nbor_it).second, it );
-                   // assigning the neighbor's neighbor-element pointer to this new element
-                   it->Assign( i, eptr );
-                   nbors_found++;
-                   // only of face of the neighbor may be connected
-                   break;
-                }
-           }
+          // finding the corner nodes of the face
+          const auto crn_nodes = eptr->CornerNodesOfFace(i);
+          face_nodes.assign( crn_nodes.begin(), crn_nodes.end() );
+          
+          // finding same-dimensional parent elements that share the elements face nodes (there should only be one!)
+          vector<Element<dim>*>  elmts_with_all_nodes = parentElementsContaining<dim>( face_nodes.begin(), face_nodes.end() );
+          eraseDifferentDimensionalOrInvalidCells( eptr, elmts_with_all_nodes );
+          
+          // if there are none nothing can be done, but there should not be more than one
+          if ( elmts_with_all_nodes.size() <= 1 ) {
+               if ( eptr != elmts_with_all_nodes[0] )
+                 csmp_error.Note( ERROR, "connectNeighborsUsingNodeParents:", "nodes identified do not match element found" );
+               continue;
+            }
+          else if ( elmts_with_all_nodes.size() > 2 ) {
+               cerr <<"\n\t"<< eptr->Idx() <<": face: "<< i;
+               csmp_error.Note( ERROR, "connectNeighborsUsingNodeParents:", "faces can only have one equidimensional neighbor" );
+            }
+            
+          // assigning the neighbor element
+          uint32_t nbor_elmt = ( eptr != elmts_with_all_nodes[0] ) ? 0u : 1u;
+          eptr->Assign( i, elmts_with_all_nodes[nbor_elmt] );
+
+          // finding which face of the identified neighbor element contains the shared nodes
+          uint32_t face_of_nbor = faceWithCornerNodes( elmts_with_all_nodes[nbor_elmt], face_nodes.begin(), face_nodes.end() );
+          
+          // assigning the current element to the neighbor
+          elmts_with_all_nodes[nbor_elmt]->Assign( face_of_nbor, eptr );
+          
+          nbors_found++;
        }
        
     return nbors_found;
         
  } // end connectNeighborsUsingNodeParents
  
-template size_t connectNeighborsUsingNodeParents( Element<1U>* const);
-template size_t connectNeighborsUsingNodeParents( Element<2U>* const);
-template size_t connectNeighborsUsingNodeParents( Element<3U>* const);
+template uint32_t connectNeighborsUsingNodeParents( Element<1U>* const );
+template uint32_t connectNeighborsUsingNodeParents( Element<2U>* const );
+template uint32_t connectNeighborsUsingNodeParents( Element<3U>* const );
+
 
 
 

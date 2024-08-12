@@ -895,6 +895,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
      csmp_error.Note( ERROR, "MeshManager<dim>::AddElement", "node vector is empty");
 
    // 1. constructing new element
+   // ---------------------------
    typename plf::colony<Element<dim>>::iterator eit = ( fvm_manager_ ) ?
                elements_.emplace( Element<dim>( elements_.size(),
                                   fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars, material_id ) ) :
@@ -902,6 +903,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
                                   fem_manager_.E(etype), static_cast<FiniteVolumeStencil<dim>*>(nullptr), lvars, ivars, material_id ) );
 
    // 2. assigning nodes
+   // ------------------
    const auto n_nodes{ nodes.size() };
    for ( uint32_t i{0U}; i<n_nodes; ++i ) {
         (*eit).Assign( i, nodes[i] );
@@ -912,14 +914,13 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
   // 3. trying to establish neighbor information from the nodes assuming if they have parent connectivity
   // ----------------------------------------------------------------------------------------------------
   //    checking whether the nodes have the necessary parent element information
-  bool valid_parent_info(true);
+  bool valid_parent_info{true};
   for ( uint32_t i{0U}; i<n_nodes; ++i )
     if ( (*eit).N(i)->Parents() == 0U ) {
          cerr <<"\n\tnode "<< i;
          valid_parent_info = false;
          csmp_error.Note( WARNING, "MeshManager<dim>::AddElement",
                           "neighbor information could not be created because node(s) miss parent element info");
-         return &(*eit);
       }
       
    // 4. connect new element to its neighbors: this gets done only after a range of elements were created.
@@ -1359,8 +1360,53 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
 
 
 
+template<uint32_t dim>
+bool	MeshManager<dim>::Delete( Element<dim>* eptr )
+ {
+    // remove element from the parent element list of its connected nodes
+    for ( auto nit=eptr->NodesBegin(); nit!=eptr->NodesEnd(); ++nit ) {
+         (*nit)->Unassign( eptr );
+         (*nit)->EraseNullPointerParents();
+      }
+    // detaching neighbor elements
+    detachNeighborsFrom( eptr );
+    auto success = elements_.erase( elements_.get_iterator(eptr) );
+    eptr = nullptr;
+    
+    // does a prior element to the one erase exist? - if so erase() worked
+    return ( success == elements_.end() );
+ }
+
+/**
+     Deletion of a Face only affects its face neighbors
+*/
+template<uint32_t dim>
+bool	MeshManager<dim>::Delete( Face<dim>* fptr )
+ {
+    // detaching neighbor faces
+    detachNeighborsFrom( fptr );
+    auto success = faces_.erase( faces_.get_iterator(fptr) );
+    fptr = nullptr;
+    
+    // does a prior face to the one erase exist? - if so erase() worked
+    return ( success == faces_.end() );
+ }
 
 
+/**
+     Deletion of an InterFace only affects its face neighbors
+*/
+template<uint32_t dim>
+bool	MeshManager<dim>::Delete( InterFace<dim>* fptr )
+ {
+    // detaching neighbor InterFace objects
+    detachNeighborsFrom( fptr );
+    auto success = interfaces_.erase( interfaces_.get_iterator(fptr) );
+    fptr = nullptr;
+    
+    // does a prior InterFace to the one erase exist? - if so erase() worked
+    return ( success == interfaces_.end() );
+ }
 
 
 /**

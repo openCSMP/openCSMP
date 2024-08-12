@@ -60,9 +60,9 @@ class MeshManager_Test : public Test {
     bool Test_connectNeighborsUsingNodeParents(); // TODO: make separate test for all these functions
     
     // TODO: test these...
-    bool Test_AddNodeAt();
+    bool Test_AddNodeAt(); // <- TestElementDeletionAndInsertion() tests this
     bool Test_Duplicate(); // node
-    bool Test_AddElement();
+    bool Test_AddElement(); // <- TestElementDeletionAndInsertion() tests this
     bool Test_AddInterveningElement();
     bool Test_ReplaceElementByFace();
     bool Test_ReplaceElementByInterFace();

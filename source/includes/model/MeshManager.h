@@ -281,6 +281,11 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
   // DELETIONS & MAINTANANCE OF MESH CONNECTIVITY
   // --------------------------------------------
   // NB: elements are responsible for their nodes, nodes for their manifolds
+  
+  /// deletes element and repairs connectivity, reports whether deletion was successful (@note faster to delete multiple elements at once than one by one)
+  bool Delete( Element<dim>* );
+  bool Delete( Face<dim>* );
+  bool Delete( InterFace<dim>* );
 
   /// updates all connectivity (elements, faces, interfaces, nodes to parents); rebulding node manifolds if necessary
   void UpdateConnectivity();

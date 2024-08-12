@@ -227,13 +227,20 @@ void Node<dim>::Assign( uint32_t pnode, Element<dim>* element )
  {
     assert( parent_node_indexes_.size() == parent_element_pointers_.size() );
     assert( pnode <= FIFTY );
+    assert( element != nullptr );
     
-    for ( uint32_t parent{0}; parent<parent_node_indexes_.size(); parent++ )
+    // looking for a free slot in existing parent vectors
+    const auto parents{ parent_node_indexes_.size() };
+    for ( uint32_t parent{0u}; parent < parents; parent++ )
       if ( parent_node_indexes_[parent] == NOT_INITIALIZED ) {
            parent_node_indexes_[parent]     = static_cast<ONE_BYTE_NUMBER>(pnode);
            parent_element_pointers_[parent] = element;
            return;
         }
+        
+    // if the parent element storage must be extended
+    parent_node_indexes_.push_back( static_cast<ONE_BYTE_NUMBER>(pnode) );
+    parent_element_pointers_.push_back( element );
 
  } // end Assign
 
@@ -248,6 +255,7 @@ void Node<dim>::Assign( uint32_t pnode, Element<dim>* element )
 template<uint32_t dim>
 bool Node<dim>::Unassign( Element<dim>* element )
  {
+    if ( element == nullptr ) return false;
     assert( parent_node_indexes_.size() ==  parent_element_pointers_.size() );
     for ( uint32_t parent(0); parent < Parents(); ++parent )
       if ( Parent(parent) == element )
@@ -498,9 +506,9 @@ void  Node<dim>::ResizeParentStorage( uint32_t n )
      parent_element_pointers_.clear();
      // resize, initialising contained pointers to null and indices to NOT_INITIALIZED
      parent_node_indexes_.resize( n, NOT_INITIALIZED );
-     std::vector<ONE_BYTE_NUMBER>( parent_node_indexes_ ).swap( parent_node_indexes_ );
+     parent_node_indexes_.shrink_to_fit();
      parent_element_pointers_.resize( n, nullptr );
-     std::vector<Element<dim>*>( parent_element_pointers_ ).swap( parent_element_pointers_ );
+     parent_element_pointers_.shrink_to_fit();
   }
 
 
@@ -569,14 +577,14 @@ void  Node<dim>::SortParents() {
              }
         );
   
-    // sorting the vectors
-    sort( parent_element_pointers_.begin(), parent_element_pointers_.end() );
+     // sorting the vectors
+     sort( parent_element_pointers_.begin(), parent_element_pointers_.end() );
   
-    // extra vector needed for tempory
-    vector<ONE_BYTE_NUMBER> temp{ parent_node_indexes_.size() };
-    int n{0};
-    for ( auto& i : indices ) temp[n++] = parent_node_indexes_[i];
-    parent_node_indexes_ = temp;
+     // extra vector needed for tempory
+     vector<ONE_BYTE_NUMBER> temp{ parent_node_indexes_.size() };
+     int n{0};
+     for ( auto& i : indices ) temp[n++] = parent_node_indexes_[i];
+     parent_node_indexes_ = temp;
 
   } // end UpdateParents
 
@@ -748,6 +756,8 @@ void Node<dim>::Out() const
 template class Node<1U>;
 template class Node<2U>;
 template class Node<3U>;
+ 
+ 
  
  
  
@@ -957,7 +967,52 @@ size_t eraseLowerDimensionalOrInvalidCells( vector<CELL<dim>*>& elmt_pointers )
     
  } // end eraseLowerDimensionalOrInvalidCells
 
-//template size_t eraseLowerDimensionalOrInvalidCells( vector<Element<3>*>& );
+template size_t eraseLowerDimensionalOrInvalidCells( vector<Element<3>*>& );
+template size_t eraseLowerDimensionalOrInvalidCells( vector<Element<2>*>& );
+template size_t eraseLowerDimensionalOrInvalidCells( vector<Element<1>*>& );
+
+
+
+/**
+       Erases cells from the vector that have a different dimension than the current cell.
+       @return the number of cells remaining in the vector
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t eraseDifferentDimensionalOrInvalidCells( const CELL<dim>* const cptr, vector<CELL<dim>*>& elmt_pointers )
+ {
+    if ( elmt_pointers.empty() ) return 0ul;
+    if constexpr ( dim == 1U ) return 0ul;
+    
+    // TODO: there should be a virtual function in FiniteElement that returns cellshape!
+    const CELL_SHAPE shape = parseFiniteElementDimension( cptr->FE_Type() );
+    
+    // eliminating potential lower-dimensional elements or nullprts from result vector
+    auto new_end = remove_if( elmt_pointers.begin(), elmt_pointers.end(),
+                              [shape]( const Element<dim>* eit )
+                               {
+                                  if ( eit==nullptr ) return true;
+                                  if constexpr ( dim == 3U ) {
+                                       if ( shape == VOLUME  && !eit->IsVolume() ) return true;
+                                       if ( shape == SURFACE && !eit->IsSurface() ) return true;
+                                       if ( shape == LINE    && !eit->IsLine() ) return true;
+                                    }
+                                  else if constexpr ( dim == 2U ) {
+                                       if ( shape == SURFACE && !eit->IsSurface() ) return true;
+                                       if ( shape == LINE    && !eit->IsLine() ) return true;
+                                    }
+                                  return false;
+                               } );
+                               
+    // deleting cells beyond the vectors new end
+    elmt_pointers.erase( new_end, elmt_pointers.end() );
+
+    return elmt_pointers.size();
+    
+ } // end eraseDifferentDimensionalOrInvalidCells
+
+template size_t eraseDifferentDimensionalOrInvalidCells( const Element<3>* const, vector<Element<3>*>& );
+template size_t eraseDifferentDimensionalOrInvalidCells( const Element<2>* const, vector<Element<2>*>& );
+template size_t eraseDifferentDimensionalOrInvalidCells( const Element<1>* const, vector<Element<1>*>& );
 
 
 
@@ -985,6 +1040,12 @@ uint32_t faceWithCornerNodes( const CELL<dim>* const cell_ptr,
 template uint32_t faceWithCornerNodes( const Element<3U>* const,
                                        typename vector<Node<3U>*>::const_iterator,
                                        typename vector<Node<3U>*>::const_iterator );
+template uint32_t faceWithCornerNodes( const Element<2U>* const,
+                                       typename vector<Node<2U>*>::const_iterator,
+                                       typename vector<Node<2U>*>::const_iterator );
+template uint32_t faceWithCornerNodes( const Element<1U>* const,
+                                       typename vector<Node<1U>*>::const_iterator,
+                                       typename vector<Node<1U>*>::const_iterator );
      
       
 

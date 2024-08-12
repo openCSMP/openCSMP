@@ -131,14 +131,14 @@ bool MeshManager_Test::CheckConnectivityOfModel3D( Model<3>& model )
               cout <<"\n\t\t'"<< it.first <<"': "<< it.second.size() <<" elements.";
            }
       }
-    cout << "\n\nExamining the connectivity of  Faces: " << mesh.Faces() << "\n";
     if ( mesh.Faces() > 0 ) {
+        cout << "\n\nExamining the connectivity of  Faces: " << mesh.Faces() << "\n";
         map<string,vector<Face<3U>*> >  face_map3;
         _test( findContiguousMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) >= 1 );
         cout << "\nInterconnected faces: " << (*face_map3.begin()).second.size() << "\n";
       }
-    cout << "\nExamining the connectivity of  Interfaces: " << mesh.InterFaces() << "\n";
     if ( mesh.InterFaces() > 0 ) {
+       cout << "\nExamining the connectivity of  Interfaces: " << mesh.InterFaces() << "\n";
         map<string,vector<InterFace<3U>*> >  iface_map3;
         _test( findContiguousMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) >= 1 );
         cout << "\nInterconnected Interfaces: " << (*iface_map3.begin()).second.size() << "\n";
@@ -311,7 +311,7 @@ void MeshManager_Test::TestBasics()
   {
     VSet<2> vset_with_manifolds;
     ModelTopology  topo = create_BoundarySplitBoundaryPatch( vset_with_manifolds );
-    Model<2> split_model( topo, vset_with_manifolds, "CSMP-variables.txt", false );
+    Model<2> split_model( topo, vset_with_manifolds, "MeshManager_Test-variables.txt", false );
     split_model.Name("BoundarySplitBoundaryPatch");
     // using vsetMaker's SPLIT22_BASIC for testing
     _test( split_model.Mesh().HasNodeManifolds() );
@@ -638,43 +638,80 @@ bool MeshManager_Test::TestEntityNumberingFunction( Model<3>& model )
 
 
 /**
-     Starts with a hexahedral mini model
+     Tests:
+      - AddNodeAt()
+      - AddElement()
+      - Delete( Element*)
+      - connectNeighborsUsingNodeParents()
 */
 bool MeshManager_Test::TestElementDeletionAndInsertion()
 {
   VSet<3U> vset;
   create_Hexahedra_VSet( vset, false );
   Model<3>   model( vset, "CSMP-variables.txt" );
-  //Region<3>& model_domain = model.Region("Model");
 
   MeshManager<3U>& mesh(model.Mesh());
   const size_t     n_original_elmts(mesh.Elements());
   
-	// 0. the first element is copy constructed and stored, and then deleted
-	csmp::Element<3U> first_element(*mesh.ElementsBegin());
-	// 1. delete elements 1 from the model
-	mesh.Erase( mesh.ElementsBegin() );
+	// 1. Checking that pointers to elements are not affected by element deletion
+  // --------------------------------------------------------------------------
+  // make a copy of first element
+  Element<3>* e1ptr = &(*mesh.elements_.begin());
+  auto elmt1 = (*mesh.elements_.begin());
+  // get pointer to element 3
+  Element<3>* const e3ptr = &(*next(mesh.elements_.begin(),3));
+  const size_t e3idx = e3ptr->Idx();
+  // erase element 1 from the plf_colony, repairing connectivity
+	mesh.Delete( e1ptr );
   
+  _test( e3idx == e3ptr->Idx() );
 	_test(mesh.Elements() == n_original_elmts - 1);
-
-  const size_t n_original_nodes(mesh.Nodes());
-	// 2. create a new element with its nodes
-	IsoparametricLinearPyramid fe;
+  // --------------------------------------------
+  
+  // 2. recreate the missing the element and repair connectivity
+  // -----------------------------------------------------------
 	LocalVariables				     node_vars = model.Database().LocalVariablesAt(NODE);
 	LocalVariables				     elmt_vars = model.Database().LocalVariablesAt(ELEMENT);
 	IntegrationPointVariables	 intp_vars = model.Database().IntegrationPointVariablesAt(ELEMENT);
+  vector<Node<3>*>           nodes( elmt1.NodesBegin(), elmt1.NodesEnd() );
 
-  // the first node
-  Node<3U>& n1 = (*mesh.NodesBegin());
-  // get a poiner to the first node
-  Node<3U>* const ptr_n1 = &(*mesh.NodesBegin());
-  const size_t nearby_node(4);
-  // should return a pointer to the existing node n1 rather than creating a new node
-  // TODO: rethink logic of this test
-	Node<3U>* n_ptr = mesh.AddNodeAt( ptr_n1->Coordinate(), node_vars );
+	e1ptr = mesh.AddElement( elmt1.FE_Type(), elmt_vars, intp_vars, nodes, elmt1.Material_ID() );
+  //           -------------------------------------------------------------------------------
+  // NB: must fix missing parent information for node 0 that has lost its only parent element
+  
+  
+  // 3. Create a new node and pyramid element and connected themm with mesh
+  // ----------------------------------------------------------------------
+  const size_t n_original_nodes(mesh.Nodes());
+  // new node is placed at z=-1 (behind, in the center of backface of element 1,
+  // getting its barycentre coordinates from it)
+  Point<3U> bctr = e1ptr->BaryCenter();
+  bctr[2]        = -1.;
+	Node<3U>* n_ptr = mesh.AddNodeAt( bctr, node_vars );
   //                     ----------------------------
-  // method must return pointer to node 1 pointer
-  _test( n_ptr == ptr_n1 );
+	_test( mesh.Nodes() == n_original_nodes + 1 );
+  n_ptr->Idx( mesh.Nodes() ); // needs a number here
+
+  // create new PYRAMID element on the backside of the mesh
+	IsoparametricLinearPyramid fe;
+  int32_t material_id(1); // new element's rock_tye
+  vector<Node<3U>*>  nodes2 = { nodes[3], nodes[2], nodes[1], nodes[0], n_ptr };
+	Element<3U>*	     py_ptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_PYRAMID, elmt_vars, intp_vars, nodes2, material_id );
+  //                               -------------------------------------------------------------------------------------
+  // debugging diagnosts
+  cout <<"\n"<<"Nodes element 1:  ";
+  for ( auto it=e1ptr->NodesBegin(); it!=e1ptr->NodesEnd(); ++it ) cout << (*it)->Idx() <<" ";
+  cout <<"\n"<<"Nodes py element: ";
+  for ( auto it=py_ptr->NodesBegin(); it!=py_ptr->NodesEnd(); ++it ) cout << (*it)->Idx() <<" ";
+  cout << endl;
+  size_t nbors_found = connectNeighborsUsingNodeParents( py_ptr );
+  _test( nbors_found == 1 );
+  _test( py_ptr->Neighbor(4) == e1ptr ); // opposite base-plane
+  
+  
+  
+  
+  // X. Creating an intervening element between pyramid and element 1
 
   // create new nodes and return pointers to them
 	Node<3U>*		ptr_n2 = mesh.AddNodeAt( Point<3U>(26., 27., 0.0), node_vars, NOT );
@@ -682,15 +719,12 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	Node<3U>*		ptr_n4 = mesh.AddNodeAt( Point<3U>(31., 32., 0.0), node_vars, NOT );
 	Node<3U>*		ptr_n5 = mesh.AddNodeAt( Point<3U>(34., 35., 0.0), node_vars, NOT );
   //                   --------------
-
 	_test( mesh.Nodes() == n_original_nodes + 5 );
 
-  // create new PYRAMID element
-  int32_t material_id(1); // new element's rock_tye
-  vector<Node<3U>*>  nodes = {ptr_n1,ptr_n2,ptr_n3,ptr_n4,ptr_n5};
-	Element<3U>*	     ptr_e1 = mesh.AddElement( ISOPARAMETRIC_LINEAR_PYRAMID, elmt_vars, intp_vars, nodes, material_id );
+
 
 	// assign new element as a parent to its nodes (TODO: should be done when nodes are connected
+ /*
   ptr_n1->ResizeParentStorage( n1.Parents()+1 );
 	ptr_n1->Assign( n1.Parents() - 1, ptr_e1);
   
@@ -705,7 +739,8 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
   
   ptr_n4->ResizeParentStorage( n1.Parents()+1 );
 	ptr_n5->Assign( n1.Parents() - 1, ptr_e1);
-
+  */
+  
 	// checking the total number of nodes and elements (after insertion)
 	std::cout << "\nNodes    of the model after insertion: " << mesh.Nodes();
 	std::cout << "\nElements of the model after insertion: " << mesh.Elements();
@@ -716,7 +751,6 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	mesh.DeleteNodesAndRepairConnnectivity( nodes.begin(), nodes.end() );
 	_test( mesh.Nodes() == n_original_nodes );
 
-// TODO: test insertion / deletion / connection of Face and InterFace objects
 	return true;
 }
 

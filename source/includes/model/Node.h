@@ -71,7 +71,7 @@ class Node : public LocalVariableStorage<dim,Node> {
 
     // node to parent element connectivity (sorted vector that is searchable)
     
-    /// assign new parent element where there is a  NOT_INITIALISED  slot in the parent element storage
+    /// assign new parent element where there is a  NOT_INITIALISED  slot in the parent element storage, else adds new one
     void Assign( uint32_t parent_elmt_node_number, Element<dim>* parent_elmt );
     /// if found, sets matching parent element pointer to nullptr and the corresponding node number to NOT_INITIALIZED
     bool Unassign( Element<dim>* parent_elmt );
@@ -197,12 +197,31 @@ class Node : public LocalVariableStorage<dim,Node> {
 template<uint32_t dim>
 bool isWithinBoundingBox( const Point<dim>& pmin, const Point<dim>& pmax, const Node<dim>* const nptr );
 
-/// finds the 2 higher-dim parent elements that share face identified by its nodes, inner element is reported first; outer next; face-nodes of dim-1 element must be in correct order
+/// Find all parent elements that contain the supplied range of nodes.
+template<uint32_t dim>
+std::vector<Element<dim>*> parentElementsContaining( typename std::vector<Node<dim>*>::const_iterator first,
+                                                     typename std::vector<Node<dim>*>::const_iterator last );
+
+/// Erases cells from the vector that have a different dimension than the supplied cell
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t eraseDifferentDimensionalOrInvalidCells( const CELL<dim>* const cptr, std::vector<CELL<dim>*>& );
+                                                     
+/// Eliminates surface and line elements from cell range in 3D, and line elements from cell range in 2D.
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t eraseLowerDimensionalOrInvalidCells( std::vector<CELL<dim>*>& );
+                                                     
+/// Finds the number of the cell faces which consists of the supplied range of nodes.
+template<uint32_t dim, template<uint32_t> class CELL>
+uint32_t faceWithCornerNodes( const CELL<dim>* const cell_ptr,
+                              typename std::vector<Node<dim>*>::const_iterator first,
+                              typename std::vector<Node<dim>*>::const_iterator last );
+
+/// Finds the 2 higher-dim parent elements that share face identified by its nodes, inner element is reported first; outer next; face-nodes of dim-1 element must be in correct order
 template<uint32_t dim>
 std::pair<Element<dim>*,Element<dim>*>  parentElements( typename std::vector<Node<dim>*>::const_iterator first,
                                                         typename std::vector<Node<dim>*>::const_iterator last );
 
-///finds higher-dim parent element of element face on model outside, throws if  face is within the model // USED
+/// Finds the 1 higher-dim parent element of element face on model outside, throws if  face is within the model // USED
 template<uint32_t dim>
 std::pair<Element<dim>*,uint32_t>  parentElement( typename std::vector<Node<dim>*>::const_iterator first,
                                                   typename std::vector<Node<dim>*>::const_iterator last );
