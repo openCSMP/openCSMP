@@ -197,8 +197,10 @@ class Element : public FiniteElementPolicy<dim, Element>,
 
     /// (re)connect the element to its neighbors (during the model construction process or after remeshing)
     void Assign( uint32_t nbor, Element<dim>* const );
-    /// sets pointer to given neighbor element to zero
-    void Unassign( const Element<dim>* const );
+    /// sets pointer to given neighbor element to zero, reports whether removal was made
+    bool Unassign( const Element<dim>* const );
+    /// sets pointer to given neighbor element identifed by its number to zero
+    void UnassignNeighbor( uint32_t );
 
     /// (re)connect the element to its nodes (during the model construction process or after remeshing / split boundary creation)
     void Assign( uint32_t node, Node<dim>* const );
@@ -284,6 +286,10 @@ class Element : public FiniteElementPolicy<dim, Element>,
     // TODO: add uint32_t region_id_;  ///< for quick identification of regions across boundaries
 };
 
+
+/// Method that is not dependent on neighbor connectivity to return the nodes that are shared between the two elements; if these are the node-set of a shared face the returned boolean is set to true
+template<uint32_t dim>
+std::pair<std::vector<Node<dim>*>,bool>  sharedNodes( const Element<dim>* const eptr1, const Element<dim>* const eptr2 );
 
 } // csmp
 

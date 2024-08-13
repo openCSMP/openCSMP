@@ -315,7 +315,7 @@ uint32_t  Element<dim>::Neighbors() const
 template<uint32_t dim>
 uint32_t  Element<dim>::ConnectedNeighbors() const
 {
-  uint32_t nulls( 0 );
+  uint32_t nulls{0u};
   for ( auto& f : elmt_connector_ )
     if ( !f ) nulls++;
   return static_cast<uint32_t>(elmt_connector_.size() - nulls);
@@ -403,20 +403,34 @@ void Element<dim>::Assign( uint32_t i, Element<dim>* const e_ptr )
 
 
 /**
-    unassigns the neighbor element, setting the pointer in the 'elmt_connector' vector to null
+    Unassigns the neighbor element, setting the pointer in the 'elmt_connector' vector to nullptr.
+    Neither the argument pointer nor the Element pointed to are modified.
+    
+        @return whether removal was successful
+
 */
 template<uint32_t dim>
-void Element<dim>::Unassign( const Element<dim>* const e_ptr )
+bool Element<dim>::Unassign( const Element<dim>* const e_ptr )
   {
-    if ( e_ptr == nullptr ) return;
-    for ( uint32_t i{0U}; i < elmt_connector_.size(); ++i )
-      if ( e_ptr == elmt_connector_[i] ) {
+    if ( e_ptr == nullptr ) return false;
+    const auto n_nbors = static_cast<uint32_t>(elmt_connector_.size());
+    for ( uint32_t i{0U}; i < n_nbors; ++i )
+      if ( elmt_connector_[i] == e_ptr ) {
           elmt_connector_[i] = nullptr;
-          break;
+          return true; // a removal was made
         }
+    return false;
   }
 
-
+/**
+      Fast version which assumes that the number of the neighbor is known
+*/
+template<uint32_t dim>
+void Element<dim>::UnassignNeighbor( uint32_t nbor )
+  {
+     assert( nbor < elmt_connector_.size() );
+     elmt_connector_[nbor] = nullptr;
+  }
 
 
 template<uint32_t dim>
@@ -434,7 +448,8 @@ template<uint32_t dim>
 void Element<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
   {
     if ( nd_ptr == nullptr ) return;
-    for ( uint32_t i{0U}; i < node_connector_.size(); i++ )
+    const auto n_nodes = static_cast<uint32_t>(node_connector_.size());
+    for ( uint32_t i{0U}; i < n_nodes; i++ )
       if ( nd_ptr == node_connector_[i] ) {
           node_connector_[i] = nullptr;
           break;
@@ -591,7 +606,7 @@ void  Element<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
 {
   const auto n_nodes( Nodes() );
   XY.Resize( n_nodes, dim );
-  for ( auto i{0U}; i<n_nodes; ++i )
+  for ( uint32_t i{0U}; i<n_nodes; ++i )
     XY.AssignRow( i, N( i )->Coordinate() );
 
 } // end CoordinateMatrix
@@ -631,7 +646,7 @@ Point<dim>  Element<dim>::BaryCenter() const
 {
   Point<dim>  pt( N( 0U )->Coordinate() );
   const auto  n_nodes( Nodes() );
-  for ( auto i{1U}; i<n_nodes; ++i )
+  for ( uint32_t i{1U}; i<n_nodes; ++i )
     pt += N( i )->Coordinate();
 
   return pt / static_cast<double>(Nodes());
@@ -675,7 +690,7 @@ double  Element<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection
   assert( fMagnitudeOfDirection >= numeric_limits<double>::epsilon() );
 
   const auto n_nodes( Nodes() );
-  for ( auto i = 0; i<n_nodes; ++i ) {
+  for ( uint32_t i{0u}; i<n_nodes; ++i ) {
     // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
     double fTemp( vecDirection.DotProduct( N( i )->Coordinate() ) );
     fTemp /= fMagnitudeOfDirection;
@@ -709,10 +724,10 @@ void  Element<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Var>
   }
 
   // resizing V if necessary
-  const auto  n_nodes( Nodes() );
+  const auto  n_nodes{ Nodes() };
   V.resize( n_nodes );
 
-  for ( auto i{0U}; i<n_nodes; i++ )
+  for ( uint32_t i{0U}; i<n_nodes; i++ )
     N( i )->Read( idx, V[i] );
 }
 
@@ -755,14 +770,14 @@ void Element<dim>::Out() const
 
   cout << "\n\tconnected nodes (indices : boundary flags):  ";
   string str("undefined");
-  for ( auto i{0U}; i<this->Nodes(); i++ ) {
+  for ( uint32_t i{0U}; i<this->Nodes(); i++ ) {
     str = parseBoundary( N( i )->AtBoundary() );
     cout << N( i )->Idx() << ":" << str << "  ";
   }
   cout << endl;
 
   cout << "\n\tconnected neighbors (finite element types : boundary flags):\n";
-  for ( auto i{0U}; i<this->Neighbors(); i++ ) {
+  for ( uint32_t i{0U}; i<this->Neighbors(); i++ ) {
         if ( Neighbor( i ) != nullptr ) {
             cout << "\t\t"<<"elmt "<< Neighbor( i )->Idx() << ": ";
             cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << " ";
@@ -811,6 +826,38 @@ void Element<dim>::Out() const
 template class Element<1U>;
 template class Element<2U>;
 template class Element<3U>;
+
+
+
+
+// NON-MEMBER FUNCTIONS
+
+/// returns the nodes that are shared between the two elements; if these are the node-set of a shared face the returned boolean is set to true
+template<uint32_t dim>
+pair<vector<Node<dim>*>,bool>  sharedNodes( const Element<dim>* const eptr1, const Element<dim>* const eptr2 )
+ {
+    if ( !eptr1 || !eptr2 ) return make_pair( vector<Node<dim>*>(), false );
+ 
+    const bool describes_face = ( (eptr1->IsLine() && eptr2->IsLine()) ||
+                                  (eptr1->IsSurface() && eptr2->IsSurface()) ||
+                                  (eptr1->IsVolume() && eptr2->IsVolume()) ) ? true : false;
+
+     // agrrrh! - we need sorted vectors, so we might as well get sorted node sets
+     set<Node<dim>*> nodes1( eptr1->NodesBegin(), eptr1->NodesEnd() ), nodes2( eptr2->NodesBegin(), eptr2->NodesEnd() );
+     // store the nodes shared between the first and the second element
+     vector<Node<dim>*> shared_nodes;
+     set_intersection( nodes1.begin(), nodes1.end(),
+                       nodes2.begin(), nodes2.end(),
+                       back_inserter(shared_nodes) );
+
+     return make_pair( shared_nodes, describes_face );
+ 
+ } // end sharedNodes
+
+template pair<vector<Node<3>*>,bool>  sharedNodes( const Element<3>* const, const Element<3>* const );
+template pair<vector<Node<2>*>,bool>  sharedNodes( const Element<2>* const, const Element<2>* const );
+template pair<vector<Node<1>*>,bool>  sharedNodes( const Element<1>* const, const Element<1>* const );
+
 
 } // end namespace csmp
 

@@ -588,19 +588,29 @@ void InterFace<dim>::Assign( uint32_t n_local, Node<dim>* nptr, INTERFACE_SIDE s
 
 
 /**
-    unassigns the neighbor face, setting the pointer in the 'face_connector' vector to null
+    Unassigns the neighbor face, setting the pointer in the 'face_connector' vector to null
+    @return whether removal was successful
 */
 template<uint32_t dim>
-void InterFace<dim>::Unassign( const InterFace<dim>* const e_ptr )
+bool InterFace<dim>::Unassign( const InterFace<dim>* const if_ptr )
   {
-    if ( e_ptr == nullptr ) return;
-    for ( auto i{0U}; i < interface_connector_.size(); i++ )
-      if ( e_ptr == interface_connector_[i] ) {
+    if ( if_ptr == nullptr ) return false;
+    const auto n_nbors{ static_cast<uint32_t>(interface_connector_.size()) };
+    for ( uint32_t i{0U}; i < n_nbors; i++ )
+      if ( if_ptr == interface_connector_[i] ) {
           interface_connector_[i] = nullptr;
-          break;
+          return true;
         }
+    return false;
   }
 
+
+template<uint32_t dim>
+void InterFace<dim>::UnassignNeighbor( uint32_t nbor )
+  {
+     assert( nbor < interface_connector_.size() );
+     interface_connector_[nbor] = nullptr;
+  }
 
 
 

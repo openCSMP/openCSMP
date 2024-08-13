@@ -235,10 +235,54 @@ void MeshManager_Test::run()
 
 
 
+bool MeshManager_Test::Test_detachNeighborsFrom()
+ {
+    VSet<3>       vset;
+    ModelTopology topology;
+//    create_RubikCube( vset );
+    create_FracBox( topology, vset );
+    Model<3> model( vset, "MeshManager_Test-variables.txt" );
+    model.Name("FracBox");
+    
+    // element 13 (14) sits in the center of the cube, having all neighbors
+    Region<3U>& model_domain = model.Region("Model");
+    size_t      errors{0ul};
+ 
+    // finding element that has all its nbors, recording it and its neigbhors 
+    size_t               e_with_nbors{0ul};
+    vector<Element<3U>*> e_nbors;
+    for ( const auto& it : model_domain.CellVector() ) {
+         if ( it->IsVolume() && it->ConnectedNeighbors() == it->Neighbors() ) {
+              e_nbors.assign( it->NeighborsBegin(), it->NeighborsEnd() );
+              break;
+           }
+         e_with_nbors++;
+      }
+    
+    // recording the number of neighbors of all surrounding elements
+    vector<int> n_nbors( model_domain.E(e_with_nbors)->Neighbors(), IRREGULAR_OUTSIDE );
+    for ( uint32_t i{0u}; i<n_nbors.size(); i++ )
+      n_nbors[i] = model_domain.E(e_with_nbors)->Neighbor(i)->ConnectedNeighbors();
+    
+    model.Mesh().DetachNeighborsFrom( &(*model_domain.E(e_with_nbors)) );
+    //           ----------------------------------------------------
+
+    // testing
+    for ( uint32_t i{0u}; i<e_nbors.size(); i++ ) {
+        _test( e_nbors[i]->ConnectedNeighbors() == n_nbors[i] - 1U );
+        if ( !(e_nbors[i]->ConnectedNeighbors() == n_nbors[i] - 1U) ) errors++;
+      }
+
+    return ( errors == 0 );
+    
+ } // end Test_detachNeighborsFrom
+
+
 
 /**
     Checks that numbers of elements etc. in mesh manager do indeed reflect those of input model
-    Tests: Nodes(), Elements(), Faces(), InterFaces(), HybridElementMesh(), IsContiguous(), OutputMeshTo(vset) and node-nbor connectivity
+    Tests: Nodes(), Elements(), Faces(), InterFaces(), HybridElementMesh(), IsContiguous(), OutputMeshTo(vset) and node-nbor connectivity;
+    detachNeighborsFrom()
 */
 void MeshManager_Test::TestBasics()
 {
@@ -275,6 +319,8 @@ void MeshManager_Test::TestBasics()
 
   // returns number of interfaces=faces with multiplicated nodes
   _test(mesh.InterFaces() == 0);
+  
+  _test( Test_detachNeighborsFrom() );
   
   // test model model volume (based on bounding box)
   const Region<3>&  model_domain(model.Region("Model"));
@@ -643,6 +689,7 @@ bool MeshManager_Test::TestEntityNumberingFunction( Model<3>& model )
       - AddElement()
       - Delete( Element*)
       - connectNeighborsUsingNodeParents()
+      - sharedNodes( eptr, eptr )
 */
 bool MeshManager_Test::TestElementDeletionAndInsertion()
 {
@@ -668,6 +715,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	_test(mesh.Elements() == n_original_elmts - 1);
   // --------------------------------------------
   
+  
   // 2. recreate the missing the element and repair connectivity
   // -----------------------------------------------------------
 	LocalVariables				     node_vars = model.Database().LocalVariablesAt(NODE);
@@ -677,7 +725,8 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 
 	e1ptr = mesh.AddElement( elmt1.FE_Type(), elmt_vars, intp_vars, nodes, elmt1.Material_ID() );
   //           -------------------------------------------------------------------------------
-  // NB: must fix missing parent information for node 0 that has lost its only parent element
+  mesh.ConnectNeighborsUsingNodeParents( e1ptr );
+  _test( e1ptr->ConnectedNeighbors() == 3 );
   
   
   // 3. Create a new node and pyramid element and connected themm with mesh
@@ -693,63 +742,85 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
   n_ptr->Idx( mesh.Nodes() ); // needs a number here
 
   // create new PYRAMID element on the backside of the mesh
-	IsoparametricLinearPyramid fe;
   int32_t material_id(1); // new element's rock_tye
   vector<Node<3U>*>  nodes2 = { nodes[3], nodes[2], nodes[1], nodes[0], n_ptr };
 	Element<3U>*	     py_ptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_PYRAMID, elmt_vars, intp_vars, nodes2, material_id );
   //                               -------------------------------------------------------------------------------------
   // debugging diagnosts
-  cout <<"\n"<<"Nodes element 1:  ";
-  for ( auto it=e1ptr->NodesBegin(); it!=e1ptr->NodesEnd(); ++it ) cout << (*it)->Idx() <<" ";
-  cout <<"\n"<<"Nodes py element: ";
-  for ( auto it=py_ptr->NodesBegin(); it!=py_ptr->NodesEnd(); ++it ) cout << (*it)->Idx() <<" ";
-  cout << endl;
-  size_t nbors_found = connectNeighborsUsingNodeParents( py_ptr );
-  _test( nbors_found == 1 );
-  _test( py_ptr->Neighbor(4) == e1ptr ); // opposite base-plane
+  if ( verbose_ ) {
+    cout <<"\n"<<"Nodes element 1:  ";
+    for ( auto it=e1ptr->NodesBegin(); it!=e1ptr->NodesEnd(); ++it ) cout << (*it)->Idx() <<" ";
+    cout <<"\n"<<"Nodes py element: ";
+    for ( auto it=py_ptr->NodesBegin(); it!=py_ptr->NodesEnd(); ++it ) cout << (*it)->Idx() <<" ";
+    cout << endl;
+    size_t nbors_found = mesh.ConnectNeighborsUsingNodeParents( py_ptr );
+    _test( nbors_found == 1 );
+    _test( py_ptr->Neighbor(4) == e1ptr ); // opposite base-plane
+   }
+  // getting rid of pyramid (and its connection so that face 0 of element 1 is on the outside of model again
+  _test( mesh.Delete( py_ptr ) == true );
+  _test( e1ptr->Neighbor(0) == nullptr );
   
   
-  
-  
-  // X. Creating an intervening element between pyramid and element 1
+  // 4. Creating an intervening element between pyramid and element 1
+  // ----------------------------------------------------------------
+  // backing up the 4 nodes of pyramid base
+  vector<Node<3U>*> py_base_nds( nodes2.begin(), next(nodes2.begin(),4) );
+  // finding the shared nodes
+  pair<vector<Node<3U>*>,bool> snodes = sharedNodes( e1ptr, py_ptr );
+  _test( snodes.second == true ); // should be face nodes
+  sort( nodes2.begin(), nodes2.end() );
+  nodes2.erase( remove( nodes2.begin(), nodes2.end(), n_ptr ), nodes2.end() );
+  sort( snodes.first.begin(), snodes.first.end() );
+  _test( snodes.first == nodes2 ); // should be face nodes
+  //                                                                                           nodes in right order!
+	Element<3U>* quad_ptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_QUADRILATERAL, elmt_vars, intp_vars, py_base_nds, material_id );
+ // no neighbor connectivity is required here because this is a stand-alone piece of surface mesh
+  auto nrml = quad_ptr->UnitNormal();
+  _test( nrml[2] < 1 ); // should be outward pointing
 
-  // create new nodes and return pointers to them
-	Node<3U>*		ptr_n2 = mesh.AddNodeAt( Point<3U>(26., 27., 0.0), node_vars, NOT );
-	Node<3U>*		ptr_n3 = mesh.AddNodeAt( Point<3U>(29., 30., 0.0), node_vars, NOT );
-	Node<3U>*		ptr_n4 = mesh.AddNodeAt( Point<3U>(31., 32., 0.0), node_vars, NOT );
-	Node<3U>*		ptr_n5 = mesh.AddNodeAt( Point<3U>(34., 35., 0.0), node_vars, NOT );
+  // create new nodes and return pointers to them (they will later be identified as orphan and deleted)
+	Node<3U>*	ptr_n2 = mesh.AddNodeAt( Point<3U>(26., 27., 0.0), node_vars, NOT );
+	Node<3U>*	ptr_n3 = mesh.AddNodeAt( Point<3U>(29., 30., 0.0), node_vars, NOT );
+	Node<3U>*	ptr_n4 = mesh.AddNodeAt( Point<3U>(31., 32., 0.0), node_vars, NOT );
+	Node<3U>*	ptr_n5 = mesh.AddNodeAt( Point<3U>(34., 35., 0.0), node_vars, NOT );
+  _test( ptr_n2 != nullptr );
+  _test( ptr_n3 != nullptr );
+  _test( ptr_n4 != nullptr );
+  _test( ptr_n5 != nullptr );
   //                   --------------
 	_test( mesh.Nodes() == n_original_nodes + 5 );
 
 
-
-	// assign new element as a parent to its nodes (TODO: should be done when nodes are connected
- /*
-  ptr_n1->ResizeParentStorage( n1.Parents()+1 );
-	ptr_n1->Assign( n1.Parents() - 1, ptr_e1);
-  
-  ptr_n2->ResizeParentStorage( n1.Parents()+1 );
-	ptr_n2->Assign( n1.Parents() - 1, ptr_e1);
-  
-  ptr_n3->ResizeParentStorage( n1.Parents()+1 );
-	ptr_n3->Assign( n1.Parents() - 1, ptr_e1);
-  
-  ptr_n4->ResizeParentStorage( n1.Parents()+1 );
-	ptr_n4->Assign( n1.Parents() - 1, ptr_e1);
-  
-  ptr_n4->ResizeParentStorage( n1.Parents()+1 );
-	ptr_n5->Assign( n1.Parents() - 1, ptr_e1);
-  */
+  // 4. Creating Face connected to hex at the back model boundary
+  // ------------------------------------------------------------
+	LocalVariables				     face_vars = model.Database().LocalVariablesAt(FACE);
+	IntegrationPointVariables	 fitp_vars = model.Database().IntegrationPointVariablesAt(FACE);
+  // testing pair<Element<dim>*>,uint32_t> parentElement<>()
+  pair<Element<3U>*,uint32_t> adjacent_hex = parentElement<3U>( py_base_nds.begin(), py_base_nds.end() );
+  _test( adjacent_hex.first == e1ptr );
+  // creating face
+  mesh.AddBoundaryFace( adjacent_hex.first, adjacent_hex.second, face_vars, fitp_vars );
+  // after deleting the pyramid and the quad we should be back to original number of elements
+  _test( mesh.Elements() == n_original_elmts );
   
 	// checking the total number of nodes and elements (after insertion)
 	std::cout << "\nNodes    of the model after insertion: " << mesh.Nodes();
 	std::cout << "\nElements of the model after insertion: " << mesh.Elements();
   // one lost one gained
 	_test( mesh.Elements() == n_original_elmts );
+ 
+  // mesh should be broken
+  bool connectivity_is_broken = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
+  _test( connectivity_is_broken );
 
 	// 2. deleting these nodes again
 	mesh.DeleteNodesAndRepairConnnectivity( nodes.begin(), nodes.end() );
 	_test( mesh.Nodes() == n_original_nodes );
+ 
+  // mesh should be fine now
+  connectivity_is_broken = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
+ _test( !connectivity_is_broken );
 
 	return true;
 }

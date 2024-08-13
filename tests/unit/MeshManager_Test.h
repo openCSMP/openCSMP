@@ -59,6 +59,9 @@ class MeshManager_Test : public Test {
     // SUPPORTING FUNCTIONALITY FROM MESH_MANAGEMENT_UTILITIES
     bool Test_connectNeighborsUsingNodeParents(); // TODO: make separate test for all these functions
     
+    // hex 27 VSet - disconnected Neighbors from central element
+    bool Test_detachNeighborsFrom();
+    
     // TODO: test these...
     bool Test_AddNodeAt(); // <- TestElementDeletionAndInsertion() tests this
     bool Test_Duplicate(); // node

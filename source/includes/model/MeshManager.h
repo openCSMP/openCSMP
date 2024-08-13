@@ -282,6 +282,9 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
   // --------------------------------------------
   // NB: elements are responsible for their nodes, nodes for their manifolds
   
+  /// relying on the parent element information of its nodes,  finds equidimensional neighbors of element face and connects itself with them and vice versa; returns number of neighbors found
+  uint32_t ConnectNeighborsUsingNodeParents( Element<dim>* const );
+
   /// deletes element and repairs connectivity, reports whether deletion was successful (@note faster to delete multiple elements at once than one by one)
   bool Delete( Element<dim>* );
   bool Delete( Face<dim>* );
@@ -357,6 +360,11 @@ private:
               
   size_t Erase( typename plf::colony<InterFace<dim>>::const_iterator first,
                 typename plf::colony<InterFace<dim>>::const_iterator last ) { interfaces_.erase(first,last); return interfaces_.size(); }
+
+
+  /// disconnected neighbor elements from cell and itself from its neighbors
+  template<template<uint32_t> class CELL>
+  void DetachNeighborsFrom( CELL<dim>* const );
 
   /// (Re)number all cells; either continuous for all cells or seperate ranges for all entity types (const because idx is mutable)
   void AssignUniqueNumbers( bool in_a_single_sequence=false );

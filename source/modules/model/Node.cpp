@@ -764,7 +764,7 @@ template class Node<3U>;
  // NON-MEMBER FUNCTIONS
  
 /**
-   Returns  the element(s) that  share the face nodes which are supplied to the function via node iterators.
+   Returns  the highest dimensional element(s) that  share the face nodes which are supplied to the function via node iterators.
    The inside element is reported first; the outer one next. A nullptr is returned second if only the inside element is found.
    Since the function uses node numbers, it does not depend on a valid element neighbor connectivity.
    
@@ -1050,7 +1050,7 @@ template uint32_t faceWithCornerNodes( const Element<1U>* const,
       
 
 /**
-       Returns pointer to element that has a face with with the supplied range of nodes.
+       Returns pointer to the highest dimensional element that has a face with with the supplied range of nodes.
        When more than a single element is found, this may mean that the Element found is not on a model boundary.
        If so, the method selects the element with the least number of neighbors as the return value.
        
@@ -1092,7 +1092,7 @@ pair<Element<dim>*,uint32_t> parentElement( typename vector<Node<dim>*>::const_i
                    return make_pair( nullptr, numeric_limits<uint32_t>::max() );
                 }
            }
-         // 1.2 extra diagnostics if more than a single higher-dimensional element was found this message is unsuitable,
+         // 1.2 extra diagnostics if more than a single higher-dimensional element was found this function is unsuitable,
          //     but diagnostics will be offered before returning
          if ( elmts_with_all_nodes.size() == 2 )
            {

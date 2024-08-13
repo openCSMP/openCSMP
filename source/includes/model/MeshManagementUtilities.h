@@ -145,14 +145,6 @@ const Element<dim>* isContainedIn( const Region<dim>& subdomain, const std::arra
 
 // FUNCTIONALITY FOR INDIVIDUAL ELEMENTS/FACES/INTERFACES
 
-/// relying on the parent element information of its nodes,  finds equidimensional neighbors of element face and connects itself with them and vice versa; returns number of neighbors found
-template<uint32_t dim>
-uint32_t connectNeighborsUsingNodeParents( Element<dim>* const );
-
-/// loops over the valid neighbors of the cell and sets their neighbor pointers to point to this cell to nullptr
-template<uint32_t dim, template<uint32_t> class CELL>
-void detachNeighborsFrom( CELL<dim>* const cell_to_detach_neighbors_from );
-
 /// returns angle (in degrees) between the normals of the two cells, which must be surfaces (only in 3D)
 template<template<uint32_t> class CELL>
 double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* const cell2 );
@@ -164,10 +156,6 @@ double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* con
 ///Loops over begin and end iterators of an element colony and counts all the corner nodes
 template<uint32_t dim>
 size_t countCornerNodes( typename plf::colony<Element<dim>>::const_iterator elmts_begin, typename plf::colony<Element<dim>>::const_iterator elmts_end  );
-
-// TODO: not implement yet: not sure how to do this in a generic way
-template<uint32_t dim>
-void updateParentElementConnectivity( Node<dim>* const );
 
 /// finds the neighbors of each node in the target region returning the sparsity pattern of the mesh
 template<uint32_t dim>

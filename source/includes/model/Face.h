@@ -130,8 +130,10 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// tell face about its face neighbors
     void Assign( uint32_t nbor, Face<dim>* const );
       
-    /// sets the pointer to given neighbor face to zero
-	  bool Unassign( const Face<dim>* const );
+    /// sets the pointer to given neighbor face to zero, reports whether removal was made
+    bool Unassign( const Face<dim>* const );
+    /// removal of anything attached to face neighbor
+	  void UnassignNeighbor( uint32_t nbor );
 
     /// @attention because of the pointers, this assignment makes sense only in the rarest cases
     Face& operator=( const Face<dim>& );

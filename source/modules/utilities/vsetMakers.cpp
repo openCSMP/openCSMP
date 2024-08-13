@@ -1154,7 +1154,7 @@ void create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   	//nodes at faces:
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j{0U}; j < iDim_j; j++) //y
-  	for(auto i{0U}; i < iDim_i; i++) //x
+  	for(size_t i{0U}; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -3112,7 +3112,7 @@ void create_Tetra_VSet( VSet<3U>& vset )
 
 
 
-void create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
+void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
 {
   	IsoparametricLinearPyramid iso_pyramid;
   	
@@ -3492,6 +3492,8 @@ void create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
     vset.Out();
     
 } // end create_Pyramid_VSet
+
+
 
 
 

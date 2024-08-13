@@ -861,8 +861,12 @@ Node<dim>* const MeshManager<dim>::AddNodeAt( const Point<dim>& location,
                                               BOX_BOUNDARY bdry,
                                               TOPOTYPE topo )
 {
+   size_t node_idx{ nodes_.size() };
    typename plf::colony<Node <dim>>::iterator
      nit = nodes_.emplace( Node<dim>( nodes_.size(), location, lvars, bdry, topo ) );
+     
+   (*nit).Idx(node_idx);
+   
    return &(*nit);
 }
 
@@ -893,17 +897,25 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
    // node vector
    if ( nodes.empty() )
      csmp_error.Note( ERROR, "MeshManager<dim>::AddElement", "node vector is empty");
-
+     
+     
    // 1. constructing new element
    // ---------------------------
+   size_t elmt_idx{ elements_.size() };
    typename plf::colony<Element<dim>>::iterator eit = ( fvm_manager_ ) ?
                elements_.emplace( Element<dim>( elements_.size(),
                                   fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars, material_id ) ) :
                elements_.emplace( Element<dim>( elements_.size(),
                                   fem_manager_.E(etype), static_cast<FiniteVolumeStencil<dim>*>(nullptr), lvars, ivars, material_id ) );
-
+   (*eit).Idx( elmt_idx );
+   
    // 2. assigning nodes
    // ------------------
+   // verifying that the correct number of nodes is supplied
+   if ( nodes.size() != (*eit).FE()->Nodes() )
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddElement", "supplied node vector has incorrect size");
+   
+   // node assignment
    const auto n_nodes{ nodes.size() };
    for ( uint32_t i{0U}; i<n_nodes; ++i ) {
         (*eit).Assign( i, nodes[i] );
@@ -969,7 +981,7 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
    // 2. checking the validity of the node vector in debug mode
 #ifdef DEBUG
    // node vector
-   for ( auto i{0U}; i<ifptr->FE()->Nodes(); ++i ) {
+   for ( uint32_t i{0U}; i<ifptr->FE()->Nodes(); ++i ) {
          if ( nodes[i] == nullptr ) {
               cerr <<"\n\tnode "<< i;
               csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector contains a nullptr");
@@ -984,12 +996,15 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
 #endif
 
    // 3. creating the new Element
+   size_t elmt_idx{ elements_.size() };
    typename plf::colony<Element<dim>>::iterator
      eit = elements_.emplace( Element<dim>( elements_.size(), ifptr->FE(), ifptr->FV(), lvars, ivars, material_id ) );
+     
+   (*eit).Idx( elmt_idx );
    
    // 4. connecting the nodes to the element
    const size_t n_nodes( ifptr->FE()->Nodes() );
-   for ( auto i{0U}; i<n_nodes; ++i )
+   for ( uint32_t i{0U}; i<n_nodes; ++i )
      (*eit).Assign( i, nodes[i] );
      
    // 5. Connecting the intervening element to interface
@@ -1057,14 +1072,7 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
    (*fit).Idx( face_id );
 
    // 3. deleting original Element
-   if ( delete_original_face ) {
-        // disconnecting the neigbors
-        detachNeighborsFrom( eptr );
-        // deleting the element
-        elements_.erase( elements_.get_iterator(eptr) );
-        eptr = nullptr;
-     }
-
+   if ( delete_original_face ) Delete( eptr );
    return &(*fit);
    
  } // end ReplaceElementByFace
@@ -1126,9 +1134,7 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
 
    // 3. deleting the original Element
    // --------------------------------
-   detachNeighborsFrom( eptr );
-   elements_.erase( elements_.get_iterator(eptr) );
-   eptr = nullptr;
+   Delete( eptr );
 
    return &(*fit);
    
@@ -1276,7 +1282,6 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
    typename plf::colony<Face<dim>>::iterator
      fit = faces_.emplace( Face<dim>( *eptr, fem_manager_.E( eptr->FE()->ElementTypeOfFace(local_face_id) ),
                                       fvm_manager_, local_face_id, lvars, ivars ) );
-
    (*fit).Idx( face_number );
 
 #ifdef MESH_MANAGER_DEBUG
@@ -1360,6 +1365,116 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
 
 
 
+
+
+/**
+   Relying on the parent element information from its corner nodes, method tries finds  neighbor elements for each element Face (or boundary).
+   If a neighbor can be found, the function connects the element to it.
+ 
+   @return the number of neighbors that were identified
+ */
+template<uint32_t dim>
+uint32_t MeshManager<dim>::ConnectNeighborsUsingNodeParents( Element<dim>* const eptr )
+ {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+     if ( eptr == nullptr ) {
+             csmp_error.Note( ERROR, "MeshManager<dim>::ConnectNeighborsUsingNodeParents:",
+                               "invalid element pointer" );
+            return 0U;
+        }
+    
+     vector<Node<dim>*> face_nodes;
+     uint32_t nbors_found{0u};
+
+     const auto n_faces(eptr->Faces());
+     for ( uint32_t i{0U}; i<n_faces; ++i )
+       {
+          // finding the corner nodes of the face
+          const auto crn_nodes = eptr->CornerNodesOfFace(i);
+          face_nodes.assign( crn_nodes.begin(), crn_nodes.end() );
+          
+          // finding same-dimensional parent elements that share the elements face nodes (there should only be one!)
+          vector<Element<dim>*>  elmts_with_all_nodes = parentElementsContaining<dim>( face_nodes.begin(), face_nodes.end() );
+          eraseDifferentDimensionalOrInvalidCells( eptr, elmts_with_all_nodes );
+          
+          // if there are none nothing can be done, but there should not be more than one
+          if ( elmts_with_all_nodes.size() <= 1 ) {
+               if ( eptr != elmts_with_all_nodes[0] )
+                 csmp_error.Note( ERROR, "MeshManager<dim>::ConnectNeighborsUsingNodeParents:", "nodes identified do not match element found" );
+               continue;
+            }
+          else if ( elmts_with_all_nodes.size() > 2 ) {
+               cerr <<"\n\t"<< eptr->Idx() <<": face: "<< i;
+               csmp_error.Note( ERROR, "MeshManager<dim>::ConnectNeighborsUsingNodeParents:", "faces can only have one equidimensional neighbor" );
+            }
+            
+          // assigning the neighbor element
+          uint32_t nbor_elmt = ( eptr != elmts_with_all_nodes[0] ) ? 0u : 1u;
+          eptr->Assign( i, elmts_with_all_nodes[nbor_elmt] );
+
+          // finding which face of the identified neighbor element contains the shared nodes
+          uint32_t face_of_nbor = faceWithCornerNodes( elmts_with_all_nodes[nbor_elmt], face_nodes.begin(), face_nodes.end() );
+          
+          // assigning the current element to the neighbor
+          elmts_with_all_nodes[nbor_elmt]->Assign( face_of_nbor, eptr );
+          
+          nbors_found++;
+       }
+       
+    return nbors_found;
+        
+ } // end ConnectNeighborsUsingNodeParents
+
+
+
+
+
+
+
+
+// TODO: belongs into MeshManager
+/** loops over the valid neighbors of the cell and sets their neighbor pointers to point to this cell to nullptr
+ */
+template<uint32_t dim>
+template<template<uint32_t> class CELL>
+void MeshManager<dim>::DetachNeighborsFrom( CELL<dim>* const eptr )
+ {
+    assert( eptr != nullptr );
+    // nulling the connections of neighbor neighbor elements to this element
+    // (neighbor pointer to this element is nulled)
+    const uint32_t n_nbors{ eptr->Neighbors() };
+    for ( uint32_t i{0U}; i<n_nbors; ++i ) {
+          if ( eptr->Neighbor(i) ) {
+              const uint32_t n_nbor_nbors{ eptr->Neighbor(i)->Neighbors() };
+              for ( uint32_t j{0U}; j<n_nbor_nbors; ++j )
+                if ( eptr->Neighbor(i)->Neighbor(j) == eptr ) {
+                     // detaching neighbor from cell
+                     eptr->Neighbor(i)->UnassignNeighbor( j );
+                     break;
+                  }
+              // detaching itself from neighbor (only necessary if there is one) : works!
+              eptr->UnassignNeighbor( i );
+           }
+       }
+ }
+
+template void MeshManager<1>::DetachNeighborsFrom( Element<1>* const );
+template void MeshManager<2>::DetachNeighborsFrom( Element<2>* const );
+template void MeshManager<3>::DetachNeighborsFrom( Element<3>* const );
+
+template void MeshManager<1>::DetachNeighborsFrom( Face<1>* const );
+template void MeshManager<2>::DetachNeighborsFrom( Face<2>* const );
+template void MeshManager<3>::DetachNeighborsFrom( Face<3>* const );
+
+template void MeshManager<1>::DetachNeighborsFrom( InterFace<1>* const );
+template void MeshManager<2>::DetachNeighborsFrom( InterFace<2>* const );
+template void MeshManager<3>::DetachNeighborsFrom( InterFace<3>* const );
+
+
+
+
+
+
 template<uint32_t dim>
 bool	MeshManager<dim>::Delete( Element<dim>* eptr )
  {
@@ -1369,7 +1484,7 @@ bool	MeshManager<dim>::Delete( Element<dim>* eptr )
          (*nit)->EraseNullPointerParents();
       }
     // detaching neighbor elements
-    detachNeighborsFrom( eptr );
+    DetachNeighborsFrom( eptr );
     auto success = elements_.erase( elements_.get_iterator(eptr) );
     eptr = nullptr;
     
@@ -1384,7 +1499,7 @@ template<uint32_t dim>
 bool	MeshManager<dim>::Delete( Face<dim>* fptr )
  {
     // detaching neighbor faces
-    detachNeighborsFrom( fptr );
+    DetachNeighborsFrom( fptr );
     auto success = faces_.erase( faces_.get_iterator(fptr) );
     fptr = nullptr;
     
@@ -1400,7 +1515,7 @@ template<uint32_t dim>
 bool	MeshManager<dim>::Delete( InterFace<dim>* fptr )
  {
     // detaching neighbor InterFace objects
-    detachNeighborsFrom( fptr );
+    DetachNeighborsFrom( fptr );
     auto success = interfaces_.erase( interfaces_.get_iterator(fptr) );
     fptr = nullptr;
     
@@ -1511,9 +1626,7 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
 #endif
 
    // 3. removing original face
-   detachNeighborsFrom( fptr );
-   faces_.erase( faces_.get_iterator( fptr ) );
-   fptr = nullptr;
+   Delete( fptr );
 
    return &(*ifp);
 
@@ -2887,7 +3000,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Elem
           // 1.2 deleting the elements, setting pointers to zero
           size_t deleted_elements{ 0U };
           while ( first1 != last ) {
-               detachNeighborsFrom( (*first1) );
+               DetachNeighborsFrom( (*first1) );
                elements_.erase( elements_.get_iterator( (*first1) ) );
                (*first1) = nullptr;
                deleted_elements++;
@@ -2935,7 +3048,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Elem
      size_t deleted_elements{ 0U };
      while ( first1 != last ) {
           if ( (*first) != nullptr ) {
-               detachNeighborsFrom( (*first1) );
+               DetachNeighborsFrom( (*first1) );
                elements_.erase( elements_.get_iterator( (*first1) ) );
                (*first1) = nullptr;
             }
@@ -2998,7 +3111,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Face
      // 2. deleting the supplied range of faces, nulling the pointers to them
      size_t deleted_faces{ static_cast<size_t>(faces_to_delete) };
      for ( auto& fit : face_ptrs ) {
-          detachNeighborsFrom( fit );
+          DetachNeighborsFrom( fit );
           faces_.erase( faces_.get_iterator(fit) );
           fit = nullptr;
        }
@@ -3055,7 +3168,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Inte
      size_t deleted_interfaces{ static_cast<size_t>(interfaces_to_delete) };
      while( first1 != last ) {
           if ( (*first1) == nullptr ) deleted_interfaces--;
-          detachNeighborsFrom( (*first1) );
+          DetachNeighborsFrom( (*first1) );
           interfaces_.erase( interfaces_.get_iterator(*first1) );
           (*first1) = nullptr;
           first1++;

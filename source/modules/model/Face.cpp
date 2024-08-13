@@ -545,24 +545,33 @@ void Face<dim>::Assign( uint32_t i, csmp::Face<dim>* const f_ptr )
       Removes the first occurrence of the neighbor pointed to by f_ptr from the neighbor array.
       Any further occurrence is ignored.
       
-      @note call twice if there are multple occurrences.
+      @return whether removal was successful
       
+      @note call twice if there are multple occurrences.
       @note if called with a nullptr argument method will return false.
 */
 template<uint32_t dim>
 bool Face<dim>::Unassign( const Face<dim>* const f_ptr )
 {
   if ( f_ptr == nullptr ) return false;
-	for ( auto i{0U}; i < face_connector_.size(); ++i )
+  const auto n_nbors{ static_cast<uint32_t>(face_connector_.size()) };
+	for ( uint32_t i{0U}; i < n_nbors; ++i )
 		if ( f_ptr == face_connector_[i] )
       {
          face_connector_[i] = nullptr;
          return true;
       }
-	return false;
+	return false; // no removal was made
   
 } // end Unassign
 
+
+template<uint32_t dim>
+void Face<dim>::UnassignNeighbor( uint32_t nbor )
+  {
+     assert( nbor < face_connector_.size() );
+     face_connector_[nbor] = nullptr;
+  }
 
 
 template<uint32_t dim>
