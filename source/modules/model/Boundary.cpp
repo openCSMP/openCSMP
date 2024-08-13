@@ -783,7 +783,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
 
       // if there is an outer element
       if ( inner_outer_elements.second != nullptr ) {
-          pair<size_t,size_t> face_ids = findAdjacentElementFaces( inner_outer_elements.first, inner_outer_elements.second );
+          pair<size_t,size_t> face_ids = findAdjacentFacesFromNeighbors( inner_outer_elements.first, inner_outer_elements.second );
           // create new internal face
           this->cell_vec_.push_back( meshManager.ReplaceElementByFace( (*it),
                                                                        inner_outer_elements.first, inner_outer_elements.second,

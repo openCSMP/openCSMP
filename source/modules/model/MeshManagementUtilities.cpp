@@ -998,20 +998,20 @@ template pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<1>* const, 
      @attention if no shared face can be found, function returns UNSPECIFIED.
 */
 template<uint32_t dim>
-pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element<dim>* const eptr2 )
+pair<size_t,size_t> findAdjacentFacesFromNodes( Element<dim>* const eptr1, Element<dim>* const eptr2 )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
    if ( eptr1 == nullptr ) {
-        csmp_error.Note( ERROR, "findAdjacentElementFaces", "null pointer to first element.");
+        csmp_error.Note( ERROR, "findAdjacentFacesFromNodes", "null pointer to first element.");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
    if ( eptr2 == nullptr ) {
-        csmp_error.Note( ERROR, "findAdjacentElementFaces", "null pointer to second element.");
+        csmp_error.Note( ERROR, "findAdjacentFacesFromNodes", "null pointer to second element.");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
    if ( eptr1 == eptr2 ) {
-        csmp_error.Note( ERROR, "findAdjacentElementFaces", "the supplied pointers point to the same element!");
+        csmp_error.Note( ERROR, "findAdjacentFacesFromNodes", "the supplied pointers point to the same element!");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
     
@@ -1044,9 +1044,9 @@ pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element
     
  } // end findAdjacentElementFaces
  
-template pair<size_t,size_t> findAdjacentElementFaces( Element<3>* const, Element<3>* const );
-template pair<size_t,size_t> findAdjacentElementFaces( Element<2>* const, Element<2>* const );
-template pair<size_t,size_t> findAdjacentElementFaces( Element<1>* const, Element<1>* const );
+template pair<size_t,size_t> findAdjacentFacesFromNodes( Element<3>* const, Element<3>* const );
+template pair<size_t,size_t> findAdjacentFacesFromNodes( Element<2>* const, Element<2>* const );
+template pair<size_t,size_t> findAdjacentFacesFromNodes( Element<1>* const, Element<1>* const );
  
 
 

@@ -214,7 +214,7 @@ void MeshManager_Test::run()
 	cout << "\n----------------------------------------------------";
 	cout << "\nMeshManager_Test::TestElementDeletionAndInsertion";
 	cout << "\n----------------------------------------------------";
-	_test(TestElementDeletionAndInsertion());
+	_test(TestCellDeletionAndInsertion());
 
 	cout << "\n-------------------------------------------------";
 	cout << "\nMeshManager_Test::TestFaceDeletionAndInsertion";
@@ -248,7 +248,7 @@ bool MeshManager_Test::Test_detachNeighborsFrom()
     Region<3U>& model_domain = model.Region("Model");
     size_t      errors{0ul};
  
-    // finding element that has all its nbors, recording it and its neigbhors 
+    // finding element that has all its nbors, recording it and its neigbhors
     size_t               e_with_nbors{0ul};
     vector<Element<3U>*> e_nbors;
     for ( const auto& it : model_domain.CellVector() ) {
@@ -686,16 +686,19 @@ bool MeshManager_Test::TestEntityNumberingFunction( Model<3>& model )
 /**
      Tests:
       - AddNodeAt()
-      - AddElement()
+      - AddElement(),
+      - AddFace(),
+      - ReplaceElementByFace(),
       - Delete( Element*)
       - connectNeighborsUsingNodeParents()
       - sharedNodes( eptr, eptr )
+      
 */
-bool MeshManager_Test::TestElementDeletionAndInsertion()
+bool MeshManager_Test::TestCellDeletionAndInsertion()
 {
   VSet<3U> vset;
   create_Hexahedra_VSet( vset, false );
-  Model<3>   model( vset, "CSMP-variables.txt" );
+  Model<3>   model( vset, "MeshManager_Test-variables.txt" );
 
   MeshManager<3U>& mesh(model.Mesh());
   const size_t     n_original_elmts(mesh.Elements());
@@ -757,14 +760,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
     _test( nbors_found == 1 );
     _test( py_ptr->Neighbor(4) == e1ptr ); // opposite base-plane
    }
-  // getting rid of pyramid (and its connection so that face 0 of element 1 is on the outside of model again
-  _test( mesh.Delete( py_ptr ) == true );
-  _test( e1ptr->Neighbor(0) == nullptr );
-  
-  
-  // 4. Creating an intervening element between pyramid and element 1
-  // ----------------------------------------------------------------
-  // backing up the 4 nodes of pyramid base
+  // backing up the 4 nodes at pyramid base
   vector<Node<3U>*> py_base_nds( nodes2.begin(), next(nodes2.begin(),4) );
   // finding the shared nodes
   pair<vector<Node<3U>*>,bool> snodes = sharedNodes( e1ptr, py_ptr );
@@ -773,12 +769,73 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
   nodes2.erase( remove( nodes2.begin(), nodes2.end(), n_ptr ), nodes2.end() );
   sort( snodes.first.begin(), snodes.first.end() );
   _test( snodes.first == nodes2 ); // should be face nodes
+
+  // getting rid of pyramid (and its connections so that face 0 of element 1 is on the outside of model again
+  _test( mesh.Delete( py_ptr ) == true );
+  _test( e1ptr->Neighbor(0) == nullptr );
+  
+  
+  // 4. Creating an element that caps face of element 1 where pyramid was
+  // --------------------------------------------------------------------
   //                                                                                           nodes in right order!
 	Element<3U>* quad_ptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_QUADRILATERAL, elmt_vars, intp_vars, py_base_nds, material_id );
  // no neighbor connectivity is required here because this is a stand-alone piece of surface mesh
   auto nrml = quad_ptr->UnitNormal();
   _test( nrml[2] < 1 ); // should be outward pointing
 
+
+  // 4. Creating Face connected to hex at the back model boundary
+  // ------------------------------------------------------------
+	LocalVariables				     face_vars = model.Database().LocalVariablesAt(FACE);
+	IntegrationPointVariables	 fitp_vars = model.Database().IntegrationPointVariablesAt(FACE);
+  // testing pair<Element<dim>*>,uint32_t> parentElement<>()
+  pair<Element<3U>*,uint32_t> adjacent_hex = parentElement<3U>( py_base_nds.begin(), py_base_nds.end() );
+  _test( adjacent_hex.first == e1ptr );
+  // creating duplicate faces
+  mesh.AddBoundaryFace( adjacent_hex.first, adjacent_hex.second, face_vars, fitp_vars );
+  mesh.AddBoundaryFace( adjacent_hex.first, adjacent_hex.second, face_vars, fitp_vars );
+  _test( mesh.Faces() == 2 );
+  // testing utility that identifies duplicated cells (verbose off)
+  size_t duplicate_faces = detectDuplicateCells<3U,Face>( mesh.FacesBegin(), mesh.FacesEnd(), false );
+  _test( duplicate_faces == 1 );
+  // deleting quad
+  mesh.Delete( quad_ptr );
+  // after deleting the pyramid and the quad we should be back to original number of elements
+  _test( mesh.Elements() == n_original_elmts );
+  
+	// checking the total number of nodes and elements (after insertion)
+	cout << "\nNodes    of the model after insertion: " << mesh.Nodes();
+	cout << "\nElements of the model after insertion: " << mesh.Elements();
+  // one lost one gained
+	_test( mesh.Elements() == n_original_elmts );
+ 
+  // mesh should be broken
+  bool connectivity_is_broken = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
+  _test( connectivity_is_broken );
+  
+ 
+   // 5. Creating a Face between hex1 and a neighbor
+  // ------------------------------------------------------------
+  uint32_t valid_nbor_face1(UNSPECIFIED);
+  for ( uint32_t i{0u}; i<e1ptr->Neighbors(); ++i ) if ( e1ptr->Neighbor(i) ) { valid_nbor_face1=i; break; }
+  assert( valid_nbor_face1 < e1ptr->Neighbors() );
+  // finding shared face
+  pair<size_t,size_t> shared_faces_nbors = findAdjacentFacesFromNeighbors( e1ptr, e1ptr->Neighbor(valid_nbor_face1) );
+  pair<size_t,size_t> shared_faces_nodes = findAdjacentFacesFromNodes( e1ptr, e1ptr->Neighbor(valid_nbor_face1) );
+  _test( shared_faces_nbors == shared_faces_nodes );
+  valid_nbor_face1          = (uint32_t) shared_faces_nodes.first;
+  uint32_t valid_nbor_face2 = (uint32_t) shared_faces_nodes.second;
+  // finding shared nodes
+  auto shared_nodes = sharedNodes( e1ptr, e1ptr->Neighbor(valid_nbor_face1) );
+  // putting a quadrilateral element between these elements
+	quad_ptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_QUADRILATERAL, elmt_vars, intp_vars, shared_nodes.first, material_id );
+  // replacing this element by a face
+  auto fptr = mesh.ReplaceElementByFace( quad_ptr, e1ptr, e1ptr->Neighbor(valid_nbor_face1), valid_nbor_face1, valid_nbor_face2, face_vars, fitp_vars );
+  _test( fptr != nullptr );
+  _test( mesh.Faces() == 3 );
+
+	// 6. Node diagnostics and deletion
+  // -----------------------------------------------------------------
   // create new nodes and return pointers to them (they will later be identified as orphan and deleted)
 	Node<3U>*	ptr_n2 = mesh.AddNodeAt( Point<3U>(26., 27., 0.0), node_vars, NOT );
 	Node<3U>*	ptr_n3 = mesh.AddNodeAt( Point<3U>(29., 30., 0.0), node_vars, NOT );
@@ -790,32 +847,13 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
   _test( ptr_n5 != nullptr );
   //                   --------------
 	_test( mesh.Nodes() == n_original_nodes + 5 );
+  vector<Node<3U>*>  orphan_nodes1{ n_ptr, ptr_n2, ptr_n3, ptr_n4, ptr_n5 };
+  sort( orphan_nodes1.begin(), orphan_nodes1.end() );
+  // using this result to verify OrphanNodeVector()
+  vector<const Node<3U>*> orphan_nodes2 = mesh.OrphanNodeVector();
+  _test( orphan_nodes2.size() == orphan_nodes1.size() );
 
-
-  // 4. Creating Face connected to hex at the back model boundary
-  // ------------------------------------------------------------
-	LocalVariables				     face_vars = model.Database().LocalVariablesAt(FACE);
-	IntegrationPointVariables	 fitp_vars = model.Database().IntegrationPointVariablesAt(FACE);
-  // testing pair<Element<dim>*>,uint32_t> parentElement<>()
-  pair<Element<3U>*,uint32_t> adjacent_hex = parentElement<3U>( py_base_nds.begin(), py_base_nds.end() );
-  _test( adjacent_hex.first == e1ptr );
-  // creating face
-  mesh.AddBoundaryFace( adjacent_hex.first, adjacent_hex.second, face_vars, fitp_vars );
-  // after deleting the pyramid and the quad we should be back to original number of elements
-  _test( mesh.Elements() == n_original_elmts );
-  
-	// checking the total number of nodes and elements (after insertion)
-	std::cout << "\nNodes    of the model after insertion: " << mesh.Nodes();
-	std::cout << "\nElements of the model after insertion: " << mesh.Elements();
-  // one lost one gained
-	_test( mesh.Elements() == n_original_elmts );
- 
-  // mesh should be broken
-  bool connectivity_is_broken = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
-  _test( connectivity_is_broken );
-
-	// 2. deleting these nodes again
-	mesh.DeleteNodesAndRepairConnnectivity( nodes.begin(), nodes.end() );
+	mesh.DeleteNodesAndRepairConnnectivity( orphan_nodes1.begin(), orphan_nodes1.end() );
 	_test( mesh.Nodes() == n_original_nodes );
  
   // mesh should be fine now
@@ -823,7 +861,9 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
  _test( !connectivity_is_broken );
 
 	return true;
-}
+  
+} // end TestCellDeletionAndInsertion
+
 
 
 
@@ -961,7 +1001,7 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
                  outside_nodes.push_back( onptr );
               }
             // find matching faces via the shared nodes
-            pair<uint32_t,uint32_t> face_ids1 = findAdjacentElementFaces( eptr, eptr->Neighbor(i) );
+            pair<uint32_t,uint32_t> face_ids1 = findAdjacentFacesFromNodes( eptr, eptr->Neighbor(i) );
             _test( i == face_ids1.first );
             // find matching faces via neighbor element pointers (faster)
             pair<uint32_t,uint32_t> face_ids2 = findAdjacentFacesFromNeighbors( eptr, eptr->Neighbor(i) );

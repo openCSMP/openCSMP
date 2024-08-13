@@ -1748,7 +1748,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceInteriorElementsByFaces( const Prop
          assert( pelmts.first  != nullptr );
          assert( pelmts.second != nullptr );
          // finding the face numbers of the parent elements
-         pair<uint32_t,uint32_t> face_ids = findAdjacentElementFaces( pelmts.first, pelmts.second );
+         pair<uint32_t,uint32_t> face_ids = findAdjacentFacesFromNodes( pelmts.first, pelmts.second );
          // creates Face, stores a pointer to it; deletes lower-dimensional element from which it was constructed
          face_ptrs.push_back( ReplaceElementByFace( (*first), pelmts.first, pelmts.second,
                                                    face_ids.first, face_ids.second, lvars, ivars ) );
@@ -1867,6 +1867,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
       
      // 2. deleting the elements from which the faces were created
      // ----------------------------------------------------------
+     // TODO: should call Delete( elmt ) instead so that connectivity is taken care off
      while( first2 != last ) {
           elements_.erase( elements_.get_iterator(*first2) );
           (*first2) = nullptr;
@@ -7171,6 +7172,71 @@ bool  MeshManager<dim>::HybridElementMesh() const
 
 
 
+  ///  Reports nodes that do not belong to any parent elements, faces or interfaces
+template<uint32_t dim>
+size_t MeshManager<dim>::OrphanNodes() const {
+     return MeshManager<dim>::OrphanNodeVector().size();
+  }
+
+
+template<uint32_t dim>
+vector<const Node<dim>*> MeshManager<dim>::OrphanNodeVector() const
+  {
+     // renumbering the Node objects consecutively and creating a corresponding integer vector
+     long counter{0};
+     for ( const auto& node : nodes_ )  node.Idx( counter++ );
+     vector<long> all_nodes( nodes_.size(), UNSPECIFIED );
+     iota( all_nodes.begin(), all_nodes.end(), 0 );
+ 
+     plf::colony<long>  connected_nodes;
+ 
+     for ( const auto& elmt : elements_ )
+       for ( auto nit=elmt.NodesBegin(); nit!=elmt.NodesEnd(); ++nit )
+         connected_nodes.insert( (*nit)->Idx() );
+     
+     // better than for vector, these are efficient member functions
+     connected_nodes.sort();
+     connected_nodes.unique();
+ 
+     if ( !faces_.empty() ) {
+          for ( const auto& face : faces_ )
+           for ( auto nit=face.NodesBegin(); nit!=face.NodesEnd(); ++nit )
+             connected_nodes.insert( (*nit)->Idx() );
+         
+          connected_nodes.sort();
+          connected_nodes.unique();
+       }
+     if ( !interfaces_.empty() ) {
+          for ( const auto& iface : interfaces_ )
+           for ( auto nit=iface.NodesBegin(); nit!=iface.NodesEnd(); ++nit )
+             connected_nodes.insert( (*nit)->Idx() );
+         
+          connected_nodes.sort();
+          connected_nodes.unique();
+       }
+
+     // assumes that there are no duplicates
+     if ( connected_nodes.size() == nodes_.size() ) return vector<const Node<dim>*>( /* empty vec */ );
+  
+     vector<long> nodes_missing;
+     set_difference( all_nodes.begin(), all_nodes.end(),
+                     connected_nodes.begin(), connected_nodes.end(),
+                     back_inserter(nodes_missing) );
+     
+     vector<const Node<dim>*> orphan_nodes;
+     
+     if ( !nodes_missing.empty() ) {
+         for ( const auto& node : nodes_missing )
+           orphan_nodes.push_back( &(*next(nodes_.begin(),node)) );
+       }
+     
+     return orphan_nodes;
+  
+  } // end OrphanNodeVector
+
+
+
+
 
 /**
         @note SKM retained this method for the moment (6/9/2021)
@@ -7446,10 +7512,78 @@ void MeshManager<dim>::Out() const
 
 
 
-
 template class MeshManager<1U>;
 template class MeshManager<2U>;
 template class MeshManager<3U>;
+
+
+// NON-MEMBER FUNCTIONS
+
+/// finds cells that have the same nodes and reports their numbers
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t detectDuplicateCells( typename plf::colony<CELL<dim>>::const_iterator first,
+                             typename plf::colony<CELL<dim>>::const_iterator last,
+                             bool verbose )
+ {
+    map<set<Node<dim>*>,set<const CELL<dim>*> > potential_duplicates;
+    size_t  n_duplicates{0ul};
+    size_t  cell_counter{0ul};
+    bool    first_issue{ true };
+    
+    while( first != last ) {
+         // creating cell keys from their node pointers
+         set<Node<dim>*> node_set;
+         const auto n_nodes{ first->Nodes() };
+         if constexpr( is_same<CELL<dim>,InterFace<dim>>::value ) {
+              for ( uint32_t i{0U}; i<n_nodes/2u; i++ ) {
+                   node_set.insert( first->N(i) );
+                }
+           }
+         else if constexpr( is_same<CELL<dim>,Element<dim>>::value ||
+                            is_same<CELL<dim>,Face<dim>>::value )  {
+              for ( uint32_t i{0U}; i<n_nodes; i++ ) {
+                   node_set.insert( first->N(i) );
+                }
+           }
+         // recording the cells
+         auto it = potential_duplicates.insert( make_pair( node_set, set<const CELL<dim>*>{ &(*first) } ) );
+         // if there is a cell with the same nodes but a different pointer, it is recorded
+         if ( it.second == false ) {
+              auto cit =(*it.first).second.insert( &(*first) );
+              if ( verbose && cit.second == false ) {
+                  cout <<"\n"<<"detectDuplicateCells: input range contains multiple copies of:";
+                  first->Out();
+                }
+              n_duplicates++;
+           }
+         first++;
+         cell_counter++;
+      }
+      
+    // printing the duplicate cells if any
+    if ( n_duplicates  > 0U && verbose ) {
+         cout <<"\n\n"<<"detectDuplicateCells: found "<< n_duplicates <<" cells sharing all nodes in input range:";
+         for ( auto pd : potential_duplicates )
+           if ( pd.second.size() > 1U )
+             (*pd.second.begin())->Out();
+      }
+  
+    return n_duplicates;
+    
+ } // end detectDuplicateCells
+
+template size_t detectDuplicateCells<3,Element>( plf::colony<Element<3>>::const_iterator, plf::colony<Element<3>>::const_iterator, bool );
+template size_t detectDuplicateCells<2,Element>( plf::colony<Element<2>>::const_iterator, plf::colony<Element<2>>::const_iterator, bool );
+template size_t detectDuplicateCells<1,Element>( plf::colony<Element<1>>::const_iterator, plf::colony<Element<1>>::const_iterator, bool );
+
+template size_t detectDuplicateCells<3,Face>( plf::colony<Face<3>>::const_iterator, plf::colony<Face<3>>::const_iterator, bool );
+template size_t detectDuplicateCells<2,Face>( plf::colony<Face<2>>::const_iterator, plf::colony<Face<2>>::const_iterator, bool );
+template size_t detectDuplicateCells<1,Face>( plf::colony<Face<1>>::const_iterator, plf::colony<Face<1>>::const_iterator, bool );
+
+template size_t detectDuplicateCells<3,InterFace>( plf::colony<InterFace<3>>::const_iterator, plf::colony<InterFace<3>>::const_iterator, bool );
+template size_t detectDuplicateCells<2,InterFace>( plf::colony<InterFace<2>>::const_iterator, plf::colony<InterFace<2>>::const_iterator, bool );
+template size_t detectDuplicateCells<1,InterFace>( plf::colony<InterFace<1>>::const_iterator, plf::colony<InterFace<1>>::const_iterator, bool );
+
 
 
 } // end namespace csmp 

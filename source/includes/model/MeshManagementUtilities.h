@@ -42,6 +42,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<dim>& );
 template<uint32_t dim,template<uint32_t> class CELL>
 size_t findContiguousMeshPatch( CELL<dim>* const entry_cell, std::set<CELL<dim>*>& contiguous_subset_of_cells );
 
+// TODO: put into MM
 /// distinguishes the contiguous mesh patches represented by the supplied range of cells; each patch is given a name and stored in the argument map
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  findContiguousMeshPatches( typename plf::colony<CELL<dim>>::iterator begin,
@@ -80,7 +81,6 @@ template<uint32_t dim>
 void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,
                           typename std::vector<Node<dim>*>::const_iterator nodes_end,
                           std::vector<std::vector<double> >& distances_and_weight );
-
 
 /// container of element pointers and local face ids of elements contacting each other across a split boundary
 typedef std::pair<std::pair<Element<3U>*, uint32_t>, std::pair<Element<3U>*, uint32_t> > OppositeElements;
@@ -121,6 +121,7 @@ size_t detectOrphanNodes( MeshManager<dim>&, std::set<Node<dim>*>& orphan_nodes 
 template<uint32_t dim>
 size_t findInterconnectedNodeCluster( Node<dim>* const, std::set<Node<dim>*>& contiguous_set_of_nodes );
 
+// TODO: put into MM
 /// Relying on the node-to-node connectivity, uses a recursive depth first traversal to discover the interconnected nodes in the supplied range; set of node pairs defining the cel segments must be input
 template<uint32_t dim>
 size_t findInterconnectedNodes( const plf::colony<Node<dim>>& nodes, std::set<std::pair<const Node<dim>*,const Node<dim>*>>& validEdges );
@@ -153,6 +154,7 @@ double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* cons
 template<uint32_t dim, template<uint32_t> class CELL>
 double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 );
 
+// TODO: put into MM
 ///Loops over begin and end iterators of an element colony and counts all the corner nodes
 template<uint32_t dim>
 size_t countCornerNodes( typename plf::colony<Element<dim>>::const_iterator elmts_begin, typename plf::colony<Element<dim>>::const_iterator elmts_end  );
@@ -178,13 +180,13 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
 template<uint32_t dim>
 void eraseElementPointerFromVector( std::vector<csmp::Element<dim>*>&, const Element<dim>* );
 
-/// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (faster)
+/// for juxtaposed elements, method uses neighbor connectivity to find the faces of e1 and e2 that are in contact with one another (faster)
 template<uint32_t dim>
 std::pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 );
 
-/// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (slower)
+/// for juxtaposed elements, method uses shared nodes to find the faces of e1 and e2 that are in contact with one another  (slower)
 template<uint32_t dim>
-std::pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element<dim>* const eptr2 );
+std::pair<size_t,size_t> findAdjacentFacesFromNodes( Element<dim>* const eptr1, Element<dim>* const eptr2 );
 
 /// returns true if the supplied elements contain each other's barycentre
 template<uint32_t dim>
@@ -215,6 +217,7 @@ void backupNeighborConnectivity( typename std::vector<CELL<dim>*>::const_iterato
                                  typename std::vector<CELL<dim>*>::const_iterator last,
                                  std::vector<std::vector<CELL<dim>*> >& nbor_pointers );
 
+// TODO: put into MM
 /// tests whether all the expected cell functionality is there and operational
 template<uint32_t dim, template<uint32_t> class CELL>
 bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,

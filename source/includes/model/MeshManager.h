@@ -208,10 +208,10 @@ public:
   Node<dim>* const     Duplicate( Node<dim>* const nptr_inside, const LocalVariables& lvars );
 
   /// method tries to find neighbors through the parent connectivity of the nodes
-  Element<dim>*	const AddElement( CSMP_FEM_TYPE,
-                                  const LocalVariables& element_variables,
-                                  const IntegrationPointVariables& element_integration_point_variables,
-                                  const std::vector<Node<dim>*>& nodes, int32_t material_id );
+  Element<dim>*	const  AddElement( CSMP_FEM_TYPE,
+                                   const LocalVariables& element_variables,
+                                   const IntegrationPointVariables& element_integration_point_variables,
+                                   const std::vector<Node<dim>*>& nodes, int32_t material_id );
 
   /// puts lower-dimensional element inside of an InterFace, connecting it to its base pointer; the neighbors are not connected yet
   Element<dim>*	const AddInterveningElement( csmp::InterFace<dim>* const,
@@ -282,9 +282,6 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
   // --------------------------------------------
   // NB: elements are responsible for their nodes, nodes for their manifolds
   
-  /// relying on the parent element information of its nodes,  finds equidimensional neighbors of element face and connects itself with them and vice versa; returns number of neighbors found
-  uint32_t ConnectNeighborsUsingNodeParents( Element<dim>* const );
-
   /// deletes element and repairs connectivity, reports whether deletion was successful (@note faster to delete multiple elements at once than one by one)
   bool Delete( Element<dim>* );
   bool Delete( Face<dim>* );
@@ -334,6 +331,13 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
   /// disconnects nodes from potential manifolds and deletes the latter
   size_t DeleteNodesAndRepairConnnectivity( typename std::vector<Node<dim>*>::iterator first,
                                             typename std::vector<Node<dim>*>::iterator last );
+
+  ///  Reports nodes that do not belong to any parent elements, faces or interfaces
+  size_t OrphanNodes() const;
+  std::vector<const Node<dim>*> OrphanNodeVector() const;
+
+  /// relying on the parent element information of its nodes,  finds equidimensional neighbors of element face and connects itself with them and vice versa; returns number of neighbors found
+  uint32_t ConnectNeighborsUsingNodeParents( Element<dim>* const );
 
   /// method to test the connectivity of a mesh
   size_t CheckElementConnectivity() const;
@@ -398,6 +402,15 @@ private:
   friend class MeshManager_Test; ///< so that private methods can be tested
   friend class Model<dim>;       ///<  exclusive access to private member functions
 };
+
+
+/// finds cells sharing the same nodes and reports their numbers; verbose reports the duplicate cells
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t detectDuplicateCells( typename plf::colony<CELL<dim>>::const_iterator begin,
+                             typename plf::colony<CELL<dim>>::const_iterator end,
+                             bool verbose );
+
+
 
 } // end namespace csmp
 

@@ -13,7 +13,6 @@ namespace csmp {
 
 /** 
     Constructs face as exact copy of a lower-dimensional element from which it is constructed.
-    The lower-dimensional element gets attached to the middle element pointer.
 
     custom constructor which:
  
@@ -22,7 +21,6 @@ namespace csmp {
     - connects face to its nodes
  
     - connects face to its higher-dimensiona parent elements
-    
 
     @note nodes and node numbering will be exactly that 
     of the original lower-dimensional ELement object.
@@ -72,11 +70,11 @@ Face<dim>::Face( const Element<dim>& elmt,
 #ifdef DEBUG
     const uint32_t         nodes_to_match(elmt.Nodes());
     set<const Node<dim>*>  elmt_nodes;
-    for ( auto j{0U}; j<nodes_to_match; ++j )
+    for ( uint32_t j{0U}; j<nodes_to_match; ++j )
       elmt_nodes.insert( elmt.N(j) );
     // checking inner parent
     uint32_t matching_nodes(0U);
-    for ( auto j{0U}; j<innerParent_->Nodes(); ++j ) {
+    for ( uint32_t j{0U}; j<innerParent_->Nodes(); ++j ) {
           assert( innerParent_->N(j) != nullptr );
           if ( elmt_nodes.find( innerParent_->N(j) ) != elmt_nodes.end() )
             matching_nodes++;
@@ -85,7 +83,7 @@ Face<dim>::Face( const Element<dim>& elmt,
     // checking outer parent
     if ( outerParent_ != nullptr ) {
         matching_nodes = 0U;
-        for ( auto j{0U}; j<innerParent_->Nodes(); ++j ) {
+        for ( uint32_t j{0U}; j<innerParent_->Nodes(); ++j ) {
               assert( innerParent_->N(j) != nullptr );
               if ( elmt_nodes.find( innerParent_->N(j) ) != elmt_nodes.end() )
                 matching_nodes++;
@@ -104,7 +102,7 @@ Face<dim>::Face( const Element<dim>& elmt,
     // 2. Assigning the nodes from that of the Inner Parents face.  Attention! Not the lower-dim element
     vector<uint32_t> fnids = inner_parent->FE()->NodesOfFace( inner_parent_face_id_ );
     uint32_t i_node{0};
-    for ( auto i : fnids )
+    for ( auto& i : fnids )
       node_connector_[i_node++] = inner_parent->N(i);
 
     /* Old Implementation - Doesnt guarantee nodes of face = InnerParent->NodesOfFace() are the same (e.g could be rotated by one node).

@@ -77,6 +77,7 @@ class MeshManager_Test : public Test {
     
     // MESH MODIFICATION (elements to faces etc.)
 
+    bool TestCellDeletionAndInsertion();
     // TODO: get these to run
     bool TestElementDeletionAndInsertion();
     bool TestFaceDeletionAndInsertion();
