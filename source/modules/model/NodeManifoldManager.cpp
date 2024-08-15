@@ -183,7 +183,7 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeMani
      
      // 3. reclassifying the manifold geometry
      // --------------------------------------
-     nmf1->GeometricClassifier( consistencyCheck( *nmf1 ) );
+     nmf1->GeometricClassifier( consistencyCheck( *nmf1, verbose_ ) );
      
      // 4. deleting the merged manifold 2
      // ---------------------------------

@@ -44,6 +44,8 @@ void Node_Test::run()
   // .) ERASE PARENTS
   n2.EraseParents();
   _test( n2.Parents() == 0 );
+  
+  // TODO: test whether parent-node relationship still holds after deletions and insertions
 
   // .) IDX
   n1.Idx( 999 );

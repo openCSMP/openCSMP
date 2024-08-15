@@ -127,7 +127,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( co
      // erasing the faces
      if ( erase_interfaces ) {
          // getting the mesh manager to delete faces and nodes and fix up the connectivity
-         splitBoundaryComplex.Mesh().DeleteCellsAndRepairConnnectivity( split_boundary.CellVector().begin(), split_boundary.CellVector().end() );
+         splitBoundaryComplex.Mesh().DeleteInterfacesAndRepairConnnectivity( split_boundary.CellVector().begin(), split_boundary.CellVector().end() );
        }
 
      // deleting the split boundary
@@ -166,7 +166,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( cs
      if ( erase_interfaces ) {
          SPLITBOUNDARY_COMPLEX<dim>&  splitBoundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>&>(*this) );
          // getting the mesh manager to delete faces and nodes and fix up the connectivity
-         splitBoundaryComplex.Mesh().DeleteCellsAndRepairConnnectivity( splitboundary.CellVector().begin(), splitboundary.CellVector().end() );
+         splitBoundaryComplex.Mesh().DeleteInterfacesAndRepairConnnectivity( splitboundary.CellVector().begin(), splitboundary.CellVector().end() );
        }
 
      splitBoundaryMap_.erase( splitboundary.Name() );

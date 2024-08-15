@@ -90,7 +90,7 @@ class Node : public LocalVariableStorage<dim,Node> {
     Element<dim>* Parent( uint32_t ) const;
     /// the local number of this node within the node-numbering scheme of parent element (and equal to sector number)
     uint32_t ParentNodeNumber( uint32_t parent_element ) const;
-    /// checks whether Element is a parent of the node
+    /// checks whether Element is a parent of the node; call SortParents() first !!!
     bool IsParent( const Element<dim>* const ) const;
   
     typename std::vector<Element<dim>*>::const_iterator ParentElementsBegin() const { return parent_element_pointers_.begin(); }
@@ -138,7 +138,17 @@ class Node : public LocalVariableStorage<dim,Node> {
     
     typename std::vector<Node<dim>*>::const_iterator NeighborsBegin() const { return neighbor_node_pointers_.begin(); }
     typename std::vector<Node<dim>*>::const_iterator NeighborsEnd() const { return neighbor_node_pointers_.end(); }
+ 
+     /// check whether a node is neighbor  of this node via linear search algorithm
+    bool LinearSearch( Node<dim>* const nptr ) const { return std::find( neighbor_node_pointers_.begin(),
+                                                                         neighbor_node_pointers_.end(), nptr ) != neighbor_node_pointers_.end(); }
 
+    /// checks whether a node is neighbor of this node ( since a sorted vector is required call SortNeighbors() first)
+    bool BinarySearch( Node<dim>* const nptr ) const { return std::binary_search( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), nptr ); }
+
+    ///  to prepare neighbor vector for binary search
+    void SortNeighbors() { sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() ); };
+    
 
     // basic functionality of the Node
     

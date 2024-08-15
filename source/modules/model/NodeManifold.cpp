@@ -346,6 +346,9 @@ bool NodeManifold<dim>::Add( Node<dim>* nd )
 template<uint32_t dim>
 bool NodeManifold<dim>::Remove( const Node<dim>* const nd )
 {
+   // in this is true, this should not be a manifold anymore
+   if ( branches_.empty() ) return false;
+   
    for ( auto& nit : branches_ )
      if ( nit == nd ) {
          // disconnecting the node from the manifold
@@ -359,7 +362,6 @@ bool NodeManifold<dim>::Remove( const Node<dim>* const nd )
     csmp_error.Note( WARNING, "NodeManifold<dim>::Remove(Node<dim>*)",
                                 "Node does not exist in manifold. Nothing was done.");
     return false;
-
 }
 
 
@@ -467,7 +469,7 @@ template class NodeManifold<3U>;
       @todo consider the special case of a multiplicated point in 2D which cannot be a splitboundary
 */
 template<uint32_t dim>
-ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf )
+ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -480,84 +482,86 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf )
     // 1. diagnostics: if there is only one topotype
     // ---------------------------------------------
     if ( node_attributes.size() == 1U ) {
-         switch( (*node_attributes.begin()) ) {
-              case MESH_VERTEX: {
-                   if ( nmf.GeometricClassifier() != ManifoldType::STAND_ALONE ) {
-                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'STAND_ALONE'";
-                        csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                     }
-                  }
-                break;
-              case INTERSECTION_POINT: {
-                   if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_CROSSING ) {
-                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_CROSSING'";
-                        csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                     }
-                  }
-                break;
-              case PERIMETER_POINT: {
-                   if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_END ) {
-                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_END'";
-                        csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                     }
-                  }
-                break;
-              case EXTERIOR_POINT: {
-                   if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_END ) {
-                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_END'";
-                        csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                     }
-                  }
-                break;
-              case INTERIOR_LINE: {
-                   if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY ) {
-                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY'";
-                        csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                     }
-                  }
-                break;
-              case PERIMETER_LINE: {
-                   if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_TERMINATION ) {
-                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_TERMINATION'";
-                        csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                     }
-                  }
-                break;
-              case EXTERIOR_LINE: {
-                   if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_END ) {
-                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_END'";
-                        csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                     }
-                  }
-                break;
-              case INTERSECTION_LINE: {
-                   if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_CROSSING ) {
-                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_CROSSING'";
-                        csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                     }
-                  }
-                break;
-              case INTERIOR_SURFACE: {
-                   if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY ) {
-                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY'";
-                        csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                     }
-                  }
-                break;
-              case PERIMETER_SURFACE: {
-                   if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY ) {
-                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY'";
-                        csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                     }
-                  }
-                break;
-              // a node manifold should not exist here
-              case EXTERIOR_SURFACE: {
-                    csmp_error.Note( ERROR, "consistencyCheck", "there should be no node manifold ton model boundary, resetting." );
-                  }
-                break;
-              default:
-                cerr <<"\nconsistencyCheck(NodeManifold): TOPOTYPE of Node could not be resolved."<< endl;
+         if ( verbose ) {
+           switch( (*node_attributes.begin()) ) {
+                case MESH_VERTEX: {
+                     if ( nmf.GeometricClassifier() != ManifoldType::STAND_ALONE ) {
+                          cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'STAND_ALONE'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case INTERSECTION_POINT: {
+                     if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_CROSSING ) {
+                          cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_CROSSING'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case PERIMETER_POINT: {
+                     if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_END ) {
+                          cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_END'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case EXTERIOR_POINT: {
+                     if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_END ) {
+                          cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_END'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case INTERIOR_LINE: {
+                     if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY ) {
+                          cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case PERIMETER_LINE: {
+                     if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_TERMINATION ) {
+                          cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_TERMINATION'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case EXTERIOR_LINE: {
+                     if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_END ) {
+                          cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_END'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case INTERSECTION_LINE: {
+                     if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_CROSSING ) {
+                          cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_CROSSING'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case INTERIOR_SURFACE: {
+                     if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY ) {
+                          cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case PERIMETER_SURFACE: {
+                     if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY ) {
+                          cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                // a node manifold should not exist here
+                case EXTERIOR_SURFACE: {
+                      csmp_error.Note( ERROR, "consistencyCheck", "there should be no node manifold ton model boundary, resetting." );
+                    }
+                  break;
+                default:
+                  cerr <<"\nconsistencyCheck(NodeManifold): TOPOTYPE of Node could not be resolved."<< endl;
+              }
            }
          // fixing the ManifoldType if necessary
          return nmf.GeometricClassifier();
@@ -585,8 +589,8 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf )
 
  } // end consistency check
 
-template ManifoldType  consistencyCheck( const NodeManifold<3>& );
-template ManifoldType  consistencyCheck( const NodeManifold<2>& );
-template ManifoldType  consistencyCheck( const NodeManifold<1>& );
+template ManifoldType  consistencyCheck( const NodeManifold<3>&, bool );
+template ManifoldType  consistencyCheck( const NodeManifold<2>&, bool );
+template ManifoldType  consistencyCheck( const NodeManifold<1>&, bool );
 
 }// csmp

@@ -1679,7 +1679,8 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
 
     // working out whether the original classification as an interface was correct
 #ifdef DEBUG
-    consistencyCheck( (*(*nit).Manifold()) );
+    const bool verbose{false};
+    consistencyCheck( (*(*nit).Manifold()), verbose );
 #endif
     return &(*nit);
     
@@ -2817,7 +2818,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeMatchingEl
 
            // working out whether the original classification as an interface was correct
 #ifdef DEBUG
-           consistencyCheck( (*nit.first->Manifold()) );
+           const bool verbose{false};
+           consistencyCheck( (*nit.first->Manifold()), verbose );
 #endif
         }
 
@@ -2851,54 +2853,93 @@ cerr << it.second.first->N(outside_fnids[n_face_nodes-i-1U])->Coordinate();
 
 
 
-
+// TODO: by comparison with a traversal of a node graph, this includes many redundant binary searches
 /**
-    Erases the supplied sequence of nodes in the MeshManager returning the number of erasures.
-    The pointer to the deleted elements are set to 'nullptr'.
+    Erases the nodes in the MeshManager pointed to by the supplied range of pointers.
+    Only nodes that do not have parent elements are deleted. If there are nodes that are still interconnected, they are reported.
+    Method returns the number of erasures made.
     Any potential node manifolds are updated.
+    
+    @attention checks whether the nodes to delete are still connected to any elements, reporting them if this is the case.
+    Whatch out! - this check is not done for the nodes that belong to Face or InterFace objects because nodes do not keep any parent info fom them.
 */
 template<uint32_t dim>
-size_t MeshManager<dim>::DeleteNodesAndRepairConnnectivity( typename vector<Node<dim>*>::iterator first,
-                                                            typename vector<Node<dim>*>::iterator last )
+size_t MeshManager<dim>::DeleteNodesAndRepairNodeConnnectivity( typename vector<Node<dim>*>::iterator first,
+                                                                typename vector<Node<dim>*>::iterator last )
  {
-     long deleted_nodes( distance(first,last) );
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+     long n_nodes_to_delete( distance(first,last) );
  
-     if ( deleted_nodes == 0 ) return 0U;
+     if ( n_nodes_to_delete == 0 ) return 0U;
 
-     // 1. disconnecting neighbor nodes from the nodes that will be removed
+     // 1. making sure that the nodes do not belong to any cells anymore
+     // ----------------------------------------------------------------
+     vector<Node<dim>*> nodes_to_delete; nodes_to_delete.reserve( n_nodes_to_delete );
+     set<Node<dim>*>    nodes_still_connected;
+     
+     while ( first != last ) {
+           assert( (*first) != nullptr );
+           bool still_connected_node_found{ false };
+           const uint32_t n_parents{ (*first)->Parents() };
+           for ( uint32_t i{0u}; i<n_parents; i++ )
+             if ( (*first)->Parent(i)->N( (*first)->ParentNodeNumber(i) ) != nullptr ) {
+                  nodes_still_connected.insert( (*first) );
+                  still_connected_node_found = true;
+                  n_nodes_to_delete--;
+                  break;
+               }
+           if ( !still_connected_node_found ) nodes_to_delete.push_back( (*first) );
+           first++;
+        }
+     // reporting
+     if ( !nodes_still_connected.empty() ) {
+          cout <<"\n"<<"MeshManager<dim>::DeleteNodesAndRepairNodeConnnectivity: ";
+          cout <<"you are trying to delete nodes still connected to elements:"<< endl;
+          for ( const auto& nit : nodes_still_connected ) {
+               cout <<"\t\t"<< nit->Idx() <<": "<< nit->Coordinate() << endl;
+            }
+          csmp_error.Note( WARNING, "MeshManager<dim>::DeleteNodesAndRepairNodeConnnectivity",
+                          "detected non-eligible nodes; continuing deletion without these." );
+            
+          // are there any nodes left to delete?
+          if ( n_nodes_to_delete <= 0 ) return 0ul;
+       }
+
+
+     // 2. disconnecting neighbor nodes from the nodes that will be removed
      // -------------------------------------------------------------------
-     // collecting neighbors of the node which are not among the range of nodes to be deleted
-     vector<Node<dim>*> nodes_to_delete( first, last );
+     // but only for neighbor nodes which are not within the range of the nodes to be deleted
      sort( nodes_to_delete.begin(), nodes_to_delete.end() );
-     for ( const auto& nit : nodes_to_delete )
-      for ( uint32_t i{0U}; i<nit->Neighbors(); i++ )
-        for ( uint32_t j{0U}; j<nit->Neighbor(i)->Neighbors(); j++ )
-          if ( binary_search( nodes_to_delete.begin(), nodes_to_delete.end(), nit->Neighbor(i)->Neighbor(j) ) ) {
-               // neighbor node only moves current node beyond the end of the neighbors container
-               nit->RemoveNeighbor( nit );
-               break;
-            }
+     for ( const auto& nit : nodes_to_delete ) {
+        const uint32_t n_nbors{ nit->Neighbors() };
+        for ( uint32_t i{0U}; i<n_nbors; i++ ) {
+              const uint32_t n_nbor_nbors{ nit->Neighbor(i)->Neighbors() };
+              for ( uint32_t j{0U}; j<n_nbor_nbors; j++ )
+                if ( binary_search( nodes_to_delete.begin(), nodes_to_delete.end(), nit->Neighbor(i)->Neighbor(j) ) ) {
+                     // neighbor node only moves current node beyond the end of the neighbors container
+                     nit->RemoveNeighbor( nit );
+                     break;
+                  }
+          }
+      }
 
-     // 2. removing nodes from potential manifolds before removing themselves
+     // 3. removing nodes from potential manifolds before removing themselves
      // ---------------------------------------------------------------------
-     while( first != last ) {
-          // only counting active nodes
-          if ( (*first) == nullptr ) deleted_nodes--;
+     for ( auto& nit : nodes_to_delete ) {
           // disconnecting the node from its manifold
-          else if ( (*first)->IsManifold() ){
-               (*first)->Manifold()->Remove( (*first) );
+          if ( nit->IsManifold() ) {
+               nit->Manifold()->Remove( nit );
                // if the node no longer is a manifold, it is removed from the node-manifold manager
-               if ( (*first)->Manifold()->Branches() == 1U )
-               node_manifold_manager_->Delete( (*first)->Manifold() );
+               if ( nit->Manifold()->Branches() == 1U )
+               node_manifold_manager_->Delete( nit->Manifold() );
             }
-          nodes_.erase( nodes_.get_iterator(*first) );
-          (*first) = nullptr;
-          first++;
+          nodes_.erase( nodes_.get_iterator(nit) );
        }
      
-     return static_cast<size_t>(deleted_nodes);
+     return static_cast<size_t>(n_nodes_to_delete);
     
- } // end DeleteNodesAndRepairConnnectivity
+ } // end DeleteNodesAndRepairNodeConnnectivity
 
 
 
@@ -3009,7 +3050,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Elem
             }
           
           // 1.3 deleting the interior nodes, updating neighbor connectivity with perimeter ones
-          DeleteNodesAndRepairConnnectivity( interior_nodes.begin(), interior_nodes.end() );
+          DeleteNodesAndRepairNodeConnnectivity( interior_nodes.begin(), interior_nodes.end() );
           
           // 1.4 updating the perimeter nodes
           ConnectNodesToParentsAndNeighbors( adjacent_elmts.begin(), adjacent_elmts.end() );
@@ -3128,13 +3169,14 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Face
 
 
 /**
-    Deletes range of Faces after detecting and disconnecting potential neighbor faces around the perimeter of the face patch.
+    Deletes range of InterFaces after detecting and disconnecting potential neighbor faces around the perimeter of the face patch.
+    Duplicated nodes are removed as well as the the mesh is reconnected.
     
     @attention method does not reconnect the mesh where interfaces are removed.
 */
 template<uint32_t dim>
-size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<InterFace<dim>*>::iterator first,
-                                                       typename vector<InterFace<dim>*>::iterator last )
+size_t MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity( typename vector<InterFace<dim>*>::iterator first,
+                                                                 typename vector<InterFace<dim>*>::iterator last )
  {
      auto interfaces_to_delete( distance(first,last) );
  
@@ -3145,41 +3187,113 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Inte
      vector<InterFace<dim>*> interface_ptrs( first, last );
      sort( interface_ptrs.begin(), interface_ptrs.end() );
      if ( binary_search( interface_ptrs.begin(), interface_ptrs.end(), static_cast<InterFace<dim>*>(nullptr) ) )
-       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
-                         "input range contains 'nullptr' InterFace objects; have these InterFaces already been deleted?");
+       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity",
+                       "input range contains 'nullptr' InterFace objects; have these InterFaces already been deleted?");
 
-     auto first1{ first };
+auto first1{ first };
+#ifndef NDEBUG
+   vector<size_t> deleted_nodes, deleted_ifaces;
+#endif
+
+     set<Node<dim>*>  nodes_to_delete;
      
      while ( first != last )
        {
           assert( (*first) != nullptr );
-          // 1. disconnecting faces adjacent to the perimeter of the supplied face patch
-          for ( auto i{0U}; i<(*first)->Neighbors(); i++ )
+          
+          // 1. disconnecting interface neighbors adjacent to the perimeter of the supplied interface patch
+          for ( uint32_t i{0U}; i<(*first)->Neighbors(); i++ )
             if ( (*first)->Neighbor(i) != nullptr &&
                  !binary_search( interface_ptrs.begin(), interface_ptrs.end(), (*first)->Neighbor(i) ) )
               {
-                 for ( auto k{0U}; k<(*first)->Neighbor(i)->Neighbors(); k++ )
+                 for ( uint32_t k{0U}; k<(*first)->Neighbor(i)->Neighbors(); k++ )
                    if ( (*first)->Neighbor(i)->Neighbor(k) == (*first) )
                      (*first)->Neighbor(i)->Assign( k, static_cast<InterFace<dim>*>(nullptr) );
               }
+              
+          // 2. reconnecting higher-dimensional neighbor elements with one-another
+          (*first)->InnerParent()->Assign( (*first)->InnerParentFaceID(), (*first)->OuterParent() );
+          (*first)->OuterParent()->Assign( (*first)->OuterParentFaceID(), (*first)->InnerParent() );
+
+          // 3. collecting a unique set of outer nodes that will have to be deleted if they are manifold nodes
+          const uint32_t n_nodes{ (*first)->FE()->Nodes() };
+          for ( uint32_t i{0u}; i<n_nodes; ++i )
+            // if the node is a manifold with at least 2 nodes within it
+            if ( (*first)->N(i,OUTSIDE)->IsManifold() && (*first)->N(i,OUTSIDE)->Manifold()->Branches() > 1 ) {
+                 nodes_to_delete.insert((*first)->N(i,OUTSIDE));
+                 // 4. removing the outer nodes from potential manifolds to prepare them for deletion
+                 if ( (*first)->N(i,OUTSIDE)->Manifold()->Branches() > 1 ) {
+                      (*first)->N(i,OUTSIDE)->Manifold()->Remove( (*first)->N(i,OUTSIDE) );
+                   }
+                 // if the node no longer is a manifold, it is removed from the node-manifold manager
+                 else node_manifold_manager_->Delete( (*first)->N(i,OUTSIDE)->Manifold() );
+              }
+
+          // 4. replacing the face nodes of the outside element with those from the inside
+          uint32_t node_counter{0u};
+          for ( auto& fnid : (*first)->OuterParent()->FE()->NodesOfFace( (*first)->OuterParentFaceID() ) ) {
+               assert( (*first)->OuterParent()->N(fnid) == (*first)->N(node_counter,OUTSIDE) );
+               (*first)->OuterParent()->Assign( fnid, (*first)->N(node_counter,INSIDE) );
+               node_counter++;
+            }
+
           first++;
        }
+       
+     // 5. deleting the fused nodes
+     for ( auto& nit : nodes_to_delete ) {
+         // to avert duplicate attempts of deletion
+         if ( nodes_.get_iterator(nit) != nodes_.end() ) {
+#ifndef NDEBUG
+              deleted_nodes.push_back( nit->Idx() );
+#endif
+             nodes_.erase( nodes_.get_iterator(nit) );
+          }
+       }
 
-     // 2. deleting the interfaces and nulling the pointers to them
+     // 6. deleting the interfaces and nulling the pointers to them
      size_t deleted_interfaces{ static_cast<size_t>(interfaces_to_delete) };
      while( first1 != last ) {
           if ( (*first1) == nullptr ) deleted_interfaces--;
-          DetachNeighborsFrom( (*first1) );
-          interfaces_.erase( interfaces_.get_iterator(*first1) );
-          (*first1) = nullptr;
+#ifndef NDEBUG
+          deleted_ifaces.push_back( (*first1)->Idx() );
+#endif
+          Delete( (*first1) );
           first1++;
        }
 
+#ifndef NDEBUG
+     if ( !deleted_nodes.empty() ) {
+          cout <<"\nMeshManager::DeleteInterfacesAndRepairConnnectivity: deleted the nodes:\n\t";
+          sort( deleted_nodes.begin(), deleted_nodes.end() );
+          for ( const auto& nit : deleted_nodes ) cout << nit <<" ";
+          cout << endl;
+       }
+     if ( !deleted_ifaces.empty() ) {
+          cout <<"\nMeshManager::DeleteInterfacesAndRepairConnnectivity: deleted the interfaces:\n\t";
+          sort( deleted_ifaces.begin(), deleted_ifaces.end() );
+          for ( const auto& it : deleted_ifaces ) cout << it <<" ";
+          cout << endl;
+       }
+#endif
+
      return deleted_interfaces;
     
- } // end DeleteAndRepairConnnectivity(InterFace)
+ } // end DeleteInterfacesAndRepairConnnectivity
 
-
+/* TESTING
+               if ( (*first)->MatchingN( node_counter, OUTSIDE ) != (*first)->OuterParent()->N( fnid ) ) {
+                    cout <<"\n"<<"interface node pointers: ";
+                    for ( uint32_t i{0U}; i<(*first)->FE()->Nodes(); i++ ) cout <<" "<< (*first)->N(i,INSIDE);
+                    for ( uint32_t i{0U}; i<(*first)->FE()->Nodes(); i++ ) cout <<" "<< (*first)->N(i,OUTSIDE);
+                    cout << endl;
+                    cout <<"\noutside element face node: "<< (*first)->OuterParent()->N( fnid );
+                    cout <<"\ninside element face node:  "<< (*first)->N(node_counter);
+                    cout <<"\noutside matching node:     "<< (*first)->MatchingN( node_counter, OUTSIDE );
+                    cout <<"\ninside matching node:      "<< (*first)->MatchingN( node_counter, INSIDE );
+                    cout << endl;
+                 }
+*/
 
 
 

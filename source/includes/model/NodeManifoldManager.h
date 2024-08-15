@@ -75,7 +75,8 @@ class NodeManifoldManager {
   protected:
      plf::colony< NodeManifold<dim>>  node_manifolds_;                 ///<  sorted deque of pointers to manifolds created with new and delete
      std::string                      current_sort_variable_ = "none"; ///< TODO: update the sort order if some modifications are made
-}; 
+     const bool                       verbose_ = false;
+};
 
 } // csmp
 

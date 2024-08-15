@@ -195,7 +195,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// access the nodes that are connected to either, the inside or the outside of the Face
     csmp::Node<dim>* const N( uint32_t n_local, INTERFACE_SIDE side ) const;
 
-    csmp::Node<dim>* const MatchingN( uint32_t n_local, INTERFACE_SIDE side) const;
+    csmp::Node<dim>* const MatchingN( uint32_t n_local, INTERFACE_SIDE side ) const;
 
     /// switches internal state variable that sets interface side
     void            CurrentSide( INTERFACE_SIDE side );
@@ -292,7 +292,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     void    BisectorCoordinateMatrix(DenseMatrix<DM_MIN>& XY) const;
 
     /// finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface; uses point coordinates that must be matched
-    std::pair<uint32_t,uint32_t>  SharedElementFaces();
+    std::pair<uint32_t,uint32_t>  SharedElementFacesAndFaceIDs(); // TODO: replace with more generic functionality?
   
     /// connects the nodes of already connected higher dimensional neighbor elements to the InterFace
     void InitialiseNodeVector();

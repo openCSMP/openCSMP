@@ -63,15 +63,15 @@ class MeshManager_Test : public Test {
     bool Test_detachNeighborsFrom();
     
     // TODO: test these...
-    bool Test_AddNodeAt(); // <- TestElementDeletionAndInsertion() tests this
+    bool Test_AddNodeAt();                  // <- TestCellDeletionAndInsertion() tests this
     bool Test_Duplicate(); // node
-    bool Test_AddElement(); // <- TestElementDeletionAndInsertion() tests this
+    bool Test_AddElement();                 // <- TestCellDeletionAndInsertion() tests this
     bool Test_AddInterveningElement();
-    bool Test_ReplaceElementByFace();
+    bool Test_ReplaceElementByFace();       // <- TestCellDeletionAndInsertion() tests this
     bool Test_ReplaceElementByInterFace();
     bool Test_AddFace();
     bool Test_AddEdgeFace();
-    bool Test_AddBoundaryFace();
+    bool Test_AddBoundaryFace();            // <- TestCellDeletionAndInsertion() tests this
     bool Test_ReplaceFaceByInterFace();
     bool Test_AddInterFace(); // two versions
     
@@ -97,6 +97,9 @@ class MeshManager_Test : public Test {
     bool Test_BuildLineConnectivity();
     bool Test_BuildInterFaceConnectivity();
     bool Test_ConnectNodesToParentsAndNeighbors();
+    
+    void Test_DeleteNodesAndRepairNodeConnnectivity(); // implemented
+    
     bool Test_DeleteCellsAndRepairConnnectivity(); // 4 versions for Node, Element, Face, InterFace - split ino RepairConnectivity()
     
     bool Test_CheckElementConnectivity();

@@ -113,7 +113,7 @@ class NodeManifold {
 
 /// check whether through modification of the manifold, the original topology identifier is no longer valid
 template<uint32_t dim>
-ManifoldType consistencyCheck( const NodeManifold<dim>& );
+ManifoldType consistencyCheck( const NodeManifold<dim>&, bool verbose );
   
 } // end csmp
 

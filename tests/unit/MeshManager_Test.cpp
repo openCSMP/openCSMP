@@ -6,6 +6,7 @@
 //  Copyright © 2018 Stephan Matthai. All rights reserved.
 //
 
+#include <ranges>
 #include "CSMP_definitions.h"
 #include "MeshManager_Test.h"
 #include "MeshManagementUtilities.h"
@@ -190,6 +191,8 @@ void MeshManager_Test::run()
   // tests whether traversal works for contiguous model
   _test( Test_MeshTraversal3D(/* Pyramid_Hexa_VSet */) );
   
+  Test_DeleteNodesAndRepairNodeConnnectivity();
+  
   // building more complex 'FracBox' model with Boundaries and lower-dimensional elements for further testing
   VSet<3U>      vset;
   ModelTopology topology;
@@ -276,6 +279,62 @@ bool MeshManager_Test::Test_detachNeighborsFrom()
     return ( errors == 0 );
     
  } // end Test_detachNeighborsFrom
+
+
+
+
+// for a model with a splitboundary
+// NOTE: 14/8/2024 - method not used anywhere yet
+ void MeshManager_Test::Test_DeleteNodesAndRepairNodeConnnectivity()
+  {
+      VSet<2> vset;
+      // model with boundaries and split boundary
+      ModelTopology topology = create_BoundarySplitBoundaryPatch( vset );
+      const bool    bds_from_regions{ false };
+      Model<2> model( topology, vset, "MeshManager_Test-variables.txt", bds_from_regions );
+      model.Name("BoundarySplitBoundaryPatch");
+      Region<2> mdomain = model.Region("Model");
+      auto n_original_nodes = vset.Vertices();
+      
+      // 1. getting some nodes to delete some of which are manifolds
+      // -----------------------------------------------------------
+      vector<Node<2>*> nodes;
+      // nodes 13-17 from original mesh, containing split boundary and intersection point
+      set<size_t> search_nodes{ 13, 14, 15, 16, 17 };
+      const csmp::Index n_key = model.Database().StorageKey("node number");
+      for ( const auto& node : mdomain.NodeVector() ) {
+           size_t node_idx = static_cast<size_t>(node->Read(n_key));
+           if ( search_nodes.find(node_idx) != search_nodes.end() )
+             nodes.push_back( node );
+        }
+      _test( nodes.size() == search_nodes.size() );
+      
+      /*
+         This should differentiate the treatment of nodes delelted versus their immediate neighbors
+      */
+      size_t deletions = model.Mesh().DeleteNodesAndRepairNodeConnnectivity( nodes.begin(), nodes.end() );
+      _test( deletions == 0 ); // because they are all still interconnected
+	    _test( model.Mesh().Nodes() == n_original_nodes );
+  
+  
+      // 2. Now we chop away those elements that contain the nodes and then try deletion again
+      //    Elements:  from original mesh, containing split boundary and intersection point
+      // -----------------------------------------------------------
+      set<size_t> search_elmts{ 6, 7, 8, 9, 10, 11 };
+      const csmp::Index e_key = model.Database().StorageKey("element number");
+      for ( auto& elmt : mdomain.CellVector() ) {
+           size_t elmt_idx = static_cast<size_t>(elmt->Read(e_key));
+           if ( search_elmts.find(elmt_idx) != search_elmts.end() )
+             model.Mesh().Delete( elmt );
+        }
+        
+      // and we try to delete the nodes again
+      deletions = model.Mesh().DeleteNodesAndRepairNodeConnnectivity( nodes.begin(), nodes.end() );
+      _test( deletions > 0 );
+      _test( nodes.size() == search_nodes.size() );
+
+  } // end Test_DeleteNodesAndRepairConnnectivity
+
 
 
 
@@ -700,9 +759,15 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
   create_Hexahedra_VSet( vset, false );
   Model<3>   model( vset, "MeshManager_Test-variables.txt" );
 
+
   MeshManager<3U>& mesh(model.Mesh());
   const size_t     n_original_elmts(mesh.Elements());
-  
+
+  // TODO: prerequisite: test mesh must not be broken (element nbor connectivity issue)
+  bool connectivity_is_broken = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
+  _test( !connectivity_is_broken );
+
+
 	// 1. Checking that pointers to elements are not affected by element deletion
   // --------------------------------------------------------------------------
   // make a copy of first element
@@ -809,10 +874,11 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
   // one lost one gained
 	_test( mesh.Elements() == n_original_elmts );
  
-  // mesh should be broken
-  bool connectivity_is_broken = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
-  _test( connectivity_is_broken );
-  
+  // mesh should now be broken, but if it was already initially, this is of no interest
+  if ( !connectivity_is_broken ) {
+       connectivity_is_broken = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
+       _test( connectivity_is_broken );
+    }
  
    // 5. Creating a Face between hex1 and a neighbor
   // ------------------------------------------------------------
@@ -853,13 +919,9 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
   vector<const Node<3U>*> orphan_nodes2 = mesh.OrphanNodeVector();
   _test( orphan_nodes2.size() == orphan_nodes1.size() );
 
-	mesh.DeleteNodesAndRepairConnnectivity( orphan_nodes1.begin(), orphan_nodes1.end() );
+	mesh.DeleteNodesAndRepairNodeConnnectivity( orphan_nodes1.begin(), orphan_nodes1.end() );
 	_test( mesh.Nodes() == n_original_nodes );
  
-  // mesh should be fine now
-  connectivity_is_broken = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
- _test( !connectivity_is_broken );
-
 	return true;
   
 } // end TestCellDeletionAndInsertion
@@ -870,6 +932,14 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
 
 /**
    create Faces at boundary and between prism and hexa elements and then deletes them again.
+   Tests:
+   
+   - AddBoundaryFace()
+   - AddFace()
+   - ReplaceFaceByInterFace()
+   - DeleteInterfacesAndRepairConnnectivity()
+   - AssignUniqueNumbers()
+   
 */
 bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
 {
@@ -885,26 +955,27 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
   bool             interior_face_constructed(false);
   LocalVariables				     fvars = model.Database().LocalVariablesAt(FACE);
 	IntegrationPointVariables	 ivars = model.Database().IntegrationPointVariablesAt(FACE);
-  const size_t n_original_faces = mesh.Faces();
+  const size_t n_original_nodes = mesh.Nodes();
 
-  // creating faces around the pyramid elements
+  // 1. creating faces around the pyramid elements
+  // ---------------------------------------------
   Region<3>&       model_domain(model.Region("Model"));
   vector<Face<3>*> ptrs_to_faces_created;
   for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); it++ )
     if ( (*it)->FE_Type() == ISOPARAMETRIC_LINEAR_PYRAMID )
       {
-        for ( auto i{0U}; i<(*it)->Faces(); i++ )
+        for ( uint32_t i{0U}; i<(*it)->Faces(); i++ )
           {
              // if the face is at the boundary or has a hexahedral element neighbor, a Face is constructed there
              if ( (*it)->Neighbor(i) == nullptr ) {
                   // FACE CONSTRUCTION
                   ptrs_to_faces_created.push_back( mesh.AddBoundaryFace( (*it), i, fvars, ivars ) );
-                  boundary_face_constructed = true;
+                  boundary_face_constructed = true; //  -------------------------------------------
                }
              // if the face is within model, we construct a normal face
              else if ( (*it)->Neighbor(i)->FE_Type() == ISOPARAMETRIC_LINEAR_HEXAHEDRON ) {
                   uint32_t opposite_face = UNSPECIFIED;
-                  for ( auto j{0U}; j<(*it)->Neighbor(i)->Faces(); ++j ) {
+                  for ( uint32_t j{0U}; j<(*it)->Neighbor(i)->Faces(); ++j ) {
                        if ( (*it)->Neighbor(i)->Neighbor(j) == (*it) ) {
                             opposite_face = j;
                             break;
@@ -912,7 +983,8 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
                     }
                   // FACE_CONSTRUCTION
                   ptrs_to_faces_created.push_back( mesh.AddFace( (*it), i, (*it)->Neighbor(i), opposite_face, fvars, ivars ) );
-                  interior_face_constructed = true;
+                  interior_face_constructed = true; //  ----------------------------------------------------------------------
+                  _test( ptrs_to_faces_created.back() != nullptr );
                }
           }
     
@@ -924,35 +996,76 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
     
 	_test( mesh.Faces() == ptrs_to_faces_created.size() );
  
-  // conversion of the last interior face to interface, but without duplication of nodes
-  vector<Node<3U>*>  outside_nodes( ptrs_to_faces_created.back()->FE()->Nodes(), nullptr );
-  // using the inside nodes but in reverse order in order to create the outside nodes for the interface
-  for ( auto i{0U}; i<ptrs_to_faces_created.back()->FE()->Nodes(); i++ )
-    outside_nodes[i] = ptrs_to_faces_created.back()->N( ptrs_to_faces_created.back()->Nodes()-i-1U ); // OK
+  // 2. converting the Face into InterFace objects
+  // ---------------------------------------------
+  // (since the faces should include the pyramid region all of their nodes must be duplicated)
+  // 2.1 testing that all inside elements of of the faces are pyramids
+  for ( const auto& face : ptrs_to_faces_created ) {
+       _test( face->InnerParent()->FE_Type() == ISOPARAMETRIC_LINEAR_PYRAMID );
+       _test( face->OuterParent()->FE_Type() == ISOPARAMETRIC_LINEAR_HEXAHEDRON );
+    }
+  // 2.2 duplicating the face nodes for the creation on the interface
+  LocalVariables				    nvars = model.Database().LocalVariablesAt(NODE);
+  vector<vector<Node<3U>*>> outside_nodes( ptrs_to_faces_created.size(), vector<Node<3U>*>{nullptr} );
+  unordered_set<Node<3U>*>  unique_outsiders;
+  int face_counter{0};
+  for ( const auto& face : ptrs_to_faces_created ) {
+       outside_nodes[face_counter].resize( face->Nodes(), nullptr );
+       for ( uint32_t j{0U}; j<face->Nodes(); ++j ) {
+            auto nit = unique_outsiders.insert( face->N(j) );
+            // if this is a new node that could be inserted it is duplicated and placed into the outside node container
+            if ( nit.second ) { //               node duplication
+                outside_nodes[face_counter][j] = mesh.Duplicate( face->N(j), nvars );
+                //                                    -------------------------------
+                cout <<"\n\t"<<"created node: "<< outside_nodes[face_counter][j]->Idx();
+              }
+            else // the node that already duplicated and simply has to be retrieved
+              outside_nodes[face_counter][j] = (*nit.first);
+         }
+       face_counter++;
+    }
+  cout<<"\n\n\tcreated "<<  unique_outsiders.size() <<" nodes."<< endl;
+
+  
+  // 2.3 conversion of the last interior face to interface, but without duplication of nodes
+  //     (using the inside nodes but in reverse order in order to create the outside nodes for the interface)
   // creating the interface
   LocalVariables				     ifvars = model.Database().LocalVariablesAt(INTER_FACE);
 	IntegrationPointVariables	 iivars = model.Database().IntegrationPointVariablesAt(INTER_FACE);
-  
-  if ( interior_face_constructed ) {
+   vector<InterFace<3>*>      ptrs_to_ifaces_created;
+ 
+  // 'ranges' co-iteration of containers not yet: for ( const auto& [face,out_nodes] : zip( ptrs_to_faces_created, outside_nodes ) ) {
+  for ( uint32_t i{0U}; i < ptrs_to_faces_created.size(); ++i ) {
+        // getting the outside nodes in reverse order
+        vector<Node<3U>*> iface_outside_nodes( outside_nodes[i].rbegin(), outside_nodes[i].rend() );
+        
        // INTERFACE CONSTRUCTION
-       InterFace<3U>* ifptr = mesh.ReplaceFaceByInterFace( ptrs_to_faces_created.back(), ifvars, iivars, outside_nodes );
-       ifptr->Out();
+       ptrs_to_ifaces_created.push_back( mesh.ReplaceFaceByInterFace( ptrs_to_faces_created[i], ifvars, iivars, iface_outside_nodes ) );
+       //                                     ---------------------------------------------------------------------------------------
+       _test( ptrs_to_ifaces_created.back() != nullptr );
     }
-  _test( mesh.Faces() == ptrs_to_faces_created.size() - 1U );
- // verifying that the pointer to the deleted Face has been set to null
-  _test( ptrs_to_faces_created.back() == nullptr );
-  // remove last Face that has now been assigned a nullptr
-  ptrs_to_faces_created.pop_back();
+  cout<<"\n\tcreated "<<  ptrs_to_ifaces_created.size() <<" interfaces."<< endl;
+    
+  _test( mesh.Faces() == 0 );
+  _test( mesh.InterFaces() == ptrs_to_faces_created.size() );
 	
-	// delete the new face(s) again
-	mesh.DeleteCellsAndRepairConnnectivity( ptrs_to_faces_created.begin(), ptrs_to_faces_created.end() );
+	// delete the new interface(s) again and repair the mesh connectivity
+	mesh.DeleteInterfacesAndRepairConnnectivity( ptrs_to_ifaces_created.begin(), ptrs_to_ifaces_created.end() );
+  _test( mesh.Nodes() == n_original_nodes );
+ 
+  // Do all elements still have their nodes?
+  mesh.AssignUniqueNumbers();
+  for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it )
+    for ( auto nit=(*it).NodesBegin(); nit!=(*it).NodesEnd(); ++nit )
+      _test( (*nit) != nullptr && (*nit)->Idx() < mesh.Nodes() );
+  
 	cout << "\nMeshManager_Test::TestFaceDeletionAndInsertion: model '" << model.Name() << "' (after deletion of faces):\n";
-	cout << "\nFaces: " << mesh.Faces() << "\n";
-
-	_test( mesh.Faces() == n_original_faces );
+  cout << "\n\tFaces:      " << mesh.Faces() << "\n";
+	cout << "\n\tInterFaces: " << mesh.InterFaces() << "\n";
 
 	return true;
-}
+  
+} // end TestFaceDeletionAndInsertion
 
 
 
@@ -1025,7 +1138,7 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
 	_test( mesh.Faces() == n_original_ifaces + interface_constructed );
  
 	// delete the new interface(s) again
-	mesh.DeleteCellsAndRepairConnnectivity( iface_ptrs.begin(), iface_ptrs.end() );
+	mesh.DeleteInterfacesAndRepairConnnectivity( iface_ptrs.begin(), iface_ptrs.end() );
 	cout << "\nMeshManager_Test::TestInterFaceDeletionAndInsertion: model '" << model.Name() << "' (after deletion of interfaces):\n";
 	cout << "\nFaces: " << mesh.InterFaces() << "\n";
 

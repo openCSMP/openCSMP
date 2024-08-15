@@ -536,7 +536,7 @@ void InterFace<dim>::AssignElementsAndNodes( Element<dim>* const inner_elmt,
      outerParent_ = outer_elmt;
      
      // 1. numbers of the shared faces
-     pair<uint32_t, uint32_t> shared_faces = SharedElementFaces();
+     pair<uint32_t, uint32_t> shared_faces = SharedElementFacesAndFaceIDs();
      inner_parent_face_id_ = shared_faces.first;
      outer_parent_face_id_ = shared_faces.second;
      
@@ -675,7 +675,7 @@ uint32_t  InterFace<dim>::Faces() const
     uses point coordinates that must be matched across the interface to find the nodes.
 */
 template<uint32_t dim>
-pair<uint32_t,uint32_t>  InterFace<dim>::SharedElementFaces()
+pair<uint32_t,uint32_t>  InterFace<dim>::SharedElementFacesAndFaceIDs()
 {
   assert( innerParent_ != nullptr );
   assert( outerParent_ != nullptr );
@@ -717,7 +717,7 @@ pair<uint32_t,uint32_t>  InterFace<dim>::SharedElementFaces()
   }
   return make_pair( inner_face_id, outer_face_id );
 
-} // end SharedElementFaces
+} // end SharedElementFacesAndFaceIDs
 
 
 
@@ -938,7 +938,7 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n ) const
 
 
 /**
-    Returns pointers to the nodes which match with the INSIDE ordering of the interface
+    Returns pointers to the node which match with the INSIDE ordering of the interface
 
     @section input Input Arguments
 

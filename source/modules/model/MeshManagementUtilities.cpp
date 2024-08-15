@@ -1081,6 +1081,8 @@ template void eraseElementPointerFromVector( vector<csmp::Element<2U>*>&, const 
 template void eraseElementPointerFromVector( vector<csmp::Element<3U>*>&, const Element<3U>* );
 
 
+
+
 /**
 
 Attempts a floodfill on the supplied set of elements, this so identified

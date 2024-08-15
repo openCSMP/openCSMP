@@ -325,12 +325,12 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
                                             typename std::vector<Face<dim>*>::iterator last );
 
   /// disconnectes interfaces from not-targeted neighbors before deleting them;  does not remove multiplicated nodes or manifolds;  input pointers are nulled
-  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<InterFace<dim>*>::iterator first,
-                                            typename std::vector<InterFace<dim>*>::iterator last );
+  size_t DeleteInterfacesAndRepairConnnectivity( typename std::vector<InterFace<dim>*>::iterator first,
+                                                 typename std::vector<InterFace<dim>*>::iterator last );
 
-  /// disconnects nodes from potential manifolds and deletes the latter
-  size_t DeleteNodesAndRepairConnnectivity( typename std::vector<Node<dim>*>::iterator first,
-                                            typename std::vector<Node<dim>*>::iterator last );
+  /// disconnects nodes from potential manifolds, deletes the nodes as well as manifolds that no longer are
+  size_t DeleteNodesAndRepairNodeConnnectivity( typename std::vector<Node<dim>*>::iterator first,
+                                                typename std::vector<Node<dim>*>::iterator last );
 
   ///  Reports nodes that do not belong to any parent elements, faces or interfaces
   size_t OrphanNodes() const;
