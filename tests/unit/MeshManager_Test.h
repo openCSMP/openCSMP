@@ -62,26 +62,25 @@ class MeshManager_Test : public Test {
     // hex 27 VSet - disconnected Neighbors from central element
     bool Test_detachNeighborsFrom();
     
-    // TODO: test these...
-    bool Test_AddNodeAt();                  // <- TestCellDeletionAndInsertion() tests this
-    bool Test_Duplicate(); // node
-    bool Test_AddElement();                 // <- TestCellDeletionAndInsertion() tests this
-    bool Test_AddInterveningElement();
-    bool Test_ReplaceElementByFace();       // <- TestCellDeletionAndInsertion() tests this
+    // TODO: test the uncommented ones...
+    //bool Test_AddNodeAt();                  // <- TestCellDeletionAndInsertion() tests this
+    //bool Test_Duplicate(); // node
+    //bool Test_AddElement();                 // <- TestCellDeletionAndInsertion() tests this
+    //bool Test_AddInterveningElement();
+    //bool Test_ReplaceElementByFace();       // <- TestCellDeletionAndInsertion() tests this
     bool Test_ReplaceElementByInterFace();
-    bool Test_AddFace();
+    //bool Test_AddFace();
     bool Test_AddEdgeFace();
-    bool Test_AddBoundaryFace();            // <- TestCellDeletionAndInsertion() tests this
+    //bool Test_AddBoundaryFace();            // <- TestCellDeletionAndInsertion() tests this
     bool Test_ReplaceFaceByInterFace();
-    bool Test_AddInterFace(); // two versions
+    //bool Test_AddInterFace(); // two versions
     
     // MESH MODIFICATION (elements to faces etc.)
 
-    bool TestCellDeletionAndInsertion();
-    // TODO: get these to run
-    bool TestElementDeletionAndInsertion();
-    bool TestFaceDeletionAndInsertion();
-    bool TestInterFaceDeletionAndInsertion();
+    bool TestCellDeletionAndInsertion();      // done
+    //bool TestElementDeletionAndInsertion();
+    bool TestFaceDeletionAndInsertion();      // done
+    bool TestInterFaceDeletionAndInsertion(); // done
 
     bool Test_ReplaceInteriorElementsByFaces();
     bool Test_ReplaceBoundaryElementsByFaces();
@@ -91,20 +90,22 @@ class MeshManager_Test : public Test {
     bool Test_CreateInterfacesBetweenNodeSharingElements();
     bool Test_CreateInterfacesBetweenNodeMatchingElements();
 
-    bool Test_BuildConnectivity();
-    bool Test_BuildVolumeConnectivity();
-    bool Test_BuildSurfaceConnectivity();
-    bool Test_BuildLineConnectivity();
-    bool Test_BuildInterFaceConnectivity();
+    bool Test_BuildConnectivity(); // test UpdateConnectivity() done which calls these
+    //bool Test_BuildVolumeConnectivity();
+    //bool Test_BuildSurfaceConnectivity();
+    //bool Test_BuildLineConnectivity();
+    //bool Test_BuildInterFaceConnectivity();
     bool Test_ConnectNodesToParentsAndNeighbors();
     
-    void Test_DeleteNodesAndRepairNodeConnnectivity(); // implemented
+    void Test_DeleteNodesAndRepairNodeConnnectivity(); // done
     
-    bool Test_DeleteCellsAndRepairConnnectivity(); // 4 versions for Node, Element, Face, InterFace - split ino RepairConnectivity()
+    bool Test_DeleteCellsAndRepairConnnectivity(); // TODO: refactor: 4 versions for Node, Element, Face, InterFace - split ino RepairConnectivity()
     
     bool Test_CheckElementConnectivity();
-    bool Test_OutputStoredVariablesTo();
-    bool Test_InputStoredVariablesFrom();
+    bool Test_OutputStoredVariablesTo();   // covered by binary file saving and reading tests
+    bool Test_InputStoredVariablesFrom();  // covered by binary file saving and reading tests
+    
+    // TODO: test RepairConnectivity( input from SplitB generation, nodes, nbors with new nodes etc.
     
     // indirectly tested underlying functionality
     /*

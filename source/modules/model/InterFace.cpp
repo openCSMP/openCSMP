@@ -1535,40 +1535,38 @@ template<uint32_t dim>
 void  InterFace<dim>::Out() const
 {
   cout << "\nInterFace<" << dim << ">::Out: number: " << idx_;
-  cout << "\nInternal data: ";
-  cout << "\n\tconnected nodes with boundary flags:  ";
+  cout <<": "<< parseFiniteElementType( this->FE_Type() );
+  cout << "\n\tconnected inside nodes with boundary flags:   ";
   string str;
-  for ( auto i{0U}; i<this->FE()->Nodes(); i++ ) {
+  for ( uint32_t i{0U}; i<this->FE()->Nodes(); i++ ) {
     str = parseBoundary( N( i, INSIDE )->AtBoundary() );
     cout << N( i, INSIDE )->Idx() << ":" << str << "  ";
   }
-  for ( auto i{0U}; i<this->FE()->Nodes(); i++ ) {
+  cout << "\n\tconnected outside nodes with boundary flags:  ";
+  for ( uint32_t i{0U}; i<this->FE()->Nodes(); i++ ) {
     str = parseBoundary( N( i, OUTSIDE )->AtBoundary() );
     cout << N( i, OUTSIDE )->Idx() << ":" << str << "  ";
   }
   cout << endl;
 
-  cout << "\n\tconnected neighbor InterFace types / boundary flags:\n";
-  for ( auto i{0U}; i<this->Neighbors(); i++ )
+  cout << "\n\tconnected neighbor InterFace types / boundary flags: ";
+  for ( uint32_t i{0U}; i<this->Neighbors(); i++ )
     if ( Neighbor( i ) != nullptr ) {
-      cout << "\t\t" << Idx() << ":";
-      cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
-      //str = parseBoundary(Neighbor(i)->AtBoundary());
-      //cout << str;
-      cout << endl;
-    }
-    else cout << "none.  ";
+        cout << "\t\t" << Idx() << ": ";
+        cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
+        //str = parseBoundary(Neighbor(i)->AtBoundary());
+        //cout << str;
+        cout << endl;
+      }
+    else cout << "none ";
     cout << endl;
-
-    cout << "\tInterFace is connected via bridge pattern to: ";
-    cout << parseFiniteElementType( this->FE_Type() ) << endl;
 
     Point<dim>  pt( this->BaryCenter() );
 
     if ( dim == 1U )
       cout << "\n\tBarycentre at (xyz): " << pt[0] << endl;
     else if ( dim == 2U )
-      cout << "\n\tBarycentre at (xyz): " << pt[0] << ", " << pt[1] << endl;
+      cout << "n\tBarycentre at (xyz): " << pt[0] << ", " << pt[1] << endl;
     else
       cout << "\n\tBarycentre at (xyz): " << pt[0] << ", " << pt[1] << ", " << pt[2] << endl;
 
@@ -1577,36 +1575,26 @@ void  InterFace<dim>::Out() const
       cout << "\n\tStorage sites for IntegrationPoint properties: " << ipoints << endl;
     }
 
-    cout << "\n Connected Node objects, side 1 of interface: ";
-    for ( auto i{0U}; i<this->FE()->Nodes(); i++ )
-      node_connector_[i]->Out();
-    cout << endl;
-
-    cout << "\n Connected Node objects, side 2 of interface: ";
-    for ( auto i{0U}; i<this->FE()->Nodes(); i++ )
-      node_connector_[ i+ this->FE()->Nodes() ]->Out();
-    cout << endl;
-
-    cout <<"\nParent (higher-dimensional) Element objects:\n";
+    cout <<"\n\t"<<"Parent (higher-dimensional) Element objects:\n";
     if ( innerParent_ != nullptr ) {
-         cout <<"\t"<<"inside higher-dim parent Element: "<< this->innerParent_->Idx();
-         cout  <<" ("<< parseFiniteElementType(this->Parent(INSIDE)->FE_Type()) <<")"<< endl;
+         cout <<"\t\t"<<"inside "<< dim <<"-dimensional parent Element: "<< this->innerParent_->Idx();
+         cout  <<": "<< parseFiniteElementType(this->Parent(INSIDE)->FE_Type()) << endl;
       }
-    else cout <<"\tnone.\n";
+    else cout <<"\t\tnone.\n";
     if ( this->outerParent_ != nullptr ) {
-         cout <<"\t"<<"outside higher-dim parent Element: "<< this->outerParent_->Idx();
-         cout <<" ("<< parseFiniteElementType(this->Parent(OUTSIDE)->FE_Type()) <<")"<< endl;
+         cout <<"\t\t"<<"outside "<< dim <<"-dimensional parent Element: "<< this->outerParent_->Idx();
+         cout <<": "<< parseFiniteElementType(this->Parent(OUTSIDE)->FE_Type()) << endl;
       }
-    else cout << "\tnone.\n";
+    else cout << "\t\tnone.\n";
     if ( this->middleElement_ != nullptr ) {
-         cout <<"\t"<<"intervening same-dimensional Element: "<< this->middleElement_->Idx();
-         cout <<" ("<< parseFiniteElementType(this->Parent(MIDDLE)->FE_Type()) <<")"<< endl;
+         cout <<"\t\t"<<"intervening "<< dim-1 <<"-dimensional Element: "<< this->middleElement_->Idx();
+         cout <<": "<< parseFiniteElementType(this->Parent(MIDDLE)->FE_Type()) << endl;
       }
-    else cout << "\tnone.\n";
+    else cout << "\t\tnone.\n";
 
-    cout << "\tUnit Normal:            ";
+    cout << "\n\tUnit normal:  ";
     Point<dim> un = UnitNormal();
-    for ( auto i{0U}; i<dim; i++ ) cout << un[i] << ", ";
+    for ( uint32_t i{0U}; i<dim; i++ ) cout << un[i] << ", ";
     cout << endl;
 
 } // end Out

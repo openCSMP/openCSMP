@@ -985,12 +985,12 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
          if ( nodes[i] == nullptr ) {
               cerr <<"\n\tnode "<< i;
               csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector contains a nullptr");
-   break;
+              break;
            }
          else if ( nodes[i]->Coordinate() != ifptr->N(i)->Coordinate() ) {
               cerr <<"\n\tnode "<< i;
               csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node locations do not match");
-   break;
+              break;
            }
        }
 #endif
@@ -1003,7 +1003,7 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
    (*eit).Idx( elmt_idx );
    
    // 4. connecting the nodes to the element
-   const size_t n_nodes( ifptr->FE()->Nodes() );
+   const uint32_t n_nodes{ ifptr->FE()->Nodes() };
    for ( uint32_t i{0U}; i<n_nodes; ++i )
      (*eit).Assign( i, nodes[i] );
      
@@ -3173,6 +3173,8 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Face
     Duplicated nodes are removed as well as the the mesh is reconnected.
     
     @attention method does not reconnect the mesh where interfaces are removed.
+    
+    @attention method does not deal with elements sandwhiched between the tow sides of the interface, they need to be deleted first
 */
 template<uint32_t dim>
 size_t MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity( typename vector<InterFace<dim>*>::iterator first,
@@ -3200,6 +3202,20 @@ auto first1{ first };
      while ( first != last )
        {
           assert( (*first) != nullptr );
+          
+          // 0. checking for elements sandwhiched between interface sides
+          if ( (*first)->HasInterveningElement() ) {
+#ifndef NDEBUG
+                cout <<"\n\t"<<"detected intervening Element: "<< (*first)->InterveningElement()->Idx() <<": ";
+                cout << parseFiniteElementType( (*first)->InterveningElement()->FE_Type() );
+                csmp_error.Note( WARNING, "MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity",
+                                "Element will be deleted including nodes");
+#endif
+                for ( auto nit=(*first)->InterveningElement()->NodesBegin(); nit!=(*first)->InterveningElement()->NodesEnd(); ++nit )
+                  nodes_to_delete.insert( (*nit) );
+                // deleting the intervening element
+                Delete( (*first)->InterveningElement() );
+            }
           
           // 1. disconnecting interface neighbors adjacent to the perimeter of the supplied interface patch
           for ( uint32_t i{0U}; i<(*first)->Neighbors(); i++ )
@@ -3232,7 +3248,15 @@ auto first1{ first };
           // 4. replacing the face nodes of the outside element with those from the inside
           uint32_t node_counter{0u};
           for ( auto& fnid : (*first)->OuterParent()->FE()->NodesOfFace( (*first)->OuterParentFaceID() ) ) {
-               assert( (*first)->OuterParent()->N(fnid) == (*first)->N(node_counter,OUTSIDE) );
+               if ( (*first)->OuterParent()->N(fnid) != (*first)->N(node_counter,OUTSIDE) ) {
+#ifndef NDEBUG
+                    cout <<"\n\t"<<"interface node: "<< (*first)->N(node_counter,OUTSIDE)->Idx() <<" and ";
+                    cout <<"outer parent face node: "<< (*first)->OuterParent()->N(fnid)->Idx() <<" do not match.";
+                    csmp_error.Note( WARNING, "MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity",
+                                    "detected node-numbering inconsistency between InterFace and outside Element face; nodes could not be fused");
+#endif
+                    continue;
+                 }
                (*first)->OuterParent()->Assign( fnid, (*first)->N(node_counter,INSIDE) );
                node_counter++;
             }
@@ -4014,7 +4038,7 @@ void MeshManager<dim>::UpdateConnectivity()
          n.first->ResizeParentStorage( n_parents );
          // looping over the future parents
          for ( const auto& it : n.second ) {
-           const auto n_nodes{it->Nodes()};
+           const uint32_t n_nodes{it->Nodes()};
            // assigning them to the node
            for ( uint32_t j{0U}; j<n_nodes; ++j )
              if ( n.first == it->N(j) ) {

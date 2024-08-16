@@ -751,6 +751,7 @@ bool MeshManager_Test::TestEntityNumberingFunction( Model<3>& model )
       - Delete( Element*)
       - connectNeighborsUsingNodeParents()
       - sharedNodes( eptr, eptr )
+      - BuildConnectivity( iface)
       
 */
 bool MeshManager_Test::TestCellDeletionAndInsertion()
@@ -990,6 +991,9 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
     
     } // end for all pyramids
     
+  // interconnect the Face objects with their neighbors
+  mesh.BuildConnectivity<Face>( ptrs_to_faces_created.begin(), ptrs_to_faces_created.end() );
+    
   cout<<"\n\tcreated "<<  ptrs_to_faces_created.size() <<" faces."<< endl;
   _test( !boundary_face_constructed );
   _test( interior_face_constructed );
@@ -1024,6 +1028,7 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
          }
        face_counter++;
     }
+
   cout<<"\n\n\tcreated "<<  unique_outsiders.size() <<" nodes."<< endl;
 
   
@@ -1044,6 +1049,9 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
        //                                     ---------------------------------------------------------------------------------------
        _test( ptrs_to_ifaces_created.back() != nullptr );
     }
+
+  // connect interfaces to their neighbors
+  mesh.BuildConnectivity<InterFace>( ptrs_to_ifaces_created.begin(), ptrs_to_ifaces_created.end() );
   cout<<"\n\tcreated "<<  ptrs_to_ifaces_created.size() <<" interfaces."<< endl;
     
   _test( mesh.Faces() == 0 );
@@ -1072,7 +1080,14 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
 
 
 
-
+/**
+    Tests:
+    - AddInterFace()
+    - findAdjacentFacesFromNodes()
+    - findAdjacentFacesFromNeighbors()
+    - DeleteInterfacesAndRepairConnnectivity()
+    - AddInterveningElement()
+*/
 bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
 {
 	// vsetMakers: create_Pyramid_Hexa_VSet
@@ -1085,8 +1100,10 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
   MeshManager<3U>&           mesh(model.Mesh());
   bool                       interface_constructed(false);
   LocalVariables				     nvars  = model.Database().LocalVariablesAt(NODE);
-  LocalVariables				     ifvars = model.Database().LocalVariablesAt(INTER_FACE);
-	IntegrationPointVariables	 iivars = model.Database().IntegrationPointVariablesAt(INTER_FACE);
+  LocalVariables             ifvars = model.Database().LocalVariablesAt(INTER_FACE);
+  IntegrationPointVariables  iivars = model.Database().IntegrationPointVariablesAt(INTER_FACE);
+  LocalVariables				     evars = model.Database().LocalVariablesAt(ELEMENT);
+	IntegrationPointVariables	 eivars = model.Database().IntegrationPointVariablesAt(ELEMENT);
   const size_t n_original_ifaces = mesh.InterFaces();
 
   // puts interfaces between the interior faces of Element # and Element #
@@ -1094,23 +1111,23 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
   InterFace<3U>*     ifptr(nullptr);
   vector<InterFace<3U>*> iface_ptrs;
   iface_ptrs.reserve( eptr->Faces() );
-  for ( auto i{0}; i<eptr->Faces(); i++ )
+  for ( uint32_t i{0}; i<eptr->Faces(); i++ )
     {
        if ( eptr->Neighbor(i) != nullptr && !interface_constructed ) {
             // getting the nodes for the inside of the future interface
             auto fnids = eptr->FE()->NodesOfFace( i );
             vector<Node<3U>*> inside_nodes;
             inside_nodes.reserve( fnids.size() );
-            for ( auto j=0U; j<fnids.size(); ++j )
+            for ( uint32_t j=0U; j<fnids.size(); ++j )
               inside_nodes.push_back( eptr->N( fnids[j] ) );
             // duplicating these nodes to get nodes for the inside element and the other side
             vector<Node<3U>*> middle_nodes, outside_nodes;
             middle_nodes.reserve( fnids.size() );
             outside_nodes.reserve( fnids.size() );
-            for ( auto j=0U; j<fnids.size(); ++j ) {
-                 Node<3U>* mnptr = mesh.Duplicate( eptr->N( fnids[j] ), nvars );
+            for ( auto& j : fnids ) {
+                 Node<3U>* mnptr = mesh.Duplicate( eptr->N(j), nvars );
                  middle_nodes.push_back( mnptr );
-                 Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), nvars );
+                 Node<3U>* onptr = mesh.Duplicate( eptr->N(j), nvars );
                  outside_nodes.push_back( onptr );
               }
             // find matching faces via the shared nodes
@@ -1118,24 +1135,28 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
             _test( i == face_ids1.first );
             // find matching faces via neighbor element pointers (faster)
             pair<uint32_t,uint32_t> face_ids2 = findAdjacentFacesFromNeighbors( eptr, eptr->Neighbor(i) );
-            _test( face_ids1.first == face_ids2.first );
-            _test( face_ids1.first == face_ids2.second );
+            _test( face_ids1.first  == face_ids2.first );
+            _test( face_ids1.second == face_ids2.second );
             //                        inner  outer
             ifptr = mesh.AddInterFace( eptr, face_ids1.first, eptr->Neighbor(i), face_ids1.second, ifvars, iivars );
+            //           ------------------------------------------------------------------------------------------
             interface_constructed = true;
             // create an intervening element
             const int32_t material_id(5);
-            Element<3U>*	ieptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_QUADRILATERAL, ifvars, iivars, middle_nodes, material_id );
-            
-            // connecting the InterFace to the middle element
-            ifptr->Assign( ieptr );
+            Element<3U>*	ieptr = mesh.AddInterveningElement( ifptr, evars, eivars, middle_nodes, material_id );
+            //                         -------------------------------------------------------------------------
+            // is the InterFace connected to middle element
+            _test( ifptr->InterveningElement() == ieptr );
             iface_ptrs.push_back( ifptr );
          }
     }
-  cout<<"\n\tcreated faces: ";
-  if ( interface_constructed ) ifptr->Out();
+  if ( interface_constructed ) {
+       cout<<"\n\tcreated interface: ";
+       cout << ifptr->Idx() << endl;
+       ifptr->Out();
+    }
     
-	_test( mesh.Faces() == n_original_ifaces + interface_constructed );
+	_test( iface_ptrs.size() == 1 );
  
 	// delete the new interface(s) again
 	mesh.DeleteInterfacesAndRepairConnnectivity( iface_ptrs.begin(), iface_ptrs.end() );
