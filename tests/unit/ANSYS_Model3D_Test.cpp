@@ -380,7 +380,10 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
             
      _test( ctrSeIps == 4 );
      _test( ctrFaIps == 6 );
-
+     
+      // Testing input / output of the model with quadratic FEM basis functions (midside nodes)
+      Test_ReadWriteQuadraticFEM_Model();
+     
        if ( verbose ) cout <<"\n\n"<<this->getName()<<" FINISHED!!!"<<endl;
     }
     
@@ -618,5 +621,25 @@ void ANSYS_Model3D_Test::ModelRecoveryFromFileTest()
       }
 
 } // end ModelRecoveryFromFileTest
+
+
+
+
+void ANSYS_Model3D_Test::Test_ReadWriteQuadraticFEM_Model()
+ {
+   // box with a vertical well in the middle that is meshed volumetrically
+   // 4617 nodes, 3878 elements, 8 families                 :
+   ANSYS_Model3D model( "box_with_hole2", "CSMP-variables.txt",  true /* binary_file */ );
+   model.OutputToBinaryFile("Test_ReadWriteQuadraticFEM_Model");
+
+   Model<3U>  modelIn( string("Test_ReadWriteQuadraticFEM_Model") );
+
+   ModelSubDomain_Test comparitor;
+   _test( comparitor.CompareModelSubdomains( model.Region("WELL"),
+                                             modelIn.Region("WELL"), true ) );
+ }
+
+
+
 
 } // csmp

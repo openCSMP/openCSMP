@@ -418,6 +418,25 @@ typename vector<csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesEnd() co
   return node_connector_.end();
 }
 
+
+
+template<uint32_t dim>
+typename vector<csmp::Node<dim>*>::const_iterator InterFace<dim>::CornerNodesBegin() const
+{
+   if ( current_side_ == INSIDE ) return node_connector_.begin();
+   return next( node_connector_.begin(), this->FE()->Nodes() );
+}
+
+
+template<uint32_t dim>
+typename vector<csmp::Node<dim>*>::const_iterator InterFace<dim>::CornerNodesEnd() const
+{
+  if ( current_side_ == INSIDE ) return next( node_connector_.begin(), this->FE()->Nodes() );
+  return next(node_connector_.begin(),this->FE()->Nodes() + this->FE()->CornerNodes());
+}
+
+
+
 template<uint32_t dim>
 typename vector<InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsBegin() const
 {

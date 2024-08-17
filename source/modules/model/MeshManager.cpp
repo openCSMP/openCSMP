@@ -1776,7 +1776,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceInteriorElementsByFaces( const Prop
              }
         
          // 1.2 construction of Face object in the interior of a model where both neighbors are present
-         pair<Element<dim>*,Element<dim>*>  pelmts = parentElements<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
+         pair<Element<dim>*,Element<dim>*>  pelmts = parentElements<dim>( (*first)->CornerNodesBegin(), (*first)->CornerNodesEnd() );
          assert( pelmts.first  != nullptr );
          assert( pelmts.second != nullptr );
          // finding the face numbers of the parent elements
@@ -1848,7 +1848,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
     
     // 1. converting Elements into Faces
     // ---------------------------------
-    size_t face_idx{0};
+    size_t face_idx{0ul};
     // remembering the first iterator
     auto first2{ first };
     
@@ -1874,7 +1874,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
          // 1.2 constructing Faces at model boundary, verifying that the supplied elemnent actually is located on the boundary
          // ------------------------------------------------------------------------------------------------------------------
          // trying to find higher dimensional neighbor of the face-element and its face idx
-         pair<Element<dim>* const,uint32_t> pelmt = parentElement<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
+         pair<Element<dim>* const,uint32_t> pelmt = parentElement<dim>( (*first)->CornerNodesBegin(), (*first)->CornerNodesEnd() );
          
          // if this is unsuccesful, boundary face creation is stopped, but element will be deleted
          if ( pelmt.first == nullptr ) {

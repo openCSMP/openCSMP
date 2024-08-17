@@ -463,6 +463,19 @@ std::vector<uint32_t>  IsoparametricQuadraticHexahedron::NodesConnectedTo( uint3
         case 5: return vector<uint32_t>{1,4,6};
         case 6: return vector<uint32_t>{2,5,7};
         case 7: return vector<uint32_t>{3,4,6};
+        // midside nodes
+        case 8: return vector<uint32_t>{0,1};
+        case 9: return vector<uint32_t>{1,2};
+        case 10: return vector<uint32_t>{2,3};
+        case 11: return vector<uint32_t>{3,0};
+        case 12: return vector<uint32_t>{0,4};
+        case 13: return vector<uint32_t>{1,5};
+        case 14: return vector<uint32_t>{2,6};
+        case 15: return vector<uint32_t>{3,7};
+        case 16: return vector<uint32_t>{4,5};
+        case 17: return vector<uint32_t>{5,6};
+        case 18: return vector<uint32_t>{6,7};
+        case 19: return vector<uint32_t>{7,4};
         default:
           cerr <<"\nIsoparametricQuadraticHexahedron::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }

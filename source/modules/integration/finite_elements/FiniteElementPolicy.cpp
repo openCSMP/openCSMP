@@ -817,11 +817,12 @@ template<uint32_t dim, template<uint32_t> class CELL>
 set<Node<dim>*> FiniteElementPolicy<dim,CELL>::CornerNodesConnectedTo( uint32_t node_id ) const
  {
     assert( fptr_ != nullptr );
-    assert( node_id < fptr_->CornerNodes() );
+    assert( node_id < fptr_->Nodes() );
  
     const CELL<dim>* const eptr( static_cast<const CELL<dim>* const>(this) );
 
     set<Node<dim>*>  temp;
+    // NB: the midside nodes are always connected to corner nodes
     for ( const auto& nit : fptr_->NodesConnectedTo(node_id) ) {
          assert( eptr->N(nit) != nullptr );
          temp.insert( eptr->N(nit) );

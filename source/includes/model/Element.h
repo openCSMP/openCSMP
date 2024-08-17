@@ -224,10 +224,15 @@ class Element : public FiniteElementPolicy<dim, Element>,
     uint32_t  Faces() const;
 
     /// only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by MeshManager); thus, nodes and element neighbors can be manipulated but not the pointers to them
-    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesBegin()     const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesEnd()       const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesBegin() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesEnd() const;
+
+    /// assuming that the corner nodes are the first, the midside nodes the second, and the .. in the elements node set according to CSMP_FEM_conventions.pdf
+    typename std::vector<csmp::Node<dim>*>::const_iterator      CornerNodesBegin() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator      CornerNodesEnd() const;
+
     typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsBegin() const;
-    typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsEnd()   const;
+    typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsEnd() const;
 
     typename  std::vector<csmp::Node<dim>*>&                    NodeVector();
     typename  std::vector<csmp::Element<dim>*>&                 NeighborElementVector();

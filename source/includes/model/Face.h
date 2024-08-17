@@ -163,10 +163,14 @@ class Face : public FiniteElementPolicy<dim,Face>,
     uint32_t  Faces() const;
 
     /// only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by MeshManager)
-    typename std::vector<csmp::Node<dim>*>::const_iterator   NodesBegin()     const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator   NodesEnd()       const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator   NodesBegin() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator   NodesEnd() const;
+
+    typename std::vector<csmp::Node<dim>*>::const_iterator   CornerNodesBegin() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator   CornerNodesEnd() const;
+
     typename std::vector<csmp::Face<dim>*>::const_iterator   NeighborsBegin() const;
-    typename std::vector<csmp::Face<dim>*>::const_iterator   NeighborsEnd()   const;
+    typename std::vector<csmp::Face<dim>*>::const_iterator   NeighborsEnd() const;
 
     /// to apply visitors whose application level is Boundary and target is Face
     void Accept( csmp::Visitor<dim>& );

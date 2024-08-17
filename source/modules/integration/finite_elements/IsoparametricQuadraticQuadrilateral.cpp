@@ -201,6 +201,11 @@ vector<uint32_t>  IsoparametricQuadraticQuadrilateral::NodesConnectedTo( uint32_
         case 1: return vector<uint32_t>{0,2};
         case 2: return vector<uint32_t>{1,3};
         case 3: return vector<uint32_t>{0,2};
+        // midside nodes
+        case 4: return vector<uint32_t>{0,1};
+        case 5: return vector<uint32_t>{1,2};
+        case 6: return vector<uint32_t>{2,3};
+        case 7: return vector<uint32_t>{3,0};
         default:
           cerr <<"\nIsoparametricQuadraticQuadrilateral::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }

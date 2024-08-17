@@ -336,6 +336,16 @@ vector<uint32_t>  IsoparametricQuadraticPrism::NodesConnectedTo( uint32_t node_i
         case 3: return vector<uint32_t>{0,4,5};
         case 4: return vector<uint32_t>{1,3,5};
         case 5: return vector<uint32_t>{2,3,4};
+        // midside nodes
+        case 6: return vector<uint32_t>{0,1};
+        case 7: return vector<uint32_t>{1,2};
+        case 8: return vector<uint32_t>{2,0};
+        case 9: return vector<uint32_t>{0,3};
+        case 10: return vector<uint32_t>{1,4};
+        case 11: return vector<uint32_t>{2,5};
+        case 12: return vector<uint32_t>{3,4};
+        case 13: return vector<uint32_t>{4,5};
+        case 14: return vector<uint32_t>{5,3};
         default:
           cerr <<"\nIsoparametricQuadraticPrism::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }

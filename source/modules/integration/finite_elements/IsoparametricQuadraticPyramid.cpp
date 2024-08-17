@@ -307,6 +307,15 @@ vector<uint32_t>  IsoparametricQuadraticPyramid::NodesConnectedTo( uint32_t node
         case 2: return vector<uint32_t>{1,3,4};
         case 3: return vector<uint32_t>{0,2,4};
         case 4: return vector<uint32_t>{0,1,2,3};
+        // midside nodes
+        case 5: return vector<uint32_t>{0,1};
+        case 6: return vector<uint32_t>{1,2};
+        case 7: return vector<uint32_t>{2,3};
+        case 8: return vector<uint32_t>{3,0};
+        case 9: return vector<uint32_t>{0,4};
+        case 10: return vector<uint32_t>{1,4};
+        case 11: return vector<uint32_t>{2,4};
+        case 12: return vector<uint32_t>{3,4};
         default:
           cerr <<"\nIsoparametricQuadraticPyramid::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }

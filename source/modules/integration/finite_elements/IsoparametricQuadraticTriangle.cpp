@@ -534,6 +534,10 @@ std::vector<uint32_t>  IsoparametricQuadraticTriangle::NodesConnectedTo( uint32_
         case 0: return vector<uint32_t>{1,2};
         case 1: return vector<uint32_t>{2,0};
         case 2: return vector<uint32_t>{0,1};
+        // midside nodes
+        case 3: return vector<uint32_t>{0,1};
+        case 4: return vector<uint32_t>{1,2};
+        case 5: return vector<uint32_t>{2,0};
       }
     cerr <<"\nIsoparametricQuadraticTriangle::NodesConnectedTo: node "<< node_id <<" does not exist.";
     return vector<uint32_t>{};

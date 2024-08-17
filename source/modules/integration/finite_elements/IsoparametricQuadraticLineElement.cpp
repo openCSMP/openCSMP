@@ -250,6 +250,7 @@ vector<uint32_t>  IsoparametricQuadraticLineElement::NodesConnectedTo( uint32_t 
         // local corner node numbers are returned in ascending order
         case 0: return vector<uint32_t>{1};
         case 1: return vector<uint32_t>{0};
+        case 2: return vector<uint32_t>{0,1};
         default:
           cerr <<"\nIsoparametricQuadraticLineElement::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }

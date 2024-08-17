@@ -13,6 +13,8 @@ namespace csmp {
       
       void ModelRecoveryFromFileTest();
       
+      void Test_ReadWriteQuadraticFEM_Model();
+      
     private:
       static const bool verbose_ = false;
     };

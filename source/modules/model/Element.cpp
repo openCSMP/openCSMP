@@ -353,6 +353,25 @@ typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesEnd()
   return node_connector_.end();
 }
 
+
+
+
+/// assuming that the corner nodes are the first, the midside nodes the second, and the .. in the elements node set according to CSMP_FEM_conventions.pdf
+template<uint32_t dim>
+typename vector<csmp::Node<dim>*>::const_iterator Element<dim>::CornerNodesBegin() const
+{
+  return node_connector_.begin();
+}
+
+template<uint32_t dim>
+typename vector<csmp::Node<dim>*>::const_iterator Element<dim>::CornerNodesEnd() const
+{
+  return next(node_connector_.begin(),this->FE()->CornerNodes());
+}
+
+
+
+
 template<uint32_t dim>
 typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsBegin() const
 {
