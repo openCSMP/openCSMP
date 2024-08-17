@@ -577,7 +577,7 @@ double  IsoparametricLinearTriangle::Volume()
     // numerical integration:
     // looping over the Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( auto i{0U}; i<gpe; i++ )
+    for ( uint32_t i{0U}; i<gpe; i++ )
       {
          // getting interpolation function derivatives
          RS_[0] = rr_[i];
@@ -1542,7 +1542,7 @@ double  IsoparametricLinearTriangle::JacobianInverse()
          // to print a scalar, the data matrix only needs 1 row
          DenseMatrix<DM_MIN> DATA( 1, Nodes() );
          // values increase linearly from first to last node (so that node numbering direction can be seen)
-         for ( auto j{0u}; j<Nodes(); ++j ) DATA(0,j) = j;
+         for ( uint32_t j{0u}; j<Nodes(); ++j ) DATA(0,j) = j;
          OutputNodeDataToVTK( file_name.c_str(), "error_code", DATA );
          throw std::range_error("IsoparametricLinearTriangle::JacobianInverse");
     }

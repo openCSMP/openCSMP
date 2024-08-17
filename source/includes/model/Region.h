@@ -114,6 +114,9 @@ class Region : public ModelSubDomain<dim, Element>,
    // Property input/output
    // --------------------------------------------
 
+    /// Sets the Region ID to ModelSubDomain::domain_idx_ for all elements of unique region; override as is needed
+    void SetRegion_ID( int32_t region_id_for_non_unique_regions = UNSPECIFIED );
+
     /// for the assignment of properties that are unique to the instance of this subclass
     template<typename Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );

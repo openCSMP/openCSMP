@@ -39,6 +39,7 @@ Element<dim>::Element( csmp::FiniteElement* f )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
     idx_( numeric_limits<size_t>::max() ),
     material_id_(UNSPECIFIED),
+    region_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )
 {
@@ -54,6 +55,7 @@ Element<dim>::Element( csmp::FiniteElement* f,
     FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
     idx_( numeric_limits<size_t>::max() ),
     material_id_(UNSPECIFIED),
+    region_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )
 {
@@ -72,6 +74,7 @@ Element<dim>::Element( csmp::FiniteElement* f,
     FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
     idx_( numeric_limits<size_t>::max() ),
     material_id_(UNSPECIFIED),
+    region_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )
 {
@@ -101,6 +104,7 @@ Element<dim>::Element( size_t idx,
     FiniteVolumePolicy<dim, ::csmp::Element>( s ),
     idx_( idx ),
     material_id_(material),
+    region_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )
 {
@@ -121,6 +125,7 @@ Element<dim>::Element( const Element<dim>& el )
     FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
     idx_( el.idx_ ),
     material_id_(el.material_id_),
+    region_id_(el.region_id_),
     elmt_connector_( el.elmt_connector_ ), // the pointers point to the same elements as for the original element
     node_connector_( el.node_connector_ )
 {
@@ -140,6 +145,7 @@ Element<dim>::Element( Element<dim>&& el )
 //    LocalVariableStorage<dim, csmp::Element>( el.LVS() ),  does not compile, why?
     idx_(el.idx_),
     material_id_(el.material_id_),
+    region_id_(el.region_id_),
     // calling std::move() is important, else elmt destructor has to do more work!
     elmt_connector_( std::move(el.elmt_connector_) ),
     node_connector_( std::move(el.node_connector_) )
@@ -169,6 +175,7 @@ Element<dim>& Element<dim>::operator=( const Element<dim>& el )
     elmt_connector_ = el.elmt_connector_;
     node_connector_ = el.node_connector_;
     material_id_    = el.material_id_;
+    region_id_      = el.region_id_;
     this->LVS( el.LVS() );
   }
   return *this;
@@ -192,6 +199,7 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   elmt_connector_ = std::move( el.elmt_connector_ );
   node_connector_ = std::move( el.node_connector_ );
   material_id_    = el.material_id_;
+  region_id_      = el.region_id_;
   
   this->LVS( std::move( el.LVS() ) );
 
@@ -208,9 +216,10 @@ bool  Element<dim>::operator==( const Element<dim>& el ) const
   if ( &el != this )
     {
        if ( this->FE_Type() != el.FE_Type() ) return false;
-       if ( material_id_    != el.material_id_ ) return false;
        if ( node_connector_ != el.node_connector_ ) return false;
        if ( elmt_connector_ != el.elmt_connector_ ) return false;
+       if ( material_id_    != el.material_id_ ) return false;
+       if ( region_id_      != el.region_id_ ) return false;
        // ignored: if ( idx_ == el.idx_ ) return true;
     }
   return true;
@@ -331,31 +340,6 @@ uint32_t  Element<dim>::Faces() const
 // ITERATORS
 
 /// iterator to the element nodes
-/*
-template<uint32_t dim>
-typename std::vector<csmp::Node<dim>*>::iterator  Element<dim>::NodesBegin()
-{
-  return node_connector_.begin();
-}
-
-template<uint32_t dim>
-typename std::vector<csmp::Node<dim>*>::iterator  Element<dim>::NodesEnd()
-{
-  return node_connector_.end();
-}
-
-template<uint32_t dim>
-typename std::vector<Element<dim>*>::iterator  Element<dim>::NeighborsBegin()
-{
-  return elmt_connector_.begin();
-}
-
-template<uint32_t dim>
-typename std::vector<Element<dim>*>::iterator  Element<dim>::NeighborsEnd()
-{
-  return elmt_connector_.end();
-}
-*/
 
 template<uint32_t dim>
 typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesBegin() const
@@ -477,6 +461,20 @@ template<uint32_t dim>
 void Element<dim>::Material_ID( int32_t id )
  {
     material_id_ = id;
+ }
+
+
+template<uint32_t dim>
+int32_t Element<dim>::Region_ID() const
+ {
+    return region_id_;
+ }
+ 
+ 
+template<uint32_t dim>
+void Element<dim>::Region_ID( int32_t id )
+ {
+    region_id_ = id;
  }
 
 

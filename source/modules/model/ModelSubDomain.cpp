@@ -1474,6 +1474,9 @@ int32_t  ModelSubDomain<dim,CELL>::DomainIndex() const
   return domain_idx_;
 }
 
+
+
+
 /**
 
 Returns a vector<double> with the ID numbers of the Elements which belong
@@ -5367,7 +5370,7 @@ void ModelSubDomain<dim,CELL>::RebuildSubDomainAfterChangeOfCellVector()
     // erasing cell vector without changing the relative number of its cells
     cell_vec_.erase( remove( cell_vec_.begin(), cell_vec_.end(), nullptr ), cell_vec_.end() );
     cell_vec_.shrink_to_fit();
-    
+
     // rebuild the node vector
     CreateNodePointerVector();
     // includes shrink to fit
@@ -5380,6 +5383,24 @@ void ModelSubDomain<dim,CELL>::RebuildSubDomainAfterChangeOfCellVector()
     rebuilt_needed_ = false;
     
  } // end RebuildSubDomainAfterChangeOfCellVector
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void ModelSubDomain<dim,CELL>::RebuildSubDomainAfterChangeOfNodeVector()
+ {
+    // rebuild the node vector
+    CreateNodePointerVector();
+    // includes shrink to fit
+    
+    // sorting vectors and identifying perimeter cells and nodes
+    IdentifyPerimeter();
+    // the following happens inside of IdentifyPerimeter()->PartitionVectors()
+    // BuildPerimeterFaceVector( InteriorCells() );
+    
+    rebuilt_needed_ = false;
+    
+ } // end RebuildSubDomainAfterChangeOfNodeVector
 
 
 

@@ -657,12 +657,10 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
                                                                         pit.InnerElementFace(),
                                                                         pit.OuterElementFace(),
                                                                         lvsFaces, lvsIntegrationPoints ) );
+              // element is deleted after removal from node-parents
               // remembering which faces make up the patch
               face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
-              
            }
-         // connecting the new faces in the patch with eachother
-         model.Mesh().template BuildConnectivity<Face>( face_vector.begin(), face_vector.end() );
          patch_counter++;
       }
     patch_data.clear();
@@ -673,19 +671,17 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     cout << "\n\t\t"<<"Removed "<< n_original_elmts - model.Mesh().Elements()  <<" elements from the mesh."<< endl;
 #endif
    
-    //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
-    //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
-    //      - this method also updates node to parent element connectivity
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // TODO: these are global changes! - not sure how to improve this because so many regions are affected
-    // model.Mesh().UpdateConnectivity();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 4. Create Boundary objects for each of the mesh patches established above
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    for ( auto i{0U}; i<patch_names.size(); ++i )
+    for ( uint32_t i{0U}; i<patch_names.size(); ++i )
       AddBoundary( patch_names[i].c_str(), face_ptr_per_patch[i].begin(), face_ptr_per_patch[i].end(), INTERNAL );
       
+    // 4.1 IMPORTANT! connect all the newly created faces from the patches with one another
+    model.Mesh().template BuildConnectivity<Face>( face_vector.begin(), face_vector.end() );
+    face_vector.clear();
+
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 5. Assign BOX_BOUNDARY flags to the nodes of each new patch by using the underlying region
     // ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -1082,7 +1078,7 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
                            "This method is intended for the creation of unique non-overlapping Regions");
          return make_pair("boundary not created",false);
       }
-    // TODO: test whether cases are handled correctly where one of the regions is a surface or a line while the other is a volume?
+    // TODO: test whether cases are handled correctly when one of the regions is a surface or a line while the other is a volume?
    
    
     // 2. do the two regions share part of (are in contact with eachother) their perimeter
@@ -1215,8 +1211,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryAround( const char* 
          return false;
       }
 
-    // 4. getting the MeshManager to create and interconnect the missing Face objects
-    // ------------------------------------------------------------------------------
+    // 4. getting the MeshManager to create and interconnect the required Face objects
+    // -------------------------------------------------------------------------------
     vector<Face<dim>*> face_ptrs = boundaryComplex->Mesh().CreateFacesBetweenNodeSharingElements( boundaryComplex->Database(), hull_elmt_faces );
     
 
@@ -1402,7 +1398,7 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model,
                // 2.1 parent element of Face 1
                // ----------------------------
                // establishing the face-node sequence of the inner element face that will be shared with the new Face object
-               for ( auto i{0U}; i<parent1->Segments(); ++i ) {
+               for ( uint32_t i{0U}; i<parent1->Segments(); ++i ) {
                     vector<uint32_t> snids; // local segment node ids
                     parent1->FE()->NodesOfSegment( i, snids );
                     set<csmp::Node<3U>*> nset;
@@ -1442,9 +1438,6 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model,
            }
       }
    
-    // assigning the equidimensional neighbors to the newly created faces
-    // createLineFaceConnectivity( shared_faces ); // works fine but this is the task of the MeshManager
-    
     // interconnecting the edges with one-another
     model.Mesh().BuildLineConnectivity<Face>( shared_faces.begin(), shared_faces.end() );
 		

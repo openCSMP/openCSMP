@@ -14,7 +14,20 @@ namespace csmp {
 
 template<uint32_t> class Element;
 
-/// all it takes to build a face later
+/**
+    @brief Container of pairs of pointers to Element objects juxtaposed along a shared face identified by its local face number.
+    Used in the construction of Boundary and SplitBoundary objects.
+    
+    The juxtaposed elements must have the same dimension as the model.
+    The first element in the pair is the inside one and the second one the outside one.
+    Material values identify which regions they belong to.
+    There is also a Face or InterFace patch number used to identify the new modelsubdomain that will be created with the help
+    of FaceConstructionData.
+    
+    @attention FaceConstructionData is populated by the function
+    
+       higherDimensionalNeighbors( csmp::Element<dim>&, const csmp::Index& );
+*/
 template<uint32_t dim>
 class FaceConstructionData {
   public:

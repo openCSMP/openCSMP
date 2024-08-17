@@ -223,6 +223,24 @@ LocalVariables Region<dim>::ElementVariables() const
 
 
 
+/**
+    Sets the Region ID to ModelSubDomain::domain_idx_ for all elements of the region.
+    For unique non-spatially overlapping regions (including lower-dim node sharing regions) the value is used as is.
+    
+    @attention This mechanism does not apply to Face or InterFace objects since they have no region ID.
+    
+    @attention For non-unique regions,  no assignment is made!
+*/
+template<uint32_t dim>
+void Region<dim>::SetRegion_ID( int32_t region_id )
+{
+   // only if a negative number is inserted, the reference-counted domain index is not used
+   region_id = ( region_id < 0 ) ? this->DomainIndex() : region_id;
+   for ( auto& it : this->cell_vec_ ) it->Region_ID( region_id );
+}
+
+
+
 // VISITORS INTERFACE
 
 /**
@@ -2785,121 +2803,6 @@ double  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multiply
 
 
 
-
-
-/**
-   In preparation for the generation of a SplitBoundary at a region boundary,
-   search the elements outside that do not have a face but some nodes on its perimeter.
-   
-   @param perimeter_nodes input  that can be computed with sharedPerimeterNodes()
-   @param perimeter_cells elements on the perimeter (inside) of the region, and those matching on the outside
-   @param touching_elmts those outside elements that contain the perimeter node but do not have a face on the boundary
-   
-   @return how many of such nodes were found.
-   
-   TODO: not used at the moment, remove?
-  
-*/
-template<uint32_t dim>
-size_t outsideElementsWithNodesTouchingPerimeter( const Region<dim>& subdomain,
-                                                  const vector<Node<dim>*>& perimeter_nodes,
-                                                  const vector<pair<pair<Element<dim>*,uint32_t>,
-                                                               pair<Element<dim>*,uint32_t> > >& perimeter_cells,
-                                                  map<Node<dim>*,map<Element<dim>*,uint32_t>>& touching_elmts )
- {
-    touching_elmts.clear();
-    
-    // creating a search vector with outside cells that have a face on the regions perimeter
-    // (since these are already unique no check is required)
-    vector<Element<dim>*> outside_perimeter_cells;
-    outside_perimeter_cells.reserve( perimeter_cells.size() );
-    for ( const auto& it : perimeter_cells )
-      outside_perimeter_cells.push_back( it.second.first );
-    sort( outside_perimeter_cells.begin(), outside_perimeter_cells.end() );
-    
-    // search perimeter nodes for parent elements that are not perimeter elements
-    // (as determined by searching the elements that share perimeter face)
-    for ( const auto& nit : perimeter_nodes )
-      for ( uint32_t i{0u}; i<nit->Parents(); ++i )
-        // record ‘eptr’ and local node number (from with node-pointer can be deduced for later lookup)
-        if ( !binary_search( outside_perimeter_cells.begin(), outside_perimeter_cells.end(), nit->Parent(i) ) &&
-             !subdomain.Contains( nit->Parent(i) )  ) {
-             auto insert_it = touching_elmts.insert( make_pair( nit,
-                                                                map<Element<dim>*,uint32_t>{ {nit->Parent(i),
-                                                                                              nit->ParentNodeNumber(i)} } ) );
-             // if there already is an entry for this node another map entry is inserted for it
-             if ( !insert_it.second )
-               (*insert_it.first).second.insert( make_pair( nit->Parent(i), nit->ParentNodeNumber(i) ) );
-          }
-
-    // return how many of such outside elements were found
-    size_t n_extra_outside_elmts{0ul};
-    for ( const auto& nit : touching_elmts )
-      n_extra_outside_elmts += nit.second.size();
-      
-    return n_extra_outside_elmts;
- 
- } // outsideElementsWithNodesTouchingPerimeter
-
-template size_t outsideElementsWithNodesTouchingPerimeter( const Region<1U>&,
-                                                           const vector<Node<1U>*>&,
-                                                           const vector<pair<pair<Element<1U>*,uint32_t>,
-                                                                             pair<Element<1U>*,uint32_t> > >&,
-                                                           map<Node<1U>*,map<Element<1U>*,uint32_t>>& );
-
-template size_t outsideElementsWithNodesTouchingPerimeter( const Region<2U>&,
-                                                           const vector<Node<2U>*>&,
-                                                           const vector<pair<pair<Element<2U>*,uint32_t>,
-                                                                             pair<Element<2U>*,uint32_t> > >&,
-                                                           map<Node<2U>*,map<Element<2U>*,uint32_t>>& );
-
-template size_t outsideElementsWithNodesTouchingPerimeter( const Region<3U>&,
-                                                           const vector<Node<3U>*>&,
-                                                           const vector<pair<pair<Element<3U>*,uint32_t>,
-                                                                             pair<Element<3U>*,uint32_t> > >&,
-                                                           map<Node<3U>*,map<Element<3U>*,uint32_t>>& );
-
-
-
-
-
-/**
-      Returns Elements sharing a face or touching (with a node) the perimeter of the Regions of interest.
-      All these elements are returned into an unordered (hash) map for fast access.
-      
-      @param region1 unique model subdomain that is supposed to have  a shared border with subdomain2
-      @param region2 unique model subdomain bordering subdomain 2
-      @param halo_elmts  into which the cells forming a halo to subdomain1 will be stored
-      
-      @attention this method only works for Region because nodes do not store Face or InterFace parents
-*/
-template<uint32_t dim>
-size_t haloElements( const Region<dim>& region1, const Region<dim>& region2, unordered_set<Element<dim>*>& halo_elmts )
- {
-    // finding the nodes that are shared between the subdomains which will be on their perimeter
-    vector<Node<dim>*> perimeter_nodes;
-    if ( sharedPerimeterNodes( region1, region2, perimeter_nodes ) == 0 )
-      return 0ul;
-    
-    // finding the halo cells by searching the parent elements of the perimeter nodes
-    halo_elmts.clear();
-    for ( const auto& nit : perimeter_nodes )
-      for ( uint32_t i{0u}; i<nit->Parents(); ++i ) {
-            if ( nit->Parent(i) == nullptr ) {
-                 cerr <<" nd:"<< nit->Idx() <<" parent:"<< i <<"null";
-                 continue;
-              }
-            if ( region2.Contains( nit->Parent(i) ) )
-              halo_elmts.insert( nit->Parent(i) );
-        }
-      
-    return halo_elmts.size();
- 
- } // haloCells
- 
-template size_t haloElements( const Region<1U>&, const Region<1U>&, unordered_set<Element<1U>*>& );
-template size_t haloElements( const Region<2U>&, const Region<2U>&, unordered_set<Element<2U>*>& );
-template size_t haloElements( const Region<3U>&, const Region<3U>&, unordered_set<Element<3U>*>& );
 
 
 

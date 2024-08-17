@@ -87,6 +87,9 @@ class ModelSubDomain {
     /// deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells
     void RebuildSubDomainAfterChangeOfCellVector();
     
+    /// rebuilds node vector, sorts everything and re-establishes interior and perimeter
+    void RebuildSubDomainAfterChangeOfNodeVector();
+    
     /// rebuilds subdomain on the basis of the cells that will be selected according to the supplied property constraints
     void UpdateCellMembershipApplyingConstraints( typename std::vector<CELL<dim>*>::const_iterator master_domain_start,
                                                   typename std::vector<CELL<dim>*>::const_iterator master_domain_end,

@@ -249,6 +249,10 @@ class Element : public FiniteElementPolicy<dim, Element>,
     int32_t Material_ID() const;
     void Material_ID( int32_t id );
 
+    /// unique region identifier to be set to minus ModelSubDomain::domain_idx_ for non-unique regions
+    int32_t Region_ID() const;
+    void Region_ID( int32_t id );
+
     // ------------------------------------------------------------------------
     // Functionality
     // ------------------------------------------------------------------------
@@ -283,7 +287,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
     std::vector<Element<dim>*>     elmt_connector_; ///< neighbors
     std::vector<csmp::Node<dim>*>  node_connector_; ///< nodes
     int32_t                        material_id_;    ///< unique identifier, equal to number of unique region that  element belongs or rocktype indentifier
-    // TODO: add uint32_t region_id_;  ///< for quick identification of regions across boundaries
+    int32_t                        region_id_;      ///< to identify which region element belongs to;, IMPORTANT: since ref-counted these indices are not preserved on restart
 };
 
 

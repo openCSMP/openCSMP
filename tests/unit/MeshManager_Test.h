@@ -82,13 +82,28 @@ class MeshManager_Test : public Test {
     bool TestFaceDeletionAndInsertion();      // done
     bool TestInterFaceDeletionAndInsertion(); // done
 
-    bool Test_ReplaceInteriorElementsByFaces();
-    bool Test_ReplaceBoundaryElementsByFaces();
-    bool Test_CreateFacesBetweenNodeSharingElements();
-    bool Test_ReplaceFacesByInterFaces();
-    bool Test_ReplaceElementsByInterFaces();
-    bool Test_CreateInterfacesBetweenNodeSharingElements();
-    bool Test_CreateInterfacesBetweenNodeMatchingElements();
+    // creation of Boundary objects
+    // ----------------------------
+    bool Test_ReplaceInteriorElementsByFaces(); // NOT USED: TODO: should be used by BoundaryInterFace::CreateInternalBoundaryFrom() which uses MM::ReplaceElementByFace()
+    bool Test_ReplaceBoundaryElementsByFaces();         // PRIORITY -> used by BoundaryInterFace::CreateExternalBoundaryFrom()
+    bool Test_CreateFacesBetweenNodeSharingElements();  // -> used by Boundary::InterFace::CreateBoundaryBetween()
+
+    // creation of SplitBoundary objects
+    // ---------------------------------
+    // bool Test_ReplaceFacesByInterFaces();    // NOT USED - TODO: deprecate ReplaceFacesByInterFaces() ?
+    
+    // ConnectNodesToParentsAndNeighbors(); // PRIORITY: used by InsertRegionIntoSplitBoundary()
+    
+    // builds on higherDimensionalNeighbors() and uses FaceConstructionData
+    // bool Test_ReplaceElementsByInterFaces(); // used by: SplitBoundaryInterFace::CreateSplitBoundaryFrom() - TODO: deprecate ReplaceElementsByInterFaces() ?
+    
+    // uses sharedPerimeterCells() and haloElements()
+    // incomplete for 3D case!
+    bool Test_CreateInterfacesBetweenNodeSharingElements();  // PRIORITY: used by: SplitBoundaryInterFace::CreateSplitBoundaryBetween(), calls sharedPerimeterCells() and haloElements()
+
+    bool Test_CreateInterfacesBetweenNodeMatchingElements(); // PRIORITY: used by: SplitBoundaryInterFace::DetectAndCreateSplitBoundaries()
+    
+    // clean-up after Face and InterFace creation
 
     bool Test_BuildConnectivity(); // test UpdateConnectivity() done which calls these
     //bool Test_BuildVolumeConnectivity();

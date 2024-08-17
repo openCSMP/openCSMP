@@ -289,6 +289,7 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
 
   /// updates all connectivity (elements, faces, interfaces, nodes to parents); rebulding node manifolds if necessary
   void UpdateConnectivity();
+  
 
   /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements & Faces)
   /// @todo disambiguate connectivity between Face and InterFace object at manifolds
@@ -404,12 +405,20 @@ private:
 };
 
 
+
+// NON-MEMBER FUNCTIONS
+
 /// finds cells sharing the same nodes and reports their numbers; verbose reports the duplicate cells
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t detectDuplicateCells( typename plf::colony<CELL<dim>>::const_iterator begin,
                              typename plf::colony<CELL<dim>>::const_iterator end,
                              bool verbose );
 
+/// Rotates node numbers while keeping the separation of nodes into corner nodes, midside nodes (quadratic elements)
+template<uint32_t dim>
+void reverseOrderOfFaceNodes( uint32_t n_corner_nodes_of_face,
+                              typename std::vector<Node<dim>*>::iterator first,
+                              typename std::vector<Node<dim>*>::iterator last );
 
 
 } // end namespace csmp

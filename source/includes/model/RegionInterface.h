@@ -85,16 +85,22 @@ class RegionInterface {
 
     /// checks whether all elements within the region are interconnected (if the region has multi-dimensional elements this is never the case)
     // see model subdomain: bool IsContiguous( const std::string& regionname ) const;
-    
+ 
+     /// using the unique region ID (=domain idx) assigned to any ModelSubDomain upon creation, this method searches for the corresponding unique region
+    csmp::Region<dim>&  RegionByDomainIndex( int32_t domain_index );
+
     /// checks that there is a model region and that it contains elements
     bool HasValidModelRegion() const;
-
+    
 
     // -----------------------------------------------
     //  Input/output
     // -----------------------------------------------
 
     size_t RegionsOut() const;
+    
+    /// prints ModelSubDomain::domain_idx_ assigned automatically using reference count mechanism
+    void PrintDomainIndices() const;
 
     /// writes unique and non-unique regions to binary file, including, interior/perimeter/boundary face information; relies on unique indexes
     void OutputRegionsToBinary( const char* file_name ) const;
@@ -255,6 +261,21 @@ class RegionInterface {
     std::map<std::string, csmp::Region<dim> >   regionMap_;        ///<  map of non-unique (potentially overlapping) regions
     std::map<std::string, PropertyConstraints>  regionTraits_;     ///<  criteria how non-unique regions were created
 };
+
+
+// NOn-MEMBER FUNCTIONS
+
+/// Returns those elements from outside Region 2, which share a face or touch (with a node) the perimeter of the inside Region 1
+template<uint32_t dim>
+size_t haloElements( const Region<dim>& region1, const Region<dim>& region2, std::unordered_set<Element<dim>*>& halo_elmts );
+
+/// Searches the Region returning those elements that do not have a face but only one or some nodes on its perimeter
+template<uint32_t dim>
+size_t outsideElementsWithNodesTouchingPerimeter( const Region<dim>& subdomain,
+                                                  const std::vector<Node<dim>*>& perimeter_nodes,
+                                                  const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,
+                                                                    std::pair<Element<dim>*,uint32_t> > >& perimeter_cells,
+                                                  std::map<Node<dim>*,std::map<Element<dim>*,uint32_t>>& touching_elmts );
 
 } // csmp
 

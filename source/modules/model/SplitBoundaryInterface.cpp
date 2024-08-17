@@ -126,16 +126,25 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( co
 
      // erasing the faces
      if ( erase_interfaces ) {
-         // getting the mesh manager to delete faces and nodes and fix up the connectivity
+splitBoundaryComplex.PrintDomainIndices();
+         // finding the region(s) on the outside of the domain which will need to be updated after split boundary removal
+         set<int32_t> domain_indices_of_outside_regions;
+         for ( const auto& it : split_boundary.CellVector() )
+           domain_indices_of_outside_regions.insert( it->OuterParent()->Region_ID() );
+         // getting MeshManager to delete interfaces and nodes and fix up the connectivity
          splitBoundaryComplex.Mesh().DeleteInterfacesAndRepairConnnectivity( split_boundary.CellVector().begin(), split_boundary.CellVector().end() );
+         // updating outside region(s)
+         assert( !domain_indices_of_outside_regions.empty() );
+         for ( auto& it : domain_indices_of_outside_regions ) {
+              Region<dim>& region = splitBoundaryComplex.RegionByDomainIndex( it );
+              region.RebuildSubDomainAfterChangeOfNodeVector();
+           }
        }
 
      // deleting the split boundary
      splitBoundaryMap_.erase( splitboundary );
      
-     // TODO: should we remove duplicated nodes again?
-     cout <<"\n"<<"SplitBoundaryInterface<"<< dim <<">::RemoveSplitBoundary: removed split boundary named '";
-     cout << splitboundary <<"' albeing retaining duplicated nodes."<< endl;
+     cout <<"\n"<<"SplitBoundaryInterface<"<< dim <<">::RemoveSplitBoundary: removed split boundary named '"<< splitboundary <<"'"<< endl;
 
   } // end RemoveSplitBoundary
 
@@ -805,6 +814,7 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::SeparateUniqueRegionsB
     // do this sequentially according to neighbours, otherwise boundaries are not assgiend properly
     for ( auto it : region_final_pairs ) // for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
       model->CreateSplitBoundaryBetween( it.first.c_str(), it.second.c_str() );
+    // the new interfaces are already connected with one another
 
     // screen output
     // cout <<"\n\n"<<"SplitBoundaryInterface::SeparateUniqueRegionsBySplitBoundaries: split boundaries after separation.\n";
@@ -901,9 +911,6 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
 
                 4.2) Breaks dim-1 region into smaller subregions based on t
            5) Breaks dim-1 Region into smaller subregions, and gives each one a unique name
-
-
-
 
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
@@ -1095,10 +1102,10 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     //  2.1 creating the required objects
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    const size_t                          new_interfaces_required(subdomain.Cells());
-    vector<FaceConstructionData<dim>>    iface_construction_vector;
+    const size_t                       new_interfaces_required(subdomain.Cells());
+    vector<FaceConstructionData<dim>>  iface_construction_vector;
     iface_construction_vector.reserve(new_interfaces_required);
-    const size_t n_original_faces(model.Mesh().Faces());
+    const size_t n_original_faces(model.Mesh().InterFaces());
     const size_t n_original_elmts(model.Mesh().Elements());
 
     // looping over the region, identifying and recording the juxtaposition relationships
@@ -1107,48 +1114,49 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     string                             patch_name;
     uint32_t                           n_juxtapositions(0);
 
-    // 2.2 Preprocessing region to make Data for InterFace construction
-    for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit ) {
+    // 2.2 Preprocessing the entire lower dimensional region collecting the Data needed for InterFace construction
+    for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit )
+      {
+        //making FaceConstructionData
+        FaceConstructionData  fdata( higherDimensionalNeighbors( *(*eit), mtrl_key ) );
 
-      //making FaceConstructionData
-      FaceConstructionData  fdata( higherDimensionalNeighbors( *(*eit), mtrl_key ) );
+        // 2.1.2 recording which category of juxtaposition element fall into, naming it and assigning a patch number
+        auto it = patches.insert( make_pair(fdata.Materials(),n_juxtapositions) );
+        // incrementing number of juxtapositions and corresponding patch names
+        if ( it.second == true ) {                                          //If new element was inserted, then
+             fdata.PatchNumber( (*it.first).second );                       //Set patch number to n_juxtapositions (this should be unique...)
+             patch_name = CreateSplitBoundaryNameFrom( fdata, region_names ); //Make a name based on fdata( materials, juxta, region name)
+             patch_names.insert( make_pair(n_juxtapositions,patch_name) );
+             n_juxtapositions++;
+          }
+        fdata.PatchNumber( (*it.first).second );          //name set t
 
-      // 2.1.2 recording which category of juxtaposition element fall into, naming it and assigning a patch number
-      auto it = patches.insert( make_pair(fdata.Materials(),n_juxtapositions) );
-      // incrementing number of juxtapositions and corresponding patch names
-      if ( it.second == true ) {                                          //If new element was inserted, then
-           fdata.PatchNumber( (*it.first).second );                       //Set patch number to n_juxtapositions (this should be unique...)
-           patch_name = CreateSplitBoundaryNameFrom( fdata, region_names ); //Make a name based on fdata( materials, juxta, region name)
-           patch_names.insert( make_pair(n_juxtapositions,patch_name) );
-           n_juxtapositions++;
-        }
-      fdata.PatchNumber( (*it.first).second );          //name set t
-
-      //Adding to vector
-      iface_construction_vector.push_back(fdata);
-    }
+        //Adding to vector
+        iface_construction_vector.push_back(fdata);
+      }
     assert( iface_construction_vector.size() == subdomain.Cells() );
 
 
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 2.3 Creating Interfaces from vector of FaceConstructionDataInterFace using MeshManager (expects FaceConstructionData with well defined perimeter).
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    set<size_t>  region_material_ids; //needed for selective rebuilding of regions with OUTSIDE elements (vector is configured by MeshManager)
+    set<size_t>  region_material_ids; // needed for selective rebuilding of regions with OUTSIDE elements (vector is configured by MeshManager)
 
-    //Creating interfaces for subsegment of dim-1 region, uses subdomain perimeter to avoid duplication at perimeter, and returns vector of outside elements region ids
-    //that have been modified. Intersections are also handled .... Hopefully
+    // Creating interfaces for the entire input region, considering its perimeter to avoid node duplication where it terminates inside another region
+    // split boundary intersections are also handled .... Hopefully
     vector<InterFace<dim>*> iface_vector = model.Mesh().ReplaceElementsByInterFaces( model.Database(),
                                                              iface_construction_vector.begin(),
                                                              iface_construction_vector.end(),
                                                              subdomain.PerimeterNodesBegin(),
                                                              subdomain.NodesEnd(),
-                                                             extra_perimeter_nodes,    //currently, this contains both the old perimeter node , and its manifold node (only need the manifold node).
+                                                             extra_perimeter_nodes, // will contain old perim-node - manifold node pairs (only need the manifold node).
                                                              region_material_ids );
 
+    // the new interfaces are already connected with one another
     assert(iface_vector.size() == iface_construction_vector.size());
     assert( (*iface_vector.begin())->InnerParent() == iface_construction_vector.begin()->InnerElement()) ;
     assert( (*iface_vector.back()).InnerParent() == iface_construction_vector.back().InnerElement()) ;
-
+   
 
 
     // ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -1190,12 +1198,12 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 4. Creating SplitBoundary objects for each of the mesh patches established above
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    for ( auto i{0U}; i<patch_names.size(); ++i )
+    for ( size_t i{0U}; i<patch_names.size(); ++i )
       AddSplitBoundary( patch_names[i].c_str(), patch_data[ patch_names[i] ].begin(), patch_data[ patch_names[i] ].end(), INTERNAL );
-
+      
 #ifdef DEBUG
     cout <<"\n\n"<<"SplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryFrom:";
-    cout << "\n\t\t"<<"Added "<< model.Mesh().Faces() - n_original_faces <<" faces to mesh.";
+    cout << "\n\t\t"<<"Added "<< model.Mesh().InterFaces() - n_original_faces <<" interfaces to mesh.";
     cout << "\n\t\t"<<"Removed "<< n_original_elmts - model.Mesh().Elements()  <<" elements from the mesh."<< endl;
 #endif
 
@@ -1230,78 +1238,10 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
          return make_pair( set<string>({}), false );
       }
 
-
     return make_pair( split_boundary_names, true );
        
  } // end CreateSplitBoundaryFrom
 
-
-
-
-
-
-
-
-/**
-     CreateSplitBoundaryFrom( const Boundary<dim>& );
-     
-     @attention the input boundary is removed in the process and its Face objects will be erased.
-     
-     @return boolean indicating whether the method was able to create a singe Split boundary and its name
-     
-     SKM: DEPRECATED because it fails to update the higher dimensional regions on either side!
-*/
-/*
-template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom( Boundary<dim>& boundary )
-{
-  SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
-
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-  // checking whether boundary is external to the model in which case a SplitBoundary cannot be buid
-  if ( boundary.IsExternal() ) {
-       csmp_error.Note( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom", "Region 'Model' not eligible for InsertSplitBoundary." );
-       return make_pair( "no SplitBoundary was created", false );
-    }
-
-  // creating boundary name by replacing BOUNDARY with SPLIT_BOUNDARY
-  string   splitboundaryName( boundary.Name() );
-  const size_t  str_length(string("BOUNDARY").length());
-  splitboundaryName.replace( splitboundaryName.find("BOUNDARY"), str_length, "SPLITBOUNDARY" );
-
-  // attempt to create a splitboundary
-  if ( ContainsSplitBoundary(splitboundaryName) ) {
-       csmp_error.Note( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom", splitboundaryName,
-                        "a SplitBoundary with this name already exists; nothing was done." );
-       return make_pair( "no SplitBoundary was created", false );
-    }
-  
-  pair<typename map<string, csmp::SplitBoundary<dim> >::iterator, bool>
-    it = splitBoundaryMap_.insert( make_pair( splitboundaryName, csmp::SplitBoundary<dim>( splitboundaryName,
-                                                                                           splitboundaryComplex->Database() ) ) );
-  if ( it.second ) {
-      cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom:";
-      cout <<" creating SplitBoundary from 'Boundary' "<< boundary.Name() << endl;
-      (*it.first).second.CreateFrom( splitboundaryComplex->Database(), splitboundaryComplex->Mesh(), boundary );
-    }
-
-  // removes boundary, noting that its interface objects were already deleted by CreateFrom()
-  const bool erase_faces{ false };
-  splitboundaryComplex->RemoveBoundary( boundary, erase_faces );
-
-  //Updates all regions who may have the new nodes now -> Local updates would mean searching each existing region if they had an original node.. is that faster?
-  assert( false ); //E.P 2022 - THIS IS SUPPOSED TO BREAK - The regions of outside elements are not flagged for update! So this method doesnt correctly configure node_vec of outside regions
-  splitboundaryComplex->UpdateRegions();
-
-  cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom: created splitboundary: '";
-  cout << splitboundaryName <<"' successfully.\n\n";
-
-  return make_pair( splitboundaryName, false );
-
-} // end CreateSplitBoundaryFrom( Boundary )
-
-*/
 
 
 
@@ -1370,6 +1310,8 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
                                                                                                            matched_elmts,
                                                                                                            create_manifolds_on_perimeter,
                                                                                                            halo_elements );
+    // the new interfaces are already connected with one another
+ 
     // 3. creation of the new SplitBoundary
     // ------------------------------------
     string split_boundary_name = CreateSplitBoundaryName( make_pair( region1_name, region2_name ) );
@@ -1395,9 +1337,15 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
       }
     else throw csmp::Exception( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryBetween:",
                                 split_boundary_name, "split boundary already exists. Nothing was done.");
-                                
-    // update region on the outside of the new SplitBoundary because it needs a new node vector
-    region2.ScheduleForRebuilt();
+    
+    // no cells get deleted but connectivity needs to be rebuilt
+
+    // TODO: repair connectivity ?
+    //RepairConnnectivity( typename vector<Element<dim>*>::iterator first,
+    //                     typename vector<Element<dim>*>::iterator last )
+    
+    // update region outside of new SplitBoundary because its nodes have changed
+    region2.RebuildSubDomainAfterChangeOfNodeVector();
 
     //update outside regions
     // RebuildSubDomainAfterChangeOfCellVector() is not sufficient because the model needs to be rebuild as well
@@ -1476,7 +1424,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      for ( auto& it : splitBoundary.CellVector() ) {
            // nodes
          vector<Node<dim>*>  nodes;  nodes.reserve(4);
-           for ( auto i{0U}; i<it->FE()->Nodes(); i++ )
+           for ( uint32_t i{0U}; i<it->FE()->Nodes(); i++ )
              nodes.push_back( node_pointers[ it->N(i)->Idx() ] );
            // interior and perimeter elements
            it->Idx( counter++ );
@@ -1486,12 +1434,9 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
        
      // 3. establishing neighbor connectivity among the new elements
      // ------------------------------------------------------------
-     if constexpr ( dim == 2U )
-       mesh.template BuildLineConnectivity<Element>( elmt_pointers.begin(), elmt_pointers.end() );
-     if constexpr ( dim == 3U )
-       mesh.template BuildSurfaceConnectivity<Element>( elmt_pointers.begin(), elmt_pointers.end() );
+     mesh. template BuildConnectivity<Element>( elmt_pointers.begin(), elmt_pointers.end() );
 
-     // 4. establish node to parent connectivity
+     // 4. establish node to parent connectivity // TODO: test
      mesh.ConnectNodesToParentsAndNeighbors( elmt_pointers.begin(), elmt_pointers.end() );
 
      // 5. construct the new unique region between the interface elements in the model
@@ -1746,199 +1691,3 @@ template class SplitBoundaryInterface<3U, Model>;
 } // csmp
 
 
-
-
-
-
-
-// DEPRECATED - SKM 25/1/2020
-
- /**
- Creates SplitBoundarty around a unique volumetric(3D) / surface(2D) region; except for model boundary.
-
- This will involve the creation and connection of InterFace elements by the MeshManager.
- This will only work for unique Regions which are not overlapping.
-
- @attention This method makes no sense for the region 'Model' as it encompasses all unique regions.
-
- @attention:  SplitBoundaryInterface objects cannot be created in 1D models or between regions which contain
- one-dimensional elements.
-
- Option deleteRegionAndItsElements in fact provides a choice for keeping fracture\fault or any other low dimensional Region
- or use such Region just to introduce the interface around it and delete it afterwards
- */
- /*
- template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
- bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( const string& region )
- {
-   bool succeeded( false );
-   SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
-   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-   if ( region == "Model" ) {
-     csmp_error.Note( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary",
-                        "Region 'Model' not eligible for InsertSplitBoundary." );
-     return false;
-   }
-
-   if ( !splitboundaryComplex->IsUnique( region.c_str() ) )
-     csmp_error.Note( WARNING, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary",
-                        "This method is intended for the creation of splitboundaries around unique Regions" );
-
-   string  splitboundaryName( "SPLITBOUNDARY_" + region );
-   splitboundaryComplex->InsertBoundary( IRREGULAR, region.c_str() );
-   Boundary<dim>& boundary( splitboundaryComplex->Boundary( region.c_str() ) );
-
-   splitboundaryComplex->RemoveRegion( region.c_str(), false );
-
-   // attempt to create a regular (InterFace-based) splitboundary
-   pair<typename map<string, csmp::SplitBoundary<dim> >::iterator, bool>
-     it = splitBoundaryMap_.insert( make_pair( splitboundaryName, csmp::SplitBoundary<dim>( splitboundaryName, splitboundaryComplex->Database() ) ) );
-   if ( it.second )
-   {
-     //cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary creating splitboundary around: " << region << endl;
-     splitboundaryComplex->UpdateIndices();
-     succeeded = (*it.first).second.CreateFrom( *splitboundaryComplex, boundary );
-
-   }
-   else
-     throw csmp::Exception( INFO, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary",
-                            splitboundaryName.c_str(),
-                            "boundary already exists. Nothing was done." );
-
-   // remove temporal boundary
-   splitboundaryComplex->RemoveBoundary( boundary );
-
-   // update indexes
-   splitboundaryComplex->UpdateIndices();
-
-   UpdateSplitBoundaryComplex();
-
-   if ( succeeded )
-     cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary created splitboundary around " << region << endl;
-   else
-     throw csmp::Exception( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary", "Splitting failed!" );
-
-   return true;
-
- } // end InsertSplitBoundary
-
-*/
-
-
-
-
-
-/**
-Method forms a SplitBoundary between the two supplied regions. This will involve the creation
-and connection of InterFaces by the MeshManager.
-
-@attention:  BoundariesInterface cannot be created in 1D models or between regions which contain
-one-dimensional elements.
-
-This method will only work for Regions which are not overlapping.
-
-This method makes no sense for the region 'Model' as it encompasses all unique regions.
-*/
-/*
-template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( const string& group1, const string& group2, bool createRegionBetween )
-{
-  SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-  if ( dim == 1 ) {
-    csmp_error.Note( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary", "There are no SplitBoundaries in 1D models." );
-    return false;
-  }
-
-  if ( group1 == "Model" or group2 == "Model" ) {
-    csmp_error.Note( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary", "Region 'Model' not eligible for InsertSplitBoundary." );
-    return false;
-  }
-  if ( group1 == group2 ) {
-    csmp_error.Note( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary", "Provided Regions are identical." );
-    return false;
-  }
-
-
-  if ( !splitboundaryComplex->IsUnique( group1.c_str() ) or !splitboundaryComplex->IsUnique( group2.c_str() ) ) {
-    csmp_error.Note( WARNING,
-                       "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary",
-                       "This method is intended for the creation of splitboundaries between unique Regions" );
-
-    // checking for a potential overlap of the regions, if the regions are non-unique
-    if ( splitboundaryComplex->RegionIntersection( group1.c_str(), group2.c_str(), "groupintersection" ) ) {
-      csmp_error.Note( ERROR,
-                         "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary",
-                         "one of the supplied regions is not unique and they overlap",
-                         "It was therefore impossible to insert a boundary" );
-      splitboundaryComplex->RemoveRegion( "groupintersection", false );
-      return false;
-    }
-  }
-
-  string  boundaryName( string(group1) + string("_") + string(group2) );
-  pair<string, string> key = make_pair( group1, group2 );
-
-  splitboundaryComplex->InsertBoundary( group1.c_str(), group2.c_str(), createRegionBetween );
-  Boundary<dim>& boundary( splitboundaryComplex->Boundary( boundaryName ) );
-
-  const csmp::Region<dim>&  gref1( splitboundaryComplex->Region( group1.c_str() ) );
-  const csmp::Region<dim>&  gref2( splitboundaryComplex->Region( group2.c_str() ) );
-
-  // checking whether the two regions share some nodes (these will mark their common boundary)
-  const size_t  shared_nodes( sharedNodes( gref1, gref2 ) );
-  bool succeeded( false );
-
-  if ( shared_nodes == 0U )
-    csmp_error.Note( WARNING,
-                       "Model<dim,SPLITBOUNDARY_COMPLEX>::InsertBoundary",
-                       "The regions of interest do not share any nodes; trying to create a split boundary" );
-
-
-  // attempt to create a regular (InterFace-based) splitboundary
-  else {
-    // TODO: make name consistent with name of boundary (replace string BOUNDARY with SPLIT_BOUNDARY)
-    string  splitboundaryName( CreateSplitBoundaryName( key ) );
-    boundaryName = splitboundaryName;
-    pair<typename map<string, csmp::SplitBoundary<dim> >::iterator, bool>
-      it = splitBoundaryMap_.insert( make_pair( splitboundaryName, csmp::SplitBoundary<dim>( splitboundaryName,
-                                     splitboundaryComplex->Database() ) ) );
-    if ( it.second )
-    {
-      //cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary creating splitboundary between " << group1 << " and " << group2 << endl;
-      splitboundaryComplex->UpdateIndices();
-      succeeded = (*it.first).second.CreateFrom( *splitboundaryComplex, boundary );
-    }
-    else
-      throw csmp::Exception( INFO,
-                             "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary",
-                             splitboundaryName.c_str(),
-                             "boundary already exists. Nothing was done." );
-  }
-
-  splitboundaryComplex->UpdateIndices();
-
-  // remove temporal boundary
-  splitboundaryComplex->RemoveBoundary( boundary );
-
-  // update indexes
-  splitboundaryComplex->UpdateIndices();
-
-  UpdateSplitBoundaryComplex();
-
-  if ( succeeded ) {
-       cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary: created split boundary '";
-       cout << boundaryName <<"' between " << group1 << " and " << group2 << endl;
-    }
-  else
-    throw csmp::Exception( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary", "Splitting failed!" );
-
-  return true;
-
-} // end InsertSplitBoundary
-
-
-
-DEPRECATED END */

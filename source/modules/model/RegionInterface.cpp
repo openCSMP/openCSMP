@@ -178,7 +178,7 @@ bool  RegionInterface<dim, REGION_COMPLEX>::IsUnique( const string& region_name 
 
   if ( !ContainsRegion(region_name) )
     csmp_error.Note( ERROR, "RegionInterface<dim, REGION_COMPLEX>::IsUnique:",
-                       region_name, "mdoes not exist.");
+                       region_name, "does not exist.");
 
   typename map<string, csmp::Region<dim> >::const_iterator  iter( uniqueRegionMap_.find( region_name ) );
   if ( iter != uniqueRegionMap_.end() )
@@ -199,6 +199,33 @@ bool RegionInterface<dim, REGION_COMPLEX>::ContainsRegion( const string& region_
   return false;
 } // end ContainsRegion
 
+
+
+
+/**
+     Finds Region by its unique region ID (=domain idx) assigned to any ModelSubDomain upon creation, this method searches for the corresponding unique region
+ */
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
+Region<dim>&  RegionInterface<dim, REGION_COMPLEX>::RegionByDomainIndex( int32_t domain_index )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( uniqueRegionMap_.empty() )
+      throw csmp::Exception( ERROR,
+                             "RegionsInterface<dim,REGION_COMPLEX>::RegionByDomainIndex:",
+                             "model does not contain any unique regions" );
+    // linear search
+    assert( domain_index > 0 );
+    for ( auto& rit : uniqueRegionMap_ ) {
+         if ( rit.second.DomainIndex() == domain_index )
+           return rit.second;
+      }
+
+    csmp_error.Note( ERROR, "RegionInterface<dim, REGION_COMPLEX>::RegionByDomainIndex:",
+                         to_string( domain_index ), "region with this domain index does not exist; returning 'Model'.");
+    
+    return Region("Model");
+ }
 
 
 
@@ -277,6 +304,10 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
        csmp_error.Note( ERROR, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",
                           regionname, "'Model' not all elements were incorporated into the new 'Model' region." );
     }
+    
+  // setting the region ID
+  if ( is_unique )
+    (*newRegion.first).second.SetRegion_ID();
 
   return (*newRegion.first).second.Cells();
   
@@ -288,7 +319,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
 /**
       Forms unique regions called MATERIAL1..n from the material IDs assigned to the elements.
       
-      @attention this method assumes that the unique numbers of elements, faces, and interfaces via the MeshManage
+      @attention this method assumes that the unique numbers of elements, faces, and interfaces via the MeshManager
       
       TODO: add a PropertyConstraint here
 */
@@ -346,7 +377,10 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs()
         else
           throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFromMaterialIDs",
                                  region_name, "could not be formed. Does this region already exist?" );
-        
+
+        // setting region IDs
+        (*it.first).second.SetRegion_ID();
+
       } // end materials loop
 
     return n_regions;
@@ -560,7 +594,7 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
 
 /**
 Reads all regions stored by OutputRegionsToBinary() into Interface,
-constructing them using the SubDomainInfo data, thereby avoiding the costly
+constructing them using the SubDomainInfo data, thereby avoiding costly
 re-initialisation.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
@@ -604,7 +638,7 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
       fp.read( reinterpret_cast<char*>(&records), sizeof( int64_t  ) );
       if ( records > 0 )
           // reading the regions sequentially
-          for ( auto i{0U}; i<records; i++ )
+          for ( int64_t i{0UL}; i<records; i++ )
             {
               BinaryFileSectionRead hdr( fp, "ONE_REGN" );
               // reading name and element indices for each unique region
@@ -617,6 +651,9 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
               if ( !it.second )
                 throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
                                        info.name, "Region could not be formed; issue with binary file." );
+              else
+                // new domain indices matching the ref-count of regions must be assigned
+                (*it.first).second.SetRegion_ID();
 
               cout << "\n\t\t'" << (*it.first).first << "'(" << (*it.first).second.Cells() << " elements).";
               
@@ -790,7 +827,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
   }
 
   // 2. Prompting user for region names and making regions
-  // ---------------------------------------------------
+  // -----------------------------------------------------
   cout << "\nModel<" << dim << ">::FormRegionsFromPropertyValues: Generating region names";
   cout << " corresponding to unique values of the property: '" << prop << "' ";
   cout << "[" << regionComplex->Database().Unit( prop ) << "]." << endl;
@@ -799,8 +836,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
   size_t  group_idx( 0U );
   char    num[30U];
 
-  for ( typename map<double, string>::iterator
-        it = groups.begin(); it != groups.end(); it++ )
+  for ( auto it = groups.begin(); it != groups.end(); it++ )
   {
     cout << "\nProperty value: " << (*it).first;
     snprintf( num, sizeof(num), "%lu", group_idx++ );
@@ -847,6 +883,9 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionN
         it = this->uniqueRegionMap_.insert( make_pair( regionName, csmp::Region<dim>( regionName, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
         if ( it.second )
           (*it.first).second.AccumulateByNumber( model_domain.CellsBegin(), model_domain.CellsEnd(), elmt_ids );
+
+        // setting the region ID
+        (*it.first).second.SetRegion_ID();
     }
   else {
         it = this->regionMap_.insert( make_pair( regionName, csmp::Region<dim>( regionName, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
@@ -1001,6 +1040,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionn
         return 0U;
       }
 
+    if ( unique ) (*it.first).second.SetRegion_ID();
+
     return (*it.first).second.Cells();
     
  } // end FormRegionFrom (range of element pointers)
@@ -1075,6 +1116,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* region_
                        "Region could not be formed", output_region.c_str() );
     return 0U;
   }
+
+  if ( unique_region ) (*it.first).second.SetRegion_ID();
 
   return (*it.first).second.Cells();
 
@@ -1176,6 +1219,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* region_
     return 0U;
   }
 
+  if ( unique_region ) (*it.first).second.SetRegion_ID();
+
   return (*it.first).second.Cells();
 
 } // end FormRegionFrom
@@ -1245,7 +1290,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* newRegi
     if ( elementIds.empty() )
       return 0U;
     
-    return this->FormRegionFrom( newRegionName, elementIds );
+    return this->FormRegionFrom( newRegionName, elementIds, false );
   }
 
 
@@ -1325,11 +1370,16 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
                                  "Region could not be formed", (*lit).c_str() );
             }
           else {
-               // assigning unique material IDs to the element members of the region
-               for ( auto eit=(*it.first).second.CellsBegin(); eit!=(*it.first).second.CellsEnd(); ++eit )
-                 (*eit)->Material_ID( new_regions );
+               // assigning unique material IDs and region identifiers to the element members of the region
+               for ( auto eit=(*it.first).second.CellsBegin(); eit!=(*it.first).second.CellsEnd(); ++eit ) {
+                    (*eit)->Material_ID( new_regions );
+                    (*eit)->Region_ID( (*it.first).second.DomainIndex() );
+                 }
                // reporting the name of the newly generated region
                cout << region_name << " ";
+               
+               (*it.first).second.SetRegion_ID();
+
                new_regions++;
             }
         }
@@ -1447,6 +1497,9 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
                                                
                 // copy all values of region properties from parent to child region
                 (*it.first).second.LVS( gref.LVS() );
+                
+                // assign a region ID to the elements of the new region
+                (*it.first).second.SetRegion_ID();
              }
          
            // subtracting the elements that constitute the new region from the remaining element list
@@ -1767,6 +1820,9 @@ If the region cannot be formed because no elements in the desired
 coordinate range can be found or because another region with the same
 name already exists, the method will terminate the program, by reporting
 a fatal error.
+
+@attention this Region is always non-unique because it overlaps other regions
+
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRectangularRegion( const char* region_name,
@@ -1884,6 +1940,10 @@ void RegionInterface<dim, REGION_COMPLEX>::AssimilateRegion( const char* region_
     csmp::Region<dim>&        gref_to_be_added_to( Region( region_to_be_added_to ) );
 
     gref_to_be_added_to.Add( gref_to_add );
+    
+    // if the region was unique the elements added are assigned the same unique region ID
+    if ( IsUnique(region_to_be_added_to) )
+      gref_to_be_added_to.SetRegion_ID();
   }
   catch ( Exception& e ) {
     cout << "\nRegionsInterface<dim,REGION_COMPLEX>::AssimilateRegion: nothing was done; handled exception: " << endl;
@@ -1938,15 +1998,19 @@ void RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const set<string>& inpu
   typename map<string, csmp::Region<dim> >::const_iterator  iter;
 
   // collecting element indexes from input regions into set for output
+  bool all_regions_are_unique{ true };
   vector<Element<dim>*>  element_ptrs;
   for ( auto it = input_regions.begin(); it != input_regions.end(); it++ ) {
     // finding the region in the region list
     if ( (iter = regionMap_.find( *it )) != regionMap_.end() or
          (iter = uniqueRegionMap_.find( *it )) != uniqueRegionMap_.end() ) {
-      //  outputting the ids of the member elements of the region
+      // outputting the ids of the member elements of the region
       element_ptrs.reserve( element_ptrs.size() + (*iter).second.Cells() );
       for ( auto eit = (*iter).second.CellsBegin(); eit != (*iter).second.CellsEnd(); eit++ )
         element_ptrs.push_back( const_cast<Element<dim>*>(*eit) );
+      // are all input regions unique?
+      if ( regionMap_.find(*it) != regionMap_.end() )
+        all_regions_are_unique = false;
     }
     else csmp_error.Note( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
                             (*it).c_str(), "region does not exist and was therefore not considered." );
@@ -1971,6 +2035,10 @@ void RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const set<string>& inpu
                                output_region.c_str(), "region could not be formed." );
 
       else (*it.first).second.Accumulate( element_ptrs.begin(), element_ptrs.end() );
+
+      // if all of the merged regions are unique the elements of the new region is assigned a new unique region ID
+      if ( all_regions_are_unique )
+        (*it.first).second.SetRegion_ID();
    }
   else
     throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions",
@@ -2068,6 +2136,7 @@ form the union of a region which includes all elements that are hotter than
 
 If either one of the regions is empty or does not exist or if the target
 region cannot be formed an error is reported.
+
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::RegionUnion( const char* groupa, const char* groupb,
@@ -2101,6 +2170,10 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionUnion( const char* groupa, cons
       }
       // assigning new region name
       (*it.first).second.Name( groupunion );
+      
+      // new region ID is assigned to the ensemble of elements
+      if ( IsUnique(groupa) && IsUnique(groupb) )
+        (*it.first).second.SetRegion_ID();
     }
     else {
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2361,37 +2434,6 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionSymmetricDifference( const char
 
 
 
-/**
-
-Concept: CreateBetween()
-
-Attempts to create a lower-dimensional region between higher dimensional ones.
-This is done in the following steps:
-
-0. Checks:
-- do the input regions exist
-- are they higher dimensional
-- is there not already a region that has the name that the new region will get?
-
-1. Using the Perimeter faces of the candiate regions, matching faces are found and the inside and outside
-elements are determined as well as recording their face numbers.
-
-2. The MeshManager is instructed to create the required Face objects AND connect them with one another.
-(no objects need to be deleted because it is assumed that there is no line element region at this boundary) @todo check
-
-3. The Boundary is constructed from the Face objects.
-
-@note the Region will be oriented such that the elements of the first region will be on the inside (normals pointing outward from this region).
-
-@note this region is not necessarily contiguous
-
-@author SKM
-@date refactored 2/4/2022
-
-*/
-
-
-
 
 /**
 Removes the elements shared with 'region-to-subtract' from the current (non-unique) region.
@@ -2535,6 +2577,8 @@ as "region identifier". If the supplied variable does not exist, it is created b
 @param region_identifier scalar element property the unique value of which shall be used to distinguish the unique regions
 @param region_names vector of region names to retrieve them from the integer keys
 
+@attention this functionality is superseded by the unique RegionID stored on each element of each unique region
+
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelUniqueRegions( const char* region_identifier, vector<string>& region_names )
@@ -2576,8 +2620,6 @@ size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelUniqueRegions( const c
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::CheckRegionIdentifierIsUpToDate( const char* region_identifier )
 {
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
   REGION_COMPLEX<dim>& regionComplex( static_cast<REGION_COMPLEX<dim>& >(*this) );
 
   //if region_identifier not yet defined
@@ -2601,6 +2643,8 @@ bool RegionInterface<dim, REGION_COMPLEX>::CheckRegionIdentifierIsUpToDate( cons
 Finds the contact area between regions a and b, logging pairs of element pointers and face numbers; @return number of shared faces
 
 Region a will be the inner region whose perimeter Element pointers will be the first in the pairs.
+
+@atention there is similar functionality inside the MeshManager
 
 @author SKM
 @date 18/3/2017
@@ -2726,7 +2770,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
      cout <<"\n\nRegionInterface<"<< dim <<",Region<Element>>::RegionsOut:\n";
      cout <<"\n\tUnique regions of model:\n";
      for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit ) {
-          cout <<"\t\t"<< (*rit).first;
+          cout <<"\t\t"<< (*rit).first <<":"<< (*rit).second.DomainIndex();
           cout <<" "<< (*rit).second.Cells() <<" elements,";
           pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
           if ( rdim.second == 3U )
@@ -2757,11 +2801,150 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
 
 
 
+    /// prints ModelSubDomain::domain_idx_ assigned automatically using reference count mechanism
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
+void RegionInterface<dim, REGION_COMPLEX>::PrintDomainIndices() const
+ {
+     cout <<"\n"<<"RegionInterface<dim, REGION_COMPLEX>::PrintDomainIndices:"<< endl;
+     cout <<"\t"<<"indices of unique regions:"<< endl;
+     for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit )
+       cout <<"\t\t"<< (*rit).first <<": "<< (*rit).second.DomainIndex() << endl;
+     cout <<"\t"<<"indices of non-unique regions:"<< endl;
+     for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit )
+       cout <<"\t\t"<< (*rit).first <<": "<< (*rit).second.DomainIndex() << endl;
+     cout << endl;
+ }
+
+
+
 
 // EXPLICIT TEMPLATE INSTANTIATION FOR REGION_INTERFACE
 template class RegionInterface<1U, Model>;
 template class RegionInterface<2U, Model>;
 template class RegionInterface<3U, Model>;
+
+
+
+
+/**
+   In preparation for the generation of a SplitBoundary at a region boundary,
+   search the elements outside that do not have a face but some nodes on its perimeter.
+   
+   @param perimeter_nodes input  that can be computed with sharedPerimeterNodes()
+   @param perimeter_cells elements on the perimeter (inside) of the region, and those matching on the outside
+   @param touching_elmts those outside elements that contain the perimeter node but do not have a face on the boundary
+   
+   @return how many of such nodes were found.
+   
+   TODO: not used at the moment, remove?
+   TODO: generalise to all types of ModelSubDomains
+  
+*/
+template<uint32_t dim>
+size_t outsideElementsWithNodesTouchingPerimeter( const Region<dim>& subdomain,
+                                                  const vector<Node<dim>*>& perimeter_nodes,
+                                                  const vector<pair<pair<Element<dim>*,uint32_t>,
+                                                               pair<Element<dim>*,uint32_t> > >& perimeter_cells,
+                                                  map<Node<dim>*,map<Element<dim>*,uint32_t>>& touching_elmts )
+ {
+    touching_elmts.clear();
+    
+    // creating a search vector with outside cells that have a face on the regions perimeter
+    // (since these are already unique no check is required)
+    vector<Element<dim>*> outside_perimeter_cells;
+    outside_perimeter_cells.reserve( perimeter_cells.size() );
+    for ( const auto& it : perimeter_cells )
+      outside_perimeter_cells.push_back( it.second.first );
+    sort( outside_perimeter_cells.begin(), outside_perimeter_cells.end() );
+    
+    // search perimeter nodes for parent elements that are not perimeter elements
+    // (as determined by searching the elements that share perimeter face)
+    for ( const auto& nit : perimeter_nodes )
+      for ( uint32_t i{0u}; i<nit->Parents(); ++i )
+        // record ‘eptr’ and local node number (from with node-pointer can be deduced for later lookup)
+        if ( !binary_search( outside_perimeter_cells.begin(), outside_perimeter_cells.end(), nit->Parent(i) ) &&
+             !subdomain.Contains( nit->Parent(i) )  ) {
+             auto insert_it = touching_elmts.insert( make_pair( nit,
+                                                                map<Element<dim>*,uint32_t>{ {nit->Parent(i),
+                                                                                              nit->ParentNodeNumber(i)} } ) );
+             // if there already is an entry for this node another map entry is inserted for it
+             if ( !insert_it.second )
+               (*insert_it.first).second.insert( make_pair( nit->Parent(i), nit->ParentNodeNumber(i) ) );
+          }
+
+    // return how many of such outside elements were found
+    size_t n_extra_outside_elmts{0ul};
+    for ( const auto& nit : touching_elmts )
+      n_extra_outside_elmts += nit.second.size();
+      
+    return n_extra_outside_elmts;
+ 
+ } // outsideElementsWithNodesTouchingPerimeter
+
+template size_t outsideElementsWithNodesTouchingPerimeter( const Region<1U>&,
+                                                           const vector<Node<1U>*>&,
+                                                           const vector<pair<pair<Element<1U>*,uint32_t>,
+                                                                             pair<Element<1U>*,uint32_t> > >&,
+                                                           map<Node<1U>*,map<Element<1U>*,uint32_t>>& );
+
+template size_t outsideElementsWithNodesTouchingPerimeter( const Region<2U>&,
+                                                           const vector<Node<2U>*>&,
+                                                           const vector<pair<pair<Element<2U>*,uint32_t>,
+                                                                             pair<Element<2U>*,uint32_t> > >&,
+                                                           map<Node<2U>*,map<Element<2U>*,uint32_t>>& );
+
+template size_t outsideElementsWithNodesTouchingPerimeter( const Region<3U>&,
+                                                           const vector<Node<3U>*>&,
+                                                           const vector<pair<pair<Element<3U>*,uint32_t>,
+                                                                             pair<Element<3U>*,uint32_t> > >&,
+                                                           map<Node<3U>*,map<Element<3U>*,uint32_t>>& );
+
+
+
+
+
+/**
+      Returns those Elements from outside Region 2, which share a face or touch (with a node) the perimeter of the inside Region 1.
+      All these elements are returned into an unordered (hash) map for fast access.
+      
+      @param region1 unique model subdomain that is supposed to have  a shared border with subdomain2
+      @param region2 unique model subdomain bordering subdomain 2
+      @param halo_elmts  into which the cells forming a halo to subdomain1 will be stored
+      
+      @attention this method only works for Region because nodes do not store Face or InterFace parents
+      
+      @note to find the outside elements ModelSubDomain<>::Contains() is used; this is expensive but always works
+*/
+template<uint32_t dim>
+size_t haloElements( const Region<dim>& region1, const Region<dim>& region2, unordered_set<Element<dim>*>& halo_elmts )
+ {
+    // finding the nodes that are shared between the subdomains which will be on their perimeter
+    vector<Node<dim>*> perimeter_nodes;
+    if ( sharedPerimeterNodes( region1, region2, perimeter_nodes ) == 0 )
+      return 0ul;
+    
+    // finding the halo cells by searching the parent elements of the perimeter nodes
+    halo_elmts.clear();
+    for ( const auto& nit : perimeter_nodes )
+      for ( uint32_t i{0u}; i<nit->Parents(); ++i ) {
+            if ( nit->Parent(i) == nullptr ) {
+                 cerr <<" nd:"<< nit->Idx() <<" parent:"<< i <<"null";
+                 continue;
+              }
+            if ( region2.Contains( nit->Parent(i) ) )
+              halo_elmts.insert( nit->Parent(i) );
+        }
+      
+    return halo_elmts.size();
+ 
+ } // haloCells
+ 
+template size_t haloElements( const Region<1U>&, const Region<1U>&, unordered_set<Element<1U>*>& );
+template size_t haloElements( const Region<2U>&, const Region<2U>&, unordered_set<Element<2U>*>& );
+template size_t haloElements( const Region<3U>&, const Region<3U>&, unordered_set<Element<3U>*>& );
+
+
+
 
 
 } // csmp

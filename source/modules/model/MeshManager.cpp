@@ -1063,15 +1063,15 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
    assert( adjacent_face_of_inner_element < inner_eptr->Faces() );
    if ( outer_eptr != nullptr ) assert( adjacent_face_of_outer_element < outer_eptr->Faces() );
 
-   // constructing new face
+   // 1. constructing new face
    const size_t face_id = faces_.size(); // since the face will be added at the end of the colony
    typename plf::colony<Face<dim>>::iterator
      fit = faces_.emplace( Face<dim>( *eptr, inner_eptr, outer_eptr,
                                        adjacent_face_of_inner_element, adjacent_face_of_outer_element,
                                        lvars, ivars ) );
    (*fit).Idx( face_id );
-
-   // 3. deleting original Element
+   
+   // 2. removing the element from the parent-element vectors of its nodes before deleting it
    if ( delete_original_face ) Delete( eptr );
    return &(*fit);
    
@@ -1689,6 +1689,37 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
 
 
 
+/**
+    Rotates node numbers while keeping the separation of nodes into corner nodes, midside nodes, further nodes (the latter no being touched)
+
+    Turning the nodes from counterclockwise looking from the outside in to clockwise.
+*/
+template<uint32_t dim>
+void reverseOrderOfFaceNodes( uint32_t crn_nodes,
+                              typename vector<Node<dim>*>::iterator first,
+                              typename vector<Node<dim>*>::iterator last )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    const long n_nodes = distance(first,last);
+    assert( crn_nodes >= n_nodes );
+         
+    // for linear elements which only have corner nodes
+    if ( crn_nodes == n_nodes ) {
+         reverse( first, last );
+         return;
+      }
+
+    // for quadratic elements which only have corner nodes
+    if ( (crn_nodes * 2) % n_nodes == 0 ) {
+         reverse( first, next(first,crn_nodes) ); // reverse corner nodes
+         reverse( next(first,crn_nodes), last ); // reverse midside nodes
+         return;
+      }
+   
+    csmp_error.Note( ERROR, "reverseOrderOfFaceNodes", "cases where n-nodes > 2 * crn_nodes not handled yet");
+
+ } // end reverseNodeOrder
 
 
 
@@ -2315,11 +2346,10 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
            } else
              outside_nodes[i] = (*first)->N(i);            //take inside node when node is at perimeter of model
          }
-           // reversing the sequence once outside nodes are calibrated
-         if ( (*first)->FE()->MidSideNodes() > 0 )
-           csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceFacesByInterFaces", "reversing node-order for elements with midside nodes not implemented yet.");
-         else
-           reverse( outside_nodes.begin(), outside_nodes.end() );
+         // reversing the sequence once outside nodes are calibrated
+         reverseOrderOfFaceNodes<dim>( (*first)->FE()->CornerNodes(),
+                                       outside_nodes.begin(), outside_nodes.end() );
+  
            
          // 1.3 construction of InterFace away from boundaries
          // --------------------------------------------------
@@ -2358,7 +2388,9 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
              }
            else outside_nodes[i] = (*first)->N(i);
 
-         reverse( outside_nodes.begin(), outside_nodes.end() );
+         //reverse( outside_nodes.begin(), outside_nodes.end() );
+         reverseOrderOfFaceNodes<dim>( (*first)->FE()->CornerNodes(),
+                                       outside_nodes.begin(), outside_nodes.end() );
 
          // 2.3 construction of InterFace on the model perimeter
          // ----------------------------------------------------
@@ -2450,9 +2482,6 @@ vector<Face<dim>*>  MeshManager<dim>::CreateFacesBetweenNodeSharingElements( con
                                        lvars, ivars ) );
       }
 
-     // connectiving the newly created faces with one another
-     BuildSurfaceConnectivity<Face>( face_ptrs.begin(),face_ptrs.end() );
-
      // 2. cleaning up inter-CELL and node to parent connectivity
      // ---------------------------------------------------------
     BuildConnectivity<csmp::Face>( face_ptrs.begin(), face_ptrs.end() ); // between the faces
@@ -2462,8 +2491,6 @@ vector<Face<dim>*>  MeshManager<dim>::CreateFacesBetweenNodeSharingElements( con
      return face_ptrs;
      
   } // end CreateInterFacesBetweenNodeSharingElements
-
-
 
 
 
@@ -2529,7 +2556,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
         // 2. Finding the subset of these nodes which will also be on the perimeter of the SplitBoundary
         // ---------------------------------------------------------------------------------------------
         // IMPORTANT: this needs to be done before creating the InterFace objects because it influences which of its nodes will have to be manifolds
-        // How? - in 2D, these are the nodes that are only contained in of of the faces
+        // How? - in 2D, these are the nodes that are only contained in one of the faces
         if constexpr (dim == 2U ) {
              vector<size_t> face_count( perimeter_node_ptrs.size(), 0U );
              // again
@@ -2575,7 +2602,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
          // - segments that have element faces on either side, are inside the patch, the other ones are at the perimeter
          vector<Node<dim>*> outside_nodes( it.first.first->FE()->NodesPerFace( it.first.second ), nullptr );
          auto               nit{ new_nodes.end() };
-         uint32_t           nd_count{0};
+         uint32_t           nd_count{0u};
          
          for ( const auto& i : it.first.first->FE()->NodesOfFace( it.first.second ) ) {
              // nodes are multiplicated, always if 'multiplicate_perimeter_nodes=true'
@@ -2613,8 +2640,10 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
              nd_count++;
            }
 
-         // turning the nodes from counterclockwise to clockwse because they will go on the opposite side of the interface
-         reverse( outside_nodes.begin(), outside_nodes.end() ); // TODO: write function that can do with for elmts with midside nodes too
+         // turning the nodes from counterclockwise to clockwise because they will go on the opposite side of the interface
+         // reverse( outside_nodes.begin(), outside_nodes.end() );
+         reverseOrderOfFaceNodes<dim>( static_cast<uint32_t>(it.first.first->CornerNodesOfFace( it.first.second ).size()),
+                                       outside_nodes.begin(), outside_nodes.end() );
 
          // 2.3 construction of InterFace on the model perimeter
          // ----------------------------------------------------
@@ -2637,7 +2666,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
      unordered_map<Node<dim>*, Element<dim>*> old_node_unassigned_element_map;
      for( auto& nd_pair : new_nodes ) {
        auto old_node = nd_pair.first;
-       for (uint32_t i{0}; i < old_node->Parents(); ++i) {
+       for (uint32_t i{0u}; i < old_node->Parents(); ++i) {
          auto parent_elmt = old_node->Parent(i);
          // for all outside elements (not just the equidimensional ones)
          if ( outside_elmts.find(parent_elmt) != outside_elmts.end() ) {
@@ -2657,10 +2686,10 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
        old_node->Unassign(parent_elmt);
      }
      
-     // 3.3 connectiving the newly created interfaces with one another
-     BuildSurfaceConnectivity<InterFace>( interface_ptrs.begin(),interface_ptrs.end() );
-     
-     // no entities have to be removed by this function
+    // connecting the new interfaces with one another
+    BuildConnectivity<InterFace>( interface_ptrs.begin(), interface_ptrs.end() );
+
+     // no entities are removed by this function
      
      cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterfacesBetweenNodeSharingElements: created "<< interface_ptrs.size() <<" new interfaces and ";
      cout << new_nodes.size() <<" new nodes."<< endl;
@@ -3172,6 +3201,8 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Face
     Deletes range of InterFaces after detecting and disconnecting potential neighbor faces around the perimeter of the face patch.
     Duplicated nodes are removed as well as the the mesh is reconnected.
     
+    @attention IMPORTANT - after this operation, any (unique or non-unique) outside regions must be updated because their node vector is changed!
+    
     @attention method does not reconnect the mesh where interfaces are removed.
     
     @attention method does not deal with elements sandwhiched between the tow sides of the interface, they need to be deleted first
@@ -3231,7 +3262,7 @@ auto first1{ first };
           (*first)->InnerParent()->Assign( (*first)->InnerParentFaceID(), (*first)->OuterParent() );
           (*first)->OuterParent()->Assign( (*first)->OuterParentFaceID(), (*first)->InnerParent() );
 
-          // 3. collecting a unique set of outer nodes that will have to be deleted if they are manifold nodes
+          // 3. collecting a unique set of outer element nodes that will have to be deleted if they are manifold nodes
           const uint32_t n_nodes{ (*first)->FE()->Nodes() };
           for ( uint32_t i{0u}; i<n_nodes; ++i )
             // if the node is a manifold with at least 2 nodes within it
@@ -3257,7 +3288,13 @@ auto first1{ first };
 #endif
                     continue;
                  }
-               (*first)->OuterParent()->Assign( fnid, (*first)->N(node_counter,INSIDE) );
+               // inverting the node sequence to get the correct matching node
+               (*first)->OuterParent()->Assign( fnid, (*first)->N( (*first)->FE()->Nodes() - 1 - node_counter, INSIDE) );
+// testing
+// cout <<"\n"<<"outside node: "<< node_counter;
+// cout <<": "<< (*first)->N(node_counter,OUTSIDE)->Coordinate() <<" vs inside node: ";
+//cout << (*first)->N(node_counter,INSIDE)->Coordinate();
+
                node_counter++;
             }
 
@@ -3437,8 +3474,8 @@ void MeshManager<3>::BuildVolumeConnectivity( typename vector<CELL<3U>*>::const_
            // pairing the elements up in the search map
            while ( first != elementsEnd ) {
                 assert( (*first) != nullptr );
-                const size_t n_faces{ (*first)->Faces() };
-                for ( auto face{0U}; face < n_faces; ++face ) {
+                const uint32_t n_faces{ (*first)->Faces() };
+                for ( uint32_t face{0U}; face < n_faces; ++face ) {
                      // trying to insert it into the map
                      auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face),
                                                              map<Element<3U>*,uint32_t>{make_pair(*first,face)} )
@@ -3506,7 +3543,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename vector<CELL<dim>*>::co
            const auto cellsEnd{last};
            while ( first != cellsEnd ) {
                 assert( (*first) != nullptr );
-                const size_t n_faces{ (*first)->Faces() };
+                const uint32_t n_faces{ (*first)->Faces() };
                 for ( uint32_t face{0u}; face < n_faces; ++face ) {
                      // trying to insert cell into the map using a search key of node pointers
                      pair<typename map<set<Node<3>*>,map<CELL<3>*,uint32_t> >::iterator,bool>
@@ -3545,7 +3582,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename vector<CELL<dim>*>::co
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of surfaces or line elements with the smallest acute angle between them
                      map<double,uint32_t>  ordered_combinations;
-                     for ( auto i{0U}; i < n_combinations; ++i ) {
+                     for ( uint32_t i{0U}; i < n_combinations; ++i ) {
                           CELL<3U>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
                           CELL<3U>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
                           assert( ptr1 != nullptr );
@@ -3581,7 +3618,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename vector<CELL<dim>*>::co
            // pairing the elements up in the search map
            while ( first != cellsEnd ) {
                 assert( (*first) != nullptr );
-                const size_t n_faces{ (*first)->Faces() };
+                const uint32_t n_faces{ (*first)->Faces() };
                 for ( uint32_t face{0u}; face < n_faces; ++face ) {
                      // trying to insert it into the map
                      auto it = cell_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map<CELL<2>*,uint32_t>{make_pair(*first,face)} ) );
@@ -3663,8 +3700,8 @@ void MeshManager<dim>::BuildLineConnectivity( typename vector<CELL<dim>*>::const
            // pairing the elements up in the search map
            while ( first != cellsEnd ) {
                 assert( (*first) != nullptr );
-                const auto n_faces{ (*first)->Faces() };
-                for ( auto face{0U}; face < n_faces; ++face ) {
+                const uint32_t n_faces{ (*first)->Faces() };
+                for ( uint32_t face{0U}; face < n_faces; ++face ) {
                      // now there is only a single corner node corresponding to the opposite face of the line element
                      // (node 1 is at Face 0 and node 0 at Face 1 as for all simplex elements)
                      auto it = cell_pairs.insert( make_pair( (*first)->N( n_faces - face - 1U ),
@@ -3701,7 +3738,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename vector<CELL<dim>*>::const
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of lines with the smallest acute angle between them
                      map<double,uint32_t>  ordered_combinations;
-                     for ( auto i{0U}; i < n_combinations; ++i ) {
+                     for ( uint32_t i{0U}; i < n_combinations; ++i ) {
                           CELL<dim>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
                           CELL<dim>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
                           const double acute_angle = angleBetweenLineCells( ptr1, ptr2 );
@@ -3734,8 +3771,8 @@ void MeshManager<dim>::BuildLineConnectivity( typename vector<CELL<dim>*>::const
            // pairing the elements up in the search map
            while ( first != cellsEnd ) {
                 assert( (*first) != nullptr );
-                const size_t n_faces{ (*first)->Faces() };
-                for ( auto face{0}; face < n_faces; ++face ) {
+                const uint32_t n_faces{ (*first)->Faces() };
+                for ( uint32_t face{0u}; face < n_faces; ++face ) {
                      // trying to insert it into the map
                      auto it = cell_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map<CELL<1>*,uint32_t>{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
