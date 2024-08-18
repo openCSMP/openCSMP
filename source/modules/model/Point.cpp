@@ -778,6 +778,7 @@ Point<3U>& Point<3U>::operator/=( double val )
 bool Point<3U>::operator==( const Point<3U>& pt ) const
  {
     return essentiallyEqual(x_,pt.x_) && essentiallyEqual(y_,pt.y_) && essentiallyEqual(z_,pt.z_);
+//    return !( *this < pt && pt < *this );
  }
 
 bool Point<3U>::operator!=( const Point<3U>& pt ) const
@@ -785,17 +786,30 @@ bool Point<3U>::operator!=( const Point<3U>& pt ) const
     return !(*this == pt);
  }
 
+
+/**
+    Lexicographical compare via standard array as needed by predicate less<> to store points in std containers..
+    Else one would need iterators.
+    
+    @code
+    std::lexicographical_compare()
+    @endcode
+
+    Old code does not implement a strict weak ordering and might cause undefined behaviour if used in a map
+    @code
+    return x_<p.x_ || (x_==p.x_ && y_<p.y_) || (x_==p.x_ &&  y_==p.y_ && z_<p.z_);
+    @endcode
+*/
 bool Point<3U>::operator<( const Point<3U>& p )  const
  {
-    // this code does not implement a strict weak ordering and might cause undefined behaviour if used in a map
-    // TODO: implement point with std::array which already has this operator
-    return x_<p.x_ || (x_==p.x_ && y_<p.y_) || (x_==p.x_ &&  y_==p.y_ && z_<p.z_);
+    array<double,3> p0{ x_, y_, z_ }, p1{ p.x_, p.y_, p.z_ };
+    return p0 < p1;
  }
 
 bool Point<3U>::operator>( const Point<3U>& p )  const
  {
-    // this code does not implement a strict weak ordering and might cause undefined behaviour if used in a map
-    return x_>p.x_ || (x_==p.x_ && y_>p.y_) || (x_==p.x_ && y_==p.y_ && z_>p.z_);
+    array<double,3> p0{ x_, y_, z_ }, p1{ p.x_, p.y_, p.z_ };
+    return p0 > p1;
  }
 
 

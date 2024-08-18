@@ -289,7 +289,10 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
 
   /// updates all connectivity (elements, faces, interfaces, nodes to parents); rebulding node manifolds if necessary
   void UpdateConnectivity();
-  
+
+  /// elements,  node-parents, node-manifolds like UpdateConnectivity() but restricted to the surroundings of the range of interfaces
+  void UpdateConnectivity(  typename std::vector<InterFace<dim>*>::const_iterator first,
+                            typename std::vector<InterFace<dim>*>::const_iterator last );
 
   /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements & Faces)
   /// @todo disambiguate connectivity between Face and InterFace object at manifolds
@@ -318,12 +321,13 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
                                           typename std::vector<Element<dim>*>::iterator last );
 
   /// deletes elements and potentially orphaned nodes if any;  parent element storage of the nodes is rebuild and connectivity repaired;  input pointers are nulled
-  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<Element<dim>*>::iterator first,
-                                            typename std::vector<Element<dim>*>::iterator last );
+  size_t DeleteElementsAndRepairConnnectivity( typename std::vector<Element<dim>*>::iterator first,
+                                               typename std::vector<Element<dim>*>::iterator last );
 
   /// disconnects face patch from potential adjacent faces before deleting faces; input pointers are nulled
-  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<Face<dim>*>::iterator first,
-                                            typename std::vector<Face<dim>*>::iterator last );
+  // TODO: not used: only when Faces are converted into interfaces
+ size_t DeleteFacesAndRepairConnnectivity( typename std::vector<Face<dim>*>::iterator first,
+                                           typename std::vector<Face<dim>*>::iterator last );
 
   /// disconnectes interfaces from not-targeted neighbors before deleting them;  does not remove multiplicated nodes or manifolds;  input pointers are nulled
   size_t DeleteInterfacesAndRepairConnnectivity( typename std::vector<InterFace<dim>*>::iterator first,

@@ -6,73 +6,11 @@
 #include "CSMP_mathUtilities.h"
 #include "Visitor.h"
 #include "variableOperations.h"
-//#include "TriangularFacet.h"
-//#include "QuadrilateralFacet.h"
 #include "compareFloats.h"
 
 using namespace std;
 
 namespace csmp {
-
-/**
-    Constructor that uses separate nodes for the OUTSIDE higher-dimensional parent element substituting these into this element.
-*/
-/*
-template<uint32_t dim>
-InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
-               csmp::Element<dim>* inner_parent,
-               csmp::Element<dim>* outer_parent,
-               uint32_t adjacent_face_of_inner_element,
-               uint32_t adjacent_face_of_outer_element,
-               const LocalVariables&  interface_props,
-               const IntegrationPointVariables&  interface_integration_point_props,
-               vector<Node<dim>*> outside_nodes )
-  : FiniteElementPolicy<dim,csmp::InterFace>( elmt.FE() ),
-    FiniteVolumePolicy<dim,csmp::InterFace>( elmt.FV() ),
-    idx_( numeric_limits<size_t>::max() ),
-    node_connector_( elmt.Nodes() * 2, nullptr ),
-    interface_connector_( elmt.Neighbors(), nullptr ),
-    middleElement_( nullptr ),
-    current_side_( INSIDE ),
-    innerParent_( inner_parent ),
-    outerParent_( outer_parent ),
-    inner_parent_face_id_( adjacent_face_of_inner_element ),
-    outer_parent_face_id_( adjacent_face_of_outer_element )
-{
-   assert( elmt.FE() != nullptr );
-   assert( innerParent_ != nullptr );
-   assert( outerParent_ != nullptr );
-   assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_ );
-   assert( outerParent_->Neighbor(outer_parent_face_id_) == innerParent_ );
-   assert( outside_nodes.size() == elmt.Nodes() );
-
-#ifdef DEBUG
-   for ( const auto& nit : outside_nodes ) assert( nit != nullptr );
-#endif
-
-   // 1. assigning the nodes to the new InterFace
-   // -------------------------------------------
-   const auto n_nodes{ outside_nodes.size() };
-   for ( auto i{0U}; i< n_nodes; i++ ) {
-        Assign( i, elmt.N(i), INSIDE );
-        Assign( i, outside_nodes[i], OUTSIDE );
-     }
-     
-   // 2. replacing the nodes on the outside element with the new outside nodes
-   // ------------------------------------------------------------------------
-   vector<uint32_t> fnids;
-   outerParent_->FE()->NodesOfFace( outer_parent_face_id_, fnids );
-   for ( auto i{0U}; i< n_nodes; i++ )
-     outerParent_->Assign( fnids[i], outside_nodes[i] );
-     
-   // 3. detaching the higher-dimensional element neighbors from one another
-   // ----------------------------------------------------------------------
-   innerParent_->Unassign( outerParent_ );
-   outerParent_->Unassign( innerParent_ );
-
- } // end complete custom constructor (Element)
-*/
-
 
 
 /** New! SKM 29/7/2022: constructs  InterFace using the nodes and their numbering from the InterFace's higher-dimensional neighbors.
@@ -83,6 +21,10 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
                Nodes of face of outside element are taken and rotated to be matching in the "reverse" order to Inside Node.
                Note: "reverse" is in quotation marks because it's not quite reversed if you consider MidPoint Nodes
 
+   @attention outside nodes are rotated so that the last corner node of Inside matches with the first corner node on the outside
+    this is needed to ensure MatchingN(i,INSIDE) == MatchingN(i,OUTSIDE)
+    this breaks the idea that outside nodes match with the nodes of the face of outside element (they may be rotated )
+    Therefore N(i,OUTSIDE) != OuterParent->N( OuterParent->NodesOfFace( outer_parent_face_id)[i] )
 */
 template<uint32_t dim>
 InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
@@ -788,8 +730,9 @@ void InterFace<dim>::InitialiseNodeVector()
 
    const auto n_corner_nodes_outer{ this->FE()->CornerNodes() };
 
-   while( outerParent_->N( nids[0] )->Coordinate() != N( n_corner_nodes_outer - 1 , INSIDE )->Coordinate() &&
-          node_count < n_face_nodes_outer ) {
+// TODO: SKM comment: is there no better way than to rely on Point comparitor which can be unsafe
+//       perhaps use lexicographical compare operator< of std::array
+   while( outerParent_->N( nids[0] )->Coordinate() != N( n_corner_nodes_outer - 1 , INSIDE )->Coordinate() && node_count < n_face_nodes_outer ) {
          rotate( nids.begin(), nids.begin()+1, nids.end() );
          node_count++;
      }

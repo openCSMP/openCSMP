@@ -1125,9 +1125,9 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
    // 1. constructing the new interface
    // ---------------------------------
    const size_t iface_id = interfaces_.size(); // since the interface will be added at the end of the colony
-   //Creates interface which unassigns the InnerParent and OuterParent elements that share a face with interface from each other
+   // creates interface, detaching InnerParent and OuterParent elements that share a face with the interface from each other
    typename plf::colony<InterFace<dim>>::iterator
-     fit = interfaces_.emplace( InterFace<dim>( *eptr, inner_eptr, outer_eptr,        //gets nodes from higher dim Parent face (nodes should be already duplicated
+     fit = interfaces_.emplace( InterFace<dim>( *eptr, inner_eptr, outer_eptr, // nodes from higher dim arent face should be already duplicated
                                                 adjacent_face_of_inner_element, adjacent_face_of_outer_element,
                                                 lvars, ivars ) );
    (*fit).Idx( iface_id );
@@ -1776,14 +1776,14 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceInteriorElementsByFaces( const Prop
              }
         
          // 1.2 construction of Face object in the interior of a model where both neighbors are present
-         pair<Element<dim>*,Element<dim>*>  pelmts = parentElements<dim>( (*first)->CornerNodesBegin(), (*first)->CornerNodesEnd() );
-         assert( pelmts.first  != nullptr );
-         assert( pelmts.second != nullptr );
-         // finding the face numbers of the parent elements
-         pair<uint32_t,uint32_t> face_ids = findAdjacentFacesFromNodes( pelmts.first, pelmts.second );
-         // creates Face, stores a pointer to it; deletes lower-dimensional element from which it was constructed
-         face_ptrs.push_back( ReplaceElementByFace( (*first), pelmts.first, pelmts.second,
-                                                   face_ids.first, face_ids.second, lvars, ivars ) );
+         // -------------------------------------------------------------------------------------------
+         // 1.2.1 finding higher dimensional elements to connect the Face to
+         auto  pelmts = parentElements<dim>( (*first)->CornerNodesBegin(), (*first)->CornerNodesEnd() );
+         assert( pelmts.first.first  != nullptr );
+         assert( pelmts.second.first != nullptr );
+         // 1.2.2 create Face, storing pointer to it; deletes lower-dimensional element from which it was constructed
+         face_ptrs.push_back( ReplaceElementByFace( (*first), pelmts.first.first, pelmts.second.first,
+                                                     pelmts.first.second, pelmts.second.second, lvars, ivars ) );
          // numbering new Face consecutively
          face_ptrs.back()->Idx( face_idx++ );
        
@@ -1997,7 +1997,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
                                                                         typename vector<FaceConstructionData<dim>>::iterator last,
                                                                         typename vector<Node<dim>*>::const_iterator perim_first,
                                                                         typename vector<Node<dim>*>::const_iterator perim_last,
-                                                                        set<Node<dim>*> &split_perimeter_nodes,
+                                                                        set<Node<dim>*>& split_perimeter_nodes,
                                                                         set<size_t>& region_material_ids )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2028,7 +2028,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
     set<Element<dim>*>    inside_parents;
     // tracking already duplicated nodes to avoid duplicates
     //  original,  duplicate
-    map<Node<dim>*,Node<dim>*>  new_nodes;
+    map<Node<dim>*,Node<dim>*> new_nodes;
     map<Node<dim>*,Node<dim>*> new_nodes_with_existing_manifold;
     map<Node<dim>*,Node<dim>*> new_perimeter_nodes_without_manifold;
 
@@ -2051,15 +2051,15 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          // 1.2 duplicating the nodes creating manifolds as necessary and adding boundary flags
          // -----------------------------------------------------------------------------------
          //getting vector of inside nodes to iterater
-         vector<uint32_t> inside_fnids = inside_elmt->FE()->NodesOfFace( first->InnerElementFace() );
          map<Node<dim>*, Node<dim>*> in_out_nodes;
-         auto               nit{ new_nodes.end() };
+         auto            nit{ new_nodes.end() };
          // creating the node vector and reverting its order so that it matches the face of the higher dimensional outside element
-         for ( uint32_t i{0U}; i<inside_fnids.size(); ++i ) {
-           Node<dim>* inside_node = inside_elmt->N(inside_fnids[i]);
+         for ( const auto& i : inside_elmt->FE()->NodesOfFace( first->InnerElementFace() ) ) {
+           Node<dim>* inside_node = inside_elmt->N(i);
            //If we are at not at perimeter, or if we are at intersection (manifold)
            bool inside_was_manifold  = inside_node->IsManifold();
-           bool inside_was_perimeter = (inside_node->Attribute() == PERIMETER_LINE || inside_node->Attribute() == PERIMETER_POINT );  //if we hit another regions perimeter (not the region we are splitting)
+           bool inside_was_perimeter = (inside_node->Attribute() == PERIMETER_LINE ||
+                                        inside_node->Attribute() == PERIMETER_POINT );  //if we hit another regions perimeter (not the region we are splitting)
            if ( find( perim_first, perim_last, inside_node ) == perim_last && split_perimeter_nodes.find(inside_node) == split_perimeter_nodes.end() ){
              if ( (nit=new_nodes.find( inside_node )) == new_nodes.end() ) {                // if a matching outside node has not been created yet
                   //duplicating outside node if not already duplicated
@@ -2094,12 +2094,11 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
 
          }//end of node loop and duplication
 
-         //Need to assign outside nodes to OuterParent element
-         vector<uint32_t> outside_fnids = outside_elmt->FE()->NodesOfFace( first->OuterElementFace() );
-         for ( uint32_t n : outside_fnids){
+         // assign outside nodes to OuterParent element
+         for ( const uint32_t& n : outside_elmt->FE()->NodesOfFace( first->OuterElementFace() ) ) {
            // TODO: find a meaningful number rather than this is arbitrary tolerance!
            assert( distance( outside_elmt->N(n)->Coordinate(), in_out_nodes[outside_elmt->N(n)]->Coordinate()) < 0.001 );
-           outside_elmt->Assign(n, in_out_nodes[outside_elmt->N(n)] );
+           outside_elmt->Assign(n, in_out_nodes[ outside_elmt->N(n) ] );
          }
 
          // 1.4 construction of InterFace from parent elements
@@ -2108,6 +2107,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          //     - faces of higher dimensional neighbors are also known
          //     - nodes on outside are known and ASSIGNED to the OuterParent (old nodes are on inside, new nodes on outside)
          //     - nodes on inside and outside are the same for perimeter interfaces away from boundaries
+         // TODO: make replacement optional so that the lower-dim region can be kept if needs be
          iface_ptrs.push_back(  ReplaceElementByInterFace( first->LowerDimElement(),
                                                            first->InnerElement(),
                                                            first->OuterElement(),
@@ -2119,7 +2119,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
 
 
     // 2. Assigning new nodes to outside elements - Neighbor search being performed
-    // ---------------------------------------------------------
+    // ----------------------------------------------------------------------------
      // Loop over outer parents and search neighbors with old node
      while ( outside_neighbors_to_search.empty() == false ){
        typename set<Element<dim>*>::iterator eit = outside_neighbors_to_search.begin(); //take start of set
@@ -2998,8 +2998,8 @@ size_t MeshManager<dim>::DeleteNodesAndRepairNodeConnnectivity( typename vector<
 */
 // TODO: The connectivity of the affected mesh neighborhood needs to get fixed separately.
 template<uint32_t dim>
-size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Element<dim>*>::iterator first,
-                                                            typename vector<Element<dim>*>::iterator last )
+size_t MeshManager<dim>::DeleteElementsAndRepairConnnectivity( typename vector<Element<dim>*>::iterator first,
+                                                               typename vector<Element<dim>*>::iterator last )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -3011,7 +3011,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Elem
      // ---------------------------------------------------------------------------------------------------------------------
      const CELL_SHAPE cell_shape = parseFiniteElementDimension( (*first)->FE_Type() );
      if ( parseFiniteElementDimension( (*prev(last,1))->FE_Type() ) != cell_shape ) {
-          csmp_error.Note( ERROR, "MeshManager<dim>::DeleteCellsAndRepairConnnectivity",
+          csmp_error.Note( ERROR, "MeshManager<dim>::DeleteElementsAndRepairConnnectivity",
                             "range of supplied elements appear to be of different cell shape; nothing was done" );
           return 0U;
        }
@@ -3132,7 +3132,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Elem
 
     return deleted_elements;
     
- } // end DeleteCellsAndRepairConnnectivity(Element)
+ } // end DeleteElementsAndRepairConnnectivity
 
 
 
@@ -3142,7 +3142,7 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Elem
       Deletes range of Faces after detecting and disconnecting potential neighbor faces around the perimeter of the face patch.
 */
 template<uint32_t dim>
-size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Face<dim>*>::iterator first,
+size_t MeshManager<dim>::DeleteFacesAndRepairConnnectivity( typename vector<Face<dim>*>::iterator first,
                                                             typename vector<Face<dim>*>::iterator last )
  {
      auto faces_to_delete( distance(first,last) );
@@ -3155,12 +3155,12 @@ size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Face
      vector<Face<dim>*> face_ptrs( first, last );
      sort( face_ptrs.begin(), face_ptrs.end() );
      if ( binary_search( face_ptrs.begin(), face_ptrs.end(), static_cast<Face<dim>*>(nullptr) ) )
-       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
+       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteFacesAndRepairConnnectivity",
                        "input range contains 'nullptr' Face objects; have these Faces already been deleted?");
                        
      face_ptrs.erase( unique( face_ptrs.begin(), face_ptrs.end() ), face_ptrs.end() );
      if ( face_ptrs.size() < static_cast<size_t>(faces_to_delete) )
-       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
+       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteFacesAndRepairConnnectivity",
                        "input range contained duplicate Face objects, which have been removed");
           
      while ( first != last )
@@ -4056,7 +4056,6 @@ void MeshManager<dim>::UpdateConnectivity()
     
     // 2. (Re)-creating node connectivity to parent elements
     // -----------------------------------------------------
-    // TODO: locally: ConnectNodesToParentsAndNeighbors() = same code, expensive: requires that all surrounding elements have the right nodes
     // 2.1 counting the parent elements of each node
     map<Node<dim>*,set<Element<dim>*> >  parent_elmts_per_node;
     for ( auto& it : elements_ ) {
@@ -4094,7 +4093,6 @@ void MeshManager<dim>::UpdateConnectivity()
     // ------------------------
     // 4.1 (Re)-creating node connectivity to parent interfaces
     // --------------------------------------------------------
-    // counting the parent elements of each node
     map<Node<dim>*,set<pair<InterFace<dim>*,pair<uint32_t,INTERFACE_SIDE>>> >  parent_ifaces_per_node;
     for ( auto& it : interfaces_ ) {
       assert( it.FE() );
@@ -4127,9 +4125,147 @@ void MeshManager<dim>::UpdateConnectivity()
 
 
 
+/**
+       Same as above but only for the Elements and Nodes in the given range.
+*/
+template<uint32_t dim>
+void MeshManager<dim>::UpdateConnectivity(  typename vector<InterFace<dim>*>::const_iterator first,
+                                            typename vector<InterFace<dim>*>::const_iterator last )
+ {
+    cout <<"\n"<<"MeshManager<dim>::UpdateConnectivity: rebuilding cell connectivity for entire model..."<< endl;
+    
+    // 0. Finding all Elements sharing a node with the interface
+    // ---------------------------------------------------------
+    vector<Element<dim>*> element_ptrs;
+    element_ptrs.reserve( distance(first,last) * 3 );
+    vector<Node<dim>*> core_node_ptrs;
+    core_node_ptrs.reserve( distance(first,last) * 4 );
+    
+    for ( auto it=first; it!=last; ++it ) {
+         // higher-dimensional neighbors and their neighbors
+         // inside
+         assert( (*it)->InnerParent() != nullptr );
+         element_ptrs.push_back( (*it)->InnerParent() );
+         for ( auto eit=(*it)->InnerParent()->NeighborsBegin(); eit!=(*it)->InnerParent()->NeighborsEnd(); ++eit )
+           if ( (*eit) != nullptr )
+             element_ptrs.push_back( (*eit) );
+         // outside
+         assert( (*it)->OuterParent() != nullptr );
+         element_ptrs.push_back( (*it)->OuterParent() );
+         for ( auto eit=(*it)->OuterParent()->NeighborsBegin(); eit!=(*it)->OuterParent()->NeighborsEnd(); ++eit )
+           if ( (*eit) != nullptr )
+             element_ptrs.push_back( (*eit) );
+         // nodes
+         for ( auto nit=(*it)->NodesBegin(); nit!=(*it)->NodesEnd(); ++nit ) {
+              assert( (*nit) != nullptr );
+              core_node_ptrs.push_back( (*nit) );
+           }
+      }
+    
+    // eliminating duplicates
+    // elements
+    sort( element_ptrs.begin(), element_ptrs.end() );
+    element_ptrs.erase( unique( element_ptrs.begin(), element_ptrs.end() ), element_ptrs.end() );
+    // core nodes
+    sort( core_node_ptrs.begin(), core_node_ptrs.end() );
+    core_node_ptrs.erase( unique( core_node_ptrs.begin(), core_node_ptrs.end() ), core_node_ptrs.end() );
+    
+    // distinguishing halo nodes from core nodes
+    /* not needed yet
+    vector<Node<dim>*> node_ptrs; // halo_node_ptrs.reserve( distance(first,last) );
+    for ( auto& eit : element_ptrs )
+      for ( auto nit=eit->NodesBegin(); nit!=eit->NodesEnd(); ++nit )
+        node_ptrs.push_back( (*nit) );
+    // eliminating duplicates
+    sort( node_ptrs.begin(), node_ptrs.end() );
+    node_ptrs.erase( unique( node_ptrs.begin(), node_ptrs.end() ), node_ptrs.end() );
+    // halo nodes
+    vector<Node<dim>*> halo_node_ptrs; // halo_node_ptrs.reserve( distance(first,last) );
+    set_difference( node_ptrs.begin(), node_ptrs.end(),
+                   core_node_ptrs.begin(), core_node_ptrs.end(),
+                   back_inserter(halo_node_ptrs) );
+    */
+    
+    // 1. creating Element vector needed by BuildConnectivity() method, reconnecting equidimensional cells
+    // ---------------------------------------------------------------------------------------------------
+    // TODO: check whether this method preserves connections to cells outside the current range of cells
+    BuildInterFaceConnectivity( first, last );
+    BuildConnectivity<csmp::Element>( element_ptrs.begin(), element_ptrs.end() );
+
+    // 2. (Re)-creating node connectivity to parent elements
+    // -----------------------------------------------------
+    // 2.1 counting the parent elements of each node // TODO: missing the ones outside of the element patch (collect halo elements as well)
+    map<Node<dim>*,set<Element<dim>*> >  parent_elmts_per_node;
+    for ( auto& it : element_ptrs ) {
+        assert( it->FE() );
+        const auto nodes_end{ it->NodesEnd() };
+        for ( auto nit = it->NodesBegin(); nit != nodes_end; ++nit ) {
+             auto mit = parent_elmts_per_node.insert( make_pair( (*nit), set<Element<dim>*>{ it } ) );
+             if ( mit.second == false )
+               (*mit.first).second.insert( it );
+          }
+      }
+
+    // 2.2 re-assigning the parent elements to nodes
+    for ( auto& n : parent_elmts_per_node ) {
+         const auto n_parents = static_cast<uint32_t>( n.second.size() );
+         n.first->ResizeParentStorage( n_parents );
+         // looping over the future parents
+         for ( const auto& it : n.second ) {
+           const uint32_t n_nodes{it->Nodes()};
+           // assigning them to the node
+           for ( uint32_t j{0U}; j<n_nodes; ++j )
+             if ( n.first == it->N(j) ) {
+                 it->N(j)->Assign( j, it );
+                 break;
+              }
+           }
+         assert( n.first->Parents() >= 1 );
+      }
+    
+    // 2.3 Rebuilding the node connectivity
+    for ( auto& nit : core_node_ptrs ) nit->AssignNodeNeighbors();
+//    for ( auto& nit : nodes_ ) nit.AssignNodeNeighbors();
+    
+
+    // 4. Update node manifolds
+    // ------------------------
+    // 4.1 (Re)-creating node connectivity to parent interfaces
+    // --------------------------------------------------------
+    map<Node<dim>*,set<pair<InterFace<dim>*,pair<uint32_t,INTERFACE_SIDE>>> >  parent_ifaces_per_node;
+    for ( auto it=first; it!=last; ++it ) {
+      assert( (*it)->FE() );
+      const uint32_t nodes{ (*it)->FE()->Nodes() };
+      for ( uint32_t n{0U}; n < nodes; ++n ) {
+        vector<INTERFACE_SIDE> sides{INSIDE,OUTSIDE};
+        for ( INTERFACE_SIDE side : sides ){
+          if( (*it)->N(n,side)->IsManifold() ){
+            set<pair<InterFace<dim>*,pair<uint32_t,INTERFACE_SIDE>>> trial_set{make_pair( (*it), make_pair(n,side))};
+            auto mit = parent_ifaces_per_node.insert( make_pair( (*it)->N(n,side), trial_set )) ; //inserting NodeManifold - InterFace pair if it doesnt exist
+            if (mit.second == false) //if insertion didnt happen because manifold already exists
+              mit.first->second.insert( *trial_set.begin() ); //add new interface to already existing set of InterFaces for existing NodeManifold
+          }//end of found manifold
+        }//end of side iteration
+      }//end of node loop
+    }//end of interface loop
 
 
-  ///  for nodes attached to elements in the supplied element range, the parent and the neighbor connectivity is reconstructed from scratch
+    // 5. re-assigning parent interface index pairs to the node manifold
+    // -----------------------------------------------------------------
+    for ( auto& n : parent_ifaces_per_node ) {
+         assert(n.first->IsManifold());
+         n.first->Manifold()->Assign(n.first, n.second); //assigning set of interfaces and index pairs to the manifold
+      }
+
+    cout <<"\t"<<"established cell-to-cell connectivity."<< endl;
+
+ } // end UpdateConnectivity( near interfaces )
+
+
+
+
+
+///  for nodes attached to elements in the supplied element range, the parent and the neighbor connectivity is reconstructed from scratch
 // TODO: this forgets the elements that only have a single node on the deleted region
 template<uint32_t dim>
 void MeshManager<dim>::ConnectNodesToParentsAndNeighbors( typename vector<Element<dim>*>::iterator first,

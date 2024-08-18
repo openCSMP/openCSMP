@@ -155,9 +155,10 @@ template<uint32_t dim, template<uint32_t> class CELL>
 double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 );
 
 // TODO: put into MM
-///Loops over begin and end iterators of an element colony and counts all the corner nodes
+///Loops over the  iterator range of the element colony, summing the corner nodes of all elements
 template<uint32_t dim>
-size_t countCornerNodes( typename plf::colony<Element<dim>>::const_iterator elmts_begin, typename plf::colony<Element<dim>>::const_iterator elmts_end  );
+size_t countCornerNodes( typename plf::colony<Element<dim>>::const_iterator elmts_begin,
+                         typename plf::colony<Element<dim>>::const_iterator elmts_end );
 
 /// finds the neighbors of each node in the target region returning the sparsity pattern of the mesh
 template<uint32_t dim>
@@ -182,11 +183,11 @@ void eraseElementPointerFromVector( std::vector<csmp::Element<dim>*>&, const Ele
 
 /// for juxtaposed elements, method uses neighbor connectivity to find the faces of e1 and e2 that are in contact with one another (faster)
 template<uint32_t dim>
-std::pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 );
+std::pair<uint32_t,uint32_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 );
 
 /// for juxtaposed elements, method uses shared nodes to find the faces of e1 and e2 that are in contact with one another  (slower)
 template<uint32_t dim>
-std::pair<size_t,size_t> findAdjacentFacesFromNodes( Element<dim>* const eptr1, Element<dim>* const eptr2 );
+std::pair<uint32_t,uint32_t> findAdjacentFacesFromNodes( Element<dim>* const eptr1, Element<dim>* const eptr2 );
 
 /// returns true if the supplied elements contain each other's barycentre
 template<uint32_t dim>

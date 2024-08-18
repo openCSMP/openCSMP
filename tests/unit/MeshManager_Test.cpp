@@ -178,6 +178,8 @@ void MeshManager_Test::run()
 
   // testing hex element consistency for meshes from ANSYS
   _test(TestNeigbourVersusFaceConsistency());
+  
+  _test( Test_BuildConnectivity() );
 
   _test(Test_BuiltElementConnectivity2D()); // OK
   _test(Test_BuiltElementConnectivity3D()); // OK
@@ -1263,5 +1265,38 @@ bool MeshManager_Test::TestNeigbourVersusFaceConsistency()
       
      return ( errors == 0U );
  }
+ 
+ 
+/**
+       Tests that a local connectivity update does not break the connectivity
+       at the margin of the updated region.
+*/
+bool MeshManager_Test::Test_BuildConnectivity()
+  {
+     ModelTopology topology;
+     VSet<3U>      vset;
+     create_FracBox( topology, vset );
+     const bool    create_boundaries_from_regions{ true };
+     Model<3U>     model( topology, vset, "MeshManager_Test-variables.txt", create_boundaries_from_regions );
+     int           errors(0ul);
+     
+     // 1. testing that a local connectivity update does not break neighbor connections else
+     vector<Element<3U>*>  test_volumes;
+     test_volumes.reserve( model.Mesh().Elements() );
+     const Region<3U>&     model_domain = model.Region("Model");
+     for ( auto& eit : model_domain.CellVector() )
+       if ( eit->IsVolume() && eit->ConnectedNeighbors() == eit->Neighbors() )
+         test_volumes.push_back( eit );
+         
+     // connectivity update
+     model.Mesh().BuildVolumeConnectivity<Element>( next(test_volumes.begin(),30), next(test_volumes.begin(),60) );
+         
+     // testing
+     for ( const auto& eit : test_volumes )
+       if ( eit->ConnectedNeighbors() != eit->Neighbors() ) errors++;
+     
+     return ( errors > 0 );
+  }
+ 
 
 } // end csmp

@@ -1,6 +1,11 @@
 #include "geometricCalculations.h"
 #include "CSMP_mathUtilities.h"
-#include "algorithm"
+//#include "algorithm"
+
+#include "Point.h"
+#include "Element.h"
+#include "Face.h"
+#include "InterFace.h"
 
 namespace csmp {
 
@@ -712,6 +717,25 @@ bool isValidElement( const std::vector<Point<3U> >& vertexList ) {
     }
   return true;
 }
+
+
+/// using the above functionality, tests whether element is fit for computations
+template<uint32_t dim>
+bool isValidElement( const Element<dim>* const elmt ) {
+      std::vector<Point<dim>> vertexList;
+      vertexList.reserve( elmt->Nodes() );
+      for ( auto nit=elmt->NodesBegin(); nit!=elmt->NodesEnd(); ++nit )
+        vertexList.push_back( (*nit)->Coordinate() );
+      
+      return isValidElement( vertexList );
+  }
+
+template bool isValidElement( const Element<3>* const );
+//template bool isValidElement( const Element<2>* const );
+//template bool isValidElement( const Element<1>* const );
+
+
+
 
 bool isTetrahedron( const std::vector<Point<3U> >& vertexList ) {
   assert( vertexList.size() == 4 );

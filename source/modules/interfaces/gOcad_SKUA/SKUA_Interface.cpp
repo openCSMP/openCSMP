@@ -666,13 +666,13 @@ void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const st
   if ( model.IsUnique(target_region) ) {
        // finding the target elements
        vector<Element<3U>*> elmt_ptrs;
-       model.Mesh().DeleteCellsAndRepairConnnectivity( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
+       model.Mesh().DeleteElementsAndRepairConnnectivity( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
        return;
     }
 
-  // if the region was non-unique, i.e., overlapping other regions, all regions the overlapped regions need to be rebuild
-  // updating regions
   model.Mesh().UpdateConnectivity();
+  // since the region may not have been unique, i.e., overlapping other regions, all regions the overlapped regions need to be rebuild
+  // updating regions
   
 } // end Remove_NO_DATA_ElementsInModel
 

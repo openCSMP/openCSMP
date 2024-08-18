@@ -213,7 +213,48 @@ FaceConstructionData<dim>  higherDimensionalNeighbors( Element<dim>& e, const cs
 
      // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
      // ----------------------------------------------------------------------------------------------------------------------------
-     
+     auto nbors = parentElements<dim>( e.CornerNodesBegin(), e.CornerNodesEnd() );
+     pair<uint32_t,uint32_t> faces{ nbors.first.second, nbors.second.second };
+     pair<long,long> materials{ (*nbors.first.first).Read( mtrl_key ), (*nbors.second.first).Read( mtrl_key ) };
+
+#ifndef NDEBUG
+    assert( faces.first  != numeric_limits<uint32_t>::max() );
+    assert( faces.second != numeric_limits<uint32_t>::max() );
+
+    // VERIFICATION
+    // ------------
+    // verifying the inside neighbor element by projecting the face normal onto lower-dim-element normal
+
+    Point<dim> enrml = e.UnitNormal();
+
+    // first element
+    Point<dim> fnrml = (*nbors.first.first).UnitNormalToFace( faces.first );
+    // if the projection is negative, the first element lies on the outside
+    enum POSITION { INNER_ELMT, OUTER_ELMT };
+    POSITION  epos_elmt1 = ( dotProduct( enrml, fnrml ) < 0. ) ? OUTER_ELMT : INNER_ELMT;
+
+    // swapping sides if necessary
+    if ( epos_elmt1 != INNER_ELMT ) {
+         cerr <<"\nhigherDimensionalNeighbors: normal inconsistency found and fixed; element:"<< e.Idx();
+         cerr <<" "<< parseFiniteElementType( e.FE_Type() ) << endl;
+         swap( nbors.first.first, nbors.second.first );
+         swap( faces.first, faces.second );
+         swap( materials.first, materials.second );
+      }
+#endif
+
+    // initialise with nbors, their faces, adjacent materials, and patch numbers
+    auto neighbors = make_pair( nbors.first.first, nbors.second.first );
+    if ( mtrl_key.place != UNDEFINED )
+      return FaceConstructionData( e, neighbors, faces, materials,
+                                   static_cast<long>(e.Read( mtrl_key)) );
+    else
+      return FaceConstructionData( e, neighbors, faces, materials, UNSPECIFIED );
+      
+ } // end higherDimensionalNeighbors
+
+/* DEPRECATED CODE
+
      // making a set of element nodes to serve as a key for later identification of faces
      set<Node<dim>*> node_set;
      const uint32_t nodes(e.Nodes());
@@ -237,63 +278,7 @@ FaceConstructionData<dim>  higherDimensionalNeighbors( Element<dim>& e, const cs
                  }
             }
        }
-
-#ifdef DEBUG
-    // VERIFICATION
-    assert( nbor_elmts.size() == 2U );
-    const auto e1{ nbor_elmts.begin() };
-    const auto e2{ nbor_elmts.rbegin() };
-    assert( (*e1).first->Neighbor( (*e1).second ) == (*e2).first );
-    assert( (*e2).first->Neighbor( (*e2).second ) == (*e1).first );
-#endif
-
-    // 2. finding the inside neighbor element by projecting the face normal onto lower-dim-element normal
-    // --------------------------------------------------------------------------------------------------
-    vector<double>  enrml, fnrml;
-    e.UnitNormal( enrml );
-    const auto nbor1{ nbor_elmts.begin() };
-    const auto nbor2{ nbor_elmts.rbegin() };
-    enum POSITION { INNER_ELMT, OUTER_ELMT };
-    //                                         inside first    outside second
-    pair<Element<dim>*,Element<dim>*>  nbors{ (*nbor1).first, (*nbor2).first };
-    pair<uint32_t,uint32_t>            faces{ (*nbor1).second, (*nbor2).second };
-    pair<long,long>                    materials{ (*nbor1).first->Read( mtrl_key ),
-                                                  (*nbor2).first->Read( mtrl_key ) };
-    // first element
-    // -------------
-    (*nbor1).first->UnitNormalToFace( faces.first, fnrml );
-    double dotproduct(0.);
-    for ( uint32_t k{0U}; k<dim; ++k ) dotproduct += enrml[k] * fnrml[k];
-   
-    // if the projection is negative, the first element lies on the outside
-    POSITION  epos_elmt1 = ( dotproduct < 0. ) ? OUTER_ELMT : INNER_ELMT;
-
-    // second element
-    // --------------
-    (*nbor2).first->UnitNormalToFace( faces.second, fnrml );
-    dotproduct = 0.;
-    for ( uint32_t k{0U}; k<dim; ++k ) dotproduct += enrml[k] * fnrml[k];
-
-    POSITION  epos_elmt2 = ( dotproduct < 0. ) ? OUTER_ELMT : INNER_ELMT;
-
-    // checking that we have no duplication here
-    assert( epos_elmt1 != epos_elmt2 );
-
-    // swapping sides if necessary
-    if ( epos_elmt1 != INNER_ELMT ) {
-         swap( nbors.first, nbors.second );
-         swap( faces.first, faces.second );
-         swap( materials.first, materials.second );
-      }
-
-    // initialise with nbors, their faces, adjacent materials, and patch numbers
-    if ( mtrl_key.place != UNDEFINED )
-      return FaceConstructionData( e, nbors,  faces, materials,
-                                   static_cast<long>(e.Read( mtrl_key)) );
-    else
-      return FaceConstructionData( e, nbors, faces, materials, -1 );
-      
- } // end higherDimensionalNeighbors
+*/
 
 
 template FaceConstructionData<3U>  higherDimensionalNeighbors( Element<3U>&, const csmp::Index& );

@@ -763,132 +763,8 @@ template class Node<3U>;
  
  // NON-MEMBER FUNCTIONS
  
-/**
-   Returns  the highest dimensional element(s) that  share the face nodes which are supplied to the function via node iterators.
-   The inside element is reported first; the outer one next. A nullptr is returned second if only the inside element is found.
-   Since the function uses node numbers, it does not depend on a valid element neighbor connectivity.
-   
-   Application: give nodes of lower-dimensional face to find element on either side
-   
-   @todo method probably sill contains a large number of redundant operations.
-   
-   @attention in the case of quadratic FEs, this function must be given only the corner nodes of the element face
-*/
-template<uint32_t dim>
-pair<Element<dim>*,Element<dim>*>  parentElements( typename vector<Node<dim>*>::const_iterator first,
-                                                   typename vector<Node<dim>*>::const_iterator last )
- {
-    assert( first != last );
-    // 1. creating sets of the parent elements of the face nodes, testing which ones are shared
-    // ----------------------------------------------------------------------------------------
-    //const auto nodes_of_face = distance(first,last); // 1 for line, 2-for surface, 3 or 4 for volume
-    const auto nodesEnd{last};
-    auto       nit{first};
-
-    // creating a set of the parent elements of the first node
-    assert( (*nit)->Parents() > 0 );
-    const auto n_parents{(*nit)->Parents()};
-    set<Element<dim>*> shared_parents;
-    // first node
-    for ( uint32_t i{0U}; i<n_parents; ++i ) {
-         if ( (*nit)->Parent(i) == nullptr ) continue;
-         // only considering equi-dimensional elements
-         if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
-         if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
-         shared_parents.insert( (*nit)->Parent(i) );
-      }
-      
-    // advancing the node iterator
-    nit++;
-
-    // searching for shared parent elements in subsequent nodes
-    while ( nit != nodesEnd ) {
-         set<Element<dim>*> temp;
-         const auto parents{(*nit)->Parents()};
-         for ( uint32_t i{0U}; i<parents; ++i ) {
-              if ( (*nit)->Parent(i) == nullptr ) continue;
-              if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
-              if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
-              if ( shared_parents.find( (*nit)->Parent(i) ) != shared_parents.end() )
-                temp.insert( (*nit)->Parent(i) );
-           }
-         shared_parents = temp;
-         if ( shared_parents.size() == 2U ) break;
-         nit++;
-      }
-      
-    // 2. analysing the results and determining the inside element if there are two
-    // ----------------------------------------------------------------------------
-    if ( shared_parents.empty() ) {
-         cerr << endl << endl <<"input nodes: ";
-         while ( first != last ) { cerr << (*first)->Idx() <<" "; first++; }
-         throw csmp::Exception( ERROR, "parentElements", "no shared parent elements found" );
-      }
-       
-    // if there is only one element that shares the nodes it must be located on the inside of a boundary
-    if ( shared_parents.size() == 1U ) return make_pair( (*shared_parents.begin()), nullptr );
-    
-    // once two parent elements were found, the one on the inside needs to be determined
-    // initial guess
-    pair<Element<dim>*,Element<dim>*> result( (*shared_parents.begin()), (*shared_parents.rbegin()) );
-    
-    // 3D case where face is either a triangle or a quadrilateral
-    if constexpr ( dim == 3U ) {
-         vector<Node<3>*> face_nodes( first, last );
-         assert( face_nodes.size() >= 3 );
-         // getting normal to face from the first 3 node coordinates
-         Point<3> vec1(face_nodes[0]->Coordinate() - face_nodes[1]->Coordinate()); // cw
-         Point<3> vec2(face_nodes[2]->Coordinate() - face_nodes[1]->Coordinate()); // ccw
-         Point<3> nrml =  crossProduct( vec2, vec1 );
-         // checking whether a vector from the second element barycentre to the first parent element center yields a negative or positive dot product
-         Point<3> bvec = (*shared_parents.rbegin())->BaryCenter() - (*shared_parents.begin())->BaryCenter();
-         // using dot-product to find inner element: if normal is pointing toward barycentre of first element, initial order needs to be reversed
-         if ( dotProduct( nrml, bvec ) < 0. ) {
-              auto swap     = result.second;
-              result.second = result.first;
-              result.first  = swap;
-           }
-      }
-    
-    // 2D case where the face is line and the non-existing normal points out of the plane
-    if constexpr ( dim == 2U ) {
-         vector<Node<2>*> face_nodes( first, last );
-         assert( face_nodes.size() == 2U );
-         Point<2> vec(face_nodes[1]->Coordinate() - face_nodes[0]->Coordinate()); // line element node numbering
-         // rotating this line clockwise to get the normal
-         Point<2> nrml( -vec[1] /* -y */, vec[0] /* x */ );
-         // checking whether a vector from the faces barycentre to the parent element center yields a negative or positive dot product
-         Point<2> bvec = (*shared_parents.rbegin())->BaryCenter() - (*shared_parents.begin())->BaryCenter();
-         // using the dot-product to find inner element, if the normal is pointing toward first barycentre, initial order needs to be reversed
-         if ( dotProduct( nrml, bvec ) < 0. ) {
-              auto swap     = result.second;
-              result.second = result.first;
-              result.first  = swap;
-           }
-      }
  
-     // in a 1D model faces coincide with nodes and have just a single node
-     if constexpr ( dim == 1U ) {
-         // the inside element is that for which the node is node 2
-         const uint32_t parent_element{0};
-         if ( (*first)->ParentNodeNumber( parent_element ) == 0 ) {
-              auto swap     = result.second;
-              result.second = result.first;
-              result.first  = swap;
-           }
-      }
-
-    return result;
-    
- } // end parentElements
-
-template pair<Element<3>*,Element<3>*>  parentElements( typename vector<Node<3>*>::const_iterator, typename std::vector<Node<3>*>::const_iterator );
-template pair<Element<2>*,Element<2>*>  parentElements( typename vector<Node<2>*>::const_iterator, typename std::vector<Node<2>*>::const_iterator );
-template pair<Element<1>*,Element<1>*>  parentElements( typename vector<Node<1>*>::const_iterator, typename std::vector<Node<1>*>::const_iterator );
-
-
-
-/**
+ /**
       Find all parent elements that contain the supplied range of nodes.
       
   @return subset of parent elements that share all the supplied nodes
@@ -933,6 +809,215 @@ template vector<Element<2U>*> parentElementsContaining( typename vector<Node<2U>
                                                         typename vector<Node<2U>*>::const_iterator );
 template vector<Element<1U>*> parentElementsContaining( typename vector<Node<1U>*>::const_iterator,
                                                         typename vector<Node<1U>*>::const_iterator );
+
+
+
+
+ 
+/**
+   Returns  the dim-dimensional element(s) that  share the face corner nodes supplied to the function via node iterators.
+   The inside element is reported first; the outer one next. A nullptr is returned second if only the inside element is found.
+   Since the function uses node numbers, it does not depend on a valid element neighbor connectivity.
+   
+   Application: give nodes of lower-dimensional face to find element on either side
+   
+   @attention THE SUPPLIED NODES MUST BE IN CORRECT ORDER because they are used to identify the inside element
+   
+   @attention in the case of quadratic FEs, this function must be given only the corner nodes of the element face
+*/
+template<uint32_t dim>
+pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t>>  parentElements( typename vector<Node<dim>*>::const_iterator first,
+                                                                                 typename vector<Node<dim>*>::const_iterator last )
+ {
+    ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    
+    assert( first != last );
+    
+    // 1. Find all dim-dimensional parent elements that contain the supplied range of nodes
+    // ------------------------------------------------------------------------------------
+    vector<Element<dim>*>  shared_parents = parentElementsContaining<dim>( first, last );
+    const auto remaining_cells = eraseLowerDimensionalOrInvalidCells( shared_parents );
+      
+    // 2. analysing the results
+    // ----------------------------------------------------------------------------
+    if ( remaining_cells == 0U ) {
+         cerr << endl << endl <<"input nodes: ";
+         auto first1{ first };
+         while ( first1 != last ) { cerr << (*first1)->Idx() <<" "; first1++; }
+         csmp_error.Note( ERROR, "parentElements", "no shared parent elements found; returning null pointers" );
+         return make_pair( make_pair( nullptr, numeric_limits<uint32_t>::max()), make_pair( nullptr, numeric_limits<uint32_t>::max() ) );
+      }
+    // if there is only one element that shares the nodes it must be located on the inside of a boundary
+    else if ( remaining_cells == 1U ) {
+         csmp_error.Note( WARNING, "parentElements", "only one shared parent element found which is returned element" );
+         auto face_id = faceWithCornerNodes( (*shared_parents.begin()), first, last );
+         return make_pair( make_pair( (*shared_parents.begin()), face_id ), make_pair( nullptr, numeric_limits<uint32_t>::max() ) );
+      }
+    else if ( remaining_cells > 2U ) {
+         csmp_error.Note( ERROR, "parentElements", "found more than 2 parent elements ?!, returning first two" );
+         return make_pair( make_pair( (*shared_parents.begin()), numeric_limits<uint32_t>::max() ),
+                           make_pair( (*next(shared_parents.begin(),1)), numeric_limits<uint32_t>::max() ) );
+      }
+    
+    // 3. finding the shared faces of the elements
+    // -------------------------------------------------------------------------------
+    // (assuming that the neighbor connectivity between the elements works)
+    pair<uint32_t,uint32_t> shared_faces = findAdjacentFacesFromNeighbors( shared_parents[0], shared_parents[1] );
+    if ( shared_faces.first == numeric_limits<uint32_t>::max() ||
+         shared_faces.second == numeric_limits<uint32_t>::max() ) {
+         csmp_error.Note( ERROR, "parentElements", "could not determine face indices of share faces" );
+         shared_faces = findAdjacentFacesFromNodes( shared_parents[0], shared_parents[1] );
+         assert( shared_faces.first != numeric_limits<uint32_t>::max() );
+         assert( shared_faces.second != numeric_limits<uint32_t>::max() );
+      }
+
+    // 4. determining the inside element which must have the same node ordering as the one supplied
+    // --------------------------------------------------------------------------------------------
+    vector<Node<dim>*> cnr_node_vec( first, last ), eface_node_vec1;
+    for ( const auto& nd : shared_parents[0]->FE()->CornerNodesOfFace( shared_faces.first ) )
+      eface_node_vec1.push_back( shared_parents[0]->N(nd) );
+    
+    // if there is a match the elements are returned in their current order
+    if ( cnr_node_vec == eface_node_vec1 )
+      return make_pair( make_pair( shared_parents[0], shared_faces.first ), make_pair( shared_parents[1], shared_faces.second ) );
+      
+    // else the second lot of face nodes are compared
+    vector<Node<dim>*> eface_node_vec2;
+    for ( const auto& nd : shared_parents[1]->FE()->CornerNodesOfFace( shared_faces.second ) )
+      eface_node_vec2.push_back( shared_parents[1]->N(nd) );
+    if ( cnr_node_vec == eface_node_vec2 )
+      return make_pair( make_pair( shared_parents[1], shared_faces.second ), make_pair( shared_parents[0], shared_faces.first ) );
+      
+    // 5. hopefully we never get here: diagnostics
+    // -------------------------------------------
+#ifndef NDEBUG
+    cout <<"\n"<<"parentElements: failed to match nodes:";
+    for ( const auto& nit : cnr_node_vec ) cout <<" "<< nit->Idx();
+    cout <<", with face nodes of shared elements:";
+    cout <<"\n\t"<< shared_parents[0]->Idx() <<": " << parseFiniteElementType( shared_parents[0]->FE_Type() );
+    cout <<": nodes of shared face: "<< shared_faces.first <<": ";
+    for ( const auto& nit : eface_node_vec1 ) cout << nit->Idx() <<" ";
+    cout <<"\n\t"<< shared_parents[1]->Idx() <<": " << parseFiniteElementType( shared_parents[1]->FE_Type() );
+    cout <<": nodes of shared face: "<< shared_faces.second <<": ";
+    for ( const auto& nit : eface_node_vec2 ) cout << nit->Idx() <<" ";
+    cout <<"\n"<<"trying node rotation now..."<< endl;
+#endif
+
+    // 6. attempting the same after rotating the corner nodes
+    // ------------------------------------------------------
+    // first element first
+    for ( uint32_t i{0u}; i<cnr_node_vec.size(); ++i ) {
+         rotate( eface_node_vec1.begin(), eface_node_vec1.begin()+1, eface_node_vec1.end() );
+         if ( cnr_node_vec == eface_node_vec1 )
+           return make_pair( make_pair( shared_parents[0], shared_faces.first ), make_pair( shared_parents[1], shared_faces.second ) );
+      }
+    // second element
+    for ( uint32_t i{0u}; i<cnr_node_vec.size(); ++i ) {
+         rotate( eface_node_vec2.begin(), eface_node_vec2.begin()+1, eface_node_vec2.end() );
+         if ( cnr_node_vec == eface_node_vec2 )
+           return make_pair( make_pair( shared_parents[1], shared_faces.second ), make_pair( shared_parents[0], shared_faces.first ) );
+      }
+
+#ifndef NDEBUG
+    cout <<"\n"<<"parentElements: failed to match nodes even after rotation:";
+    for ( const auto& nit : cnr_node_vec ) cout <<"\n\t\t"<< nit->Idx() <<": "<< nit->Coordinate();
+    cout <<"\n\t"<<"with face nodes of shared elements:";
+    cout <<"\n\t\t"<< shared_parents[0]->Idx() <<": " << parseFiniteElementType( shared_parents[0]->FE_Type() );
+    cout <<"\n\t\t"<<"nodes of shared face: "<< shared_faces.first <<": ";
+    for ( const auto& nit : eface_node_vec1 ) cout <<"\n\t\t\t"<< nit->Idx() <<": "<< nit->Coordinate();
+    cout <<"\n\t\t"<< shared_parents[1]->Idx() <<": " << parseFiniteElementType( shared_parents[1]->FE_Type() );
+    cout <<"\n\t\t"<<"nodes of shared face: "<< shared_faces.second <<": ";
+    for ( const auto& nit : eface_node_vec2 ) cout <<"\n\t\t\t"<< nit->Idx() <<": "<< nit->Coordinate();
+    cout << endl;
+    csmp_error.Note( WARNING, "parentElements", "could not match face nodes on inside and outside" );
+    cout <<"\n"<<"trying matching of node sets now..."<< endl;
+#endif
+
+    // 7. returning those faces which have the same collection of nodes
+    // ----------------------------------------------------------------
+    set<Node<dim>*> key_cnr_nodes( cnr_node_vec.begin(), cnr_node_vec.end() ),
+                    key_e1_nodes( eface_node_vec1.begin(), eface_node_vec1.end() ),
+                    key_e2_nodes( eface_node_vec2.begin(), eface_node_vec2.end() );
+                    
+    if ( key_cnr_nodes == key_e1_nodes && key_cnr_nodes == key_e2_nodes )
+      return make_pair( make_pair( shared_parents[0], shared_faces.first ), make_pair( shared_parents[1], shared_faces.second ) );
+
+    // 8. Oh dear! - was the wrong face identified?
+    // ----------------------------------------------------------------
+#ifndef NDEBUG
+    const auto e_matched      = ( key_cnr_nodes != key_e1_nodes ) ? 0 : 1;
+    const auto e_not_found    = ( key_cnr_nodes != key_e1_nodes ) ? 1 : 0;
+    const auto e_problem_face = ( key_cnr_nodes != key_e1_nodes ) ? shared_faces.second : shared_faces.first;
+    cout <<"\n"<<"parentElements: only Element "<< shared_parents[e_matched]->Idx() <<" contains the nodes:\n\t\t        ";
+    for ( const auto& nit : cnr_node_vec ) cout <<" "<< nit->Idx();
+    cout <<"\n\t"<<"Element "<< shared_parents[e_not_found]->Idx() <<": ";
+    cout << parseFiniteElementType( shared_parents[e_not_found]->FE_Type() ) <<": face: "<< e_problem_face <<" cannot be matched.";
+    cout <<" The nodes of its faces are:";
+    for ( uint32_t face{0u}; face < shared_parents[e_not_found]->Faces(); ++face ) {
+         cout <<"\n\t\t"<<"face: "<< face <<": ";
+         for ( auto nd : shared_parents[e_not_found]->FE()->NodesOfFace(face) )
+           cout << shared_parents[e_not_found]->N(nd)->Idx() <<" ";
+      }
+    cout << endl;
+    csmp_error.Note( ERROR, "parentElements", "can you see any of the faces matching nodes that have been missed?" );
+#endif
+
+    throw csmp::Exception( ERROR, "parentElements", "found 1 face-matched element but for element 2 the nodes do not match");
+    
+    // whatever has been found
+    return make_pair( make_pair( shared_parents[0], shared_faces.first ), make_pair( shared_parents[1], shared_faces.second ) );
+    
+ } // end parentElements
+
+template pair<pair<Element<3>*,uint32_t>,pair<Element<3>*,uint32_t>>  parentElements( typename vector<Node<3>*>::const_iterator, typename std::vector<Node<3>*>::const_iterator );
+template pair<pair<Element<2>*,uint32_t>,pair<Element<2>*,uint32_t>>  parentElements( typename vector<Node<2>*>::const_iterator, typename std::vector<Node<2>*>::const_iterator );
+template pair<pair<Element<1>*,uint32_t>,pair<Element<1>*,uint32_t>>  parentElements( typename vector<Node<1>*>::const_iterator, typename std::vector<Node<1>*>::const_iterator );
+
+
+/* CUTOUT CODE DUPLICATING OTHER FUNCTIONALITY
+
+    // 1. creating sets of the parent elements of the face nodes, testing which ones are shared
+    // ----------------------------------------------------------------------------------------
+    //const auto nodes_of_face = distance(first,last); // 1 for line, 2-for surface, 3 or 4 for volume
+    const auto nodesEnd{last};
+    auto       nit{first};
+
+    // creating a set of the parent elements of the first node
+    assert( (*nit)->Parents() > 0 );
+    const auto n_parents{(*nit)->Parents()};
+    set<Element<dim>*> shared_parents;
+    // first node
+    for ( uint32_t i{0U}; i<n_parents; ++i ) {
+         if ( (*nit)->Parent(i) == nullptr ) continue;
+         // only considering equi-dimensional elements
+         if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
+         if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
+         shared_parents.insert( (*nit)->Parent(i) );
+      }
+      
+    // advancing the node iterator
+    nit++;
+
+    // searching for shared parent elements in subsequent nodes
+    while ( nit != nodesEnd ) {
+         set<Element<dim>*> temp;
+         const auto parents{(*nit)->Parents()};
+         for ( uint32_t i{0U}; i<parents; ++i ) {
+              if ( (*nit)->Parent(i) == nullptr ) continue;
+              if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
+              if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
+              if ( shared_parents.find( (*nit)->Parent(i) ) != shared_parents.end() )
+                temp.insert( (*nit)->Parent(i) );
+           }
+         shared_parents = temp;
+         if ( shared_parents.size() == 2U ) break;
+         nit++;
+      }
+*/
+
+
+
+
 
 
 /**

@@ -21,8 +21,8 @@ template<uint32_t> class Model;
 */
 
     /// identifies "halo" elements/faces/interfaces, i.e. which contribute to domain FVs, but are outside of domain, returns number
-template<uint32_t dim, template<uint32_t> class CELL>
-size_t collectHaloStencils( const ModelSubDomain<dim,CELL>&, std::vector<CELL<dim>*>& halo_stencils );
+//template<uint32_t dim, template<uint32_t> class CELL> TODO: implement efficient version
+//size_t collectHaloStencils( const ModelSubDomain<dim,CELL>&, std::vector<CELL<dim>*>& halo_stencils );
 
 /**
     taking into account element thickness and total velocity, initialises:

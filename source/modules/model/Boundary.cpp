@@ -779,26 +779,20 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
       if constexpr ( dim == 3u ) if ( (*it)->IsLine() ) continue;
 
       // finding the higher-dimensional element(s) that sit(s) adjacent to the lower-dimensional one
-      pair<Element<dim>*,Element<dim>*>  inner_outer_elements = parentElements<dim>( (*it)->NodesBegin(), (*it)->NodesEnd() );
-
-      // if there is an outer element
-      if ( inner_outer_elements.second != nullptr ) {
-          pair<size_t,size_t> face_ids = findAdjacentFacesFromNeighbors( inner_outer_elements.first, inner_outer_elements.second );
+      auto new_nbors = parentElements<dim>( (*it)->NodesBegin(), (*it)->NodesEnd() );
+      
+      if ( new_nbors.first.first != nullptr && new_nbors.second.first != nullptr )
+        {
           // create new internal face
           this->cell_vec_.push_back( meshManager.ReplaceElementByFace( (*it),
-                                                                       inner_outer_elements.first, inner_outer_elements.second,
-                                                                       face_ids.first, face_ids.second,
+                                                                       new_nbors.first.first, new_nbors.second.first,
+                                                                       new_nbors.first.second, new_nbors.second.second,
                                                                        lvsFaces, lvsIntegrationPoints ) );
         }
-      else { // if this is a Face at the model boundary
-          size_t face{0};
-          while( face < inner_outer_elements.first->Neighbors() ) {
-          // TODO: this assumption is not true
-               if ( inner_outer_elements.first->Neighbor(face) == nullptr ) break;
-               face++;
-            }
+      else { // if this Face will be located at the model boundary
           // create new boundary face
-          this->cell_vec_.push_back( meshManager.AddBoundaryFace( inner_outer_elements.first, face,
+          this->cell_vec_.push_back( meshManager.AddBoundaryFace( new_nbors.first.first,
+                                                                  new_nbors.first.second,
                                                                   lvsFaces, lvsIntegrationPoints ) );
         }
       

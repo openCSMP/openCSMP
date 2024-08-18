@@ -215,7 +215,7 @@ size_t eraseDifferentDimensionalOrInvalidCells( const CELL<dim>* const cptr, std
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t eraseLowerDimensionalOrInvalidCells( std::vector<CELL<dim>*>& );
                                                      
-/// Finds the number of the cell faces which consists of the supplied range of nodes.
+/// Finds the number of the cell face which consists of the supplied range of nodes.
 template<uint32_t dim, template<uint32_t> class CELL>
 uint32_t faceWithCornerNodes( const CELL<dim>* const cell_ptr,
                               typename std::vector<Node<dim>*>::const_iterator first,
@@ -228,8 +228,8 @@ std::vector<Element<dim>*> parentElementsContaining( typename std::vector<Node<d
 
 /// Finds the 2 higher-dim parent elements that share face identified by its nodes, inner element is reported first; outer next; face-nodes of dim-1 element must be in correct order
 template<uint32_t dim> // input corner nodes only
-std::pair<Element<dim>*,Element<dim>*>  parentElements( typename std::vector<Node<dim>*>::const_iterator first,
-                                                        typename std::vector<Node<dim>*>::const_iterator last );
+std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t>>  parentElements( typename std::vector<Node<dim>*>::const_iterator first,
+                                                                                                typename std::vector<Node<dim>*>::const_iterator last );
 
 /// Finds the 1 higher-dim parent element of element face on model outside, throws if  face is within the model // USED
 template<uint32_t dim> // input corner nodes only

@@ -1,8 +1,7 @@
 #ifndef CSMP_GEOMETRIC_CALCULATIONS_UOM_H
 #define CSMP_GEOMETRIC_CALCULATIONS_UOM_H
 
-#include <map>
-#include "Point.h"
+#include "CSMP_definitions.h"
 
 /**
 
@@ -16,6 +15,9 @@ geometric calculations
 */
 
 namespace csmp {
+
+template<uint32_t> class Point;
+template<uint32_t> class Element;
 
 // CALCULATIONS ORIGINALLY DEVELOPED TO ASSESS THE DEGENERACY OF CORNER-POINT GRIDS
 // TODO: useful functionality but needs documentation and refactoring.
@@ -116,6 +118,10 @@ bool isPrism( const std::vector<Point<3U> >& );
 bool isPyramid( const std::vector<Point<3U> >& );
 
 bool isValidElement( const std::vector<Point<3U> >& vertexList );
+
+/// using the above functionality, tests whether element is fit for computations
+template<uint32_t dim>
+bool isValidElement( const Element<dim>* const );
 
 }// end namespace csmp
 

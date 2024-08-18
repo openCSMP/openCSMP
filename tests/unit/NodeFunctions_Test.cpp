@@ -105,13 +105,13 @@ bool NodeFunctions_Test::Test_parentElementsSharedByFace()
          }
       
       // calling the function that is being tested
-      pair<Element<3>*,Element<3>*> parents = parentElements<3>( face_nodes.begin(), face_nodes.end() );
+      auto parents = parentElements<3>( face_nodes.begin(), face_nodes.end() );
       
       // test that the correct neighbor elements were found (inner one should be first)
-      _test( parents.first  != nullptr );
-      _test( parents.second != nullptr );
-      _test( parents.first  == inner_eptr );
-      _test( parents.second->Idx() == 3u ); // element 3 shares the face
+      _test( parents.first.first  != nullptr );
+      _test( parents.second.first != nullptr );
+      _test( parents.first.first  == inner_eptr );
+      _test( parents.second.first->Idx() == 3u ); // element 3 shares the face
     }
     
     // 2. test case with a single hexahedron
@@ -138,9 +138,9 @@ bool NodeFunctions_Test::Test_parentElementsSharedByFace()
       auto parents = parentElements<3>( face_nodes.begin(), face_nodes.end() );
       
       // test that the correct neighbor elements were found (inner one should be first
-      _test( parents.first  == inner_eptr );
-      _test( parents.second == nullptr );
-      _test( parents.first  == eptr );
+      _test( parents.first.first  == inner_eptr );
+      _test( parents.second.first == nullptr );
+      _test( parents.first.first  == eptr );
     }
     
     return true;

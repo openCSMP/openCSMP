@@ -783,7 +783,7 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( const char* bound
      // erasing the faces
      if ( erase_faces ) {
          // getting the mesh manager to delete faces and nodes and fix up the connectivity
-         boundaryComplex->Mesh().DeleteCellsAndRepairConnnectivity( boundary.CellVector().begin(), boundary.CellVector().end() );
+         boundaryComplex->Mesh().DeleteFacesAndRepairConnnectivity( boundary.CellVector().begin(), boundary.CellVector().end() );
        }
 
     // erasing the boundary
@@ -816,7 +816,7 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( csmp::Boundary<di
      if ( erase_faces ) {
          BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
          // getting the mesh manager to delete faces and nodes and fix up the connectivity
-         boundaryComplex->Mesh().DeleteCellsAndRepairConnnectivity( boundary.CellVector().begin(), boundary.CellVector().end() );
+         boundaryComplex->Mesh().DeleteFacesAndRepairConnnectivity( boundary.CellVector().begin(), boundary.CellVector().end() );
        }
 
      // deleting the Boundary

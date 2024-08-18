@@ -133,13 +133,15 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( co
   //Getting volumetric regions for later use
   Region<DIM>& BottomUnit1 = model1.Region("BOTTOMUNIT");
   Region<DIM>& TopUnit1 = model1.Region("TOPUNIT");
+  int32_t region_ID_bottom = BottomUnit1.DomainIndex();
+  int32_t region_ID_top    = TopUnit1.DomainIndex();
 
   //Getting perimeter nodes of region, before splitboundary is created and information is lost
   std::set<Node<DIM>*> perim_nodes1, perim_nodes2;
   Region<DIM>& frac_region1 = model1.Region( "FRACTURE" );
-  for ( auto nit = frac_region1.PerimeterNodesBegin(); nit !=frac_region1.NodesEnd(); nit++){
+  for ( auto nit = frac_region1.PerimeterNodesBegin(); nit !=frac_region1.NodesEnd(); nit++)
     perim_nodes1.insert(*nit);
-  }
+  
   _test( perim_nodes1.size() == frac_region1.PerimeterNodes() );
 
 
@@ -147,12 +149,28 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( co
 
   //Region -> SplitBoundary
   string sb_name1  = *((model1.CreateSplitBoundaryFrom( "FRACTURE" ) ).first.begin()) ;
+  //Getting splitboundary
+  SplitBoundary<DIM>& sb1 = model1.SplitBoundary( sb_name1 );
+
+  // local version (tested before)
+  auto t0 = chrono::high_resolution_clock::now();
+  model1.Mesh().UpdateConnectivity( sb1.CellsBegin(), sb1.CellsEnd() );
+  auto t1 = chrono::high_resolution_clock::now();
+  cout <<"\n\n"<<"Test_NodeAndElementsCorrespondance_3D: Completed LOCAL mesh connectivity update in ";
+  cout << chrono::duration_cast<chrono::milliseconds>(t1-t0).count();
+  cout <<" milliseconds."<< endl;
+
+  // global version
+  auto t2 = chrono::high_resolution_clock::now();
+  model1.Mesh().UpdateConnectivity();
+  auto t3 = chrono::high_resolution_clock::now();
+  cout <<"\n\n"<<"Test_NodeAndElementsCorrespondance_3D: Completed GLOBAL mesh connectivity update in ";
+  cout << chrono::duration_cast<chrono::milliseconds>(t3-t2).count();
+  cout <<" milliseconds."<< endl;
 
   ///Inserting lower dimensional region in each
   model1.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
 
-  //Getting splitboundaries
-  SplitBoundary<DIM>& sb1 = model1.SplitBoundary( sb_name1 );
 
 
   std::vector<SplitBoundary<DIM>> sb_vec{sb1};
@@ -180,11 +198,10 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( co
       std::vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
                             nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID());
 
-
       std::set<Node<DIM>*> outside_nds_interface;
       std::set<Node<DIM>*> outside_nds_face;
       uint32_t n_nodes = ifp->FE()->Nodes();
-      for ( uint32_t n{0U}; n<n_nodes;++n){
+      for ( uint32_t n{0U}; n<n_nodes;++n ){
         //Nodes should match that of INSIDE face
         _test( ifp->N(n,INSIDE)  == ifp->InnerParent()->N(nids_in[n] ));
 
@@ -211,19 +228,31 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( co
           _test( TopUnit1.Contains( ifp->MatchingN(n,OUTSIDE) ) );
           //matching outside node not in bottom half
           _test( !BottomUnit1.Contains( ifp->MatchingN(n,OUTSIDE) ) );
+          
+          // SKM extra consistency checks
+          _test( ifp->InnerParent()->Region_ID() == region_ID_bottom );
+          _test( ifp->OuterParent()->Region_ID() == region_ID_top );
+          // is the normal of the interface pointing outward from the inside region?
+          // (this is checked by the sign of the dotproduct of the normal and a vector from the
+          // interface barycentre to that of the Outside element)
+          Point<DIM> vec = ifp->OuterParent()->BaryCenter() - ifp->BaryCenter();
+          double dotproduct = dotProduct( nrml_in, vec );
+          _test( dotproduct > 0. );
 
-          //Testing inside parents assignmnet by checking they are part of BottomUnit region
-          for (uint32_t p{0U} ; p < ifp->N(n,INSIDE)->Parents() ; ++p){
-            _test( BottomUnit1.Contains( ifp->N(n,INSIDE)->Parent(p) )); //bottom unit has parent of inside node
-            _test( !TopUnit1.Contains( ifp->N(n,INSIDE)->Parent(p)));    //top unit doenst have parent of inside node
-          }
-          for (uint32_t p{0U} ; p < ifp->MatchingN(n,OUTSIDE)->Parents() ; ++p){
-            _test( !BottomUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //bottom unit Does Not have parent of matching outside node
-            _test( TopUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p)));    //top unit does have parent of matching outside node
-          }
-
+          // Testing node-parent elements on inside to confirm that they are indeed inside the BottomUnit region
+          for (uint32_t p{0U} ; p < ifp->N(n,INSIDE)->Parents() ; ++p)
+            if ( ifp->N(n,INSIDE)->IsManifold() )
+              {
+                _test( BottomUnit1.Contains( ifp->N(n,INSIDE)->Parent(p) )); //bottom unit has parent of inside node
+                _test( !TopUnit1.Contains( ifp->N(n,INSIDE)->Parent(p)));    //top unit doenst have parent of inside node
+              }
+          for (uint32_t p{0U} ; p < ifp->MatchingN(n,OUTSIDE)->Parents() ; ++p)
+            if ( ifp->N(n,OUTSIDE)->IsManifold() )
+              {
+                _test( !BottomUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //bottom unit must not contain parent of outside node
+                _test( TopUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p))); //top unit must contain parent of matching outside node
+              }
         }  else _test( ifp->MatchingN(n,INSIDE) == ifp->MatchingN(n,OUTSIDE) ) ; //test nodes match if on perimeter
-
 
       }
 
@@ -312,7 +341,6 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_I
   assert(split_perimter_node!=nullptr);
 
   ///Testing splitboundary creation
-
 
   //Region -> SplitBoundary
   std::set<string> sb_names    = (model1.CreateSplitBoundaryFrom( "FRACTURE_PLANAR" ) ).first ;

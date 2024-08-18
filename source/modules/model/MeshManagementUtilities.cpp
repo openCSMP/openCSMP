@@ -941,7 +941,7 @@ template void findNodesViaHigherDimensionalNeighbors( Element<3>* const, Element
     Finds the face between 2 elements (if any) via the neighbor connectivity.
 */
 template<uint32_t dim>
-pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 )
+pair<uint32_t,uint32_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    const uint32_t unspecified = numeric_limits<uint32_t>::max();
@@ -968,6 +968,11 @@ pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, E
            break;
         }
 
+   if ( face_of_elmt1 == unspecified ) {
+        csmp_error.Note( ERROR, "findAdjacentFacesFromNeighbors", "could not find matching face of Element 1");
+        return make_pair( unspecified, unspecified );
+     }
+
     // 2. finding which face of element 2 is shared with element 1
     uint32_t face_of_elmt2 = unspecified;
     const auto n_faces2(eptr2->Faces());
@@ -977,13 +982,18 @@ pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, E
            break;
         }
 
+   if ( face_of_elmt2 == unspecified ) {
+        csmp_error.Note( ERROR, "findAdjacentFacesFromNeighbors", "could not find matching face of Element 2");
+        return make_pair( unspecified, unspecified );
+     }
+
     return make_pair( face_of_elmt1, face_of_elmt2 );
     
  } // end findAdjacentElementFaces
  
-template pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<3>* const, Element<3>* const );
-template pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<2>* const, Element<2>* const );
-template pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<1>* const, Element<1>* const );
+template pair<uint32_t,uint32_t> findAdjacentFacesFromNeighbors( Element<3>* const, Element<3>* const );
+template pair<uint32_t,uint32_t> findAdjacentFacesFromNeighbors( Element<2>* const, Element<2>* const );
+template pair<uint32_t,uint32_t> findAdjacentFacesFromNeighbors( Element<1>* const, Element<1>* const );
  
 
 
@@ -998,7 +1008,7 @@ template pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<1>* const, 
      @attention if no shared face can be found, function returns UNSPECIFIED.
 */
 template<uint32_t dim>
-pair<size_t,size_t> findAdjacentFacesFromNodes( Element<dim>* const eptr1, Element<dim>* const eptr2 )
+pair<uint32_t,uint32_t> findAdjacentFacesFromNodes( Element<dim>* const eptr1, Element<dim>* const eptr2 )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -1044,9 +1054,9 @@ pair<size_t,size_t> findAdjacentFacesFromNodes( Element<dim>* const eptr1, Eleme
     
  } // end findAdjacentElementFaces
  
-template pair<size_t,size_t> findAdjacentFacesFromNodes( Element<3>* const, Element<3>* const );
-template pair<size_t,size_t> findAdjacentFacesFromNodes( Element<2>* const, Element<2>* const );
-template pair<size_t,size_t> findAdjacentFacesFromNodes( Element<1>* const, Element<1>* const );
+template pair<uint32_t,uint32_t> findAdjacentFacesFromNodes( Element<3>* const, Element<3>* const );
+template pair<uint32_t,uint32_t> findAdjacentFacesFromNodes( Element<2>* const, Element<2>* const );
+template pair<uint32_t,uint32_t> findAdjacentFacesFromNodes( Element<1>* const, Element<1>* const );
  
 
 

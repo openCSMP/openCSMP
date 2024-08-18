@@ -8,6 +8,7 @@
 
 #include "GeometricCalculations_Test.h"
 #include "geometricCalculations.h"
+#include "Point.h"
 
 using namespace std;
 
