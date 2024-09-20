@@ -180,6 +180,7 @@ void MeshManager_Test::run()
   _test(TestNeigbourVersusFaceConsistency());
   
   _test( Test_BuildConnectivity() );
+  _test( Test_UpdateConnectivity() );
 
   _test(Test_BuiltElementConnectivity2D()); // OK
   _test(Test_BuiltElementConnectivity3D()); // OK
@@ -1295,8 +1296,78 @@ bool MeshManager_Test::Test_BuildConnectivity()
      for ( const auto& eit : test_volumes )
        if ( eit->ConnectedNeighbors() != eit->Neighbors() ) errors++;
      
-     return ( errors > 0 );
+     return !( errors > 0 );
   }
+  
+ 
+ 
+ 
+/**
+    For a the box-shaped "FracBox" model with lower dimensional elements, the neighbor and parent  connectivity is removed and then rebuilt.
+    The results are tested with integrityCheck.
+    
+    Also tests BuildVolumeConnectivty, BuidSurfaceConnectivity, BuildLineConnectivity
+*/
+bool MeshManager_Test::Test_UpdateConnectivity()
+ {
+     ModelTopology topology;
+     VSet<3U>      vset;
+     create_FracBox( topology, vset );
+     const bool    create_boundaries_from_regions{ true };
+     Model<3U>     model( topology, vset, "MeshManager_Test-variables.txt", create_boundaries_from_regions );
+     int           errors(0ul);
+     
+     // 1. Removing existing connectivity
+     // ---------------------------------
+     // element
+     Region<3U>&  model_domain = model.Region("Model");
+     for ( auto& eit : model_domain.CellVector() )
+       for ( uint32_t i{0u}; i<eit->Neighbors(); ++i )
+         if ( eit->Neighbor(i) != nullptr )
+           eit->Neighbor(i)->UnassignNeighbor(i);
+     // node parents and node neighbors
+     for ( auto& nit : model_domain.NodeVector() ) {
+          nit->EraseParents();
+          nit->EraseNeighbors();
+          // manifolds
+          if ( nit->IsManifold() )
+            nit->Manifold()->Remove( nit );
+       }
+      // faces
+      if ( model.Mesh().Faces() > 0 ) {
+            for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit ) {
+                for ( uint32_t i{0u}; i<fit->Neighbors(); ++i )
+                  if ( fit->Neighbor(i) != nullptr )
+                    fit->Neighbor(i)->UnassignNeighbor(i);
+              }
+         }
+     
+     // 2. Recreating connectivity
+     // --------------------------
+     // connectivity update
+    auto t0 = chrono::high_resolution_clock::now();
+    // _________________________________
+    model.Mesh().UpdateConnectivity();
+    auto t1 = chrono::high_resolution_clock::now();
+    cout<<"\n"<<"MeshManager_Test::Test_UpdateConnectivity: time to reconnect the mesh: ";
+    cout << chrono::duration_cast<chrono::milliseconds>(t1-t0).count();
+    cout <<" milliseconds."<< endl;
+         
+     // testing
+    const bool elements_ok = integrityCheck<3U,Element>( model.Mesh().ElementsBegin(), model.Mesh().ElementsEnd() );
+    _test( elements_ok );
+    if ( !elements_ok ) errors++;
+    const bool faces_ok = integrityCheck<3U,Face>( model.Mesh().FacesBegin(), model.Mesh().FacesEnd() );
+    _test( faces_ok );
+    if ( !faces_ok ) errors++;
+     
+    return !( errors > 0 );
+     
+ } // end Test_UpdateConnectivity
+ 
+ 
+ 
+ 
  
 
 } // end csmp

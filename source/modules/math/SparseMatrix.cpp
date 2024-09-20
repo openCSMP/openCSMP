@@ -20,34 +20,6 @@ SparseMatrix::SparseMatrix( size_t m_x_n )
  }
  
  
-SparseMatrix::SparseMatrix( const SparseMatrix& sp )
- : data_(sp.data_),
-   entries_(sp.entries_)
- {
- }
- 
- 
-SparseMatrix::SparseMatrix( SparseMatrix&& sp )
- : data_(sp.data_),
-   entries_(sp.entries_)
- {
- }
- 
-
-
-SparseMatrix& SparseMatrix::operator=( const SparseMatrix& sp )
- {
-    if ( &sp != this ) {
-         entries_ = sp.entries_;
-         data_    = sp.data_;
-      }
-    return *this;
- }
-
-
-SparseMatrix::~SparseMatrix()
- {
- }
 
 
 void SparseMatrix::Resize( size_t n_x_m, bool preserve_allocated_memory )

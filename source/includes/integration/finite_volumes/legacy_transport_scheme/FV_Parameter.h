@@ -9,12 +9,8 @@ namespace csmp {
 /// so that these do not have to be recompute each timecrement
 class FV_Parameter {
   public:
-    FV_Parameter() {};
+    FV_Parameter() {}
     FV_Parameter( size_t sectors, size_t facets, uint32_t dim, bool with_normals=false );
-    FV_Parameter( const FV_Parameter& );
-    FV_Parameter& operator=( const FV_Parameter& );
-    FV_Parameter( FV_Parameter&& );
-    FV_Parameter& operator=( FV_Parameter&& );
   
     // mutators
     void Resize( size_t sectors, size_t facets, uint32_t dim, bool with_normals=false );
@@ -42,49 +38,12 @@ class FV_Parameter {
     
   private:
     ///< velocites projected on facet normals and facet areas
-    std::vector<double>                       sector_volume_;
+    std::vector<double>                     sector_volume_;
     ///< velocites projected on facet normals and facet areas
     std::vector<std::pair<double,double> >  facet_v_and_A_;
-    std::vector<std::vector<double> >         facet_unit_normal_;
+    std::vector<std::vector<double> >       facet_unit_normal_;
 };
 
-
-inline FV_Parameter::FV_Parameter( const FV_Parameter& param )
- : sector_volume_(param.sector_volume_), 
-   facet_v_and_A_(param.facet_v_and_A_),
-   facet_unit_normal_(param.facet_unit_normal_) 
- {
- }
-
-
-inline FV_Parameter::FV_Parameter( FV_Parameter&& param )
- : sector_volume_{param.sector_volume_},
-   facet_v_and_A_{param.facet_v_and_A_},
-   facet_unit_normal_{param.facet_unit_normal_}
- {
- }
-
-
-inline FV_Parameter& FV_Parameter::operator=( const FV_Parameter& param )
- {
-    if ( &param != this ) {
-         sector_volume_     = param.sector_volume_;
-         facet_v_and_A_     = param.facet_v_and_A_;
-         facet_unit_normal_ = param.facet_unit_normal_;
-      }
-    return *this;
- }
-
-
-inline FV_Parameter& FV_Parameter::operator=( FV_Parameter&& param )
- {
-    if ( &param != this ) {
-         sector_volume_     = {param.sector_volume_};
-         facet_v_and_A_     = {param.facet_v_and_A_};
-         facet_unit_normal_ = {param.facet_unit_normal_};
-      }
-    return *this;
- }
 
 
 inline void FV_Parameter::SectorVolume( size_t sector, double vol )

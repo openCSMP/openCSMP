@@ -889,7 +889,6 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<di
     //const double zero( std::numeric_limits<double>::min()); //can be num_epsilon or so
     //const double zero(1.0e-15); //can be num_epsilon or so
 
-    Element<dim>* eptr(nullptr);
     double sign(0.0);
 
     this->ApplicationCycle(1);
@@ -898,9 +897,9 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<di
 
         double fn(1.0);
 
-        for ( auto t=0U; t<n_ref.Parents(); t++ )
+        for ( uint32_t t=0U; t<n_ref.Parents(); t++ )
         {
-            eptr = n_ref.Parent(t);
+            const Element<dim>* eptr = n_ref.Parent(t);
             this->GetOperands(*eptr);
             auto pnid(n_ref.ParentNodeNumber(t));
             cell_thickness_ = ( multiply_with_cell_thickness_ ? eptr->Read(this->thi_key_): 1. );
@@ -909,7 +908,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<di
             satFunc_.Initialize(*eptr);
             // --------------------------------------------------------------------------
             // For all finite-volume facets
-            for ( auto k{0U}; k<eptr->FV()->FacetsPerSector(pnid); k++ )
+            for ( uint32_t k{0U}; k<eptr->FV()->FacetsPerSector(pnid); k++ )
             {
                 auto i( eptr->FV()->FacetSurroundingSector(pnid,k) );
 
@@ -966,9 +965,9 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<di
         double vn_at_facet_int_point (1.0), vw_at_facet_int_point (1.0);
 
 
-        for ( auto t=0U; t<n_ref.Parents(); t++ )
+        for ( uint32_t t=0U; t<n_ref.Parents(); t++ )
         {
-            eptr = n_ref.Parent(t);
+            const Element<dim>* const eptr = n_ref.Parent(t);
             this->GetOperands(*eptr);
             auto pnid(n_ref.ParentNodeNumber(t));
 //            size_t eid(eptr->Idx());
@@ -983,14 +982,14 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<di
 
             eptr->dN_AtBaryCenter( DN_ );
             dsdn_ = 0.0;
-            for ( auto j{0U}; j<eptr->Nodes(); j++ ) {
+            for ( uint32_t j{0U}; j<eptr->Nodes(); j++ ) {
                  const double sn = eptr->N(j)->Read( this->TestOperandKey() );
                  for ( auto k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
             }
 
             // --------------------------------------------------------------------------
             // For all finite-volume facets
-            for ( auto k{0U}; k<eptr->FV()->FacetsPerSector(pnid); k++ )
+            for ( uint32_t k{0U}; k<eptr->FV()->FacetsPerSector(pnid); k++ )
             {
                 auto i( eptr->FV()->FacetSurroundingSector(pnid,k) );
 
@@ -1123,9 +1122,9 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<di
         double vn_gravity_component_of_velocity (1.0), vw_gravity_component_of_velocity (1.0);
         double vn_at_facet_int_point (1.0), vw_at_facet_int_point (1.0);
 
-        for ( auto t{0U}; t<n_ref.Parents(); t++ )
+        for ( uint32_t t{0U}; t<n_ref.Parents(); t++ )
         {
-            eptr = n_ref.Parent(t);
+            const Element<dim>* const eptr = n_ref.Parent(t);
             this->GetOperands(*eptr);
             auto pnid(n_ref.ParentNodeNumber(t));
 //            size_t eid(eptr->Idx());
@@ -1152,7 +1151,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<di
 
             // --------------------------------------------------------------------------
             // For all finite-volume facets
-            for ( auto k{0U}; k<eptr->FV()->FacetsPerSector(pnid); k++ )
+            for ( uint32_t k{0U}; k<eptr->FV()->FacetsPerSector(pnid); k++ )
             {
                 auto i( eptr->FV()->FacetSurroundingSector(pnid,k) );
 

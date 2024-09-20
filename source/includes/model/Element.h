@@ -166,19 +166,8 @@ class Element : public FiniteElementPolicy<dim, Element>,
              const LocalVariables& element_props,
              const IntegrationPointVariables& integration_point_props,
              int32_t material );
-
-    /// exact copy: same idx, properties, nodes and neighbor elements
-    Element( const Element& );
-
-    /// handcoded move constructor to deal with pointers
-    Element( Element&& );
-
-    ~Element();
-
-    Element&  operator=( const Element& );
-
-    /// hand-coded assignment to deal with pointers
-    Element& operator=( Element&& );
+             
+    // rule of zero
 
     /// compares finite element type, material id, nodes, and neighbors; ignoring mutable idx and other attributes
     bool operator==( const Element<dim>& ) const;

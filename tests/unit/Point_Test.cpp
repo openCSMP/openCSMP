@@ -5,6 +5,8 @@
  */
 
 #include <limits>
+#include <random>
+
 #include "Point.h"
 #include "Point_Test.h"
 #include "compareFloats.h"
@@ -523,6 +525,20 @@ void Point_Test::TestPointComparitors3D()
    _test( !(p2 > p2) );
    _test( !(p1 < p1) );
    _test( !(p1 > p1) );
+   
+   // TODO: add more challenging comparisons involving very small discrepancies
+   // ---------------------------------------------------------------------------
+   // generating point locations with random number generator
+   random_device rd; // obtain a random number from hardware
+   mt19937 gen(rd()); // seed the generator
+   default_random_engine generator;
+   // define the range
+   uniform_real_distribution<double> double_distr( 1., 1e15 );
+   lognormal_distribution<double> log_distr( 1., 10. );
+
+    for(int n=0; n<4; ++n)
+        std::cout << double_distr(gen) << ' '; // generate numbers
+    cout << endl;
 
 } // end TestPointComparitors3D
 

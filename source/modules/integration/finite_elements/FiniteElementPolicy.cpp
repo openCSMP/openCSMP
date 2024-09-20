@@ -28,11 +28,14 @@ void FiniteElementPolicy<dim,CELL>::Assign( FiniteElement* fe_ptr )
  }
 
 
-
+/*
+   The check:   if ( !fptr_ ) return UNKNOWN;  crashes program?!
+*/
 template<uint32_t dim, template<uint32_t> class CELL>
 CSMP_FEM_TYPE FiniteElementPolicy<dim,CELL>::FE_Type() const
   {
     assert( fptr_ != nullptr );
+//    assert( fptr_->ElementType() != UNKNOWN );
     return fptr_->ElementType();
   }
 

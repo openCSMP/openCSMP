@@ -13,7 +13,6 @@ namespace csmp
       public:
         
         SparseMatrix_Test();
-        ~SparseMatrix_Test();
         
         void run();
         

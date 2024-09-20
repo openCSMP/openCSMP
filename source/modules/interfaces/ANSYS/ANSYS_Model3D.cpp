@@ -172,9 +172,7 @@ void ANSYS_Model3D::InitializeANSYS( bool isoparametric,
       node_coords_.push_back( Point<3U>{ vset.Px( i ), vset.Py( i ), vset.Pz( i ) } );
 
     // 3. construct model based on obtained model topology and vset
-    Model<3U>::Initialize( regions_file_prefix,
-                           mesh_topology,
-                           vset );
+    Model<3U>::Initialize( regions_file_prefix, mesh_topology, vset );
   }
 
   // -------------------------------------------------
@@ -252,8 +250,10 @@ void ANSYS_Model3D::InitializeANSYS( const char* mesh_file_set,
     // the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
     // later on this connectivity will be recreated inside of the Model where suitable machinery exists.
     vset.RemovePfverts();
-    vset.EstablishElementConnectivity3D(); // tested: OK
-    vset.InitialiseNodeTopologyIdentifiers();
+    if ( vset.OrderOfFiniteElementInterpolationFunctions() == 1 ) {
+        vset.EstablishElementConnectivity3D(); // tested: OK, but does not handle midside nodes
+        vset.InitialiseNodeTopologyIdentifiers(); // relies on 'pfverts'
+      }
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {

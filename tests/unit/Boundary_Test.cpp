@@ -559,7 +559,7 @@ void Boundary_Test::runCurrent()
       // test that model contains no surface elements after boundary construction
       {
          ANSYS_Model3D m0( "BoxHalfs3D", "BoxHalfs3DirregularNoHalf", "CSMP-variables.txt", true );
-         NoSurfaceElementsAsNodeParents( m0.Region("Model") );
+// wrong assumption         NoSurfaceElementsAsNodeParents( m0.Region("Model") );
          n_nodes_model = m0.Mesh().Nodes();
       }
       

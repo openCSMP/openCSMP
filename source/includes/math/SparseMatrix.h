@@ -24,16 +24,13 @@ class SparseMatrix {
   public:
     SparseMatrix();
     explicit SparseMatrix( size_t m_x_n );
-    SparseMatrix( const SparseMatrix& );
-    SparseMatrix( SparseMatrix&& );
-    ~SparseMatrix();
+    // rule of zero: watch out since entries_ might be non-zero in moved objects
 
     typedef std::vector<std::map<size_t,double> >::const_iterator    rowsConstIterator;
     typedef std::map<size_t,double>::const_iterator                  colsConstIterator;
     typedef std::vector<std::map<size_t,double> >::iterator          rowsIterator;
     typedef std::map<size_t,double>::iterator                        colsIterator;
 
-    SparseMatrix& operator=( const SparseMatrix& );
     SparseMatrix& operator+=( const SparseMatrix& ); /// operator accumulates sparse matrices.  Initially created for OpenMP features.
     
     /// standard accessor of matrix elements (asserts i,j in debug mode)

@@ -2,6 +2,8 @@
 #include "IsoparametricLinearQuadrilateral.h"
 #include "IsoparametricLinearTriangle.h"
 #include "Element.h"
+#include "PropertyDatabase.h"
+#include "compareFloats.h"
 
 using namespace std;
 
@@ -34,6 +36,8 @@ void Element_Test::run()
 
     ElementLengthTest2D();
     ElementLengthTest3D();
+    
+    VariableAccessAndIterators();
   }
 
 
@@ -129,7 +133,7 @@ void Element_Test::MoveSemanticsTest()
   csmp::Element<2U> e1_copy( e1 );
   _test( e1 == e1_copy );
   // are they having the same nodes & neighbors ?
-  for ( auto i{0}; i<e1.Nodes(); ++i ) {
+  for ( uint32_t i{0u}; i<e1.Nodes(); ++i ) {
        _test( e1.N(i) == e1_copy.N(i) );
        _test( e1.N(i)->AtBoundary() == e1_copy.N(i)->AtBoundary() );
     }
@@ -140,9 +144,9 @@ void Element_Test::MoveSemanticsTest()
   csmp::Element<2U> e1_copy2 = e1;
   _test( e1 == e1_copy2 );
   // are they having the same nodes & neighbors ?
-  for ( auto i{0}; i<e1.Nodes(); ++i )
+  for ( uint32_t i{0}; i<e1.Nodes(); ++i )
     _test( e1.N(i) == e1_copy2.N(i) );
-  for ( auto i{0}; i<e1.Neighbors(); ++i )
+  for ( uint32_t i{0}; i<e1.Neighbors(); ++i )
     _test( e1.Neighbor(i) == e1_copy2.Neighbor(i) );
     
   // move constructor & assigment operator
@@ -184,8 +188,12 @@ void Element_Test::MoveSemanticsTest()
 */
 void Element_Test::VariableAccessAndIterators()
  {
+    PropertyDatabase<2> dbase("CSMP-variables.txt");
+    
     // making sure that everything is like in a simulation
-    const LocalVariables evars( 1, // scalarsVars,
+    const LocalVariables evars = dbase.LocalVariablesAt( NODE );
+    /*
+                              ( 1, // scalarsVars,
                                 2, // vectorVars,
                                 1, // tensorVars,
                                 0, // array_count,
@@ -194,8 +202,8 @@ void Element_Test::VariableAccessAndIterators()
                                 0, // flag_array_length,
                                 9, // total_data_depth,
                                 6 ); // total_flag_depth
-                                
-    const IntegrationPointVariables ivars;
+    */
+    const IntegrationPointVariables ivars = dbase.IntegrationPointVariablesAt( ELEMENT );
 
   // Element<dim>( elmt_idx, fem, stencil, evars, cvars, mtrl_idx );
     FiniteVolumeStencil<2>  quad_fv( "ISOPARAMETRIC_LINEAR_QUADRILATERAL" );
@@ -208,9 +216,9 @@ void Element_Test::VariableAccessAndIterators()
    
     // Nodes - constructor: Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
     csmp::Node<2U> n0( 0, Point<2>(0.,0.), evars, CNR1, EXTERIOR_POINT ),
-                   n1( 1, Point<2>(0.,0.), evars, CNR2, EXTERIOR_POINT ),
-                   n2( 2, Point<2>(0.,0.), evars, CNR3, EXTERIOR_POINT ),
-                   n3( 3, Point<2>(0.,0.), evars, CNR4, EXTERIOR_POINT );
+                   n1( 1, Point<2>(1.,0.), evars, CNR2, EXTERIOR_POINT ),
+                   n2( 2, Point<2>(1.,1.), evars, CNR3, EXTERIOR_POINT ),
+                   n3( 3, Point<2>(0.,1.), evars, CNR4, EXTERIOR_POINT );
     
     // assigning the nodes
     quad.Assign( 0, &n0 );
@@ -218,17 +226,42 @@ void Element_Test::VariableAccessAndIterators()
     quad.Assign( 2, &n2 );
     quad.Assign( 3, &n3 );
     
-    // testing write access to node variable (should not be OK)
-    /*
-    csmp::Index               var_key;
+    // assigning some property values
+    const csmp::Index nvar_key = dbase.StorageKey("nodal variable");
+    n0.Store( nvar_key, makeScalar(ANY,1.) );
+    n1.Store( nvar_key, makeScalar(ANY,2.) );
+    n2.Store( nvar_key, makeScalar(ANY,3.) );
+    n3.Store( nvar_key, makeScalar(ANY,4.) );
+    
+    const csmp::Index evar_key = dbase.StorageKey("element variable");
+    quad.Store( evar_key, makeScalar(PLAIN,1.0e-12) );
+    
+    // testing write access to node variable
     const csmp::Element<2U>&  quad_ref = quad;
     
-    for ( vector<const csmp::Node<2>*>::const_iterator
-          nit=quad_ref.NodesBegin(); nit!=quad_ref.NodesEnd(); nit++  ) {
-          double var = (*nit)->Read( var_key );
-          (*nit)->Store( var_key, makeScalar(ANY,3.) ); // should not compile
+    for ( auto nit=quad_ref.NodesBegin(); nit!=quad_ref.NodesEnd(); nit++  ) {
+          double var = (*nit)->Read( nvar_key );
+          _test( var >= 1. && var <= 4. );
+          (*nit)->Store( nvar_key, makeScalar(ANY,3.) );
       }
-    */
+      
+    // testing a copy of the element
+    csmp::Element<2U>  quad1( quad );
+    _test( approximatelyEqual( quad1.Read(evar_key),1.0e-12) );
+    _test( approximatelyEqual( quad1.Volume(),1.0) );
+    
+    // and an assignment
+    csmp::Element<2U>  quad2 = quad1;
+    _test( approximatelyEqual( quad2.Read(evar_key),1.0e-12) );
+    _test( approximatelyEqual( quad2.Volume(),1.0) );
+
+    // and move semantics
+    csmp::Element<2U>  quad3( Element<2U>( 0, &fe_q, &quad_fv, evars, ivars, mtrl_idx ) );
+    _test( isnan(quad3.Read(evar_key)) );
+    _test( quad3.FE_Type() == ISOPARAMETRIC_LINEAR_QUADRILATERAL );
+
+    cout <<"\nElement_Test:VariableAccessAndIterators: done"<< endl;
+    
 } // end VariableAccessAndIterators
 
 

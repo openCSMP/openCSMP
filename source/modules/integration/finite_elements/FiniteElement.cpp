@@ -28,6 +28,8 @@ FiniteElement::FiniteElement()
    csp_fem_type(UNKNOWN),
    object_id_( InitialID() )
  {
+   cout <<"\n"<<"FiniteElement::FiniteElement: default constructor called."<< endl;
+   Out();
  }
 
 

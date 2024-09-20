@@ -19,7 +19,6 @@ void Node_Test::run()
   Node<3U> n1;
 
   // .) PARENTS
-  n1.ResizeParentStorage( 3 );
   n1.Assign( 0, &e1 );
   n1.Assign( 1, &e2 );
   n1.Assign( 1, &e3 );

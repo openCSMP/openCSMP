@@ -219,41 +219,30 @@ InterFace<dim>::InterFace( const InterFace<dim>& ifc )
 /// move constructor
 template<uint32_t dim>
 InterFace<dim>::InterFace( InterFace<dim>&& ifc )
-  : FiniteElementPolicy<dim, csmp::InterFace>( ifc.FE() ),
-    FiniteVolumePolicy<dim, csmp::InterFace>( ifc.FV() ),
-    idx_( ifc.idx_ ),
-    inner_parent_face_id_( ifc.inner_parent_face_id_ ),
-    outer_parent_face_id_( ifc.outer_parent_face_id_ ),
-    innerParent_( ifc.innerParent_ ),
-    outerParent_( ifc.outerParent_ ),
-    middleElement_( ifc.middleElement_ ),
+  : FiniteElementPolicy<dim, csmp::InterFace>( std::move(ifc.FE()) ),
+    FiniteVolumePolicy<dim, csmp::InterFace>( std::move(ifc.FV()) ),
+    idx_( std::move(ifc.idx_) ),
+    inner_parent_face_id_( std::move(ifc.inner_parent_face_id_) ),
+    outer_parent_face_id_( std::move(ifc.outer_parent_face_id_) ),
+    innerParent_( std::move(ifc.innerParent_) ),
+    outerParent_( std::move(ifc.outerParent_) ),
+    middleElement_( std::move(ifc.middleElement_) ),
     node_connector_( std::move( ifc.node_connector_ ) ),
     interface_connector_( std::move( ifc.interface_connector_ ) ),
     current_side_( ifc.current_side_ )
 {
-  assert( !interface_connector_.empty() ); // detected unitialized element
+    // nulling the pointers in the dying object
+    ifc.AssignFiniteElementNullPtr();
+    ifc.AssignFiniteVolumeNullPtr();
+    ifc.innerParent_ = nullptr;
+    ifc.outerParent_ = nullptr;
+    
+    assert( !interface_connector_.empty() ); // detected unitialized element
                                            // variable storage: call of initialization function
-  this->LVS( std::move( ifc.LVS() ) );
+    this->LVS( std::move( ifc.LVS() ) );
 }
 
 
-
-/**
-        Before destructing an InterFace make sure:
-        
-    // disconnecting the neighbor interfaces that are connected to this element
-    if ( !interface_connector_.empty() )
-      for ( auto& it : interface_connector_ )
-        if ( it != nullptr  && !it->interface_connector_.empty() )
-          it->Unassign( this );
-          
-          and update the NodeManifolds.
-
-*/
-template<uint32_t dim>
-InterFace<dim>::~InterFace()
- {
- }
 
 
 
@@ -308,10 +297,13 @@ InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
 }
 
 
-/// Roman, 2014
-/// WARNING: this operator is used specifically in the process of creation of particular SplitBoundary.
-/// Therefore only important infromation for that process is taken into account in order to distinguish two InterFace's.
-/// That must be reference to inner and outer parent Elements, inner and outer parent face ID's
+
+
+/**
+    WARNING: this operator is used specifically in the process of creation of particular SplitBoundary.
+    Therefore only important infromation for that process is taken into account in order to distinguish two InterFace's.
+     That must be reference to inner and outer parent Elements, inner and outer parent face ID's
+*/
 template<uint32_t dim>
 bool  InterFace<dim>::operator==( const InterFace<dim>& ifc )
 {

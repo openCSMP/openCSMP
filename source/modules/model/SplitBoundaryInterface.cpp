@@ -718,6 +718,8 @@ pair<set<string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Detec
       vector<InterFace<dim>*>  iface_ptrs = splitboundaryComplex->Mesh().CreateInterfacesBetweenNodeMatchingElements(
                                                                                     splitboundaryComplex->Database(),
                                                                                     ifset );
+      // repairing connectivity among elements after removal
+      splitboundaryComplex->Mesh().template RemoveDegenerateNeighbors<Element>();
 
       // creating the SplitBoundary asking the MeshManager to create the required number of InterFace objects
       pair<typename map<string, csmp::SplitBoundary<dim> >::iterator, bool>
@@ -1012,12 +1014,14 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
          
          
-    // 2. Algorithm: Preprocessing lower-dim element data
-    // --------------------------------------------------
-    /*
-       Checking nodes whether they are manifolds.
-       If so, we need to determine if the lower dimensional element is attached on the inside or outside of the interface.
-       Once determined, the lower dimensional element can be configured with correct OUTSIDE or INSIDE node.
+    // 2. Dealing with pre-existing split boundaries intersected by the surface to become SplitBoundary
+    // ------------------------------------------------------------------------------------------------
+    /* ASSUMPTION: split boundaries terminate at intersection
+    
+       If we find a manifold along the surface that shall become a splitboundary,the surface is intersecting an earlier splitboundary
+       
+   ?    If so, we need to determine if the lower dimensional element is attached on the inside or outside of the interface.
+   ?    Once determined, the lower dimensional element can be configured with correct OUTSIDE or INSIDE node.
        Now splitting can proceed like before (the lack of neighbor connectivity at the interface will ensure that an
        outside neighbor search does not reach INSIDE elements.
        
@@ -1025,9 +1029,9 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
        but to view an intersection on the scale of a single interface which touches the node of a pre-existing interface.
        This means that T intersections and X intersections can be handled with the same logic.
        
-       Procedure
+       Algorithm
 
-       1) Identify all nodes of lower-dim object which have been split previously (and therefore are manifolds).
+       1) Identify all split-boundary nodes on the surface
        
        2) For each Element node pair, disambiguate which node the lower dim object should have
           (relying on the nodes dim-dimensional parent having the correct node).
@@ -1182,9 +1186,9 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     assert( (*iface_vector.begin())->InnerParent() == iface_construction_vector.begin()->InnerElement()) ;
     assert( (*iface_vector.back()).InnerParent() == iface_construction_vector.back().InnerElement()) ;
    
+    model.Mesh().template RemoveDegenerateNeighbors<Element>();
     // while the new interfaces were already connected with one another by ReplaceElementsByInterFaces this deals with their neighborhood
     model.Mesh().UpdateConnectivity( iface_vector.begin(), iface_vector.end() );
-
 
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 3. Determine number of splitboundary segments (sub-boundaries) that the new splitboundary will consist of.
@@ -1337,8 +1341,11 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
                                                                                                            matched_elmts,
                                                                                                            create_manifolds_on_perimeter,
                                                                                                            halo_elements );
+    // removing potential left-over connections among elements
+    modelComplex->Mesh().template RemoveDegenerateNeighbors<Element>();
     // the new interfaces are already connected with one another
- 
+
+
     // 3. creation of the new SplitBoundary
     // ------------------------------------
     string split_boundary_name = CreateSplitBoundaryName( make_pair( region1_name, region2_name ) );

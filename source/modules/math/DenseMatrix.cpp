@@ -45,15 +45,6 @@ DenseMatrix<mn_max>::DenseMatrix( const std::initializer_list<std::initializer_l
 
 
 
-/// copy constructor
-// ---------------------------------------
-template<uint32_t mn_max>
-DenseMatrix<mn_max>::DenseMatrix( const DenseMatrix<mn_max>& mat )
- : data(mat.data),
-   rows(mat.rows),
-   cols(mat.cols)
- {
- }
 
 
 
@@ -63,31 +54,12 @@ template<uint32_t mn_max>
 DenseMatrix<mn_max>::DenseMatrix( uint32_t m, uint32_t n, double val )
  : rows(m), cols(n)
  {
-    for ( auto i{0U}; i<rows; i++ )
+    for ( uint32_t i{0U}; i<rows; i++ )
       for ( uint32_t j{0U}; j<cols; j++ ) data[i][j] = val;
  }
 
 
-// destructor
-// ---------------------------------------
-template<uint32_t mn_max>
-DenseMatrix<mn_max>::~DenseMatrix()
- {
- }
 
-
-// operator=( DM )
-// ---------------------------------------
-template<uint32_t mn_max>
-DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator=( const DenseMatrix<mn_max>& mat )
- {
-    if ( &mat != this ) {
-         rows  = mat.rows;
-         cols  = mat.cols;
-         data  = mat.data;
-      }
-    return *this;
- }
 
 
 

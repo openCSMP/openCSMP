@@ -12,9 +12,13 @@ template<uint32_t dim, template<uint32_t> class CELL>
 class FiniteElementPolicy {
   public:
     FiniteElementPolicy( FiniteElement* = nullptr );
-    FiniteElementPolicy( const FiniteElementPolicy& p ) : fptr_(p.fptr_) {}
-    /// virtual destructor that does nothing: super important because default destructor would try to delete FiniteElement from FiniteElementManager!
-    virtual ~FiniteElementPolicy() {}
+    FiniteElementPolicy( const FiniteElementPolicy& p ) : fptr_{p.fptr_} {}
+    /// destructor that does nothing: super important because default destructor would try to delete FiniteElement from FiniteElementManager!
+    ~FiniteElementPolicy() = default; // { fptr_ = nullptr; }
+    FiniteElementPolicy& operator=( const FiniteElementPolicy& p ) { if ( this != &p ) fptr_ = p.fptr_; return *this; }
+    /// move semantics
+    FiniteElementPolicy( FiniteElementPolicy&& p ) noexcept : fptr_{p.fptr_} { p.fptr_ = nullptr; }
+    FiniteElementPolicy& operator=( FiniteElementPolicy&& p ) noexcept { fptr_ = p.fptr_; p.fptr_ = nullptr; return *this; }
   
     /// for deferred assignment or changing the element at runtime
     void Assign( FiniteElement* fe_ptr );

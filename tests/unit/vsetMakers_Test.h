@@ -9,12 +9,19 @@
 #ifndef CSMP_VSET_MAKERS_TEST_H
 #define CSMP_VSET_MAKERS_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp {
 
+template<uint32_t> class VSet;
+
 /**
     Tests the suite of  meshes/boundary flags, data etc. that serve as the input for many of the unit tests created for the CSMP library.
+    
+    TODO: test prism_test for 'invalid' elements using geometric calculations
+    TODO: test whether the faces are in the expected place
+    
 */
 class vsetMakers_Test : public Test {
   public:
@@ -23,13 +30,12 @@ class vsetMakers_Test : public Test {
     /// test numbering/faces/neighbors/segments compliance of single element meshes with element numbering etc. for CSMP_FEM_conventions.pdf
     bool TestConsistencyWithCSMP_Conventions( const VSet<2U>& );
     bool TestConsistencyWithCSMP_Conventions( const VSet<3U>& );
-
-  private:
-  
   
   private: // auxiliary functions
+  
     /// returns node-sets (node idx using global numbering) of element faces, in the form of a vector
-    std::vector<std::set<size_t>> NodesOfElementFaces( const VSet<3U>& vset, size_t elmt );
+    template<uint32_t dim>
+    std::vector<std::vector<uint32_t>> NodesOfElementFaces( const VSet<dim>& vset, size_t elmt );
     
     /// as determined using the nodes that make up the faces; tests also whether nodes are correctly assigned to faces
     bool FaceNumbersMatch_CSMP_Conventions();

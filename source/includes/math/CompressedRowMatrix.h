@@ -33,23 +33,12 @@ Now also directly used in PDE_Integrator (2022, Qi Shao)
 class CompressedRowMatrix {
   public:
     CompressedRowMatrix() {}
-    ~CompressedRowMatrix() = default;
-
     /// this constructor constructs a compressed row matrix from the supplied sparse matrix by calling the Initialise function
     /// the constructed compressed row matrix is in SAMG format which has the diagonal term at the beginning of each row and fortran indexes.
-    explicit CompressedRowMatrix( csmp::SparseMatrix&);
+    explicit CompressedRowMatrix( csmp::SparseMatrix& );
 
     /// custom move constructor
     CompressedRowMatrix(std::vector<int32_t>&& ia, std::vector<int32_t>&& ja, std::vector<double>&& a);
-
-    /// copy constructor
-    CompressedRowMatrix( const CompressedRowMatrix& );
-
-    /// move constructor
-    CompressedRowMatrix( CompressedRowMatrix&& ) noexcept ;
-
-    CompressedRowMatrix& operator=( const CompressedRowMatrix& );
-    CompressedRowMatrix& operator=( CompressedRowMatrix&& ) noexcept ;
 
     /// standard accessor of matrix elements (asserts i,j in debug mode)
     double  operator()( uint32_t, uint32_t ) const;

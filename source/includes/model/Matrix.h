@@ -108,7 +108,7 @@ class Matrix {
   
   private:
    size_t                             rows, cols;
-   std::vector<std::vector<double> >  data;
+   std::vector<std::vector<double> >  data; // TODO: use DynamicArray2D
    
    bool  CheckRange( size_t m, size_t n, const char* originator ) const;
    bool  CheckSizes( const Matrix& mat, const char* originator ) const;

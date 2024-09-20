@@ -1545,7 +1545,7 @@ template bool containsElementsOfType<3U>( const Region<3>&, CELL_SHAPE );
 
 
 /**
-    loops over the surface cells of the model subdomain,
+    Loops over the surface cells of the model subdomain,
     checking whether any of the projections of the normals of the neighbor
     cells onto the normal of the current element are negative.
     
@@ -1566,23 +1566,19 @@ template bool containsElementsOfType<3U>( const Region<3>&, CELL_SHAPE );
 template<>
 bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain )
  {
-    vector<double> normal(3U), nbor_normal(3U);
-   
     size_t non_surface_elements(0U);
     for ( auto it=subdomain.CellsBegin(); it!=subdomain.CellsEnd(); ++it )
       // this method only considers surface elements
       if ( (*it)->IsSurface() ) {
-           (*it)->UnitNormal( normal );
-           const size_t neighbors((*it)->Neighbors());
+           auto normal = (*it)->UnitNormal();
+           const uint32_t neighbors{ (*it)->Neighbors() };
            for ( uint32_t i{0U}; i<neighbors; ++i )
              // only valid neighbor elements are considered
              if ( (*it)->Neighbor(i) != nullptr ) {
-                  (*it)->Neighbor(i)->UnitNormal( nbor_normal );
+                  auto nbor_normal = (*it)->Neighbor(i)->UnitNormal();
                   // projection
-                  double result(0.);
-                  for ( size_t j{0U}; j<3U; ++ j )
-                    result += normal[j] * nbor_normal[j];
-                  if ( result < 0. )
+                  double scalar_product = dotProduct( normal, nbor_normal );
+                  if ( scalar_product < 0. )
                     return false;
                }
          }
@@ -2086,7 +2082,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
 
     // 1. checking that all cells stored in the container are valid
     // ------------------------------------------------------------
-    const string check1("\nAre all cells stored in the container valid?\n");
+    const string check1("\nintegrityCheck: Are all cells stored in the container valid?");
     bool first_call{true};
     
     while ( first != last ) {
@@ -2094,16 +2090,16 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
          // FE policy
          if ( (*first).FE() == nullptr ) {
               if ( first_call ) { cerr << check1; first_call=false; }
-              cerr <<"\n"<< celltype << (*first).Idx() <<": FE pointer corrupt.";
+              cerr <<"\n\t"<< celltype << (*first).Idx() <<": FE pointer corrupt.";
               issues++;
            }
          first++;
       }
-       
+    if ( !first_call ) cerr << endl;
        
     // 2. checking that all connections between nodes and cells are valid
     // ------------------------------------------------------------------
-    const string check2("\nintegrityCheck: Are all the nodes connected to the cell valid?\n");
+    const string check2("\nintegrityCheck: Are all the nodes connected to the cell valid?");
     // global cell-id,local node-id
     multimap<size_t,uint32_t>  missing_nodes;
     first = copy_of_first;
@@ -2111,10 +2107,10 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
     
     while ( first != last ) {
          // connected nodes
-         for ( uint32_t i{0U}; i<(*first).Nodes(); ++i ) {
+         for ( uint32_t i{0U}; i<(*first).FE()->Nodes(); ++i ) {
                if ( (*first).N(i) == nullptr ) {
                     if ( first_call ) { cerr << check2; first_call=false; }
-                    cerr <<"\n"<< celltype << (*first).Idx() <<": node: "<< i <<": node pointer corrupt.";
+                    cerr <<"\n\t"<< celltype << (*first).Idx() <<": node: "<< i <<": node pointer corrupt.";
                     missing_nodes.insert( make_pair( (*first).Idx(), i ) );
                     issues++;
                  }
@@ -2122,48 +2118,51 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
            }
          first++;
       }
-    // TODO: write the missing nodes to a file
+    if ( !first_call ) cerr << endl;
     
     
    // 3. checking node parent connectivity after removing duplicate nodes
    // -------------------------------------------------------------------
-   const string check4("\nintegrityCheck: Are all the parent elements of the nodes valid?\n");
+   const string check3("\nintegrityCheck: Are all the parent elements of the nodes valid?");
    first_call = true;
+
    sort( shared_nodes.begin(), shared_nodes.end() );
    shared_nodes.erase( unique(shared_nodes.begin(), shared_nodes.end()), shared_nodes.end() );
    
    for ( const auto& nit : shared_nodes ) {
-       if ( nit == nullptr ) cerr <<"\ndetected 'nullptr' node.";
+       if ( nit == nullptr ) cerr <<"\n\tdetected 'nullptr' node.";
        else
          for ( uint32_t i{0U}; i<nit->Parents(); ++i )
-            if ( nit->Parent(i) == nullptr ||
-                 nit->Parent(i)->FE() == nullptr ) {
-                 if ( first_call ) { cerr << check4; first_call=false; }
-                 cerr <<"\nNode "<< nit->Idx() <<": parents vector contains nullptr.";
+            if ( nit->Parent(i) == nullptr || nit->Parent(i)->FE() == nullptr ) {
+                 if ( first_call ) { cerr << check3; first_call=false; }
+                 cerr <<"\n\t\tNode "<< nit->Idx() <<": parents vector "<< i <<" contains nullptr.";
                  issues++;
               }
      }
+    if ( !first_call ) cerr << endl;
 
 
    // 4. node to node connectivity is tested
    // --------------------------------------
-   const string check5("\nintegrityCheck: Are all node-to-node connections valid?\n");
+   const string check4("\nintegrityCheck: Are all node-to-node connections valid?");
    first_call = true;
+
    for ( const auto& nit : shared_nodes ) {
        if ( nit == nullptr ) cerr <<"\ndetected 'nullptr' node.";
        else
          for ( uint32_t i{0U}; i<nit->Neighbors(); ++i )
             if ( nit->Neighbor(i) == nullptr ) {
-                 if ( first_call ) { cerr << check5; first_call=false; }
-                 cerr <<"\nneighbor "<< i <<" of Node "<< nit->Idx() <<": is corrupt.";
+                 if ( first_call ) { cerr << check4; first_call=false; }
+                 cerr <<"\n\tneighbor "<< i <<" of Node "<< nit->Idx() <<": is corrupt.";
                  issues++;
               }
      }
+    if ( !first_call ) cerr << endl;
    
    
     // 5. checking that all cells have at least one neighbor
     // -----------------------------------------------------
-    const string check3("\nintegrityCheck: Are there cells without any neighbors?\n");
+    const string check5("\nintegrityCheck: Are there cells without any neighbors?");
     multimap<size_t,uint32_t>  missing_nbors;
     first = copy_of_first;
     first_call = true;
@@ -2173,44 +2172,46 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
            size_t n_valid_nbors{0};
            for ( uint32_t i{0U}; i<(*first).Neighbors(); ++i ) {
                  if ( (*first).Neighbor(i) != nullptr ) n_valid_nbors++;
-                 else {
-                      missing_nbors.insert( make_pair( (*first).Idx(), i ) );
-                   }
+                 else missing_nbors.insert( make_pair( (*first).Idx(), i ) );
              }
            if ( n_valid_nbors == 0 ) {
-                if ( first_call ) { cerr << check3; first_call=false; }
-                cerr <<"\n"<< celltype <<" "<< parseFiniteElementType((*first).FE_Type()) <<":"<< (*first).Idx() <<": has no neighbors.";
+                if ( first_call ) { cerr << check5; first_call=false; }
+                cerr <<"\n\t"<< celltype <<" "<< parseFiniteElementType((*first).FE_Type()) <<":"<< (*first).Idx() <<": has no neighbors.";
                 issues++;
              }
          first++;
       }
-   // TODO: check the missing neighbors against position of elements and write results to file
-
+    if ( !first_call ) cerr << endl;
 
     // 6. checking that all non-null neighbors of the cells are valid
     // --------------------------------------------------------------
-    cerr <<"\nintegrityCheck: Are all non-null nodes & cell neighbors of the cell valid?\n";
+    string check6("\nintegrityCheck: Are all non-null nodes and cell neighbors valid?");
     first = copy_of_first;
+    first_call = true;
    
     while ( first != last ) {
            // printing message before potentially catastrophic failure occurs
-           cerr <<"\t"<< parseAbbreviated_FE_Type( (*first).FE_Type() ) <<":"<< (*first).Idx() <<" ("<< celltype <<"), barycenter: "<< (*first).BaryCenter() <<", node flags: ";
-           for ( uint32_t i{0U}; i<(*first).Nodes(); ++i )
-             cerr <<" "<< parseBoundary((*first).N(i)->AtBoundary());
-           cerr << endl;
            // valid cell neighbors should not be corrupt
            for ( uint32_t i{0U}; i<(*first).Neighbors(); ++i ) {
                if ( (*first).Neighbor(i) != nullptr ) {
-                    if ( !(*first).FE() ) cerr <<"\nelement "<< (*first).Idx() <<" has corrupt FE pointer.";
-                    if ( (*first).Neighbor(i)->Idx() >= max_cell_idx )
-                      cerr <<"\nis element "<< (*first).Idx() <<" neighbor idx="<< (*first).Neighbor(i)->Idx() <<" really this large?";
+                    if ( !(*first).Neighbor(i)->FE() || (*first).Neighbor(i)->FE_Type() == UNKNOWN ) {
+                        if ( first_call ) { cerr << check6; first_call=false; }
+                        cerr <<"\n\t"<< celltype <<": "<< (*first).Idx() <<": neighbor: "<< i <<": has corrupt FE pointer.";
+                        issues++;
+                      }
+                    if ( (*first).Neighbor(i)->Idx() > max_cell_idx ) {
+                         if ( first_call ) { cerr << check6; first_call=false; }
+                         cerr <<"\n\t"<< celltype <<": "<< (*first).Idx() <<": neighbor: "<< i <<" has corrupt FE pointer.";
+                         issues++;
+                      }
                  }
-             }
-         first++;
+              }
+           first++;
       }
+    if ( !first_call ) cerr << endl;
       
-   if ( issues > 0 ) return false;
-   return true;
+    if ( issues > 0 ) return false;
+    return true;
  
  } // end integrityCheck
  
@@ -2225,7 +2226,14 @@ template bool integrityCheck<1,Face>( typename plf::colony<Face<1>>::const_itera
 template bool integrityCheck<3,InterFace>( typename plf::colony<InterFace<3>>::const_iterator, typename plf::colony<InterFace<3>>::const_iterator );
 template bool integrityCheck<2,InterFace>( typename plf::colony<InterFace<2>>::const_iterator, typename plf::colony<InterFace<2>>::const_iterator );
 template bool integrityCheck<1,InterFace>( typename plf::colony<InterFace<1>>::const_iterator, typename plf::colony<InterFace<1>>::const_iterator );
-                                          
+
+ /* TESTING
+           cerr <<"\t"<< parseAbbreviated_FE_Type( (*first).FE_Type() ) <<":"<< (*first).Idx() <<" ("<< celltype <<"), barycenter: "<< (*first).BaryCenter() <<", node flags: ";
+           for ( uint32_t i{0U}; i<(*first).Nodes(); ++i )
+             cerr <<" "<< parseBoundary((*first).N(i)->AtBoundary());
+           cerr << endl;
+*/
+
 
 
 

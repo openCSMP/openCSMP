@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "CSMP_global_enumerations.h"
 #include "LocalVariableStorage.h"
+#include "NodeParentElementVector.h"
 
 namespace csmp {
 
@@ -71,45 +72,37 @@ class Node : public LocalVariableStorage<dim,Node> {
 
     // node to parent element connectivity (sorted vector that is searchable)
     
+    /// if it is known how many parent elements will have to be assigned this can be done more efficiently with the optional help of this
+    void ReserveParentStorage( size_t capacity ) { parents_.Reserve( capacity ); }
     /// assign new parent element where there is a  NOT_INITIALISED  slot in the parent element storage, else adds new one
-    void Assign( uint32_t parent_elmt_node_number, Element<dim>* parent_elmt );
+    void Assign( uint32_t parent_elmt_node_number, Element<dim>* const parent_elmt );
     /// if found, sets matching parent element pointer to nullptr and the corresponding node number to NOT_INITIALIZED
-    bool Unassign( Element<dim>* parent_elmt );
-    /// changes parent element related containers to new size
-    void ResizeParentStorage( uint32_t parent_elements );
-    /// sorts parent vectors for searching
-    void SortParents();
-    /// removing parent elements that were previously assigned a nullptr
-    void EraseNullPointerParents();
+    void Unassign( const Element<dim>* const parent_elmt );
     /// remove all current parent elements
     void EraseParents();
 
     /// returns how many elements share this node
     uint32_t Parents() const;
     /// access to the (0..n-1) parent element
-    Element<dim>* Parent( uint32_t ) const;
+    Element<dim>* Parent( uint32_t );
+    const Element<dim>* const Parent( uint32_t ) const;
     /// the local number of this node within the node-numbering scheme of parent element (and equal to sector number)
     uint32_t ParentNodeNumber( uint32_t parent_element ) const;
     /// checks whether Element is a parent of the node; call SortParents() first !!!
     bool IsParent( const Element<dim>* const ) const;
   
-    typename std::vector<Element<dim>*>::const_iterator ParentElementsBegin() const { return parent_element_pointers_.begin(); }
-    typename std::vector<Element<dim>*>::const_iterator ParentElementsEnd() const { return parent_element_pointers_.end(); }
-    
-    // node manifolds (where nodes have been multiplicated at material interfaces)
-    
-    /// connects the node to other topologically collocated nodes if any
-    void Assign( NodeManifold<dim>& );
-    
-    /// access to manifold if any; returns nullptr if the node is not a manifold
-    bool IsManifold() const;
+    typename std::vector<const std::pair<Element<dim>*,short>>::const_iterator ParentElementsBegin() const
+      { return parents_.ParentsBegin(); }
+    typename std::vector<const std::pair<Element<dim>*,short>>::const_iterator ParentElementsEnd() const
+      { return parents_.ParentsEnd(); }
 
-    /// access to other topologically collocarted Node objects through manifold if any; returns nullptr if the node is not a manifold
-    NodeManifold<dim>* const Manifold() const;
+    typename std::vector<std::pair<Element<dim>*,short>>::const_iterator ParentElementsBegin()
+      { return parents_.ParentsBegin(); }
+    typename std::vector<std::pair<Element<dim>*,short>>::const_iterator ParentElementsEnd()
+      { return parents_.ParentsEnd(); }
 
 
-    // node neighbors (on the opposite side of the finite element segments that the node is on)
-    // (sorted vector that is searchable)
+    // node neighbors (sort vector to make it searchable by binary_search and other stl algorithms)
     
     /// initialises the corner-node to neighbor corner node pointer vector
     void Assign( std::set<Node<dim>*>& neighbor_nodes );
@@ -129,6 +122,8 @@ class Node : public LocalVariableStorage<dim,Node> {
     bool IsNeighbor( const Node<dim>* const ) const;
     void AddNeighbor( Node<dim>* neighbor_node );
     void RemoveNeighbor( const Node<dim>* const neighbor_node );
+    /// releases all the memory used
+    void EraseNeighbors();
     
     /// the number of corner nodes that this node is directly connected with via segments
     uint32_t Neighbors() const;
@@ -140,15 +135,29 @@ class Node : public LocalVariableStorage<dim,Node> {
     typename std::vector<Node<dim>*>::const_iterator NeighborsEnd() const { return neighbor_node_pointers_.end(); }
  
      /// check whether a node is neighbor  of this node via linear search algorithm
-    bool LinearSearch( Node<dim>* const nptr ) const { return std::find( neighbor_node_pointers_.begin(),
-                                                                         neighbor_node_pointers_.end(), nptr ) != neighbor_node_pointers_.end(); }
+    bool LinearSearch( Node<dim>* const nptr ) const
+     { return std::find( neighbor_node_pointers_.begin(),
+                         neighbor_node_pointers_.end(), nptr ) != neighbor_node_pointers_.end(); }
 
     /// checks whether a node is neighbor of this node ( since a sorted vector is required call SortNeighbors() first)
-    bool BinarySearch( Node<dim>* const nptr ) const { return std::binary_search( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), nptr ); }
+    bool BinarySearch( Node<dim>* const nptr ) const
+      { return std::binary_search( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), nptr ); }
 
     ///  to prepare neighbor vector for binary search
     void SortNeighbors() { sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() ); };
     
+
+    // node manifolds (where nodes have been multiplicated at material interfaces)
+    
+    /// connects the node to other topologically collocated nodes if any
+    void Assign( NodeManifold<dim>& );
+    
+    /// access to manifold if any; returns nullptr if the node is not a manifold
+    bool IsManifold() const;
+
+    /// access to other topologically collocarted Node objects through manifold if any; returns nullptr if the node is not a manifold
+    NodeManifold<dim>* const Manifold() const;
+
 
     // basic functionality of the Node
     
@@ -189,10 +198,10 @@ class Node : public LocalVariableStorage<dim,Node> {
   private:
     Point<dim>                     xyz_;                      ///< coordinate array
     mutable size_t                 idx_;                      ///< 0..n-1
-    std::vector<Element<dim>*>     parent_element_pointers_;  ///< parent element pointers
+    NodeParentElementVector<dim>   parents_;                  ///< parent element pointers and corresponding local node numbers
+    //                                                        TODO: check whether next definition still holds
     std::vector<Node<dim>*>        neighbor_node_pointers_;   ///< corner node to corner node on opposite end of the segment pointer
     NodeManifold<dim>*             manifold_ = nullptr;       ///< node manifold pointer
-    std::vector<ONE_BYTE_NUMBER>   parent_node_indexes_;      ///< local parent node number (0...nodes-1)
     BOX_BOUNDARY                   at_boundary_;              ///< which model boundary the Node is on
     TOPOTYPE                       BREP_entity_;              ///< the topologic feature of the boundary representation that the node belongs to
     

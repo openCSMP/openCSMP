@@ -295,6 +295,9 @@ Face<dim>::Face( Element<dim>& e,
     outerParent_(nullptr),
     inner_parent_face_id_(boundary_face)
  {
+    assert( FE_type_for_face != nullptr );
+    assert( FE_type_for_face->ElementType() != UNKNOWN );
+    assert( e.FE()->ElementTypeOfFace(boundary_face) == FE_type_for_face->ElementType() );
     assert( boundary_face < e.Faces() );
     if ( e.Neighbor(boundary_face) != nullptr ) outerParent_ = e.Neighbor(boundary_face);
     if constexpr ( dim == 2 ) assert( e.IsSurface() );
@@ -422,19 +425,25 @@ Face<dim>::Face( const Face<dim>& fc )
 
 
 
-/// move constructor
+/// move constructor (move () not needed for standard types
 template<uint32_t dim>
 Face<dim>::Face( Face<dim>&& fc )
-  : FiniteElementPolicy<dim,csmp::Face>(fc.FE()),
-    FiniteVolumePolicy<dim,csmp::Face>(fc.FV()),
-    idx_(std::move(fc.idx_)),
-    inner_parent_face_id_(std::move(fc.inner_parent_face_id_)),
-    outer_parent_face_id_(std::move(fc.outer_parent_face_id_)),
-    innerParent_(std::move(fc.innerParent_)),
-    outerParent_(std::move(fc.outerParent_)),
-    node_connector_(std::move(fc.node_connector_)),
-    face_connector_(std::move(fc.face_connector_))
+  : FiniteElementPolicy<dim,csmp::Face>( std::move(fc.FE()) ),
+    FiniteVolumePolicy<dim,csmp::Face>( std::move(fc.FV()) ),
+    idx_( std::move(fc.idx_) ),
+    inner_parent_face_id_( std::move(fc.inner_parent_face_id_) ),
+    outer_parent_face_id_( std::move(fc.outer_parent_face_id_) ),
+    innerParent_( std::move(fc.innerParent_) ),
+    outerParent_( std::move(fc.outerParent_) ),
+    node_connector_( std::move(fc.node_connector_) ),
+    face_connector_( std::move(fc.face_connector_) )
  {
+    // nulling the pointers in the dying object
+    fc.AssignFiniteElementNullPtr();
+    fc.AssignFiniteVolumeNullPtr();
+    fc.innerParent_ = nullptr;
+    fc.outerParent_ = nullptr;
+
     this->LVS( std::move(fc.LVS()) );
     
 //    cerr <<"\nFace: called move constructor.";

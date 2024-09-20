@@ -282,17 +282,29 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
   // --------------------------------------------
   // NB: elements are responsible for their nodes, nodes for their manifolds
   
-  /// deletes element and repairs connectivity, reports whether deletion was successful (@note faster to delete multiple elements at once than one by one)
+  /// disconnects neighbors, removes Element from node-parent container, and deletes element, reports true when deletion succeeded
   bool Delete( Element<dim>* );
+
+  /// disconnects neighbors, deletes Face, and reports true when deletion succeeded
   bool Delete( Face<dim>* );
+
+  /// disconnects neighbors, deletes InterFace, and reports true when deletion succeeded
   bool Delete( InterFace<dim>* );
+  
+  /// any non-nullpointer neighbors the element type of which is unknown (global operation on all cells)
+  template<template<uint32_t> class CELL>
+  size_t RemoveDegenerateNeighbors();
 
   /// updates all connectivity (elements, faces, interfaces, nodes to parents); rebulding node manifolds if necessary
   void UpdateConnectivity();
 
-  /// elements,  node-parents, node-manifolds like UpdateConnectivity() but restricted to the surroundings of the range of interfaces
+  /// reconnects InterFaces, disconnects adjacent elements,  updates node-parents, node-neighbors and node-manifolds; similar to UpdateConnectivity() but only for the surroundings of interfaces
   void UpdateConnectivity(  typename std::vector<InterFace<dim>*>::const_iterator first,
                             typename std::vector<InterFace<dim>*>::const_iterator last );
+
+  /// reconnects Faces and adjacent Elements,  rebuilds node-parents for Face nodes
+  void UpdateConnectivity(  typename std::vector<Face<dim>*>::const_iterator first,
+                            typename std::vector<Face<dim>*>::const_iterator last );
 
   /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements & Faces)
   /// @todo disambiguate connectivity between Face and InterFace object at manifolds

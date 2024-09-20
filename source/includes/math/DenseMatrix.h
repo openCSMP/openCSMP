@@ -48,9 +48,8 @@ class DenseMatrix {
     DenseMatrix( const std::initializer_list<std::initializer_list<double>>& );
     DenseMatrix( uint32_t m, uint32_t n );
     DenseMatrix( uint32_t m, uint32_t n, double val );
-    DenseMatrix( const DenseMatrix& );
-    DenseMatrix( DenseMatrix&& )= default;
-    ~DenseMatrix();
+    // rule of zero
+
     uint32_t Rows() const;
     uint32_t Cols() const;
     void     Resize( uint32_t m, uint32_t n );
@@ -58,8 +57,6 @@ class DenseMatrix {
     double&       operator()( uint32_t m, uint32_t n );
     const double& operator()( uint32_t m, uint32_t n ) const;
     /// assignment
-    DenseMatrix& operator=( const DenseMatrix& );
-    DenseMatrix& operator=( DenseMatrix&& ) = default;
     DenseMatrix& operator=( double );
     DenseMatrix& operator+=( const DenseMatrix& );
     DenseMatrix& operator-=( const DenseMatrix& );

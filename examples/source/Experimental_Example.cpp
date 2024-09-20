@@ -59,9 +59,58 @@ void Experimental_Example::Specifications()
 
 
 
+class MyClass {
+  public:
+    // 0. custom constructor
+    MyClass( int i_val ) : i_(i_val), i_ary_(new int[i_val]) {} // default constructor
+    
+    // 1. copy constructor
+    MyClass( const MyClass& mc ) : i_(mc.i_), i_ary_(mc.i_ary_) {
+          for ( int i=0; i<mc.i_; ++i ) i_ary_[i] = mc.i_ary_[i];
+       }
+    // 2. destructor
+    ~MyClass() { delete[] i_ary_; i_ary_=nullptr;
+      }
+    // 3. assignment operator a(5); a = b;
+    MyClass& operator=( const MyClass& mc ) {
+         if ( this != &mc ) {
+              i_ = mc.i_;
+              delete[] i_ary_;
+              i_ary_ = new int[i_];
+              for ( int i=0; i<mc.i_; ++i ) i_ary_[i] = mc.i_ary_[i];
+           }
+         return *this;
+      }
+    // 4. moving things MyClass a = func_creating_an_instance_of_MyClass();
+    MyClass( MyClass&& mc ) : i_(mc.i_), i_ary_(mc.i_ary_) {
+          mc.i_ary_ = nullptr;
+       }
+   // 5. move assignment
+   MyClass& operator=( MyClass&& mc ) {
+      if ( this == &mc ) return *this;
+      i_ = mc.i_;
+      i_ary_ = mc.i_ary_;
+      mc.i_ary_ = nullptr;
+      return *this;
+    }
+  
+  private:
+    int  i_;
+    int* i_ary_{nullptr};
+};
+
+
 
 void Experimental_Example::Run()
  {
+    constexpr int dim{3};
+    ScalarVariable        sc(ANY,1.);
+    VectorVariable<dim>   vc{ANY,ANY,ANY,1.,2.,3.};
+    TensorVariable<dim>   ts; ts = vc;
+    ArrayVariable         A(6);
+    FlaggedArrayVariable  fa(11);
+    
+    
     // a little demonstration of the pointer concept used extensively in C and C++
     int a{3};
     // pointer to the integer a

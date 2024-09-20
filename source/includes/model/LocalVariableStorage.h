@@ -57,14 +57,9 @@ class LocalVariableStorage {
 
   public:
     // ctors, dtor and assignment
-    LocalVariableStorage();
-    ~LocalVariableStorage();
+    LocalVariableStorage() {}
     LocalVariableStorage( const LocalVariables& lv );
     LocalVariableStorage( const LocalVariables& lv, const IntegrationPointVariables& iv );
-    LocalVariableStorage( const LocalVariableStorage& );
-    LocalVariableStorage( LocalVariableStorage&& ) = default;
-    LocalVariableStorage& operator=( const LocalVariableStorage& );
-    LocalVariableStorage& operator=( LocalVariableStorage&& ) = default;
 
     // size ops
     void            ResizePropertyStorage( const LocalVariables& lv );
@@ -227,14 +222,7 @@ class LocalVariableStorage {
         DataContainer data;
 #ifdef NDEBUG
         Data() : flags(0U), data(0U) {}
-        Data( const Data& d ) : flags( d.flags ), data( d.data ) {}
-        Data( Data&& d ) : flags( std::move(d.flags) ), data( std::move(d.data) ) {}
-        Data& operator=( const Data& d )
-          { if ( &d != this ) 
-             { flags = d.flags; data = d.data; }
-          return *this; }
-        Data& operator=( Data&& ) = default;
-#else // debugging: a lot more information is kept in storage
+#else // for debugging more information is kept in storage
         int_type scalars,            ///< scalar variables stored at the site this policy is associated with
                  vectors,            ///< vector variables at this site
                  tensors,            ///< tensor variables at this site
@@ -244,6 +232,7 @@ class LocalVariableStorage {
         int_type arrayLength,        ///< length of array variables associated with this site @todo only one size?
                  flaggedArrayLength; ///< length of flagged array variables @todo only one size?
 
+        // zeroing constructor for debugging
         Data() :
             flags              (0U),
             data               (0U),
@@ -255,35 +244,8 @@ class LocalVariableStorage {
             arrayLength        (0U),
             flaggedArrayLength (0U)
         {}
+#endif // end debugging version of Data
 
-        Data( const Data& d ) :
-            flags               ( d.flags ),
-            data                ( d.data ),
-            scalars             ( d.scalars ),
-            vectors             ( d.vectors ),
-            tensors             ( d.tensors ),
-            arrays              ( d.arrays ),
-            flaggedArrays       ( d.flaggedArrays ),
-            arrayLength         ( d.arrayLength ),
-            flaggedArrayLength  ( d.flaggedArrayLength )
-        {}
-
-        Data& operator=( const Data& d )
-          {
-            if ( &d != this ) {
-                flags               = d.flags;
-                data                = d.data;
-                scalars             = d.scalars;
-                vectors             = d.vectors;
-                tensors             = d.tensors;
-                arrays              = d.arrays;
-                flaggedArrays       = d.flaggedArrays;
-                arrayLength         = d.arrayLength;
-                flaggedArrayLength  = d.flaggedArrayLength;
-             }
-            return *this;
-         }
-#endif /* debugging of Data */
       };
 
     /// copy or move supplied data into storage

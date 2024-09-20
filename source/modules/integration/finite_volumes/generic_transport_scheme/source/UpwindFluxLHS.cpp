@@ -56,7 +56,7 @@ void UpwindFluxLHS<dim>::AccumulateFiniteVolume( const Node<dim>& fv, SparseMatr
     const auto node_parent_elements(fv.Parents());
     for ( auto t=0U; t<node_parent_elements; t++ )
     {
-      Element<dim>* const eptr(fv.Parent(t));   
+      const Element<dim>* const eptr(fv.Parent(t));   
       const auto pnid(fv.ParentNodeNumber(t));
       const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
       for ( auto i{0U}; i<sector_facets; i++ )

@@ -678,8 +678,8 @@ bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoun
     inflow = flux_balance = static_cast<double>(0.);
 
     // for all SECTORS of the FE_FV-stencils which contribute to boundary finite volume (surrounding the node)
-    for ( auto t=0U; t<nd_ptr->Parents(); t++ ) {
-         Element<dim>* const eptr(nd_ptr->Parent(t));
+    for ( uint32_t t=0U; t<nd_ptr->Parents(); t++ ) {
+         const Element<dim>* const eptr(nd_ptr->Parent(t));
          const auto nid(nd_ptr->ParentNodeNumber(t));
          double  flux(0.);
 
@@ -690,7 +690,7 @@ bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoun
          relperm.EffectiveSaturation();
 
          // for all FACETS per SECTOR surrounding the finite volume at the boundary
-         for ( auto i{0U}; i<eptr->FV()->FacetsPerSector(nid); i++ )
+         for ( uint32_t i{0U}; i<eptr->FV()->FacetsPerSector(nid); i++ )
            {
               auto     iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
               uint32_t inside_node = eptr->FV()->InsideNode( iFacet );
@@ -708,7 +708,7 @@ bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoun
          // if this is an interior stencil
          if ( IsInteriorStencil(eptr) ) inflow += flux; // +to satisfy convention above (that inflow is positive)
          // the balance can only be evaluated if there is a halo stencil
-         else if ( halo_stencils_.find(eptr) != halo_stencils_.end() ) flux_balance -= flux;
+         else if ( halo_stencils_.find( const_cast<Element<dim>*>(eptr) ) != halo_stencils_.end() ) flux_balance -= flux;
          else
          throw csmp::Exception( ERROR, "TwoPhaseExplicitNodeCenteredFVTransport<dim>::FractionalFlowThroughBoundaryFiniteVolume",
                                         "Attempt to access a finite volume stencil that was not initialized" );
@@ -772,7 +772,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
     // loop over the boundary finite volumes and adjust fluxes
     for ( size_t i=this->gref_.InteriorNodes(); i<this->gref_.Nodes(); i++ )
       {
-         const Node<dim>* const nd_ptr=this->gref_.N(i);
+         Node<dim>* const nd_ptr=this->gref_.N(i);
 
          if((nd_ptr->Status(no_flow_bc_key_) == DIRICH)&&(nd_ptr->Status(this->adv1_key_)!=DIRICH)){
              // if the flux balance cannot be evaluated because the node sits at a model boundary
@@ -780,7 +780,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
              inflow = static_cast<double>(0.);
 
              // for all SECTORS of the FE_FV-stencils which contribute to boundary finite volume (surrounding the node)
-             for ( auto t=0U; t<nd_ptr->Parents(); t++ )
+             for ( uint32_t t=0U; t<nd_ptr->Parents(); t++ )
                  {
                       double  flux(0.);
                       Element<dim>* e(nd_ptr->Parent(t));
@@ -913,13 +913,13 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::DivergenceFreeCorrection(
  {
     for ( size_t nidx=0U; nidx<this->gref_.Nodes(); nidx++ ){
 
-          const Node<dim>* const nd_ptr=this->gref_.N(nidx);
+          Node<dim>* const nd_ptr=this->gref_.N(nidx);
           // 1. A FLUX_BALANCE computation is performed but only if the node is not at the model boundary
           if ( !this->gref_.IsPerimeterNode(nidx) )
           {
               double div(0.0);
               // for each finite volume, f is evaluated on a sector by sector basis
-              for ( auto t=0U; t<this->gref_.N(nidx)->Parents(); t++ ) {
+              for ( uint32_t t=0U; t<this->gref_.N(nidx)->Parents(); t++ ) {
                    Element<dim>* const eptr(nd_ptr->Parent(t));
                    const auto nid(nd_ptr->ParentNodeNumber(t));
                    relperm.Initialize( *eptr );
@@ -928,7 +928,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::DivergenceFreeCorrection(
                    relperm.EffectiveSaturation();
 
                    // for all FACETS per SECTOR surrounding the finite volume at the boundary
-                   for ( auto i{0U}; i<eptr->FV()->FacetsPerSector(nid); i++ ){
+                   for ( uint32_t i{0U}; i<eptr->FV()->FacetsPerSector(nid); i++ ){
                         auto     iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
                         uint32_t inside_node,outside_node;
                         eptr->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );

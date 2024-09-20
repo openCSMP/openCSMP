@@ -1,5 +1,6 @@
 #include "Node.h"
 #include "Element.h"
+#include "NodeParentElementVector.h"
 #include "Visitor.h"
 #include "NodeManifold.h"
 #include "ErrorHandler.h"
@@ -52,10 +53,9 @@ Node<dim>::Node( size_t idx,
 template<uint32_t dim>
 Node<dim>::Node( const Node<dim>& nd )
   : xyz_(nd.xyz_), idx_(nd.idx_),
-    parent_element_pointers_(nd.parent_element_pointers_),
+    parents_(nd.parents_),
     neighbor_node_pointers_(nd.neighbor_node_pointers_),
     manifold_(nd.manifold_),
-    parent_node_indexes_(nd.parent_node_indexes_),
     at_boundary_(nd.at_boundary_),
     BREP_entity_(nd.BREP_entity_)
   {
@@ -73,10 +73,9 @@ template<uint32_t dim>
 Node<dim>::Node( Node<dim>&& nd )
   : xyz_{ std::move(nd.xyz_) },
     idx_{ std::move(nd.idx_) },
-    parent_element_pointers_{ std::move(nd.parent_element_pointers_) },
+    parents_{ std::move(nd.parents_) },
     neighbor_node_pointers_{ std::move(nd.neighbor_node_pointers_) },
     manifold_{ std::move(nd.manifold_) },
-    parent_node_indexes_{ std::move(nd.parent_node_indexes_) },
     at_boundary_{ std::move(nd.at_boundary_) },
     BREP_entity_{ std::move(nd.BREP_entity_)}
   {
@@ -105,10 +104,9 @@ Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
          idx_                     = nd.idx_;
          at_boundary_             = nd.at_boundary_;
          BREP_entity_             = nd.BREP_entity_;
-         parent_element_pointers_ = nd.parent_element_pointers_;
+         parents_                 = nd.parents_;
          neighbor_node_pointers_  = nd.neighbor_node_pointers_;
          manifold_                = nd.manifold_;
-         parent_node_indexes_     = nd.parent_node_indexes_;
          this->LVS( std::move( nd.LVS() ) );
       }
     return *this;
@@ -130,10 +128,9 @@ Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
     idx_                     = nd.idx_;
     at_boundary_             = nd.at_boundary_;
     BREP_entity_             = std::move( nd.BREP_entity_ );
-    parent_element_pointers_ = std::move( nd.parent_element_pointers_ );
+    parents_                 = std::move( nd.parents_ );
     neighbor_node_pointers_  = std::move( nd.neighbor_node_pointers_ );
     manifold_                = std::move( nd.manifold_ );
-    parent_node_indexes_     = std::move( nd.parent_node_indexes_ );
     this->LVS( nd.LVS() );
  
     return *this;
@@ -149,41 +146,19 @@ Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
 
     @author Roman Manasipov
     @date   2014
+
+TODO: when would this be used?
+
 */
 template<uint32_t dim>
 bool  Node<dim>::operator==( const Node<dim>& nd )
  {
-    // TODO: fix Node comparitor
-    cerr <<"Node<"<< dim <<">: called operator==(Node) comparitor, extremely costly and of questionable value\n";
     if ( &nd != this )
       {
-          if ( BREP_entity_ != nd.BREP_entity_ ) return false;
-          if ( Coordinate() == nd.Coordinate() )
-            {
-                if ( parent_element_pointers_.size() == nd.parent_element_pointers_.size() )
-                {
-                    if ( parent_element_pointers_.empty() )
-                      {
-                          if( idx_ == nd.idx_ )
-                              return true;
-                          return false;
-                      }
-
-                    set<Element<dim>*> elmts1(parent_element_pointers_.begin(), parent_element_pointers_.end());
-                    set<Element<dim>*> elmts2(nd.parent_element_pointers_.begin(), nd.parent_element_pointers_.end());
-                    vector<Element<dim>*> elmts_intersect;
-                    set_intersection( elmts1.begin(), elmts1.end(),
-                                      elmts2.begin(), elmts2.end(),
-                                      back_inserter(elmts_intersect) );
-                    if( elmts_intersect.size() == parent_element_pointers_.size() )
-                        return true;
-
-                    return false;
-                }
-                return false;
-            }
-          return false;
-      }
+        if ( BREP_entity_ != nd.BREP_entity_ ) return false;
+        if ( distance( Coordinate(), nd.Coordinate() ) > numeric_limits<double>::epsilon() ) return false;
+        if ( AtBoundary() != nd.AtBoundary() ) return false;
+    }
     return true;
  }
  
@@ -225,22 +200,9 @@ A pointer to the parent Element which shall be added.
 template<uint32_t dim>
 void Node<dim>::Assign( uint32_t pnode, Element<dim>* element )
  {
-    assert( parent_node_indexes_.size() == parent_element_pointers_.size() );
     assert( pnode <= FIFTY );
     assert( element != nullptr );
-    
-    // looking for a free slot in existing parent vectors
-    const auto parents{ parent_node_indexes_.size() };
-    for ( uint32_t parent{0u}; parent < parents; parent++ )
-      if ( parent_node_indexes_[parent] == NOT_INITIALIZED ) {
-           parent_node_indexes_[parent]     = static_cast<ONE_BYTE_NUMBER>(pnode);
-           parent_element_pointers_[parent] = element;
-           return;
-        }
-        
-    // if the parent element storage must be extended
-    parent_node_indexes_.push_back( static_cast<ONE_BYTE_NUMBER>(pnode) );
-    parent_element_pointers_.push_back( element );
+    parents_.Assign( element, pnode );
 
  } // end Assign
 
@@ -253,52 +215,11 @@ void Node<dim>::Assign( uint32_t pnode, Element<dim>* element )
     @note the argument element is not deleted. To do this use EraseNullPointerParents().
 */
 template<uint32_t dim>
-bool Node<dim>::Unassign( Element<dim>* element )
+void Node<dim>::Unassign( const Element<dim>* const element )
  {
-    if ( element == nullptr ) return false;
-    assert( parent_node_indexes_.size() ==  parent_element_pointers_.size() );
-    for ( uint32_t parent(0); parent < Parents(); ++parent )
-      if ( Parent(parent) == element )
-        {
-          parent_node_indexes_[parent]     = NOT_INITIALIZED;
-          parent_element_pointers_[parent] = nullptr;
-          return true;
-        }
-    return false;
+    parents_.Unassign( element );
     
  } // end Unassign
-
-
-
-
-/**
-    Removes parent elements pointers, but only if these were set to nullptr before.
-*/
-template<uint32_t dim>
-void Node<dim>::EraseNullPointerParents()
- {
-    assert( parent_node_indexes_.size() ==  parent_element_pointers_.size() );
-    const auto  n_parents{Parents()};
-    uint32_t    n_new_parents{0};
-
-    for ( auto parent{0}; parent < n_parents; ++parent ) {
-         if ( parent_element_pointers_[parent] == nullptr )
-           parent_node_indexes_[parent] = NOT_INITIALIZED;
-         else n_new_parents++;
-      }
-
-    // if nullptr parents were detected, the parent storage needs to be rebuild
-    if ( n_new_parents < n_parents ) {
-        parent_element_pointers_.erase( remove( parent_element_pointers_.begin(),
-                                                parent_element_pointers_.end(), nullptr ),
-                                                parent_element_pointers_.end() );
-
-        parent_node_indexes_.erase( remove( parent_node_indexes_.begin(),
-                                            parent_node_indexes_.end(), NOT_INITIALIZED ),
-                                            parent_node_indexes_.end() );
-      }
-    
- } // end EraseNullPointerParents
 
 
 
@@ -376,6 +297,7 @@ uint32_t  Node<dim>::AssignNodeNeighbors()
 template<uint32_t dim>
 uint32_t  Node<dim>::UpdateNeighbors()
  {
+    // needed by unique() see below
     sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
     
     neighbor_node_pointers_.erase( unique( neighbor_node_pointers_.begin(),
@@ -414,19 +336,23 @@ void  Node<dim>::AddNeighbor( Node<dim>* neighbor_node )
 
 
 /**
-    Moves  unwanted element to the end of the vector before erasing it.
+    Moves  unwanted Node  to the end of the vector before erasing it.
     @attention Use UpdateNeighbors to shrink vector to new size.
 */
 template<uint32_t dim>
 void Node<dim>::RemoveNeighbor( const Node<dim>* const neighbor_node )
  {
-    auto it = remove( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), neighbor_node );
-//    neighbor_node_pointers_.erase( remove( neighbor_node_pointers_.begin(),
-//                                           neighbor_node_pointers_.end(), neighbor_node ),
-//                                   neighbor_node_pointers_.end() );
+    neighbor_node_pointers_.erase( remove( neighbor_node_pointers_.begin(),
+                                           neighbor_node_pointers_.end(), neighbor_node ),
+                                   neighbor_node_pointers_.end() );
  }
  
  
+template<uint32_t dim>
+void Node<dim>::EraseNeighbors()
+ {
+    vector<Node<dim>*>().swap(neighbor_node_pointers_);
+ }
 
 
 
@@ -491,56 +417,40 @@ template<uint32_t dim>
 
 
 
-/**
-
-The dynamic storage for the parent element data is resized preserving the
-existing entries. The values of potential new elements are set to zero.
-
-@param n The desired new size of the storage.
-*/
-template<uint32_t dim>
-void  Node<dim>::ResizeParentStorage( uint32_t n )
-  {
-     // while this does not release the memory, it is essential to zap previous content of parent storage
-     parent_node_indexes_.clear();
-     parent_element_pointers_.clear();
-     // resize, initialising contained pointers to null and indices to NOT_INITIALIZED
-     parent_node_indexes_.resize( n, NOT_INITIALIZED );
-     parent_node_indexes_.shrink_to_fit();
-     parent_element_pointers_.resize( n, nullptr );
-     parent_element_pointers_.shrink_to_fit();
-  }
-
 
 
 template<uint32_t dim>
 void  Node<dim>::EraseParents()
   {
-     parent_element_pointers_.clear();
-     parent_node_indexes_.clear();
+     parents_.Erase();
   }
-
 
 
 template<uint32_t dim>
 uint32_t   Node<dim>::Parents() const
-  { return static_cast<uint32_t>(parent_element_pointers_.size()); }
-
+  { return static_cast<uint32_t>(parents_.Size()); }
 
 
 template<uint32_t dim>
 uint32_t  Node<dim>::ParentNodeNumber( uint32_t parent_element_number ) const
   {
-     assert( parent_element_number < parent_node_indexes_.size() );
-     return parent_node_indexes_[ parent_element_number ];
+     assert( parent_element_number < parents_.Size() );
+     return parents_.LocalNodeNumber( parent_element_number );
   }
 
 
 template<uint32_t dim>
-Element<dim>*  Node<dim>::Parent( uint32_t parent_element_number ) const
+Element<dim>* Node<dim>::Parent( uint32_t parent_element_number )
   {
-     assert( parent_element_number < parent_element_pointers_.size() );
-     return parent_element_pointers_[ parent_element_number ];
+     assert( parent_element_number < parents_.Size() );
+     return parents_.ParentElement( parent_element_number );
+  }
+
+template<uint32_t dim>
+const Element<dim>* const  Node<dim>::Parent( uint32_t parent_element_number ) const
+  {
+     assert( parent_element_number < parents_.Size() );
+     return parents_.ParentElement( parent_element_number );
   }
 
 
@@ -548,45 +458,10 @@ Element<dim>*  Node<dim>::Parent( uint32_t parent_element_number ) const
 template<uint32_t dim>
 bool  Node<dim>::IsParent( const Element<dim>* const eptr ) const
   {
-     return binary_search( parent_element_pointers_.begin(),
-                           parent_element_pointers_.end(), eptr );
+     return parents_.IsParent(eptr);
   }
 
 
-
-// TODO: refactor to a more efficient design, perhaps vector<pair<size_t,eptr>
-/**
-     sorts parent vector for searching.
-     
-     @attention parent vector must not contain any nullptrs.
-*/
-template<uint32_t dim>
-void  Node<dim>::SortParents() {
-     assert( parent_element_pointers_.size() == parent_node_indexes_.size() );
-
-     // sorting
-     // creating indices
-     vector<int> indices(parent_element_pointers_.size());
-     iota( indices.begin(), indices.end(), 0 );
-    
-     // organising indices in the order that 'b' will have once it is sorted
-     sort( indices.begin(), indices.end(),
-           [&]( int i, int j ) -> bool {
-                assert( parent_element_pointers_[i] != nullptr );
-                return parent_element_pointers_[i] < parent_element_pointers_[j];
-             }
-        );
-  
-     // sorting the vectors
-     sort( parent_element_pointers_.begin(), parent_element_pointers_.end() );
-  
-     // extra vector needed for tempory
-     vector<ONE_BYTE_NUMBER> temp{ parent_node_indexes_.size() };
-     int n{0};
-     for ( auto& i : indices ) temp[n++] = parent_node_indexes_[i];
-     parent_node_indexes_ = temp;
-
-  } // end UpdateParents
 
 
 
@@ -735,13 +610,9 @@ void Node<dim>::Out() const
     cout <<", Coordinates: "<< xyz_;
     cout << endl;
 #ifndef NDEBUG
-    if ( parent_node_indexes_.size() > 0u ) {
+    if ( parents_.Size() > 0u ) {
          cout <<"\nElement objects sharing the node / node position therein:\n"<< endl;
-         for ( auto i{0U}; i<Parents(); i++ ) {
-              if ( Parent(i) == NULL ) cout <<"NONE (null pointer) ";
-              else Parent(i)->Out();
-              cout <<"(node "<< ParentNodeNumber(i) <<"), ";
-           }
+         parents_.Out();
          cout << endl;
       } 
 #endif
@@ -776,30 +647,39 @@ vector<Element<dim>*> parentElementsContaining( typename vector<Node<dim>*>::con
     // the supplied range of nodes must contain at least two nodes
     assert( next(first,1) != last );
     
-    // sorting parent element vectors for the intersection algorithm
-    (*first)->SortParents();
-    (*next(first,1))->SortParents();
-
-    vector<Element<dim>*>  elmts_with_all_nodes, isect;
+    // create sorted parent element vectors for the intersection algorithm
+    // vector node 1
+    vector<Element<dim>*>  elmts_with_all_nodes1( (*first)->Parents() );
+    for ( uint32_t i{0u}; i<(*first)->Parents(); ++i ) elmts_with_all_nodes1[i] = (*first)->Parent(i);
+    sort( elmts_with_all_nodes1.begin(), elmts_with_all_nodes1.end() );
+    // vector node 2
+    vector<Element<dim>*>  elmts_with_all_nodes2( (*next(first,1))->Parents() ), isect;
+    for ( uint32_t i{0u}; i<(*next(first,1))->Parents(); ++i ) elmts_with_all_nodes2[i] = (*next(first,1))->Parent(i);
+    sort( elmts_with_all_nodes2.begin(), elmts_with_all_nodes2.end() );
+    
     // store the elements shared between the first and the second node in 'isect'
-    set_intersection( (*first)->ParentElementsBegin(), (*first)->ParentElementsEnd(),
-                      (*next(first,1))->ParentElementsBegin(), (*next(first,1))->ParentElementsEnd(),
-                      back_inserter(elmts_with_all_nodes) );
+    set_intersection( elmts_with_all_nodes1.begin(), elmts_with_all_nodes1.end(),
+                      elmts_with_all_nodes2.begin(), elmts_with_all_nodes2.end(),
+                      back_inserter(isect) );
     first++;
     first++;
     
     // find the shared parent elements for all the supplied nodes
     while ( first != last ) {
-         (*first)->SortParents();
-         set_intersection( elmts_with_all_nodes.begin(), elmts_with_all_nodes.end(),
-                           (*first)->ParentElementsBegin(), (*first)->ParentElementsEnd(),
-                           back_inserter(isect) );
-         elmts_with_all_nodes = isect;
+         // vector 1
+         elmts_with_all_nodes1 = isect;
          isect.clear();
+         // vector 2
+         elmts_with_all_nodes2.resize( (*first)->Parents() );
+         for ( uint32_t i{0u}; i<(*first)->Parents(); ++i ) elmts_with_all_nodes2[i] = (*first)->Parent(i);
+         sort( elmts_with_all_nodes2.begin(), elmts_with_all_nodes2.end() );
+         set_intersection( elmts_with_all_nodes1.begin(), elmts_with_all_nodes1.end(),
+                           elmts_with_all_nodes2.begin(), elmts_with_all_nodes2.end(),
+                           back_inserter(isect) ); // custom comparitor used for the sets
          first++;
       }
       
-    return elmts_with_all_nodes;
+    return isect;
       
   } // end parentElementsContaining
 
@@ -874,6 +754,7 @@ pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t>>  parentElements(
     // 4. determining the inside element which must have the same node ordering as the one supplied
     // --------------------------------------------------------------------------------------------
     vector<Node<dim>*> cnr_node_vec( first, last ), eface_node_vec1;
+    eface_node_vec1.reserve( cnr_node_vec.size() );
     for ( const auto& nd : shared_parents[0]->FE()->CornerNodesOfFace( shared_faces.first ) )
       eface_node_vec1.push_back( shared_parents[0]->N(nd) );
     
@@ -883,14 +764,15 @@ pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t>>  parentElements(
       
     // else the second lot of face nodes are compared
     vector<Node<dim>*> eface_node_vec2;
+    eface_node_vec2.reserve( cnr_node_vec.size() );
     for ( const auto& nd : shared_parents[1]->FE()->CornerNodesOfFace( shared_faces.second ) )
       eface_node_vec2.push_back( shared_parents[1]->N(nd) );
     if ( cnr_node_vec == eface_node_vec2 )
       return make_pair( make_pair( shared_parents[1], shared_faces.second ), make_pair( shared_parents[0], shared_faces.first ) );
       
-    // 5. hopefully we never get here: diagnostics
-    // -------------------------------------------
-#ifndef NDEBUG
+    // interim diagnostics before cell matching by rotation is attempted
+    // -----------------------------------------------------------------
+#ifdef DEBUG_NODE_FUNCTIONS
     cout <<"\n"<<"parentElements: failed to match nodes:";
     for ( const auto& nit : cnr_node_vec ) cout <<" "<< nit->Idx();
     cout <<", with face nodes of shared elements:";
@@ -1161,9 +1043,6 @@ pair<Element<dim>*,uint32_t> parentElement( typename vector<Node<dim>*>::const_i
     // --------------------------------------------------------
     if ( elmts_with_all_nodes.size() > 1 )
       {
-#ifndef NDEBUG
-         csmp_error.Note( WARNING, "parentElement()", "more than one element containing all nodes found.");
-#endif
          // 1.1 trying erasing potential lower-dimensional elements or nullprts from result vector
          if ( eraseLowerDimensionalOrInvalidCells( elmts_with_all_nodes ) == 0 ) {
              if  constexpr( dim == 3 ) {
@@ -1352,7 +1231,7 @@ void printParents( const Node<dim>* const nptr )
     assert( nptr != nullptr );
     assert( nptr->Parents() > 0 );
     const auto n_parents{nptr->Parents()};
-    set<Element<dim>*> parents;
+    set<const Element<dim>*> parents;
     
     cout <<"\nNode "<< nptr->Idx();
     for ( auto i{0U}; i<n_parents; ++i ) {

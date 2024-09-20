@@ -364,7 +364,7 @@ CompressedRowMatrix::CompressedRowMatrix( csmp::SparseMatrix& spmat )
  }
 
 
-
+/*
 CompressedRowMatrix::CompressedRowMatrix( const CompressedRowMatrix& crm )
 : ia(crm.ia),
   ja(crm.ja),
@@ -402,7 +402,7 @@ CompressedRowMatrix&  CompressedRowMatrix::operator=( const CompressedRowMatrix&
     if(verbose_) cout<<"CompressedRowMatrix: called move assignment operator"<<endl;
     return *this;
   }
-
+*/
 
 
 /*

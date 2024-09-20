@@ -105,7 +105,8 @@ class MeshManager_Test : public Test {
     
     // clean-up after Face and InterFace creation
 
-    bool Test_BuildConnectivity(); // test UpdateConnectivity() done which calls these
+    bool Test_BuildConnectivity();
+    bool Test_UpdateConnectivity(); // takes care of the following commented out methods
     //bool Test_BuildVolumeConnectivity();
     //bool Test_BuildSurfaceConnectivity();
     //bool Test_BuildLineConnectivity();

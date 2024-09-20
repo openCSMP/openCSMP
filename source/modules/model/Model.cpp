@@ -29,7 +29,7 @@
 #include <chrono>
 #include <filesystem>
 
-// #define CSMP_MODEL_DEBUG
+#define CSMP_MODEL_DEBUG
 
 using namespace std;
 
@@ -355,25 +355,28 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     const bool ignore_domain_identification_by_name{true};
     this->FormRegionsFrom( mesh_topology, ignore_domain_identification_by_name );
 	
+#ifdef CSMP_MODEL_DEBUG
+    cout <<"\n"<<"Model<dim>::Initialize(regionfile,ModelTopology,VSet): connectivity check prior to boundary creation: ";
+    const bool all_ok = integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+    if ( all_ok ) cout <<"everything is fine"<< endl;
+    else {
+         csmp_error.Note( ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "element connectivity is broken.");
+         mesh_manager_.UpdateConnectivity();
+      }
+#endif
+
     // 6. forming Boundaries
     //    - for box-shaped models (albeit perhaps with an irregular top surface)
     if (  (dim == 2 && mesh_topology.RectangleShapedModel()) || (dim == 3 && mesh_topology.BoxShapedModel()) ) {
          this->EstablishBoxBoundaries();
-         // TODO: see whether this can be done more locally
-         mesh_manager_.UpdateConnectivity();
-         // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
-         cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";
+         cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, corresponding AT_BOUNDARY flags were also created...\n";
       }
     //    - for irregularly shaped models
     else {
-          if ( contiguous_model ) {
-               this->EstablishBoundariesFromRegions();
-               // TODO: see whether this can be done more locally
-               mesh_manager_.UpdateConnectivity();
-            }
+          if ( contiguous_model )
+            this->EstablishBoundariesFromRegions();
           else
             csmp_error.Note( ERROR, "Model::Intialise(regionfile,ModelTopology,VSet)", "discontiguous model not handled yet");
-
          // reporting
          this->RegionsOut();
          // this->BoundariesOut(); - was already reported when these were created
@@ -382,9 +385,6 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     // 7. forming SplitBoundaries if a discontiguous model was detected
     if ( !contiguous_model ) {
          this->DetectAndCreateSplitBoundaries();
-         // TODO: see whether this can be done more locally
-         mesh_manager_.UpdateConnectivity();
-         // reporting which boundaries were created
          this->SplitBoundariesOut();
       }
 
@@ -393,32 +393,40 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
 #ifdef CSMP_MODEL_DEBUG
-integrityCheck<dim,Element>( mesh_manager_.CellsBegin(), mesh_manager_.CellsEnd() );
-if ( mesh_manager_.Faces() > 0 )
-  integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
-if ( mesh_manager_.InterFaces() > 0 )
-  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+cout <<"\n"<<"Model<dim>::Initialize(regionfile,ModelTopology,VSet): final connectivity check: ";
+bool cells_ok;
+mesh_manager_.AssignUniqueNumbers( true );
+cells_ok = integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+if ( cells_ok ) cout <<"\n\t\t"<<"Element connectivity is fine.";
+if ( mesh_manager_.Faces() > 0 ) {
+     cells_ok = integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
+     if ( cells_ok ) cout <<"\n\t\t"<<"Face connectivity is fine.";
+  }
+if ( mesh_manager_.InterFaces() > 0 ) {
+     cells_ok = integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+     if ( cells_ok ) cout <<"\n\t\t"<<"InterFace connectivity is fine.";
+  }
 #endif
 
     cout << "\n==================================================================================================";
     cout << "\nModel '"<< this->Name() <<"' has been established successfully ";
-    if ( this->Mesh().Elements() > 0 ) {
+    if ( mesh_manager_.Elements() > 0 ) {
          size_t volume_elmts{0U}, surface_elmts{0U}, line_elmts{0U};
-         cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts );
-         cout <<", nodes "<< this->Mesh().Nodes() <<")";
-         cout <<"\n\t\t\t("<< Mesh().Elements() <<" elements: volumes "<< volume_elmts <<", surfaces "<< surface_elmts <<", lines "<< line_elmts <<")";
+         cout <<"(total cells "<< currentCellTypes( mesh_manager_, ELEMENT, volume_elmts, surface_elmts, line_elmts );
+         cout <<", nodes "<< mesh_manager_.Nodes() <<")";
+         cout <<"\n\t\t\t("<< mesh_manager_.Elements() <<" elements: volumes "<< volume_elmts <<", surfaces "<< surface_elmts <<", lines "<< line_elmts <<")";
       }
-    if ( this->Mesh().Faces() > 0 ) {
+    if ( mesh_manager_.Faces() > 0 ) {
          size_t volume_faces{0U}, surface_faces{0U}, line_faces{0U};
-         currentCellTypes( this->Mesh(), FACE, volume_faces, surface_faces, line_faces );
+         currentCellTypes( mesh_manager_, FACE, volume_faces, surface_faces, line_faces );
          assert( volume_faces == 0U );
-         cout <<"\n\t\t\t("<< Mesh().Faces() <<" faces: surfaces "<< surface_faces <<", lines "<< line_faces <<")";
+         cout <<"\n\t\t\t("<< mesh_manager_.Faces() <<" faces: surfaces "<< surface_faces <<", lines "<< line_faces <<")";
       }
-    if ( this->Mesh().InterFaces() > 0 ) {
+    if ( mesh_manager_.InterFaces() > 0 ) {
          size_t volume_ifaces{0U}, surface_ifaces{0U}, line_ifaces{0U};
-         currentCellTypes( this->Mesh(), INTER_FACE, volume_ifaces, surface_ifaces, line_ifaces );
+         currentCellTypes( mesh_manager_, INTER_FACE, volume_ifaces, surface_ifaces, line_ifaces );
          assert( volume_ifaces == 0U );
-         cout <<"\n\t\t\t("<< Mesh().InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
+         cout <<"\n\t\t\t("<< mesh_manager_.InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
       }
     cout << "\n==================================================================================================";
     cout << endl;
@@ -550,8 +558,6 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     this->FormRegionsFrom( mesh_topology );
     this->FormBoundariesFrom( mesh_topology );
     this->FormSplitBoundariesFrom( mesh_topology );
-    // TODO: see whether this can be done more locally
-    mesh_manager_.UpdateConnectivity();
 	
     this->RegionsOut();
     this->BoundariesOut();
@@ -562,7 +568,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
 #ifdef CSMP_MODEL_DEBUG
-integrityCheck<dim,Element>( mesh_manager_.CellsBegin(), mesh_manager_.CellsEnd() );
+mesh_manager_.AssignUniqueNumbers( true );
+integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
 if ( mesh_manager_.Faces() > 0 )
   integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
 if ( mesh_manager_.InterFaces() > 0 )
@@ -571,23 +578,23 @@ if ( mesh_manager_.InterFaces() > 0 )
 
     cout << "\n==================================================================================================";
     cout << "\nModel '"<< this->Name() <<"' has been established successfully ";
-    if ( this->Mesh().Elements() > 0 ) {
+    if ( mesh_manager_.Elements() > 0 ) {
          size_t volume_elmts{0U}, surface_elmts{0U}, line_elmts{0U};
          cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts );
-         cout <<", nodes "<< this->Mesh().Nodes() <<")";
-         cout <<"\n\t\t\t("<< Mesh().Elements() <<" elements: volumes "<< volume_elmts <<", surfaces "<< surface_elmts <<", lines "<< line_elmts <<")";
+         cout <<", nodes "<< mesh_manager_.Nodes() <<")";
+         cout <<"\n\t\t\t("<< mesh_manager_.Elements() <<" elements: volumes "<< volume_elmts <<", surfaces "<< surface_elmts <<", lines "<< line_elmts <<")";
       }
-    if ( this->Mesh().Faces() > 0 ) {
+    if ( mesh_manager_.Faces() > 0 ) {
          size_t volume_faces{0U}, surface_faces{0U}, line_faces{0U};
-         currentCellTypes( this->Mesh(), FACE, volume_faces, surface_faces, line_faces );
+         currentCellTypes( mesh_manager_, FACE, volume_faces, surface_faces, line_faces );
          assert( volume_faces == 0U );
-         cout <<"\n\t\t\t("<< Mesh().Faces() <<" faces: surfaces "<< surface_faces <<", lines "<< line_faces <<")";
+         cout <<"\n\t\t\t("<< mesh_manager_.Faces() <<" faces: surfaces "<< surface_faces <<", lines "<< line_faces <<")";
       }
-    if ( this->Mesh().InterFaces() > 0 ) {
+    if ( mesh_manager_.InterFaces() > 0 ) {
          size_t volume_ifaces{0U}, surface_ifaces{0U}, line_ifaces{0U};
-         currentCellTypes( this->Mesh(), INTER_FACE, volume_ifaces, surface_ifaces, line_ifaces );
+         currentCellTypes( mesh_manager_, INTER_FACE, volume_ifaces, surface_ifaces, line_ifaces );
          assert( volume_ifaces == 0U );
-         cout <<"\n\t\t\t("<< Mesh().InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
+         cout <<"\n\t\t\t("<< mesh_manager_.InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
       }
     cout << "\n==================================================================================================";
     cout << endl;
@@ -680,7 +687,8 @@ void Model<dim>::Initialize( VSet<dim>& vset )
   UpdateSubdomainPropertyStorage();
 
 #ifdef CSMP_MODEL_DEBUG
-integrityCheck<dim,Element>( mesh_manager_.CellsBegin(), mesh_manager_.CellsEnd() );
+Mesh().AssignUniqueNumbers( true );
+integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
 if ( mesh_manager_.Faces() > 0 )
   integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
 if ( mesh_manager_.InterFaces() > 0 )

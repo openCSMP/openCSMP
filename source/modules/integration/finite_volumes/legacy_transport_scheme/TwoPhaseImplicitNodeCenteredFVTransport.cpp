@@ -1034,8 +1034,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
 
         vector<FV_Parameter>::const_iterator  fvt=this->STENCIL_DATA.begin();
 
-        for ( typename vector<Element<dim>*>::const_iterator
-              eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
+        for ( auto eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
         {
 
             // 2.1 get necessary data from each element
@@ -1055,7 +1054,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
 
         for ( size_t i=this->gref_.InteriorNodes(); i<this->gref_.Nodes(); i++ )
         {
-             const Node<dim>* const nd_ptr=this->gref_.N(i);
+             Node<dim>* const nd_ptr=this->gref_.N(i);
              size_t nid=this->gref_.N(i)->Idx();
              double        flux_balance(0.0),inflow(0.0);
 
@@ -1064,7 +1063,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
                  // for all SECTORS of the FE_FV-stencils which contribute to boundary finite volume (surrounding the node)
                  for ( uint32_t t=0U; t<nd_ptr->Parents(); t++ )
                  {
-                     Element<dim>* const eptr(nd_ptr->Parent(t));
+                     Element<dim>* eptr(nd_ptr->Parent(t));
                      uint32_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
                      //if(((dim==3) && (!eptr->FE()->IsSurface()) && (!eptr->FE()->IsLine())) ||((dim==2) && (!eptr->FE()->IsLine()))){
                      //if((dim>1) && (!eptr->FE()->IsLine())){
@@ -1152,7 +1151,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
 
             for ( size_t i=this->gref_.InteriorNodes(); i<this->gref_.Nodes(); i++ )
             {
-                 const Node<dim>* const nd_ptr=this->gref_.N(i);
+                 Node<dim>* const nd_ptr=this->gref_.N(i);
                  size_t nid=this->gref_.N(i)->Idx();
                  double        flux_balance(0.0),inflow(0.0);
 
@@ -1334,7 +1333,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
 
         for ( size_t i=this->gref_.InteriorNodes(); i<this->gref_.Nodes(); i++ )
         {
-             const Node<dim>* const nd_ptr=this->gref_.N(i);
+             Node<dim>* const nd_ptr=this->gref_.N(i);
              size_t nid=this->gref_.N(i)->Idx();
              double        flux_balance(0.0),inflow(0.0);
 
@@ -1454,9 +1453,9 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
 
             for ( size_t i=this->gref_.InteriorNodes(); i<this->gref_.Nodes(); i++ )
             {
-                 const Node<dim>* const nd_ptr=this->gref_.N(i);
+                 Node<dim>* const nd_ptr=this->gref_.N(i);
                  size_t nid=this->gref_.N(i)->Idx();
-                 double        flux_balance(0.0),inflow(0.0);
+                 double flux_balance(0.0),inflow(0.0);
 
                  if((nd_ptr->Status(reference_variable_to_no_flow_bc_key_) == DIRICH)&&(nd_ptr->Status(this->adv1_key_)!=DIRICH)){
 

@@ -11,6 +11,7 @@
 #include "Region.h"
 #include "ErrorHandler.h"
 #include "ANSYS_Model3D.h"
+#include "MeshManagementUtilities.h"
 #include "VTK_Interface.h"
 #include "VTU_Interface.h"
 #include "FaceConstructionData.h"
@@ -43,7 +44,7 @@ void BoundaryInterface_Test::run()
       // ------------------------------
       const bool binary_file(true);
 
-      ANSYS_Model3D model( input_file.c_str(), "CSMP-variables.txt", binary_file );
+      ANSYS_Model3D  model( input_file.c_str(), "CSMP-variables.txt", binary_file );
       printModelDimensions(model, true);
 
       /// assuming a dim-1 region, label and count material juxtaposition relationships
@@ -51,134 +52,133 @@ void BoundaryInterface_Test::run()
       vector<string>  region_names;
       size_t regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
       //out( region_names );
-
-      VTU_Interface<dim>  vtu(model);
-      if ( verbose_ ) vtu.OutputDataToVTU( "BoundaryInterface_Test_", region_tag, string("Model"), 0 );
-
+        
       const string patch_tag("patch identifier");
       // creating visual output that illustrates what the boundary should look like for testing
       size_t subregions = labelRegionPatches( model, "NORMAL_FAULT", region_tag.c_str(), patch_tag.c_str(), region_names );
 
-      if ( verbose_ ) cout <<"\nBoundaryInterface_Test::run: identified "<< subregions <<" region patches in region NORMAL_FAULT touching "<< regions <<" model regions.\n";
-      if ( verbose_ ) vtu.OutputDataToVTU( "test", patch_tag, string("NORMAL_FAULT"), 0 );
-    
-	  VTU_Interface<3> vtu_boundary(model);
-	  {
-		  std::string boundary_name("LEFT");
-		  std::string variableName("face variable");
-		  Boundary<dim>& boundary(model.Boundary(boundary_name));
-		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
-		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
-										 // either be Face, Element or InterFace
-		  ScalarVariable area(PLAIN, 0.);
-		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
-		  {
-			  area = (*it)->Area();
-			  (*it)->Store(areaKey, area);
-			  ++surfaceElementCount;
-		  }
-		  if(model.ContainsBoundary(boundary_name))
-			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
-	  }	  
-	  {
-		  std::string boundary_name("RIGHT");
-		  std::string variableName("face variable");
-		  Boundary<dim>& boundary(model.Boundary(boundary_name));
-		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
-		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
-										 // either be Face, Element or InterFace
-		  ScalarVariable area(PLAIN, 0.);
-		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
-		  {
-			  area = (*it)->Area();
-			  (*it)->Store(areaKey, area);
-			  ++surfaceElementCount;
-		  }
-		  if (model.ContainsBoundary(boundary_name))
-			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
-	  }
-	  {
-		  std::string boundary_name("FRONT");
-		  std::string variableName("face variable");
-		  Boundary<dim>& boundary(model.Boundary(boundary_name));
-		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
-		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
-										 // either be Face, Element or InterFace
-		  ScalarVariable area(PLAIN, 0.);
-		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
-		  {
-			  area = (*it)->Area();
-			  (*it)->Store(areaKey, area);
-			  ++surfaceElementCount;
-		  }
-		  if (model.ContainsBoundary(boundary_name))
-			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
-	  }
-	  {
-		  std::string boundary_name("BACK");
-		  std::string variableName("face variable");
-		  Boundary<dim>& boundary(model.Boundary(boundary_name));
-		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
-		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
-										 // either be Face, Element or InterFace
-		  ScalarVariable area(PLAIN, 0.);
-		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
-		  {
-			  area = (*it)->Area();
-			  (*it)->Store(areaKey, area);
-			  ++surfaceElementCount;
-		  }
-		  if (model.ContainsBoundary(boundary_name))
-			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
-	  }
-	  {
-		  std::string boundary_name("TOP");
-		  std::string variableName("face variable");
-		  Boundary<dim>& boundary(model.Boundary(boundary_name));
-		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
-		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
-										 // either be Face, Element or InterFace
-		  ScalarVariable area(PLAIN, 0.);
-		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
-		  {
-			  area = (*it)->Area();
-			  (*it)->Store(areaKey, area);
-			  ++surfaceElementCount;
-		  }
-		  if (model.ContainsBoundary(boundary_name))
-			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
-	  }
-	  {
-		  std::string boundary_name("BOTTOM");		  
-		  std::string variableName("face variable");
-		  Boundary<dim>& boundary(model.Boundary(boundary_name));
-		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
-		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
-										 // either be Face, Element or InterFace
-		  ScalarVariable area(PLAIN, 0.);
-		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
-		  {
-			  area = (*it)->Area();
-			  (*it)->Store(areaKey, area);
-			  ++surfaceElementCount;
-		  }
-		  if (model.ContainsBoundary(boundary_name))
-			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
-   
-      if ( verbose_ ) model.BoundariesOut();
-	  }
+      if ( verbose_ ) {
+          cout <<"\nBoundaryInterface_Test::run: identified "<< subregions <<" region patches in region NORMAL_FAULT touching "<< regions <<" model regions.\n";
+          VTU_Interface<dim>  vtu(model);
+          vtu.OutputDataToVTU( "BoundaryInterface_Test_", region_tag, string("Model"), 0 );
+          vtu.OutputDataToVTU( "test", patch_tag, string("NORMAL_FAULT"), 0 );
+        }
+	    VTU_Interface<3> vtu(model);
+      {
+        std::string boundary_name("LEFT");
+        std::string variableName("face variable");
+        Boundary<dim>& boundary(model.Boundary(boundary_name));
+        Index areaKey(model.Database().StorageKey(variableName.c_str()));
+        assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+                       // either be Face, Element or InterFace
+        ScalarVariable area(PLAIN, 0.);
+        size_t surfaceElementCount(0);
+        const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+        for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
+        {
+          area = (*it)->Area();
+          (*it)->Store(areaKey, area);
+          ++surfaceElementCount;
+        }
+        if (model.ContainsBoundary(boundary_name))
+        if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
+      }
+      {
+        std::string boundary_name("RIGHT");
+        std::string variableName("face variable");
+        Boundary<dim>& boundary(model.Boundary(boundary_name));
+        Index areaKey(model.Database().StorageKey(variableName.c_str()));
+        assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+                       // either be Face, Element or InterFace
+        ScalarVariable area(PLAIN, 0.);
+        size_t surfaceElementCount(0);
+        const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+        for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
+        {
+          area = (*it)->Area();
+          (*it)->Store(areaKey, area);
+          ++surfaceElementCount;
+        }
+        if (model.ContainsBoundary(boundary_name))
+        if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
+      }
+      {
+        std::string boundary_name("FRONT");
+        std::string variableName("face variable");
+        Boundary<dim>& boundary(model.Boundary(boundary_name));
+        Index areaKey(model.Database().StorageKey(variableName.c_str()));
+        assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+                       // either be Face, Element or InterFace
+        ScalarVariable area(PLAIN, 0.);
+        size_t surfaceElementCount(0);
+        const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+        for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
+        {
+          area = (*it)->Area();
+          (*it)->Store(areaKey, area);
+          ++surfaceElementCount;
+        }
+        if (model.ContainsBoundary(boundary_name))
+        if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
+      }
+      {
+        std::string boundary_name("BACK");
+        std::string variableName("face variable");
+        Boundary<dim>& boundary(model.Boundary(boundary_name));
+        Index areaKey(model.Database().StorageKey(variableName.c_str()));
+        assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+                       // either be Face, Element or InterFace
+        ScalarVariable area(PLAIN, 0.);
+        size_t surfaceElementCount(0);
+        const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+        for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
+        {
+          area = (*it)->Area();
+          (*it)->Store(areaKey, area);
+          ++surfaceElementCount;
+        }
+        if (model.ContainsBoundary(boundary_name))
+        if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
+      }
+      {
+        std::string boundary_name("TOP");
+        std::string variableName("face variable");
+        Boundary<dim>& boundary(model.Boundary(boundary_name));
+        Index areaKey(model.Database().StorageKey(variableName.c_str()));
+        assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+                       // either be Face, Element or InterFace
+        ScalarVariable area(PLAIN, 0.);
+        size_t surfaceElementCount(0);
+        const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+        for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
+        {
+          area = (*it)->Area();
+          (*it)->Store(areaKey, area);
+          ++surfaceElementCount;
+        }
+        if (model.ContainsBoundary(boundary_name))
+        if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
+      }
+      {
+        std::string boundary_name("BOTTOM");
+        std::string variableName("face variable");
+        Boundary<dim>& boundary(model.Boundary(boundary_name));
+        Index areaKey(model.Database().StorageKey(variableName.c_str()));
+        assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+                       // either be Face, Element or InterFace
+        ScalarVariable area(PLAIN, 0.);
+        size_t surfaceElementCount(0);
+        const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+        for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
+        {
+          area = (*it)->Area();
+          (*it)->Store(areaKey, area);
+          ++surfaceElementCount;
+        }
+        if (model.ContainsBoundary(boundary_name))
+        if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
+        if ( verbose_ ) model.BoundariesOut();
+      }
 
 	  
 
@@ -186,12 +186,17 @@ void BoundaryInterface_Test::run()
       // -------------------------------------------------------------
       // 2. Creating a Boundary from an internal region "NORMAL_FAULT"
       // -------------------------------------------------------------
+      const bool connectivity_is_intact = integrityCheck<3,Element>( model.Mesh().ElementsBegin(), model.Mesh().ElementsEnd() );
+      _test( connectivity_is_intact == true );
+
       const string test_region("NORMAL_FAULT");
       Region<3U>&  test_subdomain(model.Region(test_region.c_str()));
       const size_t elmts_original_region(test_subdomain.Cells());
       // will remove the original region
       const size_t model_faces_before(model.Mesh().Faces());
       std::pair<std::set<std::string>,bool> boundaries = model.CreateInternalBoundaryFrom( "NORMAL_FAULT" );
+      // did the neighbor connectivity of the remaining elements get broken?
+      _test( model.Mesh().RemoveDegenerateNeighbors<Element>() == 0 );
       _test( boundaries.first.size() == subregions );
       _test( model.ContainsRegion("NORMAL_FAULT") == false );
       const size_t model_faces_after(model.Mesh().Faces());

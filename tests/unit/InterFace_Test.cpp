@@ -985,13 +985,6 @@ void InterFace_Test::ConstructInterFaceIngredients(Element<2> &e_in, Element<2> 
                                                    Element<2> &e_nb_in1, Element<2> &e_nb_in2,
                                                    Element<2> &e_nb_ou1, Element<2> &e_nb_ou2)
 {
-    n_in0.ResizeParentStorage(3); //outer node
-    n_in1.ResizeParentStorage(2); //inner nodes...
-    n_in2.ResizeParentStorage(2); //...
-    n_out0.ResizeParentStorage(2);
-    n_out1.ResizeParentStorage(3);
-    n_out2.ResizeParentStorage(2); //outer node
-
     //Assigning Actual Parents To nodes - parent node index to pnode with element e1 in parent elem pointers
     n_in0.Assign(0,&e_in);
     n_in1.Assign(1,&e_in);
@@ -1048,20 +1041,6 @@ void InterFace_Test::ConstructInterFaceIngredients_quadratic(Element<2> &e_in, E
                                                    Node<2> &n_in3,  Node<2> &n_in4,  Node<2> &n_in5,
                                                    Node<2> &n_out3, Node<2> &n_out4, Node<2> &n_out5)
 {
-    n_in0.ResizeParentStorage(3); //outer node
-    n_in1.ResizeParentStorage(2); //inner nodes...
-    n_in2.ResizeParentStorage(2); //...
-    n_out0.ResizeParentStorage(2);
-    n_out1.ResizeParentStorage(3);
-    n_out2.ResizeParentStorage(2); //outer node
-
-    n_in3.ResizeParentStorage(2); //outer node
-    n_in4.ResizeParentStorage(1); //inner nodes...
-    n_in5.ResizeParentStorage(2); //...
-    n_out3.ResizeParentStorage(2);
-    n_out4.ResizeParentStorage(2);
-    n_out5.ResizeParentStorage(1); //outer node
-
     //Assigning Actual Parents To nodes - parent node index to pnode with element e1 in parent elem pointers
     n_in0.Assign(0,&e_in);
     n_in1.Assign(1,&e_in);
@@ -1144,16 +1123,6 @@ void InterFace_Test::ConstructInterFaceIngredients_3D(Element<3> &e_in, Element<
                                                       Element<3> &e_nb_in1, Element<3> &e_nb_in2,
                                                       Element<3> &e_nb_ou1, Element<3> &e_nb_ou2)
 {
-  //setting node storage size
-  n_in0.ResizeParentStorage(2); //outer node
-  n_in1.ResizeParentStorage(2); //inner nodes...
-  n_in2.ResizeParentStorage(2); //...
-  n_in3.ResizeParentStorage(2);
-  n_out0.ResizeParentStorage(2);//inner nodes
-  n_out1.ResizeParentStorage(2);//...
-  n_out2.ResizeParentStorage(2);
-  n_out3.ResizeParentStorage(2); //outer node
-
   //Assigning Actual Parents To nodes - parent node index to pnode with element e1 in parent elem pointers
   n_in0.Assign(0,&e_in);
   n_in1.Assign(1,&e_in);

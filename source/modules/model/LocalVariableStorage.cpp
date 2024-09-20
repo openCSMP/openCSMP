@@ -18,16 +18,6 @@ namespace csmp {
 //       CONSTRUCTORS
 // ---------------------------------------------------------------
 
-
-
-/// Ctor for plain(empty) variable storage
-template<uint32_t dim, template<uint32_t> class STOREE>
-LocalVariableStorage<dim, STOREE>::LocalVariableStorage()
-    : data_()
-{
-}
-
-
 /// Ctor for storees without IntegrationPointVariables
 template<uint32_t dim, template<uint32_t> class STOREE>
 LocalVariableStorage<dim, STOREE>::LocalVariableStorage( const LocalVariables& lv )
@@ -46,27 +36,6 @@ LocalVariableStorage<dim, STOREE>::LocalVariableStorage( const LocalVariables& l
 }
 
 
-template<uint32_t dim, template<uint32_t> class STOREE>
-LocalVariableStorage<dim, STOREE>::~LocalVariableStorage()
-{
-}
-
-
-template<uint32_t dim, template<uint32_t> class STOREE>
-LocalVariableStorage<dim, STOREE>::LocalVariableStorage( const LocalVariableStorage<dim,STOREE>& ps )
-    : data_(ps.data_)
-{
-}
-
-
-template<uint32_t dim, template<uint32_t> class STOREE>
-LocalVariableStorage<dim, STOREE>& LocalVariableStorage<dim, STOREE>::operator=( const LocalVariableStorage& ps )
-{
-    if ( &ps != this )
-      data_.data = ps.data_.data;
-
-    return *this;
-}
 
 
 
@@ -81,6 +50,7 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariabl
     StoreLocalState(lv);
 #endif
   }
+  
 
 
 /// Goto overload for storees with IntegrationPointVariables
@@ -95,6 +65,9 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariabl
     StoreLocalState(lv);
 #endif
   }
+
+
+
 
 
 /// Resizes the storage preserving original values if any (this is where all ResizePropertyStorage end up)

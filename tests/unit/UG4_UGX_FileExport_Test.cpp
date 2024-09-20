@@ -35,7 +35,7 @@ void UG4_UGX_FileExport_Test::Run()
     // 2D Test case without SplitBoundary objects
     // ------------------------------------------
     VSet<2U> mesh;
-    ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( mesh );
+    ModelTopology topo = create_MeshPatchWithLineElements_VSet( mesh );
     const bool treat_domains_as_regions{true}; // model does not contain any Face objects!
     Model<2U> model2D( topo, mesh, "UG4_UGX_FileExport-variables.txt", treat_domains_as_regions );
 
@@ -60,7 +60,6 @@ void UG4_UGX_FileExport_Test::Run()
     // 3D Test case using model the ANSYS model 'prism_mesh'
     // -----------------------------------------------------
     ANSYS_Model3D  model3D( "prism_test", "UG4_UGX_FileExport-variables.txt",
-                             false, /* irregular_mesh */
                              true   /* binary_file */
                           );
     printRangeOfVariable( model3D, "element number" );

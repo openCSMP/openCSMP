@@ -3542,6 +3542,7 @@ size_t VData::SwitchCornerTriangles2D()
     
     @attention method relies on correct boundary flags
     
+    @todo only use face corner nodes to identify matching faces
     @todo needs to take into account potentials Faces and Interfaces.
 */
 void VData::EstablishElementConnectivity3D()

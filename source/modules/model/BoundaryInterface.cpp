@@ -664,6 +664,12 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
          patch_counter++;
       }
     patch_data.clear();
+
+    // establishes Face connectivity between patches
+    model.Mesh().template BuildConnectivity<Face>( face_vector.begin(), face_vector.end() );
+    // repairing connectivity among elements after removal
+    model.Mesh().template RemoveDegenerateNeighbors<Element>();
+
     
 #ifdef DEBUG
     cout <<"\n\nBoundaryInterface<"<< dim <<">::CreateInternalBoundaryFrom:";
@@ -1717,11 +1723,15 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
 
 // TODO: include edges into the transformations if there are any in the input (-regions.txt) file
 
-      // 3. getting MeshManager to create faces and delete pre-cursor elements
-      // ---------------------------------------------------------------------
+      // 3. getting MeshManager to create faces and delete pre-cursor elements of all boundaries
+      // ---------------------------------------------------------------------------------------
+      // (function also already connects the new Face objects with each other)
       vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                                elmts_to_become_faces.begin(),
                                                                                elmts_to_become_faces.end() );
+       // repairing connectivity among elements after removal
+       model->Mesh().template RemoveDegenerateNeighbors<Element>();
+ 
       // 4. creating the Boundaries from the faces
       // -----------------------------------------
       typename vector<Face<dim>*>::iterator fit{ faces.begin() };
@@ -1741,7 +1751,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
       // 5. removing input regions and updating other regions
       // ------------------------------------------------------------------------------------
       // (no flagging for rebuilt of regions is necessary as they will be completely removed)
-      const bool erase_elements{ false }; // this was already done above
+      const bool erase_elements{ false }; // this was already done by ReplaceBoundaryElementsByFaces()
       if ( top.first != top.second ) model->RemoveRegion( "TOP", erase_elements );
       if ( irregular.first != irregular.second ) model->RemoveRegion( "IRREGULAR", erase_elements );
       model->RemoveRegion( "BOTTOM", erase_elements );
@@ -1769,7 +1779,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
     converts lower-dimensional Region on the outside of the model into a Boundary; returns whether this conversion was successful as well as the boundary name
 */
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
-pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom( const char* dimension_minus1_region, bool check_topo_attributes_of_nodes )
+pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom( const char* dimension_minus1_region,
+                                                                                         bool check_topo_attributes_of_nodes )
   {
 	  BOUNDARY_COMPLEX<dim>* model(static_cast<BOUNDARY_COMPLEX<dim>*>(this));
 
@@ -1812,6 +1823,10 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
     vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                              elmts_to_become_faces.begin(),
                                                                              elmts_to_become_faces.end() );
+    // repairing connectivity among elements after removal
+    model->Mesh().template RemoveDegenerateNeighbors<Element>();
+
+
     // 3. creating the Boundary from the faces
     // ---------------------------------------
     // either taking BOX-B name or appending '_BOUNDARY' to the original name of the region
@@ -1909,10 +1924,15 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
 
     // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------
+    // (the newly created Face objects also get interconnected as well)
     assert( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) == 0 );
     vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                              elmts_to_become_faces.begin(),
                                                                              elmts_to_become_faces.end() );
+    // repairing connectivity among elements after removal
+    model->Mesh().template RemoveDegenerateNeighbors<Element>();
+
+
     // 3. creating the Boundaries from the faces
     // -----------------------------------------
     typename vector<Face<dim>*>::iterator fit{ faces.begin() };
@@ -2014,15 +2034,20 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     const IntegrationPointVariables lvsIntegrationPoints( boundaryComplex->Database().IntegrationPointVariablesAt(FACE_INTEGRATION_POINT) );
 
     // creating faces on the outside of the model
+    vector<Face<dim>*> face_ptrs;
     const csmp::Region<dim>& model_domain( boundaryComplex->Region("Model") );
     assert( model_domain.PerimeterCells() > 0 );
+    face_ptrs.reserve( model_domain.PerimeterCells() );
+    // getting MeshManager to create boundary faces
     for ( size_t i=model_domain.InteriorCells(); i<model_domain.Cells(); ++i )
-      for ( auto j{0U}; j < model_domain.PerimeterFaces(i); ++j ) {
+      for ( uint32_t j{0U}; j < model_domain.PerimeterFaces(i); ++j ) {
            // ascertaining that we are indeed at the model boundary
            assert( model_domain.E(i)->Neighbor( model_domain.PerimeterFace(i,j) ) == nullptr );
            // creating the boundary face
-           mesh.AddBoundaryFace( model_domain.E(i), model_domain.PerimeterFace(i,j), lvsFaces, lvsIntegrationPoints );
+           face_ptrs.push_back( mesh.AddBoundaryFace( model_domain.E(i), model_domain.PerimeterFace(i,j), lvsFaces, lvsIntegrationPoints ) );
+           //                   ----------------------------------------------------------------------------------------------------------
         }
+    mesh.template BuildConnectivity<csmp::Face>( face_ptrs.begin(), face_ptrs.end() ); // between the faces
 
     vector<string> eligibleRegions;
     eligibleRegions.reserve( boundaryComplex->UniqueRegions() );

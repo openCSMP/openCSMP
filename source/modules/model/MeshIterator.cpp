@@ -23,10 +23,10 @@ MeshIterator<dim,CELL>::MeshIterator( Node<dim>* root_node )
  {
     // 1. traversal of existing contiguous mesh patch to find all its elements
     while ( !current_nodes_.empty() ) {
-        const csmp::Node<dim>*  n_ptr( *current_nodes_.begin() );
+        csmp::Node<dim>*  n_ptr( *current_nodes_.begin() );
         // for all parent elements of the current node
         const uint32_t parent_cells(n_ptr->Parents());
-        for ( auto i{0U}; i<parent_cells; ++i ) {
+        for ( uint32_t i{0U}; i<parent_cells; ++i ) {
             // for all the nodes of each parent element
             const uint32_t parent_nodes(n_ptr->Parent(i)->Nodes());
             for ( uint32_t j{0U}; j<parent_nodes; ++j )

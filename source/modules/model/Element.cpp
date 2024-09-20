@@ -117,8 +117,7 @@ Element<dim>::Element( size_t idx,
 }
 
 
-
-
+/*
 template<uint32_t dim>
 Element<dim>::Element( const Element<dim>& el )
   : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
@@ -126,43 +125,34 @@ Element<dim>::Element( const Element<dim>& el )
     idx_( el.idx_ ),
     material_id_(el.material_id_),
     region_id_(el.region_id_),
-    elmt_connector_( el.elmt_connector_ ), // the pointers point to the same elements as for the original element
-    node_connector_( el.node_connector_ )
+    elmt_connector_( el.elmt_connector_.size(), nullptr ),
+    node_connector_( el.node_connector_.size(), nullptr )
 {
-  assert( !node_connector_.empty() /* detected unitialized element*/ );
-  assert( !elmt_connector_.empty() /* detected unitialized element*/ );
   // variable storage: call of initialization function
   this->LVS( el.LVS() );
 }
 
 
-
-/// move constructor
 template<uint32_t dim>
 Element<dim>::Element( Element<dim>&& el )
   : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
     FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
-//    LocalVariableStorage<dim, csmp::Element>( el.LVS() ),  does not compile, why?
-    idx_(el.idx_),
-    material_id_(el.material_id_),
-    region_id_(el.region_id_),
-    // calling std::move() is important, else elmt destructor has to do more work!
-    elmt_connector_( std::move(el.elmt_connector_) ),
-    node_connector_( std::move(el.node_connector_) )
+//    LocalVariableStorage<dim, csmp::Element>( el.LVS() ), //  does not compile, why?
+    // in-built types are copied
+    idx_{ el.idx_ },
+    material_id_{ el.material_id_},
+    region_id_{ el.region_id_ },
+    elmt_connector_{ el.elmt_connector_ },
+    node_connector_{ el.node_connector_ }
 {
+   // nulling the pointers in the dying object
+   el.AssignFiniteElementNullPtr();
+   el.AssignFiniteVolumeNullPtr();
+   
    this->LVS( std::move(el.LVS()) );
     
-//  cerr <<"\nElement(ctor): moved element: "<< Idx();
+//  cout <<"\nElement(ctor): moved element: "<< Idx();
 }
-
-
-
-
-template<uint32_t dim>
-Element<dim>::~Element()
- {          
- } // end destructor
-
 
 
 template<uint32_t dim>
@@ -182,10 +172,6 @@ Element<dim>& Element<dim>::operator=( const Element<dim>& el )
 }
 
 
-
-/**
-@note a temporary variable cannot be equivalent to lvalue!
-*/
 template<uint32_t dim>
 Element<dim>& Element<dim>::operator=( Element<dim>&& el )
 {
@@ -207,6 +193,7 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
 
   return *this;
 }
+*/
 
 
 
@@ -621,7 +608,7 @@ transformation) matrix.
 template<uint32_t dim>
 void  Element<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
 {
-  const auto n_nodes( Nodes() );
+  const uint32_t n_nodes{ Nodes() };
   XY.Resize( n_nodes, dim );
   for ( uint32_t i{0U}; i<n_nodes; ++i )
     XY.AssignRow( i, N( i )->Coordinate() );

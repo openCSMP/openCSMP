@@ -35,11 +35,6 @@ SparseMatrix_Test::SparseMatrix_Test()
 }
 
 
-SparseMatrix_Test::~SparseMatrix_Test()
-{
-}
-
-
 // checked: SKM 8/5/2022
 void SparseMatrix_Test::run()
  {
