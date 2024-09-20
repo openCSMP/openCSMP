@@ -195,6 +195,8 @@ InterFace<dim>::InterFace( size_t index,
 }
 
 
+/* we use the compiler to generate the following methods
+
 /// copy constructor
 template<uint32_t dim>
 InterFace<dim>::InterFace( const InterFace<dim>& ifc )
@@ -210,7 +212,7 @@ InterFace<dim>::InterFace( const InterFace<dim>& ifc )
     inner_parent_face_id_( ifc.inner_parent_face_id_ ),
     outer_parent_face_id_( ifc.outer_parent_face_id_ )
 {
-  assert( !interface_connector_.empty() /* detected unitialized element*/ );
+  assert( !interface_connector_.empty() );
   // variable storage: call of initialization function
   this->LVS( ifc.LVS() );
 }
@@ -243,17 +245,12 @@ InterFace<dim>::InterFace( InterFace<dim>&& ifc )
 }
 
 
-
-
-
-
 /// assignment
 template<uint32_t dim>
 InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
 {
   if ( &ifc != this )
     {
-      // TODO: these assignments may be redundant
       if ( ifc.FE() ) FiniteElementPolicy<dim, csmp::InterFace>::Assign( ifc.FE() );
       if ( ifc.FV() ) FiniteVolumePolicy<dim, csmp::InterFace>::AssignFiniteVolume( ifc.FV() );
 
@@ -296,6 +293,7 @@ InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
   return *this;
 }
 
+end compiler generated */
 
 
 

@@ -111,13 +111,6 @@ class Face : public FiniteElementPolicy<dim,Face>,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
-    Face( const Face& );
-  
-    /// hand-coded move constructor that is important since pointers need to be assigned
-    Face( Face&& );
-
-    ~Face();
-
     /// connects face to the supplied node
     void Assign( uint32_t node, Node<dim>* const );
     
@@ -134,12 +127,6 @@ class Face : public FiniteElementPolicy<dim,Face>,
     bool Unassign( const Face<dim>* const );
     /// removal of anything attached to face neighbor
 	  void UnassignNeighbor( uint32_t nbor );
-
-    /// @attention because of the pointers, this assignment makes sense only in the rarest cases
-    Face& operator=( const Face<dim>& );
-
-    /// hand-coded move assignment; important since pointers need to be assigned
-    Face& operator=( Face<dim>&& );
   
     /// compares faces with one-another
     bool operator==( const Face<dim>& ) const;

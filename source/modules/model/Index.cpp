@@ -199,11 +199,11 @@ Index::Index( const csmp::Index& idx )
 
 /// move constructor that takes care of index tracker
 Index::Index( csmp::Index&& idx )
-  : type(std::move(idx.type)), place(std::move(idx.place)), index(std::move(idx.index)),
-    dataDepth(std::move(idx.dataDepth)), flagDepth(std::move(idx.flagDepth)), dataOffset(std::move(idx.dataOffset)), flagOffset(std::move(idx.flagOffset)),
-    offsetFactorCell(std::move(idx.offsetFactorCell)), offsetFactorSector(std::move(idx.offsetFactorSector)),
-    ipFactorCell(std::move(idx.ipFactorCell)), ipFactorSector(std::move(idx.ipFactorSector)), ipFactorFacet(std::move(idx.ipFactorFacet)),
-    localVariables(std::move(idx.localVariables)), integrationPointVariables(std::move(idx.integrationPointVariables)),
+  : type(idx.type), place(idx.place), index(idx.index),
+    dataDepth(idx.dataDepth), flagDepth(idx.flagDepth), dataOffset(idx.dataOffset), flagOffset(idx.flagOffset),
+    offsetFactorCell(idx.offsetFactorCell), offsetFactorSector(idx.offsetFactorSector),
+    ipFactorCell(idx.ipFactorCell), ipFactorSector(idx.ipFactorSector), ipFactorFacet(idx.ipFactorFacet),
+    localVariables(idx.localVariables), integrationPointVariables(idx.integrationPointVariables),
     indexTracker(nullptr)
   {
       // attach itself to IndexTracker and vice versa
@@ -255,20 +255,20 @@ Index&  Index::operator=( const csmp::Index& idx )
 Index&  Index::operator=( csmp::Index&& idx )
  {
     assert( this != &idx );
-    type                      = std::move(idx.type);
-    place                     = std::move(idx.place);
-    index                     = std::move(idx.index);
-    dataDepth                 = std::move(idx.dataDepth);
-    flagDepth                 = std::move(idx.flagDepth);
-    dataOffset                = std::move(idx.dataOffset);
-    flagOffset                = std::move(idx.flagOffset);
-    offsetFactorCell       = std::move(idx.offsetFactorCell);
-    offsetFactorSector        = std::move(idx.offsetFactorSector);
-    ipFactorCell           = std::move(idx.ipFactorCell);
-    ipFactorSector            = std::move(idx.ipFactorSector);
-    ipFactorFacet             = std::move(idx.ipFactorFacet);
-    localVariables            = std::move(idx.localVariables);
-    integrationPointVariables = std::move(idx.integrationPointVariables);
+    type                      = idx.type;
+    place                     = idx.place;
+    index                     = idx.index;
+    dataDepth                 = idx.dataDepth;
+    flagDepth                 = idx.flagDepth;
+    dataOffset                = idx.dataOffset;
+    flagOffset                = idx.flagOffset;
+    offsetFactorCell          = idx.offsetFactorCell;
+    offsetFactorSector        = idx.offsetFactorSector;
+    ipFactorCell              = idx.ipFactorCell;
+    ipFactorSector            = idx.ipFactorSector;
+    ipFactorFacet             = idx.ipFactorFacet;
+    localVariables            = idx.localVariables;
+    integrationPointVariables = idx.integrationPointVariables;
     /// attach itself to IndexTracker and vice versa.
     if( idx.indexTracker ) {
          // give up previous index tracker

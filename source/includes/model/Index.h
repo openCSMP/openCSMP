@@ -91,6 +91,7 @@ struct Index {
     using int_type = LocalVariables::int_type;
 
     Index();
+    
     Index( VARIABLE_TYPE, PLACEMENT, int_type idx );
   
     Index( VARIABLE_TYPE, PLACEMENT, int_type idx, int_type dataDepth, int_type flagDepth, int_type dataOffset, int_type flagOffset,
@@ -104,8 +105,9 @@ struct Index {
 
     Index&  operator=( const csmp::Index& );
     Index&  operator=( csmp::Index&& );
+
     bool    operator==( const csmp::Index& ) const;
-    bool    operator!=( const csmp::Index& ) const; 
+    bool    operator!=( const csmp::Index& ) const;
     bool    operator<( const csmp::Index& ) const; 
     bool    IsDefined() const;
 

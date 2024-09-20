@@ -89,23 +89,16 @@ Point<1U>::Point( double val ) : x_(val)
  {
  }
 
-Point<1U>::Point( const Point<1U>& pt ) : x_(pt.x_)
- {
- }
-
 Point<1U>::Point( const array<double,1U>& v )
  : x_(v[0])
  {
  }
 
+
 Point<1U>::Point( const vector<double>& v )
  : x_(v[0])
  {
     assert( v.size() == 1U );
- }
-
-Point<1U>::~Point()
- {
  }
 
 
@@ -132,12 +125,6 @@ void Point<1U>::Set( const vector<double>& v )
     x_ = v[0];
  }
 
-
-Point<1U>& Point<1U>::operator=( const Point<1U>& pt )
- {
-    if ( &pt != this ) x_ = pt.x_;
-    return *this;
- }
 
 Point<1U>& Point<1U>::operator=( double val )
  {
@@ -331,19 +318,10 @@ Point<2U>::Point( double px, double py ) : x_(px), y_(py)
  {
  }
 
-Point<2U>::Point( const Point<2U>& pt ) : x_(pt.x_), y_(pt.y_)
- {
- }
-
 Point<2U>::Point( const vector<double>& v )
  : x_(v[0]), y_(v[1])
  {
  }
-
-Point<2U>::~Point()
- {
- }
-
 
 double& Point<2U>::operator[]( uint32_t i )
  {
@@ -375,16 +353,6 @@ void Point<2U>::Set( double px, double py )
  {
     x_ = px;
     y_ = py;
- }
-
-
-Point<2U>& Point<2U>::operator=( const Point<2U>& pt )
- {
-    if ( &pt != this ) {
-         x_ = pt.x_;
-         y_ = pt.y_;
-      }
-    return *this;
  }
 
 
@@ -591,10 +559,6 @@ Point<3U>::Point( double px, double py, double pz ) : x_(px), y_(py), z_(pz)
  {
  }
 
-Point<3U>::Point( const Point<3U>& pt ) : x_(pt.x_), y_(pt.y_), z_(pt.z_)
- {
- }
-
 
 Point<3U>::Point( const array<double,3U>& v )
  : x_(v[0]), y_(v[1]), z_(v[2])
@@ -607,9 +571,6 @@ Point<3U>::Point( const vector<double>& v )
  {
  }
 
-Point<3U>::~Point()
- {
- }
 
 double& Point<3U>::operator[]( uint32_t i )
  {
@@ -646,16 +607,6 @@ void Point<3U>::Set( double px, double py, double pz )
     z_ = pz;
  }
 
-
-Point<3U>& Point<3U>::operator=( const Point<3U>& pt )
- {
-    if ( &pt != this ) {
-         x_ = pt.x_;
-         y_ = pt.y_;
-         z_ = pt.z_;
-      }
-    return *this;
- }
 
 
 Point<3U>& Point<3U>::operator=( double val )

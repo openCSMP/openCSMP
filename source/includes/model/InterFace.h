@@ -118,12 +118,6 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
                const LocalVariables&  interface_props,
                const IntegrationPointVariables&  interface_integration_point_props );
 
-    InterFace( const InterFace<dim>& );
-    InterFace( InterFace<dim>&& );
-    ~InterFace() = default;
-    InterFace& operator=( const InterFace<dim>& );
-    InterFace& operator=( InterFace<dim>&& );
-  
     /// self-detection in the interface construction process
     bool operator==( const InterFace<dim>& );
 

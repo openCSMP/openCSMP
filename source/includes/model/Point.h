@@ -24,15 +24,10 @@ class Point {
   public:
     /// initialises point to default position of zero
     explicit Point( double = 0. );
-    ~Point() = default;
   
     /// construct point from an STL vector of coordinate values
     explicit Point( const std::vector<double>& );
     explicit Point( const std::array<double,dim>& );
-    Point( const Point& );
-    Point( Point&& ) = default;
-    Point& operator=( const Point& );
-    Point& operator=( Point&& ) = default;
     Point& operator=( double );
     Point operator+( const Point& ) const;
     Point operator-( const Point& ) const;
@@ -148,13 +143,8 @@ template<>
 class Point<1U> {
   public:
     Point( double = 0. ); ///< explicit keyword is not required because conversion is desired
-    ~Point();
     explicit Point( const std::array<double,1>& );
     explicit Point( const std::vector<double>& );
-    Point( const Point<1U>& );
-    Point( Point<1U>&& ) = default;
-    Point<1U>& operator=( const Point<1U>& );
-    Point<1U>& operator=( Point<1U>&& ) = default;
     Point<1U>& operator=( double );
     Point<1U> operator+( const Point<1U>& ) const;
     Point<1U> operator-( const Point<1U>& ) const;
@@ -207,14 +197,9 @@ template<>
 class Point<2U> {
   public:
     explicit Point( double = 0. );
-    ~Point();
     Point( double, double );
     explicit Point( const std::array<double,2U>& );
     explicit Point( const std::vector<double>& );
-    Point( const Point& );
-    Point( Point&& ) = default;
-    Point<2U>& operator=( const Point<2U>& );
-    Point<2U>& operator=( Point<2U>&& ) = default;
     Point<2U>& operator=( double );
     Point<2U> operator+( const Point<2U>& ) const;
     Point<2U> operator-( const Point<2U>& ) const;
@@ -272,14 +257,9 @@ template<>
 class Point<3U> {
   public:
     explicit Point( double = 0. );
-    ~Point();
     Point( double, double, double );
     explicit Point( const std::array<double,3U>& );
     explicit Point( const std::vector<double>& );
-    Point( const Point& );
-    Point( Point&& ) = default;
-    Point<3U>& operator=( const Point<3U>& );
-    Point<3U>& operator=( Point<3U>&& ) = default;
     Point<3U>& operator=( double );
     Point<3U> operator+( const Point<3U>& ) const;
     Point<3U> operator-( const Point<3U>& ) const;
