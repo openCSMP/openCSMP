@@ -91,8 +91,6 @@ public:
   static constexpr VARIABLE_TYPE VariableType = TENSOR;
 
   TensorVariable();
-  TensorVariable( const TensorVariable& );
-  TensorVariable( TensorVariable&& ) = default;
 
   /// creates isotropic diagonal tensor with diagonal elements equal to supplied value
   TensorVariable( VARIABLE_FLAG flag, double val );
@@ -108,12 +106,6 @@ public:
                   const double  v11, const double  v12, const double  v13,
                   const double  v21, const double  v22, const double  v23,
                   const double  v31, const double  v32, const double  v33 );
-
-  ~TensorVariable();
-
-  /// basic assignment
-  TensorVariable&  operator=( const TensorVariable& );
-  TensorVariable&  operator=( TensorVariable&& ) = default;
 
   /// read/write access to the elements of the tensor
   double&        operator()( uint32_t i, uint32_t j );

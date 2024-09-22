@@ -72,9 +72,6 @@ public:
 
   ScalarVariable();
   ScalarVariable( VARIABLE_FLAG f, double val );
-  ScalarVariable( const ScalarVariable& );
-  ScalarVariable( ScalarVariable&& ) = default;
-  ~ScalarVariable();
 
   ScalarVariable&  operator+=( const ScalarVariable& );
   ScalarVariable&  operator-=( const ScalarVariable& );
@@ -87,12 +84,6 @@ public:
   ScalarVariable&  operator-=( double val ) { data_ -= val; return *this; }
   ScalarVariable&  operator*=( double val ) { data_ *= val; return *this; }
   ScalarVariable&  operator/=( double val ) { data_ /= val; return *this; }
-
-  /// assignment operator
-  ScalarVariable&  operator=( const ScalarVariable& );
-
-  /// move assignment
-  ScalarVariable&  operator=( ScalarVariable&& ) = default;
 
   /// comparitor that is used by less<> predicate in STL
   bool             operator<( const ScalarVariable& ) const;

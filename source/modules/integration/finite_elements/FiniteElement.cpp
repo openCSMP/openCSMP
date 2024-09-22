@@ -48,42 +48,11 @@ FiniteElement::FiniteElement( CSMP_FEM_TYPE csp_fem_type,
  }
 
 
-FiniteElement::FiniteElement( const FiniteElement& e ) 
-  { 
-     *this = e; 
-  }
-
-
-
-FiniteElement&  FiniteElement::operator=( const FiniteElement& e )
- {
-    if ( this != &e ) 
-      {
-        dim = e.dim;
-        itp = e.itp;
-        npe = e.npe;
-        spe = e.spe;
-        fpe = e.fpe;
-        epe = e.epe;
-        nne = e.nne;
-        cne = e.cne;
-        gpe = e.gpe;
-        isoparametric            = e.isoparametric;
-        uses_local_coordinates   = e.uses_local_coordinates;
-        order_of_shape_functions = e.order_of_shape_functions;
-        element_category         = e.element_category;
-        csp_fem_type             = e.csp_fem_type;
-        object_id_               = e.object_id_;
-        XY  = e.XY;
-        M   = e.M;
-      }
-    return *this;
- }
-
 void  FiniteElement::Isoparametric( bool isoparam ) { isoparametric = isoparam; }
 void  FiniteElement::UsesLocalCoordinates( bool uses ) { uses_local_coordinates = uses; }
 
-// inlined methods
+
+// methods
 
 bool isTriangularElement( CSMP_FEM_TYPE etype )
  {

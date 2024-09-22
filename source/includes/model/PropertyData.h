@@ -43,7 +43,7 @@ template<uint32_t dim> void read( const PropertyData&, size_t position, TensorVa
 
   @section design Design Intent
 
-  Replace FEM_Data in VSet to streamline variable exchange and storage
+  More disk storage-size efficient alternative to FEM_Data in VSet to streamline variable exchange and storage
   to disk; make it possible to read variables selectively from file.
 
   @section examples Application Examples
@@ -65,13 +65,9 @@ template<uint32_t dim> void read( const PropertyData&, size_t position, TensorVa
 */
 class PropertyData {
   public:
-    /// constructor (but no initializer) for all possible csmp variable types; array length gives the number of elements in array or flagged array variable
+
+    /// custom constructor (but not initializer) for csmp variable types; array length gives the number of elements in array or flagged array variable
     PropertyData( PLACEMENT, VARIABLE_TYPE, uint32_t dim, uint32_t array_length=0U );
-  
-    PropertyData( const PropertyData& );
-    PropertyData( PropertyData&& );
-    ~PropertyData();
-    PropertyData& operator=( const PropertyData& );
   
     /// compare to another dataset of this sort
     bool operator==( const PropertyData& ) const;
@@ -152,16 +148,13 @@ class PropertyData {
     void Out() const;
 
   private:
-    PropertyData() = delete;
-
-  private:
-    const PLACEMENT             place_;        ///< placement of variable
-    const VARIABLE_TYPE         type_;         ///< any of scalar..flagged array
-    const uint32_t              dim_;          ///< spatial dimension
-    const uint32_t              flag_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
-    const uint32_t              data_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
-    std::vector<VARIABLE_FLAG>  flags_;        ///< variable flags
-    std::vector<double>         data_;         ///< variable values
+    PLACEMENT                  place_ = ELEMENT;  ///< placement of variable
+    VARIABLE_TYPE              type_  = SCALAR;   ///< any of scalar..flagged array
+    uint32_t                   dim_   = 3;        ///< spatial dimension
+    uint32_t                   flag_stride_ = 1;  ///< variable to variable offset (e.g. dim in a vector var)
+    uint32_t                   data_stride_ = 1;  ///< variable to variable offset (e.g. dim in a vector var)
+    std::vector<VARIABLE_FLAG> flags_;        ///< variable flags
+    std::vector<double>        data_;         ///< variable values
  };
 
 

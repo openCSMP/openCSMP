@@ -31,29 +31,6 @@ FEM_Data<csp_type>::FEM_Data( PLACEMENT p, const vector<csp_type>& d )
  } 
 
 
-template<typename csp_type>
-FEM_Data<csp_type>& FEM_Data<csp_type>::operator=( const FEM_Data<csp_type>& p )
- {
-   if ( &p == this ) return *this;
-   place           = p.place;
-   data            = p.data; 
-   logarithmitized = p.logarithmitized;
-   return *this;
- } 
-
-
-template<typename csp_type>
-FEM_Data<csp_type>::FEM_Data( const FEM_Data<csp_type>& d )
- : place(d.place), data(d.data), logarithmitized(d.logarithmitized)
- {
- } 
-
-
-template<typename csp_type>
-FEM_Data<csp_type>::~FEM_Data()
- {
- } 
-
 
 /// you may only reset using a key of the same <csp_type> (i.e., ELEMENT )
 template<typename csp_type>

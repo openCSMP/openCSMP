@@ -6,13 +6,6 @@ using namespace std;
 namespace csmp {
 
 
-TensorVariable<3U>::TensorVariable( const TensorVariable<3U>& t )
-  : flag( t.flag ),
-  data( t.data )
-{
-}
-
-
 TensorVariable<3U>::TensorVariable()
   : flag{ { ANY,ANY,ANY } },
   data{ numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),
@@ -23,14 +16,6 @@ TensorVariable<3U>::TensorVariable()
 
 
 
-TensorVariable<3U>&  TensorVariable<3U>::operator=( const TensorVariable<3U>& ts )
-{
-  if ( &ts != this ) {
-    flag = ts.flag;
-    data = ts.data;
-  }
-  return *this;
-}
 
 
 
@@ -49,8 +34,6 @@ TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f, double val )
 //            INLINE METHODS START HERE
 //
 // ******************************************************************************************
-
-TensorVariable<3U>::~TensorVariable() {}
 
 
 double& TensorVariable<3U>::operator()( uint32_t i, uint32_t j )

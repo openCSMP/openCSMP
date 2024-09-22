@@ -46,17 +46,13 @@ Elements are registered as parents, Faces and InterFaces are not.
 template<uint32_t dim>
 class Node : public LocalVariableStorage<dim,Node> {
   public:
+
     Node();
+
     /// custom constructor used when model is reconstructed from binary file
     Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT, TOPOTYPE = MESH_VERTEX );
-    ~Node();
-    /// constructs Node with same idx, position, property values, and pointer connections as the argument Node
-    Node( const Node& );
-    Node( Node&& );
-    Node& operator=( const Node& );
-    Node& operator=( Node&& );
 
-    /// comparitor (Roman, 2014), very costly. @todo rethink logic and rewrite
+    /// compares memory location, idx_, BREP classifier and boundary flag
     bool operator==( const Node<dim>& );
 
     /// Local variable storage interface
@@ -199,11 +195,10 @@ class Node : public LocalVariableStorage<dim,Node> {
     Point<dim>                     xyz_;                      ///< coordinate array
     mutable size_t                 idx_;                      ///< 0..n-1
     NodeParentElementVector<dim>   parents_;                  ///< parent element pointers and corresponding local node numbers
-    //                                                        TODO: check whether next definition still holds
     std::vector<Node<dim>*>        neighbor_node_pointers_;   ///< corner node to corner node on opposite end of the segment pointer
     NodeManifold<dim>*             manifold_ = nullptr;       ///< node manifold pointer
-    BOX_BOUNDARY                   at_boundary_;              ///< which model boundary the Node is on
-    TOPOTYPE                       BREP_entity_;              ///< the topologic feature of the boundary representation that the node belongs to
+    BOX_BOUNDARY                   at_boundary_ = NOT;         ///< which model boundary the Node is on
+    TOPOTYPE                       BREP_entity_ = MESH_VERTEX; ///< the topologic feature of the boundary representation that the node belongs to
     
     friend class FiniteElement_TestData; // for testing
     friend std::istream& operator >> ( std::istream&, FiniteElement_TestData& );

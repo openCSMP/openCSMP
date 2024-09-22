@@ -45,120 +45,23 @@ Node<dim>::Node( size_t idx,
 
 
 
+
+
 /**
-    Copy constructor also copies the pointer assignments (!).
+    Tries to distinguish 2 nodes from one another.
     
-    @attention when copy constructing manifold nodes, make sure to add this new Node to it
-*/
-template<uint32_t dim>
-Node<dim>::Node( const Node<dim>& nd )
-  : xyz_(nd.xyz_), idx_(nd.idx_),
-    parents_(nd.parents_),
-    neighbor_node_pointers_(nd.neighbor_node_pointers_),
-    manifold_(nd.manifold_),
-    at_boundary_(nd.at_boundary_),
-    BREP_entity_(nd.BREP_entity_)
-  {
-    this->LVS( nd.LVS() );
-    // NB: if this is a manifold, the new Node must be added to it,
-    //     but this can only be done once the node has been constructed
-  }
-
-
-
-/**
-    Move constructor also copies the pointer assignments (!).
-*/
-template<uint32_t dim>
-Node<dim>::Node( Node<dim>&& nd )
-  : xyz_{ std::move(nd.xyz_) },
-    idx_{ std::move(nd.idx_) },
-    parents_{ std::move(nd.parents_) },
-    neighbor_node_pointers_{ std::move(nd.neighbor_node_pointers_) },
-    manifold_{ std::move(nd.manifold_) },
-    at_boundary_{ std::move(nd.at_boundary_) },
-    BREP_entity_{ std::move(nd.BREP_entity_)}
-  {
-    this->LVS( std::move(nd.LVS()) );
-  }
-
-
-
-
-template<uint32_t dim>
-Node<dim>::~Node()
- {
-//    if ( manifold_ != nullptr ) manifold_->Remove( this );
-//    cerr <<"\nNode "<< Idx() <<": called destructor.";
- }
-
-
-
-
-template<uint32_t dim>
-Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
- {
-    if ( &nd != this ) 
-      {
-         xyz_                     = nd.xyz_;
-         idx_                     = nd.idx_;
-         at_boundary_             = nd.at_boundary_;
-         BREP_entity_             = nd.BREP_entity_;
-         parents_                 = nd.parents_;
-         neighbor_node_pointers_  = nd.neighbor_node_pointers_;
-         manifold_                = nd.manifold_;
-         this->LVS( std::move( nd.LVS() ) );
-      }
-    return *this;
- }
-
-
-
-
-/**
-    Move assignment, relying on that similar operators exist for the nodes components.
-    
-    @note this assumes that the supplied node is a temporary.
-*/
-template<uint32_t dim>
-Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
- {
-    assert( this != &nd );
-    xyz_                     = nd.xyz_;
-    idx_                     = nd.idx_;
-    at_boundary_             = nd.at_boundary_;
-    BREP_entity_             = std::move( nd.BREP_entity_ );
-    parents_                 = std::move( nd.parents_ );
-    neighbor_node_pointers_  = std::move( nd.neighbor_node_pointers_ );
-    manifold_                = std::move( nd.manifold_ );
-    this->LVS( nd.LVS() );
- 
-    return *this;
- }
-
-
-
-
-/**
     This comparison operator was designed specifically for the creation of particular Region, Boundary and SplitBoundary objects.
     Hence, only information important for this process is taken into account, distinguishing 2 Nodes from each other.
     That must be coordinate and parent elements
-
-    @author Roman Manasipov
-    @date   2014
-
-TODO: when would this be used?
-
 */
 template<uint32_t dim>
 bool  Node<dim>::operator==( const Node<dim>& nd )
  {
-    if ( &nd != this )
-      {
-        if ( BREP_entity_ != nd.BREP_entity_ ) return false;
-        if ( distance( Coordinate(), nd.Coordinate() ) > numeric_limits<double>::epsilon() ) return false;
-        if ( AtBoundary() != nd.AtBoundary() ) return false;
-    }
+    if ( &nd == this ) return true;
+    if ( idx_ != nd.idx_ ) return false;
+    if ( BREP_entity_ != nd.BREP_entity_ ) return false;
+    // collocation is not a criterion:  if ( distance( Coordinate(), nd.Coordinate() ) > numeric_limits<double>::epsilon() ) return false;
+    if ( AtBoundary() != nd.AtBoundary() ) return false;
     return true;
  }
  

@@ -85,54 +85,6 @@ VData::VData( uint32_t nodes_per_element, uint32_t nbors_per_element, size_t nod
 
 
 
-VData::~VData()
-{
-}
-
-
-VData::VData( const VData& vd )
- : px(vd.px), py(vd.py), pz(vd.pz), 
-   plist(vd.plist), pfverts(vd.pfverts),
-   pelmt(vd.pelmt),
-   bflags(vd.bflags),
-   gflags_(vd.gflags_),
-   hybrid_mesh_(vd.hybrid_mesh_),
-   first_face_( vd.first_face_ ),
-   first_interface_(vd.first_interface_ ),
-   pmanifolds_( vd.pmanifolds_ )
-{
-}
-
-
-
-
-
-VData& VData::operator=( const VData& a )
-{
-  if ( &a == this ) return *this;
-  
-  px               = a.px;
-  py               = a.py;
-  pz               = a.pz;
-  pelmt            = a.pelmt;
-  plist            = a.plist;
-  pfverts          = a.pfverts;
-  bflags           = a.bflags;
-  gflags_          = a.gflags_;
-  hybrid_mesh_     = a.hybrid_mesh_;
-  first_face_      = a.first_face_;
-  first_interface_ = a.first_interface_;
-  pmanifolds_      = a.pmanifolds_;
-
-  return *this;
-}
-
-
-
-
-
-
-
 void  VData::Px( size_t i, double val ) 
 { assert( i<px.size() ); px[i] = val; }
 

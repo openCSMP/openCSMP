@@ -30,21 +30,6 @@ ScalarVariable::ScalarVariable( VARIABLE_FLAG f, double val )
 
 
 
-ScalarVariable::ScalarVariable( const ScalarVariable& s )
-  : flag_( s.flag_ ),
-  data_( s.data_ )
-{
-}
-
-
-
-ScalarVariable::~ScalarVariable() {}
-
-
-
-
-
-
 ScalarVariable&  ScalarVariable::operator+=( const ScalarVariable& s )
 {
   data_ += s.data_;
@@ -79,17 +64,6 @@ ScalarVariable&  ScalarVariable::operator/=( const ScalarVariable& s )
 }
 
 
-
-
-
-
-ScalarVariable&  ScalarVariable::operator=( const ScalarVariable& s )
-{
-  if ( &s == this ) return *this;
-  flag_ = s.flag_;
-  data_ = s.data_;
-  return(*this);
-}
 
 
 bool  ScalarVariable::operator<( const ScalarVariable& s ) const

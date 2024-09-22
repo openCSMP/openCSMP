@@ -2,11 +2,9 @@
 #define CSMP_MATRIX_H
 
 #include "CSMP_definitions.h"
+#include "DynamicArray2D.h"
 
 namespace csmp {
-
-template<uint32_t> class VectorVariable;
-template<uint32_t> class TensorVariable;
 
 /** 
     @brief Experimental implementation of class for a dense matrix
@@ -25,50 +23,35 @@ template<uint32_t> class TensorVariable;
 */
 class Matrix {
   public:
-    Matrix();
+    Matrix() {}
     Matrix( size_t m, size_t n );
     Matrix( size_t m, size_t n, double val );
-    Matrix( const Matrix& M );
-    ~Matrix();
+
     size_t Rows() const;
     size_t Cols() const;
     void Resize( size_t m, size_t n );
+    
     /// accessors M(i,j)
     double&       operator()( size_t m, size_t n );
     const double& operator()( size_t m, size_t n ) const;
     /// assignment
-    Matrix& operator=( const Matrix& M );
     Matrix& operator=( double val );
-
-    Matrix& operator=( const TensorVariable<2U>& M );
-    Matrix& operator=( const TensorVariable<3U>& M );
-    /// matrix tensor multiplication
-    Matrix& operator*=( double val );
-    Matrix& operator*=( const TensorVariable<2U>& M );
-    Matrix& operator*=( const TensorVariable<3U>& M );
-    /// matrix vector multiplication
-    Matrix& operator*=( const VectorVariable<2U>& vc );
-    Matrix& operator*=( const VectorVariable<3U>& vc );
 
     Matrix& operator+=( const Matrix& M );
     Matrix& operator-=( const Matrix& M );
     ///  matrix - matrix multiplication -> M(A.rows,B.cols) (operator creates temporary M)
     Matrix& operator*=( const Matrix& M );
+    Matrix& operator*=( double val );
     /// matrix vector multiplication
     Matrix& operator*=( const std::vector<double>& v );
-    /// matrix C-array vector multiplication
-    Matrix& operator*=( const double* v );
     /// adding of same-size matrices
     Matrix  operator+( const Matrix& M ) const;
     Matrix  operator-( const Matrix& M ) const;
     /// C = A B, matrix - matrix multiplication -> M(A.rows,B.cols)
     Matrix  operator*( const Matrix& M ) const;
+
     void Identity();
     
-    void AssignToDiagonal( const VectorVariable<2U>& vc );
-    void AssignToDiagonal( const VectorVariable<3U>& vc );
-    void ExportTo( TensorVariable<2U>& ts ) const;
-    void ExportTo( TensorVariable<3U>& ts ) const;
     /// returns vec = Mat * unity vector
     void RowCondenseTo( std::vector<double>& vec ) const;
 
@@ -82,13 +65,16 @@ class Matrix {
     std::vector<double> ReturnCol( size_t col ) const;
     void AssignToRow( size_t row, std::vector<double>& vec );
     void AssignToCol( size_t row, std::vector<double>& vec );
-    void Inversed( Matrix& RES ) const;
+
     /// RES = M^T into its argument
     void Transposed( Matrix& RES ) const;
+
     /// RES = M^T M
     void TransposedProduct( Matrix& RES ) const;
+
     /// RES = A B^T
     void MultiplyWithTransposedOf( const Matrix& B, Matrix& RES ) const;
+
     /// RES = A^T B
     void MultiplyTransposedOfWith( const Matrix& B, Matrix& RES ) const;
     double   RowSum( size_t row ) const;
@@ -107,8 +93,7 @@ class Matrix {
     void LUBackSubstitution(std::vector<uint32_t>& index, std::vector<double>& b);
   
   private:
-   size_t                             rows, cols;
-   std::vector<std::vector<double> >  data; // TODO: use DynamicArray2D
+   DynamicArray2D<double>  data;
    
    bool  CheckRange( size_t m, size_t n, const char* originator ) const;
    bool  CheckSizes( const Matrix& mat, const char* originator ) const;

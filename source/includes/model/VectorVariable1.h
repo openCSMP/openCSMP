@@ -13,11 +13,10 @@ class VectorVariable<1U> {
     static constexpr VARIABLE_TYPE VariableType = VECTOR;
 
     VectorVariable();
-    VectorVariable( const VectorVariable& vc );
+
     VectorVariable( VARIABLE_FLAG f, double val );
-    explicit VectorVariable( const std::vector<double>& v );
-    explicit VectorVariable( const csmp::Point<1U>& p );
-    ~VectorVariable();
+    explicit VectorVariable( const std::vector<double>& );
+    explicit VectorVariable( const csmp::Point<1U>& );
     
     // access of vector elements
     double&        operator()( uint32_t i );
@@ -37,31 +36,30 @@ class VectorVariable<1U> {
     VectorVariable&  operator*=( double val );
     VectorVariable&  operator/=( double val );
     
-    VectorVariable&  operator+=( const ScalarVariable& sc );
-    VectorVariable&  operator-=( const ScalarVariable& sc );
-    VectorVariable&  operator*=( const ScalarVariable& sc );
-    VectorVariable&  operator/=( const ScalarVariable& sc );
+    VectorVariable&  operator+=( const ScalarVariable& );
+    VectorVariable&  operator-=( const ScalarVariable& );
+    VectorVariable&  operator*=( const ScalarVariable& );
+    VectorVariable&  operator/=( const ScalarVariable& );
     
-    VectorVariable   operator+(  const VectorVariable& v ) const;
-    VectorVariable   operator-(  const VectorVariable& v ) const;
-    VectorVariable   operator*(  const VectorVariable& v ) const; 
-    VectorVariable   operator/(  const VectorVariable& v ) const;
+    VectorVariable   operator+(  const VectorVariable& ) const;
+    VectorVariable   operator-(  const VectorVariable& ) const;
+    VectorVariable   operator*(  const VectorVariable& ) const;
+    VectorVariable   operator/(  const VectorVariable& ) const;
 
-    VectorVariable&  operator+=( const VectorVariable& v );
-    VectorVariable&  operator-=( const VectorVariable& v );
-    VectorVariable&  operator*=( const VectorVariable& v );
-    VectorVariable&  operator/=( const VectorVariable& v );
+    VectorVariable&  operator+=( const VectorVariable& );
+    VectorVariable&  operator-=( const VectorVariable& );
+    VectorVariable&  operator*=( const VectorVariable& );
+    VectorVariable&  operator/=( const VectorVariable& );
     
     VectorVariable&  operator=( double val );
-    VectorVariable&  operator=( const csmp::Point<1U>& p );
-    VectorVariable&  operator=(  const ScalarVariable& s );
-    VectorVariable&  operator=(  const VectorVariable& v );
+    VectorVariable&  operator=( const csmp::Point<1U>& );
+    VectorVariable&  operator=(  const ScalarVariable& );
 
     // extra operators
-    bool             operator==( const VectorVariable& v ) const; 
-    bool             operator!=( const VectorVariable& v ) const; 
+    bool             operator==( const VectorVariable& ) const;
+    bool             operator!=( const VectorVariable& ) const;
     // compare length
-    bool             operator<( const VectorVariable& v ) const; 
+    bool             operator<( const VectorVariable& ) const;
   
     // Normal Methods
     VARIABLE_FLAG&   Flag( uint32_t i=0 );

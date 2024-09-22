@@ -43,8 +43,6 @@ class FaceConstructionData {
                           std::pair<long,long>& neighbor_element_materials,
                           long   this_material,
                           uint32_t number_of_patch_this_data_belongs_to );
-  
-    FaceConstructionData( const FaceConstructionData& );
     
      // NO ASSIGMENT OPERATOR BECAUSE ALL CLASS MEMBERS ARE CONSTANT
   
@@ -81,7 +79,6 @@ class FaceConstructionData {
   
   private:
     FaceConstructionData();
-    FaceConstructionData& operator=( const FaceConstructionData& );
   
   private:
     Element<dim>&                                dim_m1_element_; ///< idx of lower-dimensional parent element

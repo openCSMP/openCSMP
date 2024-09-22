@@ -17,27 +17,6 @@ TensorVariable<2U>::TensorVariable()
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator=( const TensorVariable<2U>& ts )
- {
-    if ( &ts != this ) 
-      {
-         flag = ts.flag;
-         data = ts.data;
-      }  
-    return *this; 
- }
-
-
-
-/**
-    @todo SKM do not use assigment when constructing a new object
-*/
-TensorVariable<2U>::TensorVariable( const TensorVariable<2U>& t )
- : flag(t.flag),
-   data(t.data)
- {
- }
-
 
 
 /**
@@ -168,12 +147,6 @@ uint32_t TensorVariable<2U>::Size() const
 
  
                                    
- 
-
-TensorVariable<2U>::~TensorVariable() {}
-
-
-// keep for storage of tensors in associative containers
 bool  TensorVariable<2U>::operator==( const TensorVariable<2U>& ts ) const
  {
     return ( data == ts.data && flag == ts.flag );

@@ -75,49 +75,6 @@ PropertyData::PropertyData( PLACEMENT place, VARIABLE_TYPE type, uint32_t spatia
  } 
 
 
-PropertyData::PropertyData( const PropertyData& pd )
- : place_(pd.place_),
-   type_(pd.type_),
-   dim_(pd.dim_),
-   flags_(pd.flags_),
-   data_(pd.data_),
-   flag_stride_(pd.flag_stride_),
-   data_stride_(pd.data_stride_)
- {
-//    cerr <<"\nPropertyData: called copy constructor.\n";
- }
-
-
-/// moves all the contents from pd over to this object
-PropertyData::PropertyData( PropertyData&& pd )
- : place_{pd.place_},
-   type_{pd.type_},
-   dim_{pd.dim_},
-   flags_{pd.flags_},
-   data_{pd.data_},
-   flag_stride_{pd.flag_stride_},
-   data_stride_{pd.data_stride_}
- {
-//    cerr <<"\nPropertyData: called move constructor.\n";
- }
-
-
-PropertyData& PropertyData::operator=( const PropertyData& pd )
- {
-    if ( &pd != this ) {
-        assert( place_ == pd.place_ );
-        assert( type_ == pd.type_ );
-        assert( dim_ == pd.dim_ );
-        flags_  = pd.flags_;
-        data_   = pd.data_;
-     }
-   return *this;
- } 
-
-// no dynamically allocated memory in this class
-PropertyData::~PropertyData()
- {
- } 
 
 
 // ACCESSORS AND MUTATORS

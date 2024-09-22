@@ -79,10 +79,8 @@ class VectorVariable<3U> {
   public:
     static constexpr VARIABLE_TYPE VariableType = VECTOR;
 
-    VectorVariable();                             ///< default constructor
-    ~VectorVariable();                            ///< destructor
-    VectorVariable( const VectorVariable& );      ///< copy constructor
-    VectorVariable( VectorVariable&& ) = default; ///< move constructor
+    VectorVariable(); ///< default constructor initialising values to NaN
+
     /// sets all elements to fl, val
     VectorVariable( VARIABLE_FLAG, double );
   
@@ -107,8 +105,6 @@ class VectorVariable<3U> {
     VectorVariable&  operator=( double );
     VectorVariable&  operator=( const Point<3U>& );
     VectorVariable&  operator=( const ScalarVariable& );
-    VectorVariable&  operator=( const VectorVariable& );
-    VectorVariable&  operator=( VectorVariable&& ) = default;
 
     // standard operators
     VectorVariable   operator+( double ) const;

@@ -14,8 +14,6 @@ class TensorVariable<2U> {
     static constexpr VARIABLE_TYPE VariableType = TENSOR;
 
     TensorVariable();
-    TensorVariable( const TensorVariable& );
-    TensorVariable( TensorVariable&& ) = default;
     TensorVariable( VARIABLE_FLAG f, double val );
     TensorVariable( VARIABLE_FLAG f, double v11, double v12,
                     double v21, double v22 );
@@ -23,8 +21,6 @@ class TensorVariable<2U> {
     TensorVariable( const VARIABLE_FLAG& f11, const VARIABLE_FLAG& f22,
                     const double&  v11, const double&  v12,
                     const double&  v21, const double&  v22 );
-                                                      
-    ~TensorVariable();
     
     double&        operator()( uint32_t i, uint32_t j );
     const double&  operator()( uint32_t i, uint32_t j ) const;
@@ -62,8 +58,6 @@ class TensorVariable<2U> {
     TensorVariable&  operator=( double val );
     TensorVariable&  operator=( const ScalarVariable& );
     TensorVariable&  operator=( const VectorVariable<2U>& );
-    TensorVariable&  operator=( const TensorVariable& );
-    TensorVariable&  operator=( TensorVariable&& ) = default;
   
     bool             operator==( const TensorVariable& ) const;
     bool             operator!=( const TensorVariable& ) const;

@@ -2162,6 +2162,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
    
     // 5. checking that all cells have at least one neighbor
     // -----------------------------------------------------
+    // if not, this is not necessarily an issue, only if the cells are equidimensional
     const string check5("\nintegrityCheck: Are there cells without any neighbors?");
     multimap<size_t,uint32_t>  missing_nbors;
     first = copy_of_first;
@@ -2177,11 +2178,12 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
            if ( n_valid_nbors == 0 ) {
                 if ( first_call ) { cerr << check5; first_call=false; }
                 cerr <<"\n\t"<< celltype <<" "<< parseFiniteElementType((*first).FE_Type()) <<":"<< (*first).Idx() <<": has no neighbors.";
-                issues++;
+                if ( (*first).IsEquidimensional() ) issues++;
              }
          first++;
       }
     if ( !first_call ) cerr << endl;
+
 
     // 6. checking that all non-null neighbors of the cells are valid
     // --------------------------------------------------------------

@@ -13,11 +13,7 @@ class TensorVariable<1U> {
     static constexpr VARIABLE_TYPE VariableType = TENSOR;
 
     TensorVariable();
-    TensorVariable( const TensorVariable& );
     TensorVariable( VARIABLE_FLAG, double );
-    TensorVariable( TensorVariable&& ) = default;
-                                                      
-    ~TensorVariable();
     
     double&        operator()( uint32_t i, uint32_t j );
     const double&  operator()( uint32_t i, uint32_t j ) const;
@@ -53,14 +49,12 @@ class TensorVariable<1U> {
     TensorVariable&  operator*=( const TensorVariable& t );
     
     TensorVariable&  operator=( double val );
-    TensorVariable&  operator=( const ScalarVariable& s );
-    TensorVariable&  operator=( const VectorVariable<1U>& v );
-    TensorVariable&  operator=( const TensorVariable& t );
-    TensorVariable&  operator=( TensorVariable&& ) = default;
+    TensorVariable&  operator=( const ScalarVariable& );
+    TensorVariable&  operator=( const VectorVariable<1U>& );
   
-    bool             operator==( const TensorVariable& t ) const; 
-    bool             operator!=( const TensorVariable& t ) const; 
-    bool             operator<( const TensorVariable& t ) const; 
+    bool             operator==( const TensorVariable& ) const;
+    bool             operator!=( const TensorVariable& ) const;
+    bool             operator<( const TensorVariable& ) const; 
     
     bool             IsWithinRange( double vmin, double vmax ) const;
     bool             Has_NaN_Values() const { return std::isnan(data); }

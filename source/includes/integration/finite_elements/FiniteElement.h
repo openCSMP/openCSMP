@@ -150,7 +150,7 @@ class FiniteElement {
                    uint32_t order_of_shape_functions );
 
     virtual ~FiniteElement() {}
-
+    
     /// assigns integer value used to avoid repeating the same operation
     void           CurrentID( size_t id );
   
@@ -376,8 +376,11 @@ class FiniteElement {
                                        DenseMatrix<DM_MIN>& DATA ) const;
 
   protected:
-    FiniteElement( const FiniteElement& e );
-    FiniteElement& operator=( const FiniteElement& e );
+    FiniteElement( const FiniteElement& ) = default;
+    FiniteElement( FiniteElement&& ) = default;
+    FiniteElement& operator=( const FiniteElement& ) = default;
+    FiniteElement& operator=( FiniteElement&& ) = default;
+
     void           Isoparametric( bool isoparam );
     void           UsesLocalCoordinates( bool uses );
     void           LineElement();

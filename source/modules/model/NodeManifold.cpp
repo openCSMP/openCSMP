@@ -9,15 +9,6 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim>
-NodeManifold<dim>::~NodeManifold()
-{
-   // before destruction you should disconnect the nodes from the manifold, like so
-   // for ( auto& nit : branches_ )
-   //  nit.first = static_cast<Node<dim>*>(nullptr);
-}
-
-
 /**
     Transfers manifold information directly from supplied data to new manifold,
     connecting the nodes from the container in the MeshManager with the newly created manifolds.
@@ -77,7 +68,7 @@ NodeManifold<dim>::NodeManifold( const manifold& nodes, ManifoldType geometry )
 }
 
 
-
+/*
 template<uint32_t dim>
 NodeManifold<dim>::NodeManifold( const NodeManifold& nmf )
  : branches_(nmf.branches_),
@@ -116,7 +107,7 @@ NodeManifold<dim>& NodeManifold<dim>::operator=( NodeManifold<dim>&& nmf )
       }
     return *this;
  }
-
+*/
 
 
 // accessor
@@ -258,7 +249,7 @@ uint32_t NodeManifold<dim>::NodeMapSize() const
 
 
 template<uint32_t dim>
-uint32_t NodeManifold<dim>::InterFaces(Node<dim>* n) const
+uint32_t NodeManifold<dim>::InterFaces( Node<dim>* const n ) const
 {
   //check map has been calibrated
   assert( !node_parent_interface_map_.empty() );
@@ -277,7 +268,7 @@ Node<dim>* const NodeManifold<dim>::N( size_t branch ) const
 
 
 template<uint32_t dim>
-InterFace<dim>* NodeManifold<dim>::I(Node<dim>* n, uint32_t i)
+InterFace<dim>* NodeManifold<dim>::I( Node<dim>* const n, uint32_t i )
 {
   assert(!node_parent_interface_map_.empty());
 
@@ -288,7 +279,7 @@ InterFace<dim>* NodeManifold<dim>::I(Node<dim>* n, uint32_t i)
 
 
 template<uint32_t dim>
-std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>> NodeManifold<dim>::InterFaceIndex(Node<dim>* n, uint32_t i)
+std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>> NodeManifold<dim>::InterFaceIndex( Node<dim>* const n, uint32_t i )
 {
   assert(!node_parent_interface_map_.empty());
   auto interface_indexes = node_parent_interface_map_.at(n);
@@ -299,7 +290,7 @@ std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>> NodeManifold<dim>
 
 
 template<uint32_t dim>
-std::vector<std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> NodeManifold<dim>::InterFaceIndexVector(Node<dim>* n)
+std::vector<std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> NodeManifold<dim>::InterFaceIndexVector( Node<dim>* const n )
 {
   assert(!node_parent_interface_map_.empty());
   return  node_parent_interface_map_.at(n);

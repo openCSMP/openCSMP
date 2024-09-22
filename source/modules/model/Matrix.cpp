@@ -1,49 +1,21 @@
 #include "Matrix.h"
-#include "VectorVariable.h"
-#include "TensorVariable.h"
 
 using namespace std;
 
 namespace csmp {
 
-// operator=( DM )
-// ---------------------------------------
-
-Matrix& Matrix::operator=( const Matrix& mat )
- {
-    if ( &mat != this ) {
-         data.resize( mat.Rows(), vector<double>(mat.Cols(),0.) );
-         rows  = mat.rows;
-         cols  = mat.cols;
-
-         for ( size_t i{0U}; i<rows; i++ )
-           for ( size_t j{0U}; j<cols; j++ ) 
-             data[i][j] = mat.data[i][j]; 
-      }
-      
-    return *this;
- }
-
-
 
 
 Matrix& Matrix::operator=( double val )
  {
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<cols; j++ ) data[i][j] = val; 
+    for ( size_t i{0U}; i<data.rows(); i++ )
+      for ( size_t j{0U}; j<data.cols(); j++ ) data(i,j) = val;
       
     return *this;
  }
 
 
 
-// copy constructor
-// ---------------------------------------
-
-Matrix::Matrix( const Matrix& mat )
- : rows(mat.rows), cols(mat.cols), data(mat.data)
- {
- }
 
 
 
@@ -51,74 +23,23 @@ Matrix::Matrix( const Matrix& mat )
 // ---------------------------------------
 
 Matrix::Matrix( size_t m, size_t n, double val )
- : rows(m), cols(n), data(m,vector<double>(n,val))
+ : data(m,n,val)
  {
  }
-
-
-// destructor
-// ---------------------------------------
-
-Matrix::~Matrix()
- {
- }
-
 
 
 
 
 Matrix&  Matrix::operator*=( double val )
  {
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<cols; j++ ) data[i][j] *= val;
+    for ( size_t i{0U}; i<data.rows(); i++ )
+      for ( size_t j{0U}; j<data.cols(); j++ ) data(i,j) *= val;
        
     return *this;
  }
 
 
 
-// matrix - tensor multiplication
-// ------------------------------ 
-
-Matrix& 
-  Matrix::operator*=( const TensorVariable<3U>& ts )
- {
-    if ( cols != 3U ) {
-         std::cout <<"\nMatrix<double>::operator*=(TensorVar.3D): matrix.cols != tensor.dim\n";
-         throw std::range_error("Matrix<>::operator*=(TensorVar.3D): matrix.cols != tensor.dim");
-      }
-      
-    // when loop unrolling is not possible
-    if ( rows != cols ) {
-         // C++ named return value optimization
-         Matrix  temp( rows, 3U );
-    
-         for ( size_t i{0U}; i<rows; i++ )
-           for ( uint32_t j{0U}; j<3U; j++ ) {
-                 temp.data[i][j] = static_cast<double>(0.0);
-                 for ( uint32_t k{0U}; k<3U; k++ ) 
-                   temp.data[i][j] += data[i][k] * ts(k,j);
-             }
-         return *this = temp;
-      }
-
-    TensorVariable<3U> temp;
-    // Unrolled loop(i...3,j...3)
-    // row 0
-    temp(0,0) = data[0][0] * ts(0,0) + data[0][1] * ts(1,0) + data[0][2] * ts(2,0);
-    temp(0,1) = data[0][0] * ts(0,1) + data[0][1] * ts(1,1) + data[0][2] * ts(2,1);
-    temp(0,2) = data[0][0] * ts(0,2) + data[0][1] * ts(1,2) + data[0][2] * ts(2,2);
-     // row 1
-    temp(1,0) = data[1][0] * ts(0,0) + data[1][1] * ts(1,0) + data[1][2] * ts(2,0);
-    temp(1,1) = data[1][0] * ts(0,1) + data[1][1] * ts(1,1) + data[1][2] * ts(2,1);
-    temp(1,2) = data[1][0] * ts(0,2) + data[1][1] * ts(1,2) + data[1][2] * ts(2,2);
-    // row 2
-    temp(2,0) = data[2][0] * ts(0,0) + data[2][1] * ts(1,0) + data[2][2] * ts(2,0);
-    temp(2,1) = data[2][0] * ts(0,1) + data[2][1] * ts(1,1) + data[2][2] * ts(2,1);
-    temp(2,2) = data[2][0] * ts(0,2) + data[2][1] * ts(1,2) + data[2][2] * ts(2,2);
-  
-    return *this = temp; 
- }
 
 
 
@@ -129,7 +50,7 @@ Matrix&
 
 Matrix&  Matrix::operator*=( const Matrix& mat )
  {
-    if ( cols != mat.rows ) {
+    if ( data.cols() != mat.data.rows() ) {
          std::cerr <<"\nMatrix<double>::operator*=: Matrices cannot be multiplied ";
          std::cerr <<"because of incompatible sizes (A *= B, see matrices below): "<< endl;
          Out();
@@ -140,15 +61,15 @@ Matrix&  Matrix::operator*=( const Matrix& mat )
     //cout << "cols vs. rows."<<cols<<" "<<rows<<endl;
     // C++ named return value optimization
     //Matrix  temp( rows, mat.cols );
-    Matrix  temp( cols, mat.rows ,0.0);
+    Matrix  temp( data.cols(), mat.data.rows(),0.0);
 
-    for ( size_t i{0U}; i<cols; i++ )
+    for ( size_t i{0U}; i<data.cols(); i++ )
     {
-      for ( size_t j{0U}; j<mat.rows; j++ ) {
-        //temp.data[i][j] = static_cast<double>(0.0);
-        for ( size_t k{0U}; k<mat.rows; k++ )
+      for ( size_t j{0U}; j<mat.data.rows(); j++ ) {
+        //temp.data(i,j) = static_cast<double>(0.0);
+        for ( size_t k{0U}; k<mat.data.rows(); k++ )
         {
-          temp.data[i][j] += this->data[i][k] * mat.data[k][j];
+          temp.data(i,j) += this->data(i,k) * mat.data(k,j);
         }
       }
     }
@@ -161,52 +82,16 @@ Matrix&  Matrix::operator*=( const Matrix& mat )
 
 
 
-
-
-Matrix& 
-Matrix::operator*=( const TensorVariable<2U>& ts )
- {
-    if ( cols != 2U ) {
-         std::cout <<"\nMatrix<double>::operator*=(TensorVar.2D): matrix.cols != tensor.dim\n";
-         throw std::range_error("Matrix<>::operator*=(TensorVar.2D): matrix.cols != tensor.dim");
-      }
-      
-    // when loop unrolling is not possible
-    if ( rows != cols ) {
-         // C++ named return value optimization
-         Matrix  temp( rows, 2U );
-    
-         for ( size_t i{0U}; i<rows; i++ )
-           for ( uint32_t j{0U}; j<2U; j++ ) {
-                 temp.data[i][j] = static_cast<double>(0.0);
-                 for ( uint32_t k{0U}; k<2U; k++ ) 
-                   temp.data[i][j] += data[i][k] * ts(k,j);
-             }
-         return *this = temp;
-      }
-
-    TensorVariable<3U> temp;
-    // temp(i,j) += data[i][k]*ts(k][j];
-    temp(0,0) = data[0][0] * ts(0,0) + data[0][1] * ts(1,0);
-    temp(0,1) = data[0][0] * ts(0,1) + data[0][1] * ts(1,1);
-    temp(1,0) = data[1][0] * ts(0,0) + data[1][1] * ts(1,0);
-    temp(1,1) = data[1][0] * ts(0,1) + data[1][1] * ts(1,1);
-       
-    return *this = temp;
- }
- 
-
-
 // RowCondenseTo
 // ---------------------------------------
 /// vec = Mat * unity vector
 
 void Matrix::RowCondenseTo( std::vector<double>& vec ) const
  {
-    vec.resize(rows);
+    vec.resize(data.rows());
     vector<double>( vec ).swap( vec );
-    for ( size_t i{0U}; i<rows; i++ ) vec[i] = RowSum(i);
- } 
+    for ( size_t i{0U}; i<data.rows(); i++ ) vec[i] = RowSum(i);
+ }
 
 
 
@@ -216,8 +101,8 @@ void Matrix::RowCondenseTo( std::vector<double>& vec ) const
 Matrix& Matrix::operator+=( const Matrix& mat )
  {
     CheckSizes( mat, "Matrix::operator+=" );
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<cols; j++ ) data[i][j] += mat.data[i][j]; 
+    for ( size_t i{0U}; i<data.rows(); i++ )
+      for ( size_t j{0U}; j<data.cols(); j++ ) data(i,j) += mat.data(i,j);
       
     return *this;
  }
@@ -231,8 +116,8 @@ Matrix& Matrix::operator+=( const Matrix& mat )
 Matrix& Matrix::operator-=( const Matrix& mat )
  {
     CheckSizes( mat, "Matrix::operator-=" );
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<cols; j++ ) data[i][j] -= mat.data[i][j]; 
+    for ( size_t i{0U}; i<data.rows(); i++ )
+      for ( size_t j{0U}; j<data.cols(); j++ ) data(i,j) -= mat.data(i,j);
       
     return *this;
  }
@@ -247,11 +132,11 @@ Matrix& Matrix::operator-=( const Matrix& mat )
 Matrix  Matrix::operator+( const Matrix& mat ) const
  {
     CheckSizes( mat, "Matrix::operator+" );
-    Matrix  temp(cols,rows);
+    Matrix  temp(data.cols(),data.rows());
     
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<cols; j++ ) 
-        temp.data[i][j] = data[i][j] + mat.data[i][j]; 
+    for ( size_t i{0U}; i<data.rows(); i++ )
+      for ( size_t j{0U}; j<data.cols(); j++ )
+        temp.data(i,j) = data(i,j) + mat.data(i,j);
       
     return temp;
  }
@@ -263,11 +148,11 @@ Matrix  Matrix::operator+( const Matrix& mat ) const
 Matrix Matrix::operator-( const Matrix& mat ) const
  {
     CheckSizes( mat, "Matrix::operator-" );
-    Matrix  temp(cols,rows);
+    Matrix  temp(data.cols(),data.rows());
     
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<cols; j++ ) 
-        temp.data[i][j] = data[i][j] - mat.data[i][j]; 
+    for ( size_t i{0U}; i<data.rows(); i++ )
+      for ( size_t j{0U}; j<data.cols(); j++ )
+        temp.data(i,j) = data(i,j) - mat.data(i,j);
       
     return temp;
  }
@@ -275,66 +160,10 @@ Matrix Matrix::operator-( const Matrix& mat ) const
 
 
 
-Matrix& 
-  Matrix::operator*=( const VectorVariable<2U>& vc )
- {   
-    assert ( cols == 2U );
-    double sum;
-    
-    // when loop unrolling is not possible
-    if ( rows != cols ) {
-        for ( uint32_t i=0U; i<rows; i++ ) {
-               sum = static_cast<double>(0.0);
-               for ( uint32_t j{0U}; j<cols; j++ )
-                 sum +=  data[i][j] * vc[j];
-               data[i][0] = sum;
-            }
-         cols = 1U;
-         return *this;
-      }
-    
-    sum = data[0][0] * vc[0] + data[0][1] * vc[1];
-    data[0][0] = sum;
-    sum = data[1][0] * vc[0] + data[1][1] * vc[1];
-    data[1][0] = sum;
-    
-    cols = 1U;
-
-    return *this;
- }
 
 
 
 
-Matrix& 
-  Matrix::operator*=( const VectorVariable<3U>& vc )
- {
-    assert ( cols == 3U );
-    double sum;
-    
-    // when loop unrolling is not possible
-    if ( rows != cols ) {
-        for ( uint32_t i=0U; i<rows; i++ ) {
-               sum = static_cast<double>(0.0);
-               for ( uint32_t j{0U}; j<cols; j++ )
-                 sum +=  data[i][j] * vc[j];
-               data[i][0] = sum;
-            }
-         cols = 1U;
-         return *this;
-      }
-    
-    sum = data[0][0] * vc[0] + data[0][1] * vc[1] + data[0][2] * vc[2];
-    data[0][0] = sum;
-    sum = data[1][0] * vc[0] + data[1][1] * vc[1] + data[1][2] * vc[2];
-    data[1][0] = sum;
-    sum = data[2][0] * vc[0] + data[2][1] * vc[1] + data[2][2] * vc[2];
-    data[2][0] = sum;
-
-    cols = 1U;
-
-    return *this;
- }
 
 
 
@@ -345,8 +174,8 @@ Matrix&
 Matrix  Matrix::operator*( const Matrix& mat ) const
  {
 //    cout << "cols vs. rows."<<cols<<" "<<rows<<endl;
-    if ( cols != mat.rows ) {
-         std::cout <<"\nMatrix<double>::operator*: Matrices cannot be multiplied "; 
+    if ( data.cols() != mat.data.rows() ) {
+         std::cout <<"\nMatrix<double>::operator*: Matrices cannot be multiplied ";
          std::cout <<"because of incompatible sizes (A *= B, see matrices below): "<< std::endl;
          Out(3);
          mat.Out(3);
@@ -354,14 +183,14 @@ Matrix  Matrix::operator*( const Matrix& mat ) const
       }
 
     // use STANDARD return value optimization
-    Matrix  temp( rows, mat.cols );
+    Matrix  temp( data.rows(), mat.data.cols() );
     //temp.Out(3);
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<mat.cols; j++ ) {
-           temp.data[i][j] = static_cast<double>(0.0);
-           for ( size_t k{0U}; k<mat.rows; k++ ) 
-             temp.data[i][j] += data[i][k]*mat.data[k][j];
-        }  
+    for ( size_t i{0U}; i<data.rows(); i++ )
+      for ( size_t j{0U}; j<mat.data.cols(); j++ ) {
+           temp.data(i,j) = static_cast<double>(0.0);
+           for ( size_t k{0U}; k<mat.data.rows(); k++ )
+             temp.data(i,j) += data(i,k) * mat.data(k,j);
+        }
     return temp;
  }
 
@@ -373,53 +202,27 @@ Matrix  Matrix::operator*( const Matrix& mat ) const
 
 Matrix& Matrix::operator*=( const std::vector<double>& vecT )
  {
-    if ( cols != vecT.size() ) {
+    if ( data.cols() != vecT.size() ) {
          std::cout <<"\nMatrix<double>::operator*=: ";
          std::cout <<"Matrix and vector<double> cannot be multiplied "; 
          std::cout <<"because of incompatible sizes (A(cols != vecT(size)): "<< vecT.size() << std::endl;
          throw std::length_error("Matrix<mn_max>::operator*=");
       }
     
-    size_t  i, j;
-    double            sum;
+    size_t  j;
+    double  sum;
     
-    for ( i=0U; i<rows; i++ ) {
-         for ( sum=static_cast<double>(0.0), j=0; j<vecT.size(); j++ ) sum += data[i][j] * vecT[j];
-         data[i][0U] = sum;
+    for ( size_t i=0U; i<data.rows(); i++ ) {
+         for ( sum=static_cast<double>(0.0), j=0ul; j<vecT.size(); j++ ) sum += data(i,j) * vecT[j];
+         data(i,0U) = sum;
       }
       
-    // resizing the matrix
-    cols = 1U;  
+    data.resize( data.rows(), 1 );
       
     return *this;
  }
 
 
-// operator*  matrix with C-array multiplication
-// ---------------------------------------------
-/// Clearly, all hell will break loose if the C-array has not been initialized properly
-
-Matrix& Matrix::operator*=( const double* vecT ) 
- {
-    if ( vecT == NULL ) {
-         std::cout <<"\nMatrix<double>::operator*=: Matrix and vector<double> cannot be multiplied "; 
-         std::cout <<"because vecT C-array is not initialized." << std::endl;
-         throw std::length_error("Matrix<mn_max>::operator*=");
-      }
-    size_t  i, j;
-    double      sum;
-    
-    for ( i=0U; i<rows; i++ ) {
-         for ( sum=static_cast<double>(0.0), j=0; j<rows; j++ ) sum += data[i][j] * vecT[j];
-         data[i][0] = sum;
-      }
-      
-    // resizing the matrix
-    cols = 1;  
-      
-    return *this;
- }
-    
 
 
 
@@ -429,7 +232,7 @@ Matrix& Matrix::operator*=( const double* vecT )
 void 
 Matrix::MultiplyWithTransposedOf( const Matrix& B, Matrix& RES ) const
  {
-    if ( cols != B.cols ) {
+    if ( data.cols() != B.data.cols() ) {
          cout <<"\nMatrix<double>::MultiplyWithTransposedOf: ";
          cout <<"Matrices cannot be multiplied "; 
          cout <<"because of incompatible sizes (A *= B^T, see matrices below): "<< endl;
@@ -438,15 +241,15 @@ Matrix::MultiplyWithTransposedOf( const Matrix& B, Matrix& RES ) const
          throw length_error("Matrix<mn_max>::MultiplyWithTransposedOf");
       }
     
-    RES.Resize( rows, B.rows );
+    RES.Resize( data.rows(), B.data.rows() );
     double  sum;
     
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<B.rows; j++ ) {
+    for ( size_t i{0U}; i<data.rows(); i++ )
+      for ( size_t j{0U}; j<B.data.rows(); j++ ) {
            sum = static_cast<double>(0.0);
-           for ( size_t k{0U}; k<cols; k++ ) 
-             sum += data[i][k] * B.data[j][k];
-           RES.data[i][j] = sum;  
+           for ( size_t k{0U}; k<data.cols(); k++ )
+             sum += data(i,k) * B.data(j,k);
+           RES.data(i,j) = sum;
         }
  }
 
@@ -459,7 +262,7 @@ Matrix::MultiplyWithTransposedOf( const Matrix& B, Matrix& RES ) const
 void 
 Matrix::MultiplyTransposedOfWith( const Matrix& B, Matrix& RES ) const
  {
-    if ( rows != B.rows ) {
+    if ( data.rows() != B.data.rows() ) {
          cout <<"\nMatrix<double>::MultiplyTransposedOfWith: ";
          cout <<"Matrices cannot be multiplied "; 
          cout <<"because of incompatible sizes (A *= B^T, see matrices below): "<< endl;
@@ -468,15 +271,15 @@ Matrix::MultiplyTransposedOfWith( const Matrix& B, Matrix& RES ) const
          throw length_error("Matrix<mn_max>::MultiplyTransposedOfWith");
       }
     
-    RES.Resize( cols, B.cols );
+    RES.Resize( data.cols(), B.data.cols() );
     double  sum;
     
-    for ( size_t i{0U}; i<cols; i++ )
-      for ( size_t j{0U}; j<B.cols; j++ ) {
+    for ( size_t i{0U}; i<data.cols(); i++ )
+      for ( size_t j{0U}; j<B.data.cols(); j++ ) {
            sum = static_cast<double>(0.0);
-           for ( size_t k{0U}; k<B.rows; k++ ) 
-             sum += data[k][i] * B.data[k][j];
-           RES.data[i][j] = sum;
+           for ( size_t k{0U}; k<B.data.rows(); k++ )
+             sum += data(k,i) * B.data(k,j);
+           RES.data(i,j) = sum;
         }
  }
 
@@ -489,15 +292,15 @@ Matrix::MultiplyTransposedOfWith( const Matrix& B, Matrix& RES ) const
 void 
 Matrix::TransposedProduct( Matrix& RES ) const
  {
-    RES.Resize( cols, cols );
+    RES.Resize( data.cols(), data.cols() );
     double  sum;
     
-    for ( size_t i{0U}; i<cols; i++ )
-      for ( size_t j{0U}; j<cols; j++ ) {
+    for ( size_t i{0U}; i<data.cols(); i++ )
+      for ( size_t j{0U}; j<data.cols(); j++ ) {
            sum = static_cast<double>(0.0);
-           for ( size_t k{0U}; k<rows; k++ ) 
-             sum += data[k][i] * data[k][j];
-           RES.data[j][i] = sum;  
+           for ( size_t k{0U}; k<data.rows(); k++ )
+             sum += data(k,i) * data(k,j);
+           RES.data(j,i) = sum;
         }
  }
 
@@ -508,90 +311,39 @@ Matrix::TransposedProduct( Matrix& RES ) const
 
 double Matrix::NormL_Infinity() const
  {
-	if ( rows == 0 || cols == 0 ) {
+	if ( data.rows() == 0 || data.cols() == 0 ) {
          cerr <<"\nMatrix<double>::NormL_Infinity: empty matrix!\n";
          return std::numeric_limits<double>::signaling_NaN();
       }
 
 	double  maxval(static_cast<double>(0.0)), sum;
 
-	for ( size_t i=0U; i<rows; i++ ) {
+	for ( size_t i=0U; i<data.rows(); i++ ) {
 		 sum = static_cast<double>(0.0);
-		 for ( size_t j{0U}; j<cols; j++ )
-		   sum += fabs(data[i][j]);
+		 for ( size_t j{0U}; j<data.cols(); j++ )
+		   sum += fabs(data(i,j));
 		 maxval = max(maxval,sum);
 	  }
 
 	return maxval;
  }
 
-/*
-
-// operator +
-// ---------------------------------------
-
-Matrix  operator+( const Matrix& a, const Matrix& b )
- {
-    Matrix temp(a); 
-    temp += b;
-    return temp; 
- }
-
-
-// operator -
-// ---------------------------------------
-
-Matrix  operator-( const Matrix& a, const Matrix& b )
- {
-    Matrix temp(a);  
-    temp -= b;
-    return temp; 
- }
-
-
-// operator *
-// ---------------------------------------
-
-Matrix  operator*( const Matrix& a, const Matrix& b )
- {
-#ifndef NDEBUG
-    if ( a.Cols() != b.Rows() ) {
-         cout <<"\nMatrix<double> operator*: Matrices cannot be multiplied "; 
-         cout <<"because of incompatible sizes (A * B, see matrices below): "<< endl;
-         a.Out(3L);
-         b.Out(3L);
-         throw length_error("Matrix<mn_max>::operator*");
-      }
-#endif
-    Matrix  temp( a.Rows(), b.Cols() );
-    
-    for ( auto i{0}; i<a.Rows(); i++ )
-      for ( size_t j{0U}; j<b.Cols(); j++ ) {
-           temp(i,j) = static_cast<double>(0.0);
-           for ( size_t k{0U}; k<b.Rows(); k++ ) 
-             temp(i,j) += a(i,k) * b(k,j);
-        }
-      
-    return temp;
- }
-
-*/
 
 /// unscaled L1 matrix norm ||A1|| = max_j * sum_i |aij|
 
 double Matrix::NormL1() const
  {
-	if ( rows == 0 || cols == 0 ) {
+	if ( data.rows() == 0 || data.cols() == 0 ) {
          cerr <<"\nMatrix<double>::NormL1: empty matrix!\n";
          return std::numeric_limits<double>::signaling_NaN();
       }
 
 	double  maxval(static_cast<double>(0.0)), sum;
 
-	for ( size_t j{0U}; j<cols; j++ ) {
+	for ( size_t j{0U}; j<data.cols(); j++ ) {
 		 sum = static_cast<double>(0.0);
-		 for ( size_t i{0U}; i<rows; i++ )
-		   sum += fabs(data[i][j]);
+		 for ( size_t i{0U}; i<data.rows(); i++ )
+		   sum += fabs(data(i,j));
 		 maxval = max(maxval,sum);
 	  }
 
@@ -652,23 +404,7 @@ Matrix  operator*( const vector<double>& vec, const Matrix& mat )
 
 void Matrix::Resize( size_t m, size_t n )
  {
-    // resize matrix but keep storage as is if the new matrix 
-    // is smaller than the old matrix
-    if ( m <= rows && n <= cols ) {
-        rows = m;
-        cols = n;        
-        return;
-      }
-    
-    // increase matrix size
-    rows = m;
-    cols = n;    
-    data.resize(m);
-    vector<vector<double> >( data ).swap( data );
-    for ( size_t i{0U}; i<m; i++ ) {
-         data[i].resize(n);
-         vector<double>( data[i] ).swap( data[i] );
-      }
+    data.resize( m, n );
  }
 
 
@@ -677,10 +413,10 @@ void Matrix::Resize( size_t m, size_t n )
 
 void Matrix::Identity()
  {
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<cols; j++ ) 
-        if ( i == j ) data[i][j] = static_cast<double>(1.0);
-        else          data[i][j] = static_cast<double>(0.0);         
+    for ( size_t i{0U}; i<data.rows(); i++ )
+      for ( size_t j{0U}; j<data.cols(); j++ )
+        if ( i == j ) data(i,j) = static_cast<double>(1.0);
+        else          data(i,j) = static_cast<double>(0.0);         
  }
  
 
@@ -689,9 +425,9 @@ void Matrix::Identity()
 
 void Matrix::Zero()
  {
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<cols; j++ ) 
-        data[i][j] = static_cast<double>(0.0);
+    for ( size_t i{0U}; i<data.rows(); i++ )
+      for ( size_t j{0U}; j<data.cols(); j++ )
+        data(i,j) = static_cast<double>(0.0);
  }
  
 
@@ -700,8 +436,8 @@ void Matrix::Zero()
 
 void Matrix::ZeroRow( size_t row )
  {
-    if ( row < rows ) for ( size_t j{0U}; j<cols; j++ ) 
-      data[row][j] = static_cast<double>(0.0);
+    if ( row < data.rows() ) for ( size_t j{0U}; j<data.cols(); j++ )
+      data(row,j) = static_cast<double>(0.0);
       
     else {
         std::cout <<"\nMatrix<double>::ZeroRow: ";
@@ -716,7 +452,7 @@ void Matrix::ZeroRow( size_t row )
 
 void Matrix::ZeroCol( size_t col )
  {
-    if ( col < cols ) for ( size_t i{0U}; i<rows; i++ ) data[i][col] = static_cast<double>(0.0);
+    if ( col < data.cols() ) for ( size_t i{0U}; i<data.rows(); i++ ) data(i,col) = static_cast<double>(0.0);
     else
     std::cout <<"\nMatrix<double>::ZeroCol: Target column does not exist: "<< col << std::endl;
  }
@@ -728,8 +464,7 @@ void Matrix::ZeroCol( size_t col )
 
 void Matrix::Fill( double val )
  {
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<cols; j++ ) data[i][j] = val;
+    for ( auto it=data.begin(); it!=data.end(); ++it ) (*it) = val;
  }
 
 
@@ -738,7 +473,7 @@ void Matrix::Fill( double val )
 
 void Matrix::FillRow( size_t row, double val )
  {
-    if ( row < rows ) for ( size_t j{0U}; j<cols; j++ ) data[row][j] = val;
+    if ( row < data.rows() ) for ( size_t j{0U}; j<data.cols(); j++ ) data(row,j) = val;
     else {
       std::cout <<"\nMatrix<double>::FillRow: ";
       std::cout <<"Target rows does not exist: "<< row << std::endl;
@@ -751,7 +486,7 @@ void Matrix::FillRow( size_t row, double val )
 
 void Matrix::FillCol( size_t col, double val )
  {
-    if ( col < cols ) for ( size_t i{0U}; i<rows; i++ ) data[i][col] = val;
+    if ( col < data.cols() ) for ( size_t i{0U}; i<data.rows(); i++ ) data(i,col) = val;
     else {
       std::cout <<"\nMatrix<double>::FillCol: ";
       std::cout <<"Target column does not exist: "<< col << std::endl;
@@ -764,10 +499,10 @@ void Matrix::FillCol( size_t col, double val )
 
 void Matrix::Transposed( Matrix& M ) const
  {
-    M.Resize(cols,rows);
+    M.Resize(data.cols(),data.rows());
  
-    for ( size_t i{0U}; i<rows; i++ )
-      for ( size_t j{0U}; j<cols; j++ ) M.data[j][i] = data[i][j];
+    for ( size_t i{0U}; i<data.rows(); i++ )
+      for ( size_t j{0U}; j<data.cols(); j++ ) M.data(j,i) = data(i,j);
  }
 
 
@@ -780,8 +515,8 @@ double   Matrix::RowSum( size_t row ) const
  {
     double  sum(0.);
  
-    if ( row < rows ) {
-         for ( size_t j{0U}; j<cols; j++ ) sum += data[row][j];
+    if ( row < data.rows() ) {
+         for ( size_t j{0U}; j<data.cols(); j++ ) sum += data(row,j);
          return sum;
       }
 
@@ -800,8 +535,8 @@ double   Matrix::ColSum( size_t col ) const
  {
     double  sum(0.0);
  
-    if ( col < cols ) {
-         for ( auto i{0}; i<rows; i++ ) sum += data[i][col];
+    if ( col < data.cols() ) {
+         for ( size_t i{0ul}; i<data.rows(); i++ ) sum += data(i,col);
          return sum;
       }
 
@@ -819,14 +554,17 @@ double   Matrix::ColSum( size_t col ) const
 
 void Matrix::In()
  {
+    size_t rows{0}, cols{0};
     cout <<"\nMatrix<double>: Please enter matrix entries as prompted for: "<< endl;
     cout <<"Enter number of rows and columns: ";
     cin >> rows >> cols;
     
+    data.resize( rows, cols );
+    
     for ( size_t i=0U; i<rows; i++ )
       {
          cout <<"\nEnter entries of row "<< i+1 <<": ";
-         for ( size_t j{0U}; j<cols; j++ ) cin >> data[i][j];
+         for ( size_t j{0U}; j<cols; j++ ) cin >> data(i,j);
       }
 
     cout <<"\nThank you."<< endl;    
@@ -840,17 +578,17 @@ void Matrix::In()
 void Matrix::Out( long digits ) const
  {
     long  prec(cout.precision(digits));
-    cout <<"\nMatrix<double>::Out(): m="<< rows <<", n="<< cols << endl;
+    cout <<"\nMatrix<double>::Out(): m="<< data.rows() <<", n="<< data.cols() << endl;
     if ( digits != 0U ) cout.setf(ios::scientific);
     size_t row_break, split_adoubleer(10U);
      
-    for ( size_t i=0U; i<rows; i++ )
+    for ( size_t i=0U; i<data.rows(); i++ )
       {
          row_break = 1;
-         for ( size_t j{0U}; j<cols; j++, row_break++ )
+         for ( size_t j{0U}; j<data.cols(); j++, row_break++ )
            {
-              if ( data[i][j] >= 0. ) cout <<" ";
-              cout << data[i][j] <<" ";
+              if ( data(i,j) >= 0. ) cout <<" ";
+              cout << data(i,j) <<" ";
               if ( row_break == split_adoubleer )
                 {
                    cout << endl;
@@ -871,51 +609,11 @@ void Matrix::Out( long digits ) const
 
 
 
-// operator= ( TensorVariable 2D)
-// ---------------------------------------
-Matrix& Matrix::operator=( const TensorVariable<2U>& ts )
- {
-    rows = cols = 2U;
-    data[0][0] = ts(0,0);
-    data[0][1] = ts(0,1);
-    data[1][0] = ts(1,0);
-    data[1][1] = ts(1,1);
-      
-    return *this; 
- }
-
-
-
-// operator= ( TensorVariable 3D)
-// ---------------------------------------
-Matrix&  Matrix::operator=( const TensorVariable<3U>& ts )
- {
-    rows = cols = 3U;
-    data[0][0] = ts(0,0);
-    data[0][1] = ts(0,1);
-    data[0][2] = ts(0,2);
-    data[1][0] = ts(1,0);
-    data[1][1] = ts(1,1);
-    data[1][2] = ts(1,2);
-    data[2][0] = ts(2,0);
-    data[2][1] = ts(2,1);
-    data[2][2] = ts(2,2); 
-      
-    return *this; 
- }
-
-
-
-/// default constructor
-Matrix::Matrix()
- : rows(0), cols(0)
- {
- }
 
 
 /// constructor (i,j)
 Matrix::Matrix( size_t m, size_t n )
- : rows(m), cols(n), data(m,std::vector<double>(n))
+ : data(m,n)
  {
  }
 
@@ -929,7 +627,7 @@ double& Matrix::operator()( size_t m, size_t n )
 #ifndef NDEBUG
     CheckRange( m, n, "Matrix::operator()");
 #endif
-    return data[m][n];
+    return data(m,n);
  }
 
 
@@ -940,7 +638,7 @@ const double& Matrix::operator()( size_t m, size_t n ) const
 #ifndef NDEBUG
     CheckRange( m, n, "Matrix::operator()");
 #endif
-    return data[m][n];
+    return data(m,n);
  }
 
 
@@ -948,11 +646,11 @@ const double& Matrix::operator()( size_t m, size_t n ) const
 
 
 /// returns number of rows
-size_t Matrix::Rows() const { return rows; }
+size_t Matrix::Rows() const { return data.rows(); }
 
 
 /// returns number of columns
-size_t Matrix::Cols() const { return cols; }
+size_t Matrix::Cols() const { return data.cols(); }
 
 
 
@@ -962,15 +660,15 @@ size_t Matrix::Cols() const { return cols; }
 bool Matrix::CheckRange( size_t m, size_t n,
                          const char* originator ) const
  {
-    if ( m >= rows ) {
+    if ( m >= data.rows() ) {
          std::cerr <<"\n"<< originator <<" row index violation, index="<< m;
-         std::cerr <<" versus, row-max=" << rows << std::endl;
+         std::cerr <<" versus, row-max=" << data.rows() << std::endl;
          throw std::length_error("Matrix<mn_max>::CheckRange");
          return false;
       }
-    if ( n >= cols ) {
+    if ( n >= data.cols() ) {
          std::cerr <<"\n"<< originator <<" column index violation, index="<< n;
-         std::cerr <<" versus, column-max=" << cols << std::endl;
+         std::cerr <<" versus, column-max=" << data.cols() << std::endl;
          throw std::length_error("Matrix<mn_max>::CheckRange");
          return false;
       }
@@ -984,15 +682,15 @@ bool Matrix::CheckRange( size_t m, size_t n,
 bool Matrix::CheckSizes( const Matrix& mat, 
                          const char* originator ) const
  {
-    if ( rows != mat.rows ) {
-         std::cerr <<"\n"<< originator <<" matrices have different sizes; rows1="<< rows;
-         std::cerr <<" versus, rows2=" << mat.rows << std::endl;
+    if ( data.rows() != mat.data.rows() ) {
+         std::cerr <<"\n"<< originator <<" matrices have different sizes; rows1="<< data.rows();
+         std::cerr <<" versus, rows2=" << mat.data.rows() << std::endl;
          throw std::length_error("Matrix<mn_max>::CheckSizes");
          return false;
       }
-    if ( cols != mat.cols ) {
-         std::cerr <<"\n"<< originator <<" matrices have different sizes; columns1="<< cols;
-         std::cerr <<" versus, columns2=" << mat.cols << std::endl;
+    if ( data.cols() != mat.data.cols() ) {
+         std::cerr <<"\n"<< originator <<" matrices have different sizes; columns1="<< data.cols();
+         std::cerr <<" versus, columns2=" << mat.data.cols() << std::endl;
          throw std::length_error("Matrix<mn_max>::CheckSizes");
          return false;
       }
@@ -1000,120 +698,57 @@ bool Matrix::CheckSizes( const Matrix& mat,
  }
 
 
-// AssignToDiagonal ( VectorVariable 2D)
-// ---------------------------------------
-void Matrix::AssignToDiagonal( const VectorVariable<2U>& vc )
- {
-    assert ( rows == cols && cols == 2U );
-    data[0][0] = vc(0);
-    data[0][1] = static_cast<double>(0.);
-    data[1][0] = static_cast<double>(0.);
-    data[1][1] = vc(1);
- }
 
-
-
-// AssignToDiagonal ( TensorVariable 3D)
-// ---------------------------------------
-void Matrix::AssignToDiagonal( const VectorVariable<3U>& vc )
- {
-    assert ( rows == cols && cols == 3U );
-    data[0][0] = vc(0);
-    data[0][1] = static_cast<double>(0.);
-    data[0][2] = static_cast<double>(0.);
-    data[1][0] = static_cast<double>(0.);
-    data[1][1] = vc(1);
-    data[1][2] = static_cast<double>(0.);
-    data[2][0] = static_cast<double>(0.);
-    data[2][1] = static_cast<double>(0.);
-    data[2][2] = vc(2); 
- }
-
-
-
-// assign matrix to tensor variable
-// --------------------------------
-void Matrix::ExportTo( TensorVariable<2U>& ts ) const
- {
-    if ( rows != 2U || rows != cols ) {
-         std::cout <<"\nMatrix<>::ExportTo (tensor 2D): This matrix has wrong size.\n";
-         return;
-      } 
-    ts(0,0) = data[0][0];
-    ts(0,1) = data[0][1];
-    ts(1,0) = data[1][0];
-    ts(1,1) = data[1][1];
- }
-
-
-
-void Matrix::ExportTo( TensorVariable<3U>& ts ) const
- {
-    if ( rows != 3U || rows != cols ) {
-         std::cout <<"\nMatrix<>::ExportTo (tensor 3D): This matrix has wrong size.\n";
-         return;
-      } 
-    ts(0,0) = data[0][0];
-    ts(0,1) = data[0][1];
-    ts(0,2) = data[0][2];
-    ts(1,0) = data[1][0];
-    ts(1,1) = data[1][1];
-    ts(1,2) = data[1][2];
-    ts(2,0) = data[2][0];
-    ts(2,1) = data[2][1];
-    ts(2,2) = data[2][2];
- }
-
-void Matrix::LUDecomposition(std::vector<uint32_t>& index, double& d)
+void Matrix::LUDecomposition( std::vector<uint32_t>& index, double& d )
 {
     const double TINY(1.0e-20);
-    int i,imax(0),j,k;
+    long i,imax(0),j,k;
     double big,dum,sum,temp;
 
-    std::vector<double> vv(rows);
-    index.resize(rows);
+    std::vector<double> vv(data.rows());
+    index.resize(data.rows());
 
     d=1.0;
-    for (i=0U;i<rows;i++) {
+    for (i=0U;i<data.rows();i++) {
             big=0.0;
-            for (j=0;j<rows;j++)
-                if ((temp=std::fabs(data[i][j])) > big) big=temp;
+            for (j=0;j<data.rows();j++)
+                if ((temp=std::fabs(data(i,j))) > big) big=temp;
             if (big == 0.0) {
                 std::cout << "\nMatrix::LUDecomposition: Singular matrix" << std::endl;
                 throw std::logic_error("Matrix::LUDecomposition: Singular matrix");
             }
             vv[i]=1.0/big;
     }
-    for (j=0U;j<rows;j++) {
+    for (j=0U;j<data.rows();j++) {
             for (i=0;i<j;i++) {
-                    sum=data[i][j];
-                    for (k=0;k<i;k++) sum -= data[i][k]*data[k][j];
-                    data[i][j]=sum;
+                    sum=data(i,j);
+                    for (k=0;k<i;k++) sum -= data(i,k) * data(k,j);
+                    data(i,j)=sum;
             }
             big=0.0;
-            for (i=j;i<rows;i++) {
-                    sum=data[i][j];
-                    for (k=0;k<j;k++) sum -= data[i][k]*data[k][j];
-                    data[i][j]=sum;
+            for (i=j;i<data.rows();i++) {
+                    sum=data(i,j);
+                    for (k=0;k<j;k++) sum -= data(i,k) * data(k,j);
+                    data(i,j)=sum;
                     if ((dum=vv[i]*std::fabs(sum)) >= big) {
                             big=dum;
                             imax=i;
                     }
             }
             if (j != imax) {
-                    for (k=0;k<rows;k++) {
-                            dum=data[imax][k];
-                            data[imax][k]=data[j][k];
-                            data[j][k]=dum;
+                    for (k=0;k<data.rows();k++) {
+                            dum=data(imax,k);
+                            data(imax,k) = data(j,k);
+                            data(j,k)=dum;
                     }
                     d = -d;
                     vv[imax]=vv[j];
             }
-            index[j]=imax;
-            if (data[j][j] == 0.0) data[j][j]=TINY;
-            if (j != rows-1) {
-                    dum=1.0/(data[j][j]);
-                    for (i=j+1;i<rows;i++) data[i][j] *= dum;
+            index[j] = imax;
+            if (data(j,j) == 0.0) data(j,j) = TINY;
+            if (j != data.rows()-1) {
+                    dum=1.0/(data(j,j));
+                    for (i=j+1;i<data.rows();i++) data(i,j) *= dum;
             }
     }
 
@@ -1123,25 +758,25 @@ void Matrix::LUDecomposition(std::vector<uint32_t>& index, double& d)
 void Matrix::LUBackSubstitution(std::vector<uint32_t>& index, std::vector<double> &b)
 {
 
-   if (index.size() != rows or b.size() != rows) {
+   if (index.size() != data.rows() or b.size() != data.rows()) {
         std::cout << "\nMatrix::LUBackSubstitution: Input vectors must be of length M.Rows" << std::endl;
         throw std::logic_error("Matrix::LUBackSubstitution: Input vectors must be of length M.Rows");
     }
 
   long i,ii=0,ip,j;
   double sum;
-  for (i=0U;i<rows;i++) {
+  for (i=0U;i<data.rows();i++) {
       ip=index[i];
       sum=b[ip];
       b[ip]=b[i];
-      if (ii != 0) for (j=ii-1;j<i;j++) sum -= data[i][j]*b[j];
+      if (ii != 0) for (j=ii-1;j<i;j++) sum -= data(i,j)*b[j];
       else if (sum != 0.0) ii=i+1;
       b[i]=sum;
     }
-  for (i=rows-1;i>=0;i--) {
+  for (i=data.rows()-1;i>=0;i--) {
       sum=b[i];
-      for (j=i+1;j<rows;j++) sum -= data[i][j]*b[j];
-      b[i]=sum/data[i][i];
+      for (j=i+1;j<data.rows();j++) sum -= data(i,j)*b[j];
+      b[i]=sum/data(i,i);
     }
 
 
@@ -1152,9 +787,9 @@ void Matrix::LUBackSubstitution(std::vector<uint32_t>& index, std::vector<double
 // ---------------------------------------------
 std::vector<double> Matrix::ReturnRow( size_t row ) const
  {
-    std::vector<double> row_vals(cols,0.);
-    if ( row < rows ) {
-        for ( size_t j{0U}; j<cols; j++ ) row_vals[j] = data[row][j];
+    std::vector<double> row_vals(data.cols(),0.);
+    if ( row < data.rows() ) {
+        for ( size_t j{0U}; j<data.cols(); j++ ) row_vals[j] = data(row,j);
       }
     else {
        std::cout <<"\nMatrix<double>::ReturnRow: ";
@@ -1167,9 +802,9 @@ std::vector<double> Matrix::ReturnRow( size_t row ) const
 // ---------------------------------------------
 std::vector<double>  Matrix::ReturnCol( size_t col ) const
  {
-    std::vector<double> col_vals(rows,0.);
-    if ( col < cols ) {
-        for ( size_t i{0U}; i<rows; i++ ) col_vals[i] = data[i][col];
+    std::vector<double> col_vals(data.rows(),0.);
+    if ( col < data.cols() ) {
+        for ( size_t i{0U}; i<data.rows(); i++ ) col_vals[i] = data(i,col);
       }
     else {
         std::cout <<"\nMatrix<double>::ReturnCol: ";
@@ -1182,12 +817,12 @@ std::vector<double>  Matrix::ReturnCol( size_t col ) const
 
 void Matrix::AssignToRow( size_t row, std::vector<double>& vec )
  {
-    if ( vec.size() != cols ) {
+    if ( vec.size() != data.cols() ) {
       std::cout <<"\nMatrix<double>::AssignToRow: ";
       std::cout <<"Vector must have same length as number of cols: " << std::endl;
       return;
      }
-    if ( row < rows ) for ( size_t i{0U}; i<cols; i++ ) data[row][i] = vec[i];
+    if ( row < data.rows() ) for ( size_t i{0U}; i<data.cols(); i++ ) data(row,i) = vec[i];
     else {
       std::cout <<"\nMatrix<double>::AssignToRow: ";
       std::cout <<"Target column does not exist: "<< row << std::endl;
@@ -1198,12 +833,12 @@ void Matrix::AssignToRow( size_t row, std::vector<double>& vec )
 
 void Matrix::AssignToCol( size_t col, std::vector<double>& vec )
 {
-  if ( vec.size() != rows ) {
+  if ( vec.size() != data.rows() ) {
     std::cout <<"\nMatrix<double>::AssignToCol: ";
     std::cout <<"Vector must have same length as number of rows: " << std::endl;
     return;
   }
-  if ( col < cols ) for ( size_t i{0U}; i<rows; i++ ) data[i][col] = vec[i];
+  if ( col < data.cols() ) for ( size_t i{0U}; i<data.rows(); i++ ) data(i,col) = vec[i];
   else {
     std::cout <<"\nMatrix<double>::AssignToCol: ";
     std::cout <<"Target column does not exist: "<< col << std::endl;
@@ -1211,28 +846,24 @@ void Matrix::AssignToCol( size_t col, std::vector<double>& vec )
 }
 
 /**
-    @todo SKM whoever wrote this code should clarify its purpose
+    Returns a submatrix of the matrix with the dimensions row x col
 */
 Matrix Matrix::Minor(const size_t row, const size_t col)
 {
-  Matrix res;
-  if (row <= rows-1 && col <= cols-1)
-  {
-    res = Matrix(rows - 1, cols - 1); // minor matrix
+   if ( row >= data.rows() || col >= data.cols() )
+      throw out_of_range("Matrix::Minor");
+
+    Matrix res = Matrix(data.rows() - 1, data.cols() - 1); // minor matrix
     // copy the content of the matrix to the minor, except the selected
-    for (int r = 0; r <= (rows - (row >= (rows-1)))-1; r++)
-    {
-      for (int c = 0; c <= (cols - (col >= (cols-1)))-1; c++)
+    for ( long r = 0; r <= (data.rows() - (row >= (data.rows()-1)))-1; r++)
       {
-        //printf("r=%i, c=%i, value=%f, rr=%i, cc=%i \n", r, c, p[r-1][c-1], r - (r > row), c - (c > col));
-        res(r - (r > row), c - (c > col)) = data[r][c];
+        for ( long c = 0; c <= (data.cols() - (col >= (data.cols()-1)))-1; c++)
+          {
+            //printf("r=%i, c=%i, value=%f, rr=%i, cc=%i \n", r, c, p[r-1][c-1], r - (r > row), c - (c > col));
+            res(r - (r > row), c - (c > col)) = data(r,c);
+          }
       }
-    }
-  }
-  else
-  {
-    cout<<"Index out of range"<<endl;
-  }
+
   return res;
 }
 

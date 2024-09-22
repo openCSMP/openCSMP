@@ -17,11 +17,8 @@ template<typename csp_type>
 class FEM_Data {
   public:
     FEM_Data();
-    FEM_Data( const FEM_Data<csp_type>& );
     FEM_Data( PLACEMENT, size_t i );
     FEM_Data( PLACEMENT, const std::vector<csp_type>& );
-    ~FEM_Data();
-    FEM_Data<csp_type>& operator=( const FEM_Data<csp_type>& );
     bool operator==( const FEM_Data<csp_type>& ) const;
     PLACEMENT Placement() const { return place; };
     size_t Size() const { return data.size(); };

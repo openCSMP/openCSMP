@@ -58,28 +58,6 @@ VSet<dim>::VSet( const vector<int8_t>&  elmt_types,
 
 
 
-/// copy constructor
-template<uint32_t dim>
-VSet<dim>::VSet( const VSet<dim>& a )
- : VData(a), pmtrl_(a.pmtrl_), property_map_(a.property_map_)
- {
- }
-
-
-/** Assignment operator
-*/
-template<uint32_t dim>
-VSet<dim>& VSet<dim>::operator=( const VSet<dim>& a )
-  {
-    if (&a != this) {
-         VData::operator=( a ); 
-         pmtrl_        = a.pmtrl_; 
-         property_map_ = a.property_map_;
-      }
-    return *this;
-  }
-
-
 /**
 
 Resizes the VSet internal containers to hold a mono-element type mesh
@@ -134,14 +112,6 @@ void VSet<dim>::Resize( const deque<int8_t>& etypes,
   
   if ( !property_map_.empty() )
     throw csmp::Exception( ERROR, "VSet<dim>::Resize", "resizing of property map not handled yet.");
-}
-
-
-
-
-template<uint32_t dim>
-VSet<dim>::~VSet()
-{
 }
 
 

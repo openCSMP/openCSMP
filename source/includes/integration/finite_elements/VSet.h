@@ -23,8 +23,6 @@ class VSet : public VData {
   public:
 
     VSet();
-    VSet( const VSet& );
-    VSet( VSet&& ) = default;
     
     /// single element type constructor
     VSet( uint32_t nodes_per_element,
@@ -37,11 +35,6 @@ class VSet : public VData {
           const std::deque<uint32_t>& npes,
           const std::deque<uint32_t>& epes,
           size_t nodes );
-
-    virtual ~VSet();
-    
-    VSet& operator=( const VSet& );
-    VSet& operator=( VSet&& ) = default;
 
     /// resizing meshes with only a single element type
     void Resize( uint32_t nodes_per_element,

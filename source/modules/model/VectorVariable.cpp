@@ -34,17 +34,6 @@ VectorVariable<3U>::VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE
 
 
 
-
-VectorVariable<3U>&  VectorVariable<3U>::operator=( const VectorVariable<3U>& v )
-{
-  if ( &v != this ) {
-    flag = v.flag;
-    data = v.data;
-  }
-  return *this;
-}
-
-
 // 1D specializations
 VectorVariable<1U> makeVector( VARIABLE_FLAG fx, double vx )
 {
@@ -75,14 +64,6 @@ VectorVariable<3U> makeVector( const std::vector<VARIABLE_FLAG>& flags, const st
   assert( flags.size() == 3U );
   assert( vals.size() == 3U );
   return VectorVariable<3U>( flags[0], flags[1], flags[2], vals[0], vals[1], vals[2] );
-}
-
-
-
-VectorVariable<3U>::VectorVariable( const VectorVariable<3U>& v )
-  : flag( v.flag ),
-  data( v.data )
-{
 }
 
 
@@ -167,14 +148,6 @@ VARIABLE_FLAG   VectorVariable<3U>::Flag( uint32_t i ) const
 uint32_t VectorVariable<3U>::Size() const
 {
   return 3U;
-}
-
-
-
-
-
-VectorVariable<3U>::~VectorVariable()
-{
 }
 
 

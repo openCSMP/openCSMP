@@ -13,13 +13,11 @@ class VectorVariable<2U> {
     static constexpr VARIABLE_TYPE VariableType = VECTOR;
 
     VectorVariable();
-    VectorVariable( const VectorVariable& );
-    VectorVariable( VectorVariable&& ) = default;
+
     VectorVariable( VARIABLE_FLAG f, double val );
     VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, double val1, double val2 );
     explicit VectorVariable( const std::vector<double>& );
     explicit VectorVariable( const csmp::Point<2U>& );
-    ~VectorVariable();
     
     double&        operator()( uint32_t i );
     const double&  operator()( uint32_t i ) const;
@@ -56,8 +54,6 @@ class VectorVariable<2U> {
     VectorVariable&  operator=( double );
     VectorVariable&  operator=( const Point<2U>& );
     VectorVariable&  operator=( const ScalarVariable& );
-    VectorVariable&  operator=( const VectorVariable& );
-    VectorVariable&  operator=( VectorVariable&& ) = default;
 
     // extra operators
     bool             operator==( const VectorVariable& ) const;

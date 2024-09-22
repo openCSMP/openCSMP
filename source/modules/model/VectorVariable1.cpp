@@ -11,31 +11,6 @@ VectorVariable<1U>::VectorVariable()
 
 
 
-VectorVariable<1U>::VectorVariable( const VectorVariable& vc )
-  : flag( vc.flag ), data( vc.data )
-{
-}
-
-
-
-
-VectorVariable<1U>::~VectorVariable()
-{
-}
-
-
-
-
-VectorVariable<1U>&  VectorVariable<1U>::operator=( const VectorVariable<1U>& v )
-{
-  if ( &v != this ) {
-    flag = v.flag;
-    data = v.data;
-  }
-  return *this;
-}
-
-
 
 double& VectorVariable<1U>::operator()( uint32_t )
 {

@@ -47,19 +47,6 @@ FaceConstructionData<dim>::FaceConstructionData( Element<dim>&  parent_element,
  
  
   
-template<uint32_t dim>
-FaceConstructionData<dim>::FaceConstructionData( const FaceConstructionData& fcd )
- : dim_m1_element_(fcd.dim_m1_element_),
-   neighbors_(fcd.neighbors_),
-   nbor_faces_(fcd.nbor_faces_),
-   materials_(fcd.materials_),
-   material_(fcd.material_),
-   patch_number_(fcd.patch_number_)
- {
- }
-
-
-
 /// inner (first) and out (second) higher-order parent element
 template<uint32_t dim>
 pair<Element<dim>*,Element<dim>*> FaceConstructionData<dim>::NeighborElements() const

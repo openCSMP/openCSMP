@@ -66,6 +66,7 @@ template<uint32_t dim>
 class FiniteVolumeStencil {
   public:
     explicit FiniteVolumeStencil( const char* csp_finite_element_type );
+    // TODO: refactor and test: rule of zero should work
     FiniteVolumeStencil( const FiniteVolumeStencil& );
     FiniteVolumeStencil& operator=( const FiniteVolumeStencil& );
     ~FiniteVolumeStencil() = default;

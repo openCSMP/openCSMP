@@ -44,13 +44,6 @@ class NodeManifold {
       /// constructs manifold from vector pointer and qualifier pairs
       NodeManifold( const manifold&, ManifoldType );
 
-      NodeManifold( const NodeManifold& );
-      NodeManifold( NodeManifold&& );
-      NodeManifold& operator=( const NodeManifold& );
-      NodeManifold& operator=( NodeManifold&& );
-
-      ~NodeManifold();
-      
       /// adds a node to the manifold storing the interface side, it is on; @note  this might also have implications for Manifold geometry to be addressed later
       bool Add( Node<dim>* );
 
@@ -76,16 +69,16 @@ class NodeManifold {
       uint32_t NodeMapSize() const;
       
       ///number of interfaces connected to a node
-      uint32_t InterFaces(Node<dim>*) const;
+      uint32_t InterFaces( Node<dim>* const ) const;
 
       ///Access of single interface of node
-      InterFace<dim>* I(Node<dim>*, uint32_t i) ;
+      InterFace<dim>* I( Node<dim>* const, uint32_t i );
 
       ///Pair with interface, and corresponding position of node in nodeconnector of interface.
-      std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE> >  InterFaceIndex(Node<dim>* n, uint32_t i);
+      std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE> >  InterFaceIndex( Node<dim>* const n, uint32_t i);
 
       /// InterFace vector of node
-      std::vector< std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> InterFaceIndexVector(Node<dim>* n);
+      std::vector< std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> InterFaceIndexVector( Node<dim>* const n );
 
       /// reports manifold classifier that indicates the topologic position of the manifold
       ManifoldType GeometricClassifier() const;
@@ -104,8 +97,8 @@ class NodeManifold {
       void Out() const;
 
     private:
-      manifold                         branches_;                        ///< vector of Node - classifier pairs
-      ManifoldType                     parent_geometry_;                 ///< classifier for the manifold as a whole
+      manifold     branches_;                        ///< vector of Node - classifier pairs
+      ManifoldType parent_geometry_;                 ///< classifier for the manifold as a whole
 
       std::map< Node<dim>*,std::vector<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE> >> >   node_parent_interface_map_;     ///interfaces and index for each node on manifold
 };

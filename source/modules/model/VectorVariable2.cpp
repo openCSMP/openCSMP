@@ -11,13 +11,6 @@ VectorVariable<2U>::VectorVariable()
 }
 
 
-VectorVariable<2U>::VectorVariable( const VectorVariable<2U>& v )
-  : flag( v.flag ),
-  data( v.data )
-{
-}
-
-
 VectorVariable<2U>::VectorVariable( VARIABLE_FLAG f, double val )
   : flag{ { f,f } },
   data{ { val,val } }
@@ -45,20 +38,6 @@ VectorVariable<2U>::VectorVariable( const Point<2U>& p )
 {
 }
 
-
-VectorVariable<2U>::~VectorVariable()
-{
-}
-
-
-VectorVariable<2U>&  VectorVariable<2U>::operator=( const VectorVariable<2U>& v )
-{
-  if ( &v != this ) {
-    flag = v.flag;
-    data = v.data;
-  }
-  return *this;
-}
 
 
 double& VectorVariable<2U>::operator()( uint32_t i )

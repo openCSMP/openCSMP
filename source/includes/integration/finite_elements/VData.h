@@ -110,12 +110,6 @@ class VData {
     void ResizePfverts( const std::deque<uint32_t>& mixed_ele_pfverts );
     void ResizeBFlags( /* nodes */ );
     void ResizeBREP_Flags( /* nodes */ );
-
-    virtual ~VData();
-    VData( const VData& );
-    VData( VData&& ) = default;
-    VData& operator=( const VData& );
-    VData& operator=( VData&& ) = default;
     
     /// compares 'pelmt', 'plist', 'pvferts' and 'pbflags' among the VData; specific mismatches are reported to std::cerr
     bool operator==( const VData& ) const;

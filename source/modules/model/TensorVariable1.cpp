@@ -57,24 +57,6 @@ TensorVariable<1U>::TensorVariable()
 
 
 
-TensorVariable<1U>&  TensorVariable<1U>::operator=( const TensorVariable<1U>& ts )
- {
-    if ( &ts != this ) {
-         flag = ts.flag;
-         data = ts.data;
-      }  
-    return *this; 
- }
-
-
-
-
-TensorVariable<1U>::TensorVariable( const TensorVariable<1U>& t )
- {
-    *this = t;
- }
-
-
 
 
 TensorVariable<1U>::TensorVariable( VARIABLE_FLAG f, double val )
@@ -82,10 +64,6 @@ TensorVariable<1U>::TensorVariable( VARIABLE_FLAG f, double val )
  {
  } 
  
-                                   
- 
-
-TensorVariable<1U>::~TensorVariable() {}
 
 
 
