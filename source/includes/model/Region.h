@@ -252,10 +252,6 @@ class Region : public ModelSubDomain<dim, Element>,
 };
 
 
-/// collects the Elements from region2 which touch (with a node) or share a face with Region1 and returns them into the set
-template<uint32_t dim>
-size_t haloElements( const Region<dim>& region1, const Region<dim>& region2, std::unordered_set<Element<dim>*>& halo_elmts );
-
 /// supporting SplitBoundary creation, this methods finds outside elements that only touch the region parameter with nodes
 template<uint32_t dim>
 size_t outsideElementsWithNodesTouchingPerimeter( const Region<dim>&,
@@ -263,7 +259,6 @@ size_t outsideElementsWithNodesTouchingPerimeter( const Region<dim>&,
                                                   const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,
                                                                std::pair<Element<dim>*,uint32_t> > >& perimeter_cells,
                                                   std::map<Node<dim>*,std::map<Element<dim>*,uint32_t>>& touching_elmts );
-
 } // csmp
 
 #endif

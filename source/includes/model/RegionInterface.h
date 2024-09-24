@@ -269,14 +269,6 @@ class RegionInterface {
 template<uint32_t dim>
 size_t haloElements( const Region<dim>& region1, const Region<dim>& region2, std::unordered_set<Element<dim>*>& halo_elmts );
 
-/// Searches the Region returning those elements that do not have a face but only one or some nodes on its perimeter
-template<uint32_t dim>
-size_t outsideElementsWithNodesTouchingPerimeter( const Region<dim>& subdomain,
-                                                  const std::vector<Node<dim>*>& perimeter_nodes,
-                                                  const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,
-                                                                    std::pair<Element<dim>*,uint32_t> > >& perimeter_cells,
-                                                  std::map<Node<dim>*,std::map<Element<dim>*,uint32_t>>& touching_elmts );
-
 } // csmp
 
 #endif

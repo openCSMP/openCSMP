@@ -24,10 +24,6 @@ class NodeParentElementVector {
     /// to pre-reserve some elements to control over memory growth
     explicit NodeParentElementVector( size_t capacity );
     NodeParentElementVector() = default;
-    ~NodeParentElementVector() = default;
-    NodeParentElementVector( const NodeParentElementVector<dim>& ) = default;
-    NodeParentElementVector( NodeParentElementVector<dim>&& ) = default;
-    NodeParentElementVector<dim>& operator=( const NodeParentElementVector<dim>& ) = default;
     
     /// to avoid unneccasary reallocations of the storage in case the desired number of entries is known before multiple Assign's are called
     void Reserve( size_t expected_size );
