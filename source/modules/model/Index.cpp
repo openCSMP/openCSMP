@@ -559,7 +559,7 @@ ostream& operator<<( ostream& stream, const csmp::Index& o )
     stream << resetiosflags( ios::adjustfield );
     stream << setiosflags( ios::left ) << str;
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#ifdef defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
     stream <<" index: "<< o.index <<" ";
     stream <<" data depth: "<< o.dataDepth <<" ";
     stream <<" flag depth: "<< o.flagDepth <<" ";

@@ -1,13 +1,7 @@
 #ifndef CSMP_POINT_H
 #define CSMP_POINT_H
 
-#include <iostream>
-#include <cmath>
-#include <vector>
-#include <typeinfo>
-#include <cstdlib>
-#include <cassert>
-#include <limits>
+#include "CSMP_definitions.h"
 
 namespace csmp {
 

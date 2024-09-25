@@ -23,6 +23,7 @@ class NodeParentElementVector {
   public:
     /// to pre-reserve some elements to control over memory growth
     explicit NodeParentElementVector( size_t capacity );
+    
     NodeParentElementVector() = default;
     
     /// to avoid unneccasary reallocations of the storage in case the desired number of entries is known before multiple Assign's are called

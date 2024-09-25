@@ -11,7 +11,7 @@
 #include "enumTypeCompatibilityChecks.h"
 #include "localVariableDispatch.h"
 
-//#define VARIABLE_STORAGE_DEBUG
+//#define CSMP_VARIABLE_STORAGE_DEBUG
 
 namespace csmp {
 
@@ -275,7 +275,7 @@ inline double LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<SCALAR,p
  {
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     assert( idx.index < data_.scalars );
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( idx.dataOffset < data_.data.size() );
 #endif
     return data_.data[idx.dataOffset];
@@ -293,7 +293,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<SCALAR,pla
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<ScalarVariable,SCALAR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
     assert( idx.index < data_.scalars );
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( idx.dataOffset < data_.data.size() );
  assert( idx.flagOffset < data_.flags.size() );
 #endif
@@ -311,7 +311,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( const csmp::INDEX<SCALAR,pl
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<ScalarVariable,SCALAR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
     assert( idx.index < data_.scalars );
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( idx.flagOffset < data_.flags.size() );
  assert( idx.dataOffset < data_.data.size() );
 #endif
@@ -328,7 +328,7 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<ScalarVariable,SCALAR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( idx.flagOffset < data_.flags.size() );
 #endif
     return data_.flags[idx.flagOffset];
@@ -342,7 +342,7 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<ArrayVariable,ARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( idx.flagOffset < data_.flags.size() );
 #endif
     return data_.flags[idx.flagOffset];
@@ -359,7 +359,7 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TemplateTypeMatchesVariableType<VectorVariable,VECTOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   assert( i < dim );
   assert( (idx.flagOffset+i) < data_.flags.size() );
 #endif
@@ -374,7 +374,7 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TemplateTypeMatchesVariableType<TensorVariable,TENSOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   assert( i < dim );
   assert( (idx.flagOffset+i) < data_.flags.size() );
 #endif
@@ -389,7 +389,7 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<FlaggedArrayVariable,FLAGGEDARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   const int_type array_length(idx.flagDepth);
   assert( i < array_length );
   assert( (idx.flagOffset+i) < data_.flags.size() );
@@ -408,7 +408,7 @@ inline void LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX<SCALAR,p
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<ScalarVariable,SCALAR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( idx.flagOffset < data_.flags.size() );
 #endif
     data_.flags[idx.flagOffset] = flag;
@@ -422,7 +422,7 @@ inline void LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX<ARRAY,pl
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<ArrayVariable,ARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( idx.flagOffset < data_.flags.size() );
 #endif
     data_.flags[idx.flagOffset] = flag;
@@ -438,7 +438,7 @@ inline void LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX<VECTOR,p
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TemplateTypeMatchesVariableType<VectorVariable,VECTOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( i < dim );
  assert( (idx.flagOffset+i) < data_.flags.size() );
 #endif
@@ -454,7 +454,7 @@ inline void LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX<TENSOR,p
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TemplateTypeMatchesVariableType<TensorVariable,TENSOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( i < dim );
  assert( (idx.flagOffset+i) < data_.flags.size() );
 #endif
@@ -470,7 +470,7 @@ inline void LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX<FLAGGEDA
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<FlaggedArrayVariable,FLAGGEDARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   const int_type array_length(idx.flagDepth);
   assert( i < array_length );
   assert( (idx.flagOffset+i) < data_.flags.size() );
@@ -490,7 +490,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( const csmp::INDEX<VECTOR,pl
  {
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
     static_assert( TemplateTypeMatchesVariableType<VectorVariable,VECTOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( idx.index < data_.vectors );
 #endif
 #ifdef VARIABLE_STORAGE_DEBUG
@@ -513,7 +513,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<VECTOR,pla
     static_assert( TemplateTypeMatchesVariableType<VectorVariable,VECTOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
     assert( idx.index < data_.vectors );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( (idx.flagOffset+dim-1) < data_.flags.size() );
  assert( (idx.dataOffset+dim-1) < data_.data.size() );
 #endif
@@ -533,7 +533,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( const csmp::INDEX<TENSOR,pl
     static_assert( TemplateTypeMatchesVariableType<TensorVariable,TENSOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
     assert( idx.index < data_.tensors );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   assert( (idx.flagOffset+dim-1) < data_.flags.size() );
   assert( (idx.dataOffset+dim*dim-1) < data_.data.size() );
 #endif
@@ -557,7 +557,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<TENSOR,pla
     static_assert( TemplateTypeMatchesVariableType<TensorVariable,TENSOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
     assert( idx.index < data_.tensors );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  assert( (idx.flagOffset+dim-1) < data_.flags.size() );
  assert( (idx.dataOffset+dim*dim-1) < data_.data.size() );
 #endif
@@ -581,7 +581,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( const csmp::INDEX<ARRAY,pla
     static_assert( TypeMatchesVariableType<ArrayVariable,ARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
     assert( av.Size() == idx.dataDepth );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset) < data_.flags.size() );
 #endif
@@ -604,7 +604,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<ARRAY,plac
     av.Resize( idx.dataDepth );
     assert( av.Size() == idx.dataDepth );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset) < data_.flags.size() );
 #endif
@@ -634,7 +634,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( const csmp::INDEX<FLAGGEDAR
     static_assert( TypeMatchesVariableType<FlaggedArrayVariable,FLAGGEDARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
     assert( av.Size() == idx.dataDepth );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset+idx.dataDepth-1) < data_.flags.size() );
 #endif
@@ -649,6 +649,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( const csmp::INDEX<FLAGGEDAR
   }
 
 
+
 /// FlaggedArray variable
 template<uint32_t dim, template<uint32_t> class STOREE>
 template<PLACEMENT place> 
@@ -659,7 +660,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<FLAGGEDARR
     av.Resize( idx.dataDepth );
     assert( av.Size() == idx.dataDepth );
 
-#ifdef VARIABLE_STORAGE_DEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset+idx.dataDepth-1) < data_.flags.size() );
 #endif
@@ -1834,10 +1835,6 @@ inline void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, ui
          av.Flag( i, data_.flags[flagOffset + sector_ip_flag_offset + i] );
       }
   }
-
-
-
-
 
 
 } // end csmp

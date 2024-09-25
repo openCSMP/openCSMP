@@ -2702,7 +2702,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
       set<size_t>  line_elmts, boundary_line_elmts;
       // recording the corner-node ids of the surface elements for later searching
       // face-nd-id key, boundary face node ids in correct sequence
-      deque<pair<int64_t,int64_t> > surf_elmt_face_nd_ids;
+      deque<pair<size_t,size_t> > surf_elmt_face_nd_ids;
 
       const vector<int8_t>::const_iterator  end = PelmtEnd();
       vector<int8_t>::const_iterator        eit = PelmtBegin();
@@ -3991,7 +3991,7 @@ void VData::EstablishNodeNeighborConnectivity( vector<set<size_t>>& pnode ) cons
            }
       }
       
-#ifdef MESH_MANAGER_DEBUG
+#if defined(DEBUG) && defined(CSMP_MESH_MANAGER_DEBUG)
     // printing the node-neighbor vector for testing
     cout <<"\n\nVData::EstablishNodeNeighborConnectivity: connectivity created for "<< pnode.size() <<" nodes:";
     size_t node{0};

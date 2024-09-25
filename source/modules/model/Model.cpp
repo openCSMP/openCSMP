@@ -29,6 +29,7 @@
 #include <chrono>
 #include <filesystem>
 
+// turn on for extended diagnostics activitated only in DEBUG mode
 #define CSMP_MODEL_DEBUG
 
 using namespace std;
@@ -355,7 +356,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     const bool ignore_domain_identification_by_name{true};
     this->FormRegionsFrom( mesh_topology, ignore_domain_identification_by_name );
 	
-#ifdef CSMP_MODEL_DEBUG
+#if defined(DEBUG) && defined(CSMP_MODEL_DEBUG)
     cout <<"\n"<<"Model<dim>::Initialize(regionfile,ModelTopology,VSet): connectivity check prior to boundary creation: ";
     const bool all_ok = integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
     if ( all_ok ) cout <<"everything is fine"<< endl;
@@ -392,7 +393,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
-#ifdef CSMP_MODEL_DEBUG
+#if defined(DEBUG) && defined(CSMP_MODEL_DEBUG)
 cout <<"\n"<<"Model<dim>::Initialize(regionfile,ModelTopology,VSet): final connectivity check: ";
 bool cells_ok;
 mesh_manager_.AssignUniqueNumbers( true );
@@ -567,7 +568,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
-#ifdef CSMP_MODEL_DEBUG
+#if defined(DEBUG) && defined(CSMP_MODEL_DEBUG)
 mesh_manager_.AssignUniqueNumbers( true );
 integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
 if ( mesh_manager_.Faces() > 0 )
@@ -686,7 +687,7 @@ void Model<dim>::Initialize( VSet<dim>& vset )
   InitializeLocalVariableStorage();
   UpdateSubdomainPropertyStorage();
 
-#ifdef CSMP_MODEL_DEBUG
+#if defined(DEBUG) && defined(CSMP_MODEL_DEBUG)
 Mesh().AssignUniqueNumbers( true );
 integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
 if ( mesh_manager_.Faces() > 0 )

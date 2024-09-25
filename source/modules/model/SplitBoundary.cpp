@@ -20,8 +20,6 @@
 #include "Visitor.h"
 #include "variableOperations.h"
 
-//#define SPLITBOUNDARY_DEBUG
-
 using namespace std;
 
 

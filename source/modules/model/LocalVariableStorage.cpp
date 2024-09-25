@@ -475,14 +475,12 @@ void LocalVariableStorage<dim,STOREE>::OutLVS() const
 template<uint32_t dim, template<uint32_t> class STOREE>
 double LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx ) const  
  {
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  AssertPlacement(idx);
+#endif
  assert( idx.type == SCALAR );
  assert( idx.index < data_.scalars );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
  assert( idx.dataOffset < data_.data.size() );
-#endif
     return data_.data[idx.dataOffset];
  }
  
@@ -491,15 +489,13 @@ double LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx ) const
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, ScalarVariable& sc ) const  
  {
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  AssertPlacement(idx);
+#endif
  assert( idx.type == SCALAR );
  assert( idx.index < data_.scalars );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
  assert( idx.dataOffset < data_.data.size() );
  assert( idx.flagOffset < data_.flags.size() );
-#endif
     sc.Flag() = data_.flags[idx.flagOffset];
     sc        = data_.data[idx.dataOffset];
  }
@@ -509,15 +505,14 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, ScalarVaria
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const ScalarVariable& sc )  
  {
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  AssertPlacement(idx);
+#endif
  assert( idx.type == SCALAR );
  assert( idx.index < data_.scalars );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
  assert( idx.flagOffset < data_.flags.size() );
  assert( idx.dataOffset < data_.data.size() );
-#endif
+
     data_.flags[idx.flagOffset] = sc.Flag();
     data_.data[idx.dataOffset]  = sc();
  }
@@ -527,13 +522,12 @@ void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const Scal
 template<uint32_t dim, template<uint32_t> class STOREE>
 VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx ) const 
  {
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  AssertPlacement(idx);
+#endif
  assert( idx.type == SCALAR || idx.type == ARRAY );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
  assert( idx.flagOffset < data_.flags.size() );
-#endif
+
     return data_.flags[idx.flagOffset];
  }
  
@@ -542,13 +536,12 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx )
 template<uint32_t dim, template<uint32_t> class STOREE>
 VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx, int_type i ) const
  {
- #ifndef NDEBUG
-  AssertPlacement(idx);
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+ AssertPlacement(idx);
+#endif
   assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
   assert( (idx.flagOffset+i) < data_.flags.size() );
-#endif
+
     return data_.flags[ idx.flagOffset + i ];
  }
  
@@ -557,13 +550,11 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx, 
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx, VARIABLE_FLAG flag ) 
  {
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  AssertPlacement(idx);
+#endif
  assert( idx.type == SCALAR  || idx.type == ARRAY );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
  assert( idx.flagOffset < data_.flags.size() );
-#endif
     data_.flags[idx.flagOffset] = flag;
  }
 
@@ -572,13 +563,12 @@ void LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx, VARIABLE_
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx, int_type i, VARIABLE_FLAG flag )
  {
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  AssertPlacement(idx);
+#endif
  assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
  assert( (idx.flagOffset+i) < data_.flags.size() );
-#endif
+
     data_.flags[ idx.flagOffset + i ] = flag;
  }
  
@@ -587,15 +577,14 @@ void LocalVariableStorage<dim,STOREE>::Status( const csmp::Index& idx, int_type 
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const VectorVariable<dim>& vc )  
  {
-#ifndef NDEBUG
- AssertPlacement( idx );
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+ AssertPlacement(idx);
+#endif
  assert( idx.type == VECTOR );
  assert( idx.index < data_.vectors );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
  assert( (idx.flagOffset+dim-1) < data_.flags.size() );
  assert( (idx.dataOffset+dim-1) < data_.data.size() );
-#endif
+
     for ( uint32_t i{0u}; i<dim; ++i ) {
          data_.flags[ idx.flagOffset+i ] = vc.Flag(i);
          data_.data[ idx.dataOffset+i ]  = vc[i];
@@ -607,15 +596,14 @@ void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const Vect
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, VectorVariable<dim>& vc ) const  
  {
-#ifndef NDEBUG
- AssertPlacement( idx );
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+ AssertPlacement(idx);
+#endif
  assert( idx.type == VECTOR );
  assert( idx.index < data_.vectors );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
  assert( (idx.flagOffset+dim-1) < data_.flags.size() );
  assert( (idx.dataOffset+dim-1) < data_.data.size() );
-#endif
+
     for ( uint32_t i{0u}; i<dim; ++i ) {
          vc.Flag(i) = data_.flags[ idx.flagOffset+i ];
          vc(i)      = data_.data[ idx.dataOffset+i ];
@@ -627,15 +615,14 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, VectorVaria
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const TensorVariable<dim>& ts )
  {
-#ifndef NDEBUG
-  AssertPlacement( idx );
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+ AssertPlacement(idx);
+#endif
   assert( idx.type == TENSOR );
   assert( idx.index < data_.tensors );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
   assert( (idx.flagOffset+dim-1) < data_.flags.size() );
   assert( (idx.dataOffset+dim*dim-1) < data_.data.size() );
-#endif
+
     const uint32_t dataOffset(idx.dataOffset);
     const uint32_t flagOffset(idx.flagOffset);
     for ( uint32_t i{0U}; i<dim; i++ )
@@ -651,15 +638,14 @@ void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const Tens
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, TensorVariable<dim>& ts ) const  
  {
-#ifndef NDEBUG
- AssertPlacement( idx );
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+ AssertPlacement(idx);
+#endif
  assert( idx.type == TENSOR );
  assert( idx.index < data_.tensors );
-#endif  
-#ifdef VARIABLE_STORAGE_DEBUG
  assert( (idx.flagOffset+dim-1) < data_.flags.size() );
  assert( (idx.dataOffset+dim*dim-1) < data_.data.size() );
-#endif
+
    const uint32_t dataOffset(idx.dataOffset);
    const uint32_t flagOffset(idx.flagOffset);
    for ( uint32_t i{0U}; i<dim; i++ )
@@ -675,15 +661,14 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, TensorVaria
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const ArrayVariable& av )
   {
-#ifndef NDEBUG
-  AssertPlacement( idx );
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+ AssertPlacement(idx);
+#endif
   assert( idx.type == ARRAY );
   assert( av.Size() == idx.dataDepth );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset) < data_.flags.size() );
-#endif
+
     const uint32_t data_offset( idx.dataOffset );
     const uint32_t flags_offset( idx.flagOffset );
     const uint32_t arraySize( idx.dataDepth );
@@ -698,15 +683,14 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, ArrayVariable& av ) const
   {
     av.Resize( idx.dataDepth );
-#ifndef NDEBUG
-  AssertPlacement( idx );
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+ AssertPlacement(idx);
+#endif
   assert( idx.type == ARRAY );
   assert( av.Size() == idx.dataDepth );
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset) < data_.flags.size() );
-#endif
+
     const uint32_t data_offset( idx.dataOffset );
     const uint32_t flags_offset( idx.flagOffset );
     const uint32_t arraySize( idx.dataDepth );
@@ -719,15 +703,14 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, ArrayVariab
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const FlaggedArrayVariable& av )
   {
-#ifndef NDEBUG
-  AssertPlacement( idx );
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+ AssertPlacement(idx);
+#endif
   assert( idx.type == FLAGGEDARRAY );
   assert( av.Size() == idx.dataDepth ); 
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset+idx.dataDepth-1) < data_.flags.size() );
-#endif
+
     const uint32_t data_offset( idx.dataOffset );
     const uint32_t flags_offset( idx.flagOffset );
     const uint32_t arraySize( idx.dataDepth );
@@ -744,15 +727,14 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, FlaggedArrayVariable& av ) const
   {
   av.Resize( idx.dataDepth );
-#ifndef NDEBUG
-  AssertPlacement( idx );
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+ AssertPlacement(idx);
+#endif
   assert( idx.type == FLAGGEDARRAY );
   assert( av.Size() == idx.dataDepth ); 
-#endif
-#ifdef VARIABLE_STORAGE_DEBUG
   assert( (idx.dataOffset+idx.dataDepth-1) < data_.data.size() );
   assert( (idx.flagOffset+idx.dataDepth-1) < data_.flags.size() );
-#endif
+
     const uint32_t data_offset( idx.dataOffset );
     const uint32_t flags_offset( idx.flagOffset );
     const uint32_t arraySize( idx.dataDepth );
@@ -771,8 +753,8 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 bool LocalVariableStorage<dim,STOREE>::IsWithinRange( const csmp::Index& idx, 
                                                       double vmin, double vmax ) const
   {
-#ifndef NDEBUG
-  AssertPlacement( idx );
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+ AssertPlacement(idx);
 #endif
     if ( idx.type == SCALAR ) {
       const double val = Read( idx );
@@ -820,11 +802,11 @@ double LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& i
   {
     const int_type offset(DATA_OFFSET_IP);
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( idx.type == SCALAR );
   assert( offset < data_.data.size() );
-#endif
 
     return data_.data[offset];
   }
@@ -837,12 +819,12 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx
     const int_type offset(DATA_OFFSET_IP);
     const int_type flagOffset(FLAG_OFFSET_IP);
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( idx.type == SCALAR );
   assert( offset < data_.data.size() );
   assert( flagOffset < data_.flags.size() );
-#endif
 
     sc.Flag() = data_.flags[flagOffset];
     sc        = data_.data[offset];
@@ -856,12 +838,12 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& id
     const int_type offset(DATA_OFFSET_IP);
     const int_type flagOffset(FLAG_OFFSET_IP);
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( idx.type == SCALAR );
   assert( offset < data_.data.size() );
   assert( flagOffset < data_.flags.size() );
-#endif
 
     data_.flags[flagOffset] = sc.Flag();
     data_.data[offset] = sc();
@@ -874,11 +856,11 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp:
   {
     const int_type flagOffset(FLAG_OFFSET_IP);
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( idx.type == SCALAR || idx.type == ARRAY );
   assert( flagOffset < data_.flags.size() );
-#endif
 
     return data_.flags[flagOffset];
   }
@@ -890,12 +872,12 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp:
   {
     const int_type flagOffset(FLAG_OFFSET_IP);
 
-#ifndef NDEBUG
-    AssertIntegrationPointPlacement(idx);
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+  AssertIntegrationPointPlacement(idx);
+#endif
     assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
     assert( (i < dim)&&(idx.type != FLAGGEDARRAY) || (i < idx.dataDepth )&&(idx.type == FLAGGEDARRAY) );
     assert( flagOffset+i < data_.flags.size() );
-#endif
 
     return data_.flags[ flagOffset+i ];
   }
@@ -907,11 +889,11 @@ void LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& i
   {
     const int_type flagOffset(FLAG_OFFSET_IP);
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( idx.type == SCALAR  || idx.type == ARRAY );
   assert( flagOffset < data_.flags.size() );
-#endif
 
     data_.flags[flagOffset] = flag;
   }
@@ -923,12 +905,12 @@ void LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& i
   {
     const int_type flagOffset(FLAG_OFFSET_IP);
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
   assert( (i < dim)&&(idx.type != FLAGGEDARRAY) || (i < idx.dataDepth )&&(idx.type == FLAGGEDARRAY) );
   assert( flagOffset+i < data_.flags.size() );
-#endif
 
     data_.flags[ flagOffset+i ] = flag;
   }
@@ -941,12 +923,12 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& id
     const int_type offset(DATA_OFFSET_IP);
     const int_type flagOffset(FLAG_OFFSET_IP);
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( idx.type == VECTOR );
   assert( offset+dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
-#endif
 
   for ( uint32_t i(0); i<dim; ++i ) {
     data_.flags[ flagOffset+i ] = vc.Flag(i);
@@ -962,14 +944,14 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx
     const uint32_t offset(DATA_OFFSET_IP);
     const uint32_t flagOffset(FLAG_OFFSET_IP);
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( idx.type == VECTOR );
   assert( offset+dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
-#endif
 
-    for ( uint32_t i(0); i<dim; ++i ) {
+    for ( uint32_t i(0u); i<dim; ++i ) {
       vc.Flag(i) = data_.flags[ flagOffset+i ];
       vc(i)      = data_.data[ offset+i ];
       }
@@ -983,14 +965,14 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& id
     const uint32_t offset(DATA_OFFSET_IP);
     const uint32_t flagOffset(FLAG_OFFSET_IP);
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( idx.type == TENSOR );
   assert( offset+dim*dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
-#endif
 
-  for ( auto i{0U}; i<dim; i++ )
+  for ( uint32_t i{0U}; i<dim; i++ )
     {
     data_.flags[ flagOffset+i ] = ts.Flag(i);
     for ( uint32_t j{0U}; j<dim; j++ )
@@ -1006,14 +988,14 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx
     const uint32_t offset(DATA_OFFSET_IP);
     const uint32_t flagOffset(FLAG_OFFSET_IP);
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( idx.type == TENSOR );
   assert( offset+dim*dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
-#endif
 
-  for ( auto i{0U}; i<dim; i++ )
+  for ( uint32_t i{0U}; i<dim; i++ )
     {
     ts.Flag(i) = data_.flags[flagOffset+i];
     for ( uint32_t j{0U}; j<dim; j++ )
@@ -1029,13 +1011,13 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& id
     const uint32_t flagOffset(FLAG_OFFSET_IP);
     const uint32_t arraySize( idx.dataDepth );
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == ARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset< data_.flags.size() );
-#endif
 
     for( uint32_t i(0); i < arraySize; ++i )
       data_.data[ offset     + i ] = av[i];
@@ -1051,13 +1033,13 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx
     const uint32_t flagOffset(FLAG_OFFSET_IP);
     const uint32_t arraySize( idx.dataDepth );
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == ARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset < data_.flags.size() );
-#endif
 
     for( uint32_t i(0); i < arraySize; ++i )
       av(i) = data_.data[ offset+i ];
@@ -1073,13 +1055,13 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& id
     const uint32_t flagOffset(FLAG_OFFSET_IP);
     const uint32_t arraySize( idx.dataDepth );
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == FLAGGEDARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset+arraySize-1 < data_.flags.size() );
-#endif
 
     for( uint32_t i(0); i < arraySize; ++i )
     {
@@ -1097,13 +1079,13 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx
     const uint32_t flagOffset(FLAG_OFFSET_IP);
     const uint32_t arraySize( idx.dataDepth );
 
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
+#endif
   assert( av.Size() == idx.dataDepth );
   assert( idx.type == FLAGGEDARRAY );
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset+arraySize-1 < data_.flags.size() );
-#endif
 
     for( uint32_t i(0); i < arraySize; ++i )
     {
@@ -1117,7 +1099,7 @@ template<uint32_t dim, template<uint32_t> class STOREE>
 bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t ip, const csmp::Index& idx,
                                                       double vmin, double vmax ) const
   {
-#ifndef NDEBUG
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
 #endif
 

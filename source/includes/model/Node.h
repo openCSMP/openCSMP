@@ -87,16 +87,10 @@ class Node : public LocalVariableStorage<dim,Node> {
     /// checks whether Element is a parent of the node; call SortParents() first !!!
     bool IsParent( const Element<dim>* const ) const;
   
-    typename std::vector<const std::pair<Element<dim>*,short>>::const_iterator ParentElementsBegin() const
+    typename std::vector<std::pair<Element<dim>*,short>>::const_iterator ParentElementsBegin() const
       { return parents_.ParentsBegin(); }
-    typename std::vector<const std::pair<Element<dim>*,short>>::const_iterator ParentElementsEnd() const
+    typename std::vector<std::pair<Element<dim>*,short>>::const_iterator ParentElementsEnd() const
       { return parents_.ParentsEnd(); }
-
-    typename std::vector<std::pair<Element<dim>*,short>>::const_iterator ParentElementsBegin()
-      { return parents_.ParentsBegin(); }
-    typename std::vector<std::pair<Element<dim>*,short>>::const_iterator ParentElementsEnd()
-      { return parents_.ParentsEnd(); }
-
 
     // node neighbors (sort vector to make it searchable by binary_search and other stl algorithms)
     

@@ -7,7 +7,7 @@
 #include <iostream>
 
 
-// #define CSMP_DENSE_MATRIX_DEBUG // uncomment this to invoke debugging
+// #define CSMP_DENSE_MATRIX_DEBUG // uncomment this to invoke extra detailed debugging
 
 using namespace std;
 
@@ -1263,7 +1263,7 @@ DenseMatrix<mn_max>&
 template<uint32_t mn_max>
 DenseMatrix<mn_max>&  DenseMatrix<mn_max>::operator*=( const DenseMatrix<mn_max>& mat )
  {
-#ifdef CSMP_DENSE_MATRIX_DEBUG
+#if defined(DEBUG) && defined(CSMP_DENSE_MATRIX_DEBUG)
     if ( cols != mat.rows ) {
          cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max;
          cout <<">::operator*=: Matrices cannot be multiplied "; 
@@ -1426,7 +1426,7 @@ template<uint32_t mn_max>
 DenseMatrix<mn_max>  operator*( const DenseMatrix<mn_max>& a,
                                 const DenseMatrix<mn_max>& b )
  {
-#ifdef CSMP_DENSE_MATRIX_DEBUG
+#if defined(DEBUG) && defined(CSMP_DENSE_MATRIX_DEBUG)
     if ( a.Cols() != b.Rows() ) {
          cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max;
          cerr <<"> operator*: Matrices cannot be multiplied ";

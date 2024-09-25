@@ -24,8 +24,6 @@
 #include "ErrorHandler.h"
 #include "MeshManagementUtilities.h"
 
-// #define REGION_DEBUG
-
 using namespace std;
 
 namespace csmp {
@@ -2410,21 +2408,6 @@ break;
 }
 elements_considered.clear();
 remaining_elements.clear();
-
-#ifdef REGION_DEBUG
-
-VectorVariable<dim> un( ANY, 0.0 );
-typename std::vector<csmp::Element<dim>* >::const_iterator reit = this->CellsBegin();
-while ( reit != this->CellsEnd() )
-{
-(*reit)->UnitNormal( un );
-std::cerr<<" UN = (";
-for( size_t i{0U}; i<dim; i++)
-std::cerr<< " "<< un[i];
-std::cerr<<" )\n";
-reit++;
-}
-#endif
 
 }
 */

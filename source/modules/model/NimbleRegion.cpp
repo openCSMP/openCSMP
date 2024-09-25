@@ -7,7 +7,7 @@
 
 using namespace std;
 
-//#define NIMBLE_REGION_DEBUG
+//#define CSMP_NIMBLE_REGION_DEBUG
 
 namespace csmp {
 
@@ -98,13 +98,13 @@ void NimbleRegion<dim>::Update( typename vector<Node<dim>*>::const_iterator firs
     if ( !this->node_vec_.empty() ) this->node_vec_.clear();
     this->node_vec_.reserve(n_target_nodes);
 
-#ifdef NIMBLE_REGION_DEBUG
+#if defined(DEBUG) && defined(CSMP_NIMBLE_REGION_DEBUG)
     size_t  counter(0U);
 #endif
    
     auto nit(first);
     while ( nit != nodes_end ) {
-#ifdef NIMBLE_REGION_DEBUG
+#if defined(DEBUG) && defined(CSMP_NIMBLE_REGION_DEBUG)
          // debugging: labeling the input nodes continuously
          (*nit)->Idx( counter++ );
 #endif
@@ -122,7 +122,7 @@ void NimbleRegion<dim>::Update( typename vector<Node<dim>*>::const_iterator firs
 for ( auto nit2(first); nit2!=nodes_end; ++nit2 )
   perimeter_nodes.erase( (*nit2) );
 
-#ifdef NIMBLE_REGION_DEBUG
+#if defined(DEBUG) && defined(CSMP_NIMBLE_REGION_DEBUG)
     // debugging: labeling the perimeter nodes continuously
     for ( typename set<Node<dim>*>::iterator nit=perimeter_nodes.begin(); nit!=perimeter_nodes.end(); ++nit )
       (*nit)->Idx( counter++ );
@@ -167,13 +167,12 @@ void NimbleRegion<dim>::Update2( typename vector<Node<dim>*>::const_iterator fir
     if ( !this->cell_vec_.empty() ) this->cell_vec_.clear();
     this->node_vec_.reserve(n_target_nodes);
 
-#ifdef NIMBLE_REGION_DEBUG
+#if defined(DEBUG) && defined(CSMP_NIMBLE_REGION_DEBUG)
     size_t  counter(0U);
 #endif
-   
     // recording the 'interior' nodes, excluding nodes at model boundary
     while ( first != last ) {
-#ifdef NIMBLE_REGION_DEBUG
+#if defined(DEBUG) && defined(CSMP_NIMBLE_REGION_DEBUG)
          // debugging: labeling the input nodes continuously
          (*first)->Idx( counter++ );
 #endif
@@ -202,7 +201,7 @@ void NimbleRegion<dim>::Update2( typename vector<Node<dim>*>::const_iterator fir
                     if ( !binary_search( this->node_vec_.begin(), this->node_vec_.end(), nit->Parent(i)->N(j) ) ) {
                          // storing the unique perimeter nodes
                          perimeter_nodes.insert( nit->Parent(i)->N(j) );
-#ifdef NIMBLE_REGION_DEBUG
+#if defined(DEBUG) && defined(CSMP_NIMBLE_REGION_DEBUG)
                           // debugging
                          if ( perimeter_nodes.find(nit->Parent(i)->N(j)) != perimeter_nodes.end() )
                            nit->Parent(i)->N(j)->Idx( counter++ );
@@ -246,7 +245,7 @@ void NimbleRegion<dim>::Update3( typename vector<Node<dim>*>::const_iterator fir
     if ( !this->node_vec_.empty() ) this->node_vec_.clear();
     this->node_vec_.reserve(n_target_nodes);
 
-#ifdef NIMBLE_REGION_DEBUG
+#if defined(DEBUG) && defined(CSMP_NIMBLE_REGION_DEBUG)
     size_t  counter(0U);
 #endif
    
@@ -254,7 +253,7 @@ void NimbleRegion<dim>::Update3( typename vector<Node<dim>*>::const_iterator fir
     const auto nodes_end(last);
     
     while ( nit != nodes_end ) {
-#ifdef NIMBLE_REGION_DEBUG
+#if defined(DEBUG) && defined(CSMP_NIMBLE_REGION_DEBUG)
          // debugging: labeling the input nodes continuously
          (*nit)->Idx( counter++ );
 #endif
@@ -315,7 +314,7 @@ void NimbleRegion<dim>::Update3( typename vector<Node<dim>*>::const_iterator fir
     for ( auto nit2(first); nit2!=nodes_end; ++nit2 )
         perimeter_nodes.erase( (*nit2) );
 
-#ifdef NIMBLE_REGION_DEBUG
+#if defined(DEBUG) && defined(CSMP_NIMBLE_REGION_DEBUG)
     // debugging: labeling the perimeter nodes continuously
     for ( typename set<Node<dim>*>::iterator nit=perimeter_nodes.begin(); nit!=perimeter_nodes.end(); ++nit )
       (*nit)->Idx( counter++ );

@@ -32,7 +32,7 @@
 
 #include "MeshManagementUtilities.h"
 
-//#define MODEL_SUBDOMAIN_DEBUG
+//#define CSMP_MODEL_SUBDOMAIN_DEBUG
 
 using namespace std;
 
@@ -686,7 +686,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
             }
         assert( /* all cells are accounted for */ cell_vec_.size() == interior_elmts.size() + boundary_elmts.size() + lesser_dim_elmts.size() );
 
-#ifdef MODEL_SUBDOMAIN_DEBUG
+#if defined(DEBUG) && defined(MODEL_SUBDOMAIN_DEBUG)
 cout <<"\nModelSubDomain<" << dim <<">::PartitionCellVector: '"<< Name() <<"' highest subdomain cell dim: "<< elmt_dim.second <<"\n";
 cout <<"\n\tlesser-dim cells: "<< lesser_dim_elmts.size() <<", boundary cells: "<< boundary_elmts.size();
 cout <<"\n\ttotal nodes: "<< node_vec_.size() <<", highest-dim cell nodes: "<< highest_dim_elmt_nodes.size() << endl;
@@ -785,7 +785,7 @@ cout.flush();
               cerr << endl;
            }
 
-#ifdef MODEL_SUBDOMAIN_DEBUG
+#if defined(DEBUG) && defined(MODEL_SUBDOMAIN_DEBUG)
 cout <<"\n\ttotal cells: "<< cell_vec_.size() <<", interior ones: "<< interior_elmts.size() <<", boundary cells: "<< boundary_elmts.size();
 cout <<", stand-alone lower-dim cells: "<< lesser_dim_elmts_detached.size();
 cout <<" (sum="<< interior_elmts.size() + boundary_elmts.size() <<").";
@@ -809,7 +809,7 @@ cout.flush();
     cell_vec_.shrink_to_fit();
 
 
-#ifdef MODEL_SUBDOMAIN_DEBUG
+#if defined(DEBUG) && defined(MODEL_SUBDOMAIN_DEBUG)
 // TESTING - is there an cell with a boundary face that is not in the boundary cell vector and vice versa
 bool no_error_yet(true);
 set<CELL<dim>*> elmts_with_bfaces;
@@ -896,7 +896,8 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
         
         assert( first_bd_node_ <= node_vec_.size() );
       }
-#ifdef MODEL_SUBDOMAIN_DEBUG
+
+#if defined(DEBUG) && defined(MODEL_SUBDOMAIN_DEBUG)
 cout <<"\nModelSubDomain<dim,CELL>::PartitionCellVector: '"<< Name() <<"': of the ";
 cout << cell_vec_.size() <<" cells, "<< boundary_elmts.size() <<" lie at the domain boundary."<< endl;
 cout.flush();
@@ -1069,7 +1070,8 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVectorForBoundary()
         
         assert( first_bd_node_ <= node_vec_.size() );
       }
-#ifdef MODEL_SUBDOMAIN_DEBUG
+
+#if defined(DEBUG) && defined(MODEL_SUBDOMAIN_DEBUG)
 cout <<"\nModelSubDomain<dim,CELL>::PartitionCellVectorForBoundary: '"<< Name() <<"': of the ";
 cout << cell_vec_.size() <<" cells, "<< boundary_elmts.size() <<" lie at the domain boundary."<< endl;
 cout.flush();
@@ -5551,7 +5553,7 @@ size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>& g1, const ModelSub
     set_intersection( g1_nodes.begin(), g1_nodes.end(), g2_nodes.begin(), g2_nodes.end(),
                       back_inserter(shared_nodes) );
 
-#ifdef MODEL_SUBDOMAIN_DEBUG
+#if defined(DEBUG) && defined(MODEL_SUBDOMAIN_DEBUG)
 if ( shared_nodes.size() == 2U ) {
     cout <<"\n"<<"Nodes shared between '"<< g1.Name() <<"' and '"<< g2.Name() <<"': ";
     cout << shared_nodes[0]->Idx() <<": "<< shared_nodes[0]->Coordinate() <<",  ";

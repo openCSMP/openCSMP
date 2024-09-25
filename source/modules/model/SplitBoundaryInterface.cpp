@@ -13,7 +13,7 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 
-#define SPLIT_BOUNDARY_DEBUG
+#define CSMP_SPLIT_BOUNDARY_DEBUG
 
 using namespace std;
 
@@ -693,7 +693,7 @@ pair<set<string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Detec
     }
 
   // echoing the map to the screen
-#ifdef SPLIT_BOUNDARY_DEBUG
+#if defined(DEBUG) && defined(CSMP_SPLIT_BOUNDARY_DEBUG)
   cerr << "\nSplitBoundaryInterface::DetectAndCreateSplitBoundaries: interface region pairs found:\n";
   for ( const auto& split : split_boundary_map ) {
        for ( const auto& j : split.first ) cout << j <<",";

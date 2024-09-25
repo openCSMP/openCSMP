@@ -16,7 +16,7 @@
 #include "UnionFind.h"
 
 
-// #define MESH_MANAGER_DEBUG
+// #define CSMP_MESH_MANAGER_DEBUG
 
 using namespace std;
 
@@ -710,7 +710,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
    if ( !interfaces_.empty() )
      node_manifold_manager_ = new NodeManifoldManager<dim>( nodes_, vset.PmanifoldsBegin(), vset.PmanifoldsEnd() );
      
-#ifdef MESH_MANAGER_DEBUG
+#if defined(DEBUG) && defined(CSMP_MESH_MANAGER_DEBUG)
 if ( !interfaces_.empty() ) {
    cerr <<"\n\n"<<"\nMeshManager::Initialise: node manifolds initialised in NodeManifoldManager:\n";
    size_t counter{0U};
@@ -1280,7 +1280,7 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
                                       fvm_manager_, local_face_id, lvars, ivars ) );
    (*fit).Idx( face_number );
 
-#ifdef MESH_MANAGER_DEBUG
+#if defined(DEBUG) && defined(CSMP_MESH_MANAGER_DEBUG)
 cerr <<"\n\n Element "<< eptr->Idx() <<": created new Face on face: "<< local_face_id;
 eptr->Out();
 (*fit).Out();
@@ -1810,6 +1810,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceInteriorElementsByFaces( const Prop
     
     vector<Face<dim>*> face_ptrs;
     const auto         n_faces_to_build{ distance(first,last) };
+    const auto         n_elements = distance(first,last);
 
     if ( n_faces_to_build == 0U ) {
          csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceInteriorElementsByFaces", "supplied iterator range is empty; nothing was done.");
@@ -1858,8 +1859,8 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceInteriorElementsByFaces( const Prop
       
      // RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
      //elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
-#ifdef MESH_MANAGER_DEBUG
-     cout <<"\n\nMeshManager: ReplaceInteriorElementsByFaces: created "<< faces_.size() - n_faces;
+#if defined(DEBUG) && defined(CSMP_MESH_MANAGER_DEBUG)
+     cout <<"\n\nMeshManager: ReplaceInteriorElementsByFaces: created "<< face_ptrs.size();
      cout <<" faces and deleted "<< n_elements - elements_.size() <<" elements."<< endl;
 #endif
 
@@ -1901,6 +1902,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
     
     vector<Face<dim>*> face_ptrs;
     const long         n_faces_to_build{ distance(first,last) };
+    const auto         n_elements = distance(first,last);
 
     if ( n_faces_to_build == 0U ) {
          csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces", "supplied iterator range is empty; nothing was done.");
@@ -1971,13 +1973,13 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
           if ( Delete( (*first2) ) == false ) {
                cerr <<"\n\t"<<"Element: "<< (*first2)->Idx();
                csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces",
-                               "failed to delete Element");
+                               "did not delete Element");
             }
           first2++;
        }
 
-#ifdef MESH_MANAGER_DEBUG
-     cout <<"\n\nMeshManager: ReplaceBoundaryElementsByFaces: created "<< faces_.size() - n_faces;
+#if defined(DEBUG) && defined(CSMP_MESH_MANAGER_DEBUG)
+     cout <<"\n\nMeshManager: ReplaceBoundaryElementsByFaces: created "<< face_ptrs.size();
      cout <<" faces and deleted "<< n_elements - elements_.size() <<" elements."<< endl;
      size_t surface_elmts{0};
      for ( auto& it : elements_ ) if ( it.IsSurface() ) surface_elmts++;
@@ -3879,16 +3881,22 @@ template void MeshManager<3>::BuildLineConnectivity<Element>( typename vector<El
                                                               typename vector<Element<3>*>::const_iterator );
 template void MeshManager<2>::BuildLineConnectivity<Element>( typename vector<Element<2>*>::const_iterator,
                                                               typename vector<Element<2>*>::const_iterator );
+template void MeshManager<1>::BuildLineConnectivity<Element>( typename vector<Element<1>*>::const_iterator,
+                                                              typename vector<Element<1>*>::const_iterator );
 
 template void MeshManager<3>::BuildLineConnectivity<Face>( typename vector<Face<3>*>::const_iterator,
                                                            typename vector<Face<3>*>::const_iterator );
 template void MeshManager<2>::BuildLineConnectivity<Face>( typename vector<Face<2>*>::const_iterator,
                                                            typename vector<Face<2>*>::const_iterator );
+template void MeshManager<1>::BuildLineConnectivity<Face>( typename vector<Face<1>*>::const_iterator,
+                                                           typename vector<Face<1>*>::const_iterator );
 
 template void MeshManager<3>::BuildLineConnectivity<InterFace>( typename vector<InterFace<3>*>::const_iterator,
                                                                 typename vector<InterFace<3>*>::const_iterator );
 template void MeshManager<2>::BuildLineConnectivity<InterFace>( typename vector<InterFace<2>*>::const_iterator,
                                                                 typename vector<InterFace<2>*>::const_iterator );
+template void MeshManager<1>::BuildLineConnectivity<InterFace>( typename vector<InterFace<1>*>::const_iterator,
+                                                                typename vector<InterFace<1>*>::const_iterator );
 
 
 
@@ -8063,7 +8071,5 @@ template size_t detectDuplicateCells<1,Face>( plf::colony<Face<1>>::const_iterat
 template size_t detectDuplicateCells<3,InterFace>( plf::colony<InterFace<3>>::const_iterator, plf::colony<InterFace<3>>::const_iterator, bool );
 template size_t detectDuplicateCells<2,InterFace>( plf::colony<InterFace<2>>::const_iterator, plf::colony<InterFace<2>>::const_iterator, bool );
 template size_t detectDuplicateCells<1,InterFace>( plf::colony<InterFace<1>>::const_iterator, plf::colony<InterFace<1>>::const_iterator, bool );
-
-
 
 } // end namespace csmp 

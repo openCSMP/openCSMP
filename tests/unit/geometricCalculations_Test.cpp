@@ -6,7 +6,7 @@
 //  Copyright © 2018 Stephan Matthai. All rights reserved.
 //
 
-#include "GeometricCalculations_Test.h"
+#include "geometricCalculations_Test.h"
 #include "geometricCalculations.h"
 #include "Point.h"
 
@@ -14,7 +14,7 @@ using namespace std;
 
 namespace csmp {
 
-void GeometricCalculations_Test::run()
+void geometricCalculations_Test::run()
  {
    /// axes ( 1D )
    csmp::Point<3U> pt1(1.,1.,1.), pt2(2.,4.,6.), e1;

@@ -30,9 +30,7 @@ template<uint32_t dim>
 void areaCenterOfMass(const vector<Point<dim> >& vecPoints, Point<dim>& vecCenter)
 {
 	//if vector<double> of points is empty, return an empty centroid
-	#ifdef CSP_GLOBAL_DEBUGGING
 	assert(vecPoints.size() == 4);
-	#endif
 	
 	Point<dim> pt1, pt2, pt3, pt4;
 	vertexCenterOfMass3Vertices(vecPoints[0],vecPoints[1],vecPoints[3], pt1);
@@ -102,10 +100,8 @@ vector<double> crossProduct( const vector<double>& vector1, const vector<double>
 {
 	const size_t iSize(vector1.size());
 
-	#ifdef CSP_GLOBAL_DEBUGGING
 	assert(iSize == vector2.size());
 	assert(iSize == 2 || iSize == 3);
-	#endif
 	
 	vector<double> vecReturn;
 	
@@ -185,9 +181,7 @@ template<uint32_t dim>
 void localSurfaceNormal(const vector< Point<dim> >& vecPoints, const Point<dim>& vecNormalAt, const size_t& iLevelOfRefinement, Point<dim>& vecNormal)
 {
 	// vecPolygon is of the form -> p1, p2, p3, p4, ... 
-	#ifdef CSP_GLOBAL_DEBUGGING
 	assert(!vecPoints.empty());
-	#endif
 		
 	//vecNormalAt is where the normal is to be calculated
 	
@@ -303,9 +297,7 @@ double distanceBetweenPoints(const vector<double>& v1, const vector<double> & v2
 	double fDist(0.);
 	
 	//just calculate the distance
-	#ifdef CSP_GLOBAL_DEBUGGING
 	assert(v1.size() == v2.size());
-	#endif
 	
 	vector<double>::const_iterator vIter2(v2.begin());
 	const vector<double>::const_iterator vIterEnd(v1.end());

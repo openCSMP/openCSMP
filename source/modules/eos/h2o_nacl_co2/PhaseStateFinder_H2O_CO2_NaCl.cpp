@@ -160,7 +160,7 @@ SYSTEM_STATE PhaseStateFinder_H2O_CO2_NaCl::Equilibrate()
     equilibrated = EvaluateFractionsInTriangularRegion();
     if(equilibrated)
     {
-#ifdef PHASESTATEFINDER_H2O_CO2_NACL_DEBUG
+#if defined(DEBUG) && defined(PHASESTATEFINDER_H2O_CO2_NACL_DEBUG)
         cerr << "PhaseStateFinder_H2O_CO2_NaCl::Equilibrate: Point is in aq_salt\n";
 #endif
         // First, compute composition of aqueous phase, which is the weighted sum/average of corners a+b
@@ -195,7 +195,7 @@ SYSTEM_STATE PhaseStateFinder_H2O_CO2_NaCl::Equilibrate()
     equilibrated = EvaluateFractionsInTriangularRegion();
     if(equilibrated)
     {
-#ifdef PHASESTATEFINDER_H2O_CO2_NACL_DEBUG
+#if defined(DEBUG) && defined(PHASESTATEFINDER_H2O_CO2_NACL_DEBUG)
         cerr << "PhaseStateFinder_H2O_CO2_NaCl::Equilibrate: Point is in aq_carb_salt\n";
 #endif
         MoleToMassfractionAtTriangularCorners();
@@ -227,7 +227,7 @@ SYSTEM_STATE PhaseStateFinder_H2O_CO2_NaCl::Equilibrate()
     equilibrated = EvaluateFractionsInTriangularRegion();
     if(equilibrated)
     {
-#ifdef PHASESTATEFINDER_H2O_CO2_NACL_DEBUG
+#if defined(DEBUG) && defined(PHASESTATEFINDER_H2O_CO2_NACL_DEBUG)
         cerr << "PhaseStateFinder_H2O_CO2_NaCl::Equilibrate: Point is in carb_salt\n";
 #endif
         // First, compute composition of carbonic phase, which is the weighted sum/average of corners a+b
@@ -260,7 +260,7 @@ SYSTEM_STATE PhaseStateFinder_H2O_CO2_NaCl::Equilibrate()
     equilibrated = EvaluateFractionsInTriangularRegion(); // This is ok but we are not yet done if equilibrated
     if(equilibrated)
     {
-#ifdef PHASESTATEFINDER_H2O_CO2_NACL_DEBUG
+#if defined(DEBUG) && defined(PHASESTATEFINDER_H2O_CO2_NACL_DEBUG)
         cerr << "PhaseStateFinder_H2O_CO2_NaCl::Equilibrate: Point is in aq_carb\n";
 #endif
         EvaluateSaltyAqCarb(); // does all updates

@@ -406,6 +406,7 @@ class PDE_Integrator {
     std::vector<const csmp::Face<dim>*>       boundary_faces_;           ///< empty if computation applies to entire model; else Faces needed for dS integrals
     std::vector<const csmp::InterFace<dim>*>  splitboundary_interfaces_; ///< empty if computation applies to entire model; else InterFaces needed for domain coupling
 
+// TODO: must use CompressedRowMatrix
     SparseMatrix          G_;           ///< solution matrix
     std::vector<double>   rh_;          ///< righthand vector
     std::vector<double>   x_;           ///< solution vector

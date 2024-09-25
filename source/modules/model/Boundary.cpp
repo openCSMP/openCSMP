@@ -23,8 +23,6 @@
 #include "Visitor.h"
 #include "FaceConstructionData.h"
 
-//#define BOUNDARY_DEBUG
-
 using namespace std;
 
 namespace csmp {
