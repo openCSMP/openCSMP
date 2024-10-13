@@ -261,9 +261,7 @@ Mesh connectivity file (*.dat) in text ASCII version:
 */
 class ANSYS_Interface {
   public:
-    explicit ANSYS_Interface( bool create_isoparametric_element_mesh=true);
-
-    ~ANSYS_Interface();
+    explicit ANSYS_Interface( bool create_isoparametric_element_mesh=true );
     
     /// Reading function
 

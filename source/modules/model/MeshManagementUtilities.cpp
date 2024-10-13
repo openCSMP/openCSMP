@@ -1566,8 +1566,8 @@ template bool containsElementsOfType<3U>( const Region<3>&, CELL_SHAPE );
 template<>
 bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain )
  {
-    size_t non_surface_elements(0U);
-    for ( auto it=subdomain.CellsBegin(); it!=subdomain.CellsEnd(); ++it )
+    size_t non_surface_elements(0U); // NB testing must involve only interior cells
+    for ( auto it=subdomain.CellsBegin(); it!=subdomain.PerimeterCellsBegin(); ++it )
       // this method only considers surface elements
       if ( (*it)->IsSurface() ) {
            auto normal = (*it)->UnitNormal();
@@ -1628,13 +1628,67 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
 
 
 
+
+/**
+    Tries to determine whether surface mesh has consistent element normal orientations (none of the element numberings is flipped).
+    @pre surface patch must be contiguous.
+*/
+bool doNormalsInContiguousSurfacePatchPointToSameSide( const Region<3U>& subdomain )
+ {
+    subdomain.RenumberNodes();
+    
+    // performing somewhat expensive normal computation only once on each node
+    vector<Point<3U>> vertex_normals( subdomain.Nodes() );
+    for ( const auto& nit : subdomain.NodeVector() )
+      vertex_normals[ nit->Idx() ] = nit->VertexNormal( subdomain.NodesBegin(), subdomain.NodesEnd() );
+      
+    // 1. comparing the node normals with one-another does not really answer the question, it only detects discontinuites in surface derivative
+    // (getting average normal orientation and then comparing individual normals with it)
+    Point<3U>  avg_normal(0);
+    for ( const auto& nrml : vertex_normals ) avg_normal += nrml;
+    avg_normal /= static_cast<double>( vertex_normals.size() );
+    for ( const auto& nrml : vertex_normals )
+      if ( dotProduct( avg_normal, nrml ) < 0.5 ) {
+           cout <<"\n"<<"doNormalsInContiguousSurfacePatchPointToSameSide: not all vertex normals point in about the same direction ";
+           cout <<"(this may also be caused by a discontinuity in the surface)."<< endl;
+           break;
+        }
+      
+    // 2. comparing the node normals that are consistent by construction with the normals of the elements
+    unordered_set<Element<3U>*> elmts_to_be_flipped;
+    for ( const auto& eit : subdomain.CellVector() ) {
+         if ( !eit->IsSurface() ) throw csmp::Exception( ERROR, "doNormalsInContiguousSurfacePatchPointToSameSide",
+                                                        "detected Element that is not a surface element");
+         Point enrml = eit->UnitNormal();
+         for ( auto nit = eit->NodesBegin(); nit != eit->NodesEnd(); ++nit )
+           if ( dotProduct( enrml, vertex_normals[ (*nit)->Idx() ] ) < 0. ) {
+                elmts_to_be_flipped.insert( eit );
+                break;
+             }
+       }
+    
+    // 3. reporting out
+    if ( !elmts_to_be_flipped.empty() ) {
+         cout <<"\n"<<"doNormalsInContiguousSurfacePatchPointToSameSide: detected "<< elmts_to_be_flipped.size();
+         cout <<" inconsistently numbered elements: "<< endl;
+         return false;
+      }
+      
+    return true;
+      
+ } // end doNormalsInContiguousSurfacePatchPointToSameSide
+
+
+
+
+
 /**
     Stub: ID there are no boundaries so this should be a compile time assert
     
     @todo TODO: use static_assert<> here on the template argument
 */
 template<>
-bool checkNeighborNormalsForConsistentOrientation( const Region<1U>&  subdomain )
+bool checkNeighborNormalsForConsistentOrientation( const Region<1U>& subdomain )
  {
     ErrorHandler::Instance().Note( ERROR, "checkNeighborNormalsForConsistentOrientation (1D):",
                                      subdomain.Name(), "one-dimensional models have no boundaries." );

@@ -5,6 +5,7 @@
 #include "NodeManifold.h"
 #include "ErrorHandler.h"
 #include "MeshManagementUtilities.h"
+#include "ConvexPolygon.h"
 
 using namespace std;
 
@@ -489,6 +490,61 @@ bool Node<dim>::UnitNormal( Point<dim>& avg_nrml ) const
     return true;
 
  } // end UnitNormal
+
+
+
+
+
+
+/**
+    Computes normal to Node from its neighbor nodes, but ignoring neighbors that are not contained with the supplied Node vector  (as in computer graphics)
+    Supplying this vector allows to narrow the calculation to nodes that lie on a line or surface.
+    
+    @note The method was created to help check the consistency of the node numbering of lower-dimensional elements representing surfaces prior to converting them into boundaries.
+    
+    @param first iterator to first node in the restricted node range that shall be considered (so that a geometric element can be captured)
+    @param last iterator to last node in the restricted node range that shall be considered (so that a geometric element can be captured)
+    @return either the vertex normal or a Point object initialised with signalling NaN
+    
+    @attention std::find() is used so that the supplied Node range does not have to be sorted (or may consist of 2 sorted ranges, like in a model subdomain)
+    
+    Explanation of algorithm:  for each vertex, calculate the normal of the plane formed by the two edges entering and leaving that vertex.
+    More formally, given vertices 𝐯1,𝐯2,…𝐯𝑛 with counterclockwise winding, define the normal at the 𝑖th vertex as:
+    
+         𝐧𝑖=(𝐯𝑖−𝐯𝑖−1)×(𝐯𝑖+1−𝐯𝑖)
+         
+    (where the indices wrap around). The algorithm is implemented using the MJL library in the  discretisation/ directory
+    
+    @author SKM
+    @date 12/10/24
+*/
+template<uint32_t dim>
+Point<dim> Node<dim>::VertexNormal( typename vector<Node<dim>*>::const_iterator first,
+                                    typename vector<Node<dim>*>::const_iterator last ) const
+ {
+//     throw csmp::Exception( ERROR, "Node<dim>::VertexNormal", "method fails if node ordering on surface is not correct" );
+ 
+     // 0. creating a subset of the node neighbor coordinates which lie on the feature of interest
+     vector<Point<dim>> nbors_on_feature;
+     nbors_on_feature.reserve( Neighbors() );
+
+     for ( auto nit=NeighborsBegin(); nit!=NeighborsEnd(); ++nit )
+       if ( find( first, last, (*nit) ) != last )
+         nbors_on_feature.push_back( (*nit)->Coordinate() );
+ 
+     // at least two neighbor nodes are needed to perform the normal construction (but may not be enough)
+     if ( nbors_on_feature.size() <= 2 )
+       return Point<dim>( numeric_limits<double>::signaling_NaN() );
+       
+     // 1. Order the vertices found so that they form an anti-clockwise convex polygon around the node/vertex of interest
+     ConvexPolygon<dim> nbor_polygon( nbors_on_feature.begin(), nbors_on_feature.end() );
+
+     // 2. compute the normal as an average of the spokes
+     //    (where Point a is the coordinate of the node)
+     return nbor_polygon.UnitNormal( Coordinate() );
+     
+  } // end VertexNormal
+
 
 
 

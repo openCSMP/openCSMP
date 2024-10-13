@@ -55,8 +55,12 @@ size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::c
                                              typename std::vector<CELL<dim>*>::const_iterator end,
                                              std::map<CELL<dim>*,MeshPatch<dim>>& );
 
+/// determines whether the surface normals at the mesh vertices and those of the elements in the supplied surface region point to the same side of the surface
+// TODO: fix: method currently fails if the underlying method Node::VertexNormal() encounters the wrong neighbor-node ordering
+//bool doNormalsInContiguousSurfacePatchPointToSameSide( const Region<3U>& );
 
-// MESH DIAGNOSTICS TODO: move to analysis/MeshDiagnostics
+
+// MESH DIAGNOSTICS TODO: move some to analysis/MeshDiagnostics
 
 /// calculates the number of model cells that fall into the cell category indicated by placement; returns total number of cells in the model
 template<uint32_t dim>

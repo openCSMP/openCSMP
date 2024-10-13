@@ -32,12 +32,6 @@ ANSYS_Interface::ANSYS_Interface( bool create_isoparametric_element_mesh )
  {
  }
 
- 
-ANSYS_Interface::~ANSYS_Interface()
- {
- }
-
-
 
 void ANSYS_Interface::Clear()
 {

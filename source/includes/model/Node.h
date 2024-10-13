@@ -58,9 +58,13 @@ class Node : public LocalVariableStorage<dim,Node> {
     /// Local variable storage interface
     PLACEMENT Placement() const { return NODE; }
     
-    /// if node is part of line elements (2D) or surface elements (3D), method returns a unit normal that represents the average of the normals of the connected elements
+    /// for node forming part of line elements (2D) or surface elements (3D), method returns a unit normal that represents the average of the normals of the connected elements
     bool UnitNormal( Point<dim>& unrml ) const;
-    
+ 
+    /// normal to surface mesh at the Node as based on its connectivity with the surrounding nodes on the surface  (cf., computer graphics) TODO: fails for quadrilateral meshes
+    Point<dim> VertexNormal( typename std::vector<Node<dim>*>::const_iterator first,
+                             typename std::vector<Node<dim>*>::const_iterator last ) const;
+
     /// which geometric part of the discretisation of the initial boundary representation (BREP) of the model geometry the node belongs to
     TOPOTYPE Attribute() const { return BREP_entity_; }
     void Attribute( TOPOTYPE geom_feature ) { BREP_entity_ = geom_feature; }

@@ -312,7 +312,7 @@ class VData {
     void   EstablishElementConnectivity2D();
     
     /// rebuilds 'pfverts' from scratch, needs correect BOX_BOUNDARY flagging of nodes to get the non-neighbors right
-    void   EstablishElementConnectivity3D(); // retested: OK 3/12/21 by SKM
+    void   EstablishElementConnectivity3D(); 
     
     /// eliminates corner tetrahedra with all nodes on the model boundary; extra element degrees of freedom are introduced for boundary condition assignment
     size_t RemeshCornerSpanningTetrahedra();
