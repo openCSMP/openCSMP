@@ -1295,13 +1295,13 @@ void SplitBoundary<dim>::Out() const
    Special version without nodes.
 */
 template<uint32_t dim>
-void SplitBoundary<dim>::WriteIndexesToBinaryFile( fstream& fp ) const
+void SplitBoundary<dim>::WriteSplitBoundaryIndexesToBinaryFile( fstream& fp ) const
  {
     // 1. writing name of the region
-    binaryFileWrite( fp, this->Name().c_str() );
+    binaryFileWrite( fp, this->Name() );
    
     // 2. writing the interior cell records of the split boundary
-    std::vector<uint32_t> IDs( distance(this->CellsBegin(), this->PerimeterCellsBegin() ) );
+    std::vector<size_t> IDs( distance(this->CellsBegin(), this->PerimeterCellsBegin() ) );
     transform( this->CellsBegin(), this->PerimeterCellsBegin(),
                IDs.begin(), []( const InterFace<dim>* const ptr ){ return ptr->Idx(); } ); // tested: OK
     binaryFileWrite( fp, IDs );
@@ -1311,35 +1311,35 @@ void SplitBoundary<dim>::WriteIndexesToBinaryFile( fstream& fp ) const
     transform( this->PerimeterCellsBegin(), this->CellsEnd(),
                IDs.begin(), []( const InterFace<dim>* const ptr ){ return ptr->Idx(); } );
     binaryFileWrite( fp, IDs );
+    
+    // NB: no node information is written out to file; the manifolds are stored by the NodeManifoldManager
    
     // NB: the connectivity between the cells is not stored because it is handled by MeshManager
    
- } // end WriteDomainIndexesToBinaryFile
+ } // end WriteSplitBoundaryIndexesToBinaryFile
 
 
 
-void readIndexesFromBinaryFile( uint32_t dim, fstream& fp, SubDomainInfo& info )
+void readSplitBoundaryIndexesFromBinaryFile( fstream& fp, SubDomainInfo& info )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     // 1. reading name of the subdomain
-    char name[INFO_STRING];
-    binaryFileRead( fp, name );
-    info.name = name;
+    binaryFileRead( fp, info.name );
     assert( !info.name.empty() );
    
     // 2. reading the interior cell records of the region
     binaryFileRead( fp, info.interior_elmts );
-    if (dim > 2 && info.interior_elmts.empty() ) {
-        csmp_error.Note( WARNING, "readDomainIndexesFromBinaryFile:",
-                          "Model appears to have a region with no interior cells: ", name );
+    if ( info.interior_elmts.empty() ) {
+        csmp_error.Note( WARNING, "readSplitBoundaryIndexesFromBinaryFile:", info.name,
+                          "appears to be a SplitBoundary without interior cells." );
     }
 
     // 3. reading the perimeter cell records of the region
     binaryFileRead( fp, info.perimeter_elmts );
     assert( !info.perimeter_elmts.empty() );
    
- } // end readRegionIndexesFromBinaryFile
+ } // end readSplitBoundaryIndexesFromBinaryFile
 
 
 

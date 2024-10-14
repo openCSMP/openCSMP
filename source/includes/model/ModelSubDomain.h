@@ -33,12 +33,12 @@ class PropertyConstraints;
 @date 14/3/2016
 */
 struct SubDomainInfo {
-   std::string         name;                           ///< unique name
-   std::vector<uint32_t> interior_elmts;               ///< cells that have no face on the perimeter
-   std::vector<uint32_t> perimeter_elmts;              ///< cells that have at least one face on perimeter
-   std::vector<std::vector<int8_t> > perimeter_faces;  ///< local 0..faces-1 identifiers of the faces of the simplices that lie on domain boundary
-   std::vector<uint32_t> interior_nodes;               ///< nodes within the subdomain
-   std::vector<uint32_t> perimeter_nodes;              ///< nodes on the perimeter of the subdomain
+   std::string         name;                         ///< unique name
+   std::vector<size_t> interior_elmts;               ///< cells that have no face on the perimeter
+   std::vector<size_t> perimeter_elmts;              ///< cells that have at least one face on perimeter
+   std::vector<std::vector<uint32_t> > perimeter_faces;  ///< local 0..faces-1 identifiers of the faces of the simplices that lie on domain boundary
+   std::vector<size_t> interior_nodes;               ///< nodes within the subdomain
+   std::vector<size_t> perimeter_nodes;              ///< nodes on the perimeter of the subdomain
 };
 
 
@@ -357,7 +357,7 @@ size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const 
                               std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& matching_cells );
 
 /// reads ModelSubDomain data block written by writeDomainIndexesToBinaryFile() into the domain info structure
-void readDomainIndexesFromBinaryFile( uint32_t dim, std::fstream&, SubDomainInfo& );
+void readDomainIndexesFromBinaryFile( std::fstream&, SubDomainInfo& );
 
 
 } // end namespace

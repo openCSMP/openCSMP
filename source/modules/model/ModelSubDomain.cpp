@@ -613,7 +613,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
             // (each face potentially has a neighbor cell)
             auto nbors_that_belong_to_group{ eit->Neighbors() };
             const auto n_faces{ eit->Faces() };
-            for ( auto i{0U}; i<n_faces; i++ )
+            for ( uint32_t i{0U}; i<n_faces; i++ )
               // if the face is at a model boundary or has a neighbor that does not belong to the region
               if ( !eit->Neighbor(i) || !binary_search( cell_vec_.begin(), cell_vec_.end(), eit->Neighbor(i)) )
                 {
@@ -659,7 +659,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
                 {
                    // creating a subset with their nodes
                    const auto n_nodes{ eit->Nodes() };
-                   for ( auto i{0U}; i<n_nodes; ++i ) {
+                   for ( uint32_t i{0U}; i<n_nodes; ++i ) {
                         assert( eit->N(i) != nullptr );
                         highest_dim_elmt_nodes.insert( eit->N(i) );
                      }
@@ -667,7 +667,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
                    // it is considered a boudary cell
                    long  nbors_that_belong_to_group(eit->Neighbors());
                    const auto n_faces{ eit->Faces() };
-                   for ( auto i{0U}; i<n_faces; ++i )
+                   for ( uint32_t i{0U}; i<n_faces; ++i )
                      // 1) the cell is on model boundary  or  2) one of its neighbors does not belong to its parent region
                      if ( !eit->Neighbor(i) || !binary_search( cell_vec_.begin(), cell_vec_.end(), eit->Neighbor(i) ) )
                        {
@@ -699,7 +699,7 @@ cout.flush();
          // 1.3.1 nodes that are not contained in the higher-dimensional cell subset are identified as extra boundary node
          for ( auto& it : lesser_dim_elmts ) {
               const auto n_nodes{ it->Nodes() };
-              for ( auto i{0U}; i<n_nodes; ++i )
+              for ( uint32_t i{0U}; i<n_nodes; ++i )
                 if ( highest_dim_elmt_nodes.find( it->N(i) ) == highest_dim_elmt_nodes.end() )
                   boundary_nodes.insert( it->N(i) );
            }
@@ -714,7 +714,7 @@ cout.flush();
               // lower-dimensional cells with nodes that do not belong to the node set of the
               // higher dimensional cells must be boundary cells
               size_t  exterior_nodes(0U);
-              for ( auto i{0U}; i<(*it)->Nodes(); ++i )
+              for ( uint32_t i{0U}; i<(*it)->Nodes(); ++i )
                 if ( highest_dim_elmt_nodes.find( (*it)->N(i) ) == highest_dim_elmt_nodes.end() )
                   exterior_nodes++;
 
@@ -722,7 +722,7 @@ cout.flush();
               if ( exterior_nodes >= 1U ) {
                    // adding boundary cells and boundary faces
                    const auto n_faces{ (*it)->Faces() };
-                   for ( auto i{0U}; i<n_faces; ++i )
+                   for ( uint32_t i{0U}; i<n_faces; ++i )
                      if ( !(*it)->Neighbor(i) || lesser_dim_elmts.find( static_cast<CELL<dim>*>((*it)->Neighbor(i)) ) == lesser_dim_elmts.end() ) {
                           // the cell is a boundary cell that sticks out of the region
                           boundary_elmts.insert( (*it) );
@@ -741,7 +741,7 @@ cout.flush();
                    // line cells (assuming that the faces correspond to the nodes)
                    if ( (*it)->IsLine() ) {
                         const auto n_nodes{ (*it)->Nodes() };
-                        for ( auto i{0U}; i<n_nodes; ++i )
+                        for ( uint32_t i{0U}; i<n_nodes; ++i )
                           // if the node is a boundary noode
                           if ( boundary_nodes.find( (*it)->N(i) ) != boundary_nodes.end() ) {
                                boundary_elmts.insert( (*it) );
@@ -753,7 +753,7 @@ cout.flush();
                    // if they share at least one face with it
                    else {
                         const auto n_faces{ (*it)->Faces() };
-                        for ( auto i{0U}; i<n_faces; ++i ) {
+                        for ( uint32_t i{0U}; i<n_faces; ++i ) {
                             size_t  bnodes{0U};
                             for ( const auto& j : (*it)->FE()->NodesOfFace(i) )
                               if ( boundary_nodes.find( (*it)->N(j) ) != boundary_nodes.end() )
@@ -835,7 +835,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     // bd_face_vec_ is only available if there are boundary cells
     if (boundary_elmts.size() > 0)
       {
-        bd_face_vec_.reserve(cell_vec_.size() - boundary_elmts.size());
+        bd_face_vec_.reserve(boundary_elmts.size());
         //       parent cell of face, face
         typename set<pair<CELL<dim>*,uint32_t> >::const_iterator  bfit(boundary_faces.begin());
         typename set<pair<CELL<dim>*,uint32_t> >::const_iterator  ffit(boundary_faces.begin());
@@ -5198,10 +5198,10 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) const
  {
     // 1. writing name of the region
-    binaryFileWrite( fp, Name().c_str() );
+    binaryFileWrite( fp, Name() );
    
     // 2. writing the interior cell records of the region
-    std::vector<uint32_t> IDs( distance(CellsBegin(), PerimeterCellsBegin() ) );
+    std::vector<size_t> IDs( distance(CellsBegin(), PerimeterCellsBegin() ) );
     transform( CellsBegin(), PerimeterCellsBegin(),
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } ); // tested: OK
     binaryFileWrite( fp, IDs );
@@ -5212,18 +5212,7 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) con
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     binaryFileWrite( fp, IDs );
    
-    // 4. writing the boundary faces
-    // (this not stored because pointer locations will change in reconstruction eliminating storage benefit)
-    // -----------------------------------------------------------------------------------------------------
-    /* 
-        since this is vector of vectors predominated by single value entries,
-        it is collapsed into a flat vector in which all entries that refer to 
-        multiple values per cell are prefaced by a negative numer that indicates
-        how many multiple faces per cell follow, for example
-        1 5  5 3 -2 6 2 3 3 5 6
-                    ^^^          marking the 2 local face indices that relate to an cell that has
-        2 faces on the model boundary.
-    */
+    // 4. Not writing the boundary faces because, upon reconstruction, the pointers will no longer match
 
     // 5. writing the interior nodes
     IDs.resize( InteriorNodes() );
@@ -5237,7 +5226,7 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) con
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
     binaryFileWrite( fp, IDs );
     
-    // NB: the connectivity between the cells is not stored because it is handled by MeshManager
+    // NB: the connectivity between the cells is not stored. It is handled by the MeshManager
    
  } // end WriteDomainIndexesToBinaryFile
 
@@ -5261,22 +5250,20 @@ out( IDs );
     this vector. It is therefore cheaper to rebuild the vector from scratch
     during the reconstruction.
 */
-void readDomainIndexesFromBinaryFile( uint32_t dim, fstream& fp, SubDomainInfo& info )
+void readDomainIndexesFromBinaryFile( fstream& fp, SubDomainInfo& info )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     // 1. reading name of the subdomain
-    char name[INFO_STRING];
-    binaryFileRead( fp, name );
-    info.name = name;
+    binaryFileRead( fp, info.name );
     assert( !info.name.empty() );
    
     // 2. reading the interior cell records of the region
     binaryFileRead( fp, info.interior_elmts );
-    if (dim > 2 && info.interior_elmts.empty() ) {
-        csmp_error.Note( WARNING, "readDomainIndexesFromBinaryFile:",
-                          "Model appears to have a region with no interior cells: ", name );
-    }
+    if ( info.interior_elmts.empty() ) {
+         csmp_error.Note( WARNING, "readDomainIndexesFromBinaryFile:", info.name,
+                         "is a region(=domain) with no interior cells." );
+      }
 
     // 3. reading the perimeter cell records of the region
     binaryFileRead( fp, info.perimeter_elmts );
@@ -5288,7 +5275,11 @@ void readDomainIndexesFromBinaryFile( uint32_t dim, fstream& fp, SubDomainInfo& 
     // 5. reading the perimeter nodes
     binaryFileRead( fp, info.perimeter_nodes );
     assert( !info.perimeter_nodes.empty() );
-   
+
+    if (!fp) {
+         throw runtime_error("readDomainIndexesFromBinaryFile: Error occurred while reading from binary file");
+      }
+
  } // end readDomainIndexesFromBinaryFile
 
 

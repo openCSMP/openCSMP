@@ -12,7 +12,7 @@ namespace csmp {
 @file binaryReadWrite.h
 */
 
-constexpr int CSMP_BINARY_FILE_HDR_SIZE(8); // JCK header for data record in file
+constexpr size_t CSMP_BINARY_FILE_HDR_SIZE(8+1); // JCK header for data record in file + null terminator
 
 /**
    Helper class for reading fixed-size strings from binary files
@@ -56,24 +56,22 @@ constexpr int CSMP_BINARY_FILE_HDR_SIZE(8); // JCK header for data record in fil
 */
 class BinaryFileSectionRead
 {
-public:
-	BinaryFileSectionRead( std::fstream& fp, const char* header );
-	~BinaryFileSectionRead();
+  public:
+    BinaryFileSectionRead( std::fstream& fp, const char* header );
 
-private:
-	char hdr_[CSMP_BINARY_FILE_HDR_SIZE + 1]; // header JCK - string + null terminator
-	std::fstream& fp_;  
+  private:
+    char hdr_[CSMP_BINARY_FILE_HDR_SIZE];
+    std::fstream& fp_;
 };
 
 
 /// Helper class to write sections to a binary file
 class BinaryFileSectionWrite {
-public:
-	BinaryFileSectionWrite( std::fstream& fp, const char* header );
-	~BinaryFileSectionWrite();
+  public:
+    BinaryFileSectionWrite( std::fstream& fp, const char* header );
 
-private:
-	std::fstream& fp_;
+  private:
+    std::fstream& fp_;
 };
 
 
@@ -82,7 +80,7 @@ private:
 */
 
 /// checks whether the integer value fits within the range of a size_t  and returns it
-size_t checkContainerSize( std::fstream& fp );
+size_t readContainerSize( std::fstream& fp );
 
 template<class T>
 bool binaryFileWrite(std::fstream& fp, const std::vector<T>& stl_ctner);
@@ -315,7 +313,7 @@ Uses the ANSI standard C function fwrite().
 
 @section application Application
 
-To efficiently write deque data to a binary file.
+To efficiently write std:: container data to a binary file.
 
 @section messages Messages
 
@@ -324,24 +322,26 @@ If the file pointer is invalid, method will quit, reporting an error.
 template<class T>
 bool binaryFileWrite( std::fstream& fp, const std::vector<T>& stl_ctner )
 {
-#ifdef DEBUG
-  if ( stl_ctner.empty() )
-    std::cerr <<"\nbinaryFileWrite(vector): WARNING: container is empty."<< std::endl;
-#endif
-	if (!fp.is_open()) {
-      std::cerr << "\nbool binaryFileWrite: ERROR: invalid file pointer." << std::endl;
-      return false;
-    }
-
 	const size_t	bytes = sizeof(T);
 	const size_t	elements(stl_ctner.size());
+
+  if ( stl_ctner.empty() ) {
+       std::cerr <<"\nbinaryFileWrite(vector): WARNING: container is empty."<< std::endl;
+     	 fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
+       return false;
+    }
+	if (!fp.is_open()) {
+      std::cerr << "\nbool binaryFileWrite(vector): ERROR: invalid file pointer." << std::endl;
+      return false;
+    }
 
 	// writing the size of the object
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
-  if ( elements > 0 )
-    fp.write( reinterpret_cast<const char*>(&stl_ctner[0]), bytes * elements );
+  if ( elements >= 1 )
+//    fp.write( reinterpret_cast<const char*>(&stl_ctner[0]), bytes * elements );
+    fp.write( reinterpret_cast<const char*>(stl_ctner.data()), bytes * elements );
 
 	return true;
 }
@@ -351,23 +351,24 @@ bool binaryFileWrite( std::fstream& fp, const std::vector<T>& stl_ctner )
 template<typename T>
 bool binaryFileWrite( std::fstream& fp, const std::deque<T>& stl_ctner )
 {
-#ifdef DEBUG
-  if ( stl_ctner.empty() )
-    std::cerr <<"\nbinaryFileWrite(deque): WARNING: container is empty."<< std::endl;
-#endif
+	const size_t bytes = sizeof(T);
+	const size_t elements = stl_ctner.size();
+
+  if ( stl_ctner.empty() ) {
+       std::cerr <<"\nbinaryFileWrite(deque): WARNING: container is empty."<< std::endl;
+     	 fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
+       return false;
+    }
 	if (!fp.is_open()) {
-      std::cerr << "\nbool binaryFileWrite( deque<T>& ): ERROR: invalid file pointer." << std::endl;
+      std::cerr << "\nbool binaryFileWrite(deque): ERROR: invalid file pointer." << std::endl;
       return false;
     }
-
-	const size_t bytes = sizeof(T);
-	size_t       elements = stl_ctner.size();
 
 	// writing the size of the object
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
-  if ( elements > 0 )
+  if ( elements >= 1 )
 	  for ( typename std::deque<T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++ )
 		  fp.write(reinterpret_cast<const char*>(&(*it)), bytes);
 
@@ -410,40 +411,42 @@ number does not match the number of records which were actually read.
 */
 template<class T>
 bool binaryFileRead( std::fstream& fp, std::vector<T>& stl_ctner )
-{
-	if (!fp.is_open()) {
-      std::cerr << "\nbool binaryFileRead( vector<T> ): ERROR: invalid file pointer." << std::endl;
-      return false;
-    }
-    
-	const size_t bytes = sizeof(T);
-	size_t       counter(0);
-	T            val;
+  {
+    if (!fp.is_open()) {
+        std::cerr << "\nbool binaryFileRead(vector): ERROR: invalid file pointer." << std::endl;
+        return false;
+      }
+      
+    // read size of the record and check it
+    const size_t elements = readContainerSize( fp );
+    stl_ctner.resize( elements );
+   	const size_t bytes = sizeof(T);
 
-	// read size of the record and check it 
-  const size_t elements = checkContainerSize( fp );
+    if ( !fp.read(reinterpret_cast<char*>(stl_ctner.data()), elements * bytes ) ) {
+        std::cerr << "\nbool binaryFileRead(vector): ERROR: reading from file."<< std::endl;
+        return false;
+      }
+      
+    return true;
+  }
 
-	// TODO: write the elements in one go, rather than one by one
-  if ( elements > 0 ) {
+/* OLD ONE-BY-ONE VERSION
+
+  if ( elements >= 1 ) {
         if (!stl_ctner.empty())
           stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
         stl_ctner.reserve(elements);
         // writing all elements
-        for ( auto i = 0; i<elements; i++ ) {
+        for ( size_t i{0U}; i<elements; i++ ) {
           // counting the successfully read elements
           fp.read( reinterpret_cast<char*>(&val), bytes );
           counter += 1;
           stl_ctner.push_back(val);
       }
     }
-	if (counter != elements) {
-      std::cerr << "\nbool binaryFileRead: ERROR: incorrect number of records were read: ";
-      std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
-      return false;
-    }
-    
-	return true;
-}
+
+*/
+
 
 /* ALTERNATIVE
 std::vector<uint8_t> read_vector_from_disk(std::string file_path)
@@ -468,10 +471,10 @@ bool binaryFileRead( std::fstream& fp, std::deque<T>& stl_ctner )
   size_t counter(0);
 
 	// read size of the record and assert this 
-  size_t elements = checkContainerSize( fp );
+  size_t elements = readContainerSize( fp );
 
 	// TODO: write the elements in one go, rather than one by one
-	if ( elements > 0 )
+	if ( elements >= 1 )
     {
       if (!stl_ctner.empty())
         stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
@@ -539,13 +542,12 @@ bool binaryFileWrite( std::fstream& fp, const std::deque<std::vector<T> >& stl_c
     }
 
 	// writing the number of vector objects
-	const int64_t   elements(stl_ctner.size());
+	const size_t  elements(stl_ctner.size());
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
-  if ( elements > 0 )
-    for ( typename std::deque<std::vector<T> >::const_iterator
-          it = stl_ctner.begin(); it != stl_ctner.end(); it++ )
+  if ( elements >= 1 )
+    for ( auto it = stl_ctner.begin(); it != stl_ctner.end(); it++ )
       binaryFileWrite(fp, (*it) );
 
 	return true;
@@ -587,7 +589,7 @@ the number of data records cannot be read correctly, and (3) if this
 number does not match the number of records which were actually read.
 */
 template<class T>
-bool binaryFileRead(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner)
+bool binaryFileRead(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner )
 {
 	if (!fp.is_open()) {
       std::cerr << "\nbool binaryFileRead(deque<vector<T> >&): ";
@@ -596,17 +598,17 @@ bool binaryFileRead(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner)
     }
 
 	// 1. reading number of vector records and assert this reading
-  const int64_t  elements = checkContainerSize( fp );
+  const size_t  elements = readContainerSize( fp );
 
 	// TODO: write the elements in one go, rather than one by one
 	size_t counter(0);
-	if ( elements > 0U ) {
+	if ( elements >= 1 ) {
       if (!stl_ctner.empty())
         stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
       //stl_ctner.reserve( elements );
       std::vector<T>  val;
       // 2. reading all the vector records
-      for ( auto i = 0; i<elements; i++ ) {
+      for ( size_t i{0U}; i<elements; i++ ) {
         // counting the successfully read elements
         if (binaryFileRead(fp, val)) {
           counter++;
@@ -681,7 +683,7 @@ bool binaryFileWrite(std::fstream& fp, const std::map<M, T>& stl_ctner)
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all key-value pairs
-  if ( elements > 0 )
+  if ( elements >= 1 )
     for ( typename std::map<M, T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
       {
         key = (*it).first;
@@ -747,12 +749,12 @@ bool binaryFileRead(std::fstream& fp, std::map<M, T>& stl_ctner)
 	T       val;
 
 	// 1. read number of record in the map and assert reading
-  const int64_t  elements = checkContainerSize( fp );
+  const size_t elements = readContainerSize( fp );
 
 	// TODO: write the elements in one go, rather than one by one
-	if (elements > 0) {
+	if (elements >= 1 ) {
 		// 2. reading all map records
-		for ( auto i = 0; i<elements; i++ )
+		for ( size_t i{0U}; i<elements; i++ )
 		{
 			// reading key
 			if (fp.read( reinterpret_cast<char*>(&key), bytesM )) counterM++;
@@ -826,7 +828,7 @@ bool binaryFileWrite(std::fstream& fp, const std::unordered_map<M, T>& stl_ctner
 	fp.write(reinterpret_cast<const char*>(&elements), sizeof(size_t));
 
 	// writing all key-value pairs
-  if ( elements > 0 )
+  if ( elements >= 1 )
     for ( typename std::unordered_map<M, T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
       {
         key = (*it).first;
@@ -888,14 +890,14 @@ bool binaryFileRead(std::fstream& fp, std::unordered_map<M, T>& stl_ctner)
 	 T      val;
 
 	// 1. read number of record in the map and assert reading
-  const size_t elements = checkContainerSize( fp );
+  const size_t elements = readContainerSize( fp );
 
 	// TODO: write the elements in one go, rather than one by one
-	if (elements > 0) {
+	if (elements >= 1 ) {
       if (!stl_ctner.empty())
         stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
       // 2. reading all map records
-      for ( auto i = 0; i<elements; i++)
+      for ( size_t i{0U}; i<elements; i++)
         {
           // reading key
           if (fp.read( reinterpret_cast<char*>(&key), bytesM)) counterM++;
@@ -969,7 +971,7 @@ bool binaryFileWrite(std::fstream& fp, const std::map<M, std::vector<T> >& stl_c
 	fp.write(reinterpret_cast<const char*>(&elements), sizeof(size_t));
 
 	// writing all elements
-  if ( elements > 0 )
+  if ( elements >= 1 )
     for ( typename std::map<M, std::vector<T> >::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
       {
         val = (*it).first;
@@ -1028,14 +1030,14 @@ bool binaryFileRead(std::fstream& fp, std::map<M, std::vector<T> >& stl_ctner)
 	M              key;
 
 	// 1. read number of record in the map and assert reading
-  const size_t elements = checkContainerSize( fp );
+  const size_t elements = readContainerSize( fp );
 
 	// TODO: write the elements in one go, rather than one by one
-	if (elements > 0) {
+	if (elements >= 1 ) {
     if (!stl_ctner.empty())
       stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
 		// 2. reading all map records
-		for ( auto i = 0; i<elements; i++)
+		for ( size_t i{0U}; i<elements; i++)
       {
         // reading key
         fp.read( reinterpret_cast<char*>(&key), bytes);

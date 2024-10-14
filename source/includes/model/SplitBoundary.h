@@ -190,7 +190,6 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
 	/// Method that applies half of displacement to both sides of interface (dotted by unitNormal)
     void PullApartSplitBoundary( double dist );
 
-
     /// writes all contained data on the screen
     void Out() const;
 
@@ -198,7 +197,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     // base class methods that are not available for SplitBoundary because it has no node vector
 
     /// different version than in the base class that does not attempt to write nodes
-    void WriteIndexesToBinaryFile( std::fstream& ) const;
+    void WriteSplitBoundaryIndexesToBinaryFile( std::fstream& ) const;
  
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const = delete;
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const = delete;
@@ -245,7 +244,7 @@ void inputNodePropertyValue( SplitBoundary<dim>&,
                              size_t side );
    
   /// matches member function to write domain indices
-  void readIndexesFromBinaryFile( uint32_t dim, std::fstream&, SubDomainInfo& info );
+  void readSplitBoundaryIndexesFromBinaryFile( std::fstream&, SubDomainInfo& info );
 
 } // end csmp
 

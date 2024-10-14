@@ -494,8 +494,9 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
   const PropertyDatabase<dim>& database( regionComplex.Database() );
 
   string bin_file( file_name );
-  fstream fp( bin_file.c_str(), ios::out | ios::binary );
+  fstream fp( bin_file.c_str(), ios::binary | ios::out );
   if ( !fp.is_open() ) {
+      cout <<"\n\t"<< strerror(errno);
       csmp_error.Note( ERROR, "RegionInterface<dim,REGION_COMPLEX>::OutputRegionsToBinary:",
                          bin_file, "file could not be opened; nothing was done." );
       return;
@@ -526,13 +527,13 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
   {
     BinaryFileSectionWrite uhdr( fp, "UNIQREGN" );
 
-    int64_t  records = static_cast<int64_t>(this->UniqueRegions());
+    const size_t records = this->UniqueRegions();
     
     // writing number of unique regions
-    fp.write( reinterpret_cast<const char*>(&records), sizeof( int64_t  ) );
+    // NB: std::size_t ostream::write( const char* buffer, std::size_t size );
+    fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
 
-    for ( typename map<string, csmp::Region<dim> >::const_iterator
-          git = UniqueRegionsBegin(); git != UniqueRegionsEnd(); ++git )
+    for ( auto git = UniqueRegionsBegin(); git != UniqueRegionsEnd(); ++git )
       {
         BinaryFileSectionWrite hdr( fp, "ONE_REGN" );
         cout <<"'"<< (*git).first <<"' ";
@@ -541,23 +542,25 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
         (*git).second.WriteDomainIndexesToBinaryFile( fp );
         domainVariablesOut( fp, (*git).second, database );
       }
+    cout << endl;
   }
 
   // -----------------------------
   // 3. writing non-unique regions
   // -----------------------------
   {
-    cout << "\n\n\tNon-unique regions overlapping unique ones and potentially each other: ";
+    cout << "\n\t"<<"Non-unique regions overlapping unique ones and potentially each other: ";
     BinaryFileSectionWrite nhdr( fp, "NONUREGN" );
 
-    int64_t  records = static_cast<int64_t>(this->Regions() - this->UniqueRegions());
+    const size_t records = regionMap_.size(); // this->Regions() - this->UniqueRegions();
 
-    fp.write( reinterpret_cast<const char*>(&records), sizeof( int64_t  ) );
+    fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
 
     for ( auto git = RegionsBegin(); git != RegionsEnd(); git++ )
       {
         BinaryFileSectionWrite hdr( fp, "ONE_REGN" );
-        cout << (*git).first << " ";
+        cout <<"'"<< (*git).first << "' ";
+        cout.flush();
         (*git).second.WriteDomainIndexesToBinaryFile( fp );
         domainVariablesOut( fp, (*git).second, database );
       }
@@ -607,8 +610,9 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
   MeshManager<dim>& mesh( static_cast<REGION_COMPLEX<dim>& >(*this).Mesh() );
 
   string bin_file( file_name );
-  fstream fp( bin_file.c_str(), ios::in | ios::binary );
+  fstream fp( bin_file.c_str(), ios::binary | ios::in );
   if ( !fp.is_open() ) {
+    cout <<"\n\t"<< strerror(errno);
     csmp_error.Note( ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
                        bin_file, "file could not be opened; nothing was done." );
     return;
@@ -634,23 +638,23 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
     {
       BinaryFileSectionRead uhdr( fp, "UNIQREGN" );
       // getting number of unique region records from file
-      int64_t   records( 0 );  // region records
-      fp.read( reinterpret_cast<char*>(&records), sizeof( int64_t  ) );
-      if ( records > 0 )
+      size_t   records = 0;  // region records
+      fp.read( reinterpret_cast<char*>(&records), sizeof(size_t) );
+      if ( records >= 1ul )
           // reading the regions sequentially
-          for ( int64_t i{0UL}; i<records; i++ )
+          for ( size_t i{0UL}; i<records; i++ )
             {
               BinaryFileSectionRead hdr( fp, "ONE_REGN" );
               // reading name and element indices for each unique region
               SubDomainInfo  info;
-              readDomainIndexesFromBinaryFile( dim, fp, info );
+              readDomainIndexesFromBinaryFile( fp, info );
               // reconstruct the region
               pair<typename map<string, csmp::Region<dim> >::iterator, bool>
                 it = uniqueRegionMap_.insert( make_pair( info.name, csmp::Region<dim>( database, mesh, info ) ) );
 
               if ( !it.second )
                 throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
-                                       info.name, "Region could not be formed; issue with binary file." );
+                                       info.name, "unique Region could not be formed; issue with binary file." );
               else
                 // new domain indices matching the ref-count of regions must be assigned
                 (*it.first).second.SetRegion_ID();
@@ -662,44 +666,46 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
               else selectedDomainVariablesIn( fp, (*it.first).second, database, subset_variables );
             }
        else csmp_error.Note( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
-                               bin_file, "does not contain any unique region descriptions; no regions were initialised." );
+                             bin_file, "does not contain any unique region descriptions; no regions were initialised." );
     }
 
   // -----------------------------
   // 3. reading non-unique regions
   // -----------------------------
-  cout << "\n\tnon-unique regions: ";
-  {
-    BinaryFileSectionRead nhdr( fp, "NONUREGN" );
-    // getting number of non-unique region records from file
-    int64_t   records( 0 );
-    fp.read( reinterpret_cast<char*>(&records), sizeof( int64_t  ) );
-    if ( records > 0 )
-      // reading the regions sequentially
-      for ( auto i{0U}; i<records; i++ )
-        {
-          BinaryFileSectionRead hdr( fp, "ONE_REGN" );
-          // reading name and element indices for each unique region
-          SubDomainInfo  info;
-          readDomainIndexesFromBinaryFile( dim, fp, info );
-          // if the region info record is not empty the region is reconstructed
-          pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-            it = regionMap_.insert( make_pair( info.name, csmp::Region<dim>( database, mesh, info ) ) );
-          if ( !info.interior_elmts.empty() ) {
-              if ( !it.second )
-                throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
-                                       info.name, "Region could not be formed; issue with binary file." );
+  cout << "\n\n\tnon-unique regions: ";
+    {
+      BinaryFileSectionRead nhdr( fp, "NONUREGN" );
+      // getting number of non-unique region records from file
+      size_t records = 0;
+      fp.read( reinterpret_cast<char*>(&records), sizeof(size_t) );
+      if ( records >= 1ul )
+        // reading the regions sequentially
+        for ( size_t i{0U}; i<records; i++ )
+          {
+            BinaryFileSectionRead hdr( fp, "ONE_REGN" );
+            // reading name and element indices for each unique region
+            SubDomainInfo  info;
+            readDomainIndexesFromBinaryFile( fp, info );
+            // if the region info record is not empty the region is reconstructed
+            pair<typename map<string, csmp::Region<dim> >::iterator, bool>
+              it = regionMap_.insert( make_pair( info.name, csmp::Region<dim>( database, mesh, info ) ) );
 
-              cout << "\n\t\t'" << (*it.first).first << "'(" << (*it.first).second.Cells() << " elements).";
+            if ( !it.second )
+              throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
+                                     info.name, "non-unique Region could not be formed; issue with binary file." );
+            else
+              // new domain indices matching the ref-count of regions must be assigned
+              (*it.first).second.SetRegion_ID();
 
-              // reading variables stored on the regions
-              if ( subset_variables.empty() ) domainVariablesIn( fp, (*it.first).second, database );
-              else selectedDomainVariablesIn( fp, (*it.first).second, database, subset_variables );
-            }
-        }
-    else csmp_error.Note( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
+            cout << "\n\t\t'" << (*it.first).first << "'(" << (*it.first).second.Cells() << " elements).";
+
+            // reading variables stored on the regions
+            if ( subset_variables.empty() ) domainVariablesIn( fp, (*it.first).second, database );
+            else selectedDomainVariablesIn( fp, (*it.first).second, database, subset_variables );
+          }
+      else csmp_error.Note( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
                             bin_file, "does not contain any non-unique region descriptions; no regions were initialised." );
-  }
+    }
 
   // -----------------------------
   // 4. reading model vars

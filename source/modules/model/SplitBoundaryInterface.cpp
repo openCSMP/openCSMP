@@ -281,15 +281,15 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
   {
      BinaryFileSectionWrite sect(fp, "SPLITBDR");
   
-     const uint64_t  records( this->SplitBoundaries() );
-     fp.write( reinterpret_cast<const char*>(&records), sizeof(uint64_t) );
+     const size_t records = this->SplitBoundaries();
+     fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
 
      for ( auto bit{ SplitBoundariesBegin() }; bit != SplitBoundariesEnd(); ++bit )
        {
           BinaryFileSectionWrite hdr(fp, "ONE_BDRY");
           cout <<"'"<< (*bit).first <<"' ";
           cout.flush();
-          (*bit).second.WriteIndexesToBinaryFile( fp );
+          (*bit).second.WriteSplitBoundaryIndexesToBinaryFile( fp );
           // NB: splitboundary objects have no BOX_BOUNDARY flag values because these always default to INTERNAL.
           // writing the stored variables
           domainVariablesOut( fp, (*bit).second, splitBoundaryComplex.Database() );
@@ -346,18 +346,18 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
   {
     BinaryFileSectionRead sect(fp, "SPLITBDR");
    
-    uint64_t  records(0);  // region records
+    size_t records(0);  // region records
     // getting number of unique region records from file
-    fp.read( reinterpret_cast<char*>(&records), sizeof(uint64_t ) );
+    fp.read( reinterpret_cast<char*>(&records), sizeof(size_t) );
     if ( records > 0 )
       // reading the regions sequentially
-      for ( auto i{0U}; i<records; ++i )
+      for ( size_t i{0U}; i<records; ++i )
         {
            BinaryFileSectionRead hdr(fp, "ONE_BDRY");
 
            // 1.1 reading name and face indices for each boundaries
            SubDomainInfo  info;
-           readIndexesFromBinaryFile( dim, fp, info );
+           readSplitBoundaryIndexesFromBinaryFile( fp, info );
           
            // 1.3 reading the split boundary objects
            pair<typename map<string,csmp::SplitBoundary<dim> >::iterator,bool>

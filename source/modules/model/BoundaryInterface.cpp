@@ -882,11 +882,10 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputBoundariesToBinary( const ch
      {
        BinaryFileSectionWrite sect(fp, "BOUNDARY");
 
-       const uint64_t  records(this->Boundaries());
-       fp.write( reinterpret_cast<const char*>(&records), sizeof(uint64_t ) );
+       const size_t records = this->Boundaries();
+       fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
 
-       for ( typename map<string,csmp::Boundary<dim> >::const_iterator
-             git=BoundariesBegin(); git!=BoundariesEnd(); ++git )
+       for ( auto git=BoundariesBegin(); git!=BoundariesEnd(); ++git )
          {
             BinaryFileSectionWrite hdr(fp, "ONE_BDRY");
             cout <<"'"<< (*git).first <<"' ";
@@ -895,9 +894,9 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputBoundariesToBinary( const ch
             (*git).second.WriteDomainIndexesToBinaryFile( fp );
             // 1.2 writing the boundary flags
             auto bflag = (*git).second.AtBoundary();
-            const int64_t  record(1U);
-            fp.write( reinterpret_cast<const char*>(&record), sizeof( int64_t  ) );
-            fp.write( reinterpret_cast<const char*>(&bflag), sizeof( int8_t ) );
+            const size_t record(1U);
+            fp.write( reinterpret_cast<const char*>(&record), sizeof(size_t) );
+            fp.write( reinterpret_cast<const char*>(&bflag), sizeof(int8_t) );
             // 1.3 writing the stored variables
             domainVariablesOut( fp, (*git).second, boundaryComplex.Database() );
          }
@@ -927,7 +926,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputBoundariesFromBinary( const c
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
    string  bin_file(file_name);
-	 fstream fp(bin_file.c_str(), ios::in | ios::binary);
+	 fstream fp(bin_file.c_str(), ios::in | ios::binary );
 	 if (!fp.is_open()) {
           csmp_error.Note( ERROR, "BoundaryInterface::InputBoundariesFromBinary:",
                              bin_file, "file could not be opened; nothing was done." );
@@ -953,21 +952,21 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputBoundariesFromBinary( const c
        BinaryFileSectionRead sect(fp, "BOUNDARY");
        
        SubDomainInfo  info;
-       uint64_t   records(0);  // region records
+       size_t         records(0);  // region records
        // getting number of unique region records from file
-       fp.read( reinterpret_cast<char*>(&records), sizeof(uint64_t ) );
-       if ( records > 0 )
+       fp.read( reinterpret_cast<char*>(&records), sizeof(size_t) );
+       if ( records >= 1 )
           // reading the regions sequentially
-          for ( auto i{0U}; i<records; ++i )
+          for ( size_t i{0U}; i<records; ++i )
             {
                BinaryFileSectionRead hdr(fp, "ONE_BDRY");
 
                // 1.1 reading name and face indices for each boundaries
-               readDomainIndexesFromBinaryFile( dim, fp, info );
+               readDomainIndexesFromBinaryFile( fp, info );
               
                // 1.2 reading BOX boundary flag of the boundary
                int64_t  record;
-               fp.read( reinterpret_cast<char*>(&record), sizeof(int64_t ) );
+               fp.read( reinterpret_cast<char*>(&record), sizeof(size_t) );
                assert( record == 1 );
                int8_t box_boundary_index(IRREGULAR_OUTSIDE);
                fp.read( reinterpret_cast<char*>(&box_boundary_index), sizeof(int8_t) );
