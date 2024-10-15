@@ -7,7 +7,7 @@
 //
 
 #include "MeshPatch.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "ErrorHandler.h"
 #include "Element.h"
 #include "Node.h"

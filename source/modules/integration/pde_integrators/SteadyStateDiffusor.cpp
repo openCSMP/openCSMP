@@ -5,7 +5,7 @@
 #include "Element.h"
 #include "Face.h"
 #include "Boundary.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "PL_Utilities.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dV.h"

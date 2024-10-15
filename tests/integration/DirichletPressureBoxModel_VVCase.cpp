@@ -12,7 +12,7 @@
 #include "MeshDiagnostics.h"
 #include "ModelTopology.h"
 //#include "CSMP_highLevelUtilities.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"

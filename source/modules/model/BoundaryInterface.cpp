@@ -2,7 +2,7 @@
 #include "ModelTopology.h"
 #include "Model.h"
 #include "CSMP_highLevelUtilities.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "FaceConstructionData.h"
 #include "Element.h"
 #include "Face.h"

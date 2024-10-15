@@ -3,7 +3,7 @@
 #include "Model.h"
 #include "PropertyConstraints.h"
 #include "ModelTopology.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "UnionFind.h"
 #include "binaryReadWrite.h"
 #include "ErrorHandler.h"

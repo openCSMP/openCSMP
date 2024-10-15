@@ -1,6 +1,6 @@
 #include "MeshManager.h"
 #include "MeshPatch.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "CSMP_highLevelUtilities.h"
 #include "NodeManifoldManager.h"
 #include "PropertyDatabase.h"

@@ -9,7 +9,7 @@
 #include "InterFace.h"
 
 #include "Model.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 
 #include "FiniteVolumeStencilManager.h"
 

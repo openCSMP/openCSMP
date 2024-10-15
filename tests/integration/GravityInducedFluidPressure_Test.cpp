@@ -7,7 +7,7 @@
 //
 
 #include "GravityInducedFluidPressure_Test.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "Model.h"
 #include "Boundary.h"
 //#include "SplitBoundary.h"

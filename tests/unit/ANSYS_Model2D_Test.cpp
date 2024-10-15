@@ -2,7 +2,7 @@
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "vsetMakers.h"
 
 #include "ANSYS_Model2D.h"

@@ -16,7 +16,7 @@
 #include "VSet.h"
 #include "VTK_Interface.h"
 #include "ANSYS_Model3D.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "compareFloats.h"
 #include "ModelComparator.h"
 

@@ -9,7 +9,7 @@
 #include "VTK_Interface.h"
 #include "variableOperations.h"
 #include "CSMP_mathUtilities.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 
 #include "Model.h"
 #include "VTU_Interface.h"

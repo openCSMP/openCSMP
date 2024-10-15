@@ -7,7 +7,7 @@
 //
 
 #include <unordered_set>
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "MeshManager.h"
 #include "MeshPatch.h"
 #include "Model.h"

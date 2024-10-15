@@ -1,5 +1,5 @@
 //
-//  MeshManagementUtilities.h
+//  meshManagementUtilities.h
 //  CSMP_GitHub_UnitTests
 //
 //  Created by Stephan Matthai on 3/7/21.

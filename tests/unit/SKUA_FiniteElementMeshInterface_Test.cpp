@@ -12,7 +12,7 @@
 #include "SplitBoundary.h"
 #include "VSet.h"
 #include "ModelTopology.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "ConsecutiveSequenceChecker.h"
 #include "Region.h"
 #include "Element.h"

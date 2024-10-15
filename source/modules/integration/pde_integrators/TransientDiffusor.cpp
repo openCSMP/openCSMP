@@ -1,7 +1,7 @@
 #include "TransientDiffusor.h"
 #include "Model.h"
 #include "Exception.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "ModelTime.h"
 
 using namespace std;

@@ -30,7 +30,7 @@
 #include "CSMP_mathUtilities.h"
 #include "binaryReadWrite.h"
 
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 
 //#define CSMP_MODEL_SUBDOMAIN_DEBUG
 

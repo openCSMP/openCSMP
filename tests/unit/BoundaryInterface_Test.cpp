@@ -11,7 +11,7 @@
 #include "Region.h"
 #include "ErrorHandler.h"
 #include "ANSYS_Model3D.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "VTK_Interface.h"
 #include "VTU_Interface.h"
 #include "FaceConstructionData.h"

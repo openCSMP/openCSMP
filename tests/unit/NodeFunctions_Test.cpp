@@ -8,7 +8,7 @@
 
 #include "NodeFunctions_Test.h"
 #include "CSMP_definitions.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "vsetMakers.h"
 #include "VTU_Interface.h"
 #include "Region.h"

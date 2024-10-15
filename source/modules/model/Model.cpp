@@ -18,7 +18,7 @@
 #include "ErrorHandler.h"
 #include "Standard_IO_Handler.h"
 #include "variableOperations.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "binaryReadWrite.h"
 #include "ModelTime.h"
 #include "FiniteVolumeStencilManager.h"

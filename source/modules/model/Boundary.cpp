@@ -16,7 +16,7 @@
 
 #include "binaryReadWrite.h"
 #include "CSMP_highLevelUtilities.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "PL_Utilities.h"
 #include "variableOperations.h"
 

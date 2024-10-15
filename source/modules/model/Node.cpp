@@ -4,7 +4,7 @@
 #include "Visitor.h"
 #include "NodeManifold.h"
 #include "ErrorHandler.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "ConvexPolygon.h"
 
 using namespace std;

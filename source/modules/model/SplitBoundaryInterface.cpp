@@ -4,7 +4,7 @@
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "MeshManager.h"
 #include "FaceConstructionData.h"
 #include "Node.h"

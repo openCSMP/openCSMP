@@ -22,7 +22,7 @@
 #include "UnionFind.h"
 
 #include "ErrorHandler.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 
 using namespace std;
 

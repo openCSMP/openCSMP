@@ -6,7 +6,7 @@
 #include "Region.h"
 #include "Boundary.h"
 #include "PDE_Integrator.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 
 // File I/O and Initialization
 #include "TRIANGLE_Interface.h"

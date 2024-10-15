@@ -9,7 +9,7 @@
 #include <ranges>
 #include "CSMP_definitions.h"
 #include "MeshManager_Test.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 #include "ErrorHandler.h"
 #include "vsetMakers.h"
 #include "VTU_Interface.h"
