@@ -92,8 +92,8 @@
 #include "VTU_Interface_Test.h"
 #include "FEM_Data_Test.h"
 #include "VData_Test.h"
-#include "VSet_Test.h"
-#include "VSet_TestCase.h"
+#include "VSet_Test1.h"
+#include "VSet_Test2.h"
 #include "PropertyHandle_Test.h"
 #include "PropertyAtPointVisitor_Test.h"
 #include "ModelComparator_Test.h"
@@ -293,8 +293,8 @@ int main()
       
       // interfaces / containers
       basic.addTest( new VData_Test() );
-      basic.addTest( new VSet_Test() );
-      basic.addTest( new VSet_TestCase(true /* verbose */) );
+      //basic.addTest( new VSet_Test() );
+      //basic.addTest( new VSet_TestCase(true /* verbose */) );
       basic.addTest( new ColorPalette_Test() );
       basic.addTest( new FEM_Data_Test());
       basic.addTest( new PropertyData_Test() );

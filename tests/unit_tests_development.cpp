@@ -71,7 +71,8 @@
 #include "VTU_Interface_Test.h"
 #include "FEM_Data_Test.h"
 #include "VData_Test.h"
-#include "VSet_Test.h"
+#include "VSet_Test1.h"
+#include "VSet_Test2.h"
 #include "PropertyHandle_Test.h"
 #include "PropertyAtPointVisitor_Test.h"
 //#include "ModelComparator_Test.h"     // sm: needs work
@@ -92,7 +93,6 @@
 // new tests from SKM
 #include "ANSYS_SplitBoundaryMatch_Test.h"
 
-#include "VSet_TestCase.h"
 
 //E.P Unit Tests Working
 #include "InterFace_Test.h"

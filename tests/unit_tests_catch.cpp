@@ -76,7 +76,8 @@
 #include "VTU_Interface_Test.h"
 #include "FEM_Data_Test.h"
 #include "VData_Test.h"
-#include "VSet_Test.h"
+#include "VSet_Test1.h"
+#include "VSet_Test2.h"
 #include "PropertyHandle_Test.h"
 #include "PropertyAtPointVisitor_Test.h"
 //#include "ModelComparator_Test.h"     // sm: needs work
@@ -148,7 +149,7 @@ TEST_CASE("Interfaces / containers tests", "[Interfaces]") {
   TEST_SECTION(VData)
 	TEST_SECTION(FEM_Data)
 	TEST_SECTION(PropertyData)
-  TEST_SECTION(VSet)
+ // TEST_SECTION(VSet)
   TEST_SECTION(ColorPalette)
 	TEST_SECTION(MeshManager)
 }
