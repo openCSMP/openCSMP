@@ -23,10 +23,15 @@ SET(GEN_INCLUDES_DIR "${CMAKE_BINARY_DIR}/source/generated_includes")
 FILE(GLOB EXAMPLES_SRC
 	${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/source/*.h
+	${CMAKE_CURRENT_SOURCE_DIR}/source/visitors/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/source/visitors/*.h
+	${CMAKE_CURRENT_SOURCE_DIR}/source/interrelations/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/source/interrelations/*.h
 	)
 
 FILE(GLOB EXAMPLES_EXCLUSIONS
 	${CMAKE_CURRENT_SOURCE_DIR}/source/*.old.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/source/*_original.cpp
 )
 IF(EXAMPLES_EXCLUSIONS)
 	LIST(REMOVE_ITEM EXAMPLES_SRC ${EXAMPLES_EXCLUSIONS} )
@@ -75,6 +80,7 @@ TARGET_INCLUDE_DIRECTORIES(examples PRIVATE
 	${THIRDPARTY_DIR}/iaps_h2o_eos
     ${THIRDPARTY_DIR}/plf_colony
 	${GEN_INCLUDES_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}/source/visitors
 )
 
 TARGET_LINK_LIBRARIES(examples csmpmeschach csmpcore csmpiaps csmpjpeg)
