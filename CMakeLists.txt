@@ -1,6 +1,6 @@
-project(open-csmp)
+cmake_minimum_required(VERSION 3.10)
 
-cmake_minimum_required(VERSION 3.1)
+project(open-csmp)
 set(PACKAGE_NAME "csmp-api")
 set(PACKAGE_VERSION "UoM1-alpha")
 set(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
