@@ -915,10 +915,10 @@ double  FiniteElement::JacobianInverse()
               cerr <<"\n\nFiniteElement::JacobianInverse(2D): element "<< CurrentID() <<": erroneous determinant of 2D Jacobian matrix: ";
               cerr << std::defaultfloat << detJ << endl;
               cerr <<"\ncaused by element of type: "<< parseFiniteElementType(csp_fem_type) << endl;
-              for ( auto i{0U}; i<Nodes(); i++ )
+              for ( uint32_t i{0U}; i<Nodes(); i++ )
                 {
                   cerr<<" Node("<<i<<"): "<< std::scientific;
-                  for ( auto j{0U}; j<XY.Cols(); j++ )
+                  for ( uint32_t j{0U}; j<XY.Cols(); j++ )
                       cerr << XY(i,j) <<" ";
                   cerr << std::defaultfloat << endl;
                 }

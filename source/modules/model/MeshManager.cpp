@@ -1969,14 +1969,22 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
      // ----------------------------------------------------------
      // RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
      //elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
+     bool first_call{true};
      while( first2 != last ) {
           if ( Delete( (*first2) ) == false ) {
-               cerr <<"\n\t"<<"Element: "<< (*first2)->Idx();
-               csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces",
-                               "did not delete Element");
+#ifdef CSMP_MESH_MANAGER_DEBUG
+               if ( first_call ) {
+                   csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces",
+                                   "did not delete Element");
+                   cout <<"\n\t"<<"Element(s) not deleted: "<< (*first2)->Idx();
+                   first_call = false;
+                 }
+               else cout <<" "<< (*first2)->Idx();
+#endif
             }
           first2++;
        }
+      if ( !first_call ) cout << endl;
 
 #if defined(DEBUG) && defined(CSMP_MESH_MANAGER_DEBUG)
      cout <<"\n\nMeshManager: ReplaceBoundaryElementsByFaces: created "<< face_ptrs.size();
@@ -4967,8 +4975,9 @@ template<uint32_t dim>
 void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& database, 
                                                 VSet<dim>& vset ) const
 {
-  ErrorHandler&		csmp_error( ErrorHandler::Instance() );
+  ErrorHandler&		    csmp_error( ErrorHandler::Instance() );
   map<string, Index>  properties;
+  bool                detected_first_NaN_value{ false };
   
   // 'pmtrl' stored exclusively on elements
   // =========================================
@@ -5060,14 +5069,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+          csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of node variable not recognized." );
       }
     // storing the data in the VSet
     if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-    else
-      csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                       (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+    else {
+        if ( !detected_first_NaN_value ) {
+              csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                               (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+             detected_first_NaN_value = true;
+          }
+        else cout <<" '"<< (*pit).first <<"'";
+      }
   }
 
   // -------------------------------------------------
@@ -5150,14 +5164,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           }
        break;
       default:
-        csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+        csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                            (*pit).first, "type of element variable not recognized." );
     }
     // storing the data in the VSet
     if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-    else
-      csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                       (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+    else {
+        if ( !detected_first_NaN_value ) {
+              csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                               (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+             detected_first_NaN_value = true;
+          }
+        else cout <<" '"<< (*pit).first <<"'";
+      }
   }
 
   // element integration point properties
@@ -5181,8 +5200,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case SCALAR: {
           ScalarVariable value;
           for ( const auto& it : elements_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -5196,8 +5215,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case VECTOR: {
           VectorVariable<dim> value;
           for ( const auto& it : elements_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -5211,8 +5230,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case TENSOR: {
           TensorVariable<dim> value;
           for ( const auto& it : elements_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -5226,8 +5245,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -5241,8 +5260,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -5254,14 +5273,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+          csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                           (*pit).first, "type of element integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-      else
-        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+      else {
+          if ( !detected_first_NaN_value ) {
+                csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                                 (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+               detected_first_NaN_value = true;
+            }
+          else cout <<" '"<< (*pit).first <<"'";
+        }
     }
   }
 
@@ -5287,9 +5311,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           ScalarVariable value;
           for ( const auto& it : elements_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
-              const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
+              const uint32_t ips_per_sector( it.IntegrationPointsPerSector() );
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5305,9 +5329,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           VectorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
-              const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
+              const uint32_t ips_per_sector( it.IntegrationPointsPerSector() );
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5323,9 +5347,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           TensorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
-              const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
+              const uint32_t ips_per_sector( it.IntegrationPointsPerSector() );
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5341,9 +5365,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
-              const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
+              const uint32_t ips_per_sector( it.IntegrationPointsPerSector() );
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5359,9 +5383,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
                 const auto sectors{ it.Sectors() };
-                for ( auto i{0U}; i<sectors; ++i ) {
-                  const auto ips_per_sector( it.IntegrationPointsPerSector() );
-                  for ( auto j{0U}; j<ips_per_sector; ++j ) {
+                for ( uint32_t i{0U}; i<sectors; ++i ) {
+                  const uint32_t ips_per_sector( it.IntegrationPointsPerSector() );
+                  for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     if ( value.Has_NaN_Values() ) {
                          variable_contains_NaN_values = true;
@@ -5374,14 +5398,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
          break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+          csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of element sector integraton point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-      else
-        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+      else {
+          if ( !detected_first_NaN_value ) {
+                csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                                 (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+               detected_first_NaN_value = true;
+            }
+          else cout <<" '"<< (*pit).first <<"'";
+        }
     }
   }
 
@@ -5407,9 +5436,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           ScalarVariable value;
           for ( const auto& it : elements_ ) {
             const auto facets{ it.Facets() };
-            for ( auto i{0U}; i<facets; ++i ) {
-              const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j{0U}; j<ips_per_facet; ++j ) {
+            for ( uint32_t i{0U}; i<facets; ++i ) {
+              const uint32_t ips_per_facet( it.IntegrationPointsPerFacet() );
+              for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5425,9 +5454,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           VectorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto facets{ it.Facets() };
-            for ( auto i{0U}; i<facets; ++i ) {
-              const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j{0U}; j<ips_per_facet; ++j ) {
+            for ( uint32_t i{0U}; i<facets; ++i ) {
+              const uint32_t ips_per_facet( it.IntegrationPointsPerFacet() );
+              for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5443,9 +5472,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           TensorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto facets{ it.Facets() };
-            for ( auto i{0U}; i<facets; ++i ) {
-              const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j{0U}; j<ips_per_facet; ++j ) {
+            for ( uint32_t i{0U}; i<facets; ++i ) {
+              const uint32_t ips_per_facet( it.IntegrationPointsPerFacet() );
+              for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5461,9 +5490,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const auto facets{ it.Facets() };
-            for ( auto i{0U}; i<facets; ++i ) {
-              const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j{0U}; j<ips_per_facet; ++j ) {
+            for ( uint32_t i{0U}; i<facets; ++i ) {
+              const uint32_t ips_per_facet( it.IntegrationPointsPerFacet() );
+              for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5479,9 +5508,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const auto facets{ it.Facets() };
-            for ( auto i{0U}; i<facets; ++i ) {
-              const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j{0U}; j<ips_per_facet; ++j ) {
+            for ( uint32_t i{0U}; i<facets; ++i ) {
+              const uint32_t ips_per_facet( it.IntegrationPointsPerFacet() );
+              for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5494,14 +5523,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+          csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of facet integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-      else
-        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+      else {
+          if ( !detected_first_NaN_value ) {
+                csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                                 (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+               detected_first_NaN_value = true;
+            }
+          else cout <<" '"<< (*pit).first <<"'";
+        }
     }
   }
 
@@ -5585,14 +5619,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           }
         break;
       default:
-        csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+        csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                            (*pit).first, "type of face variable not recognized." );
     }
     // storing the data in the VSet
     if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-    else
-      csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                       (*pit).first, "contained NaN values and was therefore not stored." );
+    else {
+        if ( !detected_first_NaN_value ) {
+              csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                               (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+             detected_first_NaN_value = true;
+          }
+        else cout <<" '"<< (*pit).first <<"'";
+      }
   }
 
 
@@ -5616,8 +5655,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case SCALAR: {
           ScalarVariable value;
           for ( const auto& it : faces_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -5631,8 +5670,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case VECTOR: {
           VectorVariable<dim> value;
           for ( const auto& it : faces_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -5646,8 +5685,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case TENSOR: {
           TensorVariable<dim> value;
           for ( const auto& it : faces_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -5661,8 +5700,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -5676,8 +5715,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -5689,14 +5728,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+          csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of face integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-      else
-        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+      else {
+          if ( !detected_first_NaN_value ) {
+                csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                                 (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+               detected_first_NaN_value = true;
+            }
+          else cout <<" '"<< (*pit).first <<"'";
+        }
     }
   }
 
@@ -5723,9 +5767,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           ScalarVariable value;
           for ( const auto& it : faces_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
-              const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
+              const uint32_t ips_per_sector( it.IntegrationPointsPerSector() );
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5741,9 +5785,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           VectorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
-              const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
+              const uint32_t ips_per_sector( it.IntegrationPointsPerSector() );
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5759,9 +5803,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           TensorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
-              const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
+              const uint32_t ips_per_sector( it.IntegrationPointsPerSector() );
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5777,9 +5821,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
-              const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
+              const uint32_t ips_per_sector( it.IntegrationPointsPerSector() );
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5795,9 +5839,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
-              const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
+              const uint32_t ips_per_sector( it.IntegrationPointsPerSector() );
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5810,14 +5854,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+          csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of face-sector integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-      else
-        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+      else {
+          if ( !detected_first_NaN_value ) {
+                csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                                 (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+               detected_first_NaN_value = true;
+            }
+          else cout <<" '"<< (*pit).first <<"'";
+        }
     }
   }
 
@@ -5844,9 +5893,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           ScalarVariable value;
           for ( const auto& it : faces_ ) {
             const auto facets{ it.Facets() };
-            for ( auto i{0U}; i<facets; ++i ) {
-              const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j{0U}; j<ips_per_facet; ++j ) {
+            for ( uint32_t i{0U}; i<facets; ++i ) {
+              const uint32_t ips_per_facet( it.IntegrationPointsPerFacet() );
+              for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5862,9 +5911,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           VectorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto facets{ it.Facets() };
-            for ( auto i{0U}; i<facets; ++i ) {
-              const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j{0U}; j<ips_per_facet; ++j ) {
+            for ( uint32_t i{0U}; i<facets; ++i ) {
+              const uint32_t ips_per_facet( it.IntegrationPointsPerFacet() );
+              for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5880,9 +5929,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           TensorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto facets{ it.Facets() };
-            for ( auto i{0U}; i<facets; ++i ) {
-              const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j{0U}; j<ips_per_facet; ++j ) {
+            for ( uint32_t i{0U}; i<facets; ++i ) {
+              const uint32_t ips_per_facet( it.IntegrationPointsPerFacet() );
+              for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5898,9 +5947,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto facets{ it.Facets() };
-            for ( auto i{0U}; i<facets; ++i ) {
-              const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j{0U}; j<ips_per_facet; ++j ) {
+            for ( uint32_t i{0U}; i<facets; ++i ) {
+              const uint32_t ips_per_facet( it.IntegrationPointsPerFacet() );
+              for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5916,9 +5965,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto facets{ it.Facets() };
-            for ( auto i{0U}; i<facets; ++i ) {
-              const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j{0U}; j<ips_per_facet; ++j ) {
+            for ( uint32_t i{0U}; i<facets; ++i ) {
+              const uint32_t ips_per_facet( it.IntegrationPointsPerFacet() );
+              for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -5931,14 +5980,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+          csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of face facet integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-      else
-        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+      else {
+          if ( !detected_first_NaN_value ) {
+                csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                                 (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+               detected_first_NaN_value = true;
+            }
+          else cout <<" '"<< (*pit).first <<"'";
+        }
     }
   }
 
@@ -6022,14 +6076,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       }
    break;
       default:
-        csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+        csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                            (*pit).first, "type of interface variable not recognized." );
     }
     // storing the data in the VSet
     if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-    else
-      csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                       (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+    else {
+        if ( !detected_first_NaN_value ) {
+              csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                               (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+             detected_first_NaN_value = true;
+          }
+        else cout <<" '"<< (*pit).first <<"'";
+      }
   }
 
   // interface integration point properties
@@ -6050,8 +6109,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case SCALAR: {
           ScalarVariable value;
           for ( const auto& it : interfaces_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -6065,8 +6124,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case VECTOR: {
           VectorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -6080,8 +6139,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case TENSOR: {
           TensorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -6095,8 +6154,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -6110,8 +6169,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
-            const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i{0U}; i<integration_points; ++i ) {
+            const uint32_t integration_points( it.IntegrationPoints() );
+            for ( uint32_t i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               if ( value.Has_NaN_Values() ) {
                    variable_contains_NaN_values = true;
@@ -6123,14 +6182,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+          csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of interface integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-      else
-        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+      else {
+          if ( !detected_first_NaN_value ) {
+                csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                                 (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+               detected_first_NaN_value = true;
+            }
+          else cout <<" '"<< (*pit).first <<"'";
+        }
     }
   }
 
@@ -6155,9 +6219,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           ScalarVariable value;
           for ( const auto& it : interfaces_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -6173,9 +6237,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           VectorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -6191,9 +6255,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           TensorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -6209,9 +6273,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -6227,9 +6291,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
             const auto sectors{ it.Sectors() };
-            for ( auto i{0U}; i<sectors; ++i ) {
+            for ( uint32_t i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j{0U}; j<ips_per_sector; ++j ) {
+              for ( uint32_t j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
@@ -6242,14 +6306,19 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
      break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+          csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of interface sector integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-      else
-        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+      else {
+          if ( !detected_first_NaN_value ) {
+                csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                                 (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+               detected_first_NaN_value = true;
+            }
+          else cout <<" '"<< (*pit).first <<"'";
+        }
     }
   }
 
@@ -6274,9 +6343,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                 ScalarVariable value;
                 for ( const auto& it : interfaces_ ) {
                   const auto facets{ it.Facets() };
-                  for ( auto i{0U}; i<facets; ++i ) {
+                  for ( uint32_t i{0U}; i<facets; ++i ) {
                     const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                    for ( auto j{0U}; j<ips_per_facet; ++j ) {
+                    for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                       it.Read( i, j, (*pit).second, value );
                       if ( value.Has_NaN_Values() ) {
                            variable_contains_NaN_values = true;
@@ -6292,9 +6361,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               VectorVariable<dim> value;
               for ( const auto& it : interfaces_ ) {
                 const auto facets{ it.Facets() };
-                for ( auto i{0U}; i<facets; ++i ) {
+                for ( uint32_t i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
+                  for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     if ( value.Has_NaN_Values() ) {
                          variable_contains_NaN_values = true;
@@ -6310,9 +6379,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               TensorVariable<dim> value;
               for ( const auto& it : interfaces_ ) {
                 const auto facets{ it.Facets() };
-                for ( auto i{0U}; i<facets; ++i ) {
+                for ( uint32_t i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
+                  for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     if ( value.Has_NaN_Values() ) {
                          variable_contains_NaN_values = true;
@@ -6328,9 +6397,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               ArrayVariable value( (*pit).second.dataDepth );
               for ( const auto& it : interfaces_ ) {
                 const auto facets{ it.Facets() };
-                for ( auto i{0U}; i<facets; ++i ) {
+                for ( uint32_t i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
+                  for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     if ( value.Has_NaN_Values() ) {
                          variable_contains_NaN_values = true;
@@ -6346,9 +6415,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               FlaggedArrayVariable value( (*pit).second.dataDepth );
               for ( const auto& it : interfaces_ ) {
                 const auto facets{ it.Facets() };
-                for ( auto i{0U}; i<facets; ++i ) {
+                for ( uint32_t i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
+                  for ( uint32_t j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     if ( value.Has_NaN_Values() ) {
                          variable_contains_NaN_values = true;
@@ -6361,16 +6430,22 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           break;
         default:
-          csmp_error.Note( ERROR, "Region<dim>::OutputStoredVariablesTo:",
+          csmp_error.Note( ERROR, "MeshManager<dim>::OutputStoredVariablesTo:",
                              (*pit).first, "type of interface facet integration point variable not recognized." );
       }
       // storing the data in the VSet
       if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
-      else
-        csmp_error.Note( WARNING, "Region<dim>::OutputStoredVariablesTo:",
-                         (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+      else {
+          if ( !detected_first_NaN_value ) {
+                csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",
+                                 (*pit).first, "contained NaN values and was therefore not stored in VSet." );
+               detected_first_NaN_value = true;
+            }
+          else cout <<" '"<< (*pit).first <<"'";
+        }
     }
   }
+  if ( detected_first_NaN_value ) cout <<"  are other variables that were not stored because they contained NaN values."<< endl;
 
 } // end OutputStoredVariablesTo
 

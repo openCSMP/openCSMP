@@ -26,7 +26,6 @@ namespace csmp {
      Observations
      - AllElements in single domain model is non-unique, but should be unique
       
-     TODO: test wide ranging functionality of ModelSubDomain: so far (4/1/17), this test only checks the writing and reading of the model from file;
      add tests for the other important parts of the functionality.
 */
 void ModelSubDomain_Test::run()

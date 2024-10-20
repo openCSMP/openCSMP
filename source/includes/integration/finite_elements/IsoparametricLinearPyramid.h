@@ -9,7 +9,7 @@ class IsoparametricLinearPyramid : public FiniteElement {
 
   public:
 
-    explicit IsoparametricLinearPyramid( uint32_t integrationPoints=8 /* 1 or 8 */);
+    explicit IsoparametricLinearPyramid( uint32_t integrationPoints=5 /* 1, 5 or 8 */);
     ~IsoparametricLinearPyramid();
 
     virtual double    Volume();
@@ -41,11 +41,11 @@ class IsoparametricLinearPyramid : public FiniteElement {
     virtual void        JacobianAtIntegrationPoint( uint32_t ip );
     virtual void        JacobianAt( const std::vector<double>& rst );
 
-    virtual double    dN( DenseMatrix<DM_MIN>& dn, const std::vector<double>& xyz  );
+    virtual double      dN( DenseMatrix<DM_MIN>& dn, const std::vector<double>& xyz  );
     virtual void        dN( DenseMatrix<DM_MIN>& DN5 );
-    virtual double    dN_AtNode( DenseMatrix<DM_MIN>& M, uint32_t node );
-    virtual double    dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, uint32_t gauss_point );
-    virtual double    dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
+    virtual double      dN_AtNode( DenseMatrix<DM_MIN>& M, uint32_t node );
+    virtual double      dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, uint32_t gauss_point );
+    virtual double      dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
 
     virtual void        Nrst( double r, double s, double t, std::vector<double>& nrst ) const;
     virtual void        Nrst( double r, double s, double t, double* nrst ) const;
@@ -53,7 +53,7 @@ class IsoparametricLinearPyramid : public FiniteElement {
     virtual void        dNs( double r, double s, double t, std::vector<double>& dNs ) const;
     virtual void        dNt( double r, double s, double t, std::vector<double>& dNt ) const;
 
-    virtual double    WeightAtIntegrationPoint( uint32_t i ) const;
+    virtual double      WeightAtIntegrationPoint( uint32_t i ) const;
     virtual void        IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
     virtual void        ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                     const std::vector<double>& IVAR,
@@ -67,7 +67,7 @@ class IsoparametricLinearPyramid : public FiniteElement {
   private:
 
     std::vector<double>   W;
-    DenseMatrix<DM_MIN>     DN,NXYZ,IP;
+    DenseMatrix<DM_MIN>   DN, NXYZ, IP;
 
     double  VolumeOfTetra(
                 uint32_t verticeIndex1,

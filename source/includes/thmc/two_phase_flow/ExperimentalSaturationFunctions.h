@@ -150,8 +150,9 @@ class ExperimentalSaturationFunctions {
     std::map<size_t, csmp::CubicSpline> kr1_, kr2_, pc_;
     std::map<size_t, double> swr_, snr_;
     std::map<size_t, std::vector<double>> input_sw_, input_pc_;
-    const double max_derivative_         = 5.0e+5; ///< the absolute value of any derivative calculated herein must be less than this value
-    const double max_capillary_pressure_ = 1.0e+5; ///< tensile strength of the rock
+    // semi-log extension (Webb, 2000, WRR)
+    const double max_derivative_         = 1.0e+9; ///< the absolute value of any derivative calculated herein must be less than this value
+    const double max_capillary_pressure_ = 3.0e+7; ///< tensile strength of the rock
 };
   
 } // end namespace csmp

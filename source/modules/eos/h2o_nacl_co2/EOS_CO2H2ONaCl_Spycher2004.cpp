@@ -75,7 +75,7 @@ complex<double> EOS_CO2H2ONaCl_Spycher04::complex_acos(const complex<double>& x)
 */
 double EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double pressure, double temperature  )
 {
-    assert( temperature >= 12. );
+    assert( temperature >= 10. ); // should be 12oC, below which hydrates may come into play
     assert( temperature <= 100. );
     assert( pressure <= 6.0e7 );
 
@@ -353,7 +353,7 @@ double EOS_CO2H2ONaCl_Spycher04::FugacityCo2( double pressure,
                                                 double temperature,
                                                 double phaseVolumeCo2 )
 {
-    assert( temperature >= 12. );
+    assert( temperature >= 10. );
     assert( temperature <= 100. );
     assert( pressure <= 6.0e7 );
 
@@ -444,7 +444,7 @@ double EOS_CO2H2ONaCl_Spycher04::FugacityH2o( double pressure,
                                                 double temperature,
                                                 double phaseVolumeCo2 )
 {
-    assert( temperature >= 12. );
+    assert( temperature >= 10. );
     assert( temperature <= 100. );
     assert( pressure <= 6.0e7 );
 

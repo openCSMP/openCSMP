@@ -188,8 +188,8 @@ inline mjl::Point Polygon::CenterOfGravity() const
  {
      double x, y;
      CenterOfGravity( x, y );
-     assert( !isnan(x) );
-     assert( !isnan(y) );
+     assert( !std::isnan(x) );
+     assert( !std::isnan(y) );
      return mjl::Point( x, y );
  }
 

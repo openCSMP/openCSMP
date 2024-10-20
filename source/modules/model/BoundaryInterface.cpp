@@ -1899,8 +1899,7 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
     vector<Element<dim>*>            elmts_to_become_faces;
     elmts_to_become_faces.reserve( model->Mesh().Elements() );
  
-	  for ( typename map<string,csmp::Region<dim> >::iterator
-		      it = model->UniqueRegionsBegin(); it != model->UniqueRegionsEnd(); ++it )
+	  for ( auto it = model->UniqueRegionsBegin(); it != model->UniqueRegionsEnd(); ++it )
       {
         if ( !IsBoundaryName(it->first) )
           continue;

@@ -35,7 +35,7 @@ namespace csmp {
 void replaceWhiteSpaceBy( string& p, char ascii_char )
  {
     if ( !p.empty() )
-      for ( auto i{0U}; i<p.size(); i++ )
+      for ( uint32_t i{0U}; i<p.size(); i++ )
         if ( p[i] == ' ' || p[i] == '\t' ||
              p[i] == '\n' || p[i] == '\r' ) p[i] = ascii_char;
  }

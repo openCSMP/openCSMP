@@ -18,7 +18,7 @@ IsoparametricLinearPyramid::IsoparametricLinearPyramid( uint32_t integrationPoin
  {
     //AAM, 07.02
     dim = 3;
-    itp = 1;
+    itp = integrationPoints;
     // 3/4?
     npf = 3;
     npe = 5;
@@ -49,20 +49,27 @@ IsoparametricLinearPyramid::IsoparametricLinearPyramid( uint32_t integrationPoin
     DNS.resize(npe);
     DNT.resize(npe);
 
-    // initializing local node coordinates
-    // local node coordinates are defined as r==ksi, s==nu, t==mu.
-    NXYZ(0,0) =-1.0;NXYZ(0,1) =-1.0;NXYZ(0,2) =  0.0;
-    NXYZ(1,0) = 1.0;NXYZ(1,1) =-1.0;NXYZ(1,2) =  0.0;
-    NXYZ(2,0) = 1.0;NXYZ(2,1) = 1.0;NXYZ(2,2) =  0.0;
-    NXYZ(3,0) =-1.0;NXYZ(3,1) = 1.0;NXYZ(3,2) =  0.0;
-    NXYZ(4,0) = 0.0;NXYZ(4,1) = 0.0;NXYZ(4,2) =  1.0;
+    // initializing local node coordinates, r, s, t
+    NXYZ(0,0) =-1.0; NXYZ(0,1) =-1.0; NXYZ(0,2) =  0.0;
+    NXYZ(1,0) = 1.0; NXYZ(1,1) =-1.0; NXYZ(1,2) =  0.0;
+    NXYZ(2,0) = 1.0; NXYZ(2,1) = 1.0; NXYZ(2,2) =  0.0;
+    NXYZ(3,0) =-1.0; NXYZ(3,1) = 1.0; NXYZ(3,2) =  0.0;
+    NXYZ(4,0) = 0.0; NXYZ(4,1) = 0.0; NXYZ(4,2) =  1.0;
 
     W.resize( gpe );
 
     if(integrationPoints==1)
     {
         IP(0,0)=0.0; IP(0,1)=0.0; IP(0,2)=0.25;
-        W[0]=4.0/3.0;
+        W[0]= 4.0/3.0; // volume is 1.3333333
+    }
+    else if ( integrationPoints==5 ) {
+        IP(0,0)= 0.0; IP(0,1)= 0.0; IP(0,2)= 0.585410196624968;
+        IP(1,0)=-0.5; IP(1,1)=-0.5; IP(1,2)= 0.138196601125011;
+        IP(2,0)= 0.5; IP(2,1)=-0.5; IP(2,2)= 0.138196601125011;
+        IP(3,0)= 0.5; IP(3,1)= 0.5; IP(3,2)= 0.138196601125011;
+        IP(4,0)=-0.5; IP(4,1)= 0.5; IP(4,2)= 0.138196601125011;
+        W[0] = W[1] = W[2] = W[3] = W[4] =   0.266666666666667;
     }
     else if ( integrationPoints==8 )
         // Generate 8 integration points for full numeric integration + weights
@@ -116,11 +123,11 @@ void IsoparametricLinearPyramid::Nrst( double r,
 
     N.resize(npe);
 
-   const double tMinus(1.-t);
+   const double tMinus(1. - t);
 
    double fRationalTerm( 0. );
    if( t != 1. )
-       fRationalTerm = r*s/tMinus;
+       fRationalTerm = r * s / tMinus;
 
    N[0] = 0.25*( tMinus + fRationalTerm - r - s );
    N[1] = 0.25*( tMinus - fRationalTerm + r - s );
@@ -203,28 +210,41 @@ The shape function derivatives are needed in most integration
 procedures for elements.
 */
 void IsoparametricLinearPyramid::dNr ( double,
-                                        double s,
-                                        double t,
-                                        std::vector<double>& DNR ) const
+                                       double s,
+                                       double t,
+                                       vector<double>& DNR ) const
 {
    DNR.resize(npe);
 
-   if ( t != 1.0 )
-     {
+   if ( t != 1. ) {
+        // AAM
         DNR[0] = 0.25*(-1.+t+s)/(1.-t);
         DNR[1] =-0.25*(-1.+t+s)/(1.-t);
         DNR[2] = 0.25*( 1.-t+s)/(1.-t);
         DNR[3] =-0.25*( 1.-t+s)/(1.-t);
         DNR[4] = 0.;
+        /* text book
+        DNR[0] = -0.25 * (1. - s) / (1. - t);
+        DNR[1] =  0.25 * (1. - s) / (1. - t);
+        DNR[2] =  0.25 * (1. + s) / (1. - t);
+        DNR[3] = -0.25 * (1. + s) / (1. - t);
+        DNR[4] =  0.;
+        */
      }
-   else//t==1
-   {
+   else {//t==1
         DNR[0] =-0.25;
         DNR[1] = 0.25;
         DNR[2] = 0.25;
         DNR[3] =-0.25;
         DNR[4] = 0.;
-   }
+        /*
+        DNR[0] = 0.;
+        DNR[1] = 0.;
+        DNR[2] = 0.;
+        DNR[3] = 0.;
+        DNR[4] = 0.;
+        */
+     }
 
 //   // alternative approximation
 //   const double sPlus(1.0+s);
@@ -243,25 +263,37 @@ void IsoparametricLinearPyramid::dNs(
                 double r,
                 double,
                 double t,
-                std::vector<double>& DNS ) const
+                vector<double>& DNS ) const
 {
    DNS.resize(npe);
 
-   if ( t != 1.0 )
-   {
+   if ( t != 1.0 ) {
         DNS[0] = 0.25*(-1.+t+r)/(1.-t);
         DNS[1] =-0.25*( 1.-t+r)/(1.-t);
         DNS[2] = 0.25*( 1.-t+r)/(1.-t);
         DNS[3] =-0.25*(-1.+t+r)/(1.-t);
         DNS[4] = 0.;
+        /*
+        DNS[0] = -0.25 * (1. - r) / (1. - t);
+        DNS[1] = -0.25 * (1. + r) / (1. - t);
+        DNS[2] =  0.25 * (1. + r) / (1. - t);
+        DNS[3] =  0.25 * (1. - r) / (1. - t);
+        DNS[4] =  0.;
+        */
    }
-   else//t==1
-   {
+   else {//t==1
         DNS[0] =-0.25;
         DNS[1] =-0.25;
         DNS[2] = 0.25;
         DNS[3] = 0.25;
         DNS[4] = 0.0;
+        /*
+        DNS[0] = 0.;
+        DNS[1] = 0.;
+        DNS[2] = 0.;
+        DNS[3] = 0.;
+        DNS[4] = 0.;
+        */
    }
 
 //   // alternative approximation
@@ -281,12 +313,11 @@ void IsoparametricLinearPyramid::dNt(
                 double r,
                 double s,
                 double t,
-                std::vector<double>& DNT ) const
+                vector<double>& DNT ) const
 {
    DNT.resize(npe);
 
-   if ( t != 1.0 )
-   {
+   if ( t != 1. ) {
        const double RS( r*s );
        const double TMinus2( (1.0-t)*(1.0-t) );
        const double RST(RS/TMinus2);
@@ -295,15 +326,28 @@ void IsoparametricLinearPyramid::dNt(
        DNT[2] = -0.25+0.25*RST;
        DNT[3] = -0.25-0.25*RST;
        DNT[4] =  1.;
+       /*
+       DNT[0] = -0.25 * (1. - r) / (1. - s);
+       DNT[1] = -0.25 * (1. + r) / (1. - s);
+       DNT[2] = -0.25 * (1. + r) / (1. + s);
+       DNT[3] = -0.25 * (1. - r) / (1. + s);
+       DNT[4] =  1.;
+       */
    }
-   else//t==1
-   {
+   else { //t==1
        DNT[0] =-0.25;
        DNT[1] =-0.25;
        DNT[2] =-0.25;
        DNT[3] =-0.25;
        DNT[4] = 1.0;
-   }
+       /*
+       DNT[0] = 0.;
+       DNT[1] = 0.;
+       DNT[2] = 0.;
+       DNT[3] = 0.;
+       DNT[4] = 1.;
+       */
+    }
 
 //   // alternative approximation
 //   const double rPlus(1.+r);
@@ -567,6 +611,9 @@ IsoparametricLinearPyramid::GenerateIntegrationPoints(DenseMatrix<DM_MIN> &Ip, s
             }
         }
 }
+
+
+
 
 /**
 
@@ -1260,7 +1307,6 @@ IsoparametricLinearPyramid::N_AtIntegrationPoint( uint32_t ip, std::vector<doubl
  {
     assert( ip < gpe );
 
-
     // local interpolation function values
     Nrst( IP(ip,0), IP(ip,1), IP(ip,2), N );
 
@@ -1637,6 +1683,25 @@ void IsoparametricLinearPyramid::OutputNodeDataToVTK( const char* file_name,
 
  } // end OutputNodeDataToVTK
 
+
+
+
+// REVIEW
+// ========================================================================================
+/*  SKM 17/10/2024
+
+    Accuracy of pyramid integration is very low and it is unclear whether this is due to
+    issues with the placement of the integration points (8 by default, but locations differ from those
+    specified in UG) or whether there is an error with the implementation of the interpolation functions
+    and - or their derivatives.
+    
+    The UG4 code also implements the linear pyramid, using the following 8 quadrature points
+    and interpolation functions defined in 'quadrature.cpp' and 'lagrange.h (line 1976ff)' respectively.
+    How these shape functions are implented is declared in 'local_shape_function_set.h':
+    
+    Here are these quadrature points:
+    
+*/
 
 
 } // end namespace csmp

@@ -1,5 +1,5 @@
 //
-//  TestUtilities.hpp
+//  TestUtilities.h
 //  Open CSMP++
 //
 //  Created by Stephan Matthai on 22/8/2022.
