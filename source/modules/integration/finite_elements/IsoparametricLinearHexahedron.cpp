@@ -133,13 +133,6 @@ IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( uint32_t integrati
     }
 }
 
-
-
-
-IsoparametricLinearHexahedron::~IsoparametricLinearHexahedron()
- {
- ;
- }
  
  
  

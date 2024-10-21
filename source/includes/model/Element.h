@@ -166,8 +166,13 @@ class Element : public FiniteElementPolicy<dim, Element>,
              const LocalVariables& element_props,
              const IntegrationPointVariables& integration_point_props,
              int32_t material );
-             
-    // rule of zero
+      
+    // NB: no rule of zero because FE/FV pointers in policies
+    Element( const Element<dim>& );
+    Element<dim>& operator=( const Element<dim>& );
+    // no move semantics
+    
+    ~Element() = default;
 
     /// compares finite element type, material id, nodes, and neighbors; ignoring mutable idx and other attributes
     bool operator==( const Element<dim>& ) const;

@@ -8,7 +8,7 @@ namespace csmp {
 class LinearRectangle : public FiniteElement {
 	public:
 		LinearRectangle( uint32_t dim);
-		virtual ~LinearRectangle();
+
 		virtual void IntegralNN(DenseMatrix<DM_MIN>& M);
 		virtual double Volume();
 		virtual void   EdgeLengths(std::vector<double>& );

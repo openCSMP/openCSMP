@@ -10,7 +10,6 @@ class IsoparametricLinearPyramid : public FiniteElement {
   public:
 
     explicit IsoparametricLinearPyramid( uint32_t integrationPoints=5 /* 1, 5 or 8 */);
-    ~IsoparametricLinearPyramid();
 
     virtual double    Volume();
     virtual double    AspectRatio();

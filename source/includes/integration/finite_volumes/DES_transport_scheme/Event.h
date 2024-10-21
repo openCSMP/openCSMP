@@ -14,7 +14,6 @@ class Event {
   public:
     //constructor
     explicit Event(Node<dim>* nd);
-    Event(Event&&); // TODO: complete rule of 5
     Event() = delete;
     //getting node
     csmp::Node<dim>* getNode() const {return node_;}
@@ -34,8 +33,8 @@ class Event {
     Heap_Node* getHeapNode() {return heap_node_;}
 
   private:
-    csmp::Node<dim>*	node_;
-    Heap_Node* heap_node_;
+    csmp::Node<dim>* node_ = nullptr;
+    Heap_Node* heap_node_  = nullptr;
     double t_schedule_; //scheduled time stamp used for sorting event queue
     //validity (false = event needs to be rescheduled after it is executed, becomes true after re-scheduling)
     bool valid_;

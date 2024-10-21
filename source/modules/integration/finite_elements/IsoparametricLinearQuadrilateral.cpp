@@ -72,10 +72,6 @@ IsoparametricLinearQuadrilateral::IsoparametricLinearQuadrilateral( uint32_t dim
    ElementType(ISOPARAMETRIC_LINEAR_QUADRILATERAL);
 }
 
-IsoparametricLinearQuadrilateral::~IsoparametricLinearQuadrilateral()
- {
- }
-
 
 
 void IsoparametricLinearQuadrilateral::Dimensions( uint32_t dimensions )

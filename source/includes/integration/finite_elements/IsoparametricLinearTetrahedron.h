@@ -9,7 +9,6 @@ namespace csmp {
 class IsoparametricLinearTetrahedron : public FiniteElement {
   public:
     explicit IsoparametricLinearTetrahedron( uint32_t integrationPoints = 4 /* 1 or 4*/ );
-    ~IsoparametricLinearTetrahedron();
 
     virtual double    Volume();
     virtual double    AspectRatio();

@@ -98,13 +98,6 @@ IsoparametricQuadraticTetrahedron::IsoparametricQuadraticTetrahedron()
 
 
 
-IsoparametricQuadraticTetrahedron::~IsoparametricQuadraticTetrahedron()
- {
- }
-
-
-
-
 /** Integration rules implemented by MN:
 
 As the total volume of the tetrahedron element is 1/6, the weights have to add up to 1/6.

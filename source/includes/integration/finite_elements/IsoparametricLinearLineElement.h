@@ -11,7 +11,6 @@ namespace csmp {
 class IsoparametricLinearLineElement : public FiniteElement {
   public:
     explicit IsoparametricLinearLineElement( uint32_t dimensions = 2, uint32_t ips = 2  );
-    ~IsoparametricLinearLineElement();
 
     virtual double  Volume();
     virtual double  InnerRadius();

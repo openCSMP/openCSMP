@@ -101,11 +101,6 @@ IsoparametricLinearPrism::IsoparametricLinearPrism( uint32_t integrationPoints )
  }
 
 
-IsoparametricLinearPrism::~IsoparametricLinearPrism()
- {
- }
-
-
 
 
 /**

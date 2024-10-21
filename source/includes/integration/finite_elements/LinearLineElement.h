@@ -10,7 +10,6 @@ namespace csmp {
 class LinearLineElement : public FiniteElement {
   public:
     explicit LinearLineElement( uint32_t dimensions=2 );
-    ~LinearLineElement();
 
     virtual double   Volume();
     virtual void     CornerNodes( std::vector<uint32_t>& ids ) const;

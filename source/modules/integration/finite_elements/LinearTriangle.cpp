@@ -31,11 +31,6 @@ LinearTriangle::LinearTriangle()
 
 
 
-LinearTriangle::~LinearTriangle() 
- {
- }
-
-
 
 double LinearTriangle::Volume()
 {

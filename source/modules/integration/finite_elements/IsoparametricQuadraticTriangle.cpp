@@ -105,10 +105,6 @@ IsoparametricQuadraticTriangle::IsoparametricQuadraticTriangle( uint32_t dimensi
 
 
 
-IsoparametricQuadraticTriangle::~IsoparametricQuadraticTriangle()
- {
- }
-
 
 void IsoparametricQuadraticTriangle::Dimensions( uint32_t dimensions )
  {

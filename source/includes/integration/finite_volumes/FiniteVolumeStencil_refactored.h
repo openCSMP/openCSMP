@@ -66,11 +66,13 @@ template<uint32_t dim>
 class FiniteVolumeStencil {
   public:
     explicit FiniteVolumeStencil( const char* csp_finite_element_type );
+    /*
     // TODO: refactor and test: rule of zero should work
     FiniteVolumeStencil( const FiniteVolumeStencil& );
     FiniteVolumeStencil& operator=( const FiniteVolumeStencil& );
     ~FiniteVolumeStencil() = default;
-
+    */
+    
     /// number of facets that delimited the FV sector on the insider of the parent finite element
     uint32_t  FacetsPerSector( uint32_t iSector ) const;
   

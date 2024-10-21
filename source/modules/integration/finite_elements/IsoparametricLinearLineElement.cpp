@@ -59,11 +59,7 @@ IsoparametricLinearLineElement::IsoparametricLinearLineElement( uint32_t dimensi
 }
 
 
-IsoparametricLinearLineElement::~IsoparametricLinearLineElement()
- {
- }
-
-inline CSMP_FEM_TYPE  IsoparametricLinearLineElement::ElementTypeOfFace( uint32_t ) const
+CSMP_FEM_TYPE  IsoparametricLinearLineElement::ElementTypeOfFace( uint32_t ) const
  {
     return ZERO_DIMENSIONAL_FACE;
  }

@@ -85,92 +85,92 @@ class FiniteVolumePolicy<3U, CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<3U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
-    /// virtual destructor that does nothing: super important because default destructor would try to delete FV stencil
-    ~FiniteVolumePolicy() = default; // { fvptr_ = nullptr; }
+    /// custom destructor which is super important because default destructor would try to delete FV stencil
+    ~FiniteVolumePolicy() { fvptr_ = nullptr; }
     FiniteVolumePolicy& operator=( const FiniteVolumePolicy& p ) { if ( this != &p ) fvptr_ = p.fvptr_; return *this; }
     /// move semantics
     FiniteVolumePolicy( FiniteVolumePolicy&& p ) noexcept : fvptr_(p.fvptr_) { p.fvptr_ = nullptr; }
-    FiniteVolumePolicy& operator=( FiniteVolumePolicy&& p ) noexcept { fvptr_ = p.fvptr_; p.fvptr_ = nullptr; return *this; }
+    FiniteVolumePolicy& operator=( FiniteVolumePolicy&& p ) noexcept { std::swap(fvptr_,p.fvptr_); p.fvptr_ = nullptr; return *this; }
 
     /// connect policy to a finite-volume stencil that must match the parent element
-    void       AssignFiniteVolume( const csmp::FiniteVolumeStencil<3U>* );
-    void       AssignFiniteVolumeNullPtr() { fvptr_ = nullptr; }
+    void    AssignFiniteVolume( const csmp::FiniteVolumeStencil<3U>* );
+    void    AssignFiniteVolumeNullPtr() { fvptr_ = nullptr; }
 
     /// access the stencil functionality directly
-    const FiniteVolumeStencil<3U>* const FV() const;
+    const   FiniteVolumeStencil<3U>* const FV() const;
  
     /// the surface patches that constitute the outside walls of the finite volume
-    uint32_t     Facets()  const;
+    uint32_t Facets()  const;
   
     /// the volumetric partitions of the finite elements that belong to the different node-centered finite volumes
-    uint32_t     Sectors() const;
+    uint32_t Sectors() const;
   
     /// volume quadrature points: usually one, but there may be multiple
-    uint32_t     IntegrationPointsPerSector() const;
+    uint32_t IntegrationPointsPerSector() const;
 
     /// surface quadrature points: usually one, but there may be multiple
-    uint32_t     IntegrationPointsPerFacet()  const;
+    uint32_t IntegrationPointsPerFacet()  const;
 
    /// finite-element interpolation function values Ni output to NRST vector (stored by the current finite element) at the numbered facet integration point
-    void       N_AtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip ) const;
-    void       N_AtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip, std::vector<double>& NRST ) const;
-    void       N_AtSectorIntegrationPoint( uint32_t iSector, uint32_t ip ) const;
+    void   N_AtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip ) const;
+    void   N_AtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip, std::vector<double>& NRST ) const;
+    void   N_AtSectorIntegrationPoint( uint32_t iSector, uint32_t ip ) const;
   
     /// interpolation function derivatives at point specified in local coordinates; result is returned into NRST vector of current finite element
-    void       Local_dN_At( const Point<3U>& rst ) const;
+    void   Local_dN_At( const Point<3U>& rst ) const;
   
     /// interpolation function derivatives at point specified in local coordinates returned into NRST vector of current finite element + detJ for integration
-    double   dN_At( const Point<3U>& rst, DenseMatrix<DM_MIN>& DN )  const;
+    double dN_At( const Point<3U>& rst, DenseMatrix<DM_MIN>& DN )  const;
 
     /// interpolates value of scalar node variable to facet integration point (XYZ)
-    double   PropertyValueAtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip, const csmp::Index& ) const;
+    double PropertyValueAtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip, const csmp::Index& ) const;
 
     /// interpolates value of scalar node variable to sector integration point (XYZ)
-    double   PropertyValueAtSectorIntegrationPoint( uint32_t iSector, uint32_t ip, const csmp::Index& ) const;
+    double PropertyValueAtSectorIntegrationPoint( uint32_t iSector, uint32_t ip, const csmp::Index& ) const;
   
     /// interpolate values of any node variable to facet integration point (XYZ)
     template<class Var>
-    void       PropertyValueAtFacetIntegrationPoint(  const csmp::Index&, uint32_t iFacet,  uint32_t ip,  Var& )   const;
+    void   PropertyValueAtFacetIntegrationPoint(  const csmp::Index&, uint32_t iFacet,  uint32_t ip,  Var& )   const;
 
     /// interpolate values of any node variable to sector integration point (XYZ)
     template<class Var>
-    void       PropertyValueAtSectorIntegrationPoint( const csmp::Index&, uint32_t iSector, uint32_t ip,  Var& )   const;
+    void   PropertyValueAtSectorIntegrationPoint( const csmp::Index&, uint32_t iSector, uint32_t ip,  Var& )   const;
 
     /// integrates value of property over the area of the facet
-    double   FacetIntegral(  uint32_t iFacet,  const csmp::Index& ) const;
+    double FacetIntegral(  uint32_t iFacet,  const csmp::Index& ) const;
 
     /// integrates value of property over the sector
-    double   SectorIntegral( uint32_t iSector, const csmp::Index& ) const;
+    double SectorIntegral( uint32_t iSector, const csmp::Index& ) const;
 
     /// reads value of vector property and projects it onto facet normal in physical space; returns projected value
-    double   ProjectionOnFacetNormal( uint32_t iFacet, const csmp::Index& )  const;
+    double ProjectionOnFacetNormal( uint32_t iFacet, const csmp::Index& )  const;
 
     /// projects value of vector property onto facet normal in physical space; returns projection
-    double   ProjectionOnFacetNormal( uint32_t iFacet, const VectorVariable<3U>& ) const;
+    double ProjectionOnFacetNormal( uint32_t iFacet, const VectorVariable<3U>& ) const;
 
     /// returns subvolume of finite element that corresponds to the requested finite volume sector
-    double   SectorVolume( uint32_t iSector )     const;
+    double SectorVolume( uint32_t iSector )     const;
   
     /// returns the area of the finite-volume facet in physical space as obtained by construction of facet in physical space
-    double   FacetArea( uint32_t iFacet )         const;
+    double FacetArea( uint32_t iFacet )         const;
   
     /// returns the area of the finite volume facet in physical space as obtained by Jacobian transformation of area in parametric space
-    double   FacetAreaMapped( uint32_t iFacet )   const;
+    double FacetAreaMapped( uint32_t iFacet )   const;
 
     /// returns the unit normal to the finite-volume facet
-    Point<3U>  FacetNormal( uint32_t iFacet )       const;
+    Point<3U> FacetNormal( uint32_t iFacet )       const;
   
     /// transforms the facet normal from parametric to physical space and optionally normalises it to obtain a unit length
-    Point<3U>  FacetNormalMapped( uint32_t iFacet ) const;
+    Point<3U> FacetNormalMapped( uint32_t iFacet ) const;
 
     /// returns the facet area in parametric space
-    double   ParametricFacetArea( uint32_t iFacet ) const;
+    double ParametricFacetArea( uint32_t iFacet ) const;
   
     /// returns the normal to the facet in parametric space
-    Point<3U>  ParametricFacetNormal( uint32_t iFacet ) const;
+    Point<3U> ParametricFacetNormal( uint32_t iFacet ) const;
     
     /// returns facet corner point in physical coordinates using RST_to_XYX
-    Point<3U>  FacetPoint( uint32_t iFacet, uint32_t iPoint ) const;
+    Point<3U> FacetPoint( uint32_t iFacet, uint32_t iPoint ) const;
 
     // get finite-volume facet area, normal and sector volume in parametric space from FiniteVolumeStencil class
 private:

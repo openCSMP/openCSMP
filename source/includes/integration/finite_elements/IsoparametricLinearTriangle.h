@@ -10,7 +10,6 @@ class IsoparametricLinearTriangle : public FiniteElement {
   public:
     explicit IsoparametricLinearTriangle( uint32_t dimensions=2,
                                           uint32_t ipoints=3 );
-    ~IsoparametricLinearTriangle();
 
     // standard interfaces
     virtual double    Volume();

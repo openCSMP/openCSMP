@@ -11,7 +11,6 @@ public:
 
     /// options are 1, 4, or 8 integration points
     explicit IsoparametricLinearHexahedron( uint32_t integrationPoints = 8 );
-    ~IsoparametricLinearHexahedron();
 
     virtual double    Volume();
     virtual double    AspectRatio();

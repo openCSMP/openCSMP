@@ -52,11 +52,6 @@ IsoparametricQuadraticLineElement::IsoparametricQuadraticLineElement( uint32_t d
  }
 
 
-IsoparametricQuadraticLineElement::~IsoparametricQuadraticLineElement() 
- {
- }
-
-
 
 
 /// Cheung et al. p. 26, Cook et al., p. 164

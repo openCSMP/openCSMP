@@ -10,7 +10,6 @@ class IsoparametricQuadraticQuadrilateral : public FiniteElement {
 public:
 
     explicit IsoparametricQuadraticQuadrilateral( uint32_t dimensions=3U );
-    ~IsoparametricQuadraticQuadrilateral();
 
     virtual double    Volume();
     virtual double    AspectRatio();

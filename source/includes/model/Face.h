@@ -110,6 +110,11 @@ class Face : public FiniteElementPolicy<dim,Face>,
           const csmp::FiniteVolumeStencil<dim>*,
           const LocalVariables&,
           const IntegrationPointVariables& );
+          
+    Face( const Face<dim>& );
+    Face<dim>& operator=( const Face<dim>& );
+    
+    ~Face() = default;
 
     /// connects face to the supplied node
     void Assign( uint32_t node, Node<dim>* const );
@@ -131,7 +136,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// compares faces with one-another
     bool operator==( const Face<dim>& ) const;
 
-    // TODO: poor design; rather tell Face what to do than taking over its functionality
+    /// for use in range loops
     typename  std::vector<csmp::Face<dim>*>& NeighborElementVector();
 
 

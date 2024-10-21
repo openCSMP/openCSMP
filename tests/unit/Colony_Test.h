@@ -22,7 +22,8 @@ class Colony_Test : public Test
     
     /// using a quadrilateral element for testing 
     bool TestColonyWith_int();
-    bool TestColonyWith_Element2();
+    void TestThatElementIsCopyableAssignableMovable();
+    bool TestColonyWith_Element();
   
   private:
     const static bool verbose_ = true;

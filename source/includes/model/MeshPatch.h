@@ -29,10 +29,7 @@ template<uint32_t dim>
 class MeshPatch {
   public:
     /// specify whether this is a volume, surface or line element patch
-    MeshPatch( CELL_SHAPE cs ) : cell_dimension_{cs} {}
-    
-    /// destruct the dynamically allocated finite element points
-    ~MeshPatch();
+    explicit MeshPatch( CELL_SHAPE cs ) : cell_dimension_{cs} {}
     
 /// creates an interconnected element patch from the shared faces of the supplied elements; replicates nodes upon request, and returns perimeter nodes and size of patch
     size_t BuildInterveningPatch( const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,

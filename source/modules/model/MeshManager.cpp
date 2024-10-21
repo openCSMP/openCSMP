@@ -1487,8 +1487,8 @@ bool	MeshManager<dim>::Delete( Element<dim>* eptr )
          // detaching neighbor elements
          DetachNeighborsFrom( eptr );
          // detaching FEM and FVM policies
-         eptr->AssignFiniteElementNullPtr();
-         eptr->AssignFiniteVolumeNullPtr();
+//         eptr->AssignFiniteElementNullPtr();
+//         eptr->AssignFiniteVolumeNullPtr();
          // deleting element
          success = ( elements_.erase( pfl_it ) == elements_.end() );
          if ( success )
@@ -1969,6 +1969,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
      // ----------------------------------------------------------
      // RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
      //elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
+
      bool first_call{true};
      while( first2 != last ) {
           if ( Delete( (*first2) ) == false ) {
@@ -1994,7 +1995,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
      cout <<"\t\t"<<"there are "<< surface_elmts <<" surface elements left in the model."<< endl;
 #endif
 
-     // 3. cleaning up inter-CELL and node to parent connectivity
+     // 3. cleaning up inter-CELL and node-to-parent connectivity
      // ---------------------------------------------------------
      BuildConnectivity<csmp::Face>( face_ptrs.begin(), face_ptrs.end() ); // between the faces
      

@@ -22,14 +22,6 @@ namespace csmp {
  
  
 template<uint32_t dim>
-MeshPatch<dim>::~MeshPatch()
- {
-    for ( auto ptr : fe_ptrs_ )
-      delete ptr.second;
- }
-
- 
-template<uint32_t dim>
 size_t MeshPatch<dim>::Cells() const
  {
     return elements_.size();

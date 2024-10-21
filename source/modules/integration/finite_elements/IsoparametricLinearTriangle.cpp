@@ -89,10 +89,6 @@ IsoparametricLinearTriangle::IsoparametricLinearTriangle( uint32_t dimensions,
     ElementType(ISOPARAMETRIC_LINEAR_TRIANGLE);
 }
 
-IsoparametricLinearTriangle::~IsoparametricLinearTriangle()
- {
- }
-
 
 
 /**

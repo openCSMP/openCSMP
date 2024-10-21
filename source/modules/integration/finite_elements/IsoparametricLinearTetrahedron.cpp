@@ -85,15 +85,6 @@ IsoparametricLinearTetrahedron::IsoparametricLinearTetrahedron	(
 
 
 
-IsoparametricLinearTetrahedron::~IsoparametricLinearTetrahedron()
- {
-//   cout<<" IsoparametricLinearTetrahedron::~IsoparametricLinearTetrahedron: during lifetime of the element: "<<endl;
-//   cout<<" Physical->Parametric projections called "<<projectionCalledNTimes<<" times, non-convergent="<<nonConvergenceOfProjections<<endl;
-//   cout<<" Total number of N-R Physical->Parametric projection iterations ="<<totIterations<<endl;
-//   cout<<" Accumulated projection error:                                  ="<<accDistance<<endl;
- }
-
-
 
 
 /**

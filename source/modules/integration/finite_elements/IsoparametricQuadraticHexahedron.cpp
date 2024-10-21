@@ -180,11 +180,6 @@ IsoparametricQuadraticHexahedron::IsoparametricQuadraticHexahedron( uint32_t int
 
 
 
-IsoparametricQuadraticHexahedron::~IsoparametricQuadraticHexahedron()
- {
- }
-
-
 void
  IsoparametricQuadraticHexahedron::JacobianAtIntegrationPoint( uint32_t gauss_point )
  {

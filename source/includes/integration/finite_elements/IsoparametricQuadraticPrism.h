@@ -10,7 +10,6 @@ class IsoparametricQuadraticPrism : public FiniteElement {
 public:
 
     IsoparametricQuadraticPrism();
-    ~IsoparametricQuadraticPrism();
 
     virtual double    Volume();
 

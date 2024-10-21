@@ -10,7 +10,6 @@ class IsoparametricQuadraticPyramid : public FiniteElement {
 public:
 
     IsoparametricQuadraticPyramid();
-    ~IsoparametricQuadraticPyramid();
 
     virtual double    Volume();
     virtual double    AspectRatio();

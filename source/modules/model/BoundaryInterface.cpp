@@ -1889,6 +1889,7 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
   {
 	  BOUNDARY_COMPLEX<dim>* model(static_cast<BOUNDARY_COMPLEX<dim>*>(this));
 	  cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundaries: searching for eligible boundary domains...\n";
+model->Region("Model").RenumberCells();
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1912,24 +1913,24 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
                                      
         eligibleRegions.insert( make_pair( it->first, elmt_range ) );
       }
-
+      
+    // checking whether elmts_to_become_faces contains duplicates
 	  if ( eligibleRegions.empty() ) {
          csmp_error.Note( WARNING, "BoundaryInterface::EstablishBoundariesFromRegions",
-                                     "unable to find eligible lower-dimensional regions to create Boundary objects from");
+                                   "unable to find eligible lower-dimensional regions to create Boundary objects from");
          return set<string>{};
       }
 
-
     // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------
-    // (the newly created Face objects also get interconnected as well)
     assert( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) == 0 );
     vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                              elmts_to_become_faces.begin(),
                                                                              elmts_to_become_faces.end() );
-    // repairing connectivity among elements after removal
-    model->Mesh().template RemoveDegenerateNeighbors<Element>();
-
+// In ReplaceBoundaryElementsByFaces GEHT ALLES KAPUTT!
+// checking elements for crazy IDs
+for ( auto it=model->Mesh().ElementsBegin(); it!=model->Mesh().ElementsEnd(); ++it )
+  if ( (*it).Idx() > model->Mesh().Elements() ) cout <<".";
 
     // 3. creating the Boundaries from the faces
     // -----------------------------------------
@@ -1937,10 +1938,9 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
     set<string>  boundaries_created;
 
     for ( auto& it : eligibleRegions ) {
-         // TODO: boundary names may have to be adjusted to meet CSMP conventions
          BOX_BOUNDARY boundary_flag = parseBoundary( it.first );
          if ( boundary_flag == MULTIPLE ) boundary_flag = IRREGULAR; // outside
-         if ( AddBoundary( it.first.c_str(), next(fit,it.second.first), next(fit,it.second.second), boundary_flag ) )
+         if ( AddBoundary( it.first.c_str(), next(fit,it.second.first), next(fit,it.second.second), boundary_flag ) ) // checked 20/1024n
            boundaries_created.insert( it.first );
       }
     

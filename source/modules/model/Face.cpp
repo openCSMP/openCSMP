@@ -403,6 +403,55 @@ Face<dim>::Face( size_t index,
 
 
 
+/// copy constructor
+template<uint32_t dim>
+Face<dim>::Face( const Face<dim>& fc )
+  : FiniteElementPolicy<dim,csmp::Face>(fc.FE()),
+    FiniteVolumePolicy<dim,csmp::Face>(fc.FV()),
+    idx_(fc.idx_),
+    face_connector_(fc.face_connector_),
+    node_connector_( fc.node_connector_),
+    innerParent_(fc.innerParent_),
+    outerParent_(fc.outerParent_),
+    inner_parent_face_id_(fc.inner_parent_face_id_),
+    outer_parent_face_id_(fc.outer_parent_face_id_)
+  {
+    assert( this->FE() != nullptr /* detect unitialized element*/ );
+    assert( !face_connector_.empty() /* detect unitialized element*/ );
+    // variable storage: call of initialization function
+    this->LVS( fc.LVS() );
+  }
+
+
+
+/**
+    private as there should never be a need to use it
+    and the results are undefined in terms of the pointers to parent and neighbor elements
+    
+    @note assignment operator is used in container::find(Face) operations; why?
+*/
+template<uint32_t dim>
+Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
+ {
+    if ( &fc != this ) {
+        FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
+        FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
+        idx_                  = fc.idx_;
+        face_connector_       = fc.face_connector_;
+        node_connector_       = fc.node_connector_;
+        innerParent_          = fc.innerParent_; // problematic pointer assignment
+        outerParent_          = fc.outerParent_;
+        inner_parent_face_id_ = fc.inner_parent_face_id_;
+        outer_parent_face_id_ = fc.outer_parent_face_id_;
+        this->LVS( fc.LVS() );
+      }
+      
+//    cerr <<"\nFace::operator=  called assignment operator.";
+    
+    return *this;
+ }
+
+
 
 
 

@@ -117,7 +117,6 @@ Element<dim>::Element( size_t idx,
 }
 
 
-/*
 template<uint32_t dim>
 Element<dim>::Element( const Element<dim>& el )
   : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
@@ -125,19 +124,18 @@ Element<dim>::Element( const Element<dim>& el )
     idx_( el.idx_ ),
     material_id_(el.material_id_),
     region_id_(el.region_id_),
-    elmt_connector_( el.elmt_connector_.size(), nullptr ),
-    node_connector_( el.node_connector_.size(), nullptr )
+    elmt_connector_( el.elmt_connector_ ),
+    node_connector_( el.node_connector_ )
 {
   // variable storage: call of initialization function
   this->LVS( el.LVS() );
 }
 
-
+/*
 template<uint32_t dim>
 Element<dim>::Element( Element<dim>&& el )
   : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
     FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
-//    LocalVariableStorage<dim, csmp::Element>( el.LVS() ), //  does not compile, why?
     // in-built types are copied
     idx_{ el.idx_ },
     material_id_{ el.material_id_},
@@ -153,14 +151,16 @@ Element<dim>::Element( Element<dim>&& el )
     
 //  cout <<"\nElement(ctor): moved element: "<< Idx();
 }
+*/
+
 
 
 template<uint32_t dim>
 Element<dim>& Element<dim>::operator=( const Element<dim>& el )
 {
   if ( &el != this ) {
-    if ( el.FE() ) FiniteElementPolicy<dim, csmp::Element>::Assign( el.FE() );
-    if ( el.FV() ) FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( el.FV() );
+    FiniteElementPolicy<dim, csmp::Element>::Assign( el.FE() );
+    FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( el.FV() );
     idx_ = el.idx_;
     elmt_connector_ = el.elmt_connector_;
     node_connector_ = el.node_connector_;
@@ -172,18 +172,19 @@ Element<dim>& Element<dim>::operator=( const Element<dim>& el )
 }
 
 
+/*
 template<uint32_t dim>
 Element<dim>& Element<dim>::operator=( Element<dim>&& el )
 {
   // should never happen because a temporary variable cannot be an lvalue
   assert( &el != this );
 
-  if ( el.FE() ) FiniteElementPolicy<dim, csmp::Element>::Assign( el.FE() );
-  if ( el.FV() ) FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( el.FV() );
+  FiniteElementPolicy<dim, csmp::Element>::Assign( el.FE() );
+  FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( el.FV() );
 
-  idx_ = std::move( el.idx_ );
-  elmt_connector_ = std::move( el.elmt_connector_ );
-  node_connector_ = std::move( el.node_connector_ );
+  idx_            = el.idx_;
+  elmt_connector_ = el.elmt_connector_;
+  node_connector_ = el.node_connector_;
   material_id_    = el.material_id_;
   region_id_      = el.region_id_;
   
@@ -196,18 +197,18 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
 */
 
 
-
 template<uint32_t dim>
 bool  Element<dim>::operator==( const Element<dim>& el ) const
 {
   if ( &el != this )
     {
        if ( this->FE_Type() != el.FE_Type() ) return false;
+       if ( this->FV()      != el.FV() ) return false;
        if ( node_connector_ != el.node_connector_ ) return false;
        if ( elmt_connector_ != el.elmt_connector_ ) return false;
        if ( material_id_    != el.material_id_ ) return false;
        if ( region_id_      != el.region_id_ ) return false;
-       // ignored: if ( idx_ == el.idx_ ) return true;
+       // ignored mutable index: if ( idx_ == el.idx_ ) return true;
     }
   return true;
 }

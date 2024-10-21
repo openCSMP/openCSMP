@@ -85,10 +85,6 @@ IsoparametricLinearPyramid::IsoparametricLinearPyramid( uint32_t integrationPoin
 
 
 
-IsoparametricLinearPyramid::~IsoparametricLinearPyramid()
- {
- }
-
 
 /** Returns the value of the element interpolation functions at the point 'rst'
 in local coordinates.

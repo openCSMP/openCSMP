@@ -32,8 +32,6 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		Isoparametric(false);
 	}
 
-	 LinearCuboid::~LinearCuboid() {}
-
 	 double LinearCuboid::Volume()
 	 {
 		 return (XY(5, 0) - XY(3, 0))*(XY(5, 1) - XY(3, 1))*(XY(5, 2) - XY(3, 2));

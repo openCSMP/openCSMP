@@ -10,7 +10,6 @@ class IsoparametricQuadraticHexahedron : public FiniteElement {
 public:
     /// 4, 6 or 8 integration points are possible
     explicit IsoparametricQuadraticHexahedron( uint32_t integrationPoints = 8 );
-    ~IsoparametricQuadraticHexahedron();
 
     virtual double    Volume();
     virtual double    AspectRatio();

@@ -160,7 +160,6 @@ wm withdraw .
 class LinearTriangle3D : public FiniteElement {
   public:
     LinearTriangle3D();
-    ~LinearTriangle3D();
 
     virtual double       Volume();
     virtual double       AspectRatio();

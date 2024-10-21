@@ -14,11 +14,11 @@ class FiniteElementPolicy {
     FiniteElementPolicy( FiniteElement* = nullptr );
     FiniteElementPolicy( const FiniteElementPolicy& p ) : fptr_{p.fptr_} {}
     /// destructor that does nothing: super important because default destructor would try to delete FiniteElement from FiniteElementManager!
-    ~FiniteElementPolicy() = default; // { fptr_ = nullptr; }
+    ~FiniteElementPolicy() { fptr_ = nullptr; }
     FiniteElementPolicy& operator=( const FiniteElementPolicy& p ) { if ( this != &p ) fptr_ = p.fptr_; return *this; }
     /// move semantics
     FiniteElementPolicy( FiniteElementPolicy&& p ) noexcept : fptr_{p.fptr_} { p.fptr_ = nullptr; }
-    FiniteElementPolicy& operator=( FiniteElementPolicy&& p ) noexcept { fptr_ = p.fptr_; p.fptr_ = nullptr; return *this; }
+    FiniteElementPolicy& operator=( FiniteElementPolicy&& p ) noexcept { std::swap(fptr_,p.fptr_); p.fptr_=nullptr; return *this; }
   
     /// for deferred assignment or changing the element at runtime
     void Assign( FiniteElement* fe_ptr );

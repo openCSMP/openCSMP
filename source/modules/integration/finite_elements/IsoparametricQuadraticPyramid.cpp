@@ -75,9 +75,6 @@ IsoparametricQuadraticPyramid::IsoparametricQuadraticPyramid()
 
 
 
-IsoparametricQuadraticPyramid::~IsoparametricQuadraticPyramid()
- {
- }
 
 
 /** Returns local node ids of the 4 nodes located at the corners of

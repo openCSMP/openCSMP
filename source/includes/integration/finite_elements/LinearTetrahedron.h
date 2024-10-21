@@ -9,7 +9,6 @@ class LinearTetrahedron : public FiniteElement {
   public:
 
     LinearTetrahedron();
-    virtual ~LinearTetrahedron();
 
     virtual double  Volume();
     virtual void    CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;

@@ -56,7 +56,6 @@ class IsoparametricQuadraticTriangle : public FiniteElement {
 public:
 
     explicit IsoparametricQuadraticTriangle( uint32_t dimensions );
-    ~IsoparametricQuadraticTriangle();
 
     /// sets the integration points in the inside of the triangle near the nodes (default is midside node integration)
     void GaussPointsNearCorners();

@@ -148,10 +148,10 @@ class FiniteElement {
     FiniteElement( CSMP_FEM_TYPE csp_fem_type, 
                    bool isoparametric, bool uses_local_coordinates, 
                    uint32_t order_of_shape_functions );
-
-    virtual ~FiniteElement() {}
     
-    /// assigns integer value used to avoid repeating the same operation
+    virtual ~FiniteElement() = default;
+
+   /// assigns integer value used to avoid repeating the same operation
     void           CurrentID( size_t id );
   
     /// returns integer value for comparison to avoid repeating the same operation

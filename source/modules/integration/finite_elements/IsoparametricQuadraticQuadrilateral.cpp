@@ -83,12 +83,6 @@ IsoparametricQuadraticQuadrilateral::IsoparametricQuadraticQuadrilateral( uint32
 
 
 
-IsoparametricQuadraticQuadrilateral::~IsoparametricQuadraticQuadrilateral()
- {
- }
-
-
-
 /** Computes the interpolation function values at the specified integration
 point 'ip'.
 

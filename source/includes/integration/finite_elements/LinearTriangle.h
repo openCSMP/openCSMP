@@ -9,7 +9,6 @@ namespace csmp {
 class LinearTriangle : public FiniteElement {
   public:
     LinearTriangle();
-    ~LinearTriangle();
 
     virtual double       Volume();
     virtual double       AspectRatio();

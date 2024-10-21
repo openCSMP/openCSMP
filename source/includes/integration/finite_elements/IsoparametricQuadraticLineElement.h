@@ -10,7 +10,6 @@ class IsoparametricQuadraticLineElement : public FiniteElement {
 public:
 
     explicit IsoparametricQuadraticLineElement( uint32_t dimensions=2 );
-    ~IsoparametricQuadraticLineElement();
 
     virtual double      Volume();
     virtual void        CornerNodes( std::vector<uint32_t>& ids ) const;

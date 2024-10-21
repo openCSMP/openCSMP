@@ -117,6 +117,12 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
                const csmp::FiniteVolumeStencil<dim>*,
                const LocalVariables&  interface_props,
                const IntegrationPointVariables&  interface_integration_point_props );
+               
+    InterFace( const InterFace<dim>& );
+    InterFace<dim>& operator=( const InterFace<dim>& );
+    
+    ~InterFace() = default;
+               
 
     /// self-detection in the interface construction process
     bool operator==( const InterFace<dim>& );

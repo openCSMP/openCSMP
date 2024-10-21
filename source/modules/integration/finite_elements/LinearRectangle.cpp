@@ -30,7 +30,9 @@ LinearRectangle::LinearRectangle( uint32_t dims) :FiniteElement(LINEAR_RECTANGLE
 		ElementType(LINEAR_RECTANGLE);
 	}
 
-	LinearRectangle::~LinearRectangle() {}
+
+
+
 
 	void LinearRectangle::IntegralNN(DenseMatrix<DM_MIN>& M)
 	{
@@ -110,38 +112,6 @@ void LinearRectangle::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& s
 	} // end NodesOfSegment
 
 
-/*
-void LinearRectangle::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids) const
-	{
-		fnids.resize(2);
-		if (face_id == 0)
-		{
-			fnids[0] = 0;
-			fnids[1] = 1;
-
-		}
-		else if (face_id == 1)
-		{
-			fnids[0] = 1;
-			fnids[1] = 2;
-
-		}
-		else if (face_id == 2)
-		{
-			fnids[0] = 2;
-			fnids[1] = 3;
-
-		}
-		else if (face_id == 3)
-		{
-			fnids[0] = 3;
-			fnids[1] = 0;
-
-		}
-		else
-			std::cerr << "\nIsoparametricLinearQuadrilateral::NodesOfFace: Erratic input face ID: " << face_id << std::endl;
-	}
-*/
 
 
 vector<uint32_t>  LinearRectangle::NodesOfFace( uint32_t face_id ) const

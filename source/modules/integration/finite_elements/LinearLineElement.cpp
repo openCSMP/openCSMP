@@ -29,11 +29,6 @@ LinearLineElement::LinearLineElement( uint32_t dimensions )
  }
 
 
-LinearLineElement::~LinearLineElement()
- {
- }
-
-
 /*
 void  LinearLineElement::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {

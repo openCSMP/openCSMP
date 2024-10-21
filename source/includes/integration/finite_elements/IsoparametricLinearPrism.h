@@ -16,7 +16,6 @@ namespace csmp {
 class IsoparametricLinearPrism : public FiniteElement {
   public:
     explicit IsoparametricLinearPrism( uint32_t integrationPoints = 6 /* 1 or 6*/ );
-    ~IsoparametricLinearPrism();
 
     virtual double    Volume();
     virtual double    AspectRatio();

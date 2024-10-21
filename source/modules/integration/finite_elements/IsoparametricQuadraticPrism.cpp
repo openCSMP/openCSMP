@@ -81,12 +81,6 @@ IsoparametricQuadraticPrism::IsoparametricQuadraticPrism()
 
 
 
-IsoparametricQuadraticPrism::~IsoparametricQuadraticPrism()
- {
- }
-
-
-
 
 
 

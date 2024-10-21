@@ -20,6 +20,7 @@ namespace csmp {
  Standard as for any parametrised constructor. Method parametr should be previously
  initialised as well.
 */
+/*
 template<uint32_t dim>
 FiniteVolumeStencil<dim>::FiniteVolumeStencil( const FiniteVolumeStencil<dim>& fvs )
  : facet_integration_weights_(fvs.facet_integration_weights_),
@@ -43,7 +44,7 @@ FiniteVolumeStencil<dim>::FiniteVolumeStencil( const FiniteVolumeStencil<dim>& f
    space_dimension_(fvs.space_dimension_)
 {
 }
- 
+*/
  
 /**
  
@@ -55,7 +56,8 @@ FiniteVolumeStencil<dim>::FiniteVolumeStencil( const FiniteVolumeStencil<dim>& f
 @section application Application 
 
  Standard as for any "equals" operator.
-*/ 
+*/
+/*
 template<uint32_t dim>
 FiniteVolumeStencil<dim>&  FiniteVolumeStencil<dim>::operator=( const FiniteVolumeStencil<dim>& fvs )
  {
@@ -82,7 +84,7 @@ FiniteVolumeStencil<dim>&  FiniteVolumeStencil<dim>::operator=( const FiniteVolu
        }
      return *this;
  }
-
+*/
 
 /**
  

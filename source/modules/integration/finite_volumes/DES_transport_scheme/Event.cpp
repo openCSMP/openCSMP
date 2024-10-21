@@ -14,18 +14,6 @@ Event<dim>::Event(Node<dim>* nd)
 {
 }
 
-//move constructor
-  template<uint32_t dim>
-  Event<dim>::Event(Event&& event)
-  : node_(event.node_),
-    heap_node_(event.heap_node_),
-    t_schedule_(event.t_schedule_),
-    valid_(event.valid_),
-    inPEPStack_(event.inPEPStack_),
-    inQueue_(event.inQueue_)
-  {
-  }
-
 template class Event<1U>;
 template class Event<2U>;
 template class Event<3U>;

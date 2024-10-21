@@ -28,9 +28,6 @@ LinearTetrahedron::LinearTetrahedron()
  }
 
 
-LinearTetrahedron::~LinearTetrahedron()
- {
- }
 
 
 

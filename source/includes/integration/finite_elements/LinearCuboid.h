@@ -13,7 +13,7 @@ namespace csmp {
 class LinearCuboid : public FiniteElement {
   public:
     LinearCuboid();
-    virtual ~LinearCuboid();
+
     virtual double   Volume();
     virtual double   AspectRatio();
     virtual double   InnerRadius();

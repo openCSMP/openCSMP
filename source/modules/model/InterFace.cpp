@@ -195,8 +195,6 @@ InterFace<dim>::InterFace( size_t index,
 }
 
 
-/* we use the compiler to generate the following methods
-
 /// copy constructor
 template<uint32_t dim>
 InterFace<dim>::InterFace( const InterFace<dim>& ifc )
@@ -218,31 +216,6 @@ InterFace<dim>::InterFace( const InterFace<dim>& ifc )
 }
 
 
-/// move constructor
-template<uint32_t dim>
-InterFace<dim>::InterFace( InterFace<dim>&& ifc )
-  : FiniteElementPolicy<dim, csmp::InterFace>( std::move(ifc.FE()) ),
-    FiniteVolumePolicy<dim, csmp::InterFace>( std::move(ifc.FV()) ),
-    idx_( std::move(ifc.idx_) ),
-    inner_parent_face_id_( std::move(ifc.inner_parent_face_id_) ),
-    outer_parent_face_id_( std::move(ifc.outer_parent_face_id_) ),
-    innerParent_( std::move(ifc.innerParent_) ),
-    outerParent_( std::move(ifc.outerParent_) ),
-    middleElement_( std::move(ifc.middleElement_) ),
-    node_connector_( std::move( ifc.node_connector_ ) ),
-    interface_connector_( std::move( ifc.interface_connector_ ) ),
-    current_side_( ifc.current_side_ )
-{
-    // nulling the pointers in the dying object
-    ifc.AssignFiniteElementNullPtr();
-    ifc.AssignFiniteVolumeNullPtr();
-    ifc.innerParent_ = nullptr;
-    ifc.outerParent_ = nullptr;
-    
-    assert( !interface_connector_.empty() ); // detected unitialized element
-                                           // variable storage: call of initialization function
-    this->LVS( std::move( ifc.LVS() ) );
-}
 
 
 /// assignment
@@ -251,8 +224,8 @@ InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
 {
   if ( &ifc != this )
     {
-      if ( ifc.FE() ) FiniteElementPolicy<dim, csmp::InterFace>::Assign( ifc.FE() );
-      if ( ifc.FV() ) FiniteVolumePolicy<dim, csmp::InterFace>::AssignFiniteVolume( ifc.FV() );
+      FiniteElementPolicy<dim, csmp::InterFace>::Assign( ifc.FE() );
+      FiniteVolumePolicy<dim, csmp::InterFace>::AssignFiniteVolume( ifc.FV() );
 
       idx_ = ifc.idx_;
       node_connector_ = ifc.node_connector_;
@@ -270,30 +243,6 @@ InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
 }
 
 
-template<uint32_t dim>
-InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
-{
-  assert( &ifc != this );
-
-  if ( ifc.FE() ) FiniteElementPolicy<dim, csmp::InterFace>::Assign( ifc.FE() );
-  if ( ifc.FV() ) FiniteVolumePolicy<dim, csmp::InterFace>::AssignFiniteVolume( ifc.FV() );
-
-  idx_ = ifc.idx_;
-  inner_parent_face_id_ = ifc.inner_parent_face_id_;
-  outer_parent_face_id_ = ifc.outer_parent_face_id_;
-  innerParent_          = ifc.innerParent_;
-  outerParent_          = ifc.outerParent_;
-  middleElement_        = ifc.middleElement_;
-  interface_connector_  = std::move( ifc.interface_connector_ );
-  node_connector_       = std::move( ifc.node_connector_ );
-  current_side_         = ifc.current_side_;
-
-  this->LVS( std::move( ifc.LVS() ) );
-
-  return *this;
-}
-
-end compiler generated */
 
 
 

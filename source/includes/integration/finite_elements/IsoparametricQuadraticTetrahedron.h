@@ -8,7 +8,6 @@ namespace csmp {
 class IsoparametricQuadraticTetrahedron : public FiniteElement {
   public:
     IsoparametricQuadraticTetrahedron();
-    ~IsoparametricQuadraticTetrahedron();
 
     virtual double    Volume();
     virtual double    AspectRatio();

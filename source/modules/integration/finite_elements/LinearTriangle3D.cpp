@@ -31,12 +31,6 @@ LinearTriangle3D::LinearTriangle3D()
 
 
 
-LinearTriangle3D::~LinearTriangle3D() 
- {
- }
-
-
-
 
 /// segments are numbered like faces
 void 
