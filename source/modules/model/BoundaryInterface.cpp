@@ -1889,7 +1889,6 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
   {
 	  BOUNDARY_COMPLEX<dim>* model(static_cast<BOUNDARY_COMPLEX<dim>*>(this));
 	  cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundaries: searching for eligible boundary domains...\n";
-model->Region("Model").RenumberCells();
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1927,11 +1926,6 @@ model->Region("Model").RenumberCells();
     vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                              elmts_to_become_faces.begin(),
                                                                              elmts_to_become_faces.end() );
-// In ReplaceBoundaryElementsByFaces GEHT ALLES KAPUTT!
-// checking elements for crazy IDs
-for ( auto it=model->Mesh().ElementsBegin(); it!=model->Mesh().ElementsEnd(); ++it )
-  if ( (*it).Idx() > model->Mesh().Elements() ) cout <<".";
-
     // 3. creating the Boundaries from the faces
     // -----------------------------------------
     typename vector<Face<dim>*>::iterator fit{ faces.begin() };
@@ -1958,6 +1952,7 @@ for ( auto it=model->Mesh().ElementsBegin(); it!=model->Mesh().ElementsEnd(); ++
     for ( auto& it : eligibleRegions ) {
          model->RemoveRegion( it.first.c_str(), erase_elements );
       }
+    // all non-unique regions must be rebuilt
     model->UpdateRegions();
 
 	  cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";

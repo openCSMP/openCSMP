@@ -51,6 +51,11 @@ class Node : public LocalVariableStorage<dim,Node> {
 
     /// custom constructor used when model is reconstructed from binary file
     Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT, TOPOTYPE = MESH_VERTEX );
+    
+    Node( const Node<dim>& );
+    Node<dim>& operator=( const Node<dim>& );
+    
+    ~Node();
 
     /// compares memory location, idx_, BREP classifier and boundary flag
     bool operator==( const Node<dim>& );

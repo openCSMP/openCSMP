@@ -889,12 +889,10 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
-   // 0. verifying the input
-   // node vector
+   // verifying input node vector
    if ( nodes.empty() )
      csmp_error.Note( ERROR, "MeshManager<dim>::AddElement", "node vector is empty");
-     
-     
+          
    // 1. constructing new element
    // ---------------------------
    size_t elmt_idx{ elements_.size() };
@@ -1471,14 +1469,15 @@ template void MeshManager<3>::DetachNeighborsFrom( InterFace<3>* const );
 
 
 
-
+/**
+      Disconnects neighbors from element.
+      @return iterator to next element in colony or end() if element could not be found.
+*/
 template<uint32_t dim>
-bool	MeshManager<dim>::Delete( Element<dim>* eptr )
+auto	MeshManager<dim>::Delete( Element<dim>* eptr ) -> typename plf::colony< Element<dim> >::iterator
  {
-    bool success{ false };
-    
-    // geting iterator to element
-    auto pfl_it = elements_.get_iterator( const_cast<Element<dim>* const>(eptr) );
+    // geting iterator to element ('get_iterator' returns end, if element cannot be found)
+    auto pfl_it = elements_.get_iterator( eptr );
     // if the element exists in the colony
     if ( pfl_it != elements_.end() ) {
          // remove element from the parent element list of its connected nodes
@@ -1486,33 +1485,30 @@ bool	MeshManager<dim>::Delete( Element<dim>* eptr )
            (*nit)->Unassign( eptr );
          // detaching neighbor elements
          DetachNeighborsFrom( eptr );
-         // detaching FEM and FVM policies
-//         eptr->AssignFiniteElementNullPtr();
-//         eptr->AssignFiniteVolumeNullPtr();
-         // deleting element
-         success = ( elements_.erase( pfl_it ) == elements_.end() );
-         if ( success )
-           cout <<"\n\t"<<"MeshManager<dim>::Delete: deleted element: "<< eptr->Idx();
+         // nulling element pointer
          eptr = nullptr;
+         // deleting element and returning colony iterator to next element in colony
+         return elements_.erase( pfl_it );
       }
-
-    // does a prior element to the one erase exist? - if so erase() worked
-    return success;
+    // does an element after to the one erased exist in the colony? - if so, an iterator to it is returned
+    return elements_.end();
  }
+
 
 /**
      Deletion of a Face only affects its face neighbors
 */
 template<uint32_t dim>
-bool	MeshManager<dim>::Delete( Face<dim>* fptr )
+auto	MeshManager<dim>::Delete( Face<dim>* fptr ) -> typename plf::colony< Face<dim> >::iterator
  {
-    // detaching neighbor faces
-    DetachNeighborsFrom( fptr );
-    auto success = faces_.erase( faces_.get_iterator(fptr) );
-    fptr = nullptr;
-    
-    // does a prior face to the one erase exist? - if so erase() worked
-    return ( success == faces_.end() );
+    auto pfl_it = faces_.get_iterator( fptr );
+    if ( pfl_it != faces_.end() ) {
+         DetachNeighborsFrom( fptr );
+         // nodes are not detached because they are shared with elements
+         fptr = nullptr;
+         return faces_.erase( pfl_it );
+      }
+    return faces_.end();
  }
 
 
@@ -1520,15 +1516,16 @@ bool	MeshManager<dim>::Delete( Face<dim>* fptr )
      Deletion of an InterFace only affects its face neighbors
 */
 template<uint32_t dim>
-bool	MeshManager<dim>::Delete( InterFace<dim>* fptr )
+auto	MeshManager<dim>::Delete( InterFace<dim>* fptr ) -> typename plf::colony< InterFace<dim> >::iterator
  {
-    // detaching neighbor InterFace objects
-    DetachNeighborsFrom( fptr );
-    auto success = interfaces_.erase( interfaces_.get_iterator(fptr) );
-    fptr = nullptr;
-    
-    // does a prior InterFace to the one erase exist? - if so erase() worked
-    return ( success == interfaces_.end() );
+    auto pfl_it = interfaces_.get_iterator( fptr );
+    if ( pfl_it != interfaces_.end() ) {
+         DetachNeighborsFrom( fptr );
+         // TODO: fuse nodes back together here; deleting the outside ones
+         fptr = nullptr;
+         return interfaces_.erase( pfl_it );
+      }
+    return interfaces_.end();
  }
 
 
@@ -1972,7 +1969,8 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
 
      bool first_call{true};
      while( first2 != last ) {
-          if ( Delete( (*first2) ) == false ) {
+          auto next_elmt = Delete( (*first2) );
+          if ( next_elmt != elements_.end() and next_elmt != next(elements_.get_iterator(*first),1) ) {
 #ifdef CSMP_MESH_MANAGER_DEBUG
                if ( first_call ) {
                    csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces",

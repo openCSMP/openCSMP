@@ -840,7 +840,7 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
   _test( snodes.first == nodes2 ); // should be face nodes
 
   // getting rid of pyramid (and its connections so that face 0 of element 1 is on the outside of model again
-  _test( mesh.Delete( py_ptr ) == true );
+  _test( mesh.Delete( py_ptr ) != mesh.ElementsEnd() );
   _test( e1ptr->Neighbor(0) == nullptr );
   
   

@@ -369,7 +369,7 @@ bool Colony_Test::TestColonyWith_Element()
   eptr[4] = &( *elmt_colony.insert( e4 ) );
   if ( verbose_ ) {
        cout <<"\nTestColonyWith_Element2: initial elements.\n";
-       for ( auto i : elmt_colony ) i.Out();
+       for ( const auto& i : elmt_colony ) i.Out();
     }
   
   // copy construction of some more colonies

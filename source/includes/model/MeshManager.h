@@ -283,13 +283,13 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
   // NB: elements are responsible for their nodes, nodes for their manifolds
   
   /// disconnects neighbors, removes Element from node-parent container, and deletes element, reports true when deletion succeeded
-  bool Delete( Element<dim>* );
+  auto Delete( Element<dim>* ) -> typename plf::colony< Element<dim> >::iterator;
 
   /// disconnects neighbors, deletes Face, and reports true when deletion succeeded
-  bool Delete( Face<dim>* );
+  auto Delete( Face<dim>* ) -> typename plf::colony< Face<dim> >::iterator;
 
   /// disconnects neighbors, deletes InterFace, and reports true when deletion succeeded
-  bool Delete( InterFace<dim>* );
+  auto Delete( InterFace<dim>* ) -> typename plf::colony< InterFace<dim> >::iterator;
   
   /// any non-nullpointer neighbors the element type of which is unknown (global operation on all cells)
   template<template<uint32_t> class CELL>

@@ -119,22 +119,22 @@ struct Index {
     bool Out( std::fstream& fp ) const;
     bool In( std::fstream& fp );
 
-    // TODO: make all these uint8_t (same size as the flags?
-    VARIABLE_TYPE               type;
-    PLACEMENT                   place;
-    int_type                    index = UNSPECIFIED;        ///< For Scalars, Vectors, Tensors, Arrays, FlaggedArrays: the how many'th variable of its kind at specified placement
-    int_type                    dataDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim*dim, Array:Size, FlaggedArray:Size
-    int_type                    flagDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim, Array:1, FlaggedArray:Size
-    int_type                    dataOffset;                 ///< Index in data container where data start
-    int_type                    flagOffset;                 ///< Index in flag container where data start
-    int_type                    offsetFactorCell;           ///< Factors used in integration point variable index arithmetic
-    int_type                    offsetFactorSector;         ///< Factors used in integration point variable index arithmetic
-    int_type                    ipFactorCell;               ///< Factors used in integration point variable index arithmetic
-    int_type                    ipFactorSector;             ///< Factors used in integration point variable index arithmetic
-    int_type                    ipFactorFacet;              ///< Factors used in integration point variable index arithmetic
-    LocalVariables              localVariables;             ///< Description of state of physical variables at given placement (variables count etc..)
-    IntegrationPointVariables   integrationPointVariables;  ///< Description of state of physical variables at given placement (variables count etc..)
-    IndexTracker*               indexTracker;               ///< IndexTracker used for runtime updates of offsets (addition/removal of variables)
+    VARIABLE_TYPE                       type;
+    PLACEMENT                           place;
+    // mutable as these might have to change as new variables at added at runtime
+    mutable int_type                    index = UNSPECIFIED;        ///< For Scalars, Vectors, Tensors, Arrays, FlaggedArrays: the how many'th variable of its kind at specified placement
+    int_type                            dataDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim*dim, Array:Size, FlaggedArray:Size
+    int_type                            flagDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim, Array:1, FlaggedArray:Size
+    mutable int_type                    dataOffset;                 ///< Index in data container where data start
+    mutable int_type                    flagOffset;                 ///< Index in flag container where data start
+    mutable int_type                    offsetFactorCell;           ///< Factors used in integration point variable index arithmetic
+    mutable int_type                    offsetFactorSector;         ///< Factors used in integration point variable index arithmetic
+    mutable int_type                    ipFactorCell;               ///< Factors used in integration point variable index arithmetic
+    mutable int_type                    ipFactorSector;             ///< Factors used in integration point variable index arithmetic
+    mutable int_type                    ipFactorFacet;              ///< Factors used in integration point variable index arithmetic
+    mutable LocalVariables              localVariables;             ///< Description of state of physical variables at given placement (variables count etc..)
+    mutable IntegrationPointVariables   integrationPointVariables;  ///< Description of state of physical variables at given placement (variables count etc..)
+    mutable IndexTracker*               indexTracker;               ///< IndexTracker used for runtime updates of offsets (addition/removal of variables)
  };
 
 

@@ -46,6 +46,57 @@ Node<dim>::Node( size_t idx,
 
 
 
+/**
+    Copy constructor also copies the pointer assignments (!).
+    
+    @attention when copy constructing manifold nodes, make sure to add this new Node to it
+*/
+template<uint32_t dim>
+Node<dim>::Node( const Node<dim>& nd )
+  : xyz_(nd.xyz_), idx_(nd.idx_),
+    parents_(nd.parents_),
+    neighbor_node_pointers_(nd.neighbor_node_pointers_),
+    manifold_(nd.manifold_),
+    at_boundary_(nd.at_boundary_),
+    BREP_entity_(nd.BREP_entity_)
+  {
+    this->LVS( nd.LVS() );
+    // NB: if this is a manifold, the new Node must be added to it,
+    //     but this can only be done once the node has been constructed
+  }
+
+
+
+
+template<uint32_t dim>
+Node<dim>::~Node()
+ {
+    manifold_ = nullptr;
+//    cerr <<"\nNode "<< Idx() <<": called destructor.";
+ }
+
+
+
+
+template<uint32_t dim>
+Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
+ {
+    if ( &nd != this ) 
+      {
+         xyz_                     = nd.xyz_;
+         idx_                     = nd.idx_;
+         parents_                 = nd.parents_;
+         neighbor_node_pointers_  = nd.neighbor_node_pointers_;
+         manifold_                = nd.manifold_;
+         at_boundary_             = nd.at_boundary_;
+         BREP_entity_             = nd.BREP_entity_;
+         this->LVS( std::move( nd.LVS() ) );
+      }
+    return *this;
+ }
+
+
+
 
 
 /**

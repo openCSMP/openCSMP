@@ -407,8 +407,8 @@ bool Index::Out( std::fstream& fp ) const
 {
   const auto flag_size = sizeof( VARIABLE_FLAG );
   const auto data_size = sizeof( int_type );
-  const int32_t var_type( type );
-  const int32_t place_type( place );
+  const int8_t var_type( type );
+  const int8_t place_type( place );
 
   fp.write( (char*)&var_type, flag_size );    // VARIABLE_TYPE
   fp.write( (char*)&place_type, flag_size );   // PLACEMENT
@@ -463,12 +463,14 @@ bool Index::Out( std::fstream& fp ) const
   return true; /// @todo (1-C) Meaningless return statement
 }
 
+
+
 bool Index::In( fstream& fp )
 {
   const auto flag_size = sizeof( VARIABLE_FLAG );
   const auto data_size = sizeof( int_type );
-  int32_t var_type ( SCALAR );
-  int32_t place_type( NODE );
+  int8_t var_type   = static_cast<int8_t>( SCALAR );
+  int8_t place_type = static_cast<int8_t>( NODE );
 
   fp.read( (char*)&var_type, flag_size );   // VARIABLE_TYPE
   fp.read( (char*)&place_type, flag_size );  // PLACEMENT
