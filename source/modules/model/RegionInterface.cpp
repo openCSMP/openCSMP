@@ -425,12 +425,18 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
                           regionName, "is potentially overlapping other regions; this case is not handled yet" );
        return;
     }
-
+    
   REGION_COMPLEX<dim>&  regionComplex( static_cast<REGION_COMPLEX<dim>& >(*this) );
   csmp::Region<dim>&    region = this->Region( regionName );
 
+  if ( erase_elmts_and_update_connectivity && region.NeedsRebuild() ) {
+       csmp_error.Note( ERROR, "RegionsInterface<dim,Model>::RemoveRegion",
+                          regionName, "is scheduled for rebuild. Thus, Element range may be compromised and unfit to communicate to MeshManager" );
+       return;
+    }
+
   if ( erase_elmts_and_update_connectivity )
-    // get mesh manager to delete elements and nodes and fix up the connectivity
+    // if the region is valid, the mesh manager can be asked to delete elements and nodes and fix up the connectivity
     regionComplex.Mesh().DeleteElementsAndRepairConnnectivity( region.CellVector().begin(), region.CellVector().end() );
 
   // finding the region in the corresponding map
@@ -2728,22 +2734,34 @@ size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* r
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
  {
-     // since this region may now contain a different number of elements
-     const bool also_remove_elmts{ false };
-     RemoveRegion("Model", also_remove_elmts );
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+     csmp::Region<dim>&  model_domain = RegionInterface<dim,REGION_COMPLEX>::Region("Model");
+
+     // the model region is affected by any changes, does it need to be updated?
+     size_t n_cells_changed = model_domain.RebuildCellAndPerimeterFaceVector();
+     size_t n_nodes_changed = model_domain.RebuildNodeVector();
+     
+     if ( n_cells_changed == 0 && n_nodes_changed ) {
+          csmp_error.Note( INFO, "RegionInterface<dim,REGION_COMPLEX>::UpdateRegions:",
+                          "Not even the region 'Model' changed. No updates needed to be made." );
+          return;
+       }
 
      // 1. rebuilding the region 'Model'
      // --------------------------------
-     const bool is_unique = ( distance(UniqueRegionsBegin(), UniqueRegionsEnd()) > 0 ) ? false : true;
-     FormModelRegion( is_unique );
-
-     csmp::Region<dim>&  model_domain = RegionInterface<dim,REGION_COMPLEX>::Region("Model");
+     if ( model_domain.NeedsRebuild() ) {
+          const bool also_remove_elmts{ false };
+          RemoveRegion("Model", also_remove_elmts );
+          const bool is_unique = ( distance(UniqueRegionsBegin(), UniqueRegionsEnd()) > 0 ) ? false : true;
+          FormModelRegion( is_unique );
+       }
 
      // 2. non-unique, potentially overlapping regions
      // ----------------------------------------------
      //    (they are rebuilt using original creation constraints)
      for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit )
-       if ( (*rit).second.NeedsRebuilt() && (*rit).first != "Model" ) {
+       if ( (*rit).second.NeedsRebuild() && (*rit).first != "Model" ) {
              auto crit = regionTraits_.find( (*rit).first );
              PropertyConstraints region_traits = ( crit == regionTraits_.end() )
                                                     ? PropertyConstraints("permeability", 1e-21,1e-5) : (*crit).second;
@@ -2757,7 +2775,7 @@ void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
      // 3. unique regions: only get modified if they have been ScheduledForRebuilt()
      // ----------------------------------------------------------------------------
      for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit )
-       if ( (*rit).second.NeedsRebuilt() ){
+       if ( (*rit).second.NeedsRebuild() ){
          // assuming the the element neighbor connectivity was updated before by the MeshManager
          (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
         std::cout << "Rebuilt Subdomain " << (*rit).first << " -> element and node vector now up to date" << std::endl;

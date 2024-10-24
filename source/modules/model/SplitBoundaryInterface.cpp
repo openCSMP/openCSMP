@@ -740,7 +740,7 @@ pair<set<string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Detec
 
   // update region on the outside of the new SplitBoundary because it needs a new node vector
   for ( auto rit=splitboundaryComplex->UniqueRegionsBegin(); rit!=splitboundaryComplex->UniqueRegionsEnd(); ++rit )
-   (*rit).second.ScheduleForRebuilt();
+   (*rit).second.ScheduleForRebuild();
 
   //update outside regions
   // RebuildSubDomainAfterChangeOfCellVector() is not sufficient because the model needs to be rebuild as well
@@ -1248,7 +1248,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     // 6. Flagging the regions on the outside of the new split boundaries for update of their connectivity
     // because they will contain new nodes
     for (size_t i : region_material_ids )
-      model.Region( region_names[ i ] ).ScheduleForRebuilt();
+      model.Region( region_names[ i ] ).ScheduleForRebuild();
 
     //update outside regions
     model.UpdateRegions();
@@ -1363,7 +1363,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
              cout << "\nSplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryBetween: split boundary '";
              cout << split_boundary_name << "' created successfully."<< endl;
              // flagging outside region for rebuild because it has new nodes
-             region2.ScheduleForRebuilt();
+             region2.ScheduleForRebuild();
              modelComplex->UpdateRegions();
              // all done
              return make_pair(split_boundary_name,true);

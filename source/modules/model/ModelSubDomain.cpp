@@ -140,16 +140,109 @@ void  ModelSubDomain<dim,CELL>::Name( const string& name )
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-void  ModelSubDomain<dim,CELL>::ScheduleForRebuilt()
+void  ModelSubDomain<dim,CELL>::ScheduleForRebuild()
  {
     rebuilt_needed_ = true;
  }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool  ModelSubDomain<dim,CELL>::NeedsRebuilt() const
+bool  ModelSubDomain<dim,CELL>::NeedsRebuild() const
  {
     return rebuilt_needed_;
  }
+
+
+
+
+/**
+     Deletes 'nullptr' cells from cell vector, retaining the sorting into interior and perimeter elements.
+     
+     @return number of cell pointers removed.
+     
+     @attention method does not account for the possibility that the deletion of interior elements creates new boundary elements and nodes which should be flagged as such.
+     This may require rebuilding the interior and perimeter ranges. For this reason the Region is flagged for rebuild in this case.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::RebuildCellAndPerimeterFaceVector()
+  {
+     // removing null-pointer cell range by range to keep track of the new beginning of perimeter cells
+     const long n_interior_cells  = InteriorCells();
+     //const long n_perimeter_cells = PerimeterCells();
+     auto new_end_interior = remove_if( cell_vec_.begin(), next(cell_vec_.begin(),n_interior_cells),
+                                        []( CELL<dim>* const ptr ) {
+                                             return ptr == nullptr;
+                                          } );
+     // get number of removed cells 1
+     long range1_remove_count = distance( new_end_interior, next(cell_vec_.begin(),n_interior_cells) );
+     
+     // shifting the perimeter cell range based on how many cells were removed from the first range
+     std::move( next(cell_vec_.begin(),n_interior_cells), cell_vec_.end(), new_end_interior );
+
+     // removing null pointer cells from perimeter cell range
+     auto new_end_perimeter = remove_if( next(cell_vec_.begin(),n_interior_cells - range1_remove_count), cell_vec_.end(),
+                                         []( CELL<dim>* const ptr ) {
+                                               return ptr == nullptr;
+                                            } );
+      // get number of removed cells 2
+     long range2_remove_count = distance( new_end_perimeter, cell_vec_.end() );
+
+     // erase the "removed" cells beyond the new logical end of the second range
+     const long n_cells_removed = range1_remove_count + range2_remove_count;
+     cell_vec_.erase( next(cell_vec_.end(),-n_cells_removed), cell_vec_.end() );
+
+     // since deletion of interior cells creates new boundary cells and boundary nodes
+     // the region is flagged for rebuild
+     if ( range1_remove_count > 0 ) ScheduleForRebuild();
+     
+     // rebuilding the boundary face vector if necessary
+     // (which is the case only if some cells on the perimeter were removed)
+     if ( range2_remove_count > 0 )
+       BuildPerimeterFaceVector( n_interior_cells - range1_remove_count );
+
+     return n_cells_removed;
+     
+  } // end RebuildCellAndPerimeterFaceVector
+     
+
+
+
+/**
+    Deletes 'nullptr' nodes from Node vector, retaining the sorting into interior and perimeter nodes
+    
+    @return total number of node pointers removed.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::RebuildNodeVector()
+  {
+     // removing null-pointer cell range by range to keep track of the new beginning of perimeter cells
+     auto new_end_interior = remove_if( node_vec_.begin(), next(node_vec_.begin(),first_bd_node_),
+                                        []( Node<dim>* const nptr ) {
+                                              return nptr == nullptr;
+                                          } );
+     // get number of removed cells
+     long range1_remove_count = distance( new_end_interior, next(node_vec_.begin(),first_bd_node_) );
+     
+     // shifting the perimeter cell range based on how many cells were removed from the first range
+     std::move( next(node_vec_.begin(),first_bd_node_), node_vec_.end(), new_end_interior );
+
+     // removing null pointer cells from perimeter range
+     auto new_end_perimeter = remove_if( next(node_vec_.begin(),first_bd_node_-range1_remove_count), node_vec_.end(),
+                                         []( Node<dim>* const nptr ) {
+                                              return nptr == nullptr;
+                                           } );
+     // get number of removed cells
+     long range2_remove_count = distance( new_end_perimeter, node_vec_.end() );
+
+     // erase the "removed" cells beyond the new logical end of the second range
+     const long n_node_ptrs_removed = range1_remove_count + range2_remove_count;
+     node_vec_.erase( next(node_vec_.end(),-n_node_ptrs_removed), node_vec_.end() );
+
+     first_bd_node_ -= range1_remove_count;
+ 
+     return n_node_ptrs_removed;
+     
+  } // end RebuildNodeVector
+
 
 
 
@@ -265,6 +358,10 @@ typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector()
 
 template<uint32_t dim, template<uint32_t> class CELL>
 const typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() const
+  { return node_vec_; }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector()
   { return node_vec_; }
 
 
@@ -5310,10 +5407,14 @@ void ModelSubDomain<dim,CELL>::NodeAttributesToCSV()
 
 
 
+
+
 /**
     Removes cells and nodes and rebuilds the    bd_face_vec_  and   node_vec_ if necessary.
     @return size_t  the number of cells removed.
 */
+/* USE RebuildCellVector() instead because it retains sorting into interior and perimeter ranges
+
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
  {
@@ -5346,7 +5447,7 @@ size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
 
     return n_cells - n_cells_new;
  }
-
+*/
 
 
 
@@ -5643,7 +5744,7 @@ size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const 
          csmp_error.Note( ERROR, "sharedPerimeterCells:", subdomain2.Name(), "is empty; nothing was done.");
          return 0U;
       }
-    if ( subdomain1.NeedsRebuilt() || subdomain2.NeedsRebuilt() ) {
+    if ( subdomain1.NeedsRebuild() || subdomain2.NeedsRebuild() ) {
          csmp_error.Note( ERROR, "sharedPerimeterCells:", "input subdomains have been flagged for rebuilt; nothing was done.");
          return 0U;
       }

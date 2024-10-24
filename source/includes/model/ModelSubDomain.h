@@ -110,12 +110,16 @@ class ModelSubDomain {
     /// assuming that a partitioned (and sorted) cell vector is in place, constructs the bd_face_vec_ by checking whether neighbor cells belong to the domain or not
     void BuildPerimeterFaceVector( int64_t interior_cells );
     
-    /// removes any cells or node pointers that were set to zero elsewhere; returns number of cells removed
-    size_t RemoveNullPointerCells();
-    
     /// for rebuilding subdomains when nodes or cells changed:  flag up for a rebuild using RebuildSubDomainAfterChangeOfCellVector
-    void ScheduleForRebuilt();
-    bool NeedsRebuilt() const;
+    void ScheduleForRebuild();
+    bool NeedsRebuild() const;
+    
+    /// deletes 'nullptr' cells from cell vector, retaining the sorting into interior and perimeter elements, and rebuilding perimeter faces as necessary
+    size_t RebuildCellAndPerimeterFaceVector();
+
+    /// deletes 'nullptr' nodes from Node vector, retaining the sorting into interior and perimeter nodes
+    size_t RebuildNodeVector();
+
 
     // ----------------------------------------
     // Indexes
@@ -146,8 +150,11 @@ class ModelSubDomain {
     /// do not remove!;  used for boolean operations
     typename std::vector<CELL<dim>*>&        CellVector();
   
-    /// reference to Node pointer vector
+    /// reference to const Node pointer vector
     const typename std::vector<Node<dim>*>&  NodeVector() const;
+
+    /// reference to Node pointer vector
+    typename std::vector<Node<dim>*>&        NodeVector();
 
     /// const iterators (cell and node pointers cannot be modified but the nodes and cells can!)
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
@@ -313,6 +320,8 @@ class ModelSubDomain {
 
     void      OutputVariableToScreen( const char* prop ) const;
     void      Out() const;
+    
+    friend class ModelSubDomain_Test;
 
   protected:
 
@@ -324,7 +333,7 @@ class ModelSubDomain {
     const PropertyDatabase<dim>&        pref_;
     std::string                         subdomain_name_;         ///< passed down when domain is created so that it can be referred to
     std::vector<CELL<dim>*>             cell_vec_;               ///< doubly sorted, interior cells first
-    std::vector<std::vector<uint32_t> > bd_face_vec_;            ///< as in second segment of cell_vec_
+    std::vector<std::vector<uint32_t> > bd_face_vec_;            ///< matching second sorted range of cell_vec_
     std::vector<csmp::Node<dim>*>       node_vec_;               ///< doubly sorted, interior nodes first
     size_t                              first_bd_node_ = std::numeric_limits<size_t>::max(); ///< begin of the perimeter nodes
     inline static int32_t               domain_count_ = 0;       ///<  reference-counting to get unique identifier for subdomains

@@ -1468,25 +1468,53 @@ template void MeshManager<3>::DetachNeighborsFrom( InterFace<3>* const );
 
 
 
+/**
+     Deletion of a Node only affects its face neighbors
+*/
+template<uint32_t dim>
+auto	MeshManager<dim>::Delete( Node<dim>*& nptr_ref ) -> typename plf::colony< Node<dim> >::iterator
+ {
+    // checking that the node is not connected to elements anymore
+    if ( nptr_ref->Parents() > 0 ) {
+         nptr_ref->Out();
+         throw csmp::Exception( ERROR, "MeshManager<dim>::Delete(Node-ptr-ref)",
+                               "Node  still belongs to Element(s). Therefore it cannot be deleted");
+      }
+ 
+    auto pfl_it = nodes_.get_iterator( nptr_ref );
+    if ( pfl_it != nodes_.end() ) {
+         // removing any potential connections that other nodes still have to the Node
+         for ( auto nit=nptr_ref->NeighborsBegin(); nit!=nptr_ref->NeighborsEnd(); ++nit )
+           (*nit)->RemoveNeighbor( nptr_ref );
+         
+         // nodes are not detached because they are shared with elements
+         nptr_ref = nullptr;
+         return nodes_.erase( pfl_it );
+      }
+    return nodes_.end();
+ }
+
+
 
 /**
       Disconnects neighbors from element.
+      @param eptr_ref reference to a pointer that is passed by reference so that it can be nulled
       @return iterator to next element in colony or end() if element could not be found.
 */
 template<uint32_t dim>
-auto	MeshManager<dim>::Delete( Element<dim>* eptr ) -> typename plf::colony< Element<dim> >::iterator
+auto	MeshManager<dim>::Delete( Element<dim>*& eptr_ref ) -> typename plf::colony< Element<dim> >::iterator
  {
     // geting iterator to element ('get_iterator' returns end, if element cannot be found)
-    auto pfl_it = elements_.get_iterator( eptr );
+    auto pfl_it = elements_.get_iterator( eptr_ref );
     // if the element exists in the colony
     if ( pfl_it != elements_.end() ) {
          // remove element from the parent element list of its connected nodes
-         for ( auto nit=eptr->NodesBegin(); nit!=eptr->NodesEnd(); ++nit )
-           (*nit)->Unassign( eptr );
+         for ( auto nit=eptr_ref->NodesBegin(); nit!=eptr_ref->NodesEnd(); ++nit )
+           (*nit)->Unassign( eptr_ref );
          // detaching neighbor elements
-         DetachNeighborsFrom( eptr );
+         DetachNeighborsFrom( eptr_ref );
          // nulling element pointer
-         eptr = nullptr;
+         eptr_ref = nullptr;
          // deleting element and returning colony iterator to next element in colony
          return elements_.erase( pfl_it );
       }
@@ -1499,13 +1527,13 @@ auto	MeshManager<dim>::Delete( Element<dim>* eptr ) -> typename plf::colony< Ele
      Deletion of a Face only affects its face neighbors
 */
 template<uint32_t dim>
-auto	MeshManager<dim>::Delete( Face<dim>* fptr ) -> typename plf::colony< Face<dim> >::iterator
+auto	MeshManager<dim>::Delete( Face<dim>*& fptr_ref ) -> typename plf::colony< Face<dim> >::iterator
  {
-    auto pfl_it = faces_.get_iterator( fptr );
+    auto pfl_it = faces_.get_iterator( fptr_ref );
     if ( pfl_it != faces_.end() ) {
-         DetachNeighborsFrom( fptr );
+         DetachNeighborsFrom( fptr_ref );
          // nodes are not detached because they are shared with elements
-         fptr = nullptr;
+         fptr_ref = nullptr;
          return faces_.erase( pfl_it );
       }
     return faces_.end();
@@ -1516,13 +1544,13 @@ auto	MeshManager<dim>::Delete( Face<dim>* fptr ) -> typename plf::colony< Face<d
      Deletion of an InterFace only affects its face neighbors
 */
 template<uint32_t dim>
-auto	MeshManager<dim>::Delete( InterFace<dim>* fptr ) -> typename plf::colony< InterFace<dim> >::iterator
+auto	MeshManager<dim>::Delete( InterFace<dim>*& fptr_ref ) -> typename plf::colony< InterFace<dim> >::iterator
  {
-    auto pfl_it = interfaces_.get_iterator( fptr );
+    auto pfl_it = interfaces_.get_iterator( fptr_ref );
     if ( pfl_it != interfaces_.end() ) {
-         DetachNeighborsFrom( fptr );
+         DetachNeighborsFrom( fptr_ref );
          // TODO: fuse nodes back together here; deleting the outside ones
-         fptr = nullptr;
+         fptr_ref = nullptr;
          return interfaces_.erase( pfl_it );
       }
     return interfaces_.end();
@@ -3063,7 +3091,7 @@ size_t MeshManager<dim>::DeleteNodesAndRepairNodeConnnectivity( typename vector<
     This check involves counting the node's parent elements that are not null pointers to make
     sure that the true state of the node is captured.
     
-    @attention method assumes that the neighbor connectivity of the elements is valid
+    @attention method assumes that the neighbor connectivity of the elements is valid and Region is intact (no corrupt pointers)
 
     The following steps are performed:
 
@@ -3133,7 +3161,7 @@ size_t MeshManager<dim>::DeleteElementsAndRepairConnnectivity( typename vector<E
                 else inside_elmt = false;
               // collecting the inside nodes for deletion
               if ( inside_elmt ) {
-                   for ( auto i{0U}; i<(*first)->Nodes(); i++ )
+                   for ( uint32_t i{0U}; i<(*first)->Nodes(); i++ )
                       interior_nodes.push_back( (*first)->N(i) );
                 }
               first++;
@@ -3148,9 +3176,7 @@ size_t MeshManager<dim>::DeleteElementsAndRepairConnnectivity( typename vector<E
           // 1.2 deleting the elements, setting pointers to zero
           size_t deleted_elements{ 0U };
           while ( first1 != last ) {
-               DetachNeighborsFrom( (*first1) );
-               elements_.erase( elements_.get_iterator( (*first1) ) );
-               (*first1) = nullptr;
+               Delete( (*first) );
                deleted_elements++;
                first1++;
             }
@@ -3195,11 +3221,7 @@ size_t MeshManager<dim>::DeleteElementsAndRepairConnnectivity( typename vector<E
      // 2.2 deleting the elements, setting pointers to zero
      size_t deleted_elements{ 0U };
      while ( first1 != last ) {
-          if ( (*first) != nullptr ) {
-               DetachNeighborsFrom( (*first1) );
-               elements_.erase( elements_.get_iterator( (*first1) ) );
-               (*first1) = nullptr;
-            }
+          Delete( (*first1) );
           deleted_elements++;
           first1++;
        }
@@ -3321,8 +3343,11 @@ auto first1{ first };
 #endif
                 for ( auto nit=(*first)->InterveningElement()->NodesBegin(); nit!=(*first)->InterveningElement()->NodesEnd(); ++nit )
                   nodes_to_delete.insert( (*nit) );
+
                 // deleting the intervening element
-                Delete( (*first)->InterveningElement() );
+                auto eit = elements_.get_iterator( (*first)->InterveningElement() );
+                (*first)->Assign( nullptr );
+                elements_.erase( eit );
             }
           
           // 1. disconnecting interface neighbors adjacent to the perimeter of the supplied interface patch

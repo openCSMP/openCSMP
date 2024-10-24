@@ -223,7 +223,8 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     uint32_t       ParentNodeNumber( uint32_t n_local, INTERFACE_SIDE side ) const;
 
     /// access to the Element object from which the original face was created if it still is there (use HasBase()
-    Element<dim>*  InterveningElement() const;
+    Element<dim>*  InterveningElement();
+    const Element<dim>*  InterveningElement() const;
 
     /// is an equi-dimensional element connected to the MIDDLE element pointer of this InterFace
     bool           HasInterveningElement() const { return middleElement_!=nullptr; }

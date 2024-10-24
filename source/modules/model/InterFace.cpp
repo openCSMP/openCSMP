@@ -979,7 +979,13 @@ Element<dim>* const InterFace<dim>::OuterParent() const
 }
 
 template<uint32_t dim>
-Element<dim>*  InterFace<dim>::InterveningElement() const
+Element<dim>*  InterFace<dim>::InterveningElement()
+{
+  return middleElement_;
+}
+
+template<uint32_t dim>
+const Element<dim>*  InterFace<dim>::InterveningElement() const
 {
   return middleElement_;
 }

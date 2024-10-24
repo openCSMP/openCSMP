@@ -1341,14 +1341,14 @@ bool ANSYS_Interface::ReadPelementBinary( FILE* fp, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     const size_t  ibytes  = sizeof(int32_t);
-    const size_t  uibytes = sizeof( uint32_t);
+    const size_t  uibytes = sizeof(uint32_t);
     size_t        entries(0);
 
     // reading element-type information record 'pelement' (unsigned int)
     // ---------------------------------------------------------------------
     fread( (void*) &entries, uibytes, 1U, fp );
     assert( entries > 0 );
-    assert( entries < ULONG_MAX );
+    assert( entries < numeric_limits<size_t>::max() );
     if( csmp_error.Verbose() )
     {
         cout <<"\n\treading "<< entries <<" finite-element type specifiers from 'pelement'..."<< endl;
@@ -1408,7 +1408,7 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
     fread( (void*) &entries, uibytes, 1U, fp );
     
     assert( entries > 0 );
-    assert( entries < ULONG_MAX );
+    assert( entries < numeric_limits<size_t>::max() );
     assert( entries == n_plist_entries_expected );
     
     if ( csmp_error.Verbose() ) {
@@ -1433,6 +1433,8 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
     return true;
 }
 
+
+
 template bool ANSYS_Interface::ReadPlistBinary( FILE*, VSet<1U>& );
 template bool ANSYS_Interface::ReadPlistBinary( FILE*, VSet<2U>& );
 template bool ANSYS_Interface::ReadPlistBinary( FILE*, VSet<3U>& );
@@ -1448,7 +1450,7 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
 
     const size_t  ibytes  = sizeof(int32_t);
     const size_t  uibytes = sizeof(uint32_t);
-    size_t        entries(0);
+    long          entries(0);
 
     // setting up the storage for 'pfverts' in VSet
     assert( vset.Elements() > 0 );
@@ -1457,7 +1459,7 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
 
     // making an array of with the number of neighbors for each element
     deque<uint32_t>  nbors( nelements );
-    size_t           n_pfverts_entries_expected{0};
+    size_t          n_pfverts_entries_expected{0};
     for ( size_t i{0U}; i<nelements; ++i ) {
          assert( vset.ElementType(i) >= -128 );
          assert( vset.ElementType(i) <=  128 );
@@ -1474,7 +1476,7 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     fread( (void*) &entries, uibytes, 1U, fp );
     
     assert( entries > 0 );
-    assert( entries < numeric_limits<int64_t>::max() );
+    assert( entries < ULONG_MAX );
     
     if ( entries != n_pfverts_entries_expected ) {
          cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
@@ -1560,7 +1562,7 @@ bool ANSYS_Interface::ReadPmaterialBinary( FILE* fp, VSet<dim>& vset )
     // ------------------------------------
     fread( (void*) &entries, uibytes, 1U, fp );
     assert( entries > 0 );
-    assert( entries < ULONG_MAX );
+    assert( entries < numeric_limits<size_t>::max() );
     if( csmp_error.Verbose() )
     {
         cout <<"\n\t"<<"reading "<< entries <<" material-type specifiers for the elements from 'pmtrl'..."<< endl;

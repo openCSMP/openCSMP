@@ -112,6 +112,8 @@ class ModelSubDomain_Test : public Test {
 
     /// tests method that creates neighbor connectivity inside of CSMP
     bool Test_EstablishNeighborConnectivity();
+    
+    void Test_RebuildCellAndNodeVectors();
 
     /// compares node locations and connectivity
     template<uint32_t dim,template<uint32_t> class simplicial_complex>

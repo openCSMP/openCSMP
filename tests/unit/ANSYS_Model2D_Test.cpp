@@ -25,7 +25,7 @@ namespace csmp {
 void ANSYS_Model2D_Test::run()
   {
     const bool verbose(false);
-    
+
     Test_ANSYS_ModelConstructionAndSaving2D();
     
     ANSYS_Model2D model( "BoxHalfs2D", "CSMP-variables.txt" );

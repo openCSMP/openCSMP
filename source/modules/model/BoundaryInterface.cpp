@@ -1762,6 +1762,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
         }
         
       model->UpdateRegions();
+//      assert( model->Region("Model").Cells() == model->Mesh().Elements() );
       cout << "\n\n EstablishBoxBoundaries: done!\n";
       return true;
       
@@ -1954,6 +1955,7 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
       }
     // all non-unique regions must be rebuilt
     model->UpdateRegions();
+    assert( model->Mesh().Elements() == model->Region("Model").Cells() );
 
 	  cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
     // if there are some unattributed faces left the method returs false

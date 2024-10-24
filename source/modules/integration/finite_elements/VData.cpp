@@ -3316,7 +3316,7 @@ void  VData::EstablishElementConnectivity2D()
                      // sorting the angles to find the edges that are closest to a straight continuation
                      // (= smallest angles for aligned, edges and closest to 180o for ones greater that 90o)
                      sort( inter_element_angles.begin(), inter_element_angles.end(),
-                           [](auto& a, auto& b) -> bool { return a.first < b.first; } );
+                           [](const pair<double,size_t>& a, const pair<double,size_t>& b) -> bool { return a.first < b.first; } );
                       // for any 2 edges unique connections are made until there are no more elements to connect
                       set<size_t> assigned_elements;
                       for ( auto& aet : inter_element_angles ) {

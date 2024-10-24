@@ -33,6 +33,8 @@ void ModelSubDomain_Test::run()
      // Test 0: methods of subdomain in live model
      // ------------------------------------------
      _test( Test_EstablishNeighborConnectivity() );
+     
+     Test_RebuildCellAndNodeVectors();
   
      bool test_binary_file_recovery1(true),
           verbose(true);
@@ -76,6 +78,78 @@ void ModelSubDomain_Test::run()
        }
         
   } // end run
+
+
+
+
+void ModelSubDomain_Test::Test_RebuildCellAndNodeVectors()
+ {
+    // using a simple model from vsetMakers
+    VSet<2> vset;
+    create_TrianglePatch_VSet( vset );
+    Model<2>  model( vset, "MeshManager_Test-variables.txt" );
+    Region<2> model_domain = model.Region("Model");
+    auto      n_interior_elmts  = distance( model_domain.CellsBegin(), model_domain.PerimeterCellsBegin() );
+    auto      n_perimeter_elmts = distance( model_domain.PerimeterCellsBegin(), model_domain.CellsEnd() );
+    _test( n_interior_elmts == model_domain.InteriorCells() );
+    _test( n_interior_elmts == model_domain.Cells() - n_perimeter_elmts );
+    model_domain.UpdateMemberIndexes();
+    // remembering the perimeter faces
+    vector<uint32_t> original_perimeter_faces;
+    original_perimeter_faces.reserve( model_domain.PerimeterCells() );
+    for ( size_t eid{model_domain.InteriorCells()}; eid<model_domain.Cells(); ++eid )
+      for ( uint32_t i{0u}; i<model_domain.PerimeterFaces(eid); ++i )
+        original_perimeter_faces.push_back( model_domain.PerimeterFace(eid,i) );
+
+    
+    // TESTING CELL VECTOR REBUILD
+    
+    // deleting central element (3) from model (node number stays the same)
+    _test( model_domain.IsPerimeterCell( model_domain.E(3) ) == false );
+    model.Mesh().Delete( (*next(model_domain.CellVector().begin(),3)) );
+    model_domain.RebuildCellAndPerimeterFaceVector();
+    _test( model_domain.Cells() == model.Mesh().Elements() );
+    _test( model_domain.InteriorCells() == n_interior_elmts - 1 );
+    _test( model_domain.PerimeterCells() == n_perimeter_elmts );
+    // the perimeter face vector should still be valid
+    vector<uint32_t> perimeter_faces;
+    perimeter_faces.reserve( model_domain.PerimeterCells() );
+    for ( size_t eid{model_domain.InteriorCells()}; eid<model_domain.Cells(); ++eid )
+      for ( uint32_t i{0u}; i<model_domain.PerimeterFaces(eid); ++i )
+        perimeter_faces.push_back( model_domain.PerimeterFace(eid,i) );
+    _test( perimeter_faces == original_perimeter_faces );
+
+    // deleting perimeter element (5) from model (node number stays the same)
+    _test( model_domain.IsPerimeterCell( model_domain.E(5) ) == true );
+    model.Mesh().Delete( (*next(model_domain.CellVector().begin(),5)) );
+    model_domain.RebuildCellAndPerimeterFaceVector();
+    _test( model_domain.Cells() == model.Mesh().Elements() );
+    _test( model_domain.InteriorCells() == n_interior_elmts - 1 );
+    _test( model_domain.PerimeterCells() == n_perimeter_elmts - 1 );
+    // has the perimeter face vector been rebuild?
+    vector<uint32_t> perimeter_faces2;
+    perimeter_faces2.reserve( model_domain.PerimeterCells() );
+    for ( size_t eid{model_domain.InteriorCells()}; eid<model_domain.Cells(); ++eid )
+      for ( uint32_t i{0u}; i<model_domain.PerimeterFaces(eid); ++i )
+        perimeter_faces2.push_back( model_domain.PerimeterFace(eid,i) );
+    _test( perimeter_faces2 != original_perimeter_faces );
+
+
+    // TESTING NODE VECTOR REBUILD
+    
+    // deleting the next perimeter element
+    _test( model_domain.IsPerimeterCell( model_domain.E(4) ) == true );
+    _test( model_domain.IsPerimeterCell( model_domain.E(6) ) == true );
+    model.Mesh().Delete( (*next(model_domain.CellVector().begin(),4)) );
+    model.Mesh().Delete( (*next(model_domain.CellVector().begin(),6)) );
+    model_domain.RebuildCellAndPerimeterFaceVector();
+    // after rebuild there should be a single orphan node (5) that needs to be deleted
+    model.Mesh().Delete( (*next(model_domain.NodeVector().begin(),5)) );
+    model_domain.RebuildNodeVector();
+    _test( model_domain.Nodes() == model.Mesh().Nodes() );
+    // add further checks here
+    
+ } // end Test_RebuildCellAndNodeVectors
 
 
 

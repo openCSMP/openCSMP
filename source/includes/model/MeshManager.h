@@ -282,14 +282,17 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
   // --------------------------------------------
   // NB: elements are responsible for their nodes, nodes for their manifolds
   
-  /// disconnects neighbors, removes Element from node-parent container, and deletes element, reports true when deletion succeeded
-  auto Delete( Element<dim>* ) -> typename plf::colony< Element<dim> >::iterator;
+  /// disconnects neighbors, removes Element from node-parent container and deletes element, returns iterator to next Element if deletion succeeded
+  auto Delete( Node<dim>*& ) -> typename plf::colony< Node<dim> >::iterator;
 
-  /// disconnects neighbors, deletes Face, and reports true when deletion succeeded
-  auto Delete( Face<dim>* ) -> typename plf::colony< Face<dim> >::iterator;
+  /// disconnects neighbors, removes Element from node-parent container and deletes element, returns iterator to next Element if deletion succeeded
+  auto Delete( Element<dim>*& ) -> typename plf::colony< Element<dim> >::iterator;
 
-  /// disconnects neighbors, deletes InterFace, and reports true when deletion succeeded
-  auto Delete( InterFace<dim>* ) -> typename plf::colony< InterFace<dim> >::iterator;
+  /// disconnects neighbors, deletes Face, , returns iterator to next Face if deletion succeeded
+  auto Delete( Face<dim>*& ) -> typename plf::colony< Face<dim> >::iterator;
+
+  /// disconnects neighbors, deletes InterFace, , returns iterator to next InterFace if deletion succeeded
+  auto Delete( InterFace<dim>*& ) -> typename plf::colony< InterFace<dim> >::iterator;
   
   /// any non-nullpointer neighbors the element type of which is unknown (global operation on all cells)
   template<template<uint32_t> class CELL>
