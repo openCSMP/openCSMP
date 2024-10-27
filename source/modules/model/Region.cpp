@@ -1202,8 +1202,13 @@ size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh )
    
    // obtain pointers to all elements
    this->cell_vec_.reserve( mesh.Elements() );
-   for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it )
-     this->cell_vec_.push_back( &(*it) );
+   for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it ) {
+        assert( (*it).FE() != nullptr );
+#ifndef NDEBUG
+//cout <<" "<< parseAbbreviated_FE_Type( (*it).FE_Type() );
+#endif
+        this->cell_vec_.push_back( &(*it) );
+     }
    
    // obtain pointers to all nodes
    this->node_vec_.reserve( mesh.Nodes() );

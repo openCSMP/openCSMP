@@ -262,7 +262,8 @@ bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file){
 
     ANSYS_Model2D model(mesh_file, regions_file, variables_file, true, true );
 
-    pair<set<string>,bool> sb_name = model.CreateSplitBoundaryFrom("FRACTURE");
+    const bool retain_elmts_as_intervening_elmts{ false };
+    pair<set<string>,bool> sb_name = model.CreateSplitBoundaryFrom("FRACTURE",retain_elmts_as_intervening_elmts);
 
     int32_t material_id = 1;
     model.InsertLowerDimensionalRegionsIntoSplitBoundaries(material_id);
@@ -307,7 +308,8 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
     ANSYS_Model2D model(mesh_file, regions_file, variables_file, true, true);
 
     //split boundary construction
-    pair<set<string>,bool> sb_name  = model.CreateSplitBoundaryFrom( "FRACTURE" );
+    const bool retain_elmts_as_intervening_elmts{ false };
+    pair<set<string>,bool> sb_name  = model.CreateSplitBoundaryFrom( "FRACTURE", retain_elmts_as_intervening_elmts );
 
     int32_t material_id{ 1U };
     model.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
@@ -526,7 +528,7 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
        cerr <<"\nRecode this so that it does the right thing!\n";
        model->CreateInternalBoundaryFrom( (*it).c_str() );
        Boundary<dim>& bdry = model->Boundary( (*it).c_str() );
-       model->CreateSplitBoundaryFrom( bdry );
+       model->CreateSplitBoundaryFrom( bdry, false );
     }
 
   // 4. creating lower-dimensional stand-alone meshes from SplitBoundary objects, and 

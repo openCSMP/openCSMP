@@ -12,13 +12,6 @@ namespace csmp {
 Element_Test::Element_Test()
 {
 }
-	
-  
-  
-Element_Test::~Element_Test()
-{
-}
-	
   
   
 /**   
@@ -74,6 +67,16 @@ void Element_Test::MoveSemanticsTest()
                      e2( 2, &fe_t, &tria, evars, ivars, mtrl_idx ),
                      e3( 3, &fe_t, &tria, evars, ivars, mtrl_idx ),
                      e4( 4, &fe_t, &tria, evars, ivars, mtrl_idx );
+                     
+  // writing some non-NaN data into the variable storage
+  Element<2>::Data edata;
+  edata.flags = { PLAIN, ANY, INIT_GUESS, INIT_COND, FIELD_DATA, PERIODIC, DIRICH, NEUMANN, ROBIN };
+  edata.data  = { 0., 1., 2., 3., 4., 5., 6., 7., 8. };
+  e0.LVS( edata );
+  e1.LVS( edata );
+  e2.LVS( edata );
+  e3.LVS( edata );
+  e4.LVS( edata );
  
   csmp::Node<2U> n0, n1, n2, n3, n4, n5, n6, n7;
   // quad 1
@@ -128,40 +131,48 @@ void Element_Test::MoveSemanticsTest()
   
   // 1. testing the copy and move assigments and constructors
   // --------------------------------------------------------
+
   // copy constructor
   // ----------------
+  if ( verbose_ ) cout <<"\n\n"<<"Element_Test::MoveSemanticsTest: "<< endl;
+  if ( verbose_ ) cout <<"\n\t"<<"testing copy construction:"<< endl;
   csmp::Element<2U> e1_copy( e1 );
-  _test( e1 == e1_copy );
-  // are they having the same nodes & neighbors ?
-  for ( uint32_t i{0u}; i<e1.Nodes(); ++i ) {
-       _test( e1.N(i) == e1_copy.N(i) );
-       _test( e1.N(i)->AtBoundary() == e1_copy.N(i)->AtBoundary() );
-    }
-  for ( auto i{0}; i<e1.Neighbors(); ++i )
-    _test( e1.Neighbor(i) == e1_copy.Neighbor(i) );
+  // inbuilt assignment operator
+  _test( e1_copy == e1 );
+  CompareElements( e1_copy, e1 );
     
-  // assignment
-  csmp::Element<2U> e1_copy2 = e1;
-  _test( e1 == e1_copy2 );
-  // are they having the same nodes & neighbors ?
-  for ( uint32_t i{0}; i<e1.Nodes(); ++i )
-    _test( e1.N(i) == e1_copy2.N(i) );
-  for ( uint32_t i{0}; i<e1.Neighbors(); ++i )
-    _test( e1.Neighbor(i) == e1_copy2.Neighbor(i) );
+  // assignment operator
+  // -------------------
+  if ( verbose_ ) cout <<"\n\t"<<"testing assignment:"<< endl;
+  csmp::Element<2U> e1_assigned( &fe_t );
+  e1_assigned = e1;
+  _test( e1_assigned == e1 );
+  CompareElements( e1_assigned, e1 );
     
-  // move constructor & assigment operator
-  // -------------------------------------
-  // forced call of of move constructor
-  // most comprehensive constructor but without nodes and neighbors
-  csmp::Element<2U> e1_moved( std::move( Element<2>( 1, &fe_q, &quad, evars, ivars, mtrl_idx ) ) );
-  _test( e1_moved.Idx() == e1.Idx() );
-  _test( e1_moved.Material_ID() == e1.Material_ID() );
-  _test( e1_moved.IsSurface() == e1.IsSurface() );
-  _test( e1_moved.FE_Type() == e1.FE_Type() );
-  
-  if ( verbose_ ) e1_moved.OutLVS();
+  // move constructor
+  // ----------------
+  if ( verbose_ ) cout <<"\n\t"<<"testing move constructor:"<< endl;
+  csmp::Element<2U> elmt_to_move( e1 );
+  // move construction triggered by 'vector::emplace_back'
+  vector<csmp::Element<2U>> moved_elmt;
+  moved_elmt.emplace_back( std::move(elmt_to_move) ); 
+  _test( moved_elmt[0] == e1 );
+  CompareElements( moved_elmt[0], e1 );
+
+  // move assignment operator
+  // ------------------------
+  if ( verbose_ ) cout <<"\n\t"<<"testing move assignment:"<< endl;
+  csmp::Element<2U> e1_moved2( &fe_t );
+  e1_moved2 = std::move( e1_copy );
+  _test( e1_moved2 == e1 );
+  CompareElements( e1_moved2, e1 );
+
+  if ( verbose_ ) cout <<"\n\t"<<"testing moved variable storage:"<< endl;
+  if ( verbose_ ) moved_elmt[0].OutLVS();
   
   // forced move assignment to get a completely initialised element
+  // --------------------------------------------------------------
+  if ( verbose_ ) cout <<"\n\t"<<"testing forced move assignment:"<< endl;
   csmp::Element<2U> e0_move_assigned( &fe_q, &quad );
   e0_move_assigned = std::move( e0 );
   _test( e0_move_assigned.Idx() == 0 );
@@ -179,6 +190,54 @@ void Element_Test::MoveSemanticsTest()
   _test( e0_move_assigned.Neighbor(3) == nullptr );
 
  } // end MoveSemanticsTest
+
+
+
+template<uint32_t dim>
+void Element_Test::CompareElements( const Element<dim>& a, const Element<dim>& b )
+ {
+   // testing the policies
+   _test( a.FE() == b.FE() );
+   _test( a.FV() == b.FV() );
+   if ( a.FE() && b.FE() )
+     _test( a.FE_Type() == b.FE_Type() );
+   
+   _test( a.Idx()         == b.Idx() );
+   _test( a.Material_ID() == b.Material_ID() );
+   _test( a.Region_ID()   == b.Region_ID() );
+
+   // local variable storage
+//   _test( dynamic_cast<typename Element<dim>::LocalVariableStorage>(a) == b.LVS() ); // dynamic_cast<typename Element<dim>::LocalVariableStorage>(b) );
+   auto adata = a.LVS();
+   auto bdata = b.LVS();
+   _test( adata.flags == bdata.flags );
+   _test( adata.data  == bdata.data );
+
+  // connected nodes
+  _test( a.Nodes() == b.Nodes() );
+  if ( a.Nodes() == b.Nodes() )
+    for ( uint32_t i{0u}; i<a.Nodes(); ++i ) {
+         _test( a.N(i) == b.N(i) );
+         // making sure that there are nodes present
+         if ( a.N(i) && b.N(i) )
+           _test( a.N(i)->AtBoundary() == b.N(i)->AtBoundary() );
+      }
+      
+  // neighbors
+  _test( a.Neighbors() == b.Neighbors() );
+  _test( a.ConnectedNeighbors() == b.ConnectedNeighbors() );
+  if ( a.Neighbors() == b.Neighbors() )
+     for ( uint32_t i{0u}; i<a.Neighbors(); ++i ) {
+          _test( a.Neighbor(i) == b.Neighbor(i) );
+          if ( (a.Neighbor(i) && b.Neighbor(i)) &&
+               (a.Neighbor(i)->FE() && b.Neighbor(i)->FE()) )
+            _test( a.Neighbor(i)->FE_Type() == b.Neighbor(i)->FE_Type() );
+          // uses element member function for comparison
+          _test( a.Neighbor(i) == b.Neighbor(i) );
+       }
+ }
+
+
 
 
 

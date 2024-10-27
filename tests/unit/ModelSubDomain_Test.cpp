@@ -106,7 +106,7 @@ void ModelSubDomain_Test::Test_RebuildCellAndNodeVectors()
     
     // deleting central element (3) from model (node number stays the same)
     _test( model_domain.IsPerimeterCell( model_domain.E(3) ) == false );
-    model.Mesh().Delete( (*next(model_domain.CellVector().begin(),3)) );
+    model.Mesh().Delete( next(model_domain.CellVector().begin(),3) );
     model_domain.RebuildCellAndPerimeterFaceVector();
     _test( model_domain.Cells() == model.Mesh().Elements() );
     _test( model_domain.InteriorCells() == n_interior_elmts - 1 );
@@ -121,7 +121,7 @@ void ModelSubDomain_Test::Test_RebuildCellAndNodeVectors()
 
     // deleting perimeter element (5) from model (node number stays the same)
     _test( model_domain.IsPerimeterCell( model_domain.E(5) ) == true );
-    model.Mesh().Delete( (*next(model_domain.CellVector().begin(),5)) );
+    model.Mesh().Delete( next(model_domain.CellVector().begin(),5) );
     model_domain.RebuildCellAndPerimeterFaceVector();
     _test( model_domain.Cells() == model.Mesh().Elements() );
     _test( model_domain.InteriorCells() == n_interior_elmts - 1 );
@@ -140,11 +140,11 @@ void ModelSubDomain_Test::Test_RebuildCellAndNodeVectors()
     // deleting the next perimeter element
     _test( model_domain.IsPerimeterCell( model_domain.E(4) ) == true );
     _test( model_domain.IsPerimeterCell( model_domain.E(6) ) == true );
-    model.Mesh().Delete( (*next(model_domain.CellVector().begin(),4)) );
-    model.Mesh().Delete( (*next(model_domain.CellVector().begin(),6)) );
+    model.Mesh().Delete( next(model_domain.CellVector().begin(),4) );
+    model.Mesh().Delete( next(model_domain.CellVector().begin(),6) );
     model_domain.RebuildCellAndPerimeterFaceVector();
     // after rebuild there should be a single orphan node (5) that needs to be deleted
-    model.Mesh().Delete( (*next(model_domain.NodeVector().begin(),5)) );
+    model.Mesh().Delete( next(model_domain.NodeVector().begin(),5) );
     model_domain.RebuildNodeVector();
     _test( model_domain.Nodes() == model.Mesh().Nodes() );
     // add further checks here

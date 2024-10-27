@@ -96,7 +96,7 @@ void SneddonCrack_VVCase::run()
     bool plane_strain = true; //no analy sol implemented for false
     const double ym (1.0e9), pr(0.3), P0(1.0e7);
                  //s_right(10.0e6), s_top(10.0e6), s_bottom(10.0e6), s_left(10.0e6);
-    bool quarterpoint = false;
+// not used    bool quarterpoint = false;
 
     // Model configuration:
     //Input file directory locations
@@ -113,9 +113,9 @@ void SneddonCrack_VVCase::run()
     bool binary(true), regions(true);
     ANSYS_Model2D model( mesh_file.c_str(), regions_file.c_str(), vars_file.c_str(), binary, regions);    // Constractor for empty variables
 
-    std::string sb_name = *(model.CreateSplitBoundaryFrom( "FRACTURE" ).first.begin()) ; //relies on split boundary naming convention
-    std::string sb_reg  = *(model.InsertLowerDimensionalRegionsIntoSplitBoundaries(0).begin() );
-    //_test( model.Region("Model").Contains( *(model.Region("FRACTURE_SPLIT_BOUNDARY_REGION").ElementsBegin()) ) );
+    const bool preserve_input_line_elmts{ true };
+    string sb_name = *(model.CreateSplitBoundaryFrom( "FRACTURE", preserve_input_line_elmts ).first.begin()) ; //relies on split boundary naming convention
+    string sb_reg  = "FRACTURE"; //  *(model.InsertLowerDimensionalRegionsIntoSplitBoundaries(0).begin() );
     /// -------------------------------
     /// Setting up Fracture Configuration
     /// -------------------------------

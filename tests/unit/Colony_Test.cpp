@@ -403,6 +403,19 @@ bool Colony_Test::TestColonyWith_Element()
   elmt_colony.insert( e3 );
   elmt_colony.insert( e4 );
   
+  // checking the content of the colony with the range operator
+  for ( auto i : elmt_colony ) {
+       _test( i.FE() != nullptr );
+       _test( i.FE_Type() != UNKNOWN );
+       _test( i.Idx() < 5 );
+    }
+  // checking the content of the colony with iterators
+  for ( auto it=elmt_colony.begin(); it!=elmt_colony.end(); ++it ) {
+       _test( (*it).FE() != nullptr );
+       _test( (*it).FE_Type() != UNKNOWN );
+       _test( (*it).Idx() < 5 );
+    }
+  
   if ( verbose_ ) {
       cout <<"\nTestColonyWith_Element2: rebuilt colony with all original elements.\n";
       for ( auto i : elmt_colony ) i.Out();
@@ -410,7 +423,7 @@ bool Colony_Test::TestColonyWith_Element()
   
   return true;
 
-} // end TestColonyWith_Element2
+} // end TestColonyWith_Element
   
   
   

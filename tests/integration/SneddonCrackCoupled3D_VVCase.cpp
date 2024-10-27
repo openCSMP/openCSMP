@@ -121,9 +121,10 @@ void SneddonCrackCoupled3D_VVCase::run()
     bool irregular(false), binary(true);
     ANSYS_Model3D model( mesh_file.c_str(), regions_file.c_str(), vars_file.c_str(), binary );    // Constractor for empty variables
 
-    std::string sb_name = *(model.CreateSplitBoundaryFrom( "FRACTURE" ).first.begin()) ; //relies on split boundary naming convention
-    std::string sb_reg  = *(model.InsertLowerDimensionalRegionsIntoSplitBoundaries(0).begin() );
-
+    const bool retain_elmts_as_intervening_elmts{ true };
+    string sb_name = *(model.CreateSplitBoundaryFrom( "FRACTURE", retain_elmts_as_intervening_elmts ).first.begin()) ; 
+    // string sb_reg  = *(model.InsertLowerDimensionalRegionsIntoSplitBoundaries(0).begin() );
+    string sb_reg  = "FRACTURE";
 
     //testing region model has the new unique region
     //_test( model.Region("Model").Contains( *(model.Region("FRACTURE_SPLIT_BOUNDARY_REGION").ElementsBegin()) ) );

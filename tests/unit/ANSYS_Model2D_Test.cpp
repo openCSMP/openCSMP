@@ -473,8 +473,9 @@ void  ANSYS_Model2D_Test::Test_CreateSplitBoundaries()
     size_t n_elmts_region1 = model.Region( "INTERFACE1" ).Cells();
     size_t n_elmts_region2 = model.Region( "INTERFACE2" ).Cells();
 
-    pair<set<string>,bool> splitBoundaryName1 = model.CreateSplitBoundaryFrom( "INTERFACE1" );
-    pair<set<string>,bool> splitBoundaryName2 = model.CreateSplitBoundaryFrom( "INTERFACE2" );
+    const bool retain_input_line_elmts{ false };
+    pair<set<string>,bool> splitBoundaryName1 = model.CreateSplitBoundaryFrom( "INTERFACE1", retain_input_line_elmts );
+    pair<set<string>,bool> splitBoundaryName2 = model.CreateSplitBoundaryFrom( "INTERFACE2", retain_input_line_elmts );
     assert( splitBoundaryName1.first.size() == 1 );
     assert( splitBoundaryName2.first.size() == 1 );
     _test( model.SplitBoundary( (*splitBoundaryName1.first.begin()) ).Cells() == n_elmts_region1 );

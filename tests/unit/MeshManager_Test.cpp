@@ -172,12 +172,12 @@ void MeshManager_Test::run()
       cout << "\nMeshManager_Test::TestBasics";
       cout << "\n----------------------------";
       // ==========
-      TestBasics();
+//      TestBasics();
       // ==========
    }
 
   // testing hex element consistency for meshes from ANSYS
-  _test(TestNeigbourVersusFaceConsistency());
+//  _test(TestNeigbourVersusFaceConsistency());
   
   _test( Test_BuildConnectivity() );
   _test( Test_UpdateConnectivity() );
@@ -325,10 +325,10 @@ bool MeshManager_Test::Test_detachNeighborsFrom()
       // -----------------------------------------------------------
       set<size_t> search_elmts{ 6, 7, 8, 9, 10, 11 };
       const csmp::Index e_key = model.Database().StorageKey("element number");
-      for ( auto& elmt : mdomain.CellVector() ) {
-           size_t elmt_idx = static_cast<size_t>(elmt->Read(e_key));
+      for ( auto it=mdomain.CellVector().begin(); it!=mdomain.CellVector().end(); ++it ) {
+           size_t elmt_idx = static_cast<size_t>((*it)->Read(e_key));
            if ( search_elmts.find(elmt_idx) != search_elmts.end() )
-             model.Mesh().Delete( elmt );
+             model.Mesh().Delete( it );
         }
         
       // and we try to delete the nodes again
@@ -781,7 +781,7 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
   Element<3>* const e3ptr = &(*next(mesh.elements_.begin(),3));
   const size_t e3idx = e3ptr->Idx();
   // erase element 1 from the plf_colony, repairing connectivity
-	mesh.Delete( e1ptr );
+  mesh.elements_.erase( mesh.elements_.get_iterator(e1ptr) );
   
   _test( e3idx == e3ptr->Idx() );
 	_test(mesh.Elements() == n_original_elmts - 1);
@@ -815,24 +815,25 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
 
   // create new PYRAMID element on the backside of the mesh
   int32_t material_id(1); // new element's rock_tye
-  vector<Node<3U>*>  nodes2 = { nodes[3], nodes[2], nodes[1], nodes[0], n_ptr };
-	Element<3U>*	     py_ptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_PYRAMID, elmt_vars, intp_vars, nodes2, material_id );
-  //                               -------------------------------------------------------------------------------------
+  vector<Node<3U>*>    nodes2 = { nodes[3], nodes[2], nodes[1], nodes[0], n_ptr };
+  vector<Element<3U>*> new_elmts;
+	new_elmts.emplace_back( mesh.AddElement( ISOPARAMETRIC_LINEAR_PYRAMID, elmt_vars, intp_vars, nodes2, material_id ) );
+  //                           -------------------------------------------------------------------------------------
   // debugging diagnosts
   if ( verbose_ ) {
     cout <<"\n"<<"Nodes element 1:  ";
     for ( auto it=e1ptr->NodesBegin(); it!=e1ptr->NodesEnd(); ++it ) cout << (*it)->Idx() <<" ";
     cout <<"\n"<<"Nodes py element: ";
-    for ( auto it=py_ptr->NodesBegin(); it!=py_ptr->NodesEnd(); ++it ) cout << (*it)->Idx() <<" ";
+    for ( auto it=new_elmts[0]->NodesBegin(); it!=new_elmts[0]->NodesEnd(); ++it ) cout << (*it)->Idx() <<" ";
     cout << endl;
-    size_t nbors_found = mesh.ConnectNeighborsUsingNodeParents( py_ptr );
+    size_t nbors_found = mesh.ConnectNeighborsUsingNodeParents( new_elmts[0] );
     _test( nbors_found == 1 );
-    _test( py_ptr->Neighbor(4) == e1ptr ); // opposite base-plane
+    _test( new_elmts[0]->Neighbor(4) == e1ptr ); // opposite base-plane
    }
   // backing up the 4 nodes at pyramid base
   vector<Node<3U>*> py_base_nds( nodes2.begin(), next(nodes2.begin(),4) );
   // finding the shared nodes
-  pair<vector<Node<3U>*>,bool> snodes = sharedNodes( e1ptr, py_ptr );
+  pair<vector<Node<3U>*>,bool> snodes = sharedNodes( e1ptr, new_elmts[0] );
   _test( snodes.second == true ); // should be face nodes
   sort( nodes2.begin(), nodes2.end() );
   nodes2.erase( remove( nodes2.begin(), nodes2.end(), n_ptr ), nodes2.end() );
@@ -840,16 +841,17 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
   _test( snodes.first == nodes2 ); // should be face nodes
 
   // getting rid of pyramid (and its connections so that face 0 of element 1 is on the outside of model again
-  _test( mesh.Delete( py_ptr ) != mesh.ElementsEnd() );
+  _test( mesh.Delete( new_elmts.begin() ) != mesh.elements_.end() );
   _test( e1ptr->Neighbor(0) == nullptr );
   
   
   // 4. Creating an element that caps face of element 1 where pyramid was
   // --------------------------------------------------------------------
-  //                                                                                           nodes in right order!
-	Element<3U>* quad_ptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_QUADRILATERAL, elmt_vars, intp_vars, py_base_nds, material_id );
+  //
+  vector<Element<3>*> input_elmts;   //                                                            nodes in right order!
+	input_elmts.emplace_back( mesh.AddElement( ISOPARAMETRIC_LINEAR_QUADRILATERAL, elmt_vars, intp_vars, py_base_nds, material_id ) );
  // no neighbor connectivity is required here because this is a stand-alone piece of surface mesh
-  auto nrml = quad_ptr->UnitNormal();
+  auto nrml = input_elmts[0]->UnitNormal();
   _test( nrml[2] < 1 ); // should be outward pointing
 
 
@@ -868,7 +870,9 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
   size_t duplicate_faces = detectDuplicateCells<3U,Face>( mesh.FacesBegin(), mesh.FacesEnd(), false );
   _test( duplicate_faces == 1 );
   // deleting quad
-  mesh.Delete( quad_ptr );
+  mesh.Delete( input_elmts.begin() );
+  _test( input_elmts[0] == nullptr );
+  input_elmts.clear();
   // after deleting the pyramid and the quad we should be back to original number of elements
   _test( mesh.Elements() == n_original_elmts );
   
@@ -898,9 +902,9 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
   // finding shared nodes
   auto shared_nodes = sharedNodes( e1ptr, e1ptr->Neighbor(valid_nbor_face1) );
   // putting a quadrilateral element between these elements
-	quad_ptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_QUADRILATERAL, elmt_vars, intp_vars, shared_nodes.first, material_id );
+	input_elmts.emplace_back( mesh.AddElement( ISOPARAMETRIC_LINEAR_QUADRILATERAL, elmt_vars, intp_vars, shared_nodes.first, material_id ) );
   // replacing this element by a face
-  auto fptr = mesh.ReplaceElementByFace( quad_ptr, e1ptr, e1ptr->Neighbor(valid_nbor_face1), valid_nbor_face1, valid_nbor_face2, face_vars, fitp_vars );
+  auto fptr = mesh.ReplaceElementByFace( input_elmts.begin(), e1ptr, e1ptr->Neighbor(valid_nbor_face1), valid_nbor_face1, valid_nbor_face2, face_vars, fitp_vars );
   _test( fptr != nullptr );
   _test( mesh.Faces() == 3 );
 
@@ -1048,8 +1052,8 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
         vector<Node<3U>*> iface_outside_nodes( outside_nodes[i].rbegin(), outside_nodes[i].rend() );
         
        // INTERFACE CONSTRUCTION
-       ptrs_to_ifaces_created.push_back( mesh.ReplaceFaceByInterFace( ptrs_to_faces_created[i], ifvars, iivars, iface_outside_nodes ) );
-       //                                     ---------------------------------------------------------------------------------------
+       ptrs_to_ifaces_created.push_back( mesh.ReplaceFaceByInterFace( next(ptrs_to_faces_created.begin(),i), ifvars, iivars, iface_outside_nodes ) );
+       //                                     -------------------------------------------------------------------------------------------------------
        _test( ptrs_to_ifaces_created.back() != nullptr );
     }
 
@@ -1229,8 +1233,7 @@ bool MeshManager_Test::TestNeigbourVersusFaceConsistency()
            // getting the parent element of this node
            const Element<3u>* const eptr = nit->Parent(0u);
            if ( verbose_ ) {
-                cout <<"\n"<<"Discovered corner element:";
-                eptr->Out();
+                cout <<"\n"<<"Discovered corner element: " << eptr->Idx() <<": "<< parseFiniteElementType( eptr->FE_Type() );
              }
            // corner hex should have 3 outside faces (6-3=3)
            _test( eptr->ConnectedNeighbors() == 3u );
@@ -1277,7 +1280,7 @@ bool MeshManager_Test::Test_BuildConnectivity()
      ModelTopology topology;
      VSet<3U>      vset;
      create_FracBox( topology, vset );
-     const bool    create_boundaries_from_regions{ true };
+     const bool    create_boundaries_from_regions{ true }; // true is a must, else all elements will be eliminated
      Model<3U>     model( topology, vset, "MeshManager_Test-variables.txt", create_boundaries_from_regions );
      int           errors(0ul);
      

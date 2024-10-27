@@ -46,7 +46,7 @@ We perform validity checks on Read/Store etc in debug mode only, that is with no
 
 @attention The variable storage is implicitly coupled with the PropertyDatabase through the Index and its offset calculation performed there
 
-@todo (3-D) We could now even go for a single Read/Write function templatized on the Variable type. Variable placement would then be needed to be available in variables.
+@todo (3-D) We could now even go for a single Read/Write function templatized on Variable type. Variable placement would then be needed to be available in variables.
 @note It's probably not sensible to merge duplicated functionality here for performance reasons
 @todo (2-D) DocMe (index arithmetic)
 */
@@ -58,12 +58,18 @@ class LocalVariableStorage {
   public:
     // ctors, dtor and assignment
     LocalVariableStorage() {}
-    LocalVariableStorage( const LocalVariables& lv );
-    LocalVariableStorage( const LocalVariables& lv, const IntegrationPointVariables& iv );
+    LocalVariableStorage( const LocalVariables& );
+    LocalVariableStorage( const LocalVariables&, const IntegrationPointVariables& );
+    
+    LocalVariableStorage( const LocalVariableStorage<dim,STOREE>& );
+    LocalVariableStorage( LocalVariableStorage<dim,STOREE>&& );
+    
+    // comparison of data stored with another storage
+    bool operator==( const LocalVariableStorage<dim,STOREE>& ) const;
 
     // size ops
-    void            ResizePropertyStorage( const LocalVariables& lv );
-    void            ResizePropertyStorage( const LocalVariables& lv, const IntegrationPointVariables& iv );
+    void            ResizePropertyStorage( const LocalVariables& );
+    void            ResizePropertyStorage( const LocalVariables&, const IntegrationPointVariables& );
     void            ResizePropertyStorage( int_type dataComponents, int_type flagComponents );
     void            AddProperty( const csmp::Index& );
     void            DeleteProperty( const csmp::Index& );
@@ -222,7 +228,34 @@ class LocalVariableStorage {
         DataContainer data;
 #ifdef NDEBUG
         Data() : flags(0U), data(0U) {}
+        Data( Data& data ) : flags{data.flags}, data{data.data} {}
+        Data( Data&& data ) : flags{data.flags}, data{data.data} {}
+        Data& operator=( const Data& d ) { if ( this != &d ) { flags=d.flags; data=d.data; } return *this; }
+        Data& operator=( Data&& d ) { flags=d.flags; data=d.data; return *this; }
 #else // for debugging more information is kept in storage
+        Data() : flags(1,ANY), data(1,1e-30), scalars{1}, vectors{0}, tensors{0},
+                 arrays{0}, flaggedArrays{0}, arrayLength{0}, flaggedArrayLength{0}
+          {}
+        Data( const Data& d ) : flags{d.flags}, data{d.data},
+             scalars{d.scalars}, vectors{d.vectors}, tensors{d.tensors},
+             arrays{d.arrays}, flaggedArrays{d.flaggedArrays},
+             arrayLength{d.arrayLength}, flaggedArrayLength{d.flaggedArrayLength}
+          {}
+        Data( const Data&& d ) : flags{d.flags}, data{d.data},
+             scalars{d.scalars}, vectors{d.vectors}, tensors{d.tensors},
+             arrays{d.arrays}, flaggedArrays{d.flaggedArrays},
+             arrayLength{d.arrayLength}, flaggedArrayLength{d.flaggedArrayLength}
+          {}
+        Data& operator=( const Data& d ) { if ( this != &d ) {
+              flags=d.flags; data=d.data; scalars=d.scalars; vectors=d.vectors; tensors=d.tensors;
+              arrays=d.arrays; flaggedArrays=d.flaggedArrays; arrayLength=d.arrayLength; flaggedArrayLength=d.flaggedArrayLength; }
+              return *this;
+           }
+        Data& operator=( Data&& d ) { if ( this != &d ) {
+              flags=d.flags; data=d.data; scalars=d.scalars; vectors=d.vectors; tensors=d.tensors;
+              arrays=d.arrays; flaggedArrays=d.flaggedArrays; arrayLength=d.arrayLength; flaggedArrayLength=d.flaggedArrayLength; }
+              return *this;
+           }
         int_type scalars,            ///< scalar variables stored at the site this policy is associated with
                  vectors,            ///< vector variables at this site
                  tensors,            ///< tensor variables at this site
@@ -232,27 +265,14 @@ class LocalVariableStorage {
         int_type arrayLength,        ///< length of array variables associated with this site @todo only one size?
                  flaggedArrayLength; ///< length of flagged array variables @todo only one size?
 
-        // zeroing constructor for debugging
-        Data() :
-            flags              (0U),
-            data               (0U),
-            scalars            (0U),
-            vectors            (0U),
-            tensors            (0U),
-            arrays             (0U),
-            flaggedArrays      (0U),
-            arrayLength        (0U),
-            flaggedArrayLength (0U)
-        {}
 #endif // end debugging version of Data
-
       };
 
     /// copy or move supplied data into storage
     void LVS( const Data& data ) { data_ = data; }
-    void LVS( Data&& data ) { data_ = std::move(data); }
+    void LVS( Data&& data ) { data_ = data; }
     
-    /// return copy of the data container for misc operations
+    /// return copy of the data container for misc operations (will use rcopy elision
     const Data LVS() const { return data_; }
   
   private:

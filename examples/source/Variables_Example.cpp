@@ -44,7 +44,8 @@ void Variables_Example::Run()
     //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
     Model<3U>  model(model_name, variable_file);
     
-    pair<set<string>,bool> boundary_patches = model.CreateSplitBoundaryFrom( "FRACTURE" );
+    const bool retain_elmts_as_intervening_elmts{ false };
+    pair<set<string>,bool> boundary_patches = model.CreateSplitBoundaryFrom( "FRACTURE", retain_elmts_as_intervening_elmts );
     assert( boundary_patches.second == true );
     assert( boundary_patches.first.size() == 1 );
     const string boundary_name = (*boundary_patches.first.begin());

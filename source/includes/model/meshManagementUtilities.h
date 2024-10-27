@@ -232,7 +232,18 @@ template<uint32_t dim, template<uint32_t> class CELL>
 bool integrityCheck( const plf::colony<CELL<dim> >&,
                      typename std::vector<CELL<dim>*>::const_iterator first,
                      typename std::vector<CELL<dim>*>::const_iterator last );
-                     
+
+/// checks sequence for duplicate pointers, returning the number of duplicates found
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t duplicatesCheck( typename std::vector<CELL<dim>*>::const_iterator first,
+                        typename std::vector<CELL<dim>*>::const_iterator last );
+                        
+// for debugging only
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t setNeighborsWithInvalidFE_PointersTo_nullptr( typename plf::colony<CELL<dim>>::iterator first,
+                                                     typename plf::colony<CELL<dim>>::iterator last );
+
+
 /// check whether the right types of elements have been connected with one another; counts violations also considering elements without minimum number of neighbors
 template<uint32_t dim>
 size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator first,

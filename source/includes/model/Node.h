@@ -54,6 +54,9 @@ class Node : public LocalVariableStorage<dim,Node> {
     
     Node( const Node<dim>& );
     Node<dim>& operator=( const Node<dim>& );
+    // move semantics for colony
+    Node( Node<dim>&& );
+    Node<dim>& operator=( Node<dim>&& );
     
     ~Node();
 

@@ -12,7 +12,6 @@ class Element_Test : public Test
 
   public:
 	  Element_Test();
-	 ~Element_Test();
   
     virtual void run();
     
@@ -27,6 +26,10 @@ class Element_Test : public Test
     void BaryCenterTest();
     
     void MoveSemanticsTest();
+    
+    /// tests that all members of the supplied elements are the same
+    template<uint32_t dim>
+    void CompareElements( const Element<dim>&, const Element<dim>& );
     
     void VariableAccessAndIterators();
   

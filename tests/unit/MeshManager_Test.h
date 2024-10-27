@@ -95,7 +95,7 @@ class MeshManager_Test : public Test {
     // ConnectNodesToParentsAndNeighbors(); // PRIORITY: used by InsertRegionIntoSplitBoundary()
     
     // builds on higherDimensionalNeighbors() and uses FaceConstructionData
-    // bool Test_ReplaceElementsByInterFaces(); // used by: SplitBoundaryInterFace::CreateSplitBoundaryFrom() - TODO: deprecate ReplaceElementsByInterFaces() ?
+    // bool Test_ReplaceElementsByInterFaces(); // used by: SplitBoundaryInterFace::CreateSplitBoundaryFrom() 
     
     // uses sharedPerimeterCells() and haloElements()
     // incomplete for 3D case!

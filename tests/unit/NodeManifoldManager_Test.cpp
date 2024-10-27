@@ -414,9 +414,9 @@ void NodeManifoldManager_Test::Create_splitboundary_around_regions( Model<dim>& 
         model.CreateInternalBoundaryFrom( (*it).c_str() );
         //model.CreateInternalBoundaryFrom( (*it).c_str(), false);
         Boundary<dim>& bdry = model.Boundary( (*it).c_str() );
-        model.CreateSplitBoundaryFrom( bdry );
+        model.CreateSplitBoundaryFrom( bdry, false );
         */
-        model.CreateSplitBoundaryFrom( (*it).c_str());
+        model.CreateSplitBoundaryFrom( (*it).c_str(), false );
     }
 
   // 4. creating lower-dimensional stand-alone meshes from SplitBoundary objects, and 
@@ -426,7 +426,7 @@ void NodeManifoldManager_Test::Create_splitboundary_around_regions( Model<dim>& 
  } else {
    // creating SplitBoundaries directly from original interfaces
    for ( std::set<string>::const_iterator it = interface_basic_sets.begin(); it != interface_basic_sets.end(); it++ )
-       model.CreateSplitBoundaryFrom( (*it).c_str());
+       model.CreateSplitBoundaryFrom( (*it).c_str(), false );
  }
 // TODO: build this in
 model.UpdateConnectivity();
@@ -442,7 +442,7 @@ model.UpdateConnectivity();
   assert( split_boundary.second == true );
   */
 
-  //model.CreateSplitBoundaryFrom( "FRACS" );
+  //model.CreateSplitBoundaryFrom( "FRACS", false );
 
     // create lower-dimensional stand-alone meshes from SplitBoundary objects, and 
   // insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')

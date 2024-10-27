@@ -8,7 +8,6 @@ namespace csmp {
 
 template<uint32_t> class VSet;
 template<uint32_t> class Node;
-template<uint32_t> class Element;
 template<uint32_t> class Model;
 
 /**

@@ -113,7 +113,8 @@ void LinearElasticFractureAperture2D_VVCase::run()
     bool binary = true, regions = true; //should not be changed
     ANSYS_Model2D model( mesh_file.c_str() , regions_file.c_str(), vars_file.c_str(), binary, regions );
 
-    string sb_name = *(model.CreateSplitBoundaryFrom("FRACTURE").first.begin());
+    const bool keep_lower_dim_input_region{ false };
+    string sb_name = *(model.CreateSplitBoundaryFrom("FRACTURE", keep_lower_dim_input_region ).first.begin());
 
     //std::set<string> sp_reg_names = model.InsertLowerDimensionalRegionsIntoSplitBoundaries(0);
     //model.RegionsFromSplitBoundaries();

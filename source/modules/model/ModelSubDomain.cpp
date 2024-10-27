@@ -42,6 +42,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 ModelSubDomain<dim, CELL>::ModelSubDomain( const string& subdomain_name, const PropertyDatabase<dim>& pref )
 	: pref_(pref),
 	  subdomain_name_(subdomain_name),
+// default set in class declaration:    rebuilt_needed_
     domain_idx_(++domain_count_)
  {
     if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called custom constructor.\n";

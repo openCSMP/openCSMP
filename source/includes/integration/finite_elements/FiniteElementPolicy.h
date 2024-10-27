@@ -1,34 +1,38 @@
 #ifndef FINITE_ELEMENT_POLICY_H
 #define FINITE_ELEMENT_POLICY_H
 
+#include <set>
 #include "FiniteElement.h"
 
 namespace csmp {
 
 template<uint32_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
 
 /// finite element policy for class Element
 template<uint32_t dim, template<uint32_t> class CELL>
 class FiniteElementPolicy {
   public:
-    FiniteElementPolicy( FiniteElement* = nullptr );
-    FiniteElementPolicy( const FiniteElementPolicy& p ) : fptr_{p.fptr_} {}
-    /// destructor that does nothing: super important because default destructor would try to delete FiniteElement from FiniteElementManager!
-    ~FiniteElementPolicy() { fptr_ = nullptr; }
-    FiniteElementPolicy& operator=( const FiniteElementPolicy& p ) { if ( this != &p ) fptr_ = p.fptr_; return *this; }
+    explicit FiniteElementPolicy( const CELL<dim>& ) noexcept;
+    /// takes pointer reference to avoid copying
+    FiniteElementPolicy( FiniteElement* ) noexcept;
+    FiniteElementPolicy( const FiniteElementPolicy& p ) noexcept : fptr_{p.fptr_} {}
+    FiniteElementPolicy& operator=( const FiniteElementPolicy& p ) noexcept { if ( this != &p ) fptr_ = p.fptr_; return *this; }
     /// move semantics
     FiniteElementPolicy( FiniteElementPolicy&& p ) noexcept : fptr_{p.fptr_} { p.fptr_ = nullptr; }
     FiniteElementPolicy& operator=( FiniteElementPolicy&& p ) noexcept { std::swap(fptr_,p.fptr_); p.fptr_=nullptr; return *this; }
   
     /// for deferred assignment or changing the element at runtime
     void Assign( FiniteElement* fe_ptr );
-    void AssignFiniteElementNullPtr() { fptr_ = nullptr; }
+    void AssignFiniteElementNullPtr() noexcept { fptr_ = nullptr; }
     
     /// the type is an enumeration that is used in the generation of finite elements
-    CSMP_FEM_TYPE  FE_Type() const;
+    CSMP_FEM_TYPE  FE_Type() const noexcept;
   
     /// you are allowed to switch the element at runtime and modifies the volatile data it stores
-    FiniteElement* FE() const;
+    FiniteElement* FE() const noexcept;
     
     /// true for volumes in 3D, surfaces in 2D, and line elements in 1D, else this is a lower dimensional element
     bool       IsEquidimensional() const;
@@ -165,9 +169,12 @@ class FiniteElementPolicy {
     
     /// outputs finite element and discretised variable to VTK file
     void       OutputPropertyToVTK( const csmp::Index&, const char* file_name, const char* var_name ) const;
+    
+    friend class Element<dim>;
+    friend class Face<dim>;
+    friend class InterFace<dim>;
 
   private:
-    explicit FiniteElementPolicy( const CELL<dim>& );
     csmp::FiniteElement*  fptr_ = nullptr;
 };
 

@@ -43,8 +43,8 @@ class NumIntegral_dNT_op_dN_dV_InterFace : public MathOperatorLHS<dim,InterFace>
   private:
       csmp::INDEX<SCALAR,INTER_FACE> thi_key_;            ///< 'thickness' parameter for the interface
       double                         thickness_;          ///< zone thickness modelled by interface
-      const FiniteElement*           hexa_ptr_ = nullptr; ///< element type used for quadrilateral Interfaces
-      const FiniteElement*           pris_ptr_ = nullptr; ///< element type for triangles
+      FiniteElement*                 hexa_ptr_ = nullptr; ///< element type used for quadrilateral Interfaces
+      FiniteElement*                 pris_ptr_ = nullptr; ///< element type for triangles
 
       DenseMatrix<DM_MIN>  DN_, DNT_;  ///< matrices needed for the accumulation
 };

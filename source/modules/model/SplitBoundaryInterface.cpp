@@ -929,7 +929,8 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
 
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom( const char* dim_1_region )
+pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom( const char* dim_1_region,
+                                                                                                     bool retain_elmts_as_intervening_elements )
  {
     SPLITBOUNDARY_COMPLEX<dim>& model( static_cast<SPLITBOUNDARY_COMPLEX<dim>&>(*this) );
 
@@ -1180,7 +1181,8 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
                                                              subdomain.PerimeterNodesBegin(),
                                                              subdomain.NodesEnd(),
                                                              extra_perimeter_nodes, // will contain old perim-node - manifold node pairs (only need the manifold node).
-                                                             region_material_ids );
+                                                             region_material_ids,
+                                                             retain_elmts_as_intervening_elements );
 
     assert(iface_vector.size() == iface_construction_vector.size());
     assert( (*iface_vector.begin())->InnerParent() == iface_construction_vector.begin()->InnerElement()) ;

@@ -120,6 +120,9 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
                
     InterFace( const InterFace<dim>& );
     InterFace<dim>& operator=( const InterFace<dim>& );
+    // move semantics for plf::colony
+    InterFace( InterFace<dim>&& );
+    InterFace<dim>& operator=( InterFace<dim>&& );
     
     ~InterFace() = default;
                

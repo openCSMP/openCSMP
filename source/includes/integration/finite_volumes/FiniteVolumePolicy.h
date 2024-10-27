@@ -85,8 +85,6 @@ class FiniteVolumePolicy<3U, CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<3U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
-    /// custom destructor which is super important because default destructor would try to delete FV stencil
-    ~FiniteVolumePolicy() { fvptr_ = nullptr; }
     FiniteVolumePolicy& operator=( const FiniteVolumePolicy& p ) { if ( this != &p ) fvptr_ = p.fvptr_; return *this; }
     /// move semantics
     FiniteVolumePolicy( FiniteVolumePolicy&& p ) noexcept : fvptr_(p.fvptr_) { p.fvptr_ = nullptr; }
@@ -172,6 +170,10 @@ class FiniteVolumePolicy<3U, CELL> {
     /// returns facet corner point in physical coordinates using RST_to_XYX
     Point<3U> FacetPoint( uint32_t iFacet, uint32_t iPoint ) const;
 
+    friend class Element<3U>;
+    friend class Face<3U>;
+    friend class InterFace<3U>;
+
     // get finite-volume facet area, normal and sector volume in parametric space from FiniteVolumeStencil class
 private:
     FiniteVolumePolicy( const CELL<3U>& );
@@ -215,6 +217,10 @@ class FiniteVolumePolicy<2U,CELL> {
     double   ParametricFacetArea( uint32_t iFacet ) const;
     Point<2U>  ParametricFacetNormal( uint32_t iFacet ) const;
 
+    friend class Element<2U>;
+    friend class Face<2U>;
+    friend class InterFace<2U>;
+
 private:
     FiniteVolumePolicy( const CELL<2U>& );
     const csmp::FiniteVolumeStencil<2U>*  fvptr_;
@@ -257,6 +263,10 @@ class FiniteVolumePolicy<1U, CELL> {
     Point<1U>  FacetNormalMapped( uint32_t iFacet ) const;
     double     ParametricFacetArea( uint32_t iFacet ) const;
     Point<1U>  ParametricFacetNormal( uint32_t iFacet ) const;
+
+    friend class Element<1U>;
+    friend class Face<1U>;
+    friend class InterFace<1U>;
 
 private:
     FiniteVolumePolicy( const CELL<1U>& );

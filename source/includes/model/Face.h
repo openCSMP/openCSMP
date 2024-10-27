@@ -113,7 +113,10 @@ class Face : public FiniteElementPolicy<dim,Face>,
           
     Face( const Face<dim>& );
     Face<dim>& operator=( const Face<dim>& );
-    
+    // move semantics for colony
+    Face( Face<dim>&& );
+    Face<dim>& operator=( Face<dim>&& );
+   
     ~Face() = default;
 
     /// connects face to the supplied node

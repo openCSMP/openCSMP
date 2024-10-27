@@ -37,13 +37,37 @@ LocalVariableStorage<dim, STOREE>::LocalVariableStorage( const LocalVariables& l
 
 
 
+template<uint32_t dim, template<uint32_t> class STOREE>
+LocalVariableStorage<dim, STOREE>::LocalVariableStorage( const LocalVariableStorage<dim,STOREE>& lvs )
+ : data_{lvs.data_}
+ {}
+ 
+
+template<uint32_t dim, template<uint32_t> class STOREE>
+LocalVariableStorage<dim, STOREE>:: LocalVariableStorage( LocalVariableStorage<dim,STOREE>&& lvs )
+ : data_{lvs.data_}
+ {}
+
+
+
+/// Goto overload for storees without IntegrationPointVariables
+template<uint32_t dim, template<uint32_t> class STOREE>
+bool LocalVariableStorage<dim,STOREE>::operator==( const LocalVariableStorage<dim,STOREE>& lvs ) const
+  {
+     if ( this == &lvs ) return true;
+     if ( this->data_.flags != lvs.data_.flags ) return false;
+     if ( this->data_.data  != lvs.data_.data ) return false;
+     return true;
+  }
+
+
 
 
 /// Goto overload for storees without IntegrationPointVariables
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariables& lv )
   {
-    ResizePropertyStorage( lv.totalDataDepth , lv.totalFlagDepth );
+    ResizePropertyStorage( lv.totalDataDepth, lv.totalFlagDepth );
 
 // initialise auxiliary parameters for debugging
 #ifndef NDEBUG

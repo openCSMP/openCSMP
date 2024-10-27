@@ -67,13 +67,23 @@ Node<dim>::Node( const Node<dim>& nd )
 
 
 
-
+/**
+    Move constructor also copies the pointer assignments (!).
+*/
 template<uint32_t dim>
-Node<dim>::~Node()
- {
-    manifold_ = nullptr;
-//    cerr <<"\nNode "<< Idx() <<": called destructor.";
- }
+Node<dim>::Node( Node<dim>&& nd )
+  : xyz_{ std::move(nd.xyz_) },
+    idx_{ std::move(nd.idx_) },
+    parents_{ nd.parents_ },
+    neighbor_node_pointers_{ nd.neighbor_node_pointers_ },
+    manifold_{ nd.manifold_ },
+    at_boundary_{ nd.at_boundary_ },
+    BREP_entity_{ nd.BREP_entity_ }
+  {
+    this->LVS( nd.LVS() );
+    
+    nd.manifold_ = nullptr;
+  }
 
 
 
@@ -90,10 +100,49 @@ Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
          manifold_                = nd.manifold_;
          at_boundary_             = nd.at_boundary_;
          BREP_entity_             = nd.BREP_entity_;
-         this->LVS( std::move( nd.LVS() ) );
+         
+         this->LVS( nd.LVS() );
       }
     return *this;
  }
+
+
+
+/**
+    Move assignment, relying on that similar operators exist for the nodes components.
+    
+    @note this assumes that the supplied node is a temporary.
+*/
+template<uint32_t dim>
+Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
+ {
+    assert( this != &nd );
+    xyz_                     = nd.xyz_;
+    idx_                     = nd.idx_;
+    at_boundary_             = nd.at_boundary_;
+    BREP_entity_             = nd.BREP_entity_ ;
+    parents_                 = nd.parents_;
+    neighbor_node_pointers_  = nd.neighbor_node_pointers_;
+    manifold_                = nd.manifold_;
+
+    this->LVS( nd.LVS() );
+    
+    nd.manifold_ = nullptr;
+ 
+    return *this;
+ }
+
+
+
+
+template<uint32_t dim>
+Node<dim>::~Node()
+ {
+    manifold_ = nullptr;
+//    cerr <<"\nNode "<< Idx() <<": called destructor.";
+ }
+
+
 
 
 

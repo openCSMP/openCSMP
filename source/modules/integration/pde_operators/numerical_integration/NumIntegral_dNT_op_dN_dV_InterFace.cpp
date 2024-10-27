@@ -179,9 +179,9 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim>::ComputeContribution( InterFace<dim
     FiniteElement* fptr = iface.FE();
     if ( isTriangular( iface.FE_Type() ) )
       // ugly way to get to the base class!
-      static_cast<FiniteElementPolicy<dim,InterFace>&>(iface).Assign( const_cast<FiniteElement*>(pris_ptr_) );
+      static_cast<FiniteElementPolicy<dim,InterFace>&>(iface).Assign( pris_ptr_ );
     else
-      static_cast<FiniteElementPolicy<dim,InterFace>&>(iface).Assign( const_cast<FiniteElement*>(hexa_ptr_) );
+      static_cast<FiniteElementPolicy<dim,InterFace>&>(iface).Assign( hexa_ptr_ );
    
     // 1. Two cases exist: The first is when the material property is an
     //    element property. In this case the material property matrix can

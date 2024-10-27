@@ -2250,14 +2250,22 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
            // valid cell neighbors should not be corrupt
            for ( uint32_t i{0U}; i<(*first).Neighbors(); ++i ) {
                if ( (*first).Neighbor(i) != nullptr ) {
-                    if ( !(*first).Neighbor(i)->FE() || (*first).Neighbor(i)->FE_Type() == UNKNOWN ) {
+                    // FE pointer invalid or FE pointer pointing to FiniteElement base class
+                    if ( (*first).Neighbor(i)->FE() == nullptr ) {
                         if ( first_call ) { cerr << check6; first_call=false; }
-                        cerr <<"\n\t"<< celltype <<": "<< (*first).Idx() <<": neighbor: "<< i <<": has corrupt FE pointer.";
+                        cerr <<"\n\t"<< celltype <<": "<< (*first).Idx() <<": "<< parseAbbreviated_FE_Type((*first).FE_Type()) <<": neighbor: "<< i <<": FE pointer is NULL.";
                         issues++;
                       }
+                    // FE pointer invalid or FE pointer pointing to FiniteElement base class
+                    if ( (*first).Neighbor(i)->FE() && (*first).Neighbor(i)->FE_Type() == UNKNOWN ) {
+                        if ( first_call ) { cerr << check6; first_call=false; }
+                        cerr <<"\n\t"<< celltype <<": "<< (*first).Idx() <<": "<< parseAbbreviated_FE_Type((*first).FE_Type()) <<": neighbor: "<< i <<": FE pointer points to FE base class.";
+                        issues++;
+                      }
+                    // Neighbor ID higher than elements in the mesh
                     if ( (*first).Neighbor(i)->Idx() > max_cell_idx ) {
                          if ( first_call ) { cerr << check6; first_call=false; }
-                         cerr <<"\n\t"<< celltype <<": "<< (*first).Idx() <<": neighbor: "<< i <<" has corrupt FE pointer.";
+                         cerr <<"\n\t"<< celltype <<": "<< (*first).Idx() <<": "<< parseAbbreviated_FE_Type((*first).FE_Type()) <<": neighbor: "<< i <<" has ID out of range.";
                          issues++;
                       }
                  }
@@ -2333,6 +2341,73 @@ bool integrityCheck( const plf::colony<CELL<dim> >& cells,
 template bool integrityCheck<3,Element>( const plf::colony<Element<3>>&, vector<Element<3>*>::const_iterator, vector<Element<3>*>::const_iterator );
 template bool integrityCheck<2,Element>( const plf::colony<Element<2>>&, vector<Element<2>*>::const_iterator, vector<Element<2>*>::const_iterator );
 template bool integrityCheck<1,Element>( const plf::colony<Element<1>>&, vector<Element<1>*>::const_iterator, vector<Element<1>*>::const_iterator );
+
+
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t duplicatesCheck( typename std::vector<CELL<dim>*>::const_iterator first,
+                        typename std::vector<CELL<dim>*>::const_iterator last )
+ {
+    string  celltype("Element");
+    if constexpr ( is_same< CELL<dim>,Face<dim> >::value ) celltype = "Face";
+    if constexpr ( is_same< CELL<dim>,InterFace<dim> >::value ) celltype = "InterFace";
+
+    long n_cells = distance( first, last );
+    
+    unordered_set<CELL<dim>*>  unique_cell_set( first, last );
+    size_t n_duplicates = n_cells - unique_cell_set.size();
+    
+    if ( n_duplicates > 0 ) {
+         // --------------------------------------------------------------
+         cout <<"\n"<<"duplicatesCheck<"<< celltype <<"<"<< dim <<">*> Are there any duplicate pointers in supplied iterator sequence?";
+         cout <<"\n\n\t"<<"found "<< n_duplicates <<" "<< celltype <<" pointers."<< endl;
+      }
+      
+    return n_duplicates;
+    
+ } // end
+
+template size_t duplicatesCheck<3,Element>( vector<Element<3>*>::const_iterator, vector<Element<3>*>::const_iterator );
+template size_t duplicatesCheck<2,Element>( vector<Element<2>*>::const_iterator, vector<Element<2>*>::const_iterator );
+template size_t duplicatesCheck<1,Element>( vector<Element<1>*>::const_iterator, vector<Element<1>*>::const_iterator );
+template size_t duplicatesCheck<3,Face>( vector<Face<3>*>::const_iterator, vector<Face<3>*>::const_iterator );
+template size_t duplicatesCheck<2,Face>( vector<Face<2>*>::const_iterator, vector<Face<2>*>::const_iterator );
+template size_t duplicatesCheck<1,Face>( vector<Face<1>*>::const_iterator, vector<Face<1>*>::const_iterator );
+template size_t duplicatesCheck<3,InterFace>( vector<InterFace<3>*>::const_iterator, vector<InterFace<3>*>::const_iterator );
+template size_t duplicatesCheck<2,InterFace>( vector<InterFace<2>*>::const_iterator, vector<InterFace<2>*>::const_iterator );
+template size_t duplicatesCheck<1,InterFace>( vector<InterFace<1>*>::const_iterator, vector<InterFace<1>*>::const_iterator );
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t setNeighborsWithInvalidFE_PointersTo_nullptr( typename plf::colony<CELL<dim>>::iterator first,
+                                                     typename plf::colony<CELL<dim>>::iterator last  )
+ {
+    size_t n_broken_nbors{0ul};
+    while( first != last ) {
+         for ( uint32_t i{0u}; i<(*first).Neighbors(); ++i )
+           if ( (*first).Neighbor(i) && !(*first).FE() ) {
+                (*first).UnassignNeighbor(i);
+                n_broken_nbors++;
+             }
+         first++;
+      }
+    return n_broken_nbors;
+ } // end
+
+template size_t setNeighborsWithInvalidFE_PointersTo_nullptr<3,Element>( plf::colony<Element<3>>::iterator, plf::colony<Element<3>>::iterator );
+template size_t setNeighborsWithInvalidFE_PointersTo_nullptr<2,Element>( plf::colony<Element<2>>::iterator, plf::colony<Element<2>>::iterator );
+template size_t setNeighborsWithInvalidFE_PointersTo_nullptr<1,Element>( plf::colony<Element<1>>::iterator, plf::colony<Element<1>>::iterator );
+
+
+
+
 
 
 /**

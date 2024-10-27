@@ -34,23 +34,29 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
                            uint32_t adjacent_face_of_outer_element,
                            const LocalVariables&  interface_props,
                            const IntegrationPointVariables&  interface_integration_point_props )
-  : FiniteElementPolicy<dim,csmp::InterFace>( elmt.FE() ),
-    FiniteVolumePolicy<dim,csmp::InterFace>( elmt.FV() ),
-    idx_( numeric_limits<size_t>::max() ),
+  : FiniteElementPolicy<dim,csmp::InterFace>{ elmt.FE() },
+    FiniteVolumePolicy<dim,csmp::InterFace>{ elmt.FV() },
+    idx_{ numeric_limits<size_t>::max() },
+    innerParent_{ inner_parent },
+    outerParent_{ outer_parent },
+    middleElement_{ nullptr },
     node_connector_( elmt.Nodes() * 2, nullptr ),
     interface_connector_( elmt.Neighbors(), nullptr ),
-    middleElement_( nullptr ),
-    current_side_( INSIDE ),
-    innerParent_( inner_parent ),
-    outerParent_( outer_parent ),
-    inner_parent_face_id_( adjacent_face_of_inner_element ),
-    outer_parent_face_id_( adjacent_face_of_outer_element )
+    inner_parent_face_id_{ adjacent_face_of_inner_element },
+    outer_parent_face_id_{ adjacent_face_of_outer_element },
+    current_side_{ INSIDE }
 {
    assert( elmt.FE() != nullptr );
    assert( innerParent_ != nullptr );
    assert( outerParent_ != nullptr );
    assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_ );
    assert( outerParent_->Neighbor(outer_parent_face_id_) == innerParent_ );
+
+   // setting up storage for the local variables
+   if ( this->UsesLocalCoordinates() ) {
+        this->ResizePropertyStorage( interface_props, interface_integration_point_props );
+     }
+   else this->ResizePropertyStorage( interface_props );
 
    // 1. assigning the nodes to the new InterFace
    // -------------------------------------------
@@ -100,21 +106,27 @@ InterFace<dim>::InterFace( csmp::Face<dim>* fptr,
                const LocalVariables&  interface_props,
                const IntegrationPointVariables&  interface_integration_point_props,
                vector<Node<dim>*> outside_nodes )
-  : FiniteElementPolicy<dim,csmp::InterFace>( fptr->FE() ),
-    FiniteVolumePolicy<dim,csmp::InterFace>( fptr->FV() ),
-    idx_( numeric_limits<size_t>::max() ),
+  : FiniteElementPolicy<dim,csmp::InterFace>{ fptr->FE() },
+    FiniteVolumePolicy<dim,csmp::InterFace>{ fptr->FV() },
+    innerParent_{ fptr->InnerParent() },
+    outerParent_{ fptr->OuterParent() },
+    middleElement_{ nullptr },
     node_connector_( fptr->Nodes() * 2, nullptr ),
     interface_connector_( fptr->Neighbors(), nullptr ),
-    middleElement_( nullptr ),
-    current_side_( INSIDE ),
-    innerParent_( fptr->InnerParent() ),
-    outerParent_( fptr->OuterParent() ),
-    inner_parent_face_id_( fptr->InnerParentFaceID() ),
-    outer_parent_face_id_( fptr->OuterParentFaceID() )
+    idx_{ numeric_limits<size_t>::max() },
+    inner_parent_face_id_{ fptr->InnerParentFaceID() },
+    outer_parent_face_id_{ fptr->OuterParentFaceID() },
+    current_side_{ INSIDE }
 {
    assert( fptr != nullptr );
    assert( outerParent_ != nullptr ); // interfaces must have neighbors on all sides
    assert( outside_nodes.size() == fptr->Nodes() );
+
+   // setting up storage for the local variables
+   if ( this->UsesLocalCoordinates() ) {
+        this->ResizePropertyStorage( interface_props, interface_integration_point_props );
+     }
+   else this->ResizePropertyStorage( interface_props );
 
 #ifdef DEBUG
    for ( const auto& nit : outside_nodes ) assert( nit != nullptr );
@@ -123,7 +135,7 @@ InterFace<dim>::InterFace( csmp::Face<dim>* fptr,
    // 1. assigning the nodes to the new InterFace
    // -------------------------------------------
    const auto n_nodes{ outside_nodes.size() };
-   for ( auto i{0U}; i< n_nodes; i++ ) {
+   for ( uint32_t i{0U}; i< n_nodes; i++ ) {
         Assign( i, fptr->N(i), INSIDE );
         Assign( i, outside_nodes[i], OUTSIDE );
      }
@@ -151,15 +163,15 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
                            const csmp::FiniteVolumeStencil<dim>* fvs,
                            const LocalVariables& ep,
                            const IntegrationPointVariables& ip )
-  : FiniteElementPolicy<dim,csmp::InterFace>( f ),
-    FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
-    idx_( numeric_limits<size_t>::max() ),
+  : FiniteElementPolicy<dim,csmp::InterFace>{ f },
+    FiniteVolumePolicy<dim,csmp::InterFace>{ fvs },
+    innerParent_{ nullptr },
+    outerParent_{ nullptr },
+    middleElement_{ nullptr },
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
-    middleElement_( nullptr ),
-    current_side_( INSIDE ),
-    innerParent_( nullptr ),
-    outerParent_( nullptr )
+    idx_{ numeric_limits<size_t>::max() },
+    current_side_{ INSIDE }
 {
    assert( f != nullptr );
 
@@ -176,15 +188,15 @@ InterFace<dim>::InterFace( size_t index,
                            const csmp::FiniteVolumeStencil<dim>* fvs,
                            const LocalVariables& ep,
                            const IntegrationPointVariables& ip )
-  : FiniteElementPolicy<dim,csmp::InterFace>( f ),
-    FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
-    idx_( index ),
+  : FiniteElementPolicy<dim,csmp::InterFace>{ f },
+    FiniteVolumePolicy<dim,csmp::InterFace>{ fvs },
+    innerParent_{ nullptr },
+    outerParent_{ nullptr },
+    middleElement_{ nullptr },
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
-    middleElement_( nullptr ),
-    current_side_( INSIDE ),
-    innerParent_( nullptr ),
-    outerParent_( nullptr )
+    idx_{ index },
+    current_side_{ INSIDE }
 {
    assert( f != nullptr );
 
@@ -198,22 +210,45 @@ InterFace<dim>::InterFace( size_t index,
 /// copy constructor
 template<uint32_t dim>
 InterFace<dim>::InterFace( const InterFace<dim>& ifc )
-  : FiniteElementPolicy<dim,csmp::InterFace>( ifc.FE() ),
-    FiniteVolumePolicy<dim,csmp::InterFace>( ifc.FV() ),
-    idx_( ifc.idx_ ),
-    node_connector_( ifc.node_connector_ ),
-    interface_connector_( ifc.interface_connector_ ),
-    middleElement_( ifc.middleElement_ ),
-    current_side_( ifc.current_side_ ),
-    innerParent_( ifc.innerParent_ ),
-    outerParent_( ifc.outerParent_ ),
-    inner_parent_face_id_( ifc.inner_parent_face_id_ ),
-    outer_parent_face_id_( ifc.outer_parent_face_id_ )
+  : FiniteElementPolicy<dim,csmp::InterFace>{ ifc },
+    FiniteVolumePolicy<dim,csmp::InterFace>{ ifc.FV() },
+    LocalVariableStorage<dim,csmp::InterFace>{ ifc },
+    innerParent_{ ifc.innerParent_ },
+    outerParent_{ ifc.outerParent_ },
+    middleElement_{ ifc.middleElement_ },
+    node_connector_{ ifc.node_connector_ },
+    interface_connector_{ ifc.interface_connector_ },
+    idx_{ ifc.idx_ },
+    inner_parent_face_id_{ ifc.inner_parent_face_id_ },
+    outer_parent_face_id_{ ifc.outer_parent_face_id_ },
+    current_side_{ ifc.current_side_ }
 {
   assert( !interface_connector_.empty() );
-  // variable storage: call of initialization function
-  this->LVS( ifc.LVS() );
 }
+
+
+
+/// move constructor
+template<uint32_t dim>
+InterFace<dim>::InterFace( InterFace<dim>&& ifc )
+  : FiniteElementPolicy<dim, csmp::InterFace>{ ifc },
+    FiniteVolumePolicy<dim, csmp::InterFace>{ ifc.FV() },
+    LocalVariableStorage<dim,csmp::InterFace>{ ifc },
+    innerParent_{ ifc.innerParent_ },
+    outerParent_{ ifc.outerParent_ },
+    middleElement_{ ifc.middleElement_ },
+    node_connector_{ ifc.node_connector_ },
+    interface_connector_{ ifc.interface_connector_ },
+    idx_{ ifc.idx_ },
+    inner_parent_face_id_{ ifc.inner_parent_face_id_ },
+    outer_parent_face_id_{ ifc.outer_parent_face_id_ },
+    current_side_{ ifc.current_side_ }
+ {
+    assert( !interface_connector_.empty() ); // detected unitialized element
+
+    ifc.AssignFiniteElementNullPtr();
+    ifc.AssignFiniteVolumeNullPtr();
+ }
 
 
 
@@ -226,7 +261,7 @@ InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
     {
       FiniteElementPolicy<dim, csmp::InterFace>::Assign( ifc.FE() );
       FiniteVolumePolicy<dim, csmp::InterFace>::AssignFiniteVolume( ifc.FV() );
-
+      LocalVariableStorage<dim,csmp::InterFace>::LVS( ifc.LVS() );
       idx_ = ifc.idx_;
       node_connector_ = ifc.node_connector_;
       interface_connector_ = ifc.interface_connector_;
@@ -236,9 +271,33 @@ InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
       outerParent_ = ifc.outerParent_;
       inner_parent_face_id_ = ifc.inner_parent_face_id_;
       outer_parent_face_id_ = ifc.outer_parent_face_id_;
-
-      this->LVS( ifc.LVS() );
     }
+  return *this;
+}
+
+
+
+template<uint32_t dim>
+InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
+{
+  assert( &ifc != this );
+
+  FiniteElementPolicy<dim, csmp::InterFace>::Assign( ifc.FE() );
+  FiniteVolumePolicy<dim, csmp::InterFace>::AssignFiniteVolume( ifc.FV() );
+  LocalVariableStorage<dim,csmp::InterFace>::LVS( ifc.LVS() );
+  idx_                  = ifc.idx_;
+  inner_parent_face_id_ = ifc.inner_parent_face_id_;
+  outer_parent_face_id_ = ifc.outer_parent_face_id_;
+  innerParent_          = ifc.innerParent_;
+  outerParent_          = ifc.outerParent_;
+  middleElement_        = ifc.middleElement_;
+  interface_connector_  = std::move( ifc.interface_connector_ );
+  node_connector_       = std::move( ifc.node_connector_ );
+  current_side_         = ifc.current_side_;
+
+  ifc.AssignFiniteElementNullPtr();
+  ifc.AssignFiniteVolumeNullPtr();
+
   return *this;
 }
 

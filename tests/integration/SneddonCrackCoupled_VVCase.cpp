@@ -125,9 +125,12 @@ void SneddonCrackCoupled_VVCase::run()
     ANSYS_Model2D model( mesh_file.c_str(), regions_file.c_str(), vars_file.c_str(),
                          binary, regions);    // Constractor for empty variables
 
-    std::string sb_name = *(model.CreateSplitBoundaryFrom( "FRACTURE" ).first.begin()) ; //relies on split boundary naming convention
-    std::string sb_reg  = *(model.InsertLowerDimensionalRegionsIntoSplitBoundaries(0).begin() );
-
+    // SKM_FIX (and major improvement)
+    const bool retain_elmts_as_intervening_elmts{ true };
+    string sb_name = *(model.CreateSplitBoundaryFrom( "FRACTURE", retain_elmts_as_intervening_elmts ).first.begin() ) ; //relies on SB naming convention
+    // string sb_reg  = *(model.InsertLowerDimensionalRegionsIntoSplitBoundaries(0).begin() );
+    string sb_reg = "FRACTURE";
+    // Note: this implies that the original connectivity of the lower-dim element mesh is not touched
 
     //testing region model has the new unique region
     //_test( model.Region("Model").Contains( *(model.Region("FRACTURE_SPLIT_BOUNDARY_REGION").ElementsBegin()) ) );

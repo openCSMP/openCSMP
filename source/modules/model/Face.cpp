@@ -48,7 +48,7 @@ Face<dim>::Face( const Element<dim>& elmt,
                  uint32_t outer_parent_face_id,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
-  : FiniteElementPolicy<dim,csmp::Face>(elmt.FE()),
+  : FiniteElementPolicy<dim,csmp::Face>(elmt.fptr_),
     FiniteVolumePolicy<dim,csmp::Face>(elmt.FV()),
     idx_(elmt.Idx()),
     node_connector_(elmt.Nodes(),nullptr),
@@ -104,17 +104,6 @@ Face<dim>::Face( const Element<dim>& elmt,
     uint32_t i_node{0};
     for ( auto& i : fnids )
       node_connector_[i_node++] = inner_parent->N(i);
-
-    /* Old Implementation - Doesnt guarantee nodes of face = InnerParent->NodesOfFace() are the same (e.g could be rotated by one node).
-    // 2. connecting the nodes of the face with those of the lower-dimensional element
-    //   from which it was created
-    const auto nodes(elmt.Nodes()); // nodes of Element object that is replicated by Face
-    for ( auto i{0U}; i<nodes; ++i ) {
-         // assignig the node
-         assert( elmt.N(i) != nullptr );
-         Assign( i, elmt.N(i) );
-      }
-      */
    
  } // end constructor
 
@@ -139,7 +128,9 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
                  Element<dim>* const outer_parent,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
-  : idx_(NULL_IDX),
+  : FiniteElementPolicy<dim,csmp::Face>(nullptr),  // these are assigned below after detection of element type
+    FiniteVolumePolicy<dim,csmp::Face>(nullptr),
+    idx_(NULL_IDX),
     innerParent_(inner_parent),
     outerParent_(outer_parent),
     inner_parent_face_id_(NULL_IDX),
@@ -160,12 +151,12 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
     // finding the face which is shared
     // --------------------------------
     bool  matching_face_found{false};
-    const size_t n_faces_inner{innerParent_->Faces()};
-    for ( auto i{0U}; i<n_faces_inner; ++i )
+    const auto n_faces_inner{innerParent_->Faces()};
+    for ( uint32_t i{0U}; i<n_faces_inner; ++i )
       // if the faces match
       if ( inner_parent->Neighbor(i) == outer_parent ) {
            inner_parent_face_id_ = i;
-           // assigning the finite element
+           // assigning the finite element type
            const CSMP_FEM_TYPE etype = outer_parent->FE()->ElementTypeOfFace(i);
            FiniteElementPolicy<dim,csmp::Face>::Assign( fem_manager.E(etype) );
            if ( fvm_manager ) FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume( fvm_manager->Stencil(etype) );
@@ -177,7 +168,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
              node_connector_[n_count++] = inner_parent->N(k);
            // finding the number of the shared face in the outer element
            const auto n_faces_outer{outerParent_->Faces()};
-           for ( auto j{0U}; j<n_faces_outer; ++j )
+           for ( uint32_t j{0U}; j<n_faces_outer; ++j )
              if ( outer_parent->Neighbor(j) == inner_parent ) {
                   outer_parent_face_id_ = j;
                   break;
@@ -406,20 +397,19 @@ Face<dim>::Face( size_t index,
 /// copy constructor
 template<uint32_t dim>
 Face<dim>::Face( const Face<dim>& fc )
-  : FiniteElementPolicy<dim,csmp::Face>(fc.FE()),
-    FiniteVolumePolicy<dim,csmp::Face>(fc.FV()),
-    idx_(fc.idx_),
-    face_connector_(fc.face_connector_),
-    node_connector_( fc.node_connector_),
-    innerParent_(fc.innerParent_),
-    outerParent_(fc.outerParent_),
-    inner_parent_face_id_(fc.inner_parent_face_id_),
-    outer_parent_face_id_(fc.outer_parent_face_id_)
+  : FiniteElementPolicy<dim,csmp::Face>{ fc.fptr_ },
+    FiniteVolumePolicy<dim,csmp::Face>{ fc.FV() },
+    LocalVariableStorage<dim,csmp::Face>{ fc },
+    idx_{fc.idx_},
+    face_connector_{fc.face_connector_},
+    node_connector_{fc.node_connector_},
+    innerParent_{fc.innerParent_},
+    outerParent_{fc.outerParent_},
+    inner_parent_face_id_{fc.inner_parent_face_id_},
+    outer_parent_face_id_{fc.outer_parent_face_id_}
   {
     assert( this->FE() != nullptr /* detect unitialized element*/ );
     assert( !face_connector_.empty() /* detect unitialized element*/ );
-    // variable storage: call of initialization function
-    this->LVS( fc.LVS() );
   }
 
 
@@ -436,6 +426,7 @@ Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
     if ( &fc != this ) {
         FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
         FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
+        LocalVariableStorage<dim,csmp::Face>::LVS( fc.LVS() );
         idx_                  = fc.idx_;
         face_connector_       = fc.face_connector_;
         node_connector_       = fc.node_connector_;
@@ -450,9 +441,55 @@ Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
     
     return *this;
  }
+ 
+ 
+
+
+/// move constructor
+template<uint32_t dim>
+Face<dim>::Face( Face<dim>&& fc )
+  : FiniteElementPolicy<dim,csmp::Face>{ fc.fptr_ },
+    FiniteVolumePolicy<dim,csmp::Face>{ fc.FV() },
+    LocalVariableStorage<dim,csmp::Face>{ fc },
+    idx_{fc.idx_},
+    inner_parent_face_id_{fc.inner_parent_face_id_},
+    outer_parent_face_id_{fc.outer_parent_face_id_},
+    innerParent_{fc.innerParent_},
+    outerParent_{fc.outerParent_},
+    node_connector_{fc.node_connector_},
+    face_connector_{fc.face_connector_}
+ {
+    fc.AssignFiniteElementNullPtr();
+    fc.AssignFiniteVolumeNullPtr();
+
+//    cerr <<"\nFace: called move constructor.";
+ }
 
 
 
+template<uint32_t dim>
+Face<dim>&  Face<dim>::operator=( Face<dim>&& fc )
+ {
+    assert( &fc != this );
+    
+    FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
+    FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
+    LocalVariableStorage<dim,csmp::Face>::LVS( fc.LVS() );
+    idx_                  = fc.idx_;
+    face_connector_       = fc.face_connector_;
+    node_connector_       = fc.node_connector_;
+    innerParent_          = fc.innerParent_; // problematic pointer assignment
+    outerParent_          = fc.outerParent_;
+    inner_parent_face_id_ = fc.inner_parent_face_id_;
+    outer_parent_face_id_ = fc.outer_parent_face_id_;
+
+    fc.AssignFiniteElementNullPtr();
+    fc.AssignFiniteVolumeNullPtr();
+
+//    cerr <<"\nFace::operator=  called assignment operator.";
+    
+    return *this;
+ }
 
 
 

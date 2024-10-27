@@ -49,13 +49,19 @@ template<uint32_t> class FaceConstructionData;
     
     When the MeshManager creates or deletes cells, the connectivity in the surroundings is updated
     
-    @attention MESHMANAGER IS AGNOSTIC ABOUT REGIONS, BOUNDARIES, AND SPLIT BOUNDARIES ; it only cares about connectivity!
+    @attention MESHMANAGER IS AGNOSTIC ABOUT REGIONS, BOUNDARIES, AND SPLIT BOUNDARIES; it only handles creation, deletion and connectivity of cells and nodes!
     
-    @attention Changes in the mesh affect Region, Boundary and SplitBoundary objects meaning that they may need to be updated, using
+    @attention Changes in the mesh affect Region, Boundary and SplitBoundary objects meaning that they must updated, using
     corresponding functionality of ModelSubdomain and the Region-, Boundary- and SplitBoundary interfaces (policies) of Model.
+    To support this, the MeshManager sets the supplied pointers to deleted items to NULLPOINTER.
+    This way they can be deleted from the supplied cell ranges.
+    If an object that should be deleted cannot, the pointer to it will not be nulled.
+    
+    @attention the pointers to items that shall be deleted from the colony are wrapped in iterators that allow setting the pointers to zero rather than just copies of them see method interfaces;
+    For objects that are not going to be deleted, const-pointer access is granted.
 
     @author S.K. Matthai
-    @date 2021 (complete rewrite)
+    @date 2021 ( rewrite in 2024)
 
     @remark gain access to mesh using Mesh() public interface of Model.
 
@@ -178,17 +184,17 @@ public:
                                                           typename std::vector<Face<dim>*>::iterator first_at_boundary,
                                                           typename std::vector<Face<dim>*>::iterator last,
                                                           typename std::vector<Node<dim>*>::const_iterator perim_first,
-                                                          typename std::vector<Node<dim>*>::const_iterator perim_last);
+                                                          typename std::vector<Node<dim>*>::const_iterator perim_last );
 
   /// replaces supplied Face objects with InterFace ones adding  necessary nodes and node manifolds, establishing new connectivity; the input Faces are deleted
   std::vector<InterFace<dim>*>  ReplaceElementsByInterFaces( const PropertyDatabase<dim>&,
-                                                          typename std::vector<FaceConstructionData<dim>>::iterator first,
-                                                          typename std::vector<FaceConstructionData<dim>>::iterator last,
-                                                          typename std::vector<Node<dim>*>::const_iterator perim_first,
-                                                          typename std::vector<Node<dim>*>::const_iterator perim_last,
-                                                          std::set<Node<dim>*> & split_perimeter_nodes,
-                                                          std::set<size_t>& region_material_ids);
-
+                                                             typename std::vector<FaceConstructionData<dim>>::iterator first,
+                                                             typename std::vector<FaceConstructionData<dim>>::iterator last,
+                                                             typename std::vector<Node<dim>*>::const_iterator perim_first,
+                                                             typename std::vector<Node<dim>*>::const_iterator perim_last,
+                                                             std::set<Node<dim>*> & split_perimeter_nodes,
+                                                             std::set<size_t>& region_material_ids,
+                                                             bool convert_original_elements_to_intervening_elements );
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary nodes, node manifolds, and InterFace connectivity, updating overall connectivity as well; inside elements are first in pair
   std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
@@ -220,8 +226,17 @@ public:
                                              const std::vector<Node<dim>*>& nodes,
                                              int32_t material_id );
 
-  /// creates a Face matching the current lower-dimensional element and deletes the element subsequently
-  Face<dim>* const ReplaceElementByFace( csmp::Element<dim>* eptr,
+  /// for the creation of SplitBoundaries consisting of InterFaces containing lower-dimensional elements
+  InterFace<dim>* const WrapInterFaceAroundElement( csmp::Element<dim>* const eptr,
+                                                    csmp::Element<dim>* inner_eptr,
+                                                    csmp::Element<dim>* outer_eptr,
+                                                    uint32_t adjacent_face_of_inner_element,
+                                                    uint32_t adjacent_face_of_outer_element,
+                                                    const LocalVariables& interface_variables,
+                                                    const IntegrationPointVariables& interface__ipoint_vars );
+
+ /// creates a Face matching the current lower-dimensional element and deletes the element subsequently; setting element pointer to zero if deletion was successful
+  Face<dim>* const ReplaceElementByFace( typename std::vector<Element<dim>*>::iterator,
                                          csmp::Element<dim>* inner_eptr,
                                          csmp::Element<dim>* outer_eptr,
                                          uint32_t adjacent_face_of_inner_element,
@@ -230,8 +245,8 @@ public:
                                          const IntegrationPointVariables& face_integration_point_variables,
                                          bool delete_original_face=true );
 
-/// multiplicates nodes and replaces (deletes)  lower-dimensional Element with InterFace object
-InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
+/// multiplicates nodes and replaces (deletes)  lower-dimensional Element with InterFace object, setting element pointer to zero if deletion was successful
+InterFace<dim>* const ReplaceElementByInterFace( typename std::vector<Element<dim>*>::iterator,
                                                  csmp::Element<dim>* inner_eptr,
                                                  csmp::Element<dim>* outer_eptr,
                                                  uint32_t adjacent_face_of_inner_element,
@@ -260,7 +275,7 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
                                     const IntegrationPointVariables& ); ///< optional
 
    /// assuming that the nodes on either side of the interface are already there, the face gets replaced
-  InterFace<dim>* const ReplaceFaceByInterFace( csmp::Face<dim>* eptr,
+  InterFace<dim>* const ReplaceFaceByInterFace( typename std::vector<Face<dim>*>::iterator,
                                                 const LocalVariables&,
                                                 const IntegrationPointVariables&,
                                                 std::vector<Node<dim>*> outside_nodes );
@@ -283,16 +298,16 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
   // NB: elements are responsible for their nodes, nodes for their manifolds
   
   /// disconnects neighbors, removes Element from node-parent container and deletes element, returns iterator to next Element if deletion succeeded
-  auto Delete( Node<dim>*& ) -> typename plf::colony< Node<dim> >::iterator;
+  auto Delete( typename std::vector<Node<dim>*>::iterator ) -> typename plf::colony< Node<dim> >::iterator;
 
   /// disconnects neighbors, removes Element from node-parent container and deletes element, returns iterator to next Element if deletion succeeded
-  auto Delete( Element<dim>*& ) -> typename plf::colony< Element<dim> >::iterator;
+  auto Delete( typename std::vector<Element<dim>*>::iterator ) -> typename plf::colony< Element<dim> >::iterator;
 
   /// disconnects neighbors, deletes Face, , returns iterator to next Face if deletion succeeded
-  auto Delete( Face<dim>*& ) -> typename plf::colony< Face<dim> >::iterator;
+  auto Delete( typename std::vector<Face<dim>*>::iterator ) -> typename plf::colony< Face<dim> >::iterator;
 
   /// disconnects neighbors, deletes InterFace, , returns iterator to next InterFace if deletion succeeded
-  auto Delete( InterFace<dim>*& ) -> typename plf::colony< InterFace<dim> >::iterator;
+  auto Delete( typename std::vector<InterFace<dim>*>::iterator ) -> typename plf::colony< InterFace<dim> >::iterator;
   
   /// any non-nullpointer neighbors the element type of which is unknown (global operation on all cells)
   template<template<uint32_t> class CELL>

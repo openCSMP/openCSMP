@@ -1514,7 +1514,7 @@ bool ModelTopology::AddDomainsWithEquidimensionalCheck( const multimap<string,st
 template<uint32_t dim>
 void ModelTopology::RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset )
  {
-    int32_t  elmttype;
+    int8_t  elmttype;
     for ( auto rit=model_domains_.begin(); rit!=model_domains_.end(); rit++ )
     {
         /// find highest dimension for elements in current region
@@ -1529,6 +1529,9 @@ void ModelTopology::RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset )
              etype_it = (*rit).second.first.begin(); etype_it != etype_endit; ++etype_it )
             if ( fem_specs::MinimumSpatialDimension( *etype_it ) != elmtdim )
                 remove_types.push_back( *etype_it );
+// TODO: as it stands this method removes equidimensional elements as well when boundary creation is not requested
+// if there are no types to remove we can move on to next region
+//        if ( remove_types.empty() ) continue;
         /// remove ids of low dim elements
         vector<size_t> remove_eids;
         for ( size_t i = 0ul; i < (*rit).second.second.size(); ++i )
@@ -1553,6 +1556,7 @@ void ModelTopology::RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset )
               (*rit).second.first.erase( remove_types[i] );
             for( size_t i{0ul}; i < remove_eids.size(); ++i )
               (*rit).second.second.erase( (*rit).second.second.begin() + ( remove_eids[i] - i ) );
+            // TODO: deleting regions if they have become empty
         }
     }
  } // end RemoveLowDimCellsFromDomains

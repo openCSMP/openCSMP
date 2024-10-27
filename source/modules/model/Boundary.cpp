@@ -737,6 +737,8 @@ When establishing face connectivity(parent elements) the convention is as outlin
 @attention If the element is on the model boundary(attached to a single higher dimensional parent element only),
 the unit normal of the created face will point outward.
 
+@attention the elements of the input region are removed and this region must therefore be deleted
+
 */
 template<uint32_t dim>
 bool Boundary<dim>::CreateFrom( Region<dim>& region,
@@ -767,7 +769,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
   const auto regionElementsEnd( region.CellsEnd() );
   size_t     cell_number{0};
   
-  for ( auto it = region.CellsBegin(); it != regionElementsEnd; ++it )
+  for ( auto it = region.CellVector().begin(); it != region.CellVector().end(); ++it )
     {
       // renumbering the elements so that they can be used to find neighbors
       (*it)->Idx( cell_number );
@@ -782,7 +784,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
       if ( new_nbors.first.first != nullptr && new_nbors.second.first != nullptr )
         {
           // create new internal face
-          this->cell_vec_.push_back( meshManager.ReplaceElementByFace( (*it),
+          this->cell_vec_.push_back( meshManager.ReplaceElementByFace( it,
                                                                        new_nbors.first.first, new_nbors.second.first,
                                                                        new_nbors.first.second, new_nbors.second.second,
                                                                        lvsFaces, lvsIntegrationPoints ) );
@@ -801,28 +803,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
 
 
   // connecting the new faces to their neighbors
-  size_t elmt{0};
-  // processing the interior faces whose neighbors are all on the inside of the domain first
-  for ( auto it=region.CellsBegin(); it!=region.PerimeterCellsBegin(); ++it ) {
-       const size_t n_neighbors{ (*it)->Neighbors() };
-       for ( auto i{0U}; i<n_neighbors; ++i ) {
-            // since the mapping between elements and faces only exists in this subdomain
-            // outside elements cannot be considered
-            assert ( (*it)->Neighbor(i) != nullptr );
-            this->cell_vec_[elmt]->Assign( i, this->cell_vec_[ (*it)->Neighbor(i)->Idx()] );
-         }
-       elmt++;
-    }
-  // processing perimeter faces
-  elmt = region.InteriorCells();
-  for ( auto it=region.PerimeterCellsBegin(); it!=region.CellsEnd(); ++it ) {
-       const size_t n_neighbors{ (*it)->Neighbors() };
-       for ( auto i{0U}; i<n_neighbors; ++i )
-         // if the perimeter element neighbor is contained in the interior elements of region an assignment is made
-         if ( (*it)->Neighbor(i) != nullptr && region.Contains( (*it)->Neighbor(i) ) )
-           this->cell_vec_[elmt]->Assign( i, this->cell_vec_[ (*it)->Neighbor(i)->Idx()] );
-       elmt++;
-    }
+  meshManager.template BuildConnectivity<csmp::Face>( this->cell_vec_.begin(), this->cell_vec_.end() ); // between the faces
 
   // initialize BOX_BOUNDARY of nodes
   InitializeBoundaryFlags( boxBoundary );
@@ -831,7 +812,12 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
   // (sorts node and cell vectors into interior and exterior ranges;
   //  initialises boundary face vector bd_face_vec_)
   this->IdentifyPerimeter();
-
+  
+  // since the Element objects in the input region have been deleted, this Region must be deleted as well
+  region.ScheduleForRebuild();
+  
+  throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom( Region, MeshManager, BOX_BOUNDARY )",
+                         region.Name(), "is invalid now and must be rebuild" );
   // done
   return true;
 
@@ -913,8 +899,7 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   this->cell_vec_.reserve( cell_ids.size() );
   for ( auto& idx : cell_ids ) {
        const auto face = idx - offset;
-       // TODO: this method makes no Faces, but depends on MeshManager for this task
-       assert( mesh.Faces() != 0 );
+       assert( mesh.Faces() > 0 );
        assert( face < mesh.Faces() );
        Face<dim>* fptr = &(*next(mesh.FacesBegin(),face));
        assert( fptr != nullptr );
@@ -928,7 +913,7 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   // filling the vector
   for ( auto& it : this->cell_vec_ ) {
        const auto n_nodes{it->Nodes()};
-       for ( auto i{0U}; i<n_nodes; ++i ) {
+       for ( uint32_t i{0U}; i<n_nodes; ++i ) {
             assert( it->N(i) != nullptr );
             this->node_vec_.push_back( it->N(i) );
          }
@@ -948,8 +933,9 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
 
 
 /**
-    To create Boundary from an existing range of Face objecgts. It is assumed
-    that the faces are already interconnected.
+    To create Boundary from an existing range of Face objecgts.
+    
+    @attention the method assumes that the faces are already interconnected.
 */
 template<uint32_t dim>
 bool Boundary<dim>::CreateFrom( const typename vector<Face<dim>*>::const_iterator facesBegin,

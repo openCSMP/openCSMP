@@ -150,9 +150,10 @@ void EffectiveStressDilatation2D_Example::Run()
   Model<DIM>  model(model_name, variable_file);
   
   // 2.1 create Boundaries and convert them into SplitBoundary objects
-  model.CreateSplitBoundaryFrom("SET1");
-  model.CreateSplitBoundaryFrom("SET2");
-  model.CreateSplitBoundaryFrom("WELL_FRACTURE");
+  const bool convert_lower_dim_elmts_into_intervening_elmts{ true };
+  model.CreateSplitBoundaryFrom("SET1",convert_lower_dim_elmts_into_intervening_elmts);
+  model.CreateSplitBoundaryFrom("SET2",convert_lower_dim_elmts_into_intervening_elmts);
+  model.CreateSplitBoundaryFrom("WELL_FRACTURE", false );
   
   cout <<"\nmain: created split boundaries: ";
   for ( Model<2>::splitBoundaryConstIterator it=model.SplitBoundariesBegin(); it!=model.SplitBoundariesEnd(); it++ )

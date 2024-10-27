@@ -54,7 +54,8 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeCorrespondance_2D( const char* m
 
   ///Testing Differnt model creations
   //Region -> SplitBoundary
-  string sb_name1  = *((model1.CreateSplitBoundaryFrom( "FRACTURE" ) ).first.begin()) ;
+  const bool retain_elmts_as_intervening_elmts{ false };
+  string sb_name1  = *((model1.CreateSplitBoundaryFrom( "FRACTURE", retain_elmts_as_intervening_elmts ) ).first.begin()) ;
 
   ///Inserting lower dimensional region in each
   model1.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
@@ -62,13 +63,13 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeCorrespondance_2D( const char* m
   //Getting splitboundaries
   SplitBoundary<DIM>& sb1 = model1.SplitBoundary( sb_name1 );
 
-  std::vector<SplitBoundary<DIM>> sb_vec{sb1};
+  vector<SplitBoundary<DIM>> sb_vec{sb1};
   for ( auto& sb : sb_vec){
     for (auto& ifp : sb.CellVector() ){
       uint32_t n_nodes = ifp->FE()->Nodes();
 
-      std::vector<uint32_t> nids_in = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID() );
-      std::vector<uint32_t> nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID() );
+      vector<uint32_t> nids_in = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID() );
+      vector<uint32_t> nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID() );
 
       for ( uint32_t n{0U}; n<n_nodes;++n){
         //Nodes should match that of face
@@ -137,7 +138,7 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( co
   int32_t region_ID_top    = TopUnit1.DomainIndex();
 
   //Getting perimeter nodes of region, before splitboundary is created and information is lost
-  std::set<Node<DIM>*> perim_nodes1, perim_nodes2;
+  set<Node<DIM>*> perim_nodes1, perim_nodes2;
   Region<DIM>& frac_region1 = model1.Region( "FRACTURE" );
   for ( auto nit = frac_region1.PerimeterNodesBegin(); nit !=frac_region1.NodesEnd(); nit++)
     perim_nodes1.insert(*nit);
@@ -148,7 +149,8 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( co
   ///Testing splitboundary creation
 
   //Region -> SplitBoundary
-  string sb_name1  = *((model1.CreateSplitBoundaryFrom( "FRACTURE" ) ).first.begin()) ;
+  const bool retain_elmts_as_intervening_elmts{ false };
+  string sb_name1  = *((model1.CreateSplitBoundaryFrom( "FRACTURE", retain_elmts_as_intervening_elmts ) ).first.begin()) ;
   //Getting splitboundary
   SplitBoundary<DIM>& sb1 = model1.SplitBoundary( sb_name1 );
 
@@ -173,7 +175,7 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( co
 
 
 
-  std::vector<SplitBoundary<DIM>> sb_vec{sb1};
+  vector<SplitBoundary<DIM>> sb_vec{sb1};
   for ( auto& sb : sb_vec){
     for (auto& ifp : sb.CellVector() ){
 
@@ -182,24 +184,24 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( co
       Point<DIM> nrml_out = ifp->UnitNormal(OUTSIDE);
       Point<DIM> nrml_mid = ifp->UnitNormal(MIDDLE);
       //Inside opposite to outside
-      _equal( nrml_in[0] ,  nrml_out[0] , std::numeric_limits<double>::epsilon()  );
-      _equal( nrml_in[1] , -nrml_out[1] , std::numeric_limits<double>::epsilon()  );
-      _equal( nrml_in[2] ,  nrml_out[2] , std::numeric_limits<double>::epsilon()  );
+      _equal( nrml_in[0] ,  nrml_out[0] , numeric_limits<double>::epsilon()  );
+      _equal( nrml_in[1] , -nrml_out[1] , numeric_limits<double>::epsilon()  );
+      _equal( nrml_in[2] ,  nrml_out[2] , numeric_limits<double>::epsilon()  );
       //inside is 0 1 0
       _equal( nrml_in[1] , 1.0 , 0.0001  );
-      _test(  std::fabs(nrml_in[0]) < 0.0001 );
-      _test(  std::fabs(nrml_in[2]) < 0.0001 );
+      _test(  fabs(nrml_in[0]) < 0.0001 );
+      _test(  fabs(nrml_in[2]) < 0.0001 );
       //middle is 0 1 0
-      _equal( std::fabs(nrml_mid[1]) , 1.0 , 0.0001  );
-      _test(  std::fabs(nrml_mid[0]) < 0.0001 );
-      _test(  std::fabs(nrml_mid[2]) < 0.0001 );
+      _equal( fabs(nrml_mid[1]) , 1.0 , 0.0001  );
+      _test(  fabs(nrml_mid[0]) < 0.0001 );
+      _test(  fabs(nrml_mid[2]) < 0.0001 );
 
       //Retrieve the nodes of face that match with INSIDE OUTSIDE
-      std::vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
+      vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
                             nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID());
 
-      std::set<Node<DIM>*> outside_nds_interface;
-      std::set<Node<DIM>*> outside_nds_face;
+      set<Node<DIM>*> outside_nds_interface;
+      set<Node<DIM>*> outside_nds_face;
       uint32_t n_nodes = ifp->FE()->Nodes();
       for ( uint32_t n{0U}; n<n_nodes;++n ){
         //Nodes should match that of INSIDE face
@@ -316,7 +318,7 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_I
   Region<DIM>& right_front_top      = model1.Region("RIGHT_FRONT_TOP");
 
   //Getting perimeter nodes of region, before splitboundary is created and information is lost
-  std::set<Node<DIM>*> perim_nodes_planar, perim_nodes_diagonal;
+  set<Node<DIM>*> perim_nodes_planar, perim_nodes_diagonal;
   Region<DIM>& frac_region_planar = model1.Region( "FRACTURE_PLANAR" );
   for ( auto nit = frac_region_planar.PerimeterNodesBegin(); nit !=frac_region_planar.NodesEnd(); nit++){
     perim_nodes_planar.insert(*nit);
@@ -343,8 +345,9 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_I
   ///Testing splitboundary creation
 
   //Region -> SplitBoundary
-  std::set<string> sb_names    = (model1.CreateSplitBoundaryFrom( "FRACTURE_PLANAR" ) ).first ;
-  std::set<string> sb_names_2  = (model1.CreateSplitBoundaryFrom( "FRACTURE_DIAGONAL" ) ).first ;
+  const bool retain_elmts_as_intervening_elmts{ false };
+  set<string> sb_names    = (model1.CreateSplitBoundaryFrom( "FRACTURE_PLANAR", retain_elmts_as_intervening_elmts ) ).first ;
+  set<string> sb_names_2  = (model1.CreateSplitBoundaryFrom( "FRACTURE_DIAGONAL", retain_elmts_as_intervening_elmts ) ).first ;
 
   //Need to find node on perimeter that was split by diagonal fracture
   Node<DIM>* second_split_perimeter_node = nullptr;
@@ -352,8 +355,8 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_I
   split_perimter_node->Manifold()->N(0) == split_perimter_node ?  second_split_perimeter_node = split_perimter_node->Manifold()->N(1) : second_split_perimeter_node->Manifold()->N(0);
 
 
-  std::string sb1 = model1.MergeSplitBoundaries( "FRACTURE_PLANAR",   sb_names );
-  std::string sb2 = model1.MergeSplitBoundaries( "FRACTURE_DIAGONAL", sb_names_2);
+  string sb1 = model1.MergeSplitBoundaries( "FRACTURE_PLANAR",   sb_names );
+  string sb2 = model1.MergeSplitBoundaries( "FRACTURE_DIAGONAL", sb_names_2);
 
   //For Planar SplitBoundary
   for (auto ifp : model1.SplitBoundary(sb1).CellVector() ){
@@ -363,21 +366,21 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_I
     Point<DIM> nrml_out = ifp->UnitNormal(OUTSIDE);
     //Point<dim> nrml_mid = ifp->UnitNormal(MIDDLE);
     //Inside opposite to outside
-    _equal( nrml_in[0] ,  nrml_out[0] , std::numeric_limits<double>::epsilon()  );
-    _equal( nrml_in[1] , -nrml_out[1] , std::numeric_limits<double>::epsilon()  );
-    _equal( nrml_in[2] ,  nrml_out[2] , std::numeric_limits<double>::epsilon()  );
+    _equal( nrml_in[0] ,  nrml_out[0] , numeric_limits<double>::epsilon()  );
+    _equal( nrml_in[1] , -nrml_out[1] , numeric_limits<double>::epsilon()  );
+    _equal( nrml_in[2] ,  nrml_out[2] , numeric_limits<double>::epsilon()  );
     //inside is 0 1 0
     _equal( nrml_in[1] , 1.0 , 0.0001  );
-    _test(  std::fabs(nrml_in[0]) < 0.0001 );
-    _test(  std::fabs(nrml_in[2]) < 0.0001 );
+    _test(  fabs(nrml_in[0]) < 0.0001 );
+    _test(  fabs(nrml_in[2]) < 0.0001 );
 
     //Retrieve the nodes of face that match with INSIDE OUTSIDE
-    std::vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
+    vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
                           nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID());
 
 
-    std::set<Node<DIM>*> outside_nds_interface;
-    std::set<Node<DIM>*> outside_nds_face;
+    set<Node<DIM>*> outside_nds_interface;
+    set<Node<DIM>*> outside_nds_face;
     uint32_t n_nodes = ifp->FE()->Nodes();
     for ( uint32_t n{0U}; n<n_nodes;++n){
       //Nodes should match that of INSIDE face
@@ -438,22 +441,22 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_I
     Point<DIM> nrml_out = ifp->UnitNormal(OUTSIDE);
     //Point<dim> nrml_mid = ifp->UnitNormal(MIDDLE);
     //Inside opposite to outside
-    _equal( nrml_in[0] , -nrml_out[0] , 10.0*std::numeric_limits<double>::epsilon()  );
-    _test(  std::fabs(nrml_in[1]) < 0.001 );     //normal should be along x-z plane
-    _test(  std::fabs(nrml_out[1]) < 0.001 );    //normal should be along x-z plane
-    _equal( nrml_in[2] , -nrml_out[2] , 10.0*std::numeric_limits<double>::epsilon()  );
+    _equal( nrml_in[0] , -nrml_out[0] , 10.0*numeric_limits<double>::epsilon()  );
+    _test(  fabs(nrml_in[1]) < 0.001 );     //normal should be along x-z plane
+    _test(  fabs(nrml_out[1]) < 0.001 );    //normal should be along x-z plane
+    _equal( nrml_in[2] , -nrml_out[2] , 10.0*numeric_limits<double>::epsilon()  );
     //inside is -0.707 0 -0.707
-    _equal( nrml_in[0] , -1.0/std::sqrt(2) , 0.001  );
-    _equal( nrml_in[2] , -1.0/std::sqrt(2) , 0.001  );
-    _test(  std::fabs(nrml_in[1]) < 0.001 );
+    _equal( nrml_in[0] , -1.0/sqrt(2) , 0.001  );
+    _equal( nrml_in[2] , -1.0/sqrt(2) , 0.001  );
+    _test(  fabs(nrml_in[1]) < 0.001 );
 
     //Retrieve the nodes of face that match with INSIDE OUTSIDE
-    std::vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
+    vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
                           nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID());
 
 
-    std::set<Node<DIM>*> outside_nds_interface;
-    std::set<Node<DIM>*> outside_nds_face;
+    set<Node<DIM>*> outside_nds_interface;
+    set<Node<DIM>*> outside_nds_face;
     uint32_t n_nodes = ifp->FE()->Nodes();
     for ( uint32_t n{0U}; n<n_nodes;++n){
       //Nodes should match that of INSIDE face
@@ -572,7 +575,7 @@ bool SplitBoundaryInterface_Test<DIM>::Test_NodeAndElementsCorrespondance_3D_X_I
   Region<dim>& right_front_top      = model1.Region("RIGHT_FRONT_TOP");
 
   //Getting perimeter nodes of region, before splitboundary is created and information is lost
-  std::set<Node<dim>*> perim_nodes_planar, perim_nodes_diagonal;
+  set<Node<dim>*> perim_nodes_planar, perim_nodes_diagonal;
   Region<dim>& frac_region_planar = model1.Region( "FRACTURE_PLANAR" );
   for ( auto nit = frac_region_planar.PerimeterNodesBegin(); nit !=frac_region_planar.NodesEnd(); nit++){
     perim_nodes_planar.insert(*nit);
@@ -598,8 +601,9 @@ bool SplitBoundaryInterface_Test<DIM>::Test_NodeAndElementsCorrespondance_3D_X_I
 
   ///Testing splitboundary creation
   //Region -> SplitBoundary
-  set<string> sb_names_2  = (model1.CreateSplitBoundaryFrom( "FRACTURE_DIAGONAL" ) ).first ;
-  set<string> sb_names    = (model1.CreateSplitBoundaryFrom( "FRACTURE_PLANAR" ) ).first ;
+  const bool retain_elmts_as_intervening_elmts{ false };
+  set<string> sb_names_2  = (model1.CreateSplitBoundaryFrom( "FRACTURE_DIAGONAL", retain_elmts_as_intervening_elmts ) ).first ;
+  set<string> sb_names    = (model1.CreateSplitBoundaryFrom( "FRACTURE_PLANAR", retain_elmts_as_intervening_elmts ) ).first ;
 
   //Need to find node on perimeter that was split by diagonal fracture
   Node<dim>* second_split_perimeter_node = nullptr;
@@ -607,8 +611,8 @@ bool SplitBoundaryInterface_Test<DIM>::Test_NodeAndElementsCorrespondance_3D_X_I
   split_perimter_node->Manifold()->N(0) == split_perimter_node ?  second_split_perimeter_node = split_perimter_node->Manifold()->N(1) : second_split_perimeter_node->Manifold()->N(0);
 
 
-  std::string sb1 = model1.MergeSplitBoundaries( "FRACTURE_PLANAR",   sb_names );
-  std::string sb2 = model1.MergeSplitBoundaries( "FRACTURE_DIAGONAL", sb_names_2);
+  string sb1 = model1.MergeSplitBoundaries( "FRACTURE_PLANAR",   sb_names );
+  string sb2 = model1.MergeSplitBoundaries( "FRACTURE_DIAGONAL", sb_names_2);
 
   //For Planar SplitBoundary
   for (auto ifp : model1.SplitBoundary(sb1).CellVector() ){
@@ -618,21 +622,21 @@ bool SplitBoundaryInterface_Test<DIM>::Test_NodeAndElementsCorrespondance_3D_X_I
     Point<dim> nrml_out = ifp->UnitNormal(OUTSIDE);
     //Point<dim> nrml_mid = ifp->UnitNormal(MIDDLE);
     //Inside opposite to outside
-    _equal( nrml_in[0] ,  nrml_out[0] , std::numeric_limits<double>::epsilon()  );
-    _equal( nrml_in[1] , -nrml_out[1] , std::numeric_limits<double>::epsilon()  );
-    _equal( nrml_in[2] ,  nrml_out[2] , std::numeric_limits<double>::epsilon()  );
+    _equal( nrml_in[0] ,  nrml_out[0] , numeric_limits<double>::epsilon()  );
+    _equal( nrml_in[1] , -nrml_out[1] , numeric_limits<double>::epsilon()  );
+    _equal( nrml_in[2] ,  nrml_out[2] , numeric_limits<double>::epsilon()  );
     //inside is 0 1 0
     _equal( nrml_in[1] , 1.0 , 0.0001  );
-    _test(  std::fabs(nrml_in[0]) < 0.0001 );
-    _test(  std::fabs(nrml_in[2]) < 0.0001 );
+    _test(  fabs(nrml_in[0]) < 0.0001 );
+    _test(  fabs(nrml_in[2]) < 0.0001 );
 
     //Retrieve the nodes of face that match with INSIDE OUTSIDE
-    std::vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
+    vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
                           nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID());
 
 
-    std::set<Node<dim>*> outside_nds_interface;
-    std::set<Node<dim>*> outside_nds_face;
+    set<Node<dim>*> outside_nds_interface;
+    set<Node<dim>*> outside_nds_face;
     uint32_t n_nodes = ifp->FE()->Nodes();
     for ( uint32_t n{0U}; n<n_nodes;++n){
       //Nodes should match that of INSIDE face
@@ -693,22 +697,22 @@ bool SplitBoundaryInterface_Test<DIM>::Test_NodeAndElementsCorrespondance_3D_X_I
     Point<dim> nrml_out = ifp->UnitNormal(OUTSIDE);
     //Point<dim> nrml_mid = ifp->UnitNormal(MIDDLE);
     //Inside opposite to outside
-    _equal( nrml_in[0] , -nrml_out[0] , 10.0*std::numeric_limits<double>::epsilon()  );
-    _test(  std::fabs(nrml_in[1]) < 0.001 );     //normal should be along x-z plane
-    _test(  std::fabs(nrml_out[1]) < 0.001 );    //normal should be along x-z plane
-    _equal( nrml_in[2] , -nrml_out[2] , 10.0*std::numeric_limits<double>::epsilon()  );
+    _equal( nrml_in[0] , -nrml_out[0] , 10.0*numeric_limits<double>::epsilon()  );
+    _test(  fabs(nrml_in[1]) < 0.001 );     //normal should be along x-z plane
+    _test(  fabs(nrml_out[1]) < 0.001 );    //normal should be along x-z plane
+    _equal( nrml_in[2] , -nrml_out[2] , 10.0*numeric_limits<double>::epsilon()  );
     //inside is -0.707 0 -0.707
-    _equal( nrml_in[0] , -1.0/std::sqrt(2) , 0.001  );
-    _equal( nrml_in[2] , -1.0/std::sqrt(2) , 0.001  );
-    _test(  std::fabs(nrml_in[1]) < 0.001 );
+    _equal( nrml_in[0] , -1.0/sqrt(2) , 0.001  );
+    _equal( nrml_in[2] , -1.0/sqrt(2) , 0.001  );
+    _test(  fabs(nrml_in[1]) < 0.001 );
 
     //Retrieve the nodes of face that match with INSIDE OUTSIDE
-    std::vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
+    vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
                           nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID());
 
 
-    std::set<Node<dim>*> outside_nds_interface;
-    std::set<Node<dim>*> outside_nds_face;
+    set<Node<dim>*> outside_nds_interface;
+    set<Node<dim>*> outside_nds_face;
     uint32_t n_nodes = ifp->FE()->Nodes();
     for ( uint32_t n{0U}; n<n_nodes;++n){
       //Nodes should match that of INSIDE face

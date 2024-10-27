@@ -1,10 +1,11 @@
 #ifndef CSMP_ELEMENT_H
 #define CSMP_ELEMENT_H
 
-#include "LocalVariableStorage.h"
+#include "CSMP_definitions.h"
 #include "FiniteElement.h"
 #include "FiniteElementPolicy.h"
 #include "FiniteVolumePolicy.h"
+#include "LocalVariableStorage.h"
 
 #include "Box.h"
 
@@ -170,9 +171,11 @@ class Element : public FiniteElementPolicy<dim, Element>,
     // NB: no rule of zero because FE/FV pointers in policies
     Element( const Element<dim>& );
     Element<dim>& operator=( const Element<dim>& );
-    // no move semantics
+    // move semantics essential for storage in plf::colony
+    Element( Element<dim>&& );
+    Element<dim>& operator=( Element<dim>&& );
     
-    ~Element() = default;
+    // ~Element();
 
     /// compares finite element type, material id, nodes, and neighbors; ignoring mutable idx and other attributes
     bool operator==( const Element<dim>& ) const;

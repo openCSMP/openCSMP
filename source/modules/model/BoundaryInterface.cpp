@@ -628,9 +628,11 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     //  3.1 creating the required face objects
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    const size_t       new_faces_required(subdomain.Cells());
-    vector<Face<dim>*> face_vector;
+    const size_t          new_faces_required(subdomain.Cells());
+    vector<Face<dim>*>    face_vector;
+    vector<Element<dim>*> elmt_vector;
     face_vector.reserve(new_faces_required);
+    elmt_vector.reserve(new_faces_required);
 #ifdef DEBUG
     const size_t n_original_faces(model.Mesh().Faces());
     const size_t n_original_elmts(model.Mesh().Elements());
@@ -651,7 +653,8 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
               // creating the faces
               // ------------------
               // storing pointers to the new faces in the vector from which the boundary will be constructed
-              face_vector.push_back( model.Mesh().ReplaceElementByFace( pit.LowerDimElement(),
+              elmt_vector.push_back( pit.LowerDimElement() );
+              face_vector.push_back( model.Mesh().ReplaceElementByFace( next(elmt_vector.begin(),elmt_vector.size()-1ul),
                                                                         pit.InnerElement(),
                                                                         pit.OuterElement(),
                                                                         pit.InnerElementFace(),
@@ -665,6 +668,21 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
       }
     patch_data.clear();
 
+    // checking that the conversion was performed correctly
+    assert( elmt_vector.size() == elmt_vector.size() );
+    size_t n_undeleted_elmts{ 0ul };
+    for ( const auto& it : elmt_vector )
+      if ( it != nullptr ) {
+           cout <<"\n\t"<<"input Element "<< it->Idx() <<" ("<< parseFiniteElementType( it->FE_Type() ) <<"): could not be deleted.";
+           n_undeleted_elmts++;
+        }
+    if ( n_undeleted_elmts > 0 ) {
+         cout <<"\n\t"<< n_undeleted_elmts <<" input elements could not be deleted.";
+         ErrorHandler::Instance().Note( ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom",
+                                        subdomain.Name(), "region elements may still exist as remnants");
+      }
+    subdomain.ScheduleForRebuild();
+    
     // establishes Face connectivity between patches
     model.Mesh().template BuildConnectivity<Face>( face_vector.begin(), face_vector.end() );
     // repairing connectivity among elements after removal
@@ -698,8 +716,8 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 6. remove lower-dimensional input region (its elements were already removed above).
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    const bool remove_elmts{ false };
-    model.RemoveRegion( dim_1_region, remove_elmts );
+    model.Region("Model").ScheduleForRebuild();
+    model.RemoveRegion( dim_1_region );
     model.UpdateRegions();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -1729,7 +1747,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
                                                                                elmts_to_become_faces.begin(),
                                                                                elmts_to_become_faces.end() );
        // repairing connectivity among elements after removal
-       model->Mesh().template RemoveDegenerateNeighbors<Element>();
+// TODO:      model->Mesh().template RemoveDegenerateNeighbors<Element>();
  
       // 4. creating the Boundaries from the faces
       // -----------------------------------------
@@ -1750,19 +1768,18 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
       // 5. removing input regions and updating other regions
       // ------------------------------------------------------------------------------------
       // (no flagging for rebuilt of regions is necessary as they will be completely removed)
-      const bool erase_elements{ false }; // this was already done by ReplaceBoundaryElementsByFaces()
-      if ( top.first != top.second ) model->RemoveRegion( "TOP", erase_elements );
-      if ( irregular.first != irregular.second ) model->RemoveRegion( "IRREGULAR", erase_elements );
-      model->RemoveRegion( "BOTTOM", erase_elements );
-      model->RemoveRegion( "RIGHT", erase_elements );
-      model->RemoveRegion( "LEFT", erase_elements );
+      if ( top.first != top.second ) model->RemoveRegion( "TOP" );
+      if ( irregular.first != irregular.second ) model->RemoveRegion( "IRREGULAR" );
+      model->RemoveRegion( "BOTTOM" );
+      model->RemoveRegion( "RIGHT" );
+      model->RemoveRegion( "LEFT" );
       if constexpr( dim == 3U ) {
-           model->RemoveRegion( "BACK", erase_elements );
-           model->RemoveRegion( "FRONT", erase_elements );
+           model->RemoveRegion( "BACK" );
+           model->RemoveRegion( "FRONT" );
         }
-        
+      model->Region("Model").ScheduleForRebuild();
       model->UpdateRegions();
-//      assert( model->Region("Model").Cells() == model->Mesh().Elements() );
+      assert( model->Region("Model").Cells() == model->Mesh().Elements() );
       cout << "\n\n EstablishBoxBoundaries: done!\n";
       return true;
       
@@ -1844,9 +1861,8 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
 
 	  // 4. removing the original regions from which the boundaries were created
     // ------------------------------------------------------------------------------------
-    // (no flagging for rebuilt of regions is necessary as they will be completely removed)
-    const bool erase_elements{ false }; // ATTENTION: the elements were already removed by 'ReplaceBoundaryElementsByFaces()'
-    model->RemoveRegion( dimension_minus1_region, erase_elements );
+    model->Region("Model").ScheduleForRebuild();
+    model->RemoveRegion( dimension_minus1_region );
     model->UpdateRegions();
 
 	  cout <<"\n\n"<<"BoundaryInterface::CreateExternalBoundaryFrom: created boundary '"<< boundary_name <<"', and removed input region."<< endl;
@@ -1924,9 +1940,19 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
     // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------
     assert( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) == 0 );
+#ifndef NDEBUG
+    bool mesh_ok = integrityCheck<dim,Element>( model->Mesh().ElementsBegin(), model->Mesh().ElementsEnd() );
+    assert( mesh_ok );
+#endif
     vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                              elmts_to_become_faces.begin(),
                                                                              elmts_to_become_faces.end() );
+#ifndef NDEBUG
+    mesh_ok = integrityCheck<dim,Element>( model->Mesh().ElementsBegin(), model->Mesh().ElementsEnd() );
+// NO HELP    if ( !mesh_ok) setNeighborsWithInvalidFE_PointersTo_nullptr<dim,Element>( model->Mesh().ElementsBegin(), model->Mesh().ElementsEnd() );
+//    assert( mesh_ok );
+#endif
+    
     // 3. creating the Boundaries from the faces
     // -----------------------------------------
     typename vector<Face<dim>*>::iterator fit{ faces.begin() };
@@ -1946,13 +1972,15 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
          cout << endl;
       }
 
+// DEBUGGING - restoring broken connectivity
+// if this does not work, the memory must have been corrupted before
+model->Mesh().UpdateConnectivity();
+
 	  // 4. removing the original regions from which the boundaries were created
     // ------------------------------------------------------------------------------------
+    model->Region("Model").ScheduleForRebuild();
     // (no flagging for rebuilt of regions is necessary as they will be completely removed)
-    const bool erase_elements{ false }; // this was already done above
-    for ( auto& it : eligibleRegions ) {
-         model->RemoveRegion( it.first.c_str(), erase_elements );
-      }
+    for ( auto& it : eligibleRegions ) model->RemoveRegion( it.first.c_str() );
     // all non-unique regions must be rebuilt
     model->UpdateRegions();
     assert( model->Mesh().Elements() == model->Region("Model").Cells() );

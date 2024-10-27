@@ -1,17 +1,11 @@
 #include "Element.h"
 #include "Node.h"
-
 #include "Exception.h"
-
 #include "Visitor.h"
-
-#include <cfloat>
 
 using namespace std;
 
 namespace csmp {
-
-
 
 /**
 Constructor associates Element with instance of specific finite element.
@@ -117,25 +111,30 @@ Element<dim>::Element( size_t idx,
 }
 
 
+
 template<uint32_t dim>
 Element<dim>::Element( const Element<dim>& el )
-  : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
-    FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
-    idx_( el.idx_ ),
-    material_id_(el.material_id_),
-    region_id_(el.region_id_),
-    elmt_connector_( el.elmt_connector_ ),
-    node_connector_( el.node_connector_ )
+  : FiniteElementPolicy<dim, csmp::Element>{ el },
+    FiniteVolumePolicy<dim, csmp::Element>{ el.FV() },
+    // local variable storage
+    LocalVariableStorage<dim,csmp::Element>{ el },
+    idx_{ el.idx_ },
+    material_id_{ el.material_id_ },
+    region_id_{ el.region_id_ },
+    elmt_connector_{ el.elmt_connector_ },
+    node_connector_{ el.node_connector_ }
 {
-  // variable storage: call of initialization function
-  this->LVS( el.LVS() );
+   cout <<"\n"<<"Element(&): copied element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
 }
 
-/*
+
+
 template<uint32_t dim>
 Element<dim>::Element( Element<dim>&& el )
-  : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
-    FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
+  : FiniteElementPolicy<dim, csmp::Element>{ el }, // moves the pointer (inbuilt type)
+    FiniteVolumePolicy<dim, csmp::Element>{ el.FV() },
+    // local variable storage
+    LocalVariableStorage<dim,csmp::Element>{ el },
     // in-built types are copied
     idx_{ el.idx_ },
     material_id_{ el.material_id_},
@@ -143,15 +142,30 @@ Element<dim>::Element( Element<dim>&& el )
     elmt_connector_{ el.elmt_connector_ },
     node_connector_{ el.node_connector_ }
 {
+   assert( this != &el );
+   
    // nulling the pointers in the dying object
    el.AssignFiniteElementNullPtr();
    el.AssignFiniteVolumeNullPtr();
-   
-   this->LVS( std::move(el.LVS()) );
-    
-//  cout <<"\nElement(ctor): moved element: "<< Idx();
+
+   // ascertaining that directly after the move the FE pointer is still valid
+   assert( this->FE() != nullptr );
+   assert( this->FE() != nullptr && this->FE_Type() != UNKNOWN );
+
+   cout <<"\n"<<"Element(&&): moved element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
+}
+
+
+
+
+// verbose destructor for testing
+/*
+template<uint32_t dim>
+Element<dim>::~Element() {
+   cout <<"\n~Element(): destructing element: "<< Idx();
 }
 */
+
 
 
 
@@ -159,28 +173,31 @@ template<uint32_t dim>
 Element<dim>& Element<dim>::operator=( const Element<dim>& el )
 {
   if ( &el != this ) {
-    FiniteElementPolicy<dim, csmp::Element>::Assign( el.FE() );
+    FiniteElementPolicy<dim, csmp::Element>::Assign( el.fptr_ );
     FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( el.FV() );
-    idx_ = el.idx_;
+    LocalVariableStorage<dim, csmp::Element>::LVS( el.LVS() );
+    idx_            = el.idx_;
     elmt_connector_ = el.elmt_connector_;
     node_connector_ = el.node_connector_;
     material_id_    = el.material_id_;
     region_id_      = el.region_id_;
-    this->LVS( el.LVS() );
   }
+
+  cout <<"\n"<<"Element=(&): assigned element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
+
   return *this;
 }
 
 
-/*
 template<uint32_t dim>
 Element<dim>& Element<dim>::operator=( Element<dim>&& el )
 {
   // should never happen because a temporary variable cannot be an lvalue
   assert( &el != this );
 
-  FiniteElementPolicy<dim, csmp::Element>::Assign( el.FE() );
+  FiniteElementPolicy<dim, csmp::Element>::Assign( el.fptr_ );
   FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( el.FV() );
+  LocalVariableStorage<dim, csmp::Element>::LVS( el.LVS() );
 
   idx_            = el.idx_;
   elmt_connector_ = el.elmt_connector_;
@@ -188,20 +205,26 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   material_id_    = el.material_id_;
   region_id_      = el.region_id_;
   
-  this->LVS( std::move( el.LVS() ) );
+  // setting pointers in dead object to null
+  el.AssignFiniteElementNullPtr();
+  el.AssignFiniteVolumeNullPtr();
 
-//  cerr <<"\nElement: move-assigned element: "<< Idx();
+  cout <<"\n"<<"Element=(&&): move assigned element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
 
   return *this;
 }
-*/
 
 
+
+
+/// comparitor
 template<uint32_t dim>
 bool  Element<dim>::operator==( const Element<dim>& el ) const
 {
   if ( &el != this )
     {
+       assert( this->FE() != nullptr );
+       assert( el.FE() != nullptr );
        if ( this->FE_Type() != el.FE_Type() ) return false;
        if ( this->FV()      != el.FV() ) return false;
        if ( node_connector_ != el.node_connector_ ) return false;
@@ -212,6 +235,10 @@ bool  Element<dim>::operator==( const Element<dim>& el ) const
     }
   return true;
 }
+
+
+
+
 
 
 /**

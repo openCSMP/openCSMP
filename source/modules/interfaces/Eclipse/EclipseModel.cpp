@@ -224,7 +224,8 @@ void EclipseModel::CreateSplitBoundariesAroundFaults( bool delete_fault_regions 
 {
 	this->MergeRegions(faults_, "FAULTS");
 	faults_.insert("FAULTS");
-	this->CreateSplitBoundaryFrom("FAULTS");
+  const bool convert_lower_dim_elmts_into_intervening_elmts{ false };
+	this->CreateSplitBoundaryFrom("FAULTS",convert_lower_dim_elmts_into_intervening_elmts);
 
 	// create splitboundaries
 	//for( set<string>::const_iterator

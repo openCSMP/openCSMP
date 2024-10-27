@@ -2739,6 +2739,8 @@ void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
      csmp::Region<dim>&  model_domain = RegionInterface<dim,REGION_COMPLEX>::Region("Model");
 
      // the model region is affected by any changes, does it need to be updated?
+     // (detects element removal only of 'nullptr' objects have been inserted into cell_vector)
+     /*
      size_t n_cells_changed = model_domain.RebuildCellAndPerimeterFaceVector();
      size_t n_nodes_changed = model_domain.RebuildNodeVector();
      
@@ -2747,12 +2749,12 @@ void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
                           "Not even the region 'Model' changed. No updates needed to be made." );
           return;
        }
-
+     */
+     
      // 1. rebuilding the region 'Model'
      // --------------------------------
      if ( model_domain.NeedsRebuild() ) {
-          const bool also_remove_elmts{ false };
-          RemoveRegion("Model", also_remove_elmts );
+          RemoveRegion("Model");
           const bool is_unique = ( distance(UniqueRegionsBegin(), UniqueRegionsEnd()) > 0 ) ? false : true;
           FormModelRegion( is_unique );
        }
@@ -2775,11 +2777,11 @@ void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
      // 3. unique regions: only get modified if they have been ScheduledForRebuilt()
      // ----------------------------------------------------------------------------
      for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit )
-       if ( (*rit).second.NeedsRebuild() ){
-         // assuming the the element neighbor connectivity was updated before by the MeshManager
-         (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
-        std::cout << "Rebuilt Subdomain " << (*rit).first << " -> element and node vector now up to date" << std::endl;
-       }
+       if ( (*rit).second.NeedsRebuild() ) {
+             // assuming the the element neighbor connectivity was updated before by the MeshManager
+             (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
+             cout << "Rebuilt Subdomain " << (*rit).first << " -> element and node vector now up to date" << std::endl;
+          }
        
  } // end UpdateRegions
 

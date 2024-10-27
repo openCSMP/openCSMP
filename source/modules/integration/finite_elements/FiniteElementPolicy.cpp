@@ -13,13 +13,23 @@ using namespace std;
 
 namespace csmp {
 
+
 template<uint32_t dim, template<uint32_t> class CELL>
-FiniteElementPolicy<dim,CELL>::FiniteElementPolicy( csmp::FiniteElement* eptr )
+FiniteElementPolicy<dim,CELL>::FiniteElementPolicy( const CELL<dim>& cell ) noexcept
+  : fptr_{cell.fptr_}
+  {}
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+FiniteElementPolicy<dim,CELL>::FiniteElementPolicy( csmp::FiniteElement* eptr ) noexcept
 : fptr_(eptr)
 {
 }
 
 
+/**
+     @attention call by reference is used to avoid assignment to copy of pointer
+*/
 template<uint32_t dim, template<uint32_t> class CELL>
 void FiniteElementPolicy<dim,CELL>::Assign( FiniteElement* fe_ptr )
  {
@@ -28,19 +38,17 @@ void FiniteElementPolicy<dim,CELL>::Assign( FiniteElement* fe_ptr )
  }
 
 
-/*
-   The check:   if ( !fptr_ ) return UNKNOWN;  crashes program?!
-*/
 template<uint32_t dim, template<uint32_t> class CELL>
-CSMP_FEM_TYPE FiniteElementPolicy<dim,CELL>::FE_Type() const
+CSMP_FEM_TYPE FiniteElementPolicy<dim,CELL>::FE_Type() const noexcept
   {
     assert( fptr_ != nullptr );
-//    assert( fptr_->ElementType() != UNKNOWN );
+    // by default, the pointer will point to base class (FiniteElement::csp_fem_type = UNKNOWN)
     return fptr_->ElementType();
   }
 
+
 template<uint32_t dim, template<uint32_t> class CELL>
-FiniteElement* FiniteElementPolicy<dim,CELL>::FE() const
+FiniteElement* FiniteElementPolicy<dim,CELL>::FE() const noexcept
   {
     return fptr_;
   }
@@ -322,6 +330,7 @@ double FiniteElementPolicy<dim,CELL>::det_JINV_AtIntegrationPoint( uint32_t ipoi
     fptr_->JacobianAtIntegrationPoint( ipoint );
     return fptr_->JacobianDeterminant();
   }
+
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void FiniteElementPolicy<dim,CELL>::IntegralNN( DenseMatrix<DM_MIN>& M ) const

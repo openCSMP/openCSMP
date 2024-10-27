@@ -211,9 +211,11 @@ as is done for instance by methods of the ANSYS_Interface. The
 model topology object has a rich interface which allows the user to
 select sub portions of the model stored in the vset.
 
-@param treat_domains_as_regions_and_use_regions_file  when there is a "-regions.txt"  file, the elements of regions that are not mentioned in there will be eliminated from the mesh from which the CSMP models gets build.
+@param treat_domains_as_regions_and_use_regions_file  when there is a "-regions.txt"  file,
+any elements of regions that are not mentioned in there will be eliminated from the mesh when the CSMP models gets build.
 This is important because meshing tools like ANSYS mesh every part of the BREP using lines, surfaces and volumes.
-However intervening lines or surfaces are normally not desired because element integral contributions would be duplicated for elements which share the same nodes. This is also why ANSYS_Interface eliminates the lower-dimensional elements from regions if all these element groups have the same name.
+However intervening lines or surfaces are normally not desired because element integral contributions would be duplicated for elements which share the same nodes.
+This is also why ANSYS_Interface eliminates the lower-dimensional elements from regions if all these element groups have the same name.
 
 @section implementation Implementation
 
@@ -389,7 +391,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
          this->SplitBoundariesOut();
       }
 
-    // 8. adding property storage to the Model
+    // 8. adding property storage to Model
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
@@ -398,14 +400,20 @@ cout <<"\n"<<"Model<dim>::Initialize(regionfile,ModelTopology,VSet): final conne
 bool cells_ok;
 mesh_manager_.AssignUniqueNumbers( true );
 cells_ok = integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
-if ( cells_ok ) cout <<"\n\t\t"<<"Element connectivity is fine.";
+if ( !cells_ok ) {
+     cout <<"\n\t\t"<<"Element storage is broken.";
+  }
 if ( mesh_manager_.Faces() > 0 ) {
      cells_ok = integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
-     if ( cells_ok ) cout <<"\n\t\t"<<"Face connectivity is fine.";
+     if ( !cells_ok ) {
+          cout <<"\n\t\t"<<"Face storage is broken.";
+       }
   }
 if ( mesh_manager_.InterFaces() > 0 ) {
      cells_ok = integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
-     if ( cells_ok ) cout <<"\n\t\t"<<"InterFace connectivity is fine.";
+     if ( !cells_ok ) {
+          cout <<"\n\t\t"<<"InterFace storage is broken.";
+       }
   }
 #endif
 
@@ -502,7 +510,7 @@ int createVariablesInVSetThatAreMissingFromDatabase( PropertyDatabase<dim>& dbas
 
 
 /**
-    NEW (2022)! - builds model assuming that all information about regions, boundaries or split boundaries is stored in from ModelTopology.
+    NEW (2022)! - builds model assuming that all information about regions, boundaries or split boundaries is stored in  ModelTopology.
     
     @attention if there are domains in the VSet which consist of elements of diffierent spatial dimensions, only those of the highest one are kept.
     
@@ -538,6 +546,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     
     // 3. keep only the highest-dimensional elements in regions which have the same name
      {
+        // removes any cells with a dimension less than that of the supplied model
         mesh_topology.RemoveLowDimCellsFromDomains( vset );
         //    reducing the element data to the desired elements specified in the topology object
         //    if the element numbers in the two are different.
@@ -547,6 +556,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
             vset.ReduceTo( old_and_new_elmtids );
             old_and_new_elmtids.clear();
           }
+        // TODO: delete regions that are emmpty now
       }
       
     // 4. forming default computational domain called "Model" and regions
@@ -556,6 +566,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
       csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "Region 'Model' has zero elements.");
 
     // 5. associating supplied subregions with regions (model subdomains)
+    if ( mesh_topology.ModelDomains() == 0 )
+      csmp_error.Note( ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "Model topology object does not contain any region specififications.");
     this->FormRegionsFrom( mesh_topology );
     this->FormBoundariesFrom( mesh_topology );
     this->FormSplitBoundariesFrom( mesh_topology );
@@ -569,12 +581,25 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
 #if defined(DEBUG) && defined(CSMP_MODEL_DEBUG)
+cout <<"\n"<<"Model<dim>::Initialize(ModelTopology,VSet): final connectivity check: ";
+bool cells_ok;
 mesh_manager_.AssignUniqueNumbers( true );
-integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
-if ( mesh_manager_.Faces() > 0 )
-  integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
-if ( mesh_manager_.InterFaces() > 0 )
-  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+cells_ok = integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+if ( !cells_ok ) {
+     cout <<"\n\t\t"<<"Element storage is broken.";
+  }
+if ( mesh_manager_.Faces() > 0 ) {
+     cells_ok = integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
+     if ( !cells_ok ) {
+          cout <<"\n\t\t"<<"Face storage is broken.";
+       }
+  }
+if ( mesh_manager_.InterFaces() > 0 ) {
+     cells_ok = integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+     if ( !cells_ok ) {
+          cout <<"\n\t\t"<<"InterFace storage is broken.";
+       }
+  }
 #endif
 
     cout << "\n==================================================================================================";
