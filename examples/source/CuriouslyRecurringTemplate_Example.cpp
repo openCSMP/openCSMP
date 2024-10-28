@@ -37,6 +37,7 @@ void CuriouslyRecurringTemplate_Example::Run()
  {
     Sub  sub;
     //ostream& cout = *GetStream();
+    cout <<"\n"<<"CuriouslyRecurringTemplate_Example::Run: object type is: " << typeid(sub).name() << endl;
     cout << "\nCODE EXAMPLE\n";
 
  } // Run

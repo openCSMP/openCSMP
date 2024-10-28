@@ -50,7 +50,7 @@ CSMP_FEM_TYPE FiniteElementPolicy<dim,CELL>::FE_Type() const noexcept
 template<uint32_t dim, template<uint32_t> class CELL>
 FiniteElement* FiniteElementPolicy<dim,CELL>::FE() const noexcept
   {
-    return fptr_;
+     return fptr_;
   }
 
 

@@ -334,6 +334,7 @@ void Tutorial2_Example::Run()
     matlab.Write2DMatlabFile(  model, "concentration", "concentration", time );
 
     // terminate
+    delete transport;
     cout <<"\nmain: That's it..."<< endl;
 
     filesystem::current_path("../../example_inputs/");

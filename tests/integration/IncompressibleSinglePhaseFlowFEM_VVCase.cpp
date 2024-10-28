@@ -46,7 +46,7 @@ void IncompressibleSinglePhaseFlowFEM_VVCase::run()
 {
   // some constants
   enum{DIM=2};
-  const double tensileForceInX( 50000. );
+//  const double tensileForceInX( 50000. );
   const ScalarVariable zeroScalar( PLAIN, 0. );
   const ScalarVariable zeroScalarDirichlet( DIRICH, 0. );
   const VectorVariable<DIM> zeroVector( PLAIN, 0. );
@@ -65,7 +65,7 @@ void IncompressibleSinglePhaseFlowFEM_VVCase::run()
   // print model dimensions
   Point<DIM> min, max;
   model.MinMaxCoordinates( min, max );
-  const double length( max[0]-min[0] ), height( max[1]-min[1] );
+//  const double length( max[0]-min[0] ), height( max[1]-min[1] );
   printModelDimensions( model, true );
   double domain_volume = model.Region("Model").Volume();
   cout <<"\nThe model has a volume of: "<< domain_volume <<" m^3."<< endl;

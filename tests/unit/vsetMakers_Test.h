@@ -96,7 +96,7 @@ class vsetMakers_Test : public Test {
     
     // more complex models created externally but available as VSets
     // -------------------------------------------------------------
-    /* USED IN UNIT TEST
+    // USED IN UNIT TEST
     void create_FracBox( ModelTopology&, VSet<3U>& );
     */
 };

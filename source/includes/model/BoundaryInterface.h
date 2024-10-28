@@ -93,9 +93,6 @@ class BoundaryInterface {
      /// converts lower-dimensional Region on the outside of the model into a Boundary; returns whether this conversion was successful as well as the boundary name
     std::pair<std::string,bool>  CreateExternalBoundaryFrom( const char* dimension_minus1_region, bool check_topo_attributes_of_nodes );
 
-    // external boundaries are build automatically during model construction using
-    // EstablishBoxBoundaries() or EstablishBoundariesFromRegions(), see protected methods
-                                                                       
     /// creates INTERNAL boundary, ignoring already existing boundaries or split-boundaries as well as lower-dimensional regions, region will be on inside
     bool CreateBoundaryAround( const char* region );
 

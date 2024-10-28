@@ -254,6 +254,7 @@ void DES2PhaseSlightlyCompressibleFlow_Example::RunSimulation( Model<dim>& model
     else    cerr << "\nmain: TDS transport uses " << static_cast<double>(solving_time/CLOCKS_PER_SEC) << " seconds " << endl;
     
     // terminate
+    delete DEStransport;
     cerr << "\nmain: That's it..."<< endl;
 
 } // Run()

@@ -480,7 +480,7 @@ void CSMPInterfaces_Example::Run()
      << "stem() = " << currrentPath.stem() << "\n"
      << "extension() = " << currrentPath.extension() << "\n";
 */
-bool stayInInputMeshes() {
+static bool stayInInputMeshes() {
     if ( current_path().filename() != "input_meshes" ) {
          assert( current_path().filename() == "example_inputs" );
          if ( exists(current_path()) && is_directory(current_path()) ) {
@@ -497,7 +497,7 @@ bool stayInInputMeshes() {
 
 
 /// helper function that creates output subdirectory at the same level as 'input_meshes' to store native model files
-void createAndMoveToNativeBinaryFileDirectory() {
+static void createAndMoveToNativeBinaryFileDirectory() {
     current_path("../");
     create_directory("csmp_native_format_models");
     current_path("csmp_native_format_models");

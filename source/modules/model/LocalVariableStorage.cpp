@@ -316,8 +316,8 @@ void LocalVariableStorage<dim,STOREE>::DeleteProperty( const csmp::Index& prop_k
             dataBounds[cycle1][nipCycles2].first  = dataOffset+(cycle1+1)*ipCycle1DataOffset;
             dataBounds[cycle1][nipCycles2].second = dataOffset+(cycle1+1)*ipCycle1DataOffset;
         }
-        dataBounds[nipCycles1-1][nipCycles2].first  = dataSize;
-        dataBounds[nipCycles1-1][nipCycles2].second = dataSize;
+        dataBounds[nipCycles1-1][nipCycles2].first  = static_cast<int_type>(dataSize);
+        dataBounds[nipCycles1-1][nipCycles2].second = static_cast<int_type>(dataSize);
 
         vector<vector<pair<int_type,int_type> > > flagBounds( nipCycles1, vector<pair<int_type,int_type> >(nipCycles2+1,pair<int_type,int_type>(0,0)) );
         for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
@@ -330,8 +330,8 @@ void LocalVariableStorage<dim,STOREE>::DeleteProperty( const csmp::Index& prop_k
             flagBounds[cycle1][nipCycles2].first  = flagOffset+(cycle1+1)*ipCycle1FlagOffset;
             flagBounds[cycle1][nipCycles2].second = flagOffset+(cycle1+1)*ipCycle1FlagOffset;
         }
-        flagBounds[nipCycles1-1][nipCycles2].first  = flagSize;
-        flagBounds[nipCycles1-1][nipCycles2].second = flagSize;
+        flagBounds[nipCycles1-1][nipCycles2].first  = static_cast<int_type>(flagSize);
+        flagBounds[nipCycles1-1][nipCycles2].second = static_cast<int_type>(flagSize);
 
 
         // Shifting data (same for all types)
@@ -358,8 +358,8 @@ void LocalVariableStorage<dim,STOREE>::DeleteProperty( const csmp::Index& prop_k
         }
 
         // trim excessive
-        const int_type newDataSize ( dataSize - nipCycles1*nipCycles2*dataDepth );
-        const int_type newFlagSize ( flagSize - nipCycles1*nipCycles2*flagDepth );
+        const int_type newDataSize( static_cast<int_type>(dataSize) - nipCycles1*nipCycles2*dataDepth );
+        const int_type newFlagSize( static_cast<int_type>(flagSize) - nipCycles1*nipCycles2*flagDepth );
         ResizePropertyStorage( newDataSize, newFlagSize );
 
      #ifndef NDEBUG

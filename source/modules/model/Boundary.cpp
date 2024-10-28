@@ -766,8 +766,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
 
   // looping over regions elements, assuring that it's an eligible face type, creating new face with variable storage,
   // establishing connectivity and inserting into boundary element container
-  const auto regionElementsEnd( region.CellsEnd() );
-  size_t     cell_number{0};
+  size_t cell_number{0};
   
   for ( auto it = region.CellVector().begin(); it != region.CellVector().end(); ++it )
     {

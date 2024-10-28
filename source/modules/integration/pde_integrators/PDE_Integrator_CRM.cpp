@@ -1471,18 +1471,18 @@ void PDE_Integrator_CRM<dim,CELLTYPE>::CoupleDomainsAcrossSplitBoundary( ModelSu
         }
 
         // 3. LHS: adding all the element on slave row to master dof - except slave dof
-        for (auto n{1U}; n < n_branches; n++) {
+        for ( uint32_t n{1U}; n < n_branches; n++) {
           auto slave_node = md->N(n);
           if ( slave_node->Status(var_key) == couple_if ) {
             size_t slaveIDX = slave_node->Idx();
             size_t slavePOS = DOF_indexes_[slaveIDX];
             if (slavePOS != NULL_IDX) {
-              for (size_t j(0U); j < G_.Cols(); ++j)
+              for ( uint32_t j(0U); j < G_.Cols(); ++j)
                 if (j != slavePOS && j != masterPOS)
-                  G_.Add(masterPOS, j, G_(slavePOS, j));
+                  G_.Add( static_cast<uint32_t>(masterPOS), j, G_( static_cast<uint32_t>(slavePOS), j ) );
 
               // 4. adding diagonal value to master dof
-              G_.Add(masterPOS, masterPOS, G_(slavePOS, slavePOS));
+              G_.Add( static_cast<uint32_t>(masterPOS), static_cast<uint32_t>(masterPOS), G_( static_cast<uint32_t>(slavePOS), static_cast<uint32_t>(slavePOS) ));
             }
           }
         }
@@ -1494,12 +1494,12 @@ void PDE_Integrator_CRM<dim,CELLTYPE>::CoupleDomainsAcrossSplitBoundary( ModelSu
             size_t slaveIDX = slave_node->Idx();
             size_t slavePOS = DOF_indexes_[slaveIDX];
             if (slavePOS != NULL_IDX) {
-              for (size_t j(0); j < G_.Cols(); ++j)
+              for ( uint32_t j{0u}; j < G_.Cols(); ++j)
                 if (j != slavePOS && j != masterPOS)
-                  G_.Assign(slavePOS, j, G_(masterPOS, j));
+                  G_.Assign( static_cast<uint32_t>(slavePOS), j, G_( static_cast<uint32_t>(masterPOS), j ));
 
               // 6.  copy diagonal value from master dof to slave dof
-              G_.Assign(slavePOS, slavePOS, G_(masterPOS, masterPOS));
+              G_.Assign( static_cast<uint32_t>(slavePOS), static_cast<uint32_t>(slavePOS), G_( static_cast<uint32_t>(masterPOS), static_cast<uint32_t>(masterPOS)));
             }
           }
         }
@@ -2114,9 +2114,9 @@ void PDE_Integrator_CRM<dim,CELLTYPE>::WriteGlobalMatrixBitMapToText( const char
                                       "Output file could not be opened" );
 
      // 2. writing G matrix to file
-     for ( size_t i{0U}; i<G_.Rows(); i++ )
+     for ( uint32_t i{0U}; i<G_.Rows(); i++ )
        {
-          for ( size_t j{0U}; j<G_.Cols(); j++ )
+          for ( uint32_t j{0U}; j<G_.Cols(); j++ )
             if ( G_.At(i,j) != 0. ) ofs << 1 <<" ";
             else                   ofs << 0 <<" ";
           ofs << endl;

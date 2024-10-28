@@ -544,9 +544,10 @@ static csmp::Point<3U> normalVectorElementUnitized( const vector<csmp::Point<3U>
 */
 static vector<double> computeSurfaceBarycentricCoordinates( const Element<3U>* elmt, csmp::Point<3U> point )
 {
+  assert( elmt != nullptr );
   vector<csmp::Point<3U> > elmtNs;
   csmp::Point<3U> coords;
-  for(auto i{0U};i<elmt->Nodes();++i){
+  for( uint32_t i{0U};i<elmt->Nodes();++i){
     coords = elmt->N(i)->Coordinate();
     elmtNs.push_back(coords);
   }
@@ -562,7 +563,7 @@ static vector<double> computeSurfaceBarycentricCoordinates( const Element<3U>* e
   vector<double> V1;
   vector<double> V2;
   
-  for(auto i = 0;i<dimension+1;++i){
+  for( uint32_t i = 0;i<dimension+1;++i){
     if(i!=dimension){
       n.push_back(normalVector[i]);
       V0.push_back(elmtNs[0][i]);
@@ -576,7 +577,7 @@ static vector<double> computeSurfaceBarycentricCoordinates( const Element<3U>* e
     V2.push_back(1);
     }
   }
-  for(auto i = 0;i<dimension+1;i++){
+  for( uint32_t i = 0;i<dimension+1;i++){
     for(size_t j = 0;j<dimension+1;j++){
       if(j==0){
         LHS.Add(i,j,-1*n[i]);
@@ -598,7 +599,7 @@ static vector<double> computeSurfaceBarycentricCoordinates( const Element<3U>* e
   }//End Left Hand Side Assembly
 
   //Right hand side Assembly
-  for(auto i = 0;i<dimension+1;++i){
+  for( uint32_t i = 0;i<dimension+1;++i){
     if(i!=dimension){
       RHS[i] = point[i];
     }
@@ -812,23 +813,23 @@ static Element<3U>* FindPointIn3DVolumetricRegion(csmp::Point<3U> pXYZ, const Re
 
 
 static Element<3U>*  FindPointIn3DSurfaceTetraMesh( const csmp::Point<3U>& point,
-                                             csmp::Region<3U>& surface,
-                                             Element<3U>* elmt)
+                                                    csmp::Region<3U>& surface,
+                                                    Element<3U>* elmt )
 {
   const bool debug = false;
   //surface.InputPropertyValue(iter_prop,ScalarVariable(PLAIN,0.0),COMPLETE);
-  Element<3U>* nullElmt(NULL);
+  Element<3U>* nullElmt(nullptr);
   vector<Element<3U>* > path;
-  Element<3U>* lastElement;
+  Element<3U>* lastElement{nullptr};
   vector<double> maxiter_last;
   vector<double> maxiter_current;
-  Element<3U>* containingElement; //Will contain the Element that contains the point being searched for
+  Element<3U>* containingElement{nullptr}; //Will contain the Element that contains the point being searched for
   pair<Element<3U>*,bool> traversingValues;
   csmp::Point<3U> barycentricCoordinates;
   vector<double> RESULT;
   std:vector<uint32_t> iterations;
   const size_t maxiter = 250; //Do a maximum of 1000 Steps inside the mesh
-  auto i = 0;
+  size_t i = 0;
   
   if(!elmt){//If the specified elmt vector was NULL then choose a random element in the region to start with.
    elmt = GetRandomElement(surface);

@@ -166,7 +166,7 @@ void IntegrationPointToNodePropertyVisitor_Test::Test_CoordinateInterpolationToB
             }
           else {
               // restricts the checks to pyramids with a permissible skewness
-              if ( isValidElement( it ) );
+              if ( isValidElement( it ) )
                 for ( uint32_t i{0u}; i<DIM; ++i )
                   // coords_approx_equal = approximatelyEqual( barycentre[i], vc[i], epsilon * 1.0e13 ); // passes always
                   coords_approx_equal = approximatelyEqual( barycentre[i], vc[i], epsilon * 5.0e12 );

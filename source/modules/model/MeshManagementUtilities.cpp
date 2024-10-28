@@ -795,12 +795,18 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    
    // 0. verifying the input
    // pointers
-   if ( face == nullptr )
-     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to target Face is not initialised");
-   if ( inner_nbor == nullptr )
-     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to inner higher-dim Element not initialised");
-   if ( outer_nbor == nullptr )
-     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to outer higher-dim Element  not initialised");
+   if ( face == nullptr ) {
+        csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to target Face is not initialised");
+        return;
+     }
+   if ( inner_nbor == nullptr ) {
+        csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to inner higher-dim Element not initialised");
+        return;
+     }
+   if ( outer_nbor == nullptr ) {
+        csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to outer higher-dim Element  not initialised");
+        return;
+     }
     
    // 1. Creating a map of the faces of the outer element
    //      face key
@@ -855,12 +861,18 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    
    // 0. verifying the input
    // pointers
-   if ( interface == nullptr )
-     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to target InterFace is not initialised");
-   if ( inner_nbor == nullptr )
-     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to inner higher-dim Element not initialised");
-   if ( outer_nbor == nullptr )
-     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to outer higher-dim Element  not initialised");
+   if ( interface == nullptr ) {
+        csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to target InterFace is not initialised");
+        return;
+     }
+   if ( inner_nbor == nullptr ) {
+        csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to inner higher-dim Element not initialised");
+        return;
+     }
+   if ( outer_nbor == nullptr ) {
+        csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to outer higher-dim Element  not initialised");
+        return;
+     }
     
    // 1. creating a search map from the nodes of the outer element
    //  key       inner local id, outer local node id
@@ -1633,7 +1645,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
     Tries to determine whether surface mesh has consistent element normal orientations (none of the element numberings is flipped).
     @pre surface patch must be contiguous.
 */
-bool doNormalsInContiguousSurfacePatchPointToSameSide( const Region<3U>& subdomain )
+static bool doNormalsInContiguousSurfacePatchPointToSameSide( const Region<3U>& subdomain )
  {
     subdomain.RenumberNodes();
     

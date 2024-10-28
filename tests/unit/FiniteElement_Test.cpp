@@ -111,8 +111,8 @@ void FiniteElement_Test::run()
 
   //    INITIALIZING NODES/COORDINATE MATRIX
   if ( verbose_ ) cout << "Initializing nodes...\n";
-  femPtr_->XY.Resize( femData_.NodeCount(), 3 );
-  for ( auto i = 0; i < femData_.NodeCount(); ++i )
+  femPtr_->XY.Resize( static_cast<uint32_t>(femData_.NodeCount()), 3 );
+  for ( uint32_t i = 0; i < femData_.NodeCount(); ++i )
     femPtr_->XY.AssignRow( i, femData_.NodePtr( i )->Coordinate() );
 
   // .) VOLUME

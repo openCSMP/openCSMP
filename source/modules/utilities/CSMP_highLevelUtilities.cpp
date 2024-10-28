@@ -548,9 +548,9 @@ static void test_createUniqueCombinations()
    
    // printing the results
    cout <<"\nmain: combinations: "<< n_combinations <<"\n";
-   for ( auto& i : combinations ) {
+   for ( const auto& i : combinations ) {
         cout <<"\n\t";
-        for ( auto j : i )
+        for ( const auto& j : i )
           cout <<" "<< j;
      }
    cout << endl << endl;

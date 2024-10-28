@@ -92,7 +92,6 @@ NimbleRegion_Test::NimbleRegion_Test( const string& model, const string& variabl
     model2D_->InputPropertyValue("nimble elements", makeScalar(PLAIN, 0.));
     central.InputPropertyValue("nimble nodes", makeScalar(PLAIN, nimble_val));
     central.InputPropertyValue("nimble elements", makeScalar(PLAIN, nimble_val));
-    nimble_val += 1.;
 
 } // end constructor
 

@@ -336,8 +336,8 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
   double srH2O(0.) ;
   double srCO2(0.) ;
   
-  Point<1U> origin = 0 ;
-  Point<1U> destination = 10;
+//  Point<1U> origin = 0 ;
+//  Point<1U> destination = 10;
   
   Model1D<1U> model( "Model1D", "CO2-geo-sequestration-variables.txt", length, elements );
   printModelDimensions( model, true );

@@ -397,7 +397,7 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     // test 1: re-read model2
     vector<vector<uint32_t> > perimeter_faces2;
     perimeter_faces2.reserve(model2_domain.PerimeterCells());
-    for ( auto e=model2_domain.InteriorCells(); e<model2_domain.Cells(); ++e ) {
+    for ( size_t e=model2_domain.InteriorCells(); e<model2_domain.Cells(); ++e ) {
          vector<uint32_t>  face_vec;
          for ( uint32_t i{0u}; i<model2_domain.PerimeterFaces(e); ++i )
            face_vec.push_back( model2_domain.PerimeterFace(e,i) );

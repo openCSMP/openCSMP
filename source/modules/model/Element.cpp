@@ -124,7 +124,7 @@ Element<dim>::Element( const Element<dim>& el )
     elmt_connector_{ el.elmt_connector_ },
     node_connector_{ el.node_connector_ }
 {
-   cout <<"\n"<<"Element(&): copied element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
+//   cout <<"\n"<<"Element(&): copied element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
 }
 
 
@@ -152,7 +152,7 @@ Element<dim>::Element( Element<dim>&& el )
    assert( this->FE() != nullptr );
    assert( this->FE() != nullptr && this->FE_Type() != UNKNOWN );
 
-   cout <<"\n"<<"Element(&&): moved element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
+//   cout <<"\n"<<"Element(&&): moved element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
 }
 
 
@@ -183,7 +183,7 @@ Element<dim>& Element<dim>::operator=( const Element<dim>& el )
     region_id_      = el.region_id_;
   }
 
-  cout <<"\n"<<"Element=(&): assigned element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
+//  cout <<"\n"<<"Element=(&): assigned element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
 
   return *this;
 }
@@ -209,7 +209,7 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   el.AssignFiniteElementNullPtr();
   el.AssignFiniteVolumeNullPtr();
 
-  cout <<"\n"<<"Element=(&&): move assigned element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
+//  cout <<"\n"<<"Element=(&&): move assigned element: "<< Idx() <<" "<< parseAbbreviated_FE_Type( this->FE_Type() ) << endl;
 
   return *this;
 }

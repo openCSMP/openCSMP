@@ -42,7 +42,7 @@ CVFEM_1D_VVCase::CVFEM_1D_VVCase(const char* config_file )
           "invalid input parameters: model length or number of elements");
 
     //! Create a 1D model
-    dx = length/(double)n_elements;
+    dx = length/(double)n_elements; // TODO: dx is never used. What is its purpose?
 
     model = new Model1D<dim>("Line", vars_name_, length, n_elements);
     model->InstantiateFiniteVolumes();
@@ -205,8 +205,8 @@ int CVFEM_1D_VVCase::InitializeFluidPropertiesLinearPressure()
   csmp::Index   p_key(model->Database().StorageKey("fluid pressure"));
   csmp::Index   wt_key(model->Database().StorageKey("salinity"));
 
-  double p_bottom, p_top, p_diff, ymax;
-  p_bottom = p_top = p_diff = ymax = std::numeric_limits<double>::quiet_NaN();
+  double p_bottom, p_top, ymax;
+  p_bottom = p_top = ymax = std::numeric_limits<double>::quiet_NaN();
 
   const typename vector<Node<dim>*>::const_iterator modelNodesEnd( model->Region("Model").NodesEnd() );
   for( typename vector<Node<dim>*>::const_iterator it( model->Region("Model").NodesBegin() );
@@ -225,7 +225,7 @@ int CVFEM_1D_VVCase::InitializeFluidPropertiesLinearPressure()
         }
   }
 
-  p_diff = p_bottom - p_top;
+  double p_diff = p_bottom - p_top;
 
   for( typename vector<Node<dim>*>::const_iterator it( model->Region("Model").NodesBegin() );
        it != modelNodesEnd; ++it )
@@ -250,6 +250,8 @@ CVFEM_PHX->InitialFluidPropertiesFromPTX();
 
   return 0;
 }
+
+
 
 int CVFEM_1D_VVCase::InitializeFluidProperties()
 {

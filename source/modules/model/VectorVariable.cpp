@@ -37,7 +37,7 @@ VectorVariable<3U>::VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE
 // 1D specializations
 VectorVariable<1U> makeVector( VARIABLE_FLAG fx, double vx )
 {
-  return std::move( VectorVariable<1U>( fx, vx ) );
+  return VectorVariable<1U>( fx, vx );
 }
 
 // 2D specializations

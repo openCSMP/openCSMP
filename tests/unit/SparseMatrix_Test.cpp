@@ -566,7 +566,7 @@ void SparseMatrix_Test::Test_PDE_IntegratorUseCases()
          0 -2  3  0
          0  0  0  4
     */
-    SparseMatrix A(4);
+    A.Resize(4);
     // diagonal
     A.Assign( 0, 0, 1. );
     A.Assign( 1, 1, 2. );

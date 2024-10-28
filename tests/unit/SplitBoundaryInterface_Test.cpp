@@ -302,7 +302,6 @@ template<uint32_t dim>
 bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_Intersection( const char* mesh_file){
 
   const uint32_t DIM{3U};
-  int32_t material_id = 1;
   //model construction
   const char* variables_file("SplitBoundary_Test-variables.txt");
   const char* regions_file("InternalBoundary3D_Intersect_Test");

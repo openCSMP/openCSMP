@@ -234,7 +234,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::IsBoundaryName( const string& regi
     // TAG: BOUNDARY should be at the beginning of the region name
     // DON'T confuse with SPLITBOUNDARY
     size_t found_position = regionName.find( "BOUNDARY" );
-    if ( found_position == 0 && found_position!=string::npos )
+    if ( found_position != string::npos )
         return true;
         
     if( regionName == "INTERNAL" || regionName == "IRREGULAR" )
@@ -1746,9 +1746,6 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
       vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                                elmts_to_become_faces.begin(),
                                                                                elmts_to_become_faces.end() );
-       // repairing connectivity among elements after removal
-// TODO:      model->Mesh().template RemoveDegenerateNeighbors<Element>();
- 
       // 4. creating the Boundaries from the faces
       // -----------------------------------------
       typename vector<Face<dim>*>::iterator fit{ faces.begin() };
@@ -1940,19 +1937,9 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
     // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------
     assert( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) == 0 );
-#ifndef NDEBUG
-    bool mesh_ok = integrityCheck<dim,Element>( model->Mesh().ElementsBegin(), model->Mesh().ElementsEnd() );
-    assert( mesh_ok );
-#endif
     vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                              elmts_to_become_faces.begin(),
-                                                                             elmts_to_become_faces.end() );
-#ifndef NDEBUG
-    mesh_ok = integrityCheck<dim,Element>( model->Mesh().ElementsBegin(), model->Mesh().ElementsEnd() );
-// NO HELP    if ( !mesh_ok) setNeighborsWithInvalidFE_PointersTo_nullptr<dim,Element>( model->Mesh().ElementsBegin(), model->Mesh().ElementsEnd() );
-//    assert( mesh_ok );
-#endif
-    
+                                                                             elmts_to_become_faces.end() );    
     // 3. creating the Boundaries from the faces
     // -----------------------------------------
     typename vector<Face<dim>*>::iterator fit{ faces.begin() };
@@ -1971,10 +1958,6 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
            cout <<" "<< bit;
          cout << endl;
       }
-
-// DEBUGGING - restoring broken connectivity
-// if this does not work, the memory must have been corrupted before
-model->Mesh().UpdateConnectivity();
 
 	  // 4. removing the original regions from which the boundaries were created
     // ------------------------------------------------------------------------------------

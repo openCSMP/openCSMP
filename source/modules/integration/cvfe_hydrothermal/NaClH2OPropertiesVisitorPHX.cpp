@@ -421,7 +421,7 @@ namespace csmp
   template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::UpdateSowatVariables()
   {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    // ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     t_          = t();
 //    p_bar_      = p()/1.e5;
@@ -629,7 +629,7 @@ namespace csmp
         if(sl()==0.0 && sv()==0.0 && sh()==0.0)
           {
             bogus_variables = true;
-            int cont;
+            // int cont;
             cout <<"\nNaClH2OPropertiesVisitorPHX<dim>::UpdateCSMPVariables: Warning: Bogus variables coming from SOWAT!:\n";
             cout << "sl, sv, sh = " << sl << "\t" << sv << "\t" << sh << endl;
             ScreenOutputSowatVariables();
@@ -639,7 +639,7 @@ namespace csmp
         if(sl()<0.0 || sv()<0.0 || sh()<0.0)
           {
             bogus_variables = true;
-            int cont;
+            // int cont;
             cout <<"\nNaClH2OPropertiesVisitorPHX<dim>::UpdateCSMPVariables: Warning: Bogus variables coming from SOWAT!:\n";
             cout << "sl, sv, sh = " << sl << "\t" << sv << "\t" << sh << endl;
             ScreenOutputSowatVariables();

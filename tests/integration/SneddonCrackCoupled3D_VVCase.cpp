@@ -99,9 +99,9 @@ void SneddonCrackCoupled3D_VVCase::run()
   ///==========================================================================================
   // Defining constants
     enum{dim=3};
-    bool plane_strain = true;
-    const double ym (1.0e9), pr(0.3), P0(1.0e7), mu(1.0e-3), s_unif(10000000.0), Q(0.01),
-                 s_right(s_unif), s_top(s_unif), s_bottom(10.0e6), s_left(10.0e6);
+//    bool plane_strain = true;
+    const double ym (1.0e9), pr(0.3), P0(1.0e7), mu(1.0e-3), s_unif(10000000.0), Q(0.01);
+//                 s_right(s_unif), s_top(s_unif), s_bottom(10.0e6), s_left(10.0e6);
 
 
     // Model configuration:

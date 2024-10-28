@@ -133,7 +133,7 @@ plist etc. arrays.
 void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset )
  {
    unsigned int i, j;
-   short        split, t;
+   short        split;
    int64_t      fed1, fed2, fed3;
    const short  bleft   = LEFT_OUTSIDE,
                 bright  = RIGHT_OUTSIDE,
@@ -197,7 +197,7 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
              // face edges are the elements that sit on the opposite site of a certain
              // node of the triangle 
              fed1 = static_cast<int64_t>((n+1) + 2 * n_mtrx + 1);
-             if ( i<m_mtrx and (t=TestOutline( (i+1), j, grid, elperm2 )) != DOWN_DIAG )
+             if ( i<m_mtrx and TestOutline( (i+1), j, grid, elperm2 ) != DOWN_DIAG )
                fed1 = static_cast<int64_t>((n+1) + 2 * n_mtrx);
              fed2 = static_cast<int64_t>((n+1) + 1);
              if( j == 1 ) fed3 = LEFT_OUTSIDE;                      
@@ -238,7 +238,7 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
              // 2.2.6 getting face-edge values, setting 
              if ( i == 1 ) fed1 = TOP_OUTSIDE;  // O.K.
              else  {
-                  if ( (t=TestOutline( (i-1), j, grid, elperm2 )) != DOWN_DIAG )
+                  if ( TestOutline( (i-1), j, grid, elperm2 ) != DOWN_DIAG )
                     fed1 = static_cast<int32_t>((n+1) - 2 * n_mtrx);       
                   else fed1 = static_cast<int32_t>((n+1) - 2 * n_mtrx - 1); 
                } 
@@ -292,7 +292,7 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
              fed1 = static_cast<int32_t>((n+1) + 1);  // O.K.
              if ( i == 1 ) fed2 = TOP_OUTSIDE;      // O.K.
              else {
-                  if ( (t=TestOutline( (i-1), j, grid, elperm2 )) != DOWN_DIAG )
+                  if ( TestOutline( (i-1), j, grid, elperm2 ) != DOWN_DIAG )
                     fed2 = static_cast<int32_t>((n+1) - 2 * n_mtrx + 1);   
 		              else fed2 = static_cast<int32_t>((n+1) - 2 * n_mtrx);  
 		           }
@@ -336,7 +336,7 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
              fed2 = static_cast<int64_t>(n);
              if ( i >= m_mtrx ) fed3 = BOTTOM_OUTSIDE;
              else  {
-                  if ( i<m_mtrx and (t=TestOutline( (i+1), j, grid, elperm2 )) != DOWN_DIAG )
+                  if ( i<m_mtrx and TestOutline( (i+1), j, grid, elperm2 ) != DOWN_DIAG )
                     fed3 = static_cast<int64_t>((n+1) + 2 * n_mtrx - 1);
 		              else fed3 = static_cast<int64_t>((n+1) + 2 * n_mtrx);     
     		       }

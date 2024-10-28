@@ -103,7 +103,7 @@ void SneddonCrackCoupled_VVCase::run()
   // Defining constants
     enum{dim=2};
     bool plane_strain = true;
-    const double ym (1.0e9), pr(0.3), P0(1.0e7), mu(1.0e-3), s_unif(10000000.0), Q(0.01);
+    const double ym (1.0e9), pr(0.3), P0(1.0e7), mu(1.0e-3), /*s_unif(10000000.0), */ Q(0.01);
     //             s_right(s_unif), s_top(s_unif), s_bottom(10.0e6), s_left(10.0e6);
 
 
@@ -172,7 +172,7 @@ void SneddonCrackCoupled_VVCase::run()
     /// Elasticity Boundary Conditions
     /// --------------------------------
     //Elasticity Dirichlet
-    Node<dim> *cornerNodeLeftBottom, *cornerNodeRightBottom;
+    Node<dim> *cornerNodeLeftBottom{nullptr}, *cornerNodeRightBottom{nullptr};
     for (vector<Node<dim>*>::const_iterator node (model.Region("Model").NodesBegin()); node != model.Region("Model").NodesEnd(); ++node )
     {
         if ( (*node)->AtBoundary() == CNR1 ) cornerNodeLeftBottom = (*node);

@@ -270,7 +270,7 @@ public:
 
 	bool ConstructHexahedron(ColumnCell& cell) {
 		//std::cerr << "hexa: \n";				
-		for ( size_t i = 0; i < 8; ++i) {
+		for ( uint32_t i = 0; i < 8; ++i) {
 			vertexIDs[i] = i;
 			auto p = getNodeCoord(cell, vertexIDs[i]);
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);

@@ -596,6 +596,7 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     // -----------------------------------------------------------------------------------
     transport.AdvectVariable( time_interval * 20. );
     duration += time_interval * 20.;
+    cout <<"\n"<<"ExplicitTransport_Test::TestFlowThroughModel: advected tracer for "<< duration <<" secs."<< endl;
     _test( printRangeOfVariable( *model_ptr_, "concentration", print_maximum ) <= inlet_concentration );
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 4, true );
 

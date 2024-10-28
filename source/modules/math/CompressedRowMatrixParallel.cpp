@@ -154,7 +154,7 @@ void CompressedRowMatrixParallel::CreateReceiveList( uint32_t n_block,
            if (receivelist.size()>quantity)
             {
               // Store number of entries + 1 in iptr
-              iptr.push_back( receivelist.size()+1 );
+              iptr.push_back( static_cast<uint32_t>(receivelist.size()+1) );
               quantity = receivelist.size();
             }
 
@@ -204,8 +204,7 @@ void CompressedRowMatrixParallel::ComputeVariableIndicesForBroadcast( uint32_t n
     ipts.resize(1U);   vector<int32_t>( ipts ).swap( ipts );
     ipts[0]=1U;
     set<int32_t> proc;
-    size_t counter(1U);
-    int32_t  temp2(0);
+    uint32_t counter(1U);
 
 
     // Loop over partition_vector
@@ -234,7 +233,6 @@ void CompressedRowMatrixParallel::ComputeVariableIndicesForBroadcast( uint32_t n
                 counter += sendlist.size();
                 ipts.push_back(counter);
               }
-            temp2=sendlist.size();
             temp.assign(sendlist.begin(), sendlist.end());
             // loop over set and store values in isndlist
             for( uint32_t i=0U; i<temp.size(); i++)
@@ -282,7 +280,7 @@ void CompressedRowMatrixParallel::CreateIpts( int32_t n_block,
 						 ipts[proc]=number+1;
 				 }
 
-		ipts[iranksnd.size()] = isndlists.size()+1;
+		ipts[iranksnd.size()] = static_cast<int32_t>(isndlists.size()+1);
 
 }
 
@@ -311,7 +309,7 @@ void CompressedRowMatrixParallel::CreateIptr( int32_t n_block,
 					 iptr[proc]=number;
 				 }
 
-		iptr[irankrec.size()] = ireclists.size()+1;
+		iptr[irankrec.size()] = static_cast<int32_t>(ireclists.size()+1);
 }
 /**
 
@@ -322,7 +320,7 @@ are halo elements in the corresponding row.
 
 */
 void CompressedRowMatrixParallel::Renumber( uint32_t n_block, const vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >& partition_vector,
-																		vector<int32_t>& ireclists, vector<int32_t>& isndlists) const
+																		        vector<int32_t>& ireclists, vector<int32_t>& isndlists) const
 {
 	// isndlists is straightforward:
 	for (vector<int32_t>::iterator it=isndlists.begin();it!=isndlists.end();it++)
@@ -377,7 +375,7 @@ uint32_t CompressedRowMatrixParallel::RowsWithHaloElements( int32_t n_block,
 
     }
 
-      return count(partition_vector[n_block].second.begin(), partition_vector[n_block].second.end(),true);
+      return static_cast<uint32_t>(count(partition_vector[n_block].second.begin(), partition_vector[n_block].second.end(),true));
    
    }// end RowsWithHaloElements
 

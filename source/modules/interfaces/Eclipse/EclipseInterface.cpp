@@ -3067,6 +3067,8 @@ void EclipseInterface::AddWell()
         if ( csmp_error.Verbose() )
           std::cout << "\nEclipseInterface::AddWell: '" << well_name << "' was added successfully!" << std::endl;
       }
+      if ( !valid_well )
+        csmp_error.Note( ERROR, "EclipseInterface::AddWell", (*it).first, "well could not be initialised correctly");
     }
 
     // set up the rest of the vset for wells

@@ -447,12 +447,12 @@ bool PropertyData::OutBinary( fstream& fp ) const
      // writing the number of records followed by flag values
      std::vector<int8_t>  flags; //VARIABLE_FLAG
      std::transform( flags_.begin(), flags_.end(), back_inserter( flags ), []( VARIABLE_FLAG flag ) -> int8_t { return flag; } );
-     bool return_value = binaryFileWrite( fp, flags );
+
+     // recording potentially negative writes
+     bool successfull_flag_write = binaryFileWrite( fp, flags );
+     bool successfull_data_write = binaryFileWrite( fp, data_ );
    
-     // writing the data values
-     return_value = binaryFileWrite( fp, data_ );
-   
-     return return_value;
+     return ( successfull_flag_write && successfull_flag_write );
  }
  
 

@@ -702,7 +702,7 @@ bool Matrix::CheckSizes( const Matrix& mat,
 void Matrix::LUDecomposition( std::vector<uint32_t>& index, double& d )
 {
     const double TINY(1.0e-20);
-    long i,imax(0),j,k;
+    uint32_t i,imax(0),j,k;
     double big,dum,sum,temp;
 
     std::vector<double> vv(data.rows());

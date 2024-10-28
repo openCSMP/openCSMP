@@ -320,12 +320,12 @@ namespace csmp {
     //! 4. Time evolution loop
     //! -------------------------------------------------------------
     monitorVariableRange( *model );
-    double simulated_time(0.), time_increment(mass_advector.AnisotropicCourantIncrement());
+    double simulated_time(0.);
   
     while ( simulated_time < run_settings.Duration() )
       {
         cout <<"\nmain: time-stepping loop; step: "<< time_step << endl;
-        time_increment = mass_advector.AnisotropicCourantIncrement();
+        double time_increment = mass_advector.AnisotropicCourantIncrement();
         // 1. transient temperature (starting with an initialized model with updated fluid properties)
         transient_temperature.TimeIncrement( 1. / time_increment );
         transient_temperature.IntegrateOver( *model, computation_domain );

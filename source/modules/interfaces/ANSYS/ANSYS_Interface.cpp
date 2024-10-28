@@ -660,7 +660,7 @@ bool ANSYS_Interface::ReadRegionsAndElementTypesASCII( ifstream& ifs )
                // 2.2 type of finite element used in the region 
                elmt_specifier = strtok(NULL,delims);
                // 2.3 material type identifier (material key)
-               material = atoi(strtok(NULL,delims));
+               material = atoi(strtok(NULL,delims));  // not read because material now can be made a variable stored on the unique Region
                // 2.4 number of elements which make up this region
                n_elements = atol( strtok(NULL,delims) );
                if ( n_elements == 0U ) 

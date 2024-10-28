@@ -343,8 +343,8 @@ TransientDiffusor<dim,CELLTYPE>::TransientDiffusor( Model<dim>& sg,
                              spatial_source_variable, "variable must be a scalar placed on element or constraint point" ); 
 
     csmp::Index  gradient_variable_key = p_ref.StorageKey(gradient_variable);
-    if ( (gradient_variable_key.place != ELEMENT || gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<dim>::(constructor):", 
+    if ( (gradient_variable_key.place != ELEMENT && gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<dim>::(constructor):",
                              gradient_variable, 
                             "variable must be a vector placed on element or integration point" ); 
 
@@ -442,8 +442,8 @@ TransientDiffusor<dim,CELLTYPE>::TransientDiffusor( Model<dim>& sg,
                              spatial_source_variable, "variable must be a scalar placed on element or integration point" );
 
     csmp::Index  gradient_variable_key = p_ref.StorageKey(gradient_variable);
-    if ( (gradient_variable_key.place != ELEMENT || gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<dim>::(constructor):", 
+    if ( (gradient_variable_key.place != ELEMENT && gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<dim>::(constructor):",
                              gradient_variable, 
                             "variable must be a vector placed on element or integration point" ); 
 
@@ -549,7 +549,7 @@ TransientDiffusor<dim,CELLTYPE>::TransientDiffusor( Model<dim>& sg,
                              point_source_variable, "variable must be a scalar placed on the node" );                              
 
     csmp::Index  gradient_variable_key = p_ref.StorageKey(gradient_variable);
-    if ( (gradient_variable_key.place != ELEMENT || gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
+    if ( (gradient_variable_key.place != ELEMENT && gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<dim>::(constructor):", 
                              gradient_variable, 
                             "variable must be a vector placed on element or integration point" ); 

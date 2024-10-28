@@ -50,13 +50,13 @@ Face<dim>::Face( const Element<dim>& elmt,
                  const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim,csmp::Face>(elmt.fptr_),
     FiniteVolumePolicy<dim,csmp::Face>(elmt.FV()),
-    idx_(elmt.Idx()),
+    idx_{elmt.Idx()},
     node_connector_(elmt.Nodes(),nullptr),
     face_connector_(elmt.Neighbors(),nullptr),
-    innerParent_(inner_parent),
-    outerParent_(outer_parent),
-    inner_parent_face_id_(inner_parent_face_id),
-    outer_parent_face_id_(outer_parent_face_id)
+    innerParent_{inner_parent},
+    outerParent_{outer_parent},
+    inner_parent_face_id_{inner_parent_face_id},
+    outer_parent_face_id_{outer_parent_face_id}
  {
     if constexpr ( dim == 3 ) assert( elmt.IsSurface() );
     if constexpr ( dim == 2 ) assert( elmt.IsLine() );
@@ -130,11 +130,11 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
                  const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim,csmp::Face>(nullptr),  // these are assigned below after detection of element type
     FiniteVolumePolicy<dim,csmp::Face>(nullptr),
-    idx_(NULL_IDX),
-    innerParent_(inner_parent),
-    outerParent_(outer_parent),
-    inner_parent_face_id_(NULL_IDX),
-    outer_parent_face_id_(NULL_IDX)
+    idx_{NULL_IDX},
+    innerParent_{inner_parent},
+    outerParent_{outer_parent},
+    inner_parent_face_id_{NULL_IDX},
+    outer_parent_face_id_{NULL_IDX}
  {
     assert( innerParent_ != nullptr );
     assert( outerParent_ != nullptr );
@@ -158,10 +158,13 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
            inner_parent_face_id_ = i;
            // assigning the finite element type
            const CSMP_FEM_TYPE etype = outer_parent->FE()->ElementTypeOfFace(i);
+           assert( etype != UNKNOWN );
            FiniteElementPolicy<dim,csmp::Face>::Assign( fem_manager.E(etype) );
            if ( fvm_manager ) FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume( fvm_manager->Stencil(etype) );
            node_connector_.resize(this->FE()->Nodes(),nullptr);
            face_connector_.resize(this->FE()->Faces(),nullptr);
+           assert( node_connector_.size() > 1 );
+           assert( face_connector_.size() > 1 );
            // assigning the nodes
            uint32_t n_count{0U};
            for ( const auto& k : inner_parent->FE()->NodesOfFace(i) )
@@ -169,7 +172,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
            // finding the number of the shared face in the outer element
            const auto n_faces_outer{outerParent_->Faces()};
            for ( uint32_t j{0U}; j<n_faces_outer; ++j )
-             if ( outer_parent->Neighbor(j) == inner_parent ) {
+             if ( outer_parent->Neighbor(j) && outer_parent->Neighbor(j) == inner_parent ) {
                   outer_parent_face_id_ = j;
                   break;
                }
@@ -217,13 +220,13 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
                  uint32_t outer_parent_face_id,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
-  : FiniteElementPolicy<dim,Face>( fem_manager.E( inner_parent->FE()->ElementTypeOfFace( inner_parent_face_id ) ) ),
+  : FiniteElementPolicy<dim,Face>{ fem_manager.E( inner_parent->FE()->ElementTypeOfFace( inner_parent_face_id ) ) },
     FiniteVolumePolicy<dim,Face>( (fvm_manager) ? fvm_manager->Stencil( inner_parent->FE()->ElementTypeOfFace( inner_parent_face_id ) ) : nullptr ),
-    idx_(NULL_IDX),
-    innerParent_(inner_parent),
-    outerParent_(outer_parent),
-    inner_parent_face_id_(inner_parent_face_id),
-    outer_parent_face_id_(outer_parent_face_id)
+    idx_{NULL_IDX},
+    innerParent_{inner_parent},
+    outerParent_{outer_parent},
+    inner_parent_face_id_{inner_parent_face_id},
+    outer_parent_face_id_{outer_parent_face_id}
  {
     assert( innerParent_ != nullptr );
     assert( outerParent_ != nullptr );
@@ -240,6 +243,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
     assert( outerParent_->Neighbor(outer_parent_face_id_) == innerParent_ );
 
     // resizing the node and neighbor vectors
+    assert( this->FE_Type() != UNKNOWN );
     node_connector_.resize(this->FE()->Nodes(),nullptr);
     face_connector_.resize(this->FE()->Faces(),nullptr);
     
@@ -279,12 +283,12 @@ Face<dim>::Face( Element<dim>& e,
                  const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim,csmp::Face>(FE_type_for_face),
     FiniteVolumePolicy<dim,csmp::Face>( (fvm_manager) ? fvm_manager->Stencil(FE_type_for_face->ElementType()) : nullptr ),
-    idx_(NULL_IDX),
+    idx_{NULL_IDX},
     node_connector_(FE_type_for_face->Nodes(),nullptr),
     face_connector_(FE_type_for_face->Neighbors(),nullptr),
-    innerParent_(&e),
-    outerParent_(nullptr),
-    inner_parent_face_id_(boundary_face)
+    innerParent_{&e},
+    outerParent_{nullptr},
+    inner_parent_face_id_{boundary_face}
  {
     assert( FE_type_for_face != nullptr );
     assert( FE_type_for_face->ElementType() != UNKNOWN );
@@ -342,14 +346,16 @@ Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
                  const IntegrationPointVariables& ip )
  : FiniteElementPolicy<dim,csmp::Face>(FE_type_of_boundary_face),
    FiniteVolumePolicy<dim,csmp::Face>( (fvm_manager) ? fvm_manager->Stencil(FE_type_of_boundary_face->ElementType()) : nullptr ),
-   idx_(NULL_IDX),
-   innerParent_(parent_of_face1),
-   outerParent_(parent_of_face2),
-   inner_parent_face_id_(parent_elmt1_segm_id),
-   outer_parent_face_id_(parent_elmt2_segm_id),
+   idx_{NULL_IDX},
+   innerParent_{parent_of_face1},
+   outerParent_{parent_of_face2},
+   inner_parent_face_id_{parent_elmt1_segm_id},
+   outer_parent_face_id_{parent_elmt2_segm_id},
    node_connector_(edge_nodes),
    face_connector_(2U,nullptr)
  {
+    assert( FE_type_of_boundary_face != nullptr );
+    assert( FE_type_of_boundary_face->ElementType() != UNKNOWN );
     assert( innerParent_ != nullptr );
     // assert( outerParent_ != nullptr );
    
@@ -378,14 +384,16 @@ Face<dim>::Face( size_t index,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
 
-  : FiniteElementPolicy<dim,csmp::Face>(f),
+  : FiniteElementPolicy<dim,csmp::Face>{f},
     FiniteVolumePolicy<dim,csmp::Face>(fvs),
-    idx_(index),
+    idx_{index},
     node_connector_(f->Nodes(),nullptr),
     face_connector_(f->Neighbors(),nullptr),
-    innerParent_( nullptr ),
-    outerParent_( nullptr )
+    innerParent_{nullptr},
+    outerParent_{nullptr}
  {
+    assert( f != nullptr );
+    assert( f->ElementType() != UNKNOWN );
     if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, ip );
     else

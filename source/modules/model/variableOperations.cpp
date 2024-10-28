@@ -126,7 +126,7 @@ double dotProduct( const VectorVariable<3>& v1, const VectorVariable<3>& v2 ) {
 
 VectorVariable<1U> crossProduct(  const VectorVariable<1U>& v,  const csmp::Point<1U>& )
 {
-    return std::move(VectorVariable<1U>(v.Flag(),0.0));
+    return VectorVariable<1U>(v.Flag(),0.);
 }
 
 VectorVariable<2U> crossProduct(  const VectorVariable<2U>& v1,  const csmp::Point<2U>& p )

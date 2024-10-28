@@ -172,12 +172,12 @@ void MeshManager_Test::run()
       cout << "\nMeshManager_Test::TestBasics";
       cout << "\n----------------------------";
       // ==========
-//      TestBasics();
+      TestBasics();
       // ==========
    }
 
   // testing hex element consistency for meshes from ANSYS
-//  _test(TestNeigbourVersusFaceConsistency());
+  _test(TestNeigbourVersusFaceConsistency());
   
   _test( Test_BuildConnectivity() );
   _test( Test_UpdateConnectivity() );
@@ -202,6 +202,7 @@ void MeshManager_Test::run()
   string        var_file("CSMP-variables.txt");
   const bool    regions_to_boundaries{true};
   create_FracBox( topology, vset );
+  vset.EstablishElementConnectivity3D();
   
   Model<3>      model( topology, vset, var_file.c_str(), regions_to_boundaries );
   
@@ -1280,6 +1281,7 @@ bool MeshManager_Test::Test_BuildConnectivity()
      ModelTopology topology;
      VSet<3U>      vset;
      create_FracBox( topology, vset );
+     vset.EstablishElementConnectivity3D();
      const bool    create_boundaries_from_regions{ true }; // true is a must, else all elements will be eliminated
      Model<3U>     model( topology, vset, "MeshManager_Test-variables.txt", create_boundaries_from_regions );
      int           errors(0ul);
@@ -1316,6 +1318,7 @@ bool MeshManager_Test::Test_UpdateConnectivity()
      ModelTopology topology;
      VSet<3U>      vset;
      create_FracBox( topology, vset );
+     vset.EstablishElementConnectivity3D();
      const bool    create_boundaries_from_regions{ true };
      Model<3U>     model( topology, vset, "MeshManager_Test-variables.txt", create_boundaries_from_regions );
      int           errors(0ul);
@@ -1326,8 +1329,14 @@ bool MeshManager_Test::Test_UpdateConnectivity()
      Region<3U>&  model_domain = model.Region("Model");
      for ( auto& eit : model_domain.CellVector() )
        for ( uint32_t i{0u}; i<eit->Neighbors(); ++i )
-         if ( eit->Neighbor(i) != nullptr )
-           eit->Neighbor(i)->UnassignNeighbor(i);
+             if ( eit->Neighbor(i) != nullptr ) {
+                  const auto nbor_nbors = eit->Neighbor(i)->Neighbors();
+                  for ( uint32_t j{0U}; j<nbor_nbors; ++j )
+                    if ( eit->Neighbor(i)->Neighbor(j) == eit ) {
+                         eit->Neighbor(i)->UnassignNeighbor(j);
+                         break;
+                      }
+         }
      // node parents and node neighbors
      for ( auto& nit : model_domain.NodeVector() ) {
           nit->EraseParents();

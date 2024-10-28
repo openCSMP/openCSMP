@@ -959,11 +959,14 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
    // 0. verifying the InterFace
-   if ( ifptr == nullptr )
-     csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "finite element pointer not initialised");
+   if ( ifptr == nullptr ) {
+        csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "finite element pointer not initialised");
+        return nullptr;
+     }
    if ( ifptr->HasInterveningElement() ) {
         ifptr->InterveningElement()->Out();
         csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "InterFace already has intervening element");
+        return ifptr->InterveningElement();
      }
 
    // 1. checking the node vector
@@ -1096,8 +1099,10 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( typename std:
    // 0. verifying the input
    // ----------------------
    // pointers
-   if ( (*eptr_it) == nullptr )
-     csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "element pointer not initialised");
+   if ( (*eptr_it) == nullptr ) {
+         csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "element pointer not initialised");
+         return nullptr;
+     }
    // is the element indeed lower dimensional?
    if constexpr ( dim == 3U ) if ( !(*eptr_it)->IsSurface() )
      csmp_error.Note( ERROR, "MeshManager<3>::ReplaceElementByInterFace", "element to be replaced is not a lower-dimensional surface element");
@@ -1378,8 +1383,10 @@ InterFace<dim>* const MeshManager<dim>::WrapInterFaceAroundElement( csmp::Elemen
    // 0. verifying the input
    // ----------------------
    // pointers
-   if ( eptr == nullptr )
-     csmp_error.Note( ERROR, "MeshManager<dim>::WrapInterFaceAroundElement", "element pointer not initialised");
+   if ( eptr == nullptr ) {
+        csmp_error.Note( ERROR, "MeshManager<dim>::WrapInterFaceAroundElement", "element pointer not initialised");
+        return nullptr;
+     }
    // is the element indeed lower dimensional?
    if constexpr ( dim == 3U ) if ( !eptr->IsSurface() )
      csmp_error.Note( ERROR, "MeshManager<3>::WrapInterFaceAroundElement", "element to be replaced is not a lower-dimensional surface element");
@@ -1696,10 +1703,14 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
    
    // 0. verifying the input
    // pointers
-   if ( inner_parent == nullptr )
-     csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
-   if ( outer_parent == nullptr )
-     csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
+   if ( inner_parent == nullptr ) {
+        csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
+        return nullptr;
+     }
+   if ( outer_parent == nullptr ) {
+        csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
+        return nullptr;
+     }
    if ( inner_parent == outer_parent ) {
         csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "cannot create InterFace",
                                   "inner and outer parent pointers are the same");

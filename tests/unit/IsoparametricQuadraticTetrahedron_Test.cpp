@@ -336,7 +336,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   double correct_volume       = 907.73008226913; // should be around this value
 
   // generic way of calculating volume and surface area
-
+  // TODO: use the surface area
   correct_surface_area = std::sqrt(s1*(s1-a1)*(s1-a2)*(s1-a4))+
                          std::sqrt(s2*(s2-a2)*(s2-a3)*(s2-a5))+
                          std::sqrt(s3*(s3-a3)*(s3-a6)*(s3-a1))+

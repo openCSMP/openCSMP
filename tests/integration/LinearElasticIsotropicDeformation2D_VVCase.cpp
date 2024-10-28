@@ -108,6 +108,9 @@ namespace csmp
       //All tests ran
   }
 
+
+
+
   void LinearElasticIsotropicDeformation2D_VVCase::Solve(){
 
       // Defining constants
@@ -182,7 +185,7 @@ namespace csmp
                   _test( (*b_elm_it)->Nodes() == 3 );           // Testing faces are indeed quadratic bar elements
 
               //testing each node to be on its perimeter
-              for ( size_t node = 0; node < (*b_elm_it)->Nodes() ; node++){
+              for ( uint32_t node = 0; node < (*b_elm_it)->Nodes() ; node++){
                   _test(MyModelRegion.IsPerimeterNode( (*b_elm_it)->N(node)) );
               }
           } //end of face iteration
@@ -202,7 +205,7 @@ namespace csmp
           VectorVariable<DIM> nrml;
           (*it)->UnitNormal(nrml);
           std::cout << "\nUNIT NORMAL " << nrml[0] << " " << nrml[1] << std::endl;
-          for ( size_t n = 0; n < (*it)->Nodes() ; n++)
+          for ( uint32_t n = 0; n < (*it)->Nodes() ; n++)
               std::cout << "Node: " << n << " is " << model.Region("Model").IsPerimeterNode( (*it)->N(n) ) << std::endl;
        }
 
@@ -219,7 +222,7 @@ namespace csmp
       model.InputPropertyValue("load", VectorVariable<DIM>(PLAIN, 0.0));
 
       // Model Boundary Conditions:
-      Node<DIM> *cornerNodeLeftBottom, *cornerNodeRightTop;
+      Node<DIM> *cornerNodeLeftBottom{nullptr}, *cornerNodeRightTop{nullptr};
       for (vector<Node<DIM>*>::const_iterator node (model.Region("Model").NodesBegin()); node != model.Region("Model").NodesEnd(); ++node )
       {
           if ( (*node)->AtBoundary() == CNR1 ) cornerNodeLeftBottom = (*node);

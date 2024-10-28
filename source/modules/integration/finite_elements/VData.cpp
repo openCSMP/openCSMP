@@ -4458,6 +4458,8 @@ As a consequence, degenerate tetrahedra would be produced by the splitting opera
 @todo does not repair any surface elements that are covering the faces of the tetrahedra and would need to be adjusted
 
 */
+/* TODO: not all corner cases are handled yet
+
 void splitCornerTetrahedron( VData& vdata, size_t cnr, size_t nbr )
  {
     assert( cnr < vdata.Elements() );
@@ -4620,7 +4622,7 @@ elementToVTK( vdata, nbr, "b_interior_tetrahedron" );
     cout <<" and its neighbor "<< nbr <<", adding the new tetrahedron "<< new1;
 
  } // end splitCornerTetrahedron
-
+*/
 
 
 
@@ -4751,7 +4753,7 @@ void printCell( const VData& vdata, size_t cell_id )
        }
        
      if ( vdata.SpatialDimension() == 2U ) {
-          double min_x, min_y, min_z, max_x, max_y, max_z, ctr_x{0.}, ctr_y{0};
+          double min_x, min_y, min_z{0.}, max_x, max_y, max_z{0.}, ctr_x{0.}, ctr_y{0.};
           min_x = min_y = min_z =  1.0e30;
           max_x = max_y = max_z = -1.0e30;
           for ( uint32_t i{0u}; i<vdata.PlistSize(cell_id); ++i ) {
