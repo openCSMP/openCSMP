@@ -325,14 +325,14 @@ void VSet_Test2::Test_ModelConstructionAndSaving3D()
       modelOutput3.InputPropertyValue( "faip vector 1", vv );
       modelOutput3.InputPropertyValue( "seip tensor 1", tv );
       Element<3>* ePtr = (*modelOutput3.Region("Model").CellsBegin());
-      for( auto f(0); f < ePtr->Facets(); ++f )
-        for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
+      for( uint32_t f(0); f < ePtr->Facets(); ++f )
+        for( uint32_t fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
           {
             ePtr->Read( f, fip, faipVectorKey, vvPlain );
             _test( vvPlain == vv );
           }
-      for( auto s(0); s < ePtr->Sectors(); ++s )
-        for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
+      for( uint32_t s(0); s < ePtr->Sectors(); ++s )
+        for( uint32_t sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
         {
           ePtr->Read( s, sip, seipTensorKey, tvPlain );
           _test( tvPlain == tv );
@@ -350,15 +350,15 @@ void VSet_Test2::Test_ModelConstructionAndSaving3D()
 
       Element<3>*  ePtr = *modelInput3.Region("Model").CellsBegin();
       auto ctr(0);
-      for( auto f{0U}; f < ePtr->Facets(); ++f )
-        for( auto fip{0U}; fip < ePtr->IntegrationPointsPerFacet(); ++fip )
+      for( uint32_t f{0U}; f < ePtr->Facets(); ++f )
+        for( uint32_t fip{0U}; fip < ePtr->IntegrationPointsPerFacet(); ++fip )
         {
           ePtr->Read( f, fip, faipVectorKey, vvPlain );
           _test( vvPlain == vv );
           ++ctr;
         }
-      for( auto s{0U}; s < ePtr->Sectors(); ++s )
-        for( auto sip{0U}; sip < ePtr->IntegrationPointsPerSector(); ++sip )
+      for( uint32_t s{0U}; s < ePtr->Sectors(); ++s )
+        for( uint32_t sip{0U}; sip < ePtr->IntegrationPointsPerSector(); ++sip )
         {
           ePtr->Read( s, sip, seipTensorKey, tvPlain );
           _test( tvPlain == tv );

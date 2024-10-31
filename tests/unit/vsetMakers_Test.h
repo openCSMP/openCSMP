@@ -27,10 +27,11 @@ class vsetMakers_Test : public Test {
   public:
     virtual void run();
 
+    const static bool verbose_ = false;
     
     /// test numbering/faces/neighbors/segments compliance of single element meshes with element numbering etc. for CSMP_FEM_conventions.pdf
-    bool TestConsistencyWithCSMP_Conventions( const VSet<2U>& );
-    bool TestConsistencyWithCSMP_Conventions( const VSet<3U>& );
+    template<uint32_t dim>
+    bool TestConsistencyWithCSMP_Conventions( const VSet<dim>& );
   
   private: // auxiliary functions
   

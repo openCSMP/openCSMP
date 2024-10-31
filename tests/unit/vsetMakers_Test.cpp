@@ -22,7 +22,6 @@ template<uint32_t dim>
 vector<vector<uint32_t>> vsetMakers_Test::NodesOfElementFaces( const VSet<dim>& vset, size_t elmt )
  {
     assert( elmt < vset.Elements() );
-    assert( vset.HybridElementTypeMesh() );
 
     const auto n_nbors = distance( vset.PfvertsBegin(elmt), vset.PfvertsEnd(elmt) );
     const auto e_type  = vset.ElementType( elmt );
@@ -100,9 +99,11 @@ void vsetMakers_Test::run()
       ModelTopology topo = create_MeshPatchWithLineElements_VSet( vset );
       _test( TestConsistencyWithCSMP_Conventions( vset ) );
        TestConnectedElementNeighborNumbering( vset );
+       auto pit = vset.PropertyValuesBegin();
+       while ( pit!=vset.PropertyValuesEnd() ) pit = vset.RemoveData( (*pit).first.c_str() );
 
       /// model SPLIT22_BASIC with box boundaries (Faces) and one through-going and one internal crossing split boundary (USED IN UNIT TESTS)
-      topo = create_BoundarySplitBoundaryPatch( vset );
+       topo = create_BoundarySplitBoundaryPatch( vset );
       _test( TestConsistencyWithCSMP_Conventions( vset ) );
        TestConnectedElementNeighborNumbering( vset );
     }
@@ -113,6 +114,9 @@ void vsetMakers_Test::run()
       const bool bSkewed{false};
       create_1Hexahedron_VSet( vset );
       _test( TestConsistencyWithCSMP_Conventions( vset ) );
+       auto pit = vset.PropertyValuesBegin();
+       while ( pit!=vset.PropertyValuesEnd() ) pit = vset.RemoveData( (*pit).first.c_str() );
+
       create_1Prism_VSet( vset, bSkewed );
       _test( TestConsistencyWithCSMP_Conventions( vset ) );
     }
@@ -123,37 +127,51 @@ void vsetMakers_Test::run()
 /**
      For single element meshes only.
 */
-bool vsetMakers_Test::TestConsistencyWithCSMP_Conventions( const VSet<2U>& vset )
+template<uint32_t dim>
+bool vsetMakers_Test::TestConsistencyWithCSMP_Conventions( const VSet<dim>& vset )
  {
-    assert( vset.Elements() == 1 );
     size_t inconsistencies_found{0ul};
     
-    vector<size_t> test_elements{ 0, 5, 12, 17 };
-    for ( auto eid : test_elements ) {
-         auto face_nodes = NodesOfElementFaces( vset, eid );
-      }
+    // do the neighbor types of the element match
+    for (size_t eidx = 0; eidx < vset.Elements(); ++eidx) {
+        for (uint32_t j = 0; j < vset.PfvertsSize(eidx); ++j) {
+            auto neighbor_idx = vset.Pfvert(eidx, j);
+            // If the face has a neighbor
+            if (neighbor_idx >= 0 ) {  // numbers below zero indicate no neighbor
+                // Check the neighbors of this neighbor
+                for (uint32_t k = 0; k < vset.PfvertsSize(neighbor_idx); ++k) {
+                    auto neighbor_of_neighbor_idx = vset.Pfvert(neighbor_idx, k);
+
+                    // If neighbor_of_neighbor is valid and connected to the current element
+                    if ( neighbor_of_neighbor_idx >= 0 && neighbor_of_neighbor_idx == eidx ) {
+                        auto etype      = ( vset.HybridElementTypeMesh() == true ) ? vset.ElementType(neighbor_idx) : vset.ElementType(0);
+                        auto nbor_etype = ( vset.HybridElementTypeMesh() == true ) ? vset.ElementType(neighbor_of_neighbor_idx) : vset.ElementType(0);
+                        if ( verbose_ )
+                             cout << "\nNeighbor " << neighbor_idx << ": "
+                                  << parseAbbreviated_FE_Type(etype)
+                                  << " is connected to "
+                                  << neighbor_of_neighbor_idx << ": "
+                                  << parseAbbreviated_FE_Type(nbor_etype);
+                                  
+                        _test( parseFiniteElementDimension(static_cast<CSMP_FEM_TYPE>(etype)) ==
+                               parseFiniteElementDimension(static_cast<CSMP_FEM_TYPE>(nbor_etype)) );
+                        if ( parseFiniteElementDimension(static_cast<CSMP_FEM_TYPE>(etype)) !=
+                             parseFiniteElementDimension(static_cast<CSMP_FEM_TYPE>(nbor_etype)) )
+                          inconsistencies_found++;
+                    }
+                }
+            }
+        }
+    }
       
     return (inconsistencies_found == 0);
 
 } // end TestConsistencyWithCSMP_Conventions
 
+template bool vsetMakers_Test::TestConsistencyWithCSMP_Conventions( const VSet<3>& );
+template bool vsetMakers_Test::TestConsistencyWithCSMP_Conventions( const VSet<2>& );
 
-/**
-      Testing numbering of neighbor faces 
-*/
-bool vsetMakers_Test::TestConsistencyWithCSMP_Conventions( const VSet<3U>& vset )
- {
-    assert( vset.Elements() == 1 );
-    size_t inconsistencies_found{0ul};
-    
-    vector<size_t> test_elements{ 0, 5, 12, 17 };
-    for ( auto eid : test_elements ) {
-         auto face_nodes = NodesOfElementFaces( vset, eid );
-      }
-      
-    return (inconsistencies_found == 0);
 
-} // end TestConsistencyWithCSMP_Conventions
 
 
 

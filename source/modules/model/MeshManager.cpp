@@ -3399,13 +3399,16 @@ template<uint32_t dim>
 size_t MeshManager<dim>::DeleteFacesAndRepairConnnectivity( typename vector<Face<dim>*>::iterator first,
                                                             typename vector<Face<dim>*>::iterator last )
  {
-     throw csmp::Exception( ERROR, "MeshManager<dim>::DeleteFacesAndRepairConnnectivity", "method not tested yet");
+//     throw csmp::Exception( ERROR, "MeshManager<dim>::DeleteFacesAndRepairConnnectivity", "method not tested yet");
 
      auto faces_to_delete( distance(first,last) );
  
      if ( faces_to_delete == 0 ) return 0U;
      
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+     
+     // disconnecting the Face objects that surround the Face patch that will be deleted
+     updateHaloCellConnectivity<dim,Face>( first, last );
 
      size_t deleted_faces{0ul};
      size_t nullptr_faces{0ul};
@@ -3414,22 +3417,22 @@ size_t MeshManager<dim>::DeleteFacesAndRepairConnnectivity( typename vector<Face
        {
           if ( (*first) != nullptr ) {
                auto delete_it = Delete( first );
-               if ( delete_it != faces_.end() )
-                 deleted_faces++;
+               //               ^^^^^^^^^^^^^^^^
+               deleted_faces++;
             }
           else nullptr_faces++;
           first++;
        }
-     
-     if ( deleted_faces != faces_to_delete )
-       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteFacesAndRepairConnnectivity",
-                       "deleted less faces than in input range");
      
      if ( nullptr_faces > 0 ) {
           cout <<"\n\t"<<"detected "<< nullptr_faces <<" nullptr faces in the input interator range.";
           csmp_error.Note( ERROR, "MeshManager<dim>::DeleteFacesAndRepairConnnectivity",
                            "deleted less faces than in input range");
        }
+     else if ( deleted_faces != faces_to_delete )
+       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteFacesAndRepairConnnectivity",
+                       "deleted less faces than in input range");
+     
      
      return deleted_faces;
     
@@ -8567,7 +8570,7 @@ void updateHaloCellConnectivity( typename vector<CELL<dim>*>::iterator first,
                                     halo_cells.insert( cptr->Neighbor(eidx) );
                              } );
     
-    assert( !halo_cells.empty() );
+    if ( halo_cells.empty() ) return;
     
     // 3. update the connectivity of the halo elements
     // (here extra checks are performed in DEBUG mode to determine whether they have other nullptr neighbors like at model boundary)
