@@ -1742,6 +1742,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
 
       // 3. getting MeshManager to create faces and delete pre-cursor elements of all boundaries
       // ---------------------------------------------------------------------------------------
+      updateHaloElementConnectivity<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() );
       // (function also already connects the new Face objects with each other)
       vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                                elmts_to_become_faces.begin(),
@@ -1936,10 +1937,55 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
 
     // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------
+    // 2.1 verifying the connectivity of the input element range
     assert( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) == 0 );
+    // 2.2 Fixing the connectivity of the neighbor (halo) elements
+    updateHaloElementConnectivity<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() );
+
+// DEBUGGING - TODO: eventually remove, but leave in until all tests are passing again
+#ifndef NDEBUG
+for_each( model->Mesh().ElementsBegin(), model->Mesh().ElementsEnd(), [](Element<dim>& eref){ eref.Region_ID(1); } );
+for_each( elmts_to_become_faces.begin(), elmts_to_become_faces.end(), [](Element<dim>* eptr){ assert( !eptr->IsVolume() ); eptr->Region_ID(-999); } );
+// ---------------------------------------------------------------------------------
+for ( auto it=model->Mesh().ElementsBegin(); it!=model->Mesh().ElementsEnd(); ++it )
+  if ( (*it).Region_ID() != -999 ) {
+     for ( auto eit=(*it).NeighborsBegin(); eit!=(*it).NeighborsEnd(); ++eit )
+       if ( (*eit) )
+         for ( auto neit=(*eit)->NeighborsBegin(); neit!=(*eit)->NeighborsEnd(); ++neit )
+           if ( (*neit) && (*neit)->Region_ID() == -999 ) {
+                cout <<"\n"<<"nbor "<< (*eit)->Idx() <<": "<< parseAbbreviated_FE_Type((*eit)->FE_Type()) <<" remains connected to ";
+                cout << (*neit)->Idx() <<": "<< parseAbbreviated_FE_Type((*neit)->FE_Type()) <<" element that will be deleted.";
+             }
+  }
+// IS THERE A VOLUMETRIC ELEMENT THAT HAS A LOWER-DIM NEIGHBOR
+for ( auto it=model->Mesh().ElementsBegin(); it!=model->Mesh().ElementsEnd(); ++it )
+  if ( (*it).IsVolume() )
+    for ( auto eit=(*it).NeighborsBegin(); eit!=(*it).NeighborsEnd(); ++eit )
+      if ( *eit )
+        if ( !(*eit)->IsVolume() || (*eit)->FE_Type() == UNKNOWN )
+          cout <<"\n"<<"Vol element "<< (*it).Idx() <<" has nbor "<< (*eit)->Idx() <<": "<< parseAbbreviated_FE_Type((*eit)->FE_Type());
+#endif
+// do the neighbor types match
+/* NO ISSUES!
+for ( auto it=model->Mesh().ElementsBegin(); it!=model->Mesh().ElementsEnd(); ++it ) {
+     for ( auto eit=(*it).NeighborsBegin(); eit!=(*it).NeighborsEnd(); ++eit )
+       // if the face has a neighbor
+       if ( (*eit) )
+         // if that neighbor is connected to the element
+         for ( auto neit=(*eit)->NeighborsBegin(); neit!=(*eit)->NeighborsEnd(); ++neit )
+           if ( (*neit) && (*neit)->Idx() == (*it).Idx() ) { //&& (*neit)->FE_Type() != (*eit)->FE_Type() ) {
+                cout <<"\n"<<"nbor "<< (*eit)->Idx() <<": "<< parseAbbreviated_FE_Type((*eit)->FE_Type()) <<" is connected to ";
+                cout << (*neit)->Idx() <<": "<< parseAbbreviated_FE_Type((*neit)->FE_Type()) <<" !";
+                assert( (*neit)->FE_Type() == (*it).FE_Type() );
+             }
+  }
+*/
+
     vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                              elmts_to_become_faces.begin(),
-                                                                             elmts_to_become_faces.end() );    
+                                                                             elmts_to_become_faces.end() );
+    //                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
     // 3. creating the Boundaries from the faces
     // -----------------------------------------
     typename vector<Face<dim>*>::iterator fit{ faces.begin() };
@@ -1951,19 +1997,21 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
          if ( AddBoundary( it.first.c_str(), next(fit,it.second.first), next(fit,it.second.second), boundary_flag ) ) // checked 20/1024n
            boundaries_created.insert( it.first );
       }
-    
     if ( !boundaries_created.empty() ) {
          cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: successfully created the external boundaries:\n\t";
          for ( auto bit : boundaries_created )
            cout <<" "<< bit;
          cout << endl;
       }
+      
+//model->Mesh().UpdateConnectivity();
 
 	  // 4. removing the original regions from which the boundaries were created
     // ------------------------------------------------------------------------------------
     model->Region("Model").ScheduleForRebuild();
     // (no flagging for rebuilt of regions is necessary as they will be completely removed)
     for ( auto& it : eligibleRegions ) model->RemoveRegion( it.first.c_str() );
+
     // all non-unique regions must be rebuilt
     model->UpdateRegions();
     assert( model->Mesh().Elements() == model->Region("Model").Cells() );

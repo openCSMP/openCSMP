@@ -238,7 +238,8 @@ class Element : public FiniteElementPolicy<dim, Element>,
     csmp::Node<dim>* const N( uint32_t n_local ) const;
 
     /// accessor of the equidimensional neighbor elements of the current element (volume->volume, surface->surfaces element etc.)
-    csmp::Element<dim>* const Neighbor( uint32_t ) const;
+    const csmp::Element<dim>* const Neighbor( uint32_t ) const;
+    csmp::Element<dim>* const Neighbor( uint32_t );
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
     void         Idx( size_t ) const;

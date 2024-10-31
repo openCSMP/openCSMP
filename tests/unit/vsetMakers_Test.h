@@ -27,6 +27,7 @@ class vsetMakers_Test : public Test {
   public:
     virtual void run();
 
+    
     /// test numbering/faces/neighbors/segments compliance of single element meshes with element numbering etc. for CSMP_FEM_conventions.pdf
     bool TestConsistencyWithCSMP_Conventions( const VSet<2U>& );
     bool TestConsistencyWithCSMP_Conventions( const VSet<3U>& );
@@ -40,6 +41,16 @@ class vsetMakers_Test : public Test {
     /// as determined using the nodes that make up the faces; tests also whether nodes are correctly assigned to faces
     bool FaceNumbersMatch_CSMP_Conventions();
     bool doNodeNumbersMatchCSMP_Conventions();
+    
+    /// tests 'pfverts' record in supplied vset for whether the assigned neighbor Element objects are contained in  overall element range and match element type
+    /* useful checks:
+      Loop through each element: For each element, retrieve its neighbors and iterate through each face.
+      2.	Check Opposite Face: For each face, look up the corresponding opposite face for the neighboring element.
+      3.	Symmetry Validation: Ensure that the neighboring element also lists the current element on the expected opposite face. If not, print an error message and mark the consistency check as failed.
+      4.	Boundary and Outside Conditions: OUTSIDE markers are skipped, as they represent boundaries rather than element neighbors.
+    */
+    template<uint32_t dim>
+    void TestConnectedElementNeighborNumbering( const VSet<dim>& );
 
     // TODO: to test for consistency with 2024 CSMP conventions
     /*

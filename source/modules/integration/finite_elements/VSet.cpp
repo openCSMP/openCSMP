@@ -75,7 +75,7 @@ void VSet<dim>::Resize( uint32_t nodes_per_element,
     throw csmp::Exception( ERROR, "VSet<dim>::Resize", "this method is only for single-element type meshes.");
 
   if ( Elements() > 0 && ElementType(0) != csmp_etype )
-    throw csmp::Exception( ERROR, "VSet<dim>::Resize", "element type does not match the ones stored in VData.");
+    throw csmp::Exception( ERROR, "VSet<dim>::Resize", "element type does not match the one stored in VData.");
 
 	VData::Resize(nodes_per_element, nbors_per_element, csmp_etype, nodes, elmts);
   pmtrl_.resize( elmts );
@@ -365,16 +365,20 @@ bool VSet<dim>::AddData( const char* s, const PropertyData& data )
 
 /**
    To delete a dataset
+   @return iterator to next element after the deleted one in the property map
 */
 template<uint32_t dim>
-void VSet<dim>::RemoveData( const char* s )
+auto VSet<dim>::RemoveData( const char* s ) -> map<string,PropertyData>::iterator
 {
    if ( property_map_.empty() || property_map_.count(s) == 0 ) {
         cerr <<"\n"<<"VSet<dim>::RemoveData: WARNING: vset does not contain property '";
         cerr << s <<"''; nothing was done"<< endl;
-        return;
+        return property_map_.end();
      }
-   property_map_.erase(s);
+   map<string,PropertyData>::iterator pit = property_map_.find(s);
+   if ( pit == property_map_.end() ) return property_map_.end();
+   
+   return property_map_.erase( pit );
 
 } // end RemoveData
 

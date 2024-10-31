@@ -670,7 +670,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
     }
 
   // reserving the memory for the parent storage and zeroing parent vector for next step
-  auto i{0U};
+  size_t i{0ul};
   for ( auto& n : nodes_ )
     n.ReserveParentStorage( parent_elmts_per_node[i++] );
 
@@ -723,6 +723,25 @@ if ( !interfaces_.empty() ) {
   }
 #endif
 
+
+// DEBUGGING VData - Element connectivity (ok for model FracBox
+// ---------------------------------------------------------------------------------
+/*
+cout <<"\n"<<"MeshManager::Intialise(database,vset,FV): DEBUGGING neighbor connectivity: "<< endl;
+// do the neighbor types match
+for ( auto it=elements_.begin(); it!=elements_.end(); ++it ) {
+     for ( auto eit=(*it).NeighborsBegin(); eit!=(*it).NeighborsEnd(); ++eit )
+       // if the face has a neighbor
+       if ( (*eit) )
+         // if that neighbor is connected to the element
+         for ( auto neit=(*eit)->NeighborsBegin(); neit!=(*eit)->NeighborsEnd(); ++neit )
+           if ( (*neit) && (*neit)->Idx() == (*it).Idx() ) { //&& (*neit)->FE_Type() != (*eit)->FE_Type() ) {
+                cout <<"\n"<<"nbor "<< (*eit)->Idx() <<": "<< parseAbbreviated_FE_Type((*eit)->FE_Type()) <<" is connected to ";
+                cout << (*neit)->Idx() <<": "<< parseAbbreviated_FE_Type((*neit)->FE_Type()) <<" !";
+                assert( (*neit)->FE_Type() == (*it).FE_Type() );
+             }
+  }
+*/
    return true;
   
 } // end Initialise
@@ -1584,9 +1603,6 @@ auto	MeshManager<dim>::Delete( typename vector<Element<dim>*>::iterator eptr_ref
     auto pfl_it = elements_.get_iterator( (*eptr_ref) );
     // if the element exists in the colony
     if ( pfl_it != elements_.end() ) {
-         // remove element from the parent element list of its connected nodes
-         for ( auto nit=(*eptr_ref)->NodesBegin(); nit!=(*eptr_ref)->NodesEnd(); ++nit )
-           (*nit)->Unassign( (*eptr_ref) );
          (*eptr_ref) = nullptr;
          // deleting element and returning colony iterator to next element in colony
          return elements_.erase( pfl_it );
@@ -1594,6 +1610,13 @@ auto	MeshManager<dim>::Delete( typename vector<Element<dim>*>::iterator eptr_ref
     // does an element after to the one erased exist in the colony? - if so, an iterator to it is returned
     return elements_.end();
  }
+
+/* CUT OUT: ALL THESE HAVE SIDE EFFECTS when involved regions touch eachother
+   // remove element from the parent element list of its connected nodes
+   for ( auto nit=(*eptr_ref)->NodesBegin(); nit!=(*eptr_ref)->NodesEnd(); ++nit )
+     (*nit)->Unassign( (*eptr_ref) );
+*/
+
 
 
 /**
@@ -1625,7 +1648,6 @@ auto	MeshManager<dim>::Delete( typename vector<InterFace<dim>*>::iterator fptr_r
     assert( (*fptr_ref) != nullptr );
     auto pfl_it = interfaces_.get_iterator( (*fptr_ref) );
     if ( pfl_it != interfaces_.end() ) {
-         // TODO: fuse nodes back together here; deleting the outside ones
          (*fptr_ref) = nullptr;
          return interfaces_.erase( pfl_it );
       }
@@ -2021,6 +2043,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
 #if defined(DEBUG) && defined(CSMP_MESH_MANAGER_DEBUG)
     auto               n_elements   = distance(first,last);
     size_t             n_duplicates = duplicatesCheck<dim,Element>( first, last );
+    assert( n_duplicates == 0 );
 #endif
     if ( n_faces_to_build == 0U ) {
          csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces", "supplied iterator range is empty; nothing was done.");
@@ -2063,6 +2086,8 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
          
          // if this is unsuccesful, boundary face creation is stopped, but element will be deleted
          if ( pelmt.first == nullptr ) {
+              cerr <<"\n\t"<< (*first_copy)->Idx();
+              csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces", "unable to identify higher-dim element neighbor of Element.");
 #if defined(DEBUG) && defined(CSMP_MESH_MANAGER_DEBUG)
               n_elements--;
 #endif
@@ -2073,6 +2098,8 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
          // creating Face, storing a pointer to it
          //                                    element ptr  local element ID in face
          face_ptrs.push_back( AddBoundaryFace( pelmt.first, pelmt.second, lvars, ivars ) );
+         //                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+         face_ptrs.back()->Idx( face_idx++ );
          
          // verifying the creation of th face and indexing it
          if ( face_ptrs.back() == nullptr ) {
@@ -2080,15 +2107,14 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
               throw csmp::Exception( ERROR, "MeshManager<dim>::ReplaceBoundaryElementsByFaces",
                                     "could not create suitable face matching element");
            }
-         // detaching neighboring elements from the element that will get deleted further below
-         DetachNeighborsFrom( (*first_copy) );
-         face_ptrs.back()->Idx( face_idx++ );
-        
-         // NOTE: no Element erasure yet because this would invalidate node parent vector, corrupting this functionality
+          // NOTE: no Element erasure yet because this would invalidate node parent vectors, corrupting this functionality
          first_copy++;
       }
-      
+
+     // 2. Deleting the Elements
+     // ------------------------------------------------------------------------------------
      bool first_call{true};
+     
      while( first != last )
        {
 #if defined(DEBUG) && defined(CSMP_MESH_MANAGER_DEBUG)
@@ -2102,17 +2128,15 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
                pfl_iter  != elements_.end() and
                next_elmt != next(pfl_iter,1) ) {
                if ( first_call ) {
-                   csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces",
-                                   "did not delete Element");
+                   csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces", "did not delete Element");
                    cout <<"\n\t"<<"Hexadecimal addresses of Element(s) not deleted: "<< (*first);
-                   n_elements--;
                    first_call = false;
                  }
                else cout <<" "<< (*first);
             }
 #endif
           first++;
-       }
+        }
       if ( !first_call ) cout << endl;
 
 #if defined(DEBUG) && defined(CSMP_MESH_MANAGER_DEBUG)
@@ -2126,7 +2150,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
      // 3. cleaning up inter-CELL and node-to-parent connectivity
      // ---------------------------------------------------------
      BuildConnectivity<csmp::Face>( face_ptrs.begin(), face_ptrs.end() ); // between the faces
-     
+
      return face_ptrs;
      
  } // end ReplaceBoundaryElementsByFaces
@@ -4690,7 +4714,7 @@ TODO: needs complete rewrite
 template<uint32_t dim>
 void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence )
 {
-  size_t n( 0U );
+  size_t n{ 0ul };
   for_each( nodes_.begin(), nodes_.end(), [&n]( Node<dim>& nd ) { nd.Idx( n++ ); } );
 
   n = 0U; // resetting the counter
@@ -8243,7 +8267,6 @@ size_t detectDuplicateCells( typename plf::colony<CELL<dim>>::const_iterator fir
     map<set<Node<dim>*>,set<const CELL<dim>*> > potential_duplicates;
     size_t  n_duplicates{0ul};
     size_t  cell_counter{0ul};
-    bool    first_issue{ true };
     
     while( first != last ) {
          // creating cell keys from their node pointers
@@ -8299,4 +8322,311 @@ template size_t detectDuplicateCells<3,InterFace>( plf::colony<InterFace<3>>::co
 template size_t detectDuplicateCells<2,InterFace>( plf::colony<InterFace<2>>::const_iterator, plf::colony<InterFace<2>>::const_iterator, bool );
 template size_t detectDuplicateCells<1,InterFace>( plf::colony<InterFace<1>>::const_iterator, plf::colony<InterFace<1>>::const_iterator, bool );
 
-} // end namespace csmp 
+
+
+/**
+
+Method supports the deletion a set of finite elements from your mesh, locally updating the connectivity of the remaining elements,
+while it tries to minimize the number of operations by focusing only on the immediate neighbors of the elements being deleted.
+
+Step-by-Step Algorithm
+
+1.	Mark the Elements for Deletion: A unique negative region ID of -999  is assigned to each element that will be deleted. This attribute allows to identify deleted elements without affecting other mesh operations.
+	
+2.	Identify the Halo Neighbors of the Deleted Elements:
+	•	For each element in the set to be deleted, iterate over its neighbors (from the std::vector of neighbor pointers).
+	•	For each face, if the neighboring element on that face is not marked for deletion, mark it as a “halo element” for updating or collect a pointer to it in a separate container as it needs to have its connectivity adjusted.
+  
+3.	Update the Connectivity of Halo Elements:
+	•	For each halo neighbor identified in the previous step, iterate over its list of neighbors (the neighbor pointers for each face).
+	•	For each face with a neighbor that is marked for deletion, set the corresponding neighbor pointer to nullptr because this connection will become invalid.
+  
+@todo If the face with the deleted neighbor belongs to a lower dimensional element, it may be a manfold that is potentially  connected to other remaining element(s).
+In this case, replace the deleted neighbor that will be deleted with another adjacent lower-dimensional element sharing its face nodes.
+This requires searching because there is no knowledge stored about face-node sharing alternative neighbors.
+
+Now that these tasks have been completed one can:
+
+4.	Delete the Elements from the Mesh:
+	•	Now that the border neighbors have been updated, you can safely delete the elements in the set marked for deletion.
+  
+5.	Clean-Up Neighbor Pointers:
+	•	Remove any redundant or invalid pointers from the std::vector of neighbor pointers in each element to ensure the integrity of your mesh data structure.
+
+@attention function assumes that all elements in the iterator range have the same dimension, i.e. are lines, surfaces or volumes
+
+@section Application
+
+call method with template arguments as follows
+
+@code
+          updateHaloCellConnectivity<3,Element>(first,last);
+@endcode
+
+@author SKM
+@date 30/10/2024
+
+*/
+template<uint32_t dim>
+void updateHaloElementConnectivity( typename vector<Element<dim>*>::iterator first,
+                                    typename vector<Element<dim>*>::iterator last )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( distance(first,last) == 0 ) {
+         csmp_error.Note( ERROR, "updateHaloElementConnectivity", "input element iterator range is empty");
+         return;
+      }
+    
+    const int32_t delete_mark{-999};
+    size_t        issues{0ul};
+
+    // ======================================================================
+    // PROCESSING ELEMENTS THAT HAVED THE SAME SPATIAL DIMENSION AS THE MODEL
+    // ======================================================================
+    if ( (*first)->IsEquidimensional() ) {
+        // 1. mark elements (using region ID), and remove them from the parent-element vectors of its nodes
+        // (NB: changing the region ID does not matter because these elements will be deleted anyway)
+        for_each( first, last, [ &csmp_error, &issues ](Element<dim>* cptr) {
+                                     if ( cptr ) {
+                                          // verifying that iterator points to an equidimensional element
+                                          if ( !cptr->IsEquidimensional() ) {
+                                               cout <<"\n\t"<<"Element<"<< dim <<">"<< cptr->Idx() <<": "<< parseAbbreviated_FE_Type(cptr->FE_Type());
+                                               csmp_error.Note( WARNING, "updateHaloElementConnectivity", "element pointer points to lower-dimensional element");
+                                               issues++;
+                                            }
+                                          // marking the elements via their region ID
+                                          cptr->Region_ID(delete_mark);
+                                       }
+                                     else  {
+                                         csmp_error.Note( WARNING, "updateHaloElementConnectivity", "input iterator contains nullptr");
+                                         issues++;
+                                       }
+                                 } );
+
+        // 2. collect the halo cells so that their neighbor connectivity can later be updated efficiently
+        unordered_set<csmp::Element<dim>*> halo_cells;
+        for_each( first, last, [ &halo_cells ](Element<dim>* it) {
+                                    if (it) {
+                                      const auto n_nbors = it->Neighbors();
+                                      for ( uint32_t eidx{0u}; eidx<n_nbors; ++eidx )
+                                        if ( it->Neighbor(eidx) && it->Neighbor(eidx)->Region_ID() != delete_mark )
+                                          halo_cells.insert( it->Neighbor(eidx) );
+                                    }
+                                 } );
+        
+        if ( halo_cells.empty() ) {
+             csmp_error.Note( INFO, "updateHaloElementConnectivity",
+                             "equidimensional input mesh has no halo elements; no element-neighbor updates were made.");
+             return;
+          }
+        
+        // 3. update the connectivity of the halo elements
+        // (here extra checks are performed in DEBUG mode to determine whether they have other nullptr neighbors like at model boundary)
+        for ( auto& it : halo_cells ) {
+             assert( it );
+             const auto n_nbors = it->Neighbors();
+             for ( uint32_t eidx{0u}; eidx<n_nbors; ++eidx )
+               // if the (face) neighbor of this object is going to be deleted, set it to nullptr
+               if ( it->Neighbor(eidx) && it->Neighbor(eidx)->Region_ID() == delete_mark )
+                 {
+                    // removing the element from the parent-element vectors of face nodes on the domain perimeter
+                    for ( const auto& fnid : it->FE()->NodesOfFace(eidx) )
+                      it->N(fnid)->Unassign( it->Neighbor(eidx) );
+                    // remove neighbor connection
+                    it->UnassignNeighbor(eidx);
+                 }
+          }
+         if ( issues > 0 ) {
+             csmp_error.Note( ERROR, "updateHaloElementConnectivity", "update failed; expect follow on errors.");
+           }
+         return;
+         
+      } // end equidimensional elements
+
+    
+    // ========================================================
+    // PROCESSING LOWER_DIMENSIONAL ELEMENTS
+    // ========================================================
+    // (in this case the parent-element vector of all nodes need updating because these nodes are shared with equidimensional elements)
+    const bool domain_of_surf_elmts = (*first)->IsSurface();
+    const bool domain_of_line_elmts = (*first)->IsLine();
+    cout <<"\n"<<"updateHaloElementConnectivity: provided input iterator range contains (lower-dimensional) ";
+    if ( domain_of_surf_elmts ) cout <<"surface";
+    else if ( domain_of_line_elmts ) cout <<"line";
+    cout <<" elements.";
+    cout <<" This method does not reconnect manifold neighbors of these if there are any."<< endl;
+    
+    // 1. mark elements (using region ID), and remove them from the parent-element vectors of its nodes
+    // (NB: changing the region ID does not matter because these elements will be deleted anyway)
+    for_each( first, last, [ &csmp_error, &issues, &domain_of_surf_elmts, &domain_of_line_elmts ](Element<dim>* cptr) {
+                                 if ( cptr ) {
+                                      // checking element dimensionality
+                                      if constexpr( dim == 3 ) {
+                                            if ( domain_of_surf_elmts && !cptr->IsSurface() ) {
+                                                 cout <<"\n\t"<<"Element<"<< dim <<">"<< cptr->Idx() <<": "<< parseAbbreviated_FE_Type(cptr->FE_Type());
+                                                 csmp_error.Note( WARNING, "updateHaloElementConnectivity", "wrong element dimension");
+                                                 issues++;
+                                               }
+                                            else if ( domain_of_line_elmts  && !cptr->IsLine() ) {
+                                                 cout <<"\n\t"<<"Element<"<< dim <<">"<< cptr->Idx() <<": "<< parseAbbreviated_FE_Type(cptr->FE_Type());
+                                                 csmp_error.Note( WARNING, "updateHaloElementConnectivity", "wrong element dimension");
+                                                 issues++;
+                                               }
+                                         }
+                                      else if constexpr( dim == 2 ) {
+                                            if ( !cptr->IsLine() ) {
+                                                 cout <<"\n\t"<<"Element<"<< dim <<">"<< cptr->Idx() <<": "<< parseAbbreviated_FE_Type(cptr->FE_Type());
+                                                 csmp_error.Note( WARNING, "updateHaloElementConnectivity", "wrong element dimension");
+                                                 issues++;
+                                               }
+                                         }
+                                      // removing Element from the parent-element vectors of its nodes
+                                      for ( auto nit=cptr->NodesBegin(); nit!=cptr->NodesEnd(); ++nit )
+                                         (*nit)->Unassign( cptr );
+                                      // marking the elements via their region ID
+                                      cptr->Region_ID(delete_mark);
+                                   }
+                                 else  {
+                                     csmp_error.Note( WARNING, "updateHaloElementConnectivity", "input iterator contains nullptr");
+                                     issues++;
+                                   }
+                             } );
+
+    // 2. collect the halo cells so that their neighbor connectivity can later be updated efficiently
+    unordered_set<csmp::Element<dim>*> halo_cells2;
+    for_each( first, last, [ &halo_cells2 ](Element<dim>* it) {
+                                if (it) {
+                                  const auto n_nbors = it->Neighbors();
+                                  for ( uint32_t eidx{0u}; eidx<n_nbors; ++eidx )
+                                    if ( it->Neighbor(eidx) && it->Neighbor(eidx)->Region_ID() != delete_mark )
+                                      halo_cells2.insert( it->Neighbor(eidx) );
+                                }
+                             } );
+    
+        if ( halo_cells2.empty() ) {
+             csmp_error.Note( INFO, "updateHaloElementConnectivity",
+                             "lower-dimensional input mesh has no halo elements; no element-neighbor updates were made.");
+             return;
+          }
+    
+    // 3. update the connectivity of the halo elements
+    // (here extra checks are performed in DEBUG mode to determine whether they have other nullptr neighbors like at model boundary)
+    for ( auto& it : halo_cells2 ) {
+         assert( it );
+         const auto n_nbors = it->Neighbors();
+         for ( uint32_t eidx{0u}; eidx<n_nbors; ++eidx )
+           // if the (face) neighbor of this object is going to be deleted, set it to nullptr
+           if ( it->Neighbor(eidx) && it->Neighbor(eidx)->Region_ID() == delete_mark )
+             {
+                // remove neighbor connection
+                it->UnassignNeighbor(eidx);
+             }
+      }
+
+ } // end updateHaloElementConnectivity
+
+template void updateHaloElementConnectivity<3>( vector<Element<3>*>::iterator, vector<Element<3>*>::iterator );
+template void updateHaloElementConnectivity<2>( vector<Element<2>*>::iterator, vector<Element<2>*>::iterator );
+template void updateHaloElementConnectivity<1>( vector<Element<1>*>::iterator, vector<Element<1>*>::iterator );
+
+
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void updateHaloCellConnectivity( typename vector<CELL<dim>*>::iterator first,
+                                 typename vector<CELL<dim>*>::iterator last )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( distance(first,last) == 0 ) {
+         csmp_error.Note( ERROR, "updateHaloCellConnectivity", "input cell range is empty");
+         return;
+      }
+    
+    const size_t delete_mark{ numeric_limits<size_t>::max() };
+ 
+    // 1. mark elements (using region ID), change does not matter because these elements will be deleted
+    for_each( first, last, [](CELL<dim>* cptr) {
+                                 if ( cptr ) {
+                                      // marking the elements via their region ID
+                                      cptr->Idx(delete_mark);
+                                   }
+                                 else cerr <<"\n"<<"updateHaloElementConnectivity: found 'nullptr' in input iterator range.";
+                             } );
+
+    // 2. collect the halo cells so that their neighbor connectivity can later be updated efficiently
+    set<CELL<dim>* const> halo_cells;
+    for_each( first, last, [ &halo_cells ](CELL<dim>* cptr) {
+                                const auto n_nbors = cptr->Neighbors();
+                                for ( uint32_t eidx{0u}; eidx<n_nbors; ++eidx )
+                                  if ( cptr->Neighbor(eidx) && cptr->Neighbor(eidx)->Idx() != delete_mark )
+                                    halo_cells.insert( cptr->Neighbor(eidx) );
+                             } );
+    
+    assert( !halo_cells.empty() );
+    
+    // 3. update the connectivity of the halo elements
+    // (here extra checks are performed in DEBUG mode to determine whether they have other nullptr neighbors like at model boundary)
+    for ( auto& it : halo_cells ) {
+         assert( it );
+         const auto n_nbors = it->Neighbors();
+         for ( uint32_t eidx{0u}; eidx<n_nbors; ++eidx )
+           // if the (face) neighbor of this object is going to be deleted, set it to nullptr
+           if ( it->Neighbor(eidx) && it->Neighbor(eidx)->Idx() == delete_mark )
+             it->UnassignNeighbor(eidx);
+      }
+
+ } // end updateHaloCellConnectivity
+
+template void updateHaloCellConnectivity<3,Face>( vector<Face<3>*>::iterator, vector<Face<3>*>::iterator );
+template void updateHaloCellConnectivity<2,Face>( vector<Face<2>*>::iterator, vector<Face<2>*>::iterator );
+template void updateHaloCellConnectivity<1,Face>( vector<Face<1>*>::iterator, vector<Face<1>*>::iterator );
+
+template void updateHaloCellConnectivity<3,InterFace>( vector<InterFace<3>*>::iterator, vector<InterFace<3>*>::iterator );
+template void updateHaloCellConnectivity<2,InterFace>( vector<InterFace<2>*>::iterator, vector<InterFace<2>*>::iterator );
+template void updateHaloCellConnectivity<1,InterFace>( vector<InterFace<1>*>::iterator, vector<InterFace<1>*>::iterator );
+
+
+
+
+// COLONY ITERATOR VERSION
+/*
+template<uint32_t dim, template<uint32_t> class CELL>
+void updateHaloCellConnectivity( typename plf::colony<CELL<dim>>::iterator first,
+                                 typename plf::colony<CELL<dim>>::iterator last )
+ {
+    // 1. mark elements (using region ID), change does not matter because these elements will be deleted
+    for_each( first, last, [](CELL<dim>& obj) { obj.Region_ID(-999); } );
+
+    // 2. collect the halo cells so that their neighbor connectivity can later be updated efficiently
+    set<CELL<dim>&> halo_cells;
+    for_each( first, last, [ &halo_cells ](CELL<dim>& obj) {
+                                const auto n_nbors = obj.Neighbors();
+                                for ( uint32_t eidx{0u}; eidx<n_nbors; ++eidx )
+                                  if ( obj.Neighbor(eidx) && obj.Neighbor(eidx)->Region_ID() != -999 )
+                                    halo_cells.insert( obj.Neighbor(eidx) );
+                             } );
+
+    // 3. update the connectivity of the halo elements
+    // (here extra checks are performed in DEBUG mode to determine whether they have other nullptr neighbors like at model boundary)
+    for ( auto& it : halo_cells ) {
+         assert( it );
+         const auto n_nbors = it->Neighbors();
+         for ( uint32_t eidx{0u}; eidx<n_nbors; ++eidx )
+           // if the (face) neighbor of this object is going to be deleted, set it to nullptr
+           if ( it.Neighbor(eidx) && it.Neighbor(eidx)->Region_ID() == -999 )
+             it.UnassignNeighbor(eidx);
+      }
+
+ } // end updateHaloCellConnectivity
+
+template void updateHaloCellConnectivity<3,Element>( plf::colony<Element<3>>::iterator, plf::colony<Element<3>>::iterator );
+*/
+
+
+
+} // end namespace csmp

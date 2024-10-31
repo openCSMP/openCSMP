@@ -24,6 +24,7 @@ namespace csmp {
     /// creates either 1 square or 1 split rectangle mesh using the methods above
     void create_Square_VSet( VSet<2U>&, int size_sides, double dimension, bool skewed=false );
 
+
     // 2D poly-element type meshes wirh topology info
     // ----------------------------------------------
     ///  Rectangle-shaped MODEL_TINY, consisting of 1 line element two triangles, 1 quadrilateral and 6 face object marking the box boundary.
@@ -39,29 +40,35 @@ namespace csmp {
     void create_Disconnected2D_VSet( VSet<2U>& );
     
 
-    // 3D single-element-type meshes
-    // -----------------------------
-    /// Rubik cube of 27 hexahedra, three XY planes of 3x3 elements, numbered from the left to the right (x=0..3), from the bottom to the top (y=0..3)
-    void create_RubikCube( VSet<3U>& );
-
-    /// 6 four-noded tetrahedra filling a cube, no midside nodes
-    void create_Tetra_VSet( VSet<3U>& );
-    
-    /// 27 pyramids packed into cube
-    void create_Pyramids_VSet( VSet<3U>&, bool bSkewed=false );
+    // 3D single-elememt meshes
+    // ------------------------
     
     /// single 8-noded hexahedron
     void create_1Hexahedron_VSet( VSet<3U>&, bool bSkewed = false );
     
+    /// single 6-noded prism element
+    void create_1Prism_VSet( VSet<3U>&, bool bSkewed=false );
+    
+    
+    // 3D poly-elememt meshes
+    // ----------------------
+    
+    /// 6 four-noded tetrahedra filling a cube, no midside nodes
+    void create_Tetra_VSet( VSet<3U>& );
+    
+    /// 27 pyramids packed into cube
+    void create_Pyramid_VSet( VSet<3U>&, bool bSkewed=false );
+    
+    /// Rubik cube of 27 hexahedra, three XY planes of 3x3 elements, numbered from the left to the right (x=0..3), from the bottom to the top (y=0..3)
+    void create_RubikCube_VSet( VSet<3U>& );
+
     /// 27 hexahedra forming a  cube
     // TODO: fix neighbor conectivity / elment numbering
     void create_Hexahedra_VSet( VSet<3U>&, bool bSkewed=false );
     
-    /// single 6-noded prism element
-    void create_1Prism_VSet( VSet<3U>&, bool bSkewed=false );
-    
     /// mesh with 54 prism elements
     void create_Prism_VSet( VSet<3U>&, bool bSkewed=false );
+    
     
     // 3D element sets with different types of elements
     // ------------------------------------------------

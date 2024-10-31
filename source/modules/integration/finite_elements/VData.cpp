@@ -2279,11 +2279,11 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
       {
          const size_t  eidx( it.first );
          const size_t  neidx( it.second );
-         if ( eidx > plist.size()-1U ) {
+         if ( eidx > plist.size()-1 ) {
               cerr <<"\nVData::ReduceTo: attempt to read element "<< eidx;
               cerr <<" of original 'plist' with size: "<< plist.size();
            }
-         if ( neidx > new_plist.size()-1U ) {
+         if ( neidx > new_plist.size()-1 ) {
               cerr <<"\nVData::ReduceTo: attempt to read element "<< neidx;
               cerr <<" of renumbered 'plist' with size: "<< new_plist.size();
            }
@@ -2318,13 +2318,13 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
           pfverts.assign( new_pfverts.begin(), new_pfverts.end() );
           new_pfverts.clear();
 
-          // 2. 'pfverts': assigning new contiguous element IDs to 'pfverts' map
+          // 2. 'pfverts': assigning new continuous element IDs to 'pfverts' map
           // -------------------------------------------------------------------
           bool first_incidence(true);
           for ( auto it=pfverts.begin(); it!=pfverts.end(); it++ )
             for ( auto pit=(*it).begin(); pit!=(*it).end(); pit++ )
               // only if there was a neighboring element before its ID is updated
-              if ( (*pit) > 0 ) {
+              if ( (*pit) >= 0 ) {
                    auto eit=o_n_elmt_ids.find( static_cast<size_t>(*pit) );
                    if ( eit == o_n_elmt_ids.end() ) {
                          if ( first_incidence ) {

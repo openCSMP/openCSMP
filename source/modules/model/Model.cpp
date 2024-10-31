@@ -398,7 +398,8 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
 #if defined(DEBUG) && defined(CSMP_MODEL_DEBUG)
 cout <<"\n"<<"Model<dim>::Initialize(regionfile,ModelTopology,VSet): final connectivity check: ";
 bool cells_ok;
-mesh_manager_.AssignUniqueNumbers( true );
+const bool in_a_continuous_sequence{ true };
+mesh_manager_.AssignUniqueNumbers( in_a_continuous_sequence );
 cells_ok = integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
 if ( !cells_ok ) {
      cout <<"\n\t\t"<<"Element storage is broken.";

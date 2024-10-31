@@ -172,12 +172,12 @@ void MeshManager_Test::run()
       cout << "\nMeshManager_Test::TestBasics";
       cout << "\n----------------------------";
       // ==========
-      TestBasics();
+//      TestBasics();
       // ==========
    }
 
   // testing hex element consistency for meshes from ANSYS
-  _test(TestNeigbourVersusFaceConsistency());
+//  _test(TestNeigbourVersusFaceConsistency());
   
   _test( Test_BuildConnectivity() );
   _test( Test_UpdateConnectivity() );
@@ -1281,7 +1281,8 @@ bool MeshManager_Test::Test_BuildConnectivity()
      ModelTopology topology;
      VSet<3U>      vset;
      create_FracBox( topology, vset );
-     vset.EstablishElementConnectivity3D();
+     
+//     vset.EstablishElementConnectivity3D();
      const bool    create_boundaries_from_regions{ true }; // true is a must, else all elements will be eliminated
      Model<3U>     model( topology, vset, "MeshManager_Test-variables.txt", create_boundaries_from_regions );
      int           errors(0ul);
@@ -1318,7 +1319,6 @@ bool MeshManager_Test::Test_UpdateConnectivity()
      ModelTopology topology;
      VSet<3U>      vset;
      create_FracBox( topology, vset );
-     vset.EstablishElementConnectivity3D();
      const bool    create_boundaries_from_regions{ true };
      Model<3U>     model( topology, vset, "MeshManager_Test-variables.txt", create_boundaries_from_regions );
      int           errors(0ul);

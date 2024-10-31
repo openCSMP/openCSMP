@@ -442,6 +442,17 @@ private:
 
 // NON-MEMBER FUNCTIONS
 
+/// Adjusts halo cells and perimeter node parent-element vectors in mesh domains which is going to be deleted; this domain is identified by supplied range of iterators
+template<uint32_t dim>
+void updateHaloElementConnectivity( typename std::vector<Element<dim>*>::iterator first,
+                                    typename std::vector<Element<dim>*>::iterator last );
+
+/// for Face and InterFace regions
+template<uint32_t dim, template<uint32_t> class CELL>
+void updateHaloCellConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                                 typename std::vector<CELL<dim>*>::iterator last );
+
+
 /// finds cells sharing the same nodes and reports their numbers; verbose reports the duplicate cells
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t detectDuplicateCells( typename plf::colony<CELL<dim>>::const_iterator begin,

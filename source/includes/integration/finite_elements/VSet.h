@@ -105,7 +105,7 @@ class VSet : public VData {
     std::map<std::string,PropertyData>::const_iterator PropertyValuesBegin() const;
     std::map<std::string,PropertyData>::const_iterator PropertyValuesEnd() const;
 
-    void RemoveData( const char* s );
+    auto RemoveData( const char* s ) -> std::map<std::string,PropertyData>::iterator;
 
     /// writes complete VSet to binary file with the given time stamp
     bool  OutputTo( const char* bin_file, double time ) const;

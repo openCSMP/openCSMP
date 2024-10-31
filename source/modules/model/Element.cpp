@@ -604,7 +604,14 @@ numbering scheme).
 before you are trying to use it.
 */
 template<uint32_t dim>
-csmp::Element<dim>*  const Element<dim>::Neighbor( uint32_t n ) const
+const csmp::Element<dim>* const Element<dim>::Neighbor( uint32_t n ) const
+{
+  assert( n < elmt_connector_.size() );
+  return elmt_connector_[n];
+}
+
+template<uint32_t dim>
+csmp::Element<dim>* const Element<dim>::Neighbor( uint32_t n )
 {
   assert( n < elmt_connector_.size() );
   return elmt_connector_[n];

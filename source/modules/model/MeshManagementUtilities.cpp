@@ -2136,14 +2136,12 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
     if ( first == last ) return false;
     
     const size_t              n_cells( distance(first,last) );
-    vector<const Node<dim>*>  shared_nodes;
     size_t                    issues{0};
-    shared_nodes.reserve( n_cells * dim );
     string                    celltype("Element");
     if constexpr ( is_same< CELL<dim>,Face<dim> >::value ) celltype = "Face";
     if constexpr ( is_same< CELL<dim>,InterFace<dim> >::value ) celltype = "InterFace";
 
-    auto   copy_of_first{ first};
+    auto   copy_of_first{ first };
     size_t max_cell_idx{0};
 
     // 1. checking that all cells stored in the container are valid
@@ -2170,7 +2168,10 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
     multimap<size_t,uint32_t>  missing_nodes;
     first = copy_of_first;
     first_call = true;
-    
+
+    vector<const Node<dim>*>  shared_nodes;
+    shared_nodes.reserve( n_cells * dim );
+
     while ( first != last ) {
          // connected nodes
          for ( uint32_t i{0U}; i<(*first).FE()->Nodes(); ++i ) {
@@ -2196,14 +2197,20 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
    shared_nodes.erase( unique(shared_nodes.begin(), shared_nodes.end()), shared_nodes.end() );
    
    for ( const auto& nit : shared_nodes ) {
-       if ( nit == nullptr ) cerr <<"\n\tdetected 'nullptr' node.";
+       if ( nit == nullptr ) cerr <<"\n\t"<<"detected 'nullptr' node.";
        else
-         for ( uint32_t i{0U}; i<nit->Parents(); ++i )
-            if ( nit->Parent(i) == nullptr || nit->Parent(i)->FE() == nullptr ) {
-                 if ( first_call ) { cerr << check3; first_call=false; }
-                 cerr <<"\n\t\tNode "<< nit->Idx() <<": parents vector "<< i <<" contains nullptr.";
-                 issues++;
-              }
+         for ( uint32_t i{0U}; i<nit->Parents(); ++i ) {
+              if ( nit->Parent(i) == nullptr ) {
+                   if ( first_call ) { cerr << check3; first_call=false; }
+                   cerr <<"\n\t\t"<<"Node "<< nit->Idx() <<": parent-element vector "<< i <<" contains nullptr.";
+                   issues++;
+                }
+              if ( nit->Parent(i) && nit->Parent(i)->FE() == nullptr ) {
+                   if ( first_call ) { cerr << check3; first_call=false; }
+                   cerr <<"\n\t\t"<<"Node "<< nit->Idx() <<": parent-element vector "<< i <<" contains Element whose FiniteElement pointer = nullptr.";
+                   issues++;
+                }
+           }
      }
     if ( !first_call ) cerr << endl;
 
@@ -2262,6 +2269,12 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
            // valid cell neighbors should not be corrupt
            for ( uint32_t i{0U}; i<(*first).Neighbors(); ++i ) {
                if ( (*first).Neighbor(i) != nullptr ) {
+                    // Neighbor element is corrupted so that it no longer has no storage for nodes or elements
+                    if ( (*first).Neighbor(i)->Nodes() == 0 || (*first).Neighbor(i)->Neighbors() == 0 ) {
+                         if ( first_call ) { cerr << check6; first_call=false; }
+                         cerr <<"\n\t"<< celltype <<": "<< (*first).Idx() <<": "<< parseAbbreviated_FE_Type((*first).FE_Type()) <<": neighbor: "<< i <<" has unitialised Node or Neighbor Storage.";
+                         issues++;
+                      }
                     // FE pointer invalid or FE pointer pointing to FiniteElement base class
                     if ( (*first).Neighbor(i)->FE() == nullptr ) {
                         if ( first_call ) { cerr << check6; first_call=false; }
@@ -2433,6 +2446,7 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
      size_t issues{0};
      while( first != last ) {
           const CSMP_FEM_TYPE etype = (*first)->FE_Type();
+          assert( etype != UNKNOWN );
           int n_connected_neighbors{0};
           
           // 1. checking that elements have equivalent types as neighbors

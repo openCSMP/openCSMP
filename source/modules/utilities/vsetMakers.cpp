@@ -88,25 +88,25 @@ VSet<2U> create_Quadrilateral_VSet()
     vector<int64_t> vecNeighbors(4);
     //element 0
     vecNeighbors[0]=BOTTOM_OUTSIDE;
-    vecNeighbors[1]=2;
-    vecNeighbors[2]=4;
+    vecNeighbors[1]=1;
+    vecNeighbors[2]=3;
     vecNeighbors[3]=LEFT_OUTSIDE;
     deqElementNeighbors[0]=vecNeighbors;
     //element 1
     vecNeighbors[0]=BOTTOM_OUTSIDE;
     vecNeighbors[1]=RIGHT_OUTSIDE;
-    vecNeighbors[2]=3;
-    vecNeighbors[3]=1;
+    vecNeighbors[2]=2;
+    vecNeighbors[3]=0;
     deqElementNeighbors[1]=vecNeighbors;
     //element 2
-    vecNeighbors[0]=2;
+    vecNeighbors[0]=1;
     vecNeighbors[1]=RIGHT_OUTSIDE;
     vecNeighbors[2]=TOP_OUTSIDE;
-    vecNeighbors[3]=4;
+    vecNeighbors[3]=3;
     deqElementNeighbors[2]=vecNeighbors;
     //element 3
-    vecNeighbors[0]=1;
-    vecNeighbors[1]=3;
+    vecNeighbors[0]=0;
+    vecNeighbors[1]=2;
     vecNeighbors[2]=TOP_OUTSIDE;
     vecNeighbors[3]=LEFT_OUTSIDE;
     deqElementNeighbors[3]=vecNeighbors;
@@ -121,9 +121,9 @@ VSet<2U> create_Quadrilateral_VSet()
     vset.BFlag( 6, CNR4 );
 	  vset.BFlag( 7, TOP_OUTSIDE );
     vset.BFlag( 8, CNR3 );
-    
-    vset.EstablishZeroBasedNumbering();
-    vset.Out();
+
+//    vset.Out();
+    cout <<"\n"<<"create_QuadraticQUadrilateral_VSet: model 'unnamed': done."<< endl;
     
     return vset;
     
@@ -201,8 +201,10 @@ void create_1Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed )
   	vset.BFlag( 2, CNR3);
   	vset.BFlag( 3, CNR4);
   	
+   // MUST!
     vset.EstablishZeroBasedNumbering();
     //vset.Out();
+    cout <<"\n"<<"create_1Square_VSet: model 'unnamed': done."<< endl;
     
 } // end create_1Square_VSet
 
@@ -315,7 +317,8 @@ ModelTopology  create_SimplePolyElement2DModel( VSet<2U>& vset )
     for ( size_t i{0U}; i<mesh_topology.CellsWithinDomain("LINE"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-12 ) );
     vset.AddData( "permeability", perm );
 
-    vset.Out();
+ //   vset.Out();
+    cout <<"\n"<<"create_SimplePolyElement2DModel: model 'unnamed': done."<< endl;
     
     return mesh_topology;
     
@@ -445,7 +448,8 @@ void create_TrianglePatch_VSet( VSet<2U>& vset )
     vector<int32_t> pmtrl( vset.Elements(), 1 );
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
     
-    vset.Out();
+    cout <<"\n"<<"create_TrianglePatch_VSet: model 'Prism_Hexa': done."<< endl;
+//    vset.Out();
     
 } // end create_TrianglePatch_VSet
 
@@ -722,11 +726,14 @@ ModelTopology create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
       
     vset.AddData( "element variable", elmt_vars );
       
-    // vset.Out();
+     cout <<"\n"<<"create_MeshPatchWithLineElements_VSet: model 'un-named': done."<< endl;
+   // vset.Out();
     
     return mesh_topology;
     
 } // end create_MeshPatchWithLineElements_VSet
+
+
 
 
 
@@ -806,7 +813,8 @@ void create_Disconnected2D_VSet( VSet<2U>& vset )
     for ( size_t n{0U}; n<5; ++n ) pushBack( perm, makeScalar( ANY, 1.0e-13 ) );
     vset.AddData( "permeability", perm );
 */
-    vset.Out();
+     cout <<"\n"<<"create_Disconnected2D_VSet: model 'un-named': done."<< endl;
+//    vset.Out();
 
  } // end create_Disconnected2D_VSet
 
@@ -944,11 +952,14 @@ ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     for ( size_t n{0U}; n<mesh_topology.CellsWithinDomain("lower"); ++n ) pushBack( perm, makeScalar( ANY, 1.0e-12 ) );
     vset.AddData( "permeability", perm );
 
-    vset.Out();
+     cout <<"\n"<<"create_BoundarySplitBoundaryPatch: model 'SPLIT22_BASIC': done."<< endl;
+//    vset.Out();
     
     return mesh_topology;
     
  } // end create_BoundarySplitBoundaryPatch
+
+
 
 
 
@@ -1031,8 +1042,8 @@ void create_1Hexahedron_VSet( VSet<3U>& vset, bool bSkewed )
     vector<int32_t> pmtrl( vset.Elements(), 1 );
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 
-    vset.EstablishZeroBasedNumbering();
-    vset.Out();
+     cout <<"\n"<<"create_1Hexahedron_VSet: model 'un-named': done."<< endl;
+//    vset.Out();
 }
 
 
@@ -1234,7 +1245,8 @@ void create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 
     vset.EstablishZeroBasedNumbering();
-    vset.Out();
+    cout <<"\n"<<"create_Hexahedra_VSet: model 'un-named': done."<< endl;
+//    vset.Out();
 }
 
 
@@ -1490,8 +1502,9 @@ void create_SlitRectangle_VSet( VSet<2U>& vset, int x_dimension, int y_dimension
     vector<int32_t> pmtrl( vset.Elements(), 1 );
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 
-  vset.EstablishZeroBasedNumbering();
-  vset.Out();
+    vset.EstablishZeroBasedNumbering();
+    cout <<"\n"<<"splitRectangle_VSet: model 'un-named': done."<< endl;
+//  vset.Out();
 }
 
 
@@ -1618,64 +1631,64 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
       iElement--;
      
   	 deqElements[iElement].resize(8);
-	   deqElements[iElement][0]= 1+ iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= 1+ iDim_k2*k+(iDim_j)*j+i+1;
-  	 deqElements[iElement][2]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][3]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][4]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][5]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	 deqElements[iElement][6]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][7]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
+	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*j+i;
+  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*j+i+1;
+  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
+  	 deqElements[iElement][3]= iDim_k2*k+(iDim_j)*(j+1)+i;
+  	 deqElements[iElement][4]= iDim_k2*(k+1)+(iDim_j)*j+i;
+  	 deqElements[iElement][5]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
+  	 deqElements[iElement][6]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
+  	 deqElements[iElement][7]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
     }
   	
   	int node_center(64);
     //element 26, assign nodes per element
     vector<size_t> vecNodes(5);
-    vecNodes[0]= 1+ 21;
-    vecNodes[1]= 1+ 22;
-    vecNodes[2]= 1+ 26;
-    vecNodes[3]= 1+ 25;
-    vecNodes[4]= 1U + node_center;
+    vecNodes[0]= 21;
+    vecNodes[1]= 22;
+    vecNodes[2]= 26;
+    vecNodes[3]= 25;
+    vecNodes[4]= node_center;
     deqElements[26]=vecNodes;
 
     //element 27
-    vecNodes[0]= 1+ 37;
-    vecNodes[1]= 1+ 38;
-    vecNodes[2]= 1+ 22;
-    vecNodes[3]= 1+ 21;
-    vecNodes[4]= 1+ node_center;
+    vecNodes[0]= 37;
+    vecNodes[1]= 38;
+    vecNodes[2]= 22;
+    vecNodes[3]= 21;
+    vecNodes[4]= node_center;
     deqElements[27]=vecNodes;
 
     //element 28
-    vecNodes[0]= 1+ 22;
-    vecNodes[1]= 1+ 38;
-    vecNodes[2]= 1+ 42;
-    vecNodes[3]= 1+ 26;
-    vecNodes[4]= 1+ node_center;
+    vecNodes[0]= 22;
+    vecNodes[1]= 38;
+    vecNodes[2]= 42;
+    vecNodes[3]= 26;
+    vecNodes[4]= node_center;
     deqElements[28]=vecNodes;
 
     //element 29
-    vecNodes[0]= 1+ 25;
-    vecNodes[1]= 1+ 26;
-    vecNodes[2]= 1+ 42;
-    vecNodes[3]= 1+ 41;
-    vecNodes[4]= 1+ node_center;
+    vecNodes[0]= 25;
+    vecNodes[1]= 26;
+    vecNodes[2]= 42;
+    vecNodes[3]= 41;
+    vecNodes[4]= node_center;
     deqElements[29]=vecNodes;
     
     //element 30
-    vecNodes[0]= 1+ 37;
-    vecNodes[1]= 1+ 21;
-    vecNodes[2]= 1+ 25;
-    vecNodes[3]= 1+ 41;
-    vecNodes[4]= 1+ node_center;
+    vecNodes[0]= 37;
+    vecNodes[1]= 21;
+    vecNodes[2]= 25;
+    vecNodes[3]= 41;
+    vecNodes[4]= node_center;
     deqElements[30]=vecNodes;
 
     //element 31
-    vecNodes[0]= 1+ 38;
-    vecNodes[1]= 1+ 37;
-    vecNodes[2]= 1+ 41;
-    vecNodes[3]= 1+ 42;
-    vecNodes[4]= 1+ node_center;
+    vecNodes[0]= 38;
+    vecNodes[1]= 37;
+    vecNodes[2]= 41;
+    vecNodes[3]= 42;
+    vecNodes[4]= node_center;
     deqElements[31]=vecNodes;
     
     vset.AddPlist( deqElements.begin(), deqElements.end() );
@@ -1699,32 +1712,32 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
      deqElementNeighbors[iElement].resize(6);
   
      //face 0
-     int iNeighbor(1+ iDim_km1_2*(k-1)+(iDim_j-1)*j+i);
+     int iNeighbor(iDim_km1_2*(k-1)+(iDim_j-1)*j+i);
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;
      deqElementNeighbors[iElement][0U]= (k==0) ? BACK_OUTSIDE : iNeighbor;
      //face 1
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*(j-1)+i;
+     iNeighbor = iDim_km1_2*k+(iDim_j-1)*(j-1)+i;
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;
      deqElementNeighbors[iElement][1]= (j==0) ? BOTTOM_OUTSIDE : iNeighbor;
      //face 2
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i+1;
+     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+i+1;
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;     
      deqElementNeighbors[iElement][2]= (i==iDim_i_-2) ? RIGHT_OUTSIDE : iNeighbor;
      //face 3
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*(j+1)+i;
+     iNeighbor = iDim_km1_2*k+(iDim_j-1)*(j+1)+i;
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;     
      deqElementNeighbors[iElement][3]= (j==iDim_j_-2) ? TOP_OUTSIDE : iNeighbor;
      //face 4
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+(i-1);
+     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+(i-1);
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;     
      deqElementNeighbors[iElement][4]= (i==0) ? LEFT_OUTSIDE : iNeighbor;
      //face 5
-     iNeighbor = 1+ iDim_km1_2*(k+1)+(iDim_j-1)*j+i;
+     iNeighbor = iDim_km1_2*(k+1)+(iDim_j-1)*j+i;
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;     
      deqElementNeighbors[iElement][5]= (k==iDim_k_-2) ? FRONT_OUTSIDE : iNeighbor;
@@ -1734,72 +1747,72 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     //hexa-elements with pyramid neighbors are (6): 
     
     //element 5  - face 5 -> neighbor: 26 (under)
-    deqElementNeighbors[4][5]=1+26;
+    deqElementNeighbors[4][5]=26;
     
     //element 22 - face 0 -> neighbor: 31 (over)
-    deqElementNeighbors[21][0]=1+31;
+    deqElementNeighbors[21][0]=31;
     
     //element 13 - face 2 -> neighbor: 30 (left)
-    deqElementNeighbors[12][2]=1+30;
+    deqElementNeighbors[12][2]=30;
 
     //element 14 - face 4 -> neighbor: 28 (right)
-    deqElementNeighbors[13][4]=1+28;
+    deqElementNeighbors[13][4]=28;
     
     //element 11 - face 3 -> neighbor: 27 (front)
-    deqElementNeighbors[10][3]=1+27;
+    deqElementNeighbors[10][3]=27;
     
     //element 16 - face 1 -> neighbor: 29 (front)
-    deqElementNeighbors[15][1]=1+29;
+    deqElementNeighbors[15][1]=29;
     
     //pyramid neighbors are:
     vector<int64_t> vecNeighbors(5);
     
     //element 26
-    vecNeighbors[0]=1+27;
-    vecNeighbors[1]=1+28;
-    vecNeighbors[2]=1+29;
-    vecNeighbors[3]=1+30;
-    vecNeighbors[4]=1+4;
+    vecNeighbors[0]=27;
+    vecNeighbors[1]=28;
+    vecNeighbors[2]=29;
+    vecNeighbors[3]=30;
+    vecNeighbors[4]=4;
     deqElementNeighbors[26]=vecNeighbors;
 
     //element 27
-    vecNeighbors[0]=1+31;
-    vecNeighbors[1]=1+28;
-    vecNeighbors[2]=1+26;
-    vecNeighbors[3]=1+30;
-    vecNeighbors[4]=1+10;
+    vecNeighbors[0]=31;
+    vecNeighbors[1]=28;
+    vecNeighbors[2]=26;
+    vecNeighbors[3]=30;
+    vecNeighbors[4]=10;
     deqElementNeighbors[27]=vecNeighbors;
 
     //element 28
-    vecNeighbors[0]=1+27;
-    vecNeighbors[1]=1+31;
-    vecNeighbors[2]=1+29;
-    vecNeighbors[3]=1+26;
-    vecNeighbors[4]=1+13;
+    vecNeighbors[0]=27;
+    vecNeighbors[1]=31;
+    vecNeighbors[2]=29;
+    vecNeighbors[3]=26;
+    vecNeighbors[4]=13;
     deqElementNeighbors[28]=vecNeighbors;
 
-    ///element 29
-    vecNeighbors[0]=1+26;
-    vecNeighbors[1]=1+28;
-    vecNeighbors[2]=1+31;
-    vecNeighbors[3]=1+30;
-    vecNeighbors[4]=1+15;
+    //element 29
+    vecNeighbors[0]=26;
+    vecNeighbors[1]=28;
+    vecNeighbors[2]=31;
+    vecNeighbors[3]=30;
+    vecNeighbors[4]=15;
     deqElementNeighbors[29]=vecNeighbors;
 
     //element 30
-    vecNeighbors[0]=1+27;
-    vecNeighbors[1]=1+26;
-    vecNeighbors[2]=1+29;
-    vecNeighbors[3]=1+31;
-    vecNeighbors[4]=1+12;
+    vecNeighbors[0]=27;
+    vecNeighbors[1]=26;
+    vecNeighbors[2]=29;
+    vecNeighbors[3]=31;
+    vecNeighbors[4]=12;
     deqElementNeighbors[30]=vecNeighbors;
 
     //element 31
-    vecNeighbors[0]=1+27;
-    vecNeighbors[1]=1+30;
-    vecNeighbors[2]=1+29;
-    vecNeighbors[3]=1+28;
-    vecNeighbors[4]=1+21;
+    vecNeighbors[0]=27;
+    vecNeighbors[1]=30;
+    vecNeighbors[2]=29;
+    vecNeighbors[3]=28;
+    vecNeighbors[4]=21;
     deqElementNeighbors[31]=vecNeighbors;
 
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
@@ -1893,8 +1906,82 @@ void create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     //-------------------------MATERIALS
     vector<int32_t> pmtrl( vset.Elements(), 1 );
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+ 
+ 
+    // =====================================================
+    // Checking the dataset for consistency
+    // =====================================================
+    
+    // checking the element types
+    for (size_t i = 0; i < 26; ++i) {
+    assert(etypes[i] == ISOPARAMETRIC_LINEAR_HEXAHEDRON && "Error: Element type mismatch for hexahedrons.");
+    }
+    for (size_t i = 26; i < iNrOfElements; ++i) {
+        assert(etypes[i] == ISOPARAMETRIC_LINEAR_PYRAMID && "Error: Element type mismatch for pyramids.");
+    }
+    // number of nodes per element
+    for (size_t i = 0; i < 26; ++i) {
+    assert(npes[i] == 8 && "Error: Hexahedron does not have 8 nodes.");
+    }
+    for (size_t i = 26; i < iNrOfElements; ++i) {
+        assert(npes[i] == 5 && "Error: Pyramid does not have 5 nodes.");
+    }
+    // node coordinates
+    for (size_t k = 0; k < iDim_k; ++k) {
+    for (size_t j = 0; j < iDim_j; ++j) {
+        for (size_t i = 0; i < iDim_i; ++i) {
+            size_t index = k * iDim_k2 + iDim_j * j + i;
+            if (bSkewed) {
+                assert(px[index] >= i && px[index] <= i + 2.0 && "Error: Skewed px coordinate out of range.");
+                assert(py[index] >= j && py[index] <= j + 2.0 && "Error: Skewed py coordinate out of range.");
+                assert(pz[index] >= k && pz[index] <= k + 2.0 && "Error: Skewed pz coordinate out of range.");
+            } else {
+                assert(px[index] == i && py[index] == j && pz[index] == k && "Error: Non-skewed coordinate mismatch.");
+            }
+            }
+        }
+    }
+    // barycentre coordinate
+    assert(px[64] >= 1.5 && px[64] <= 2.5 && "Error: Barycenter px out of expected range.");
+    assert(py[64] >= 1.5 && py[64] <= 2.5 && "Error: Barycenter py out of expected range.");
+    assert(pz[64] >= 1.5 && pz[64] <= 2.5 && "Error: Barycenter pz out of expected range.");
+    
+    // neigbor relationships
+    for (size_t k = 0; k < iDim_k-1; ++k) {
+    for (size_t j = 0; j < iDim_j-1; ++j) {
+        for (size_t i = 0; i < iDim_i-1; ++i) {
+            long iElement = iDim_km1_2 * k + (iDim_j-1) * j + i;
+            if (i == 1 && j == 1 && k == 1) continue;  // Skip the center element
 
-    vset.EstablishZeroBasedNumbering();
+            if (iElement > iPyramidsPlacement) iElement--;
+
+            auto& neighbors = deqElementNeighbors[iElement];
+
+            if (k == 0) assert(neighbors[0] == BACK_OUTSIDE && "Error: Incorrect back boundary neighbor.");
+            if (j == 0) assert(neighbors[1] == BOTTOM_OUTSIDE && "Error: Incorrect bottom boundary neighbor.");
+            if (i == iDim_i-2) assert(neighbors[2] == RIGHT_OUTSIDE && "Error: Incorrect right boundary neighbor.");
+            if (j == iDim_j-2) assert(neighbors[3] == TOP_OUTSIDE && "Error: Incorrect top boundary neighbor.");
+            if (i == 0) assert(neighbors[4] == LEFT_OUTSIDE && "Error: Incorrect left boundary neighbor.");
+            if (k == iDim_k-2) assert(neighbors[5] == FRONT_OUTSIDE && "Error: Incorrect front boundary neighbor.");
+        }
+        }
+    }
+    
+    // pyramid neighbor relationships
+    const std::vector<std::vector<int>> expectedPyramidNeighbors = {
+        {27, 28, 29, 30, 4},    // Pyramid 26
+        {31, 28, 26, 30, 10},   // Pyramid 27
+        {27, 31, 29, 26, 13},   // Pyramid 28
+        {26, 28, 31, 30, 15},   // Pyramid 29
+        {27, 26, 29, 31, 12},   // Pyramid 30
+        {27, 30, 29, 28, 21}    // Pyramid 31
+    };
+    for (size_t i = 26; i < 32; ++i) {
+        for (size_t j = 0; j < 5; ++j) {
+            assert(deqElementNeighbors[i][j] == expectedPyramidNeighbors[i - 26][j] &&
+                   "Error: Incorrect neighbor for pyramid element.");
+        }
+    }
     
 //    vset.Out();
     
@@ -1992,7 +2079,8 @@ void create_1Prism_VSet(VSet<3U> & vset, bool bSkewed )
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 
     vset.EstablishZeroBasedNumbering();
-    vset.Out();
+    cout <<"\n"<<"create_1Prism_VSet: model 'un-named': done."<< endl;
+//    vset.Out();
     
 } // end create_1Prism_VSet
 
@@ -2128,14 +2216,14 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
      //size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
      if(i==1 && j==1) //its the center element (6 pyramids)
   	 {
-  	  const int node1 = 1+ iDim_k2*k+(iDim_j)*j+i;
-  	  const int node2 = 1+ iDim_k2*k+(iDim_j)*j+i+1;;
-  	  const int node3 = 1+ iDim_k2*k+(iDim_j)*(j+1)+i+1;
-  	  const int node4 = 1+ iDim_k2*k+(iDim_j)*(j+1)+i;
-  	  const int node5 = 1+ iDim_k2*(k+1)+(iDim_j)*j+i;
-  	  const int node6 = 1+ iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	  const int node7 = 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-  	  const int node8 = 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
+  	  const int node1 = iDim_k2*k+(iDim_j)*j+i;
+  	  const int node2 = iDim_k2*k+(iDim_j)*j+i+1;;
+  	  const int node3 = iDim_k2*k+(iDim_j)*(j+1)+i+1;
+  	  const int node4 = iDim_k2*k+(iDim_j)*(j+1)+i;
+  	  const int node5 = iDim_k2*(k+1)+(iDim_j)*j+i;
+  	  const int node6 = iDim_k2*(k+1)+(iDim_j)*j+i+1;
+  	  const int node7 = iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
+  	  const int node8 = iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
   	  
   	  deqElements[iElement].resize(6);
 	    deqElements[iElement][0]= node1;
@@ -2161,14 +2249,14 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
   	 }
  
   	 deqElements[iElement].resize(8);
-	   deqElements[iElement][0]= 1+ iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= 1+ iDim_k2*k+(iDim_j)*j+i+1;
-  	 deqElements[iElement][2]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][3]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][4]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][5]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	 deqElements[iElement][6]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][7]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
+	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*j+i;
+  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*j+i+1;
+  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
+  	 deqElements[iElement][3]= iDim_k2*k+(iDim_j)*(j+1)+i;
+  	 deqElements[iElement][4]= iDim_k2*(k+1)+(iDim_j)*j+i;
+  	 deqElements[iElement][5]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
+  	 deqElements[iElement][6]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
+  	 deqElements[iElement][7]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
     
      iElement++;
     
@@ -2182,193 +2270,193 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     deqElementNeighbors[0].resize(6);
     deqElementNeighbors[0][0] = BOTTOM_OUTSIDE;
     deqElementNeighbors[0][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[0][2] = 1+1;
-    deqElementNeighbors[0][3] = 1+3;
+    deqElementNeighbors[0][2] = 1;
+    deqElementNeighbors[0][3] = 3;
     deqElementNeighbors[0][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[0][5] = 1+10;
+    deqElementNeighbors[0][5] = 10;
     
     deqElementNeighbors[1].resize(6);
     deqElementNeighbors[1][0] = BOTTOM_OUTSIDE;
     deqElementNeighbors[1][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[1][2] = 1+2;
-    deqElementNeighbors[1][3] = 1+4;
-    deqElementNeighbors[1][4] = 1+0;
-    deqElementNeighbors[1][5] = 1+11;
+    deqElementNeighbors[1][2] = 2;
+    deqElementNeighbors[1][3] = 4;
+    deqElementNeighbors[1][4] = 0;
+    deqElementNeighbors[1][5] = 11;
     
     deqElementNeighbors[2].resize(6);
     deqElementNeighbors[2][0] = BOTTOM_OUTSIDE;
     deqElementNeighbors[2][1] = FRONT_OUTSIDE;
     deqElementNeighbors[2][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[2][3] = 1+6;
-    deqElementNeighbors[2][4] = 1+1;
-    deqElementNeighbors[2][5] = 1+12;
+    deqElementNeighbors[2][3] = 6;
+    deqElementNeighbors[2][4] = 1;
+    deqElementNeighbors[2][5] = 12;
     
     deqElementNeighbors[3].resize(6);
     deqElementNeighbors[3][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[3][1] = 1+0;
-    deqElementNeighbors[3][2] = 1+4;
-    deqElementNeighbors[3][3] = 1+7;
+    deqElementNeighbors[3][1] = 0;
+    deqElementNeighbors[3][2] = 4;
+    deqElementNeighbors[3][3] = 7;
     deqElementNeighbors[3][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[3][5] = 1+13;
+    deqElementNeighbors[3][5] = 13;
     
     deqElementNeighbors[6].resize(6);
     deqElementNeighbors[6][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[6][1] = 1+2;
+    deqElementNeighbors[6][1] = 2;
     deqElementNeighbors[6][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[6][3] = 1+9;
-    deqElementNeighbors[6][4] = 1+5;
-    deqElementNeighbors[6][5] = 1+16;
+    deqElementNeighbors[6][3] = 9;
+    deqElementNeighbors[6][4] = 5;
+    deqElementNeighbors[6][5] = 16;
     
     deqElementNeighbors[7].resize(6);
     deqElementNeighbors[7][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[7][1] = 1+3;
-    deqElementNeighbors[7][2] = 1+8;
+    deqElementNeighbors[7][1] = 3;
+    deqElementNeighbors[7][2] = 8;
     deqElementNeighbors[7][3] = BACK_OUTSIDE;
     deqElementNeighbors[7][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[7][5] = 1+17;
+    deqElementNeighbors[7][5] = 17;
     
     deqElementNeighbors[8].resize(6);
     deqElementNeighbors[8][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[8][1] = 1+5;
-    deqElementNeighbors[8][2] = 1+9;
+    deqElementNeighbors[8][1] = 5;
+    deqElementNeighbors[8][2] = 9;
     deqElementNeighbors[8][3] = BACK_OUTSIDE;
-    deqElementNeighbors[8][4] = 1+7;
-    deqElementNeighbors[8][5] = 1+18;
+    deqElementNeighbors[8][4] = 7;
+    deqElementNeighbors[8][5] = 18;
     
     deqElementNeighbors[9].resize(6);
     deqElementNeighbors[9][0] = BOTTOM_OUTSIDE;
-    deqElementNeighbors[9][1] = 1+6;
+    deqElementNeighbors[9][1] = 6;
     deqElementNeighbors[9][2] = RIGHT_OUTSIDE;
     deqElementNeighbors[9][3] = BACK_OUTSIDE;
-    deqElementNeighbors[9][4] = 1+8;
-    deqElementNeighbors[9][5] = 1+19;
+    deqElementNeighbors[9][4] = 8;
+    deqElementNeighbors[9][5] = 19;
     
     deqElementNeighbors[10].resize(6);
-    deqElementNeighbors[10][0] = 1+0;
+    deqElementNeighbors[10][0] = 0;
     deqElementNeighbors[10][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[10][2] = 1+11;
-    deqElementNeighbors[10][3] = 1+13;
+    deqElementNeighbors[10][2] = 11;
+    deqElementNeighbors[10][3] = 13;
     deqElementNeighbors[10][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[10][5] = 1+20;
+    deqElementNeighbors[10][5] = 20;
     
     deqElementNeighbors[11].resize(6);
-    deqElementNeighbors[11][0] = 1+1;
+    deqElementNeighbors[11][0] = 1;
     deqElementNeighbors[11][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[11][2] = 1+12;
-    deqElementNeighbors[11][3] = 1+14;
-    deqElementNeighbors[11][4] = 1+10;
-    deqElementNeighbors[11][5] = 1+21;
+    deqElementNeighbors[11][2] = 12;
+    deqElementNeighbors[11][3] = 14;
+    deqElementNeighbors[11][4] = 10;
+    deqElementNeighbors[11][5] = 21;
     
     deqElementNeighbors[12].resize(6);
-    deqElementNeighbors[12][0] = 1+2;
+    deqElementNeighbors[12][0] = 2;
     deqElementNeighbors[12][1] = FRONT_OUTSIDE;
     deqElementNeighbors[12][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[12][3] = 1+16;
-    deqElementNeighbors[12][4] = 1+11;
-    deqElementNeighbors[12][5] = 1+22;
+    deqElementNeighbors[12][3] = 16;
+    deqElementNeighbors[12][4] = 11;
+    deqElementNeighbors[12][5] = 22;
     
     deqElementNeighbors[13].resize(6);
-    deqElementNeighbors[13][0] = 1+3;
-    deqElementNeighbors[13][1] = 1+10;
-    deqElementNeighbors[13][2] = 1+14;
-    deqElementNeighbors[13][3] = 1+17;
+    deqElementNeighbors[13][0] = 3;
+    deqElementNeighbors[13][1] = 10;
+    deqElementNeighbors[13][2] = 14;
+    deqElementNeighbors[13][3] = 17;
     deqElementNeighbors[13][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[13][5] = 1+23;
+    deqElementNeighbors[13][5] = 23;
     
     deqElementNeighbors[16].resize(6);
-    deqElementNeighbors[16][0] = 1+6;
-    deqElementNeighbors[16][1] = 1+12;
+    deqElementNeighbors[16][0] = 6;
+    deqElementNeighbors[16][1] = 12;
     deqElementNeighbors[16][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[16][3] = 1+19;
-    deqElementNeighbors[16][4] = 1+15;
-    deqElementNeighbors[16][5] = 1+26;
+    deqElementNeighbors[16][3] = 19;
+    deqElementNeighbors[16][4] = 15;
+    deqElementNeighbors[16][5] = 26;
     
     deqElementNeighbors[17].resize(6);
-    deqElementNeighbors[17][0] = 1+7;
-    deqElementNeighbors[17][1] = 1+13;
-    deqElementNeighbors[17][2] = 1+18;
+    deqElementNeighbors[17][0] = 7;
+    deqElementNeighbors[17][1] = 13;
+    deqElementNeighbors[17][2] = 18;
     deqElementNeighbors[17][3] = BACK_OUTSIDE;
     deqElementNeighbors[17][4] = LEFT_OUTSIDE;
-    deqElementNeighbors[17][5] = 1+27;
+    deqElementNeighbors[17][5] = 27;
     
     deqElementNeighbors[18].resize(6);
-    deqElementNeighbors[18][0] = 1+8;
-    deqElementNeighbors[18][1] = 1+15;
-    deqElementNeighbors[18][2] = 1+19;
+    deqElementNeighbors[18][0] = 8;
+    deqElementNeighbors[18][1] = 15;
+    deqElementNeighbors[18][2] = 19;
     deqElementNeighbors[18][3] = BACK_OUTSIDE;
-    deqElementNeighbors[18][4] = 1+17;
-    deqElementNeighbors[18][5] = 1+28;
+    deqElementNeighbors[18][4] = 17;
+    deqElementNeighbors[18][5] = 28;
     
     deqElementNeighbors[19].resize(6);
-    deqElementNeighbors[19][0] = 1+9;
-    deqElementNeighbors[19][1] = 1+16;
+    deqElementNeighbors[19][0] = 9;
+    deqElementNeighbors[19][1] = 16;
     deqElementNeighbors[19][2] = RIGHT_OUTSIDE;
     deqElementNeighbors[19][3] = BACK_OUTSIDE;
-    deqElementNeighbors[19][4] = 1+18;
-    deqElementNeighbors[19][5] = 1+29;
+    deqElementNeighbors[19][4] = 18;
+    deqElementNeighbors[19][5] = 29;
     
     deqElementNeighbors[20].resize(6);
-    deqElementNeighbors[20][0] = 1+10;
+    deqElementNeighbors[20][0] = 10;
     deqElementNeighbors[20][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[20][2] = 1+21;
-    deqElementNeighbors[20][3] = 1+23;
+    deqElementNeighbors[20][2] = 21;
+    deqElementNeighbors[20][3] = 23;
     deqElementNeighbors[20][4] = LEFT_OUTSIDE;
     deqElementNeighbors[20][5] = TOP_OUTSIDE;
       
     deqElementNeighbors[21].resize(6);
-    deqElementNeighbors[21][0] = 1+11;
+    deqElementNeighbors[21][0] = 11;
     deqElementNeighbors[21][1] = FRONT_OUTSIDE;
-    deqElementNeighbors[21][2] = 1+22;
-    deqElementNeighbors[21][3] = 1+24;
-    deqElementNeighbors[21][4] = 1+20;
+    deqElementNeighbors[21][2] = 22;
+    deqElementNeighbors[21][3] = 24;
+    deqElementNeighbors[21][4] = 20;
     deqElementNeighbors[21][5] = TOP_OUTSIDE;
       
     deqElementNeighbors[22].resize(6);
-    deqElementNeighbors[22][0] = 1+12;
+    deqElementNeighbors[22][0] = 12;
     deqElementNeighbors[22][1] = FRONT_OUTSIDE;
     deqElementNeighbors[22][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[22][3] = 1+26;
-    deqElementNeighbors[22][4] = 1+21;
+    deqElementNeighbors[22][3] = 26;
+    deqElementNeighbors[22][4] = 21;
     deqElementNeighbors[22][5] = TOP_OUTSIDE;
     
     deqElementNeighbors[23].resize(6);
-    deqElementNeighbors[23][0] = 1+13;
-    deqElementNeighbors[23][1] = 1+20;
-    deqElementNeighbors[23][2] = 1+24;
-    deqElementNeighbors[23][3] = 1+27;
+    deqElementNeighbors[23][0] = 13;
+    deqElementNeighbors[23][1] = 20;
+    deqElementNeighbors[23][2] = 24;
+    deqElementNeighbors[23][3] = 27;
     deqElementNeighbors[23][4] = LEFT_OUTSIDE;
     deqElementNeighbors[23][5] = TOP_OUTSIDE;
     
     deqElementNeighbors[26].resize(6);
-    deqElementNeighbors[26][0] = 1+16;
-    deqElementNeighbors[26][1] = 1+22;
+    deqElementNeighbors[26][0] = 16;
+    deqElementNeighbors[26][1] = 22;
     deqElementNeighbors[26][2] = RIGHT_OUTSIDE;
-    deqElementNeighbors[26][3] = 1+29;
-    deqElementNeighbors[26][4] = 1+25;
+    deqElementNeighbors[26][3] = 29;
+    deqElementNeighbors[26][4] = 25;
     deqElementNeighbors[26][5] = TOP_OUTSIDE;
     
     deqElementNeighbors[27].resize(6);
-    deqElementNeighbors[27][0] = 1+17;
-    deqElementNeighbors[27][1] = 1+23;
-    deqElementNeighbors[27][2] = 1+28;
+    deqElementNeighbors[27][0] = 17;
+    deqElementNeighbors[27][1] = 23;
+    deqElementNeighbors[27][2] = 28;
     deqElementNeighbors[27][3] = BACK_OUTSIDE;
     deqElementNeighbors[27][4] = LEFT_OUTSIDE;
     deqElementNeighbors[27][5] = TOP_OUTSIDE;
     
     deqElementNeighbors[28].resize(6);
-    deqElementNeighbors[28][0] = 1+18;
-    deqElementNeighbors[28][1] = 1+25;
-    deqElementNeighbors[28][2] = 1+29;
+    deqElementNeighbors[28][0] = 18;
+    deqElementNeighbors[28][1] = 25;
+    deqElementNeighbors[28][2] = 29;
     deqElementNeighbors[28][3] = BACK_OUTSIDE;
-    deqElementNeighbors[28][4] = 1+27;
+    deqElementNeighbors[28][4] = 27;
     deqElementNeighbors[28][5] = TOP_OUTSIDE;
     
     deqElementNeighbors[29].resize(6);
-    deqElementNeighbors[29][0] = 1+19;
-    deqElementNeighbors[29][1] = 1+26;
+    deqElementNeighbors[29][0] = 19;
+    deqElementNeighbors[29][1] = 26;
     deqElementNeighbors[29][2] = RIGHT_OUTSIDE;
     deqElementNeighbors[29][3] = BACK_OUTSIDE;
-    deqElementNeighbors[29][4] = 1+28;
+    deqElementNeighbors[29][4] = 28;
     deqElementNeighbors[29][5] = TOP_OUTSIDE;
     
     //prism neighbors are:
@@ -2376,49 +2464,49 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     
     //element 4
     vecNeighbors[0]=BOTTOM_OUTSIDE;
-    vecNeighbors[1]=1+1;
-    vecNeighbors[2]=1+5;
-    vecNeighbors[3]=1+3;
-    vecNeighbors[4]=1+14;
+    vecNeighbors[1]=1;
+    vecNeighbors[2]=5;
+    vecNeighbors[3]=3;
+    vecNeighbors[4]=14;
     deqElementNeighbors[4]=vecNeighbors;
   
     //element 5
     vecNeighbors[0]=BOTTOM_OUTSIDE;
-    vecNeighbors[1]=1+8;
-    vecNeighbors[2]=1+4;
-    vecNeighbors[3]=1+6;
-    vecNeighbors[4]=1+15;
+    vecNeighbors[1]=8;
+    vecNeighbors[2]=4;
+    vecNeighbors[3]=6;
+    vecNeighbors[4]=15;
     deqElementNeighbors[5]=vecNeighbors;
 
     //element 14
-    vecNeighbors[0]=1+4;
-    vecNeighbors[1]=1+11;
-    vecNeighbors[2]=1+15;
-    vecNeighbors[3]=1+13;
-    vecNeighbors[4]=1+24;
+    vecNeighbors[0]=4;
+    vecNeighbors[1]=11;
+    vecNeighbors[2]=15;
+    vecNeighbors[3]=13;
+    vecNeighbors[4]=24;
     deqElementNeighbors[14]=vecNeighbors;
 
     //element 15
-    vecNeighbors[0]=1+5;
-    vecNeighbors[1]=1+18;
-    vecNeighbors[2]=1+14;
-    vecNeighbors[3]=1+16;
-    vecNeighbors[4]=1+25;
+    vecNeighbors[0]=5;
+    vecNeighbors[1]=18;
+    vecNeighbors[2]=14;
+    vecNeighbors[3]=16;
+    vecNeighbors[4]=25;
     deqElementNeighbors[15]=vecNeighbors;
 
     //element 24
-    vecNeighbors[0]=1+14;
-    vecNeighbors[1]=1+21;
-    vecNeighbors[2]=1+25;
-    vecNeighbors[3]=1+23;
+    vecNeighbors[0]=14;
+    vecNeighbors[1]=21;
+    vecNeighbors[2]=25;
+    vecNeighbors[3]=23;
     vecNeighbors[4]=TOP_OUTSIDE;
     deqElementNeighbors[24]=vecNeighbors;
 
     //element 25
-    vecNeighbors[0]=1+15;
-    vecNeighbors[1]=1+28;
-    vecNeighbors[2]=1+24;
-    vecNeighbors[3]=1+26;
+    vecNeighbors[0]=15;
+    vecNeighbors[1]=28;
+    vecNeighbors[2]=24;
+    vecNeighbors[3]=26;
     vecNeighbors[4]=TOP_OUTSIDE;
     deqElementNeighbors[25]=vecNeighbors;
  
@@ -2507,7 +2595,6 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
       vset.BFlag( iNode, bBoundary );
   	}
 
-    vset.EstablishZeroBasedNumbering();
     vset.ResizeNodes( 64 );
     
     // additional must haves
@@ -2521,7 +2608,7 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
     for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
     vset.AddData( "element number", elmt_nums );
     
-    cout <<"\n"<<"create_Prism_Hexa_VSet: model 'Prism_Hexa': "<< endl;
+    cout <<"\n"<<"create_Prism_Hexa_VSet: model 'Prism_Hexa': done."<< endl;
     //vset.Out();
 
 } // end create_Prism_Hexa_VSet
@@ -2665,7 +2752,7 @@ void create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
 
 void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 {
-    const size_t iNrOfElements(54/*prisms*/);
+    const int iNrOfElements(54/*prisms*/);
     
   	IsoparametricLinearPrism iso_prism;
   	
@@ -2679,8 +2766,9 @@ void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	//this is a 3D model, it is a cube of hexahedron with six pyramid elements in the middle
   	
   	//elements 0->53 are prisms
-    size_t nodes(iDim_i*iDim_j*iDim_k);  //number of nodes: 64 on a 4x4x4 grid
+    int nodes(iDim_i*iDim_j*iDim_k);  //number of nodes: 64 on a 4x4x4 grid
 
+    vset.SingleElementType( iso_prism.ElementType() );
     vset.Resize( iso_prism.Nodes(),
                  iso_prism.Neighbors(),
                  iso_prism.ElementType(), 
@@ -2732,23 +2820,23 @@ void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	 size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
       
   	 deqElements[iElement].resize(6);
-	   deqElements[iElement][0]= 1+ iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= 1+ iDim_k2*k+(iDim_j)*j+i+1;
-  	 deqElements[iElement][2]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i+1;
-	   deqElements[iElement][3]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][4]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	 deqElements[iElement][5]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
+	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*j+i;
+  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*j+i+1;
+  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
+	   deqElements[iElement][3]= iDim_k2*(k+1)+(iDim_j)*j+i;
+  	 deqElements[iElement][4]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
+  	 deqElements[iElement][5]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
 
      //upper element
   	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i+27;
 
   	 deqElements[iElement].resize(6);
-  	 deqElements[iElement][0]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][1]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][2]= 1+ iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][3]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][4]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][5]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i;
+  	 deqElements[iElement][0]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
+  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*(j+1)+i;
+  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*j+i;
+  	 deqElements[iElement][3]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
+  	 deqElements[iElement][4]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
+  	 deqElements[iElement][5]= iDim_k2*(k+1)+(iDim_j)*j+i;
   	 
     }
   	
@@ -2767,19 +2855,19 @@ void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
      deqElementNeighbors[iElement].resize(5);
   
      //face 0
-     size_t iNeighbor(1+ iDim_km1_2*(k-1)+(iDim_j-1)*j+i);
+     size_t iNeighbor(iDim_km1_2*(k-1)+(iDim_j-1)*j+i);
      deqElementNeighbors[iElement][0]= (k==0?BACK_OUTSIDE:iNeighbor);
      //face 1
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*(j-1)+i +27;
+     iNeighbor = iDim_km1_2*k+(iDim_j-1)*(j-1)+i +27;
      deqElementNeighbors[iElement][1]= (j==0?BOTTOM_OUTSIDE:iNeighbor);
      //face 2
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i+1 +27;
+     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+i+1 +27;
      deqElementNeighbors[iElement][2]= (i==iDim_i-2?RIGHT_OUTSIDE:iNeighbor);
      //face 3
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i+27;
+     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+i+27;
      deqElementNeighbors[iElement][3]= (iNeighbor);
      //face 4
-     iNeighbor = 1+ iDim_km1_2*(k+1)+(iDim_j-1)*j+i;
+     iNeighbor = iDim_km1_2*(k+1)+(iDim_j-1)*j+i;
      deqElementNeighbors[iElement][4]= (k==iDim_k-2?FRONT_OUTSIDE:iNeighbor);
      
      //upper element
@@ -2788,19 +2876,19 @@ void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
      deqElementNeighbors[iElement].resize(5);
 
      //face 0
-     iNeighbor = 1+ iDim_km1_2*(k-1)+(iDim_j-1)*j+i +27;
+     iNeighbor = iDim_km1_2*(k-1)+(iDim_j-1)*j+i +27;
      deqElementNeighbors[iElement][0]= (k==0?BACK_OUTSIDE:iNeighbor);
      //face 1
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*(j+1)+i;
+     iNeighbor = iDim_km1_2*k+(iDim_j-1)*(j+1)+i;
      deqElementNeighbors[iElement][1]= (j==iDim_j-2?TOP_OUTSIDE:iNeighbor);
      //face 2
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+(i-1);
+     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+(i-1);
      deqElementNeighbors[iElement][2]= (i==0?LEFT_OUTSIDE:iNeighbor);
      //face 3
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i;
+     iNeighbor = iDim_km1_2*k+(iDim_j-1)*j+i;
      deqElementNeighbors[iElement][3]= (iNeighbor);
      //face 4
-     iNeighbor = 1+ iDim_km1_2*(k+1)+(iDim_j-1)*j+i +27;
+     iNeighbor = iDim_km1_2*(k+1)+(iDim_j-1)*j+i +27;
      deqElementNeighbors[iElement][4]= (k==iDim_k-2?FRONT_OUTSIDE:iNeighbor);
      
      
@@ -2900,6 +2988,7 @@ void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
     // fill( next(pmtrl.begin(),42), pmtrl.end(), 7 );
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 
+    cout <<"\n"<<"create_Prism_VSet: model 'un-named': done."<< endl;
 //    vset.Out();
 
 } // end
@@ -2918,7 +3007,7 @@ void create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
       @date 31/5/2024
 */
 // TODO: nbor connectivity and node flags are inconsistent with CSMP conventions
-void create_RubikCube( VSet<3U>& vset )
+void create_RubikCube_VSet( VSet<3U>& vset )
   {
     // Rubik cube 3 x 3 x 3, starting element numbering from the origin in the back plane (XY), moving left to right, from bottom to top
     deque<double>  px{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3,
@@ -2988,6 +3077,7 @@ void create_RubikCube( VSet<3U>& vset )
   	
     //------------------------CREATE VSET
     //this is a 3D model, it is a cube of unit-cell hexahedra
+    vset.SingleElementType( iso_hexahedron.ElementType() );
   	vset.Resize( iso_hexahedron.Nodes(),
                  iso_hexahedron.Neighbors(),
                  iso_hexahedron.ElementType(),
@@ -3004,7 +3094,8 @@ void create_RubikCube( VSet<3U>& vset )
     vector<int32_t> pmtrl( vset.Elements(), 1 );
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
     
-    vset.Out();
+    cout <<"\n"<<"create_RubikCube: model 'RubikCube': done."<< endl;
+//    vset.Out();
 
 } // end create_RubikCube
 
@@ -3100,8 +3191,8 @@ void create_Tetra_VSet( VSet<3U>& vset )
     vector<int32_t> pmtrl( vset.Elements(), 1 );
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
     
-    cout <<"\n"<<"testCreateTetra_VSet: model 'Tetra': "<< endl;
-    vset.Out();
+    cout <<"\n"<<"testCreateTetra_VSet: model 'Tetra': done."<< endl;
+//    vset.Out();
 
  } // end testCreateTetra_VSet
 
@@ -3111,7 +3202,7 @@ void create_Tetra_VSet( VSet<3U>& vset )
 
 
 
-void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
+void create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
 {
   	IsoparametricLinearPyramid iso_pyramid;
   	
@@ -3130,6 +3221,7 @@ void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
   	//elements 0->161 are pyramids
     size_t nodes(iDim_i*iDim_j*iDim_k+iNrOfCells);  //number of nodes: 64 on a 4x4x4 grid + one barycenter for each cell
 
+    vset.SingleElementType( iso_pyramid.ElementType() );
     vset.Resize( iso_pyramid.Nodes(),
                  iso_pyramid.Neighbors(),
                  iso_pyramid.ElementType(),
@@ -3189,6 +3281,10 @@ void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
     vset.ResizeBFlags();
   	
     //--------------------------ELEMENTS
+    const bool verbose{false};
+    if ( verbose )
+      cout <<"\n"<<"create_Pyramid_VSet: printing coordinates of selected pyramid elements.";
+
     //define pyramid elements (elements 0->54), assign nodes per element
     deque<vector<size_t> > deqElements(iNrOfElements);
     for( int k{0}; k < iDim_k-1; k++) //z
@@ -3201,67 +3297,67 @@ void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
   	 int iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
      
   	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= 1+ iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= 1+ iDim_k2*k+(iDim_j)*j+i+1;
-  	 deqElements[iElement][2]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i+1;
-	   deqElements[iElement][3]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][4]= 1+ iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
+	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*j+i;
+  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*j+i+1;
+  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
+	   deqElements[iElement][3]= iDim_k2*k+(iDim_j)*(j+1)+i;
+  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
 
   	 //pyramid 1
   	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*1;
      
   	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	 deqElements[iElement][2]= 1+ iDim_k2*k+(iDim_j)*j+i+1;
-	   deqElements[iElement][3]= 1+ iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][4]= 1+ iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
+	   deqElements[iElement][0]= iDim_k2*(k+1)+(iDim_j)*j+i;
+  	 deqElements[iElement][1]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
+  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*j+i+1;
+	   deqElements[iElement][3]= iDim_k2*k+(iDim_j)*j+i;
+  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
   	 
   	 //pyramid 2
-  	 cout << "Element:(i="<<i<<",j="<<j<<",k="<<k<<")" << iDim_km1_2*k+(iDim_j-1)*j+i + 27*2 << endl;
+  	 if ( verbose ) cout << "Element:(i="<<i<<",j="<<j<<",k="<<k<<")" << iDim_km1_2*k+(iDim_j-1)*j+i + 27*2 << endl;
   	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*2;
      
   	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= 1+ iDim_k2*k+(iDim_j)*j+i+1;
-	   cout << "Coord [" << iElement << "][0]: " << deqElements[iElement][0] << endl;
-  	 deqElements[iElement][1]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i+1;
-	   cout << "Coord [" << iElement << "][1]: " << deqElements[iElement][1] << endl;
-  	 deqElements[iElement][2]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-	   cout << "Coord [" << iElement << "][2]: " << deqElements[iElement][2] << endl;
-	   deqElements[iElement][3]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i+1;
-	   cout << "Coord [" << iElement << "][3]: " << deqElements[iElement][3] << endl;
-  	 deqElements[iElement][4]= 1+ iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
-	   cout << "Coord [" << iElement << "][4]: " << deqElements[iElement][4] << endl;
+	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*j+i+1;
+	   if ( verbose ) cout << "\tCoord [" << iElement << "][0]: " << deqElements[iElement][0] << endl;
+  	 deqElements[iElement][1]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
+	   if ( verbose ) cout << "\tCoord [" << iElement << "][1]: " << deqElements[iElement][1] << endl;
+  	 deqElements[iElement][2]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
+	   if ( verbose ) cout << "\tCoord [" << iElement << "][2]: " << deqElements[iElement][2] << endl;
+	   deqElements[iElement][3]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
+	   if ( verbose ) cout << "\tCoord [" << iElement << "][3]: " << deqElements[iElement][3] << endl;
+  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
+	   if ( verbose ) cout << "\tCoord [" << iElement << "][4]: " << deqElements[iElement][4] << endl;
   	 
   	 //pyramid 3
   	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*3;
      
   	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][1]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][2]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-	   deqElements[iElement][3]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][4]= 1+ iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
+	   deqElements[iElement][0]= iDim_k2*k+(iDim_j)*(j+1)+i;
+  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*(j+1)+i+1;
+  	 deqElements[iElement][2]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
+	   deqElements[iElement][3]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
+  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
 
   	 //pyramid 4
   	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*4;
      
   	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][1]= 1+ iDim_k2*k+(iDim_j)*j+i;
-  	 deqElements[iElement][2]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i;
-	   deqElements[iElement][3]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
-  	 deqElements[iElement][4]= 1+ iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
+	   deqElements[iElement][0]= iDim_k2*(k+1)+(iDim_j)*j+i;
+  	 deqElements[iElement][1]= iDim_k2*k+(iDim_j)*j+i;
+  	 deqElements[iElement][2]= iDim_k2*k+(iDim_j)*(j+1)+i;
+	   deqElements[iElement][3]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
+  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
 
   	 //pyramid 5
   	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*5;
      
   	 deqElements[iElement].resize(5);
-	   deqElements[iElement][0]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i+1;
-  	 deqElements[iElement][1]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i;
-  	 deqElements[iElement][2]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
-	   deqElements[iElement][3]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-  	 deqElements[iElement][4]= 1+ iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
+	   deqElements[iElement][0]= iDim_k2*(k+1)+(iDim_j)*j+i+1;
+  	 deqElements[iElement][1]= iDim_k2*(k+1)+(iDim_j)*j+i;
+  	 deqElements[iElement][2]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
+	   deqElements[iElement][3]= iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
+  	 deqElements[iElement][4]= iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
 
     }
   	
@@ -3279,19 +3375,19 @@ void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
      
      deqElementNeighbors[iElement].resize(5);
      //face 0
-     size_t iNeighbor(1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1);
+     size_t iNeighbor( iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1);
      deqElementNeighbors[iElement][0]= (iNeighbor);
      //face 1
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
      deqElementNeighbors[iElement][1]= (iNeighbor);
      //face 2
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
      deqElementNeighbors[iElement][2]= (iNeighbor);
      //face 3
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
      deqElementNeighbors[iElement][3]= (iNeighbor);
      //face 4
-     iNeighbor = 1+ iDim_km1_2*(k-1)+(iDim_j-1)*j+i +iNrOfCells*5;
+     iNeighbor =  iDim_km1_2*(k-1)+(iDim_j-1)*j+i +iNrOfCells*5;
      deqElementNeighbors[iElement][4]= (k==0?BACK_OUTSIDE:iNeighbor);
      
      //pyramid 1
@@ -3299,19 +3395,19 @@ void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
      
      deqElementNeighbors[iElement].resize(5);
      //face 0
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
      deqElementNeighbors[iElement][0]= (iNeighbor);
      //face 1
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
      deqElementNeighbors[iElement][1]= (iNeighbor);
      //face 2
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
      deqElementNeighbors[iElement][2]= (iNeighbor);
      //face 3
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
      deqElementNeighbors[iElement][3]= (iNeighbor);
      //face 4
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*(j-1)+i +iNrOfCells*3;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*(j-1)+i +iNrOfCells*3;
      deqElementNeighbors[iElement][4]= (j==0?BOTTOM_OUTSIDE:iNeighbor);
      
       //pyramid 2
@@ -3319,19 +3415,19 @@ void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
      
      deqElementNeighbors[iElement].resize(5);
      //face 0
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1;
      deqElementNeighbors[iElement][0]= (iNeighbor);
      //face 1
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
      deqElementNeighbors[iElement][1]= (iNeighbor);
      //face 2
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
      deqElementNeighbors[iElement][2]= (iNeighbor);
      //face 3
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
      deqElementNeighbors[iElement][3]= (iNeighbor);
      //face 4
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i+1 +iNrOfCells*4;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i+1 +iNrOfCells*4;
      deqElementNeighbors[iElement][4]= (i==iDim_i-2?RIGHT_OUTSIDE:iNeighbor);
       
       //pyramid 3
@@ -3339,19 +3435,19 @@ void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
      
      deqElementNeighbors[iElement].resize(5);
      //face 0
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
      deqElementNeighbors[iElement][0]= (iNeighbor);
      //face 1
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
      deqElementNeighbors[iElement][1]= (iNeighbor);
      //face 2
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
      deqElementNeighbors[iElement][2]= (iNeighbor);
      //face 3
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
      deqElementNeighbors[iElement][3]= (iNeighbor);
      //face 4
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*(j+1)+i +iNrOfCells*1;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*(j+1)+i +iNrOfCells*1;
      deqElementNeighbors[iElement][4]= (j==iDim_j-2?TOP_OUTSIDE:iNeighbor);
      
      //pyramid 4
@@ -3359,19 +3455,19 @@ void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
      
      deqElementNeighbors[iElement].resize(5);
      //face 0
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1;
      deqElementNeighbors[iElement][0]= (iNeighbor);
      //face 1
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*0;
      deqElementNeighbors[iElement][1]= (iNeighbor);
      //face 2
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
      deqElementNeighbors[iElement][2]= (iNeighbor);
      //face 3
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*5;
      deqElementNeighbors[iElement][3]= (iNeighbor);
      //face 4
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i-1 +iNrOfCells*2;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i-1 +iNrOfCells*2;
      deqElementNeighbors[iElement][4]= (i==0?LEFT_OUTSIDE:iNeighbor);
      
      //pyramid 5
@@ -3379,19 +3475,19 @@ void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
      
      deqElementNeighbors[iElement].resize(5);
      //face 0
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*1;
      deqElementNeighbors[iElement][0]= (iNeighbor);
      //face 1
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*2;
      deqElementNeighbors[iElement][1]= (iNeighbor);
      //face 2
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*3;
      deqElementNeighbors[iElement][2]= (iNeighbor);
      //face 3
-     iNeighbor = 1+ iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
+     iNeighbor =  iDim_km1_2*k+(iDim_j-1)*j+i +iNrOfCells*4;
      deqElementNeighbors[iElement][3]= (iNeighbor);
      //face 4
-     iNeighbor = 1+ iDim_km1_2*(k+1)+(iDim_j-1)*j+i +iNrOfCells*0;
+     iNeighbor =  iDim_km1_2*(k+1)+(iDim_j-1)*j+i +iNrOfCells*0;
      deqElementNeighbors[iElement][4]= (k==iDim_k-2?FRONT_OUTSIDE:iNeighbor);
      
     }
@@ -3487,8 +3583,8 @@ void create_Pyramids_VSet( VSet<3U>& vset, bool bSkewed )
 
     vset.EstablishZeroBasedNumbering();
     
-    cout <<"\n"<<"create_Pyramid_VSet: model 'Pyra_Hexa': "<< endl;
-    vset.Out();
+    cout <<"\n"<<"create_Pyramid_VSet: model 'Pyra': done."<< endl;
+//    vset.Out();
     
 } // end create_Pyramid_VSet
 
@@ -3555,6 +3651,7 @@ static void create_CornerPointGrid_6i_8j_4k( VSet<3U>& vset )
           }
           cout << "\n";
       }
+    cout <<"\n"<<"create_CornerPointGrid_6i_8j_4k: model 'un-named': done."<< endl;
 
  } // end create_CornerPointGrid
 

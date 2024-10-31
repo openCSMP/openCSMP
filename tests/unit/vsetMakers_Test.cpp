@@ -55,30 +55,65 @@ template vector<vector<uint32_t>> vsetMakers_Test::NodesOfElementFaces( const VS
 
 void vsetMakers_Test::run()
  {
+    // element neighbor connectivity
+    {
+       const bool bSkewed{false};
+       VSet<3U> vset;
+       
+       create_Tetra_VSet( vset );
+       TestConnectedElementNeighborNumbering( vset );
+
+       create_Prism_VSet( vset, bSkewed );
+       TestConnectedElementNeighborNumbering( vset );
+
+       create_Pyramid_VSet( vset, bSkewed );
+       TestConnectedElementNeighborNumbering( vset );
+
+       create_RubikCube_VSet( vset );
+       TestConnectedElementNeighborNumbering( vset );
+
+       create_Pyramid_Hexa_VSet( vset, bSkewed );
+       TestConnectedElementNeighborNumbering( vset );
+
+       create_Prism_Hexa_VSet( vset, bSkewed );
+       TestConnectedElementNeighborNumbering( vset );
+
+       ModelTopology topo;
+       // removing properties that were added to the VSet before
+       auto pit = vset.PropertyValuesBegin();
+       while ( pit!=vset.PropertyValuesEnd() ) pit = vset.RemoveData( (*pit).first.c_str() );
+       create_FracBox( topo, vset );
+       TestConnectedElementNeighborNumbering( vset );
+    }
+
     // 2D tests
     {
       VSet<2U> vset;
-
       // 2D test cases for all element types except simplicies
       ///  Rectangle-shaped MODEL_TINY, consisting of 1 line element two triangles, 1 quadrilateral and 6 face object marking the box boundary.
-      ModelTopology topo = create_SimplePolyElement2DModel( vset );
+      const double length_of_sides{5.};
+      const bool bSkewed{false};
+      create_1Square_VSet( vset, length_of_sides, bSkewed );
       _test( TestConsistencyWithCSMP_Conventions( vset ) );
 
       /// Rectangle shaped mixed model with 2 intersecting line element regions (USED IN UNIT TESTS)
-      topo = create_MeshPatchWithLineElements_VSet( vset );
+      ModelTopology topo = create_MeshPatchWithLineElements_VSet( vset );
       _test( TestConsistencyWithCSMP_Conventions( vset ) );
+       TestConnectedElementNeighborNumbering( vset );
 
       /// model SPLIT22_BASIC with box boundaries (Faces) and one through-going and one internal crossing split boundary (USED IN UNIT TESTS)
       topo = create_BoundarySplitBoundaryPatch( vset );
       _test( TestConsistencyWithCSMP_Conventions( vset ) );
+       TestConnectedElementNeighborNumbering( vset );
     }
     
     // 3D test cases
     {
-      ModelTopology topology;
       VSet<3U> vset;
-      
-      create_FracBox( topology, vset );
+      const bool bSkewed{false};
+      create_1Hexahedron_VSet( vset );
+      _test( TestConsistencyWithCSMP_Conventions( vset ) );
+      create_1Prism_VSet( vset, bSkewed );
       _test( TestConsistencyWithCSMP_Conventions( vset ) );
     }
 
@@ -119,6 +154,32 @@ bool vsetMakers_Test::TestConsistencyWithCSMP_Conventions( const VSet<3U>& vset 
     return (inconsistencies_found == 0);
 
 } // end TestConsistencyWithCSMP_Conventions
+
+
+
+    /// for the supplied vset, method checks whether the assigned neighbor Element objects are contained in the overall element range
+template<uint32_t dim>
+void vsetMakers_Test::TestConnectedElementNeighborNumbering(  const VSet<dim>& vset )
+ {
+    const size_t n_elements = vset.Elements();
+    for ( size_t eidx{0ul}; eidx<n_elements; ++eidx )
+      for ( uint32_t i{0u}; i<vset.PfvertsSize(eidx); ++i ) {
+           auto neighbor = vset.Pfvert( eidx, i );
+           // testing consistency of element type
+           // testing consistency of neighbors
+           if ( neighbor >= 0 ) {
+                _test( neighbor < n_elements );
+                if ( vset.HybridElementTypeMesh() ) {
+                     _test( vset.PfvertsSize(neighbor) == CSMP_ElementSpecifications::NeighborsPerElementOfType( vset.ElementType(neighbor) ) );
+                     _test( vset.PlistSize(neighbor) == CSMP_ElementSpecifications::NodesPerElementOfType( vset.ElementType(neighbor) ) );
+                  }
+             }
+        }
+ 
+ } // end TestConnectedElementNeighbors
+
+template void vsetMakers_Test::TestConnectedElementNeighborNumbering(  const VSet<2>& );
+template void vsetMakers_Test::TestConnectedElementNeighborNumbering(  const VSet<3>& );
 
 
 } // end csmp
