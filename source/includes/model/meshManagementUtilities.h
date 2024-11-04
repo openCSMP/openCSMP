@@ -222,7 +222,6 @@ void backupNeighborConnectivity( typename std::vector<CELL<dim>*>::const_iterato
                                  typename std::vector<CELL<dim>*>::const_iterator last,
                                  std::vector<std::vector<CELL<dim>*> >& nbor_pointers );
 
-// TODO: put into MM
 /// tests whether all the expected cell functionality is there and operational
 template<uint32_t dim, template<uint32_t> class CELL>
 bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,

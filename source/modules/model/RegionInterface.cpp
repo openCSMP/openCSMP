@@ -2582,6 +2582,33 @@ bool RegionInterface<dim, REGION_COMPLEX>::MoveToNonUniqueRegions( const char* u
 
 
 
+
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
+bool RegionInterface<dim, REGION_COMPLEX>::MoveToUniqueRegions( const char* non_unique_region )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( !ContainsRegion( non_unique_region ) ) {
+    csmp_error.Note( WARNING, "RegionInterface<dim,REGION_COMPLEX>::MoveToUniqueRegions:",
+                       non_unique_region, "does not exist; nothing was done." );
+    return false;
+  }
+  if ( IsUnique( non_unique_region ) ) {
+    csmp_error.Note( WARNING, "RegionInterface<dim,REGION_COMPLEX>::MoveToUniqueRegions:",
+                       non_unique_region, "is already a non-unique region; nothing was done." );
+    return true;
+  }
+
+  // performing the move
+  auto region_handle =  regionMap_.extract( non_unique_region );
+  uniqueRegionMap_.insert( std::move(region_handle) );
+
+  return true;
+
+} // end MoveToUniqueRegions
+
+
+
 /**
 Numbers the unique regions of the models, labeling their elements with the region number
 as "region identifier". If the supplied variable does not exist, it is created by this method.

@@ -229,6 +229,7 @@ class RegionInterface {
 
     /// moves region to from the unique- to the non-unique regions map
     bool    MoveToNonUniqueRegions( const char* unique_region );
+    bool    MoveToUniqueRegions( const char* non_unique_region );
 
     /// boolean operation: include
     bool    RegionIncludes( const char* region_a, const char* region_b ) const;

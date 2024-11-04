@@ -64,5 +64,6 @@
 #include "ThermalConvectionETHZ_Example.h"
 // TODO: include Lukas Mosser's correlation based black-oil model property calculations
 #include "MechanicsAndMultiphaseFlow_Example.h"
+#include "UG4_ProMeshOutput_Example.h"
 
 #endif

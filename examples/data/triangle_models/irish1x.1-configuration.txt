@@ -1,0 +1,88 @@
+irish1x-configuration.txt - PbZn basin model for MVT deposit formation
+
+# ---------------------------------------------------------------
+# 0. definition of model subregions for auto generation in CSMP
+#    (regions must be tagged with unique property values in Triagle output)
+# ---------------------------------------------------------------
+
+
+# ---------------------------------------------------------------
+# 1. global rock & fluid properties applied to ALL_CELLS region
+# ---------------------------------------------------------------
+# water-wet shale
+thickness	1.
+# initialises the properties of the top seal
+porosity	0.25
+# tensor permeability from which the facet normal components are calculated
+permeability	1.00E-11
+compressibility rock	1.00E-10
+total system compressibility	1.00E-09
+brooks corey parameter	2.
+entry pressure	100.
+capillary diffusivity	1.00E-15
+residual saturation aqueous phase	0.15
+residual saturation carbonic phase	0.3
+heat source		0.
+thermal conductivity	3.6
+# ------------------------------------
+# fluid properties (... MPa, ...oC)"
+# ------------------------------------
+# irc.wisc.edu - calculator
+fluid volume source		0.
+nodal fluid volume source	0.
+# supercritical CO2 (fixed initial value)
+density carbonic phase			600.
+density aqueous phase			990.
+# supercritical CO2 @ 15 MPa
+viscosity carbonic phase		41.2e-6
+viscosity aqueous phase			470.0E-6
+# irc.wisc.edu - calculator
+compressibility carbonic phase		1.021E-9
+compressibility aqueous phase		5.00E-10
+thermal conductivity aqueous phase	0.661
+thermal conductivity carbonic phase	0.066
+# 30 mN/m
+interfacial tension		0.03
+# compositional properties
+# user input = transported quantity (mol/m3)
+molality salt			1.0e-3
+# computed properties (kg/m3)
+dissolved CO2			0.
+evaporated water		0.
+# -------------------------------------
+# initial conditions	
+# -------------------------------------
+# specified only that Paraview does not get the initial NAN values
+saturation carbonic phase	0.
+saturation aqueous phase	1.
+fluid pressure		1.50E+07
+cfl	1.0
+total velocity		0.	0.	0.
+face total mobility	1.
+permeability calibration factor	1
+
+# ----------------------------------------------------------------------
+# 2. Assign properties and variable values to model subdomains = regions
+# ----------------------------------------------------------------------
+RT1_FINE	complete	permeability	1.0e-13
+RT1_FINE	complete	porosity	0.15
+RT1_FINE	complete	entry pressure	3000.
+RT1_FINE	complete	residual saturation carbonic phase	0.2
+RT1_COARSENING_UP	complete	permeability	1.0e-13
+RT1_COARSENING_UP	complete	porosity	0.15
+RT1_COARSENING_UP	complete	entry pressure	3000.
+RT1_COARSENING_UP	complete	residual saturation carbonic phase	0.2
+
+# ----------------------------------------------------------------------
+# 3. (Essential) constant values assigned to boundaries of Box-shaped model
+#    (Note that 'BOX_BOUNDARY' names must be defined in the region section above)
+# ----------------------------------------------------------------------
+# atmospheric pressure at model top
+TOP	complete	Dirichlet	fluid pressure		1.0e7
+TOP	complete	Dirichlet	saturation aqueous phase	1
+TOP	complete	Dirichlet	saturation carbonic phase	0	
+BOTTOM	complete	Dirichlet	saturation aqueous phase	0
+BOTTOM	complete	Dirichlet	saturation carbonic phase	1	
+# temperature (oC), assuming 15oC at top and geothermal gradient of 30oC/km
+TOP	complete	Dirichlet	temperature		50.	
+

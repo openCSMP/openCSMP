@@ -287,8 +287,11 @@ bool MeshManager_Test::Test_detachNeighborsFrom()
 
 
 
-// for a model with a splitboundary
-// NOTE: 14/8/2024 - method not used anywhere yet
+/**
+   For the deletion of nodes that did become orphans after Element deletion.
+  
+   @note 14/8/2024 - method DeleteNodesAndRepairNodeConnnectivity() not used anywhere yet
+*/
  void MeshManager_Test::Test_DeleteNodesAndRepairNodeConnnectivity()
   {
       VSet<2> vset;
@@ -768,9 +771,9 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
   MeshManager<3U>& mesh(model.Mesh());
   const size_t     n_original_elmts(mesh.Elements());
 
-  // TODO: prerequisite: test mesh must not be broken (element nbor connectivity issue)
-  bool connectivity_is_broken = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
-  _test( !connectivity_is_broken );
+  // prerequisite: test element connectivity
+  bool connectivity_is_intact = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
+  _test( connectivity_is_intact == true );
 
 
 	// 1. Checking that pointers to elements are not affected by element deletion
@@ -842,7 +845,12 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
   _test( snodes.first == nodes2 ); // should be face nodes
 
   // getting rid of pyramid (and its connections so that face 0 of element 1 is on the outside of model again
-  _test( mesh.Delete( new_elmts.begin() ) != mesh.elements_.end() );
+  mesh.DetachNeighborsFrom( (*new_elmts.begin()) );
+  // getting an iterator to the elements
+  auto eit = new_elmts.begin();
+  mesh.Delete( eit );
+  // pointer in iterator should now be null
+  _test( (*eit) == nullptr );
   _test( e1ptr->Neighbor(0) == nullptr );
   
   
@@ -883,11 +891,9 @@ bool MeshManager_Test::TestCellDeletionAndInsertion()
   // one lost one gained
 	_test( mesh.Elements() == n_original_elmts );
  
-  // mesh should now be broken, but if it was already initially, this is of no interest
-  if ( !connectivity_is_broken ) {
-       connectivity_is_broken = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
-       _test( connectivity_is_broken );
-    }
+  // mesh should not be broken unless it was initially
+  connectivity_is_intact = integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
+  _test( connectivity_is_intact );
  
    // 5. Creating a Face between hex1 and a neighbor
   // ------------------------------------------------------------

@@ -1734,7 +1734,8 @@ bool buildRegionsBasedOnPropertyRange( Model<dim>& model,
         cout << group_name << "' using '" << prop_name << "' range: ";
         cout << prop_min << " - " << prop_max << endl;
       }
-      model.FormRegionFrom( group_name.c_str(), prop_name.c_str(), prop_min, prop_max );
+      const bool is_unique_region{ true };
+      model.FormRegionFrom( group_name.c_str(), prop_name.c_str(), prop_min, prop_max, is_unique_region );
 
       if ( !model.ContainsRegion( group_name.c_str() ) )
       {

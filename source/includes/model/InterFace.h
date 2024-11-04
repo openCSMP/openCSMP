@@ -152,11 +152,13 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     
     /// sets neighbor pointer that was pointing to the argument object to 'nullptr'
     bool Unassign( const InterFace<dim>* const );
+
     /// removal of any InterFace attached to this neighbor slot
     void UnassignNeighbor( uint32_t nbor );
   
-    /// connects interface to a lower-dimensional element with extra nodes situated inside the InterFace in a triple-layer mesh representation for fractures
+    /// connect / disconnect interface to a lower-dimensional element with extra nodes situated inside the InterFace in a triple-layer mesh representation for fractures
     void Assign( Element<dim>* const intervening_elmt );
+    void UnAssignInterveningElement() { middleElement_ = nullptr; }
 
 
     // ------------------------------------------------------------------------

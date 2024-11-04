@@ -253,12 +253,14 @@ class  InputDataManager {
     bool ConfigureIrregular_ANSYS_ModelFromFile( Model<dim>&, const char* fname );
 
 private:
+
+    /// using the 'read..." functions specified in 'TextFileIO.cpp' reads the different sections inside the configuration file
     bool ReadBlocks( Model<dim>&,
                      std::ifstream&,
-                     std::set<std::string>& regions,
+                     std::set<std::string>& regions, // unique regions that will be created from parameter range (use with Triangle mesher)
                      std::map<std::string,std::vector<double> >& well_data,
                      ComputationalSettings& settings,
-                     bool region_specifications,      // region name from parameter range
+                     bool region_specifications,      // with or without region data
                      bool default_property_values,    // default property values
                      bool region_property_values,     // regional property values
                      bool region_property_conditions, // regional property conditions

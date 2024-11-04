@@ -1,5 +1,6 @@
 #include "InputDataManager.h"
 #include "ComputationalSettings.h"
+#include "Model.h"
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
@@ -771,9 +772,15 @@ bool InputDataManager<dim>
                 return true;
             }
         }
-
+        // SKM fix 3/11/24
+        // (putting the new regions into unique regions and moving "Model" to non-unique regions if it is nt there already)
+        size_t n_unique_regions = groups.size();
         buildRegionsBasedOnPropertyRange<dim>( model, groups,
                                                ifs, text_line, line_length, csmp_error.Verbose() );
+        // if new regions were created
+        if ( groups.size() > n_unique_regions )
+          if ( model.IsUnique("Model") )
+            model.MoveToNonUniqueRegions("Model");
     }
 
     // 2. Global model properties

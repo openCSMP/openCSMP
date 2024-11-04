@@ -94,6 +94,7 @@ int main()
             examplesSuite.RegisterExample( new Geothermal_Example() );
             // CVEN90074 course 2024
             examplesSuite.RegisterExample( new MechanicsAndMultiphaseFlow_Example() );
+            examplesSuite.RegisterExample( new UG4_ProMeshOutput_Example() );
 
       // TUTORIALS
             examplesSuite.RegisterExample( new Tutorial1_Example() );
