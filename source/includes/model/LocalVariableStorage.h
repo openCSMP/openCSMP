@@ -228,7 +228,7 @@ class LocalVariableStorage {
         DataContainer data;
 #ifdef NDEBUG
         Data() : flags(0U), data(0U) {}
-        Data( Data& data ) : flags{data.flags}, data{data.data} {}
+        Data( const Data& data ) : flags{data.flags}, data{data.data} {}
         Data( Data&& data ) : flags{data.flags}, data{data.data} {}
         Data& operator=( const Data& d ) { if ( this != &d ) { flags=d.flags; data=d.data; } return *this; }
         Data& operator=( Data&& d ) { flags=d.flags; data=d.data; return *this; }
