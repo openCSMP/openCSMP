@@ -2943,6 +2943,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
   {
      assert( elmt1 < pelmt.size() );
      assert( elmt2 < pelmt.size() );
+     assert( elmt1 != elmt2 );
      assert( isLineElement( parseFiniteElementTypeEnum( pelmt[elmt1] ) ) );
      assert( isLineElement( parseFiniteElementTypeEnum( pelmt[elmt2] ) ) );
      
@@ -2953,8 +2954,17 @@ size_t VData::RenumberElementsCounterClockwise2D()
      const double v2y = py[ plist[elmt2][1U] ] - py[ plist[elmt2][0U] ];  
      
      // cos theta = dot-product over cross-product (length1 * length2)
-     double cos_theta = (v1x*v2x + v1y*v2y) / (sqrt(v1x*v1x+v1y*v1y) * sqrt(v2x*v2x+v2y*v2y));     
+     const double cos_theta = (v1x*v2x + v1y*v2y) / (sqrt(v1x*v1x+v1y*v1y) * sqrt(v2x*v2x+v2y*v2y));
+     assert( !isnan(cos_theta) );
+     
+     // special cases 45o and 135o where cos_theta = 1
+     if ( approximatelyEqual(cos_theta, 1.) ) return 45.;
+     if ( approximatelyEqual(cos_theta,-1.) ) return 135.;
 
+     // else 'acos' will return NaN
+     assert( cos_theta <  1. );
+     assert( cos_theta > -1. );
+     
      return radiansToDegrees( acos(cos_theta) );
      
   } // end AngleBetweenLineElements2D
@@ -2980,6 +2990,15 @@ size_t VData::RenumberElementsCounterClockwise2D()
      
      // cos theta = dot-product over cross-product (length1 * length2)
      double cos_theta = (v1x*v2x + v1y*v2y + v1z*v2z) / (sqrt(v1x*v1x+v1y*v1y+v1z*v1z) * sqrt(v2x*v2x+v2y*v2y+v2z*v2z));
+     assert( !isnan(cos_theta) );
+     
+     // special cases 45o and 135o where cos_theta = 1
+     if ( approximatelyEqual(cos_theta, 1.) ) return 45.;
+     if ( approximatelyEqual(cos_theta,-1.) ) return 135.;
+
+     // else 'acos' will return NaN
+     assert( cos_theta <  1. );
+     assert( cos_theta > -1. );
 
      return radiansToDegrees( acos(cos_theta) );
      
@@ -3311,6 +3330,7 @@ void  VData::EstablishElementConnectivity2D()
                           const double angle = AngleBetweenLineElements2D( cit[0], cit[1] );
                           // ignoring edge direction
                           const double acute_angle = ( angle > 90. ) ? 180. - angle : angle;
+                          assert (!isnan(acute_angle) );
                           inter_element_angles.push_back( make_pair( acute_angle, n_combi++ ) );
                        }
                      // sorting the angles to find the edges that are closest to a straight continuation

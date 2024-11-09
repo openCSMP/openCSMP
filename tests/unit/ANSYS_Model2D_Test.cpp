@@ -521,7 +521,7 @@ void  ANSYS_Model2D_Test::Test_CreateSplitBoundariesBetweenUniqueRegions()
          cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreateSplitBoundaries: running test..."<< endl;
          cout.flush();
       }
-    string model2d_name_ = "Fluid_Flower"; // TODO: use model that is already in the testing fixtures
+    string model2d_name_ = "Fluid_Flower";
     string varFileName = "CSMP-variables.txt";
     ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
     model.InputPropertyValue( "nodal variable", makeScalar(ANY,0.) );

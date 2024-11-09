@@ -15,7 +15,7 @@ namespace csmp {
 @{
 */
 
-const double PI( 3.14159265358979324 );
+constexpr double PI = 3.14159265358979323846;
 
 /**
 @}
