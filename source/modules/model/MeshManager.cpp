@@ -1557,27 +1557,22 @@ template void MeshManager<3>::DetachNeighborsFrom( InterFace<3>* const );
 
 
 /**
-     Deletion of a Node only affects its face neighbors
+     Deletes Node without disconnecting its neighbors from it and
+     without altering its parent element vector.
+     
+     @note any potential connections of neighbors to the node need be removed before potentially neighboring nodes start to get deleted,
+     else already deleted nodes might get accessed again causing undefined behaviour.
 */
 template<uint32_t dim>
 auto	MeshManager<dim>::Delete( typename vector<Node<dim>*>::iterator nptr_ref ) -> typename plf::colony< Node<dim> >::iterator
  {
-    // checking that the node is not connected to elements anymore
-    if ( (*nptr_ref)->Parents() > 0 ) {
-         (*nptr_ref)->Out();
-         throw csmp::Exception( ERROR, "MeshManager<dim>::Delete(Node-ptr-ref)",
-                               "Node  still belongs to Element(s). Therefore it cannot be deleted");
-      }
+    // TODO: check that the node is not connected to elements anymore
+    //     throw csmp::Exception( ERROR, "MeshManager<dim>::Delete(Node-ptr-ref)",
+    //                           "Node  still belongs to Element(s). Therefore it cannot be deleted");
  
     auto pfl_it = nodes_.get_iterator( (*nptr_ref) );
     if ( pfl_it != nodes_.end() ) {
-/* NOT A GOOD IDEA WHEN WITHIN A LOOP
-         // removing any potential connections that other nodes still have to the Node
-         for ( auto nit=(*nptr_ref)->NeighborsBegin(); nit!=(*nptr_ref)->NeighborsEnd(); ++nit )
-           (*nit)->RemoveNeighbor( (*nptr_ref) );
-*/
-         // nodes are not detached because they are shared with elements
-         (*nptr_ref) = nullptr;
+        (*nptr_ref) = nullptr;
          return nodes_.erase( pfl_it );
       }
     return nodes_.end();
@@ -1586,9 +1581,9 @@ auto	MeshManager<dim>::Delete( typename vector<Node<dim>*>::iterator nptr_ref ) 
 
 
 /**
-      Disconnects neighbors from element and remove element from the parent-element vector of the nodes
-      (as this gets done only once for each node concerned).
-      No other changes are made.
+      Remove selement from the parent-element vectors of its nodes
+      (this way this gets done only once for each node concerned).
+      No other connectivity changes are made because these would have side effects.
       
       @param eptr_ref reference to a pointer that is passed by reference so that it can be nulled
       @return iterator to next element in colony or end() if element could not be found.
@@ -2333,7 +2328,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
 
          // assign outside nodes to OuterParent element
          for ( const uint32_t& n : outside_elmt->FE()->NodesOfFace( first_copy->OuterElementFace() ) ) {
-           // TODO: find a meaningful number rather than this is arbitrary tolerance!
+           // TODO: test with a meaningful number that takes model size into account rather than this is arbitrary tolerance!
            assert( distance( outside_elmt->N(n)->Coordinate(), in_out_nodes[outside_elmt->N(n)]->Coordinate()) < 0.001 );
            outside_elmt->Assign(n, in_out_nodes[ outside_elmt->N(n) ] );
          }
@@ -3267,6 +3262,39 @@ size_t MeshManager<dim>::DeleteElementsAndRepairConnnectivity( typename vector<E
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      
+     long elmts_to_delete( distance(first,last) );
+ 
+     if ( elmts_to_delete == 0 ) return 0U;
+     
+     // 1. distinguishing 2 cases: 1) equidimensional elements, and 2) lower-dim elements that share their nodes equidim ones
+     // ---------------------------------------------------------------------------------------------------------------------
+     updateHaloCellConnectivity<dim,Element>(first,last);
+
+     // 2. deleting the elements, setting pointers in input range to zero
+     // -----------------------------------------------------------------
+     size_t deleted_elements{ 0U };
+     while ( first != last ) {
+          // updates node-parent element connectivity
+          Delete( first );
+          // checking whether deletion was successful
+          if ( (*first) == nullptr ) deleted_elements++;
+          first++;
+       }
+
+    return deleted_elements;
+    
+ } // end DeleteElementsAndRepairConnnectivity
+
+
+
+/* SUPERSEDED VERSION
+
+template<uint32_t dim>
+size_t MeshManager<dim>::DeleteElementsAndRepairConnnectivity( typename vector<Element<dim>*>::iterator first,
+                                                               typename vector<Element<dim>*>::iterator last )
+ {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+     
      throw csmp::Exception( ERROR, "MeshManager<dim>::DeleteElementsAndRepairConnnectivity", "Method deletes Elements and is not tested yet");
 
      long elmts_to_delete( distance(first,last) );
@@ -3394,6 +3422,10 @@ size_t MeshManager<dim>::DeleteElementsAndRepairConnnectivity( typename vector<E
     
  } // end DeleteElementsAndRepairConnnectivity
 
+END SUPERSEDED VERSION */
+
+
+
 
 
 
@@ -3452,16 +3484,15 @@ size_t MeshManager<dim>::DeleteFacesAndRepairConnnectivity( typename vector<Face
 
 /**
     Deletes range of InterFaces after detecting and disconnecting potential neighbor faces around the perimeter of the face patch.
-    Duplicated nodes are removed as well as the the mesh is reconnected.
+    This is accimplished by calling 'updateHaloCellConnectivity'.
+    Then cells and duplicated nodes are removed and the mesh is reconnected across the fomer SplitBoundary.
     
-    @Note IMPORTANT: any potential intervening should be deleted because they will no longer be connected to any of the elements in the rest of the mesh.
-    This method cannot do this because it has no access to the RegionInterFace which would be required for deleting the associated region.
+    @Note IMPORTANT: any potential intervening Element regions should be deleted because they will no longer be connected to any of the elements in the rest of the mesh.
+    This MeshManager method cannot do this because it has no access to the RegionInterFace which would be required for deleting the associated region as well.
     
-    @attention IMPORTANT - after this operation, any (unique or non-unique) outside regions must be updated because their node vector is changed!
+    @attention IMPORTANT - after this operation, any (unique or non-unique) outside regions must be updated because their node vector will have changed!
     
     @attention method does not reconnect the mesh where interfaces are removed.
-    
-    @attention method does not deal with elements sandwhiched between the tow sides of the interface, they need to be deleted first
 */
 template<uint32_t dim>
 size_t MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity( typename vector<InterFace<dim>*>::iterator first,
@@ -3477,124 +3508,116 @@ size_t MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity( typename vector
 
 #ifndef NDEBUG
      // checking for nullptr interfaces
-     vector<InterFace<dim>*> interface_ptrs( first, last );
-     sort( interface_ptrs.begin(), interface_ptrs.end() );
-     if ( binary_search( interface_ptrs.begin(), interface_ptrs.end(), static_cast<InterFace<dim>*>(nullptr) ) )
-       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity",
-                       "input range contains 'nullptr' InterFace objects; have these InterFaces already been deleted?");
+     auto n_nullptrs_in_input = count_if( first, last, [](InterFace<dim>* const ptr) { return ptr == nullptr; } );
+     if ( n_nullptrs_in_input > 0 )
+       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity", to_string(n_nullptrs_in_input),
+                       "'nullptr' InterFace objects counted in input range; have these InterFaces already been deleted?");
 #endif
 
      // 0. disconnecting the InterFace objects that surround the InterFace patch that will be deleted
+     // ---------------------------------------------------------------------------------------------
      updateHaloCellConnectivity<dim,InterFace>( first, last );
-
-     // remembering the beginning state of the iterator
-     typename vector<InterFace<dim>*>::iterator first1 = first;
      
-#ifndef NDEBUG
-   vector<size_t> deleted_nodes, deleted_ifaces;
-#endif
 
-     set<Node<dim>*>  nodes_to_delete;
-     
-     while ( first != last )
-       {
-          assert( (*first) != nullptr );
-          
-          // 1. checking for elements sandwiched between interface sides
-          if ( (*first)->HasInterveningElement() ) {
-#ifndef NDEBUG
-                cout <<"\n\t"<<"detaching intervening Element: "<< (*first)->InterveningElement()->Idx() <<": ";
-                cout << parseFiniteElementType( (*first)->InterveningElement()->FE_Type() );
-                csmp_error.Note( WARNING, "MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity",
-                                "Element will be deleted including nodes");
-#endif
-                for ( auto nit=(*first)->InterveningElement()->NodesBegin(); nit!=(*first)->InterveningElement()->NodesEnd(); ++nit )
-                  nodes_to_delete.insert( (*nit) );
-
-                // detaching the intervening element
-                // =================================
-                (*first)->UnAssignInterveningElement();
-            }
-          
-          // 2. reconnecting higher-dimensional neighbor elements with one-another
-          (*first)->InnerParent()->Assign( (*first)->InnerParentFaceID(), (*first)->OuterParent() );
-          (*first)->OuterParent()->Assign( (*first)->OuterParentFaceID(), (*first)->InnerParent() );
-
-          // 3. collecting a unique set of outer element nodes that will have to be deleted if they are manifold nodes
-          const uint32_t n_nodes{ (*first)->FE()->Nodes() };
-          for ( uint32_t i{0u}; i<n_nodes; ++i )
-            // if the node is a manifold with at least 2 nodes within it
-            if ( (*first)->N(i,OUTSIDE)->IsManifold() && (*first)->N(i,OUTSIDE)->Manifold()->Branches() > 1 ) {
-                 nodes_to_delete.insert((*first)->N(i,OUTSIDE));
-                 // 4. removing the outer nodes from potential manifolds to prepare them for deletion
-                 if ( (*first)->N(i,OUTSIDE)->Manifold()->Branches() > 1 ) {
-                      (*first)->N(i,OUTSIDE)->Manifold()->Remove( (*first)->N(i,OUTSIDE) );
-                   }
-                 // if the node no longer is a manifold, it is removed from the node-manifold manager
-                 else node_manifold_manager_->Delete( (*first)->N(i,OUTSIDE)->Manifold() );
-              }
-
-          // 4. replacing the face nodes of the outside element with those from the inside
-          uint32_t node_counter{0u};
-          for ( auto& fnid : (*first)->OuterParent()->FE()->NodesOfFace( (*first)->OuterParentFaceID() ) ) {
-               if ( (*first)->OuterParent()->N(fnid) != (*first)->N(node_counter,OUTSIDE) ) {
-#ifndef NDEBUG
-                    cout <<"\n\t"<<"interface node: "<< (*first)->N(node_counter,OUTSIDE)->Idx() <<" and ";
-                    cout <<"outer parent face node: "<< (*first)->OuterParent()->N(fnid)->Idx() <<" do not match.";
-                    csmp_error.Note( WARNING, "MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity",
-                                    "detected node-numbering inconsistency between InterFace and outside Element face; nodes could not be fused");
-#endif
-                    continue;
-                 }
-               // inverting the node sequence to get the correct matching node
-               (*first)->OuterParent()->Assign( fnid, (*first)->N( (*first)->FE()->Nodes() - 1 - node_counter, INSIDE) );
-// testing
-// cout <<"\n"<<"outside node: "<< node_counter;
-// cout <<": "<< (*first)->N(node_counter,OUTSIDE)->Coordinate() <<" vs inside node: ";
-//cout << (*first)->N(node_counter,INSIDE)->Coordinate();
-
-               node_counter++;
-            }
-
-          first++;
-       }
+     // 1. processing potential lower-dimensional elements sandwiched between interface sides
+     //    reconnecting higher-dimensional neighbor elements with one-another and dealing with duplicated nodes
+     // -------------------------------------------------------------------------------------------------------
+     vector<Node<dim>*> nodes_to_delete;
+     nodes_to_delete.reserve( interfaces_to_delete );
+     for_each( first, last, [&nodes_to_delete, &csmp_error, this]( InterFace<dim>* const ptr) {
+                                // 1.1 detaching intervening elements
+                                // ----------------------------------
+                                if ( ptr->HasInterveningElement() )
+                                  ptr->UnAssignInterveningElement();
+                                // 1.2 reconnecting higher-dimensional neighbors
+                                // ---------------------------------------------
+                                ptr->InnerParent()->Assign( ptr->InnerParentFaceID(), ptr->OuterParent() );
+                                ptr->OuterParent()->Assign( ptr->OuterParentFaceID(), ptr->InnerParent() );
+                                // 1.3 collecting a unique set of outer element nodes that will be deleted if they are manifold nodes
+                                // --------------------------------------------------------------------------------------------------
+                                const uint32_t n_nodes{ ptr->FE()->Nodes() };
+                                for ( uint32_t i{0u}; i<n_nodes; ++i )
+                                  // if the node is a manifold with at least 2 nodes within it
+                                  if ( ptr->N(i,OUTSIDE)->IsManifold() && ptr->N(i,OUTSIDE)->Manifold()->Branches() > 1 ) {
+                                       nodes_to_delete.push_back(ptr->N(i,OUTSIDE));
+                                       // 1.4 removing outside node from manifold to prepare it for deletion
+                                       // ------------------------------------------------------------------
+                                       if ( ptr->N(i,OUTSIDE)->Manifold()->Branches() > 1 ) {
+                                            ptr->N(i,OUTSIDE)->Manifold()->Remove( ptr->N(i,OUTSIDE) );
+                                         }
+                                       // the node no longer is a manifold and therefore is removed from node-manifold manager
+                                       else node_manifold_manager_->Delete( ptr->N(i,OUTSIDE)->Manifold() );
+                                       // 1.5 Disconnecting the node from its neighbors
+                                       // ---------------------------------------------
+                                       for ( auto nit=ptr->N(i,OUTSIDE)->NeighborsBegin(); nit!=ptr->N(i,OUTSIDE)->NeighborsEnd(); ++nit )
+                                         if ( (*nit) )
+                                            (*nit)->RemoveNeighbor( ptr->N(i,OUTSIDE) );
+                                    }
+                                // 1.6 replacing the face nodes of the outside element with those from the inside
+                                // ------------------------------------------------------------------------------
+                                uint32_t node_counter{0u};
+                                for ( auto& fnid : ptr->OuterParent()->FE()->NodesOfFace( ptr->OuterParentFaceID() ) ) {
+                                     if ( ptr->OuterParent()->N(fnid) != ptr->N(node_counter,OUTSIDE) ) {
+                      #ifndef NDEBUG
+                                          cout <<"\n\t"<<"interface node: "<< ptr->N(node_counter,OUTSIDE)->Idx() <<" and ";
+                                          cout <<"outer parent face node: "<< ptr->OuterParent()->N(fnid)->Idx() <<" do not match.";
+                                          csmp_error.Note( WARNING, "MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity",
+                                                          "detected node-numbering inconsistency between InterFace and outside Element face; nodes could not be fused");
+                      #endif
+                                          continue;
+                                       }
+                                     // inverting the node sequence to get the correct matching node
+                                     ptr->OuterParent()->Assign( fnid, ptr->N( ptr->FE()->Nodes() - 1 - node_counter, INSIDE) );
+                                     // 1.7 adding the newly connected outside element to the node parents
+                                     // ------------------------------------------------------------------
+                                     ptr->OuterParent()->N(fnid)->Assign( fnid, ptr->OuterParent() );
+                                     // testing
+                                     // cout <<"\n"<<"outside node: "<< node_counter;
+                                     // cout <<": "<< ptr->N(node_counter,OUTSIDE)->Coordinate() <<" vs inside node: ";
+                                     //cout << ptr->N(node_counter,INSIDE)->Coordinate();
+                                     node_counter++;
+                                  }
+                                  
+                              } );
        
-     // 5. deleting the disconnected outside nodes that are no longer needed after the InterFace nodes were fused
-     for ( auto& nit : nodes_to_delete ) {
-         // to avert duplicate attempts of deletion
-         if ( nodes_.get_iterator(nit) != nodes_.end() ) {
+     // 2. deleting disconnected outside nodes that are no longer needed after the InterFace nodes were fused
+     // -----------------------------------------------------------------------------------------------------
+     // (eliminating potential duplicate nodes from 'nodes_to_delete' vector)
+     sort( nodes_to_delete.begin(), nodes_to_delete.end() );
+     nodes_to_delete.erase( unique( nodes_to_delete.begin(), nodes_to_delete.end() ), nodes_to_delete.end() );
 #ifndef NDEBUG
-              deleted_nodes.push_back( nit->Idx() );
+     vector<size_t> deleted_nodes;
+     deleted_nodes.reserve( nodes_to_delete.size() );
 #endif
-             nodes_.erase( nodes_.get_iterator(nit) );
-             // ======================================
-          }
+     for ( auto nit=nodes_to_delete.begin(); nit!=nodes_to_delete.end(); ++nit ) {
+           // tracking the IDs of the deleted nodes
+           size_t node_idx = (*nit)->Idx();
+           this->Delete( nit );
+#ifndef NDEBUG
+           if ( (*nit) == nullptr ) deleted_nodes.push_back( node_idx );
+#endif
        }
 
-     // 6. deleting the interfaces and nulling the pointers to them
-     first = first1; // getting back to the first element
+     // 3. deleting the interfaces and nulling the pointers to them
+     // -----------------------------------------------------------
      size_t deleted_interfaces{ static_cast<size_t>(interfaces_to_delete) };
      while( first != last ) {
-          if ( (*first) == nullptr ) deleted_interfaces--;
-#ifndef NDEBUG
-          deleted_ifaces.push_back( (*first)->Idx() );
-#endif
           Delete( first );
+//        ^^^^^^^^^^^^^^^
+          if ( (*first) != nullptr ) deleted_interfaces--;
           first++;
        }
 
 #ifndef NDEBUG
      if ( !deleted_nodes.empty() ) {
-          cout <<"\nMeshManager::DeleteInterfacesAndRepairConnnectivity: deleted the nodes:\n\t";
+          cout <<"\nMeshManager::DeleteInterfacesAndRepairConnnectivity: deleted nodes:\n\t";
           sort( deleted_nodes.begin(), deleted_nodes.end() );
           for ( const auto& nit : deleted_nodes ) cout << nit <<" ";
           cout << endl;
        }
-     if ( !deleted_ifaces.empty() ) {
-          cout <<"\nMeshManager::DeleteInterfacesAndRepairConnnectivity: deleted the interfaces:\n\t";
-          sort( deleted_ifaces.begin(), deleted_ifaces.end() );
-          for ( const auto& it : deleted_ifaces ) cout << it <<" ";
-          cout << endl;
+     if ( deleted_interfaces < interfaces_to_delete ) {
+          cout <<"\nMeshManager::DeleteInterfacesAndRepairConnnectivity: deleted less interfaces than intended:\n\t";
+          cout << deleted_interfaces <<" vs "<< interfaces_to_delete << endl;
        }
 #endif
 
@@ -3614,6 +3637,29 @@ size_t MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity( typename vector
                     cout <<"\ninside matching node:      "<< (*first)->MatchingN( node_counter, INSIDE );
                     cout << endl;
                  }
+*/
+/* REPLACED CODE
+          // 1. detaching potential lower-dimensional elements sandwiched between interface sides
+          // ------------------------------------------------------------------------------------
+          // (these elements and their nodes are recorded for deletion further below)
+          if ( (*first)->HasInterveningElement() ) {
+#ifndef NDEBUG
+                if ( first_call ) {
+                     cout <<"\n\t"<<"detaching intervening Element: "<< (*first)->InterveningElement()->Idx() <<": ";
+                     cout << parseFiniteElementType( (*first)->InterveningElement()->FE_Type() );
+                     csmp_error.Note( WARNING, "MeshManager<dim>::DeleteInterfacesAndRepairConnnectivity",
+                                     "detaching intervening lower-dimensional Element");
+                     first_call = false;
+                  }
+#endif
+                for ( auto nit=(*first)->InterveningElement()->NodesBegin(); nit!=(*first)->InterveningElement()->NodesEnd(); ++nit )
+                  nodes_to_delete.push_back( (*nit) );
+
+                // detaching the intervening element
+                // =================================
+                (*first)->UnAssignInterveningElement();
+            }
+
 */
 
 
@@ -8541,7 +8587,10 @@ template void updateHaloElementConnectivity<1>( vector<Element<1>*>::iterator, v
 
 
 
-
+/**
+        For Face and InterFace objects. Therefore does not deal with intervening elements, but only disconnects objects to be deleted
+        from equal ones forming their halo, i.e., sharing faces with them on the Boundary or SplitBoundary perimeter.
+*/
 template<uint32_t dim, template<uint32_t> class CELL>
 void updateHaloCellConnectivity( typename vector<CELL<dim>*>::iterator first,
                                  typename vector<CELL<dim>*>::iterator last )

@@ -501,12 +501,17 @@ void  ANSYS_Model2D_Test::Test_CreateSplitBoundaries()
     model.RegionsOut();
 
     // 3. Directly creating a split boundary between regions (should not work leading to detection that there already is a split boundary)
-    model.CreateSplitBoundaryBetween( "LOWER_REGION", "MIDDLE_REGION" ); // INTERFACE 2
+    auto result = model.CreateSplitBoundaryBetween( "LOWER_REGION", "MIDDLE_REGION" ); // INTERFACE 2
+    _test( result.second == false );
 
     // 4. Creating a split boundary between regions (detecting the disjointed nodes?)
     ANSYS_Model2D model2( model2d_name_.c_str(), varFileName.c_str() );
     // now the nodes are shared so this should work
     model2.CreateSplitBoundaryBetween( "MIDDLE_REGION", "UPPER_REGION" ); // INTERFACE 1
+    
+    // TESTING: calling these functions to verify that SplitBoundary generation did not break connectivity
+    model.SplitBoundariesOut();
+    model.RegionsOut();
 
 } // end Test_CreateSplitBoundaries
 

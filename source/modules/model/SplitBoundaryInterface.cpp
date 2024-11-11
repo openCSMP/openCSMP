@@ -126,19 +126,20 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( co
 
      // erasing the faces
      if ( erase_interfaces ) {
-         // finding the region(s) on the outside of the domain which will need to be updated after split boundary removal
+         // finding the region(s) on the outside of the split boundary which will need to be updated after split boundary removal
          set<int32_t> domain_indices_of_outside_regions;
          for ( const auto& it : split_boundary.CellVector() )
            domain_indices_of_outside_regions.insert( it->OuterParent()->Region_ID() );
          // getting MeshManager to delete interfaces and nodes and fix up the connectivity
          splitBoundaryComplex.Mesh().DeleteInterfacesAndRepairConnnectivity( split_boundary.CellVector().begin(),
                                                                              split_boundary.CellVector().end() );
-         // updating outside region(s)
+         // updating outside region(s) and 'Model'
          assert( !domain_indices_of_outside_regions.empty() );
          for ( auto& it : domain_indices_of_outside_regions ) {
               Region<dim>& region = splitBoundaryComplex.RegionByDomainIndex( it );
               region.RebuildSubDomainAfterChangeOfNodeVector();
            }
+         splitBoundaryComplex.Region("Model").RebuildSubDomainAfterChangeOfNodeVector();
        }
 
      // deleting the split boundary
@@ -1187,8 +1188,8 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     assert(iface_vector.size() == iface_construction_vector.size());
     assert( (*iface_vector.begin())->InnerParent() == iface_construction_vector.begin()->InnerElement()) ;
     assert( (*iface_vector.back()).InnerParent() == iface_construction_vector.back().InnerElement()) ;
-   
-    model.Mesh().template RemoveDegenerateNeighbors<Element>();
+    assert( model.Mesh().template RemoveDegenerateNeighbors<Element>() == 0 );
+    
     // while the new interfaces were already connected with one another by ReplaceElementsByInterFaces this deals with their neighborhood
     model.Mesh().UpdateConnectivity( iface_vector.begin(), iface_vector.end() );
 
@@ -1237,14 +1238,26 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
 #ifdef DEBUG
     cout <<"\n\n"<<"SplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryFrom:";
     cout << "\n\t\t"<<"Added "<< model.Mesh().InterFaces() - n_original_faces <<" interfaces to mesh.";
-    cout << "\n\t\t"<<"Removed "<< n_original_elmts - model.Mesh().Elements()  <<" elements from the mesh."<< endl;
 #endif
 
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 5. remove lower-dimensional input region (their elements were already removed above).
+    // 5. Removing lower-dimensional input region (their elements were already removed above).
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    const bool remove_elmts{ false };
+    const bool remove_elmts{ !retain_elmts_as_intervening_elements };
+    // disconnecting the intervening element pointers in the new SplitBoundary from them elements that will be deleted
+    if ( remove_elmts ) {
+         for ( size_t i{0U}; i<patch_names.size(); ++i ) {
+              auto& split_boundary = SplitBoundary( patch_names[i].c_str() );
+              for ( auto& it : split_boundary.CellVector() )
+                 it->UnAssignInterveningElement();
+           }
+      }
+    // removing the elements and the region that contained them
     model.RemoveRegion( dim_1_region, remove_elmts );
+
+#ifdef DEBUG
+    if ( remove_elmts ) cout << "\n\t\t"<<"Removed "<< n_original_elmts - model.Mesh().Elements()  <<" elements from the mesh."<< endl;
+#endif
 
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 6. Flagging the regions on the outside of the new split boundaries for update of their connectivity
@@ -1253,6 +1266,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
       model.Region( region_names[ i ] ).ScheduleForRebuild();
 
     //update outside regions
+    model.Region("Model").ScheduleForRebuild();
     model.UpdateRegions();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -1329,7 +1343,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
     if ( matched_elmts.empty() ) {
          string message( string(" input regions '") + region1_name + "' and '" + region2_name +"'");
          csmp_error.Note( WARNING, "SplitBoundaryInterface::CreateSplitBoundaryBetween:",
-                          message, "may share a node but do not share any faces");
+                          message, "may share a node but do not share any faces; is there already a SplitBoundary between them?");
          return make_pair("split boundary not created",false);
       }
         
