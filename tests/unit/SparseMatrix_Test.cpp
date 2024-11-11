@@ -38,8 +38,6 @@ SparseMatrix_Test::SparseMatrix_Test()
 // checked: SKM 8/5/2022
 void SparseMatrix_Test::run()
  {
-    Test_PDE_IntegratorUseCases();
-    
     if ( verbose_ ) {
         cout << "\n====================";
         cout << "\nTesting SparseMatrix" << endl;
@@ -534,7 +532,13 @@ void SparseMatrix_Test::run()
          _test( essentiallyEqual( D.InfinityNorm(), 13.) );
          if ( verbose_ )
            cout << "SparseMatrix D infinity norm = " << D.InfinityNorm() << endl;
-  }
+
+    Test_PDE_IntegratorUseCases();
+    
+
+  } // end run
+  
+  
 
 
 /**

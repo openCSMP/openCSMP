@@ -20,7 +20,7 @@ void UG4_ProMeshOutput_Example::Specifications()
 {
   SetTitle( "Output of CSMP Model to ProMesh Pre-Processor for UG4" );
   SetDifficulty( 1 );
-  SetCategory( "Software Functionality" );
+  SetCategory( "Software Interfaces" );
   AddAuthor( "SKM" );
   AddDescription( "Demonstrates the use of interfaces/UG4_UGX_FileExport" );
   AddDescription( "source in: UG4_ProMeshOutput_Example.cpp" );
@@ -78,6 +78,7 @@ void UG4_ProMeshOutput_Example::Run()
     assigned_properties.emplace_back( "permeability" );
     //assigned_properties.emplace_back( "vertical permeability" );
     assigned_properties.emplace_back( "brooks corey parameter" );
+    assigned_properties.emplace_back( "residual saturation aqueous phase" );
     assigned_properties.emplace_back( "residual saturation carbonic phase" );
     assigned_properties.emplace_back( "entry pressure" );
     //assigned_properties.emplace_back( "fluid pressure" );

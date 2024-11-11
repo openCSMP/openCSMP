@@ -24,7 +24,11 @@ class SparseMatrix {
   public:
     SparseMatrix();
     explicit SparseMatrix( size_t m_x_n );
-    // rule of zero: watch out since entries_ might be non-zero in moved objects
+    SparseMatrix( const SparseMatrix& );
+    SparseMatrix( SparseMatrix&& );
+    SparseMatrix& operator=( const SparseMatrix& );
+    SparseMatrix& operator=( SparseMatrix&& );
+    ~SparseMatrix() = default;
 
     typedef std::vector<std::map<size_t,double> >::const_iterator    rowsConstIterator;
     typedef std::map<size_t,double>::const_iterator                  colsConstIterator;
