@@ -50,7 +50,7 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForDiscontiguousModel()
       
       // BINARY IO
       // ---------
-      const string model_name("ModelDykeAllLayersSplit");
+      const string model_name("DykeAllLayersSplit");
       if ( verbose_ ) {
            cout <<"\nNSYS_SplitBoundaryMatch_Test::run: "<<this->getName()<<endl<<endl;
            cout <<"Building Model: '"<< model_name <<"''"<< endl;

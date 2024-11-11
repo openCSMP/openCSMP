@@ -3007,7 +3007,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
       continue;
     }
     // for all another element types: looping element's nodes
-    for( uint32_t iit = 0u; iit < (*it)->Nodes(); ++iit, ++entriesOfLine )
+    for( uint32_t iit = 0u; iit < (*it)->FE()->Nodes(); ++iit, ++entriesOfLine )
     {
       // writing node id to vtu document
       stringNumber = to_string( (*it)->N(iit)->Idx() );
