@@ -149,6 +149,7 @@ void SparseMatrix::RemoveHalo( int nrhalo )
      ZeroRow(row);
  }
 
+
 /// remove a single element from the matrix
 void SparseMatrix::RemoveEntry( size_t i, size_t j )
  {
@@ -158,6 +159,7 @@ void SparseMatrix::RemoveEntry( size_t i, size_t j )
          entries_--;
       }
  }
+ 
 
 void SparseMatrix::Erase()
  {
@@ -192,8 +194,12 @@ void SparseMatrix::ZeroColumn( size_t col )
  }
 
 
+/**
+     Assigns value to the i,j'th element in the matrix, overwriting any value that might have resided there before.
+*/
 void SparseMatrix::Assign( size_t i, size_t j, double val )
  {
+    // ignoring zero values
     if ( !(val != 0.) ) return;
     
     if ( i >= data_.size() ) {
@@ -333,7 +339,12 @@ void SparseMatrix::MultiplyWith( const vector<double>& vec, vector<double>& res 
 
 
 
-/// j's of cols with data
+/**
+   Returns the  indices j of non-zero column elements  in the row of interest.
+   
+   @param row of interest
+   @param indices is the vector into which the columns where the non-zero elements reside are returned
+*/
 void SparseMatrix::ColumnIndices( size_t row, vector<size_t>& indices ) const
  {
     if ( row >= data_.size() ) {
@@ -342,10 +353,12 @@ void SparseMatrix::ColumnIndices( size_t row, vector<size_t>& indices ) const
          throw range_error("SparseMatrix::ColumnIndices");
       }
       
+    // resize output vector to match number on non-zero elements in the row
     indices.resize( data_[row].size() );
 
     size_t i{0U};
     for ( const auto& ditc : data_[row] )
+      // ditc.first records the column number
       indices[i++] = ditc.first;
  }
 
@@ -390,23 +403,29 @@ bool SparseMatrix::Symmetric() const
     for ( size_t i{0U}; i<data_.size(); i++ )
       {
           if ( data_[i].empty() ) {
-               cerr <<"\nSparseMatrix::Symmetric: Matrix contains zero rows."<< endl;
+#ifndef NDEBUG
+               cout <<"\nSparseMatrix::Symmetric: Warning: Matrix contains zero rows."<< endl;
+#endif
                return false;
             }
-          for ( const auto& ditc : data_[i] )
-            // only for non-diagonal elements
-            if ( i != ditc.first ) {
-                  // checking whether there is a matrix element with exchanged indices
-                  if ( data_[ ditc.first ].find(i) != data_[ ditc.first ].end() ) {
-                       // if such an element exists a comparison of element values is made
-                       if ( (*this)( ditc.first, i ) != ditc.second ) return false;
-                    }
-                  else return false;
+          for ( const auto& j : data_[i] )
+            // if the existing element is off-diagonal
+            if ( j.first != i ) {
+                  // checking whether there is a ji'th matrix element that matches the current ij'th one
+                  // -----------------------------------------------------------------------------------
+                  auto ji_it = data_[ j.first ].find(i);
+                  // if this ji'th element does not exist, matrix is not symmetric
+                  if (  ji_it == data_[ j.first ].end() ) return false;
+                  // if it exists but has a different value than ij'th element, matrix is not symmetric
+                  if ( !approximatelyEqual( (*ji_it).second, j.second ) ) return false;
               }
       }
     return true;
     
  } // end Symmetric
+
+// for DEBUGGING: cout <<"\n"<<"checking ("<< i <<","<< j.first <<") ";
+
 
 
 
@@ -419,9 +438,11 @@ bool SparseMatrix::ZeroesInDiagonal() const
          if ( it.empty() ||
               it.find(i) == it.end() ||
               essentiallyEqual( (*it.find(i)).second, 0. ) ) {
-                //cout <<"\nSparseMatrix::ZeroesInDiagonal: Zero entry at ("<< i <<","<< i <<").";
-                return true;
-            }
+#ifndef NDEBUG
+              cout <<"\nSparseMatrix::ZeroesInDiagonal: Warning: detected zero entry at ("<< i <<","<< i <<").";
+#endif
+              return true;
+           }
          i++;
       }
     return false;
@@ -434,9 +455,11 @@ bool SparseMatrix::DiagonallyPositive() const
     for ( size_t i{0U}; i<data_.size(); i++ ) {
          auto diagonal_elmt = data_[i].find(i);
          if ( diagonal_elmt == data_[i].end() ) {
-               cerr <<"\nSparseMatrix::DiagonallyPositive: Warning: ";
-               cerr <<" This test can't be performed since there are zeroes in matrix diagonal."<< endl;
-               return true;
+#ifndef NDEBUG
+               cout <<"\nSparseMatrix::DiagonallyPositive: Warning: ";
+               cout <<" This test can't be performed since there are zeroes in matrix diagonal."<< endl;
+#endif
+               return false;
             }
          if ( (*diagonal_elmt).second < 0. ) return false;
       }
@@ -460,8 +483,8 @@ void SparseMatrix::SparsityPattern( const char* txtfile ) const
      for ( size_t i{0U}; i<Rows(); i++ )
        {
           for ( size_t j{0U}; j<Cols(); j++ )
-            if ( At(i,j) != 0. ) ofs << 1 <<" ";
-            else                 ofs << 0 <<" ";
+            if ( (*this)(i,j) != 0. ) ofs << 1 <<" ";
+            else                      ofs << 0 <<" ";
           ofs << endl;
        }
      ofs << endl;

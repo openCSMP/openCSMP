@@ -57,6 +57,7 @@ class SparseMatrix {
 
     /// zeroing out rows in the context of parallel computations
     void      RemoveHalo( int32_t nrhalo );
+    bool      HasEntry( size_t i, size_t j ) const { return data_[i].find(j) == data_[i].end(); }
     void      RemoveEntry( size_t, size_t );
     void      Erase();
     void      Zero();
@@ -106,6 +107,7 @@ class SparseMatrix {
 	void        OutForMatlab(const char * file) const;
     
   private:
+    // NB: can't be an unordered map because the order of the non-zero elements in each row is important
     std::vector<std::map<size_t,double> >  data_;         ///< row vector with maps that store the non-zero elements of the matrix
     size_t                                 entries_ = 0U; ///< total number of elements in the matrix
 

@@ -53,7 +53,7 @@ namespace csmp
         std::vector<size_t> sizetVector;
 
         double fTolerance          = 1.0e-6;
-        static const bool verbose_ = false;
+        static const bool verbose_ = true;
     };
 }
 

@@ -1163,9 +1163,8 @@ double InterFace<dim>::Area( INTERFACE_SIDE side ) const
 template<uint32_t dim>
 csmp::Point<dim>  InterFace<dim>::UnitNormal() const
 {
-   if ( middleElement_ != nullptr )
-     return middleElement_->UnitNormal();
-
+   if ( middleElement_ ) return middleElement_->UnitNormal();
+   // fall-back option
    BisectorCoordinateMatrix();
    return Point<dim>( this->FE()->UnitNormal() );
 }

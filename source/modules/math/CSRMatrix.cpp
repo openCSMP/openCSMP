@@ -72,8 +72,7 @@ void CSRMatrix::Initialize( const SparseMatrix& A )
       for ( size_t i=0U; i < A.Rows(); i++ )
       {
           // looping over the non-zero elements row i
-          for ( map<size_t,double>::const_iterator
-                rit=A.RowBegin(i); rit!=A.RowEnd(i); rit++ ) {
+          for ( auto rit=A.RowBegin(i); rit!=A.RowEnd(i); rit++ ) {
               n++;
           }
           // setting matrix such that diagonal element is at the beginning of next row
@@ -98,8 +97,7 @@ void CSRMatrix::Initialize( const SparseMatrix& A )
        {
           int32_t  diag(UNSPECIFIED);
           // looping over the non-zero elements row i
-          for ( map<size_t,double>::const_iterator
-                rit=A.RowBegin(i); rit!=A.RowEnd(i); rit++ ) {
+          for ( auto rit=A.RowBegin(i); rit!=A.RowEnd(i); rit++ ) {
                // copying A's entry row(i) into the compressed row storage vector 'a'
                a[n]  = (*rit).second;
                // recording the corresponding column index in 'ja'
@@ -158,8 +156,7 @@ void CSRMatrix::InitializePointBased( const SparseMatrix& A, size_t nsys )
     a.resize( ja.size() );
     size_t nnu_ = A.Rows();
 
-    map<size_t,double>::const_iterator rit;
-    long      i, j, k, row;
+    long      i, j, k;
     int32_t     diag, istart, jatemp;
     double  atemp;
     bool      zero_diag_element(false);
@@ -171,8 +168,9 @@ void CSRMatrix::InitializePointBased( const SparseMatrix& A, size_t nsys )
 
     for ( i=j=0U, ia[0]=0; i < nnu_; i++ )
     {
-        row = i%nsys*(nnu_/nsys)+i/nsys; // amending the order rows will be written in a[]
-        for ( diag=-1, rit=A.RowBegin(row); rit!=A.RowEnd(row); rit++ ) {
+        long row = i%nsys*(nnu_/nsys)+i/nsys; // amending the order rows will be written in a[]
+        auto rit = A.RowBegin(row);
+        for ( diag=-1; rit!=A.RowEnd(row); rit++ ) {
             a[j]  = (*rit).second;
             ja[j] = temp[(*rit).first];
             // rit.first points to matrix entries indexed from 0..rows-1

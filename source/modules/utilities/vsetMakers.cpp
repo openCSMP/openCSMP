@@ -1002,14 +1002,14 @@ void create_1Hexahedron_VSet( VSet<3U>& vset, bool bSkewed )
     deque<vector<size_t> > deqElements(1);
     deqElements[0].resize(8);
   	 
-    deqElements[0][0]= 1;
-    deqElements[0][1]= 2;
-    deqElements[0][2]= 3;
-    deqElements[0][3]= 4;
-    deqElements[0][4]= 5;
-    deqElements[0][5]= 6;
-    deqElements[0][6]= 7;
-    deqElements[0][7]= 8;
+    deqElements[0][0]= 0;
+    deqElements[0][1]= 1;
+    deqElements[0][2]= 2;
+    deqElements[0][3]= 3;
+    deqElements[0][4]= 4;
+    deqElements[0][5]= 5;
+    deqElements[0][6]= 6;
+    deqElements[0][7]= 7;
   	vset.AddPlist( deqElements.begin(),deqElements.end());
 
      //---------------------------------NEIGHBORS

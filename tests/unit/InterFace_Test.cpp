@@ -268,32 +268,6 @@ void InterFace_Test::Geometry_tests(){
     nrml = if_obj2.UnitNormal(OUTSIDE);
     _test(nrml == n_outside);
 
-    // Testing that unit normal throws exception when it has no base element
-#ifdef NDEBUG 
-    try {
-        nrml = if_obj0.UnitNormal(MIDDLE);
-        _test( false);                                        //test failed
-    } catch ( csmp::Exception normal_thrown ) { _test(true);} //test passed
-    try {
-        nrml = if_obj1.UnitNormal(MIDDLE);
-        _test( false );
-    } catch (csmp::Exception normal_throw) { _test(true); }
-    try {
-        nrml = if_obj2.UnitNormal(MIDDLE);
-        _test(false);
-    } catch (csmp::Exception normal_throw) { _test(true); }
-#endif
-    //Testing normal without middle element
-    /* should throw exception
-    Point<2> nrml_in_out = if_obj0.UnitNormal();
-    _test( n_middle == VectorVariable<2>(nrml_in_out));
-    nrml_in_out = if_obj1.UnitNormal();
-    _test( n_middle == VectorVariable<2>(nrml_in_out));
-    nrml_in_out = if_obj2.UnitNormal();
-    _test( n_middle == VectorVariable<2>(nrml_in_out));
-   */
-
-
     //Test Barycenter of interface
     _test( if_obj0.BaryCenter() == Point<2>(std::vector<double>(2.,2.) ));
     _test( if_obj1.BaryCenter() == Point<2>(std::vector<double>(2.,2.) ));

@@ -414,16 +414,16 @@ void SparseMatrix_Test::run()
 
          cout << "SparseMatrix B is symmetric = " << BB.Symmetric();
         }
-         _test( BB.Symmetric() == false );
+      _test( BB.Symmetric() == false );
 
-         BB.RemoveEntry( 3, 4 );
+      BB.RemoveEntry( 3, 4 );
       if ( verbose_ ) {
          cout << "\nSparseMatrix B entries after RemoveEntry( 3, 4 )";
          BB.Out();
 
          cout << "SparseMatrix B is symmetric = " << BB.Symmetric();
         }
-         _test( BB.Symmetric() == true );
+     _test( BB.Symmetric() == true );
 
 
      //Testing ZeroesInDiagonal function
@@ -435,24 +435,24 @@ void SparseMatrix_Test::run()
          BB.Out();
          cout << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal() << endl;
        }
-         _test( BB.ZeroesInDiagonal() == false );
+    _test( BB.ZeroesInDiagonal() == false );
 
-         BB.RemoveEntry( 0, 0 );
-         //BB.Assign( 0, 0, 0. );
+     BB.RemoveEntry( 0, 0 );
+     //BB.Assign( 0, 0, 0. );
      if ( verbose_ ) {
          cout << "\nSparseMatrix B entries after Assign( 0, 0, 0. )";
          BB.Out();
          cout << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal() << endl;
        }
-         _test( BB.ZeroesInDiagonal() == true );
+     _test( BB.ZeroesInDiagonal() == true );
 
-         BB.RemoveEntry( 0, 0 );
+     BB.RemoveEntry( 0, 0 );
      if ( verbose_ ) {
          cout << "\nSparseMatrix B entries after RemoveEntry( 0, 0 )";
          BB.Out();
          cout << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal();
        }
-         _test( BB.ZeroesInDiagonal() == true );
+     _test( BB.ZeroesInDiagonal() == true );
 
 
      //Testing DiagonallyPositive function
@@ -464,7 +464,7 @@ void SparseMatrix_Test::run()
          BB.Out();
          cout << "Is SparseMatrix B diagonally positive? " << BB.DiagonallyPositive() << endl;
       }
-         _test( BB.DiagonallyPositive() == true );
+    _test( BB.DiagonallyPositive() == false );
 
          BB.Assign( 0, 0, -5. );
          BB.Assign( 2, 2, -10. );
@@ -473,7 +473,7 @@ void SparseMatrix_Test::run()
          BB.Out();
          cout << "Is SparseMatrix B diagonally positive? " << BB.DiagonallyPositive() << endl;
        }
-         _test( BB.DiagonallyPositive() == false );
+     _test( BB.DiagonallyPositive() == false );
 
 
      //Testing RecountEntries function
@@ -485,11 +485,11 @@ void SparseMatrix_Test::run()
          BB.Out();
          cout << "Recounted Entries of SparseMatrix B = " << BB.RecountEntries() << endl;
        }
-         _test( BB.RecountEntries() == BB.Entries() );
+      _test( BB.RecountEntries() == BB.Entries() );
 
-         BB.Assign( 0, 1, 11. );
-         if ( verbose_ ) cout << "Recounted Entries of SparseMatrix B = " << BB.RecountEntries() << endl;
-         _test( BB.RecountEntries() == BB.Entries() );
+      BB.Assign( 0, 1, 11. );
+      if ( verbose_ ) cout << "Recounted Entries of SparseMatrix B = " << BB.RecountEntries() << endl;
+      _test( BB.RecountEntries() == BB.Entries() );
 
 
      //Testing RemoveHalo function
@@ -500,11 +500,13 @@ void SparseMatrix_Test::run()
          cout << "\nSparseMatrix B";
          BBB.Out();
        }
-         BBB.RemoveHalo(2);
-         if ( verbose_ ) cout << "SparseMatrix B entries after RemoveHalo = " << BBB.Entries() << endl;
+       
+     BBB.RemoveHalo(2);
+     if ( verbose_ ) {
+          cout << "SparseMatrix B entries after RemoveHalo = " << BBB.Entries() << endl;
          BBB.Out();
-         _test( BBB.Entries() == 3 );
-
+       }
+     _test( BBB.Entries() == 3 );
 
      //Testing SparsityPattern function
      if ( verbose_ ) {
@@ -514,9 +516,10 @@ void SparseMatrix_Test::run()
          cout << "\nSparseMatrix A";
          BBB.Out();
        }
-         BBB.SparsityPattern( "Sparsity" );
-         string datafile = "cspline_test_data";
-         if ( verbose_ ) cout << "Data file Sparsity has been created" << endl;
+       
+     BBB.SparsityPattern( "Sparsity" );
+     string datafile = "cspline_test_data";
+     if ( verbose_ ) cout << "Data file Sparsity has been created" << endl;
 
      //Testing InfinityNorm function
      if ( verbose_ ) {
@@ -533,8 +536,7 @@ void SparseMatrix_Test::run()
          if ( verbose_ )
            cout << "SparseMatrix D infinity norm = " << D.InfinityNorm() << endl;
 
-    Test_PDE_IntegratorUseCases();
-    
+     Test_PDE_IntegratorUseCases();
 
   } // end run
   
@@ -577,13 +579,20 @@ void SparseMatrix_Test::Test_PDE_IntegratorUseCases()
     A.Assign( 2, 2, 3. );
     A.Assign( 3, 3, 4. );
     // off-diagonal terms
+    A.Assign( 0, 1, -3. );
+    A.Assign( 1, 0, -3. );
     A.Assign( 1, 2, -2. );
+    A.Assign( 2, 0,  2. );
     A.Assign( 2, 1, -2. );
+    A.Assign( 3, 0,  1. );
+    A.Assign( 3, 1,  2. );
     // assign a zero element (should have no effect)
     A.Assign( 0, 3, 0. );
-    // make an element zero by adding a number
+    _test( A.HasEntry(0,3) == false );
+    // make an element zero by adding a number (was -2 before)
     A.Add( 1, 2, 2. );
     _test( essentiallyEqual( A(1,2), 0. ) );
+    // bringing the element back
     A.Add( 1, 2, -2. );
     _test( essentiallyEqual( A.At(1,2), -2. ) );
     // adding very small numbers to the off-diagonal at the bottom
@@ -594,6 +603,7 @@ void SparseMatrix_Test::Test_PDE_IntegratorUseCases()
     A.Add( 3, 2, -1.0e-21 );
     _test( essentiallyEqual( A(3,2), -2.0e-21 ) );
     // checking
+    if ( verbose_ ) A.Out(1);
     _test( A.Symmetric() );
     _test( A.DiagonallyPositive() );
     _test( A.ZeroesInDiagonal() == false );

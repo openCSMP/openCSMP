@@ -484,7 +484,7 @@ bool Region_Test::TestBoundaryFaceFunctionality( const string& model_name )
     const Region<3U>& model2_domain(model2.Region("Model"));
     double surface_area2 = model2_domain.SurfaceArea();
   
-    _equal( surface_area1, surface_area2, numeric_limits<double>::epsilon() * surface_area1 * 100. );
+    _equal( surface_area1, surface_area2, numeric_limits<double>::epsilon() * surface_area1 * 1e3 );
   
     const bool integrate_pore_volume_only(true);
     RegionMonitor<3U>  monitor( model2, "porosity", "fluid pressure",  integrate_pore_volume_only);

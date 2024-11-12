@@ -928,9 +928,8 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
       ja.resize( A.Entries() );
       a.resize( ja.size() );
    
-      map<size_t,double>::const_iterator rit;
-      long      i, j, k, row;
-      uint32_t   diag;
+      long      i, j, k;
+      uint32_t  diag;
       bool      zero_diag_element(false);
 	  
       std::vector<uint32_t>  temp( ja.size() ); // auxilary vector
@@ -941,8 +940,9 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
 	  		
       for ( i=j=0U, ia[0]=0; i < nnu_; i++ )
        {
-	        row = i%nsys*(nnu_/nsys)+i/nsys; // amending the order rows will be written in a[]
-          for ( diag=-1, rit=A.RowBegin(row); rit!=A.RowEnd(row); rit++ )
+	        long row = i%nsys*(nnu_/nsys)+i/nsys; // amending the order rows will be written in a[]
+          auto rit=A.RowBegin(row);
+          for ( diag=-1; rit!=A.RowEnd(row); rit++ )
             {
                a[j]  = (*rit).second;
                ja[j] = temp[(*rit).first];
