@@ -1,4 +1,5 @@
 #include "ScalarVariable.h"
+#include "compareFloats.h"
 
 namespace csmp {
 
@@ -98,7 +99,7 @@ bool  ScalarVariable::operator>=( const ScalarVariable& s ) const
 bool  ScalarVariable::operator==( const ScalarVariable& s ) const
 {
   if ( s.flag_ != flag_ ) return false;
-  return !(data_ > s.data_ and data_ < s.data_);
+  return essentiallyEqual(data_,s.data_);
 }
 
 

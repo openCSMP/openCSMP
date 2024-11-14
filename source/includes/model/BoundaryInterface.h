@@ -102,6 +102,18 @@ class BoundaryInterface {
     /// creates EDGE#  Boundary line objects for box-shaped model by intersecting side boundaries objects
     bool EstablishEdgeBoundariesOfBoxShapedModel();
 
+    /// creates csmp::Boundary objects replacing lower-dimensional BOX_BOUNDARY named regions with boundaries with the same names
+    bool EstablishBoxBoundaries();
+  
+    /// inserts  box boundary or irregular csmp::Boundary objects for all eligible regions in the model; returns the names of the created boudaries
+    std::set<std::string>  EstablishBoundariesFromRegions();
+
+    /// tries to create Box Boundary objects surrounding 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
+    bool EstablishBoxBoundariesFromOrientation();
+    
+    /// creates 3D BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing
+    void EstablishBoxBoundariesFromNodeFlags( bool recreate_box_boundary_flags_before );
+
     /// Removes boundary with  deletion of its faces in the MeshManager
     void RemoveBoundary( const char* boundary, bool erase_faces );
     
@@ -134,18 +146,6 @@ class BoundaryInterface {
                       typename std::vector<Face<dim>*>::iterator facesBegin,
                       typename std::vector<Face<dim>*>::iterator facesEnd,
                       BOX_BOUNDARY );
-
-    /// creates csmp::Boundary objects replacing lower-dimensional BOX_BOUNDARY named regions with boundaries with the same names
-    bool EstablishBoxBoundaries();
-  
-    /// inserts  box boundary or irregular csmp::Boundary objects for all eligible regions in the model; returns the names of the created boudaries
-    std::set<std::string>  EstablishBoundariesFromRegions();
-
-    /// tries to create Box Boundary objects surrounding 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
-    bool EstablishBoxBoundariesFromOrientation();
-    
-    /// creates BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing
-    void EstablishBoxBoundariesFromNodeFlags( bool recreate_box_boundary_flags_before );
 
  protected:
    std::map<std::string,csmp::Boundary<dim> >  boundaryMap_; ///< storage of the boundaries

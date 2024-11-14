@@ -646,6 +646,9 @@ the method argument.
 @section messages Messages
 
 The method will issue an error if the variable cannot be parsed correctly.
+
+@attention method does not read variable flag!
+
 */
 void readPropertyValue( ScalarVariable& sc )
 {
@@ -1873,9 +1876,9 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
 
       if ( prop_type == SCALAR ) {
         vector<ScalarVariable >  bvalues;
-        readPropertyValue( sc1 );
+        readPropertyValue( sc1 ); sc1.Flag() = parseCondition(cond_type);
         model.Database().CheckRange( prop_name.c_str(), sc1() );
-        readPropertyValue( sc2 );
+        readPropertyValue( sc2 ); sc2.Flag() = parseCondition(cond_type);
         model.Database().CheckRange( prop_name.c_str(), sc2() );
         if ( dim == 1U || dim == 2U ) {
           if ( sc1 == sc2 )
@@ -1883,27 +1886,26 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
                                       makeScalar( parseCondition( cond_type ), sc1() ) );
           else {
             bvalues.reserve( 2U );
-            bvalues.push_back( sc1 ); assert( parseCondition( cond_type ) == sc1.Flag() );
-            bvalues.push_back( sc2 ); assert( parseCondition( cond_type ) == sc2.Flag() );
-            model.InterpolateBoundaryValues( parseBoundary( bound_name ), prop_name.c_str(),
-                                             bvalues );
+            bvalues.push_back( sc1 );
+            bvalues.push_back( sc2 );
+            model.InterpolateBoundaryValues( parseBoundary( bound_name ), prop_name.c_str(), bvalues );
           }
           reportAssignment( prop_name, unit, bound_name, sc1, sc2 );
         }
         else {
-          readPropertyValue( sc3 );
+          readPropertyValue( sc3 ); sc3.Flag() = parseCondition(cond_type);
           model.Database().CheckRange( prop_name.c_str(), sc3() );
-          readPropertyValue( sc4 );
+          readPropertyValue( sc4 ); sc4.Flag() = parseCondition(cond_type);
           model.Database().CheckRange( prop_name.c_str(), sc4() );
           if ( sc1 == sc2 and sc2 == sc3 and sc3 == sc4 )
             model.InputBoundaryValue( parseBoundary( bound_name ), prop_name.c_str(),
                                       makeScalar( parseCondition( cond_type ), sc1() ) );
           else {
             bvalues.reserve( 4U );
-            bvalues.push_back( sc1 ); assert( parseCondition( cond_type ) == sc1.Flag() );
-            bvalues.push_back( sc2 ); assert( parseCondition( cond_type ) == sc2.Flag() );
-            bvalues.push_back( sc3 ); assert( parseCondition( cond_type ) == sc3.Flag() );
-            bvalues.push_back( sc4 ); assert( parseCondition( cond_type ) == sc4.Flag() );
+            bvalues.push_back( sc1 );
+            bvalues.push_back( sc2 );
+            bvalues.push_back( sc3 );
+            bvalues.push_back( sc4 );
             model.InterpolateBoundaryValues( parseBoundary( bound_name ), prop_name.c_str(),
                                              bvalues );
           }

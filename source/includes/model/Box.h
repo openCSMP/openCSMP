@@ -197,6 +197,14 @@ void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& );
 template<uint32_t dim>
 void boxFlagsToVariable( Model<dim>&, const char* node_variable, const char* elmt_variable );
 
+/// using the coordinate locations of the vertices defining the bounding rectangle; node flagging is performed; error prone method!
+template<uint32_t dim>
+void flagCornerNodes( VSet<dim>&, double tol, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax );
+
+/// Finds edges in boxed shaped model and gibes them a BOX_BOUDARY_FLAG
+template<uint32_t dim>
+void flagEdges( VSet<dim>&, double tol, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax );
+
 /// returns true if the model contains some box boundary identifiers, but also irregular boundaries
 bool hasAllSideBoundaries( const Model<2U>& );
 bool hasAllSideBoundaries( const Model<3U>& );

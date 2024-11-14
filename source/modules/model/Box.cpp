@@ -705,10 +705,10 @@ void recreateBoxBoundaryFlags( Model<1U>& )
 
 
 /**
-Using the side boundaries of the model,
-the method recreateBoxBoundaryFlags recreates the corresponding box-boundary flagging.
+    Using already existing side csmp::Bboundary objects in the model,
+    method recreates a corresponding, consistent box-boundary flagging.
 
-@attention the boundaries LEFT, RIGHT, TOP(or IRREGULAR), BOTTOM must be present
+    @attention the boundaries LEFT, RIGHT, TOP(or IRREGULAR), BOTTOM must be present
 */
 void recreateBoxBoundaryFlags( Model<2U>& model )
 {
@@ -1489,6 +1489,11 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
               // corner cases
               if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
               if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
+              // degenerate cases where the corner was not flagged correctly
+              if ( (flag1 == LEFT && flag2 == BOTTOM)  || (flag2 == LEFT   && flag1 == BOTTOM) ) return CNR1;
+              if ( (flag1 == BOTTOM && flag2 == RIGHT) || (flag2 == BOTTOM && flag1 == RIGHT) ) return CNR2;
+              if ( (flag1 == RIGHT && flag2 == TOP)    || (flag2 == RIGHT && flag1 == TOP) ) return CNR3;
+              if ( (flag1 == TOP && flag2 == LEFT)     || (flag2 == TOP && flag1 == LEFT) ) return CNR4;
               // there should be no other cases because the 2D model has no edges
               cerr <<"\n\tmissed case: ";
               for ( const auto& boundary : eflags )
@@ -1513,7 +1518,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
     // -------------------------------
     if constexpr ( dim == 3U )
       {
-         // assumes that all nodes of the boundary face have the same flag
+         // all nodes of the boundary face have the same flag (covers also line-element case)
          if ( eflags.size() == 1U ) return (*eflags.begin());
          
          // only for surface elements two different flags if they belong to the same face indicate a boundary position
@@ -1524,21 +1529,28 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
                      if ( isSide(bit) )
                       return bit;
                 }
-              // if this is a face of a surface element located on a model edge
-              // so that it has only 2 corner nodes
+              // if this is a face of a surface element it has only 2 corner nodes
               else if ( eptr->IsSurface() ) {
-                   auto flag_it = eflags.begin();
-                   const BOX_BOUNDARY flag1 = (*flag_it);
-                   flag_it++;
-                   const BOX_BOUNDARY flag2 = (*flag_it);
-                   // intersections between internal and external boundaries
-                   if ( flag1 != NOT && flag2 == INTERNAL ) return flag1;
-                   if ( flag2 != NOT && flag1 == INTERNAL ) return flag2;
+                   assert( eflags.size() == 2U );
+                   const BOX_BOUNDARY flag1 = (*eflags.begin());
+                   const BOX_BOUNDARY flag2 = (*next(eflags.begin(),1));
                    // if there is a corner involved, the other flag is chosen because the face of a surface cell cannot span a corner
                    if ( isCorner(flag1) ) return flag2;
                    if ( isCorner(flag2) ) return flag1;
+                   // if this is a surface element with three nodes on the outside of the model
+                   if ( isBOTTOM(flag1) && isBOTTOM(flag2) ) return BOTTOM;
+                   if ( isRIGHT(flag1) && isRIGHT(flag2) ) return RIGHT;
+                   if ( isTOP(flag1) && isTOP(flag2) ) return TOP;
+                   if ( isLEFT(flag1) && isLEFT(flag2) ) return LEFT;
+                   if ( isBACK(flag1) && isBACK(flag2) ) return BACK;
+                   if ( isFRONT(flag1) && isFRONT(flag2) ) return BOTTOM;
+                   assert( !isEdge(flag1) && !isEdge(flag2) );
+                   // intersections between internal and external boundaries
+                   if ( flag1 != NOT && flag2 == INTERNAL ) return flag1;
+                   if ( flag2 != NOT && flag1 == INTERNAL ) return flag2;
                    return whichBoundary( flag1, flag2 );
                 }
+              // line element case was already covered
               else csmp_error.Note( ERROR, "atBoundary(3D):", "Line element face should only have a single flag.");
            }
          
@@ -2700,18 +2712,16 @@ double linearInterpolate( const pair<Point<1U>,double>& p1, // endpoint1, value1
 /// interpolate along boundaries of 2D rectangle-shaped model
 double linearInterpolate( const pair<Point<2U>,double>& p1, // endpoint1, value1
                           const pair<Point<2U>,double>& p2, // endpoint2, value2
-                          const Point<2U>& pt )                // current point x,y,z
+                          const Point<2U>& pt )             // current point x,y,z
 {
     // endmember value range
     double dval = p2.second - p1.second;
     
     // distance between endpoints
-    double dx   = sqrt( (p2.first[0]-p1.first[0])*(p2.first[0]-p1.first[0]) +
-                           (p2.first[1]-p1.first[1])*(p2.first[1]-p1.first[1]) );
+    double dx   = distance( p1.first, p2.first );
     
     // distance between current point and point 1
-    double dist = sqrt( (pt[0]-p1.first[0])*(pt[0]-p1.first[0]) +
-                           (pt[1]-p1.first[1])*(pt[1]-p1.first[1]) );
+    double dist = distance( p1.first, pt );
 
     // computing the interpolated value (y = b + mx)
     //     min     normalized distance    gradient
@@ -2722,21 +2732,17 @@ double linearInterpolate( const pair<Point<2U>,double>& p1, // endpoint1, value1
 
 /// interpolate along boundaries of 2D rectangle-shaped model
 double linearInterpolate( const pair<Point<3U>,double>& p1, // endpoint1, value1
-                           const pair<Point<3U>,double>& p2, // endpoint2, value2
-                           const Point<3U>& pt )                // current point x,y,z
+                          const pair<Point<3U>,double>& p2, // endpoint2, value2
+                          const Point<3U>& pt )             // current point x,y,z
 {
     // endmember value range
     double dval = p2.second - p1.second;
     
     // distance between endpoints
-    double dx   = sqrt( (p2.first[0]-p1.first[0])*(p2.first[0]-p1.first[0]) +
-                           (p2.first[1]-p1.first[1])*(p2.first[1]-p1.first[1]) +
-                           (p2.first[2]-p1.first[2])*(p2.first[2]-p1.first[2]) );
+    double dx   = distance( p1.first, p2.first );
     
     // distance between current point and point 1
-    double dist = sqrt( (pt[0]-p1.first[0])*(pt[0]-p1.first[0]) +
-                           (pt[1]-p1.first[1])*(pt[1]-p1.first[1]) +
-                           (pt[2]-p1.first[2])*(pt[2]-p1.first[2]) );
+    double dist = distance( p1.first, pt );
 
     // computing the interpolated value (y = b + mx)
     //     min     normalized distance    gradient

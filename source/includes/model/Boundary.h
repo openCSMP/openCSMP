@@ -168,7 +168,7 @@ class Boundary : public ModelSubDomain<dim, Face>,
 
   protected:
 
-    /// assigns box boundary flags to nodes unless thet already have an !NOT value
+    /// assigns box boundary flags to nodes unless they do not have a NOT value
     void InitializeBoundaryFlags( BOX_BOUNDARY boxBoundary );
 
     /// returns local variables stored at face integration points

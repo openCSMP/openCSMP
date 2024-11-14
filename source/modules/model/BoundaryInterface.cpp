@@ -1479,7 +1479,8 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model,
 
 
 
-/** creates edge Boundary objects (of dim-2 Face objects) for box-shaped model from side boundaries
+/**
+   Creates Edge boundary objects (of dim-2 Face objects) for box-shaped model from side boundaries
    
    1. verifies that that the side boundaries of the box-shaped model are there
    
@@ -2065,8 +2066,10 @@ for ( auto& it : elmts_to_become_faces ) {
 
 
 /**
-    Tries to replace bondary surface elements with Faces and assign these to Box boundaries.
-    TOP, BOTTOM, INTERNAL, IRREGULAR, VERTICAL_SIDE etc. Edge boundaries are not created.
+    Method caps elements that share one of their faces with the model boundary with Face objects.
+    In a second step it assigns these to the Box boundaries:
+    TOP, BOTTOM,LEFT, RIGHT, etc.
+    INTERNAL, IRREGULAR, or Edge boundaries are not created.
     
     @attention method assumes that the  perimeter of region "Model" correctly identifies the outside faces of the elements of the model.
     @attention this method was designed primarily for three-dimensional models.
@@ -2083,7 +2086,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     const size_t n_initial_faces = mesh.Faces();
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    
+
     const LocalVariables lvsFaces( boundaryComplex->Database().LocalVariablesAt(FACE) );
     const IntegrationPointVariables lvsIntegrationPoints( boundaryComplex->Database().IntegrationPointVariablesAt(FACE_INTEGRATION_POINT) );
 
@@ -2108,7 +2111,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     
     // 1. Grouping pointers to Face objects of 'Model' boundary according to their facing direction
     // -------------------------------------------------------------------------------------------------
-    vector<double>  nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front, nrml_back;
+    vector<double>  nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front{0.,0.,1.}, nrml_back{0.,0.,-1};
     Box             box;
     double          minLength(0.71); // dot-product of 2 unit vectors at an angle >=45 degrees
    
@@ -2116,9 +2119,10 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     box.UnitNormalTo( TOP,    dim, nrml_top );
     box.UnitNormalTo( LEFT,   dim, nrml_left );
     box.UnitNormalTo( RIGHT,  dim, nrml_right );
-    box.UnitNormalTo( FRONT,  dim, nrml_front );
-    box.UnitNormalTo( BACK,   dim, nrml_back );
-    
+    if constexpr ( dim == 3U ) {
+         box.UnitNormalTo( FRONT,  dim, nrml_front );
+         box.UnitNormalTo( BACK,   dim, nrml_back );
+      }
     set<Face<dim>*>  top_faces, bottom_faces, left_faces, right_faces, front_faces, back_faces, irregular_faces;
     
     // for all Face objects on the model boundary (initial faces would normally be zero)
@@ -2257,9 +2261,15 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromNodeFlag
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+  if ( dim != 3u ) {
+       csmp_error.Note( WARNING, "BoundaryInterface::EstablishBoxBoundariesFromNodeFlags:",
+                                 "method only works for three-dimensional models; nothing was done.");
+       return;
+    }
+
   if ( !boundaryMap_.empty() ) {
        csmp_error.Note( WARNING, "BoundaryInterface::EstablishBoxBoundariesFromNodeFlags:",
-                                   "model already contains Boundary objects; nothing was done.");
+                                 "model already contains Boundary objects; nothing was done.");
        return;
     }
 

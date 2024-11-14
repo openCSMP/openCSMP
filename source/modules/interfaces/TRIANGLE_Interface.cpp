@@ -1158,10 +1158,15 @@ int32_t  TRIANGLE_Interface::FindFaceBoundary( vector<double>& face_node1,
 /**
 
 Using the bflags map, the min-max x, y, z values are found in the Vdata
-and, assuming, that the model is brick-shaped, the corners are flagged
+and, assuming, that the model is rectrangular, the corners are flagged
 such that the 2D model has, counting from the bottom up in counter-
-clockwise fashion, the corners 1, 2, 3, 4. In a 3D model another rectangle
-further front (z-direction) has the corresponding corners 4, 5, 6, 7, 8.  
+clockwise fashion, the corners 1, 2, 3, 4.
+
+@attention this coordinate-based method only works if the model is strictly rectangular.
+
+@note In 3D CSMP models the front rectangle
+in (z-direction) has the corresponding corners 4, 5, 6, 7, 8.
+
  */
 void TRIANGLE_Interface::FlagCornerNodes( map<size_t,int8_t>& bflags,
                                           deque<double>& x,
@@ -1175,25 +1180,55 @@ void TRIANGLE_Interface::FlagCornerNodes( map<size_t,int8_t>& bflags,
                                    zmin = min_element( z.begin(), z.end() ),
                                    zmax = max_element( z.begin(), z.end() );
                                    
-     assert( approximatelyEqual( *zmin, *zmax ) );
+     const bool two_dimensional_mesh = ( approximatelyEqual( *zmin, *zmax ) == true ) ? true : false;
+     // (assuming 2D) computing a tolerance based on the absolute dimensions of the model
+     const double eps = sqrt( (xmax-xmin)*(xmax-xmin) + (ymax-ymin)*(ymax-ymin) ) * numeric_limits<double>::epsilon() * 1e3;
       
+     if ( two_dimensional_mesh ) {
+         int corner_assignments_made{0};
+         for ( auto& it : bflags )
+           {
+              if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) ) {
+                   it.second = CNR1; // CNR_MIN;
+                   corner_assignments_made++;
+                }
+              else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) ) {
+                   it.second = CNR2; // CNR_MIN_MAXX;
+                   corner_assignments_made++;
+                }
+              else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) ) {
+                   it.second = CNR3; // CNR_MAX;
+                   corner_assignments_made++;
+                }
+              else if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps) ) {
+                   it.second = CNR4; // CNR_MIN_MAXXZ;
+                   corner_assignments_made++;
+                }
+           }
+          if ( corner_assignments_made <= 4 )
+            cerr <<"\n"<<"TRIANGLE_Interface::FlagCornerNodes: only managed to assign "<< corner_assignments_made <<" corners to rectangular model."<< endl;
+          return;
+       }
+
+     // three dimensional models
      for ( auto& it : bflags )
        {
-          if ( approximatelyEqual( x[ it.first ], *xmin ) && approximatelyEqual( y[ it.first ], *ymin ) )
+throw logic_error("TRIANGLE_Interface::FlagCornerNodes: this code must consider z dimension; not debugged yet");
+          if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) )
             it.second = CNR_MIN;
-          if ( approximatelyEqual( x[ it.first ], *xmax ) && approximatelyEqual( y[ it.first ], *ymax ) )
+          else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
             it.second = CNR_MAX;
-          if ( approximatelyEqual( x[ it.first ], *xmax ) && approximatelyEqual( y[ it.first ], *ymin ) )
+          else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) )
             it.second = CNR_MIN_MAXX;
-          if ( approximatelyEqual( x[ it.first ], *xmax ) && approximatelyEqual( y[ it.first ], *ymin ) )
+          else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps) )
             it.second = CNR_MIN_MAXXZ;
-          if ( approximatelyEqual( x[ it.first ], *xmin ) && approximatelyEqual( y[ it.first ], *ymin ) )
+          else if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) )
             it.second = CNR_MIN_MAXZ;
-          if ( approximatelyEqual( x[ it.first ], *xmin ) && approximatelyEqual( y[ it.first ], *ymax ) )
+          else if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
             it.second = CNR_MAX_MINXZ;
-          if ( approximatelyEqual( x[ it.first ], *xmax ) && approximatelyEqual( y[ it.first ], *ymax ) )
+          else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
             it.second = CNR_MAX_MAXX;
-          if ( approximatelyEqual( x[ it.first ], *xmin ) && approximatelyEqual( y[ it.first ], *ymax ) )
+          else if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
             it.second = CNR_MAX_MAXZ;
        }    
  

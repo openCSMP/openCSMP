@@ -648,6 +648,8 @@ template void Boundary<3>::InputVariableFrom<TensorVariable<3U> >( const char*, 
 /**
     Dispatched initialize method to establish node vector, perimeter entities,
     bflags and entity sorting.
+    
+    @attention Only assigns boundary flags if they have not already been set.
 */
 template<uint32_t dim>
 void Boundary<dim>::InitializeBoundaryFlags( BOX_BOUNDARY boxBoundary )

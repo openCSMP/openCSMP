@@ -1887,14 +1887,62 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
   // 2D case
   if constexpr ( dim == 2U ) {
     assert( isSide( side ) );
+    assert( bvalues.size() == 2U );
     boundaryMinMaxCoordinates( side, xyz_min, xyz_max );
-    for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
-      res() = linearInterpolate( make_pair( xyz_min, v1 ), make_pair( xyz_max, v2 ), (*nit)->Coordinate() );
-      (*nit)->Store( prop_key, res );
-    }
+
+    switch( side ) {
+         // counter-clockwise around the model (also reflecting the beginning and end-points of the boundaries
+         case BOTTOM: {
+            Point<dim> p1(xyz_min), p2(xyz_max[0],xyz_min[1]);
+            for ( auto nit = model_domain.PerimeterNodesBegin(); nit != model_domain.NodesEnd(); nit++ )
+              if ( isBOTTOM( (*nit)->AtBoundary() ) ) {
+                  res() = linearInterpolate( make_pair( p1, v1 ), make_pair( p2, v2 ), (*nit)->Coordinate() );
+                  (*nit)->Store( prop_key, res );
+                }
+             }
+           break;
+         case RIGHT: {
+            Point<dim> p1(xyz_max[0],xyz_min[1]), p2(xyz_max);
+            for ( auto nit = model_domain.PerimeterNodesBegin(); nit != model_domain.NodesEnd(); nit++ )
+              if ( isRIGHT( (*nit)->AtBoundary() ) ) {
+                  res() = linearInterpolate( make_pair( p1, v1 ), make_pair( p2, v2 ), (*nit)->Coordinate() );
+                  (*nit)->Store( prop_key, res );
+                }
+             }
+           break;
+         case TOP: {
+            Point<dim> p1(xyz_max), p2(xyz_min[0],xyz_max[1]);
+            for ( auto nit = model_domain.PerimeterNodesBegin(); nit != model_domain.NodesEnd(); nit++ )
+              if ( isTOP( (*nit)->AtBoundary() ) ) {
+                  res() = linearInterpolate( make_pair( p1, v1 ), make_pair( p2, v2 ), (*nit)->Coordinate() );
+                  (*nit)->Store( prop_key, res );
+                }
+             }
+           break;
+         case LEFT: {
+            Point<dim> p1(xyz_min[0],xyz_max[1]), p2(xyz_min);
+            for ( auto nit = model_domain.PerimeterNodesBegin(); nit != model_domain.NodesEnd(); nit++ )
+              if ( isLEFT( (*nit)->AtBoundary() ) ) {
+                  res() = linearInterpolate( make_pair( p1, v1 ), make_pair( p2, v2 ), (*nit)->Coordinate() );
+                  (*nit)->Store( prop_key, res );
+                }
+             }
+           break;
+         case IRREGULAR:
+            for ( auto nit = model_domain.PerimeterNodesBegin(); nit != model_domain.NodesEnd(); nit++ )
+              if ( (*nit)->AtBoundary() == IRREGULAR ) {
+                  res() = linearInterpolate( make_pair( xyz_min, v1 ), make_pair( xyz_max, v2 ), (*nit)->Coordinate() );
+                  (*nit)->Store( prop_key, res );
+                }
+           break;
+         default:
+           throw csmp::Exception( ERROR, "Model::AssignBoundaryValues", parseBoundary( side ),
+                                 "boundary could not be identified. Nothing is done..." );
+      }
     return;
 
   } // end 2D
+
 
   assert( !isCorner( side ) );
 
@@ -1907,7 +1955,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
     {
       case LEFT:   // YZ PLANE
         boundaryMinMaxCoordinates( LEFT, xyz_min, xyz_max );
-        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.PerimeterNodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }
@@ -1915,7 +1963,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case RIGHT:  // YZ PLANE
         boundaryMinMaxCoordinates( RIGHT, xyz_min, xyz_max );
-        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.PerimeterNodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }
@@ -1923,7 +1971,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case BACK:   // XY PLANE
         boundaryMinMaxCoordinates( BACK, xyz_min, xyz_max );
-        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.PerimeterNodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }
@@ -1931,7 +1979,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case FRONT:  // XY PLANE
         boundaryMinMaxCoordinates( FRONT, xyz_min, xyz_max );
-        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.PerimeterNodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }
@@ -1939,7 +1987,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case TOP:    // XZ PLANE
         boundaryMinMaxCoordinates( TOP, xyz_min, xyz_max );
-        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.PerimeterNodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }
@@ -1947,7 +1995,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case BOTTOM: // XZ PLANE
         boundaryMinMaxCoordinates( BOTTOM, xyz_min, xyz_max );
-        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.PerimeterNodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }

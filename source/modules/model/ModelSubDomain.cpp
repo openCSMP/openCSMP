@@ -1724,7 +1724,7 @@ bool  ModelSubDomain<dim,CELL>::IsPerimeterCell( size_t e ) const
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::MinMaxCoordinates( Point<dim>& xyz_min, Point<dim>& xyz_max ) const
  {
-    xyz_min = xyz_max = (*node_vec_.begin())->Coordinate();
+    xyz_min = 1e30; xyz_max = -1e30;
 
     // only nodes at the group boundary have to be checked
     for ( auto bit=PerimeterNodesBegin(); bit!=NodesEnd(); bit++ )
