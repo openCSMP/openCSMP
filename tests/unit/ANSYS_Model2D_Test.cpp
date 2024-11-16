@@ -217,7 +217,9 @@ void ANSYS_Model2D_Test::run()
  
  
  
- 
+/**
+  Default input is "HorFracs2D"
+*/
 void ANSYS_Model2D_Test::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& input_file_name )
   {
     enum{DIM=2U};
@@ -463,7 +465,7 @@ void  ANSYS_Model2D_Test::Test_CreateSplitBoundaries()
          cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreateSplitBoundaries: running test..."<< endl;
          cout.flush();
       }
-    string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
+    string model2d_name_ = "three_layers";
     string varFileName = "CSMP-variables.txt";
     ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
     const size_t n_original_cells = model.Mesh().Elements() + model.Mesh().Faces();  // only those
