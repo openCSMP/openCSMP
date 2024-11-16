@@ -132,7 +132,9 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
      string  model_name("prism_test");
      // string  model_name("fracs4");
 
-      ANSYS_Model3D  model( model_name.c_str(), "CSMP-2phase-variables.txt");
+//      ANSYS_Model3D  model( model_name.c_str(), "CSMP-2phase-variables.txt");
+//      ANSYS_Model3D  model( model_name.c_str(), "ExplicitTransport_Test-variables.txt");
+      ANSYS_Model3D  model( model_name.c_str(), "VariableSet_TracerTransfer-variables.txt");
       printModelDimensions( model, true );
 
      // ------------------------------------------------------------
@@ -339,6 +341,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
 
       ANSYS_Model3D  model( model_name.c_str(), "example25.txt");
       printModelDimensions( model, true );
+      model.InstantiateFiniteVolumes();
 
      // ------------------------------------------------------------
      // 2. configuring the model
