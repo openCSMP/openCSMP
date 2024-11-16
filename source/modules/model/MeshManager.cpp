@@ -1658,7 +1658,10 @@ auto	MeshManager<dim>::Delete( typename vector<InterFace<dim>*>::iterator fptr_r
 /**
    Unassigns any non-nullpointer neighbors the element type of which is unknown (global operation on all cells)
    @return number of such neighbors that were found and unassigned.
+   
+   @attention Method cannot be used because if such elements exist there already is undefined behaviour!
 */
+/*
 template<uint32_t dim>
 template<template<uint32_t> class CELL>
 size_t MeshManager<dim>::RemoveDegenerateNeighbors()
@@ -1708,7 +1711,7 @@ template size_t MeshManager<1>::RemoveDegenerateNeighbors<Face>();
 template size_t MeshManager<3>::RemoveDegenerateNeighbors<InterFace>();
 template size_t MeshManager<2>::RemoveDegenerateNeighbors<InterFace>();
 template size_t MeshManager<1>::RemoveDegenerateNeighbors<InterFace>();
-
+*/
 
 
 /**
@@ -3249,16 +3252,15 @@ size_t MeshManager<dim>::DeleteNodesAndRepairNodeConnnectivity( typename vector<
 
     The following steps are performed:
 
-    1. set the neighbor pointers to the element to zero (= disconnect the neighbor elements)
-    2. (remove the pointers from the connected nodes to this parent-element) - done later sweeping over the nodes
-    3. delete orphanaged nodes
-    4. disconnect nodes
-    5. delete element
+    1. set the neighbor pointers to the elements that will be deleted to zero (= disconnect the neighbor elements)
+    2. (remove the pointers from the connected nodes to this parent-element) - done later sweeping over the nodes (Delete())
+    3. delete elements
+    
+    @attention us this method only when the iterator ranges spans all the elements that are going to be deleted, else undefined behaviour may result.
 */
-// TODO: The connectivity of the affected mesh neighborhood needs to get fixed separately.
 template<uint32_t dim>
-size_t MeshManager<dim>::DeleteElementsAndRepairConnnectivity( typename vector<Element<dim>*>::iterator first,
-                                                               typename vector<Element<dim>*>::iterator last )
+size_t MeshManager<dim>::DeleteElementsAfterDisconnectingRemainingOnes( typename vector<Element<dim>*>::iterator first,
+                                                                        typename vector<Element<dim>*>::iterator last )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      
@@ -3283,7 +3285,7 @@ size_t MeshManager<dim>::DeleteElementsAndRepairConnnectivity( typename vector<E
 
     return deleted_elements;
     
- } // end DeleteElementsAndRepairConnnectivity
+ } // end DeleteElementsAfterDisconnectingRemainingOnes
 
 
 
@@ -3453,11 +3455,9 @@ size_t MeshManager<dim>::DeleteFacesAndRepairConnnectivity( typename vector<Face
      
      while ( first != last )
        {
-          if ( (*first) != nullptr ) {
-               auto delete_it = Delete( first );
-               //               ^^^^^^^^^^^^^^^^
-               deleted_faces++;
-            }
+          Delete( first );
+       // ^^^^^^^^^^^^^^^^
+          if ( (*first) == nullptr ) deleted_faces++;
           else nullptr_faces++;
           first++;
        }

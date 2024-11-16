@@ -671,8 +671,7 @@ bool Box_Test::TestWhetherAllBoxFlagsArePresent()
 bool Box_Test::TestBoundaryVersusBOX_BOUNDARY_Flagging()
  {
     VSet<3U>      vset;
-    ModelTopology topo;
-    create_FracBox( topo, vset ); // NOT SUITABLE because Bflags are wrong
+    ModelTopology topo = create_FracBox( vset ); // NOT SUITABLE because Bflags are wrong
     //const bool bSkewed{false};
     //create_Prism_Hexa_VSet( vset, bSkewed ); // used because boundary flags have been verified
     

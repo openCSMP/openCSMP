@@ -719,8 +719,6 @@ pair<set<string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Detec
       vector<InterFace<dim>*>  iface_ptrs = splitboundaryComplex->Mesh().CreateInterfacesBetweenNodeMatchingElements(
                                                                                     splitboundaryComplex->Database(),
                                                                                     ifset );
-      // repairing connectivity among elements after removal
-      splitboundaryComplex->Mesh().template RemoveDegenerateNeighbors<Element>();
 
       // creating the SplitBoundary asking the MeshManager to create the required number of InterFace objects
       pair<typename map<string, csmp::SplitBoundary<dim> >::iterator, bool>
@@ -1043,8 +1041,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
 
     // 1. Loop over all elements of the lower-dimensional input region
     // 1.1 For all nodes, if they are split (IsManifold) store in map<Element, ( vec<Manifold Node>, vec<node ids> ) > .
-    //     (we fix each element)
-    //     note: this also handles if perimeter has been split by another splitboundary
+    //     note: this handles if perimeter has been split by another splitboundary
     map<Element<dim>*, pair<vector<Node<dim>*>, vector<uint32_t> > > elements_with_manifold_nodes;
     set<Node<dim>*>                                                  manifold_on_perimeter;
     for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit ) {
@@ -1134,6 +1131,9 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     //  2.1 creating the required objects
     // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // disconnecting any equidimensional elements surrounding the element patch that well be deleted
+    updateHaloElementConnectivity<dim>( subdomain.CellVector().begin(), subdomain.CellVector().end() );
+    
     const size_t                       new_interfaces_required(subdomain.Cells());
     vector<FaceConstructionData<dim>>  iface_construction_vector;
     iface_construction_vector.reserve(new_interfaces_required);
@@ -1188,7 +1188,6 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     assert(iface_vector.size() == iface_construction_vector.size());
     assert( (*iface_vector.begin())->InnerParent() == iface_construction_vector.begin()->InnerElement()) ;
     assert( (*iface_vector.back()).InnerParent() == iface_construction_vector.back().InnerElement()) ;
-    assert( model.Mesh().template RemoveDegenerateNeighbors<Element>() == 0 );
     
     // while the new interfaces were already connected with one another by ReplaceElementsByInterFaces this deals with their neighborhood
     model.Mesh().UpdateConnectivity( iface_vector.begin(), iface_vector.end() );
@@ -1357,11 +1356,6 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
                                                                                                            matched_elmts,
                                                                                                            create_manifolds_on_perimeter,
                                                                                                            halo_elements );
-    // removing potential left-over connections among elements
-    modelComplex->Mesh().template RemoveDegenerateNeighbors<Element>();
-    // the new interfaces are already connected with one another
-
-
     // 3. creation of the new SplitBoundary
     // ------------------------------------
     string split_boundary_name = CreateSplitBoundaryName( make_pair( region1_name, region2_name ) );
@@ -1387,12 +1381,6 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
       }
     else throw csmp::Exception( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryBetween:",
                                 split_boundary_name, "split boundary already exists. Nothing was done.");
-    
-    // no cells get deleted but connectivity needs to be rebuilt
-
-    // TODO: repair connectivity ?
-    //RepairConnnectivity( typename vector<Element<dim>*>::iterator first,
-    //                     typename vector<Element<dim>*>::iterator last )
     
     // update region outside of new SplitBoundary because its nodes have changed
     region2.RebuildSubDomainAfterChangeOfNodeVector();
@@ -1487,7 +1475,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      // 3.1 connect elements with their neighbors
      mesh. template BuildConnectivity<Element>( elmt_pointers.begin(), elmt_pointers.end() );
 
-     // 3.2 establish node-to-node and parent connectivity // TODO: test will
+     // 3.2 establish node-to-node and parent connectivity
      mesh.ConnectNodesToParentsAndNeighbors( elmt_pointers.begin(), elmt_pointers.end() );
 
      // 4. construct the new unique region between the interface elements in the model

@@ -198,10 +198,9 @@ void MeshManager_Test::run()
   
   // building more complex 'FracBox' model with Boundaries and lower-dimensional elements for further testing
   VSet<3U>      vset;
-  ModelTopology topology;
   string        var_file("CSMP-variables.txt");
   const bool    regions_to_boundaries{true};
-  create_FracBox( topology, vset );
+  ModelTopology topology = create_FracBox( vset );
   vset.EstablishElementConnectivity3D();
   
   Model<3>      model( topology, vset, var_file.c_str(), regions_to_boundaries );
@@ -245,9 +244,8 @@ void MeshManager_Test::run()
 bool MeshManager_Test::Test_detachNeighborsFrom()
  {
     VSet<3>       vset;
-    ModelTopology topology;
 //    create_RubikCube( vset );
-    create_FracBox( topology, vset );
+    ModelTopology topology = create_FracBox( vset );
     Model<3> model( vset, "MeshManager_Test-variables.txt" );
     model.Name("FracBox");
     
@@ -1284,9 +1282,8 @@ bool MeshManager_Test::TestNeigbourVersusFaceConsistency()
 */
 bool MeshManager_Test::Test_BuildConnectivity()
   {
-     ModelTopology topology;
      VSet<3U>      vset;
-     create_FracBox( topology, vset );
+     ModelTopology topology = create_FracBox( vset );
      
 //     vset.EstablishElementConnectivity3D();
      const bool    create_boundaries_from_regions{ true }; // true is a must, else all elements will be eliminated
@@ -1322,9 +1319,8 @@ bool MeshManager_Test::Test_BuildConnectivity()
 */
 bool MeshManager_Test::Test_UpdateConnectivity()
  {
-     ModelTopology topology;
      VSet<3U>      vset;
-     create_FracBox( topology, vset );
+     ModelTopology topology = create_FracBox( vset );
      const bool    create_boundaries_from_regions{ true };
      Model<3U>     model( topology, vset, "MeshManager_Test-variables.txt", create_boundaries_from_regions );
      int           errors(0ul);

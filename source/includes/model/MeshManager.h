@@ -309,10 +309,6 @@ InterFace<dim>* const ReplaceElementByInterFace( typename std::vector<Element<di
   /// disconnects neighbors, deletes InterFace, , returns iterator to next InterFace if deletion succeeded
   auto Delete( typename std::vector<InterFace<dim>*>::iterator ) -> typename plf::colony< InterFace<dim> >::iterator;
   
-  /// any non-nullpointer neighbors the element type of which is unknown (global operation on all cells)
-  template<template<uint32_t> class CELL>
-  size_t RemoveDegenerateNeighbors();
-
   /// updates all connectivity (elements, faces, interfaces, nodes to parents); rebulding node manifolds if necessary
   void UpdateConnectivity();
 
@@ -351,8 +347,8 @@ InterFace<dim>* const ReplaceElementByInterFace( typename std::vector<Element<di
                                           typename std::vector<Element<dim>*>::iterator last );
 
   /// deletes elements and potentially orphaned nodes if any;  parent element storage of the nodes is rebuild and connectivity repaired;  input pointers are nulled
-  size_t DeleteElementsAndRepairConnnectivity( typename std::vector<Element<dim>*>::iterator first,
-                                               typename std::vector<Element<dim>*>::iterator last );
+  size_t DeleteElementsAfterDisconnectingRemainingOnes( typename std::vector<Element<dim>*>::iterator first,
+                                                        typename std::vector<Element<dim>*>::iterator last );
 
   /// disconnects face patch from potential adjacent faces before deleting faces; input pointers are nulled
   // TODO: not used: only when Faces are converted into interfaces

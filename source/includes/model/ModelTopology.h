@@ -139,6 +139,7 @@ class ModelTopology {
     void        Erase(); ///< all regions
     void        RemoveDomains( const std::set<std::string>& regions );
     void        RemoveDomain( const char* name );
+    void        RemoveEmptyDomains();
     /// eliminate all model regions other than the ones specified in '*-regions.txt' file
     void        ReduceToDomains( const char* regions_file );
     void        ReduceToDomains( const std::set<std::string>& regions );

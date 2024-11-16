@@ -2204,7 +2204,10 @@ are retained.
 
 As a second step the elements and nodes are renumbered contiguously
 and corresponding amendments are made to the pfverts, plist and 
-node arrays.    
+node arrays.
+
+@param o_n_elmt_ids represents the element  idx mapping (0..n-1) from old (key) to new (value) pairs (input)
+@param o_n_node_ids old->new node idx mapping (0..n-1) but only for the nodes that are kept (output)
 
 @section arguments Input Arguments
 
@@ -2331,6 +2334,12 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
                                if ( csmp_error.Verbose() ) {
                                    cerr <<"\nVData::ReduceTo 'pfvert' neighbor element ID could not be updated for element ";
                                    cerr << *pit <<" and possible others.\n Treating them as 'REGION_BOUNDARY'"<< endl;
+#ifndef NDEBUG
+cerr <<"\n"<<"current mapping from old neighbor-element idx to new idx:"<< endl;
+for ( const auto& pfit : o_n_elmt_ids )
+  cerr <<" "<< pfit.first <<":"<< pfit.second;
+cerr << endl;
+#endif
                                  }
                                first_incidence = false;
                            }

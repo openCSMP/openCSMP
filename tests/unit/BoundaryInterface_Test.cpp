@@ -195,8 +195,6 @@ void BoundaryInterface_Test::run()
       // will remove the original region
       const size_t model_faces_before(model.Mesh().Faces());
       std::pair<std::set<std::string>,bool> boundaries = model.CreateInternalBoundaryFrom( "NORMAL_FAULT" );
-      // did the neighbor connectivity of the remaining elements get broken?
-      _test( model.Mesh().RemoveDegenerateNeighbors<Element>() == 0 );
       _test( boundaries.first.size() == subregions );
       _test( model.ContainsRegion("NORMAL_FAULT") == false );
       const size_t model_faces_after(model.Mesh().Faces());

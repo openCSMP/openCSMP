@@ -81,8 +81,9 @@ namespace csmp {
     
     // more complex models created externally but available as VSets
     // -------------------------------------------------------------
+
     /// simplex mesh with tetra, triangles and line elements
-    void create_FracBox( ModelTopology&, VSet<3U>& );
+    ModelTopology create_FracBox( VSet<3U>& );
 }
 
 #endif

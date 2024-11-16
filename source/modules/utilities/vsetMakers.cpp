@@ -3654,13 +3654,15 @@ static void create_CornerPointGrid_6i_8j_4k( VSet<3U>& vset )
       @author SKM
       @date 2/2/22
 */
-void create_FracBox( ModelTopology& topology, VSet<3U>& vset )
+ModelTopology create_FracBox( VSet<3U>& vset )
  {
     set<string> femTypes_matrix{"ISOSPARAMETRIC_LINEAR_TETRAHEDRON"},
                 femTypes_surfaces{"ISOSPARAMETRIC_LINEAR_TRIANGLE"},
                 femTypes_lines{"ISOSPARAMETRIC_LINEAR_BAR"};
 
     // MODEL TOPOLOGY
+    const bool isoparametric = true;
+    ModelTopology topology( isoparametric );
     topology.ModelName("FracBox");
     
     vector<size_t> elmtIdx_matrix(1363), elmtIdx_lines(1871-1782); // elmtIdx_surfaces(1782-1362)
@@ -7582,6 +7584,8 @@ deque<vector<int64_t> >  pfverts( 1872 );
   for ( size_t i{0U}; i<vset.Vertices(); ++i )
     pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
   vset.AddData( "node number", node_nums );
+  
+  return topology;
 
 } // end create_FracBox
 

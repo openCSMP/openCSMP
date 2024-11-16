@@ -77,11 +77,11 @@ void vsetMakers_Test::run()
        create_Prism_Hexa_VSet( vset, bSkewed );
        TestConnectedElementNeighborNumbering( vset );
 
-       ModelTopology topo;
+       
        // removing properties that were added to the VSet before
        auto pit = vset.PropertyValuesBegin();
        while ( pit!=vset.PropertyValuesEnd() ) pit = vset.RemoveData( (*pit).first.c_str() );
-       create_FracBox( topo, vset );
+       ModelTopology topo = create_FracBox( vset );
        TestConnectedElementNeighborNumbering( vset );
     }
 

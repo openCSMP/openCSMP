@@ -232,8 +232,7 @@ void FiniteElementManager_Test::TestBasicFunctionality_FiniteElementManager1()
       // 0. model construction
       // ---------------------
       VSet<3U>      vset;
-      ModelTopology topology;
-      create_FracBox( topology, vset );
+      ModelTopology topology = create_FracBox( vset );
       // creating model
       const bool do_not_use_regions_file{true};
       Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", do_not_use_regions_file );

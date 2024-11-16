@@ -247,10 +247,9 @@ void VSet_Test2::Test_ModelConstructionAndSaving3D()
     // ------------------------------------------------------------------------------------
     {
         if ( verbose_ ) cout <<"Building ModelOutput (regions & irregular boundaries)..."<<endl;
-        ModelTopology topology;
         VSet<3U>      vset;
-        create_FracBox( topology, vset );
-        Model<3U>    modelOutput2( topology, vset, "VSet_Test2-variables.txt", true );
+        ModelTopology topology = create_FracBox( vset );
+        Model<3U>     modelOutput2( topology, vset, "VSet_Test2-variables.txt", true );
         
         const Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
         const Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");

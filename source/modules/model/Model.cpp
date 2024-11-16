@@ -325,7 +325,8 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
         //    if the element numbers in the two are different.
         if ( mesh_topology.Cells() != vset.Elements() + vset.Faces() + vset.Interfaces() ) {
             map<size_t,size_t>  old_and_new_elmtids;
-            mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
+            const bool check_output{ true };
+            mesh_topology.CreateNewCellNumbers( old_and_new_elmtids, check_output );
             vset.ReduceTo( old_and_new_elmtids );
             old_and_new_elmtids.clear();
           }
@@ -557,7 +558,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
             vset.ReduceTo( old_and_new_elmtids );
             old_and_new_elmtids.clear();
           }
-        // TODO: delete regions that are emmpty now
+        mesh_topology.RemoveEmptyDomains();
       }
       
     // 4. forming default computational domain called "Model" and regions
@@ -653,7 +654,7 @@ if ( mesh_manager_.InterFaces() > 0 ) {
 
 
 /**
-    Initialises model from VSet. Very similar to Initialise(VSet,ModelTopology), but without
+    Initialises model from VSet. Similar to Initialise(VSet,ModelTopology), but without
     the creation of regions other than 'Model'.
 
  @attention a fully (boundary) flagged valid VSet is expected by this method.
@@ -666,7 +667,7 @@ void Model<dim>::Initialize( VSet<dim>& vset )
 
   if ( vset.Faces() > 0 ||
        vset.Interfaces() > 0 )
-    csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Face and InterFace objects not handled by this method.");
+    csmp_error.Note( WARNING, "Model<dim>::Initialize(VSet):", "method not tested yet for models with Face and InterFace objects.");
 
   // 1. checking whether BOX_BOUNDARY flags are there which are essential for a model without boundary domains
   if ( *min_element(vset.BFlagsBegin(),vset.BFlagsEnd()) ==  *max_element(vset.BFlagsBegin(),vset.BFlagsEnd()) ) {

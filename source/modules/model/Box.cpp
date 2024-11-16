@@ -1544,7 +1544,9 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
                    if ( isLEFT(flag1) && isLEFT(flag2) ) return LEFT;
                    if ( isBACK(flag1) && isBACK(flag2) ) return BACK;
                    if ( isFRONT(flag1) && isFRONT(flag2) ) return BOTTOM;
-                   assert( !isEdge(flag1) && !isEdge(flag2) );
+                   // surface element edges touching model boundary edges
+                   if ( !isEdge(flag1) &&  isEdge(flag2) ) return flag1;
+                   if (  isEdge(flag1) && !isEdge(flag2) ) return flag2;
                    // intersections between internal and external boundaries
                    if ( flag1 != NOT && flag2 == INTERNAL ) return flag1;
                    if ( flag2 != NOT && flag1 == INTERNAL ) return flag2;

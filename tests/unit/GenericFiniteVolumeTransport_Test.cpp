@@ -99,7 +99,7 @@ namespace csmp {
 */
 void GenericFiniteVolumeTransport_Test::run()
  {
-    // TestBasics();
+    TestBasics();
     BenchmarkGlobalVersusParametricIntegration();
    
  } // end run
@@ -222,7 +222,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
           const double K((*it)->Read(K_key));
           double  dpdr(0.), dpds(0.), dpdt(0.);
           Point<3U> vD(0.);
-          for ( auto i{0}; i<nodes; ++i ) {
+          for ( uint32_t i{0u}; i<nodes; ++i ) {
                const double p_node((*it)->N(i)->Read(p_key));
                dpdr   = DNR[i] * p_node;
                dpds   = DNS[i] * p_node;
@@ -237,8 +237,8 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
 
           // 2. facet projections
           // --------------------
-          const size_t facets=(*it)->Facets();
-          for ( auto i{0}; i<facets; ++i ) {
+          const uint32_t facets=(*it)->Facets();
+          for ( uint32_t i{0u}; i<facets; ++i ) {
               assert( (*it)->IsVolume() );
               
                // 2.1 classic way of calculating facet fluxes in physical space
@@ -417,7 +417,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
          double vDmax(0.0);
          Point<3u> vDavg(0.0);
 
-         for ( auto j = 0; j < (*it)->Parents(); ++j) {
+         for ( uint32_t j{0u}; j < (*it)->Parents(); ++j) {
              auto e = (*it)->Parent(j);
              e->Read(v_key, vc);
              if (vDmax < vc.P().Length()) {
@@ -427,12 +427,12 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
          }
          velocity_magnitude[(*it)->Idx()] = vDmax;
          vDavg.NormalizeLengthTo(1.0);
-         for ( auto j = 0; j < (*it)->Parents(); ++j) {
+         for ( uint32_t j{0u}; j < (*it)->Parents(); ++j) {
              auto e = (*it)->Parent(j);
 
              const auto child = (*it)->ParentNodeNumber(j);
              
-             for ( auto k = 0; k < e->FV()->FacetsPerSector(child); ++k) {
+             for ( uint32_t k{0u}; k < e->FV()->FacetsPerSector(child); ++k) {
                  const auto facet = e->FV()->FacetSurroundingSector(child, k);
                  double costheta = std::abs(dotProduct(e->FacetNormal(facet), vDavg));
                  csa += costheta * e->FacetArea(facet);
@@ -469,7 +469,6 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
      
 
      for (auto& element_key : elements)
-     // for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it )
        {
            auto iti = element_key.second;
            auto it = &iti;
@@ -478,7 +477,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
            assert( (*it)->IsVolume() );
 
 
-          const size_t nodes((*it)->Nodes());
+          const uint32_t nodes((*it)->Nodes());
           // 1. computing facet velocity in parametric space
           // -----------------------------------------------
           // 1.1 getting ipol-functions at barycentre and computing the pressure gradient in parametric space
@@ -489,7 +488,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
            // pressure gradients / velocities
            const double K((*it)->Read(K_key));
            Point<3U> vD(0.);
-           for ( auto i{0}; i<nodes; ++i ) {
+           for ( uint32_t i{0u}; i<nodes; ++i ) {
                const double p_node((*it)->N(i)->Read(p_key));
                vD[0] += -K * DNR[i] * p_node;
                vD[1] += -K * DNS[i] * p_node;
@@ -509,11 +508,11 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
 
            // 2. facet projections
            // --------------------
-           const size_t facets=(*it)->Facets();
+           const uint32_t facets=(*it)->Facets();
            
 //           auto fetype = (*it)->FE_Type();
            
-           for ( auto i{0}; i<facets; ++i ) {
+           for ( uint32_t i{0u}; i<facets; ++i ) {
                assert( (*it)->IsVolume() );
                
                // 2.1 classic way of calculating facet fluxes in physical space
@@ -537,7 +536,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
 
                Point<3u> v0(0.0);
                Point<3u> v1(0.0);
-               for ( auto nn = 0; nn < (*it)->Nodes(); ++nn) {
+               for ( uint32_t nn{0u}; nn < (*it)->Nodes(); ++nn) {
                    auto xform_weights = (*it)->FV()->FacetNormalTransformationNodeWeights(i, nn);
                    const Point<3u> n((*it)->N(nn)->Coordinate());
                    v0 += xform_weights.first * n;
@@ -603,7 +602,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
 
      size_t weird_nodes = 0;
      double maxdelta = 0;
-     for (auto i = 0; i < flux_balance_physical.size(); ++i) {
+     for ( uint32_t i{0u}; i < flux_balance_physical.size(); ++i) {
          _test(directed_area_para[i].Length() < 1.0e-14);
          _test(directed_area_phys[i].Length() < 1.0e-14);
 

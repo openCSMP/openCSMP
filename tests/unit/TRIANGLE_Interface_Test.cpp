@@ -28,8 +28,6 @@ void TRIANGLE_Interface_Test::Test_BOX_BOUNDARY_NodeFlags()
     TRIANGLE_Interface  mesh_interface;
     VSet<2U>            mesh_container;
     string              file_name = "irish1x.1";
-//    cout <<"\nmain: Enter name of 'Triangle' input file set: ";
-//    cin >> file_name;
     const bool isoparametric{true};
     mesh_interface.ReadTriangle2DMesh( file_name.c_str(), mesh_container, isoparametric );
 //    auto x_range = mesh_container.X_Range();
@@ -37,12 +35,8 @@ void TRIANGLE_Interface_Test::Test_BOX_BOUNDARY_NodeFlags()
 //    const double tolerance = distance( Point<2>(x_range.second,y_range.second), Point<2>(x_range.first,y_range.first) );
 //    flagCornerNodes( mesh_container, tolerance, x_range.first, x_range.second, y_range.first, y_range.second, 0., 0. );
 
-    // 'UG4_ProMeshOutput_Example-variables.txt' is the text file that defines the variables used in this example
-    Model<2U>  model( mesh_container, "CSMP-variables.txt" );
+    Model<2U>  model( mesh_container, "Minimum-variables.txt" );
     mesh_container.Erase();
-//    printModelDimensions( model, true );
-//    printRangeOfVariable( model, "permeability", true );
-
 
     // create csmp::Boundary objects to test whether the right corners are contained each of the boundaries
     // (EstablishBoxBoundariesFromOrientation will not change flags that were set earlier)

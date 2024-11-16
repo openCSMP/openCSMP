@@ -361,9 +361,9 @@ void VData_Test::TestBinaryIO()
 // test model FracBox
 bool VData_Test::TestReplacementOfCornerTetrahedra()
   {
-     ModelTopology topology;
+     ;
      VSet<3U>      vset;
-     create_FracBox( topology, vset );
+     ModelTopology topology = create_FracBox( vset );
      
      const size_t n_cnr_spanning_tets{4}; // 385, 687, 760, 821
      _test( vset.RemeshCornerSpanningTetrahedra() == n_cnr_spanning_tets );
@@ -550,8 +550,7 @@ void VData_Test::Test_InitialiseNodeTopologyIdentifiers()
    // -----------------------------------------------------------------------
    {
       VSet<3U> vset1, vset2;
-      ModelTopology   topo;
-      create_FracBox( topo, vset1 );
+      ModelTopology topo = create_FracBox( vset1 );
       // using model topology to assign bounndary flags
       topo.AssignBoxShapedModelFlags( vset1 ); // includes FlagNodesUsingBoundaryDomains(vset1);
       

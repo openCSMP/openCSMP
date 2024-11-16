@@ -1186,9 +1186,20 @@ void  ModelTopology::RemoveDomain( const char* region )
 
 void  ModelTopology::RemoveDomains( const set<string>& undesired_regions )
  {
-    for ( set<string>::const_iterator
-          uit=undesired_regions.begin(); uit!=undesired_regions.end(); uit++ )
+    for ( auto uit=undesired_regions.begin(); uit!=undesired_regions.end(); uit++ )
       RemoveDomain( (*uit).c_str() );
+ }
+
+
+
+void  ModelTopology::RemoveEmptyDomains()
+ {
+    set<string> empty_regions;
+    for ( auto& domain : model_domains_ )
+      if ( domain.second.second.empty() )
+        empty_regions.insert( domain.first );
+
+    RemoveDomains( empty_regions );
  }
 
 
@@ -1211,8 +1222,7 @@ void  ModelTopology::ReduceToDomains( const set<string>& desired_regions )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     set<string>::const_iterator ritEnd = desired_regions.end();
-    for( set<string>::const_iterator
-         rit = desired_regions.begin(); rit != ritEnd; rit++ )
+    for( auto rit = desired_regions.begin(); rit != ritEnd; rit++ )
         if ( !Contains( (*rit).c_str() ) ) {
           string errorMessage("unrecognized region in region file");
           string token_message("token: ");
@@ -1887,6 +1897,7 @@ void  ModelTopology::CreateNewCellNumbers( map<size_t /* old-# */,size_t /* new-
       }
 
     if ( check_output ) {
+        // verifies that the output element numbering is consecutive without any gaps
     // ConsecutiveSequenceChecker::Test_ConsecutiveSequenceChecker();
          const bool check_whether_max_value_is_size_minus1(true);
          if ( !ConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded( eid_mapping, check_whether_max_value_is_size_minus1 ) )

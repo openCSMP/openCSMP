@@ -628,6 +628,9 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     //  3.1 creating the required face objects
     // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // disconnecting the Elements that will be replaced from their neighbors
+    updateHaloElementConnectivity<dim>( subdomain.CellVector().begin(), subdomain.CellVector().end() );
+    
     const size_t          new_faces_required(subdomain.Cells());
     vector<Face<dim>*>    face_vector;
     vector<Element<dim>*> elmt_vector;
@@ -685,9 +688,6 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     
     // establishes Face connectivity between patches
     model.Mesh().template BuildConnectivity<Face>( face_vector.begin(), face_vector.end() );
-    // repairing connectivity among elements after removal
-    model.Mesh().template RemoveDegenerateNeighbors<Element>();
-
     
 #ifdef DEBUG
     cout <<"\n\nBoundaryInterface<"<< dim <<">::CreateInternalBoundaryFrom:";
@@ -701,9 +701,6 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     for ( uint32_t i{0U}; i<patch_names.size(); ++i )
       AddBoundary( patch_names[i].c_str(), face_ptr_per_patch[i].begin(), face_ptr_per_patch[i].end(), INTERNAL );
-      
-    // 4.1 IMPORTANT! connect all the newly created faces from the patches with one another
-    model.Mesh().template BuildConnectivity<Face>( face_vector.begin(), face_vector.end() );
     face_vector.clear();
 
     // ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -1835,14 +1832,11 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
          csmp_error.Note( WARNING, "BoundaryInterface::CreateExternalBoundaryFrom",
                           dimension_minus1_region, "element-connectivity problem detected in input region");
 #endif
+    updateHaloElementConnectivity<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() );
     // new faces are already interconnected when returned and input elements have been deleted
     vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
                                                                              elmts_to_become_faces.begin(),
                                                                              elmts_to_become_faces.end() );
-    // repairing connectivity among elements after removal
-    model->Mesh().template RemoveDegenerateNeighbors<Element>();
-
-
     // 3. creating the Boundary from the faces
     // ---------------------------------------
     // either taking BOX-B name or appending '_BOUNDARY' to the original name of the region

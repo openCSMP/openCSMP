@@ -362,6 +362,7 @@ class VData {
     /// reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; @note needs valid 'pfverts'
     size_t SwitchCornerTriangles2D();
     
+    /// eliminates the elements that are not contained in  'old_and_new_elmt_ids' from the VSet, returning mapping of old to new node idx (0..n-1)
     void ReduceTo( const std::map<size_t,size_t>& old_and_new_elmt_ids, std::map<size_t,size_t>& o_n_node_ids );
 
      /// write mesh to supplied binary file
