@@ -5329,6 +5329,11 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     data.Reserve( flag_capacity, data_capacity );
     bool variable_contains_NaN_values{ false };
 
+// DEBUGGING
+#ifndef NDEBUG
+//set<string> NaN_scalars;
+#endif
+
     switch ( (*pit).second.type )
     {
       case SCALAR: {
@@ -5337,6 +5342,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               it.Read( (*pit).second, value );
                 if ( value.Has_NaN_Values() ) {
                      variable_contains_NaN_values = true;
+//                     NaN_scalars.insert( (*pit).first + to_string(it.Idx()) );
                      break;
                   }
               pushBack( data, value );
@@ -5396,7 +5402,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                            (*pit).first, "type of element variable not recognized." );
     }
     // storing the data in the VSet
-    if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
+    if ( !variable_contains_NaN_values ) {
+          vset.AddData( (*pit).first.c_str(), data );
+      }
     else {
         if ( !detected_first_NaN_value ) {
               csmp_error.Note( WARNING, "MeshManager<dim>::OutputStoredVariablesTo:",

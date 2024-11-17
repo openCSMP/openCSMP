@@ -988,7 +988,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionN
     const CSMP_FEM_TYPE fe_type = (mesh.FiniteElements().UsesElementsWithLocalCoordinateSystem()==true) ? ISOPARAMETRIC_LINEAR_BAR : LINEAR_BAR;
     const LocalVariables            lvsElementVars( model->Database().LocalVariablesAt(ELEMENT) );
     const IntegrationPointVariables lvsIntegrationPointVars( model->Database().IntegrationPointVariablesAt(ELEMENT) );
-    int32_t                         material_ID=numeric_limits<int32_t>::max(); // TODO: should be the domain index
+    int32_t                         material_ID = numeric_limits<int32_t>::max(); // domain index will be assigned later
     
     // forming element vector (the elements get their material from the domain index
     vector<Element<dim>*> elmts;
@@ -1001,7 +1001,12 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionN
     mesh.template BuildLineConnectivity<Element>( elmts.begin(), elmts.end() );
  
     // forming the region from the new line element vector
-    return FormRegionFrom( regionName, elmts.begin(), elmts.end(), is_unique );
+    size_t n_new_elements = FormRegionFrom( regionName, elmts.begin(), elmts.end(), is_unique );
+    
+    // since new lements are created here the model must be rebuilt
+    if ( n_new_elements > 0 ) model->Region("Model").ScheduleForRebuild();
+    
+    return n_new_elements;
 
  } // end FormRegionFrom(nodes)
 
