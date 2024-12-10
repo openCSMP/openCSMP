@@ -40,7 +40,6 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 */
 #include <algorithm>
 #include <array>
-#include <ciso646> // TODO: is this still needed by MS Visual Studio?
 #include <chrono>
 #include <deque>
 #include <exception>
@@ -87,6 +86,10 @@ to create images etc.
 */
 #define CSMP_WITH_IMAGE_OUTPUT
 
+
+#if defined(DEBUG) && defined(NDEBUG)
+#error && "DEBUG and NDEBUG cannot be defined simultaneously"
+#endif
 
 /**
 @mainpage About

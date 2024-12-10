@@ -7,7 +7,6 @@
 //
 
 #include "Experimental_Example.h"
-#include "compareFloats.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
@@ -17,29 +16,19 @@
 #include "Gauss_Solver.h"
 #endif
 
-#include "Boundary.h"
-#include "DES2PhaseSlightlyCompressibleTransport.h"
 #include "ErrorHandler.h"
-#include "FlowFunctionsModule.h"
+#include "ANSYS_Model2D.h"
 #include "InputDataManager.h"
-#include "ModelTopology.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
+#include "VelocityAndVolumeFlux.h"
 #include "PDE_Integrator.h"
+#include "SteadyStateDiffusor.h"
 #include "LinearSolver.h"
 #include "Region.h"
-#include "RegionMonitor.h"
-#include "SplitBoundary.h"
-#include "Standard_IO_Handler.h"
 #include "VTK_Interface.h"
 #include "VTU_Interface.h"
-#include "DynamicArray2D.h"
-
-#include "ANSYS_Model3D.h"
-#include "UG4_UGX_FileExport.h"
-#include "vsetMakers.h"
-
 
 using namespace std;
 
@@ -59,156 +48,47 @@ void Experimental_Example::Specifications()
 
 
 
-class MyClass {
-  public:
-    // 0. custom constructor
-    MyClass( int i_val ) : i_(i_val), i_ary_(new int[i_val]) {} // default constructor
-    
-    // 1. copy constructor
-    MyClass( const MyClass& mc ) : i_(mc.i_), i_ary_(mc.i_ary_) {
-          for ( int i=0; i<mc.i_; ++i ) i_ary_[i] = mc.i_ary_[i];
-       }
-    // 2. destructor
-    ~MyClass() { delete[] i_ary_; i_ary_=nullptr;
-      }
-    // 3. assignment operator a(5); a = b;
-    MyClass& operator=( const MyClass& mc ) {
-         if ( this != &mc ) {
-              i_ = mc.i_;
-              delete[] i_ary_;
-              i_ary_ = new int[i_];
-              for ( int i=0; i<mc.i_; ++i ) i_ary_[i] = mc.i_ary_[i];
-           }
-         return *this;
-      }
-    // 4. moving things MyClass a = func_creating_an_instance_of_MyClass();
-    MyClass( MyClass&& mc ) : i_(mc.i_), i_ary_(mc.i_ary_) {
-          mc.i_ary_ = nullptr;
-       }
-   // 5. move assignment
-   MyClass& operator=( MyClass&& mc ) {
-      if ( this == &mc ) return *this;
-      i_ = mc.i_;
-      i_ary_ = mc.i_ary_;
-      mc.i_ary_ = nullptr;
-      return *this;
-    }
-  
-  private:
-    int  i_;
-    int* i_ary_{nullptr};
-};
-
-
-
 void Experimental_Example::Run()
  {
-    constexpr int dim{3};
-    ScalarVariable        sc(ANY,1.);
-    VectorVariable<dim>   vc{ANY,ANY,ANY,1.,2.,3.};
-    TensorVariable<dim>   ts; ts = vc;
-    ArrayVariable         A(6);
-    FlaggedArrayVariable  fa(11);
-    
-    
-    // a little demonstration of the pointer concept used extensively in C and C++
-    int a{3};
-    // pointer to the integer a
-    int* ptr = &a;
-    int* ptr2{ nullptr }; // safe initalisation of pointer
-    delete ptr2;  // de-allocate the memory pointed to by a (in this case none;
-    int ptr3[] = { 0, 1, 2, 3, 4, 5 }; // C-style fixed array based on the pointer concept
-    // accessing the array's fourth element (counting from 0..arraysize-1
-    *(ptr3 + 3) = 24;
-    // assignment of values
-    ptr3[3] = 24;
-    
-    // dynamic array (which lives in heap memory)
-    int* array_ptr = new int[5];
-    // size of array pointer (not the array)
-    cout <<"\nmain: "<< sizeof(array_ptr) <<" (size of pointer = machine word) vs. "<< sizeof(int) <<" (integer)."<< endl;
-    // what is the size of the array? - some work to calculate for a dynamic array
-    cout <<"\nmain: array size: "<< 5 * sizeof(int) + sizeof(array_ptr) << endl;
-    // now the array has to be de-allocated, otherwise we have a memory leak
-    delete[] array_ptr;
-    // IN CONTEMPORARY PRACTICE DO NOT USE RAW POINTERS, use autoptr instead
-    std::shared_ptr<int> aptr{&a};
-    // aptr will get deleted automatically when the program finishes, but its management incurs some overhead
-    
-    cout <<"main: value of a: ";
-    cout << a <<" or "<< *ptr;
-    // check the validity of the pointer before using (derefencing) it
-    if ( ptr2 != nullptr ) cout << *ptr2;
-    // shorthand
-    if ( ptr2 ) cout << *ptr2;
- 
- 
-    // testing numberToString and matrix output
-    // ----------------------------------------
-    double dvalue{ 1.0e-15 };
-    float  fvalue{ 1.0e-01 };
-    cout <<"\nexample: floating point numbers: "<< dvalue <<" vs. "<< fvalue << endl;
-
-    cout <<"\n"<<"experimental example: sum: "<< numberToString( fvalue + dvalue );
-
-    cout <<"\n"<<"experimental example: float with size "<< sizeof(dvalue) <<": "<< numberToString( dvalue );
-    cout <<"\n"<<"experimental example: float with size "<< sizeof(fvalue) <<": "<< numberToString( fvalue );
-
- 
-    // comparing 1D array with vector of vectors
-    DynamicArray2D<double> mat(3,5);
-    // unsupported 2D initialisation: DynamicArray2D<double> mat2{ {1.,0}, {0.,2.} };
-    // should work: DynamicArray2D<double> mat2{ 1., 0., 0., 2. };
-    // would not know m, n: DynamicArray2D<double> mat2( vector<double>{1., 0., 0., 2.} );
-//    DynamicArray2D<double> mat3{ 1., 0., 0., 2. }; // square matrix
-    DynamicArray2D<double> mat4{ {1., 0.}, {0., 2.} };
-    // assignments
-//    DynamicArray2D<double> mat5 = { 1., 0., 0., 2. };
-  
-    // 2D Test case without SplitBoundary objects
-    // ------------------------------------------
-    VSet<2U> mesh;
-    ModelTopology topo = create_MeshPatchWithLineElements_VSet( mesh );
-    const bool treat_domains_as_regions{true}; // model does not contain any Face objects!
-    Model<2U> model2D( topo, mesh, "UG4_UGX_FileExport-variables.txt", treat_domains_as_regions );
-
-    // intialising the variables 'element variable' and 'element vector'
-    //model.InputPropertyValue( "element variable", makeScalar(ANY,1.0) );
-    model2D.InputPropertyValue( "element vector", makeVector(ANY,ANY,1.0,2.0) );
-    
-    // forcing the creation of another unique region called quadrilaterals because Promesh does not show properties
-    const bool unique_region{ true };
-    model2D.FormRegionFrom( "quads", "element variable", 3.5, 5.0, unique_region );
-
-    VTU_Interface<2U>  vtu(model2D);
-    list<string> output_props{ "node number", "element number", "element variable" };
-    vtu.OutputDataToVTU( "create_MeshPatchWithLineElements_VSet", output_props, "Model", static_cast<int>(0) );
-    
-    // OUTPUTS MODEL TO UG (name will be the model name)
-    UG4_UGX_FileExport<2U> ug4_exporter2D( model2D );
-    ug4_exporter2D.Write_UGX_FileASCII( model2D, model2D.Name() );
-    
+    string model_name("fracture_example");
     
     // 3D 'prism_mesh' testcase
     // ------------------------
-    ANSYS_Model3D  model3D( "prism_test", "UG4_UGX_FileExport-variables.txt",
-                             true   /* binary_file */
-                          );
-    printRangeOfVariable( model3D, "element number" );
-    printRangeOfVariable( model3D, "face number" );
-    printRangeOfVariable( model3D, "node number" );
-    
-    // assigning the number of nodes to 'element variable' so that this array can be tested for correctness
-    Region<3U>& model_domain = model3D.Region("Model");
-    const csmp::Index evar_key = model3D.Database().StorageKey("element variable");
-    for ( auto& it : model_domain.CellVector() )
-      it->Store( evar_key, makeScalar(ANY,it->Nodes()) );
-      
-    model3D.InputPropertyValue( "element vector", makeVector(ANY,ANY,ANY,1.,2.,3.) );
-  
-    UG4_UGX_FileExport<3U> ug4_exporter3D( model3D );
-    ug4_exporter3D.Write_UGX_FileASCII( model3D, model3D.Name() );
+    ANSYS_Model2D  model( model_name.c_str(), "Minimal-variables.txt", true /* binary_file */ );
 
+    // Configure the simulation from a file
+    InputDataManager<2>  model_configuration;
+    model_configuration.ConfigureFromFile( model, model_name.c_str(),
+                                           false,  ///< region name from parameter range
+                                           true,   ///< default property values
+                                           true,   ///< regional property values
+                                           false,  ///< boundary conditions for box-shaped model
+                                           true,   ///< essential conditions for regions
+                                           true ); ///< boundary conditions for arbitrary-shaped model
+    
+     // 7.  Building the steady-state FE Algorithm "fluid_pressure"
+    // -----------------------------------------------------------
+    const bool lump_rhs{true};
+    SteadyStateDiffusor<2U,Element> fluid_pressure( model, "conductivity", 
+                                                   "fluid pressure", 
+                                                   "fluid volume source", lump_rhs );
+   
+    fluid_pressure.IntegrateOver( model.Region("Model") );
+    model.Apply( fluid_pressure );
+
+    // 9.  Output the initial range of the variables
+    // ---------------------------------------------
+    printRangeOfVariable( model, "fluid pressure" );
+    printRangeOfVariable( model, "velocity" );
+    printRangeOfVariable( model, "pore velocity" );
+    printRangeOfVariable( model, "volume flux" );
+
+
+    // 10.  Output the initial conditions to VTK
+    // -----------------------------------------
+    list<string> output_props{ "fluid pressure", "velocity", "volume flux" };
+//    VTU_Interface<2U>( model ).OutputDataToVTU( model_name, output_props );
+    
     cout << endl << endl << "Run() finished." << endl;
 }
 

@@ -59,7 +59,7 @@ class FiniteVolumeStencil {
     explicit FiniteVolumeStencil( const char* csp_finite_element_type );
     FiniteVolumeStencil( const FiniteVolumeStencil& );
     FiniteVolumeStencil& operator=( const FiniteVolumeStencil& );
-    ~FiniteVolumeStencil();
+    ~FiniteVolumeStencil() = default;
     void      Initialize( const char* csp_finite_element_type );
     void      Resize( uint32_t isrf, uint32_t srfs_per_node, uint32_t ivol, uint32_t spts, uint32_t vpts );
   
