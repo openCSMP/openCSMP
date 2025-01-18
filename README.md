@@ -1,6 +1,6 @@
 # Open-CSMP++2024
-
-
+CSMP++ at the end of 2024 (Dec 14) during sabbatical at KAUST and before the refactoring of the finite element library.
+Stable version passing skm_unit_tests_main and supporting ACGSS.
 
 ## Getting started
 
