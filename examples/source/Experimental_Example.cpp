@@ -47,14 +47,74 @@ void Experimental_Example::Specifications()
   }
 
 
+class Shape {
+  public:
+    Shape();
+    Shape( double, double );
+    Shape( const Shape& s );
+    ~Shape();
+    Shape& operator=( const Shape& s );
+    void Out() const;
+
+  private:
+    double surface_area_;
+    double volume_;
+};
+
+Shape::Shape() : surface_area_(0), volume_(0) { cout <<"\nShape: called default ctor"<< endl; }
+
+Shape::Shape( double s, double v ) 
+ : surface_area_(s), 
+   volume_(v)
+ { cout <<"\nShape: called custom ctor"<< endl; }
+
+Shape::Shape( const Shape& s ) 
+ : surface_area_(s.surface_area_), 
+   volume_(s.volume_)
+ { cout <<"\nShape: called copy ctor"<< endl; }
+
+Shape::~Shape() { cout <<"\nShape: called destructor"<< endl; }
+
+/// Shape a = b;
+Shape& Shape::operator=( const Shape& s ) {
+    if ( this != &s ) {
+         surface_area_ = s.surface_area_; 
+         volume_       = s.volume_;
+      }
+    cout <<"\nShape: called operator="<< endl;  
+    return *this;
+ }
+
+void Shape::Out() const
+ {
+    cout<<"\nShape: area: "<< surface_area_;
+    cout<<" volume: "<< volume_ << endl;
+ }
+
 
 void Experimental_Example::Run()
  {
-    string model_name("fracture_example");
+    Shape a(20,10), b;
+    
+    a.Out();
+    b.Out();
+    
+    vector<Shape> vec(2,a);
+    vec.push_back( b );
+    vec[2] = a;
+ 
+} // end run
+
+
+
+
+
+#if 0
+    string model_name("gravels_klingbeil99");
     
     // 3D 'prism_mesh' testcase
     // ------------------------
-    ANSYS_Model2D  model( model_name.c_str(), "Minimal-variables.txt", true /* binary_file */ );
+    ANSYS_Model2D  model( model_name.c_str(), "IMPES-variables.txt", true /* binary_file */ );
 
     // Configure the simulation from a file
     InputDataManager<2>  model_configuration;
@@ -90,13 +150,10 @@ void Experimental_Example::Run()
 //    VTU_Interface<2U>( model ).OutputDataToVTU( model_name, output_props );
     
     cout << endl << endl << "Run() finished." << endl;
-}
 
 
 
 
-
-#if 0
 /**
      ANLOR bubble migration example
 */
