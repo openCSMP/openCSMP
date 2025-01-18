@@ -1,0 +1,11 @@
+UnitSquareFracs_irregular
+no properties
+MATRIX
+FRACS1
+FRACS2
+FRACS3
+FRACS4
+LEFT
+RIGHT
+TOP
+BOTTOM

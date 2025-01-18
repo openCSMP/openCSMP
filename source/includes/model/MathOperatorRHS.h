@@ -1,0 +1,214 @@
+#ifndef CSMP_MATH_OPERATOR_RHS_H
+#define CSMP_MATH_OPERATOR_RHS_H
+
+#include "Parameter.h"
+#include "DenseMatrix.h"
+
+#include "ScalarVariable.h"
+#include "VectorVariable.h"
+#include "TensorVariable.h"
+#include "ArrayVariable.h"
+#include "FlaggedArrayVariable.h"
+
+namespace csmp {
+
+template<uint32_t> class Element;
+template<uint32_t> class PropertyDatabase;
+
+/**
+@brief Base class for FE or FV integrals accumulated into righthand vector.
+
+@author S.K. Matthai
+@author Stephen G. Roberts
+@date 1999
+
+@section motivation Motivation
+
+To be able to write PDE equations in finite element form, using the
+CSMP Algorithm class.
+
+RULES for using righthand Mathoperators
+
+1. supplied data:
+
+    - Property vectors contain data from: nodes, integration points, or elements
+ 
+    - node and integration point data are supplied together in a numbering as
+      specified for the particular element type.
+ 
+    - if a node or a integration point has multiple degrees of freedom, then
+      the node property vector<double> will be of dimension (nds+ips) * dof
+      in this case, the entries will be 'dof' per node or constraint point in the
+      order as given above.
+
+*/
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class MathOperatorRHS {
+    MathOperatorRHS();
+
+  public:
+
+    MathOperatorRHS( const MathOperatorRHS& );
+
+    MathOperatorRHS( const PropertyDatabase<dim>&,
+                     const char* test );
+
+    MathOperatorRHS( const PropertyDatabase<dim>&,
+                     const char* oper,
+                     const char* test );
+
+    MathOperatorRHS& operator=( const MathOperatorRHS& );
+
+    virtual ~MathOperatorRHS();
+
+    /// Operand Functions
+    std::string   Name() const ;
+    void          Name( const char*, const char* topname );
+    void          Name( const char*, const char* opname, const char* topname );
+
+    virtual void  Out() const;
+
+    /// op
+    const Parameter& MaterialOperand()          const;
+    const Index&  MaterialOperandKey()          const;
+    std::string   MaterialOperandName()         const;
+    VARIABLE_TYPE MaterialOperandType()         const;
+    PLACEMENT     MaterialOperandPlacement()    const;
+    uint32_t      MaterialOperandDataDepth()    const;
+
+    /// bop
+    const Parameter& BasicOperand()             const;
+    const Index&  BasicOperandKey()             const;
+    std::string   BasicOperandName()            const;
+    VARIABLE_TYPE BasicOperandType()            const;
+    PLACEMENT     BasicOperandPlacement()       const;
+    uint32_t      BasicOperandDataDepth()       const;
+    size_t        BasicOperandOffset()          const;
+    void          BasicOperandOffset( size_t );
+
+    /// top
+    const Parameter& TestOperand()              const;
+    const Index&  TestOperandKey()              const;
+    std::string   TestOperandName()             const;
+    VARIABLE_TYPE TestOperandType()             const;
+    PLACEMENT     TestOperandPlacement()        const;
+    uint32_t      TestOperandDataDepth()        const;
+    size_t        TestOperandOffset()           const;
+    void          TestOperandOffset( size_t );
+
+    /// Accumulation Process Settings
+
+    /// Get Flags and Properties
+    bool          Add()                         const;
+    bool          Subtract()                    const;
+    bool          AddLater()                    const;
+    bool          SubtractLater()               const;
+    bool          Multiply()                    const;
+    bool          LumpedFormulation()           const;
+    uint32_t      ApplicationCycle()            const;
+    uint32_t      ApplicationCycles()           const;
+    double        MultiplyBy()                  const;
+    bool          MultiplyWithTimeIncrement()   const;
+    bool          DivideByTimeIncrement()       const;
+
+    /// Set Flags and Properties
+    void          AddAccumulate();
+    void          SubtractAccumulate();
+    void          AddAccumulateLater();
+    void          SubtractAccumulateLater();
+    void          MultiplyAccumulate();
+    void          LumpedFormulation ( bool );
+    void          ApplicationCycle  ( uint32_t );
+    void          ApplicationCycles ( uint32_t );
+    void          MultiplyBy( double integral_mult_factor );
+    void          MultiplyWithTimeIncrement( bool multiply );
+    void          DivideByTimeIncrement( bool divide );
+
+    /// interpolation of property if isoparametric elements are used
+    void          PropertyAtIntegrationPoint( const CELL<dim>&,
+                                              const csmp::Index&,
+                                              uint32_t ip, DenseMatrix<DM_MIN>& );
+
+    /// getting data from the Element, Face, InterFace
+    virtual void  GetOperands( const CELL<dim>& );
+
+    /// integration performed on Element, Face, InterFace
+    virtual void  ComputeContribution( const CELL<dim>& );
+  
+    /// writing data to the Element, Face, InterFace
+    virtual void  WriteOperands( CELL<dim>& );
+
+    /// if so specified multiply with time increment
+    virtual void  MultiplyWithTimeFactor( double dt );
+
+    /// assigment to the right hand side global vector (after everything was calculated )
+    virtual void  AssignToGlobal( const CELL<dim>&, std::vector<double>& rhs );
+
+    /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
+    virtual void  AssignToGlobal( const CELL<dim>&, std::vector<double>& rhs, const std::vector<size_t>& );
+
+    virtual MathOperatorRHS<dim,CELL>* clone() const = 0;
+
+  protected:
+    std::string                         name_;               ///< name of operator
+
+    Parameter                           op;                  ///< material property operand
+    std::pair<Parameter, size_t>        top;                 ///< test function operand
+
+    std::vector<double>                 RHS;                 ///< solution vector<double> to be accumulated
+
+    std::vector<DenseMatrix<DM_MIN> >   MTRL;                ///< material property matrix(es) needed for PDE operand
+  
+  // TODO: remove these non parallelisable members
+    DenseMatrix<DM_MIN>                 DERIV;               ///< shape function derivative matrix
+    std::vector<double>                 IPOL;                ///< shape function vector
+
+    double                              factor_;             ///< constant factor
+
+    /// specifies accumulation procedure
+    bool        add_accumulate_;
+    bool        subtract_accumulate_;
+    bool        add_accumulate_later_;
+    bool        subtract_accumulate_later_;
+    bool        multiply_accumulate_;
+    bool        lump_matrices_;
+
+    uint32_t    application_cycles_;
+    uint32_t    application_cycle_;
+
+    /// time-dependent multipliers
+    bool        time_multiply_;
+    bool        time_divide_;
+
+};
+
+// for multi-dimensional solution variables
+//void transformNodeIndexVector( uint32_t dim, const csmp::Index&, std::vector<size_t>& );
+
+/// expands element dof vec in var1_comp0, var1_comp2... form
+void transformNodeIndexVector( const csmp::Index&, std::vector<size_t>& );
+
+} // csmp
+
+
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

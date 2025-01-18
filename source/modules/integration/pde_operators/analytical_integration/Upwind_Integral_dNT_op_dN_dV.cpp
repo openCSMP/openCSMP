@@ -1,0 +1,148 @@
+#include "Upwind_Integral_dNT_op_dN_dV.h"
+#include "Exception.h"
+#include "PropertyDatabase.h"
+#include "Element.h"
+#include "Face.h"
+
+using namespace std;
+
+namespace csmp {
+
+/**
+ 
+@section arguments Input Arguments 
+The upwinding is based on the basic operand (which will be the pressure)
+variable.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+Upwind_Integral_dNT_op_dN_dV<dim,CELL>::Upwind_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
+                                                            				const char* oper, 
+                                                            				const char* basic, 
+                                                            				const char* test,
+                                                            				const char* upwind,
+                                                            				const char* trigger,
+                                                            				const double prefactor)
+ 
+  : MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
+    DN(2,3),
+    DNT(3,2),
+    uvar_(pref.StorageKey(upwind)),
+    tvar_(pref.StorageKey(trigger)),
+    prefactor_(prefactor)
+{
+    string name = "Upwind_Integral_dNT_op_dN_dV ";
+    name += upwind;
+    char * cname = new char[name.length()+1];
+    strcpy(cname, name.c_str());
+    MathOperatorLHS<dim,CELL>::Name(cname, oper, basic, test);
+
+    // testing the Operands 
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT )
+      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)",
+                             oper, "Operand must be placed on the element.");
+
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
+      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)",
+                             test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
+
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE || MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
+      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)",
+                             test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
+    
+    if (uvar_.place != NODE || uvar_.type != SCALAR)
+      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)",
+                             upwind, "Upwind variable must be a scalar property placed on the nodes.");
+                    
+    if (tvar_.place != NODE || uvar_.type != SCALAR)
+      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)",
+                             trigger, "Upwind variable must be a scalar property placed on the nodes.");
+                    
+}
+
+
+/**
+ 
+GetOperands fills a vector of material property matrices with the 
+required values for later computation. These matrices always have 
+the dimensions spatial-dimension^2 and they will hold either scalar,
+vector or tensor properties, depending on what kind of property the 
+Operand is.  
+
+When the property is an element property, it will be put into the
+first vector entry MTRL[0].
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
+ {
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
+    MathOperatorLHS<dim,CELL>::GetOperands(e);
+        
+    if (uvar_.place == NODE && uvar_.type == SCALAR && tvar_.place == NODE && tvar_.type == SCALAR) {
+      e.NodePropertyVector( uvar_, el_uvar);
+      e.NodePropertyVector( tvar_, el_tvar);
+    }
+    else {
+      throw csmp::Exception( FATAL_ERROR, "Upwind_Integral_dNT_op_dN_dV<dim>::GetOperands", 
+                                        "Only nodal properties allowed" );
+    }
+    
+ } // end GetOperands
+
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
+ {
+    e.dN( DN );
+    // transpose the shape function derivative matrix
+    DNT.Resize(e.Nodes(),dim); 
+    DN.Transposed( DNT );
+    
+    // calculate the element contribution to LHS (E_OP is the Basic Operand)
+    DNT *= MathOperatorLHS<dim,CELL>::MTRL[0];
+    DNT *= DN;
+    
+    // calculate upwinding coefficients and multiply them with operand matrix   
+    for (auto i = 0; i < e.Nodes(); ++i) {
+    	for (auto j = 0; j < e.Nodes(); ++j) {
+    		if (i != j) {
+    			const double decision = DNT(i, j)*(el_tvar[j]() - el_tvar[i]());
+    			if      (decision > 0) DNT(i, j) *= el_uvar[i]();
+    			else if (decision < 0) DNT(i, j) *= el_uvar[j]();
+    			else                   DNT(i, j) *= 0.5*(el_uvar[i]() + el_uvar[j]());
+    		}
+    		else                     DNT(i, j) = static_cast<double>(0.0);
+    	}
+    }
+    
+    for (auto i = 0; i < e.Nodes(); ++i) {
+    	DNT(i, i) = -DNT.RowSum(i);
+    }
+    
+    // assigning element contribution
+    MathOperatorLHS<dim,CELL>::LHS.Resize(e.Nodes(),e.Nodes());
+    MathOperatorLHS<dim,CELL>::LHS = DNT;
+    // analytical integration over area / volume for linear triangle 
+    // and tetrahedron elements, respectively
+    MathOperatorLHS<dim,CELL>::LHS *= e.Volume() * prefactor_;
+
+ //cout <<"\nElement: "<< e.Idx();
+ //MathOperatorLHS<dim>::LHS.Out();
+
+} // end ComputeContribution
+
+
+
+
+template class Upwind_Integral_dNT_op_dN_dV<2U,Element>;
+template class Upwind_Integral_dNT_op_dN_dV<3U,Element>;
+
+template class Upwind_Integral_dNT_op_dN_dV<2U,Face>;
+template class Upwind_Integral_dNT_op_dN_dV<3U,Face>;
+
+} // csmp

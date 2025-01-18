@@ -1,0 +1,15 @@
+name	notation	unit	index	min.	max.	place
+									
+porosity			PHI	X	1	1.00E-05	1.00E+00	element
+velocity			VT	m s-1	2	-1.00E+02	1.00E+02	element
+tensor permeability		K	m2	3	0.		1.00E+00	element
+aqueous species			ASYS	g/kg	5	0.		1.		element
+fluid pressure			PF	Pa	1	-1.00E+09	1.00E+09	node
+nodal velocity			NVT	m s-1	2	-1.00E+02	1.00E+02	node
+time				t	secs	1	0.		1.0e+12		model
+coordinate system		CS	NA	2	0.		15.		model
+stress				S	Pa	3	0.		1.0e12		model
+facies				F	int	1	0.		256.		region
+heat flux			HFU	W/m2	1	0.		4.0		face
+boundary heat flux		HFU	W/m2	1	0.		4.0		boundary
+traction			T	Pa	2	0.		1.0e12		boundary

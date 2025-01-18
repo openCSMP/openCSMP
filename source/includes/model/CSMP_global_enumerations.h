@@ -1,0 +1,234 @@
+#ifndef CSMP_GLOBAL_ENUMERATIONS_H
+#define CSMP_GLOBAL_ENUMERATIONS_H
+
+#include <set>
+#include <string>
+#include <limits>
+#include <cstdint>
+
+namespace csmp {
+
+/*
+========================================
+CSMP global constants and enumerations
+========================================
+*/
+
+/// initialisation of const to maximum value that uint32_t  can take
+const size_t NULL_IDX(std::numeric_limits<uint32_t>::max());
+const int    UNSPECIFIED(-1);
+
+/**
+@defgroup CSMP_global_enumerations
+Enums available globally in the csmp Namespace
+ */
+
+
+/**
+@addtogroup CSMP_global_enumerations
+@{
+*/
+
+/// some fixed string sizes (max filename length on NTFS partition / arbitrary #<32k)
+constexpr int NAME_STRING(256), INFO_STRING(1024);
+
+/// for templates and specific initialisations (set compiler to treat enums as single byte types!)
+enum ONE_BYTE_NUMBER : std::int8_t { ZERO, ONE, TWO, THREE,
+                                     FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN,
+                                     ELEVEN, TWELVE, THIRTEEN, FOURTEEN, FIVETEEN, SIXTEEN, SEVENTEEN,
+                                     EIGHTEEN, NINETEEN, TWENTY, TWENTY_ONE, TWENTY_TWO, TWENTY_THREE,
+                                     TWENTY_FOUR, TWENTY_FIVE, TWENTY_SIX, TWENTY_SEVEN, TWENTY_EIGHT,
+                                     TWENTY_NINE, THIRTY, THIRTY_ONE, THIRTY_TWO, THIRTY_THREE, THIRTY_FOUR,
+                                     THIRTY_FIVE, THIRTY_SIX, THIRTY_SEVEN, THIRTY_EIGHT, THIRTY_NINE, FOURTY,
+                                     FOURTY_ONE, FOURTY_TWO, FOURTY_THREE, FOURTY_FOUR, FOURTY_FIVE, FOURTY_SIX,
+                                     FOURTY_SEVEN, FOURTY_EIGHT, FOURTY_NINE, FIFTY, NOT_INITIALIZED=-1 };
+/**
+@}
+*/
+
+/**
+@addtogroup CSMP_global_enumerations
+@{ */
+
+/// Discretized csmp variables
+enum VARIABLE_TYPE : std::int8_t { SCALAR=1, VECTOR=2, TENSOR=3, ARRAY=4, FLAGGEDARRAY=5 };
+
+//enum VARIABLE_FLAG : int_fast8_t
+/// variable flag indicating treatment in computations (forced to be one-byte size because it is stored everywhere)
+enum VARIABLE_FLAG : std::int8_t { PLAIN,          /**< modifyable, dependent or indep. var. */
+                                   ANY,            /**< unspecified discriminator.  This is also used to identify if a variable has been assigned a value or not*/
+                                   INIT_GUESS,     /**< convergence oriented not phys. meaningful, not checked  */
+                                   INIT_COND,      /**< physically meaningful initial condition, checked */
+                                   FIELD_DATA,     /**< (Geological) field data for comparison */
+                                   PERIODIC,       /**< linked via ID to opposite side of model */
+                                   DIRICH,         /**< Dirichlet boundary condition */
+                                   NEUMANN,        /**< Neumann boundary condition */
+                                   ROBIN,          /**< linear combination function and derivative values on the boundary of the domain */
+                                   CONSTANT_FLUX   /**< Neumann is prescribed gradient, this one is for prescribed flux */
+                                 };
+
+/// Top down hierarchy of variable placements on mesh tree; finite volume quadrature pointe embedded
+enum PLACEMENT : std::int8_t { UNDEFINED, // default
+                               MODEL,     // increasing hight of tree
+                               REGION,
+                               BOUNDARY,
+                               SPLIT_BOUNDARY,
+                               ELEMENT,
+                               ELEMENT_INTEGRATION_POINT,
+                               SECTOR_INTEGRATION_POINT,
+                               FACET_INTEGRATION_POINT,
+                               FACE,
+                               FACE_INTEGRATION_POINT,
+                               FACE_SECTOR_INTEGRATION_POINT,
+                               FACE_FACET_INTEGRATION_POINT,
+                               EDGE, ///< only in 3D
+                               INTER_FACE,
+                               INTER_FACE_INTEGRATION_POINT,
+                               INTER_FACE_SECTOR_INTEGRATION_POINT,
+                               INTER_FACE_FACET_INTEGRATION_POINT,
+                               NODE
+                            };
+
+/// to classify 
+enum CELL_SHAPE : std::int8_t { POINT=0, LINE=1, SURFACE=2, VOLUME=3, HYPER_DIMENSIONAL=4 };
+
+/// Side of lower-dimensional face or interface between two higher-dimensional elements ( INSIDE or OUTSIDE ) and a potential lower-dimensional parent element ( MIDDLE )
+enum INTERFACE_SIDE : std::int32_t
+{
+    INSIDE  = -1,
+    OUTSIDE =  1,
+    MIDDLE  =  0
+};
+
+/**
+  @note This classification is for NodeManifolds (topologically collocated Nodes) only)!
+  @note Not all of these classifiers apply to manifolds, like endpoint
+  @note NodeManifolds exist only at SplitBoundary objects
+  @note SplitBoundary objects exist only inside of models
+  @note since SplitBoundaries are surfaces, this is the highest dimension
+  @note Classification applies to all nodes within Manifold simultaneously (including intervening ones)
+*/
+enum class ManifoldType : int8_t {
+                                    STAND_ALONE,                ///< multiplicated point
+                                    SPLIT_BOUNDARY,             ///<  2-node manifold along a SplitBoundary (most common)
+                                    SPLIT_BOUNDARY_WITH_INTERNAL_MESH,
+                                    SPLIT_BOUNDARY_CROSSING,    ///<  4-node manifold intersection of split boundaries
+                                    MULTI_SB_CROSSING,          ///<  6-node cross of 3 SBs in
+                                    SPLIT_BOUNDARY_TERMINATION, ///<  T-intersection of SBs or termination of SB against Boundary
+                                    SPLIT_BOUNDARY_END,         ///<  termination against model boundary
+                                };
+
+/// converts classifiers to strings so that they can be printed
+std::string parse( ManifoldType );
+
+
+
+/**
+       Geometric classification of nodes / points, BREP stands for boundary representation.
+       @author SKM
+       @date 9/07/2022
+       
+       @attention Help! - current scheme still contains apparent ambiguities of features difficult to resolve:
+       What is an interior surface in 3D (is it the inside of a lower-dim fracture?)?
+       PERIMETER_SURFACE in 3D refers to the perimeter of a volumetric region...
+       
+       @todo some flags do not exist in certain dimensions: in 1D PERIMETER_POINT is the same as INTERSECTION_POINT
+*/
+enum TOPOTYPE : std::int8_t {
+                                MESH_VERTEX,       ///< a point within the model volume
+                                INTERSECTION_POINT,///< a point where lines cross or multiple surfaces intersect
+                                PERIMETER_POINT,   ///< point at the end of a line inside a 2D model
+                                EXTERIOR_POINT,    ///< on an outside surface of the model
+                                INTERIOR_LINE,     ///< a line on the interior of the model
+                                PERIMETER_LINE,    ///< a surface edge inside of the model
+                                EXTERIOR_LINE,     ///< an edge of the model
+                                INTERSECTION_LINE, ///<  belonging to multiple surfaces in a 3D model
+                                INTERIOR_SURFACE,  ///< a surface within a 3D model
+                                PERIMETER_SURFACE, ///< a surface forming the hull of an object inside of a 3D model
+                                EXTERIOR_SURFACE   ///< a surface delimiting a 3D model
+                            };
+
+// TODO: add T_INTERSECTION_POINT ?
+
+/// converts classifiers to strings so that they can be printed
+std::string parseTopology( TOPOTYPE );
+
+
+
+/// variable flag indicating treatment in computations
+enum NORM_INDEX : std::int8_t
+{
+    POINT_DIFFERENCE           = -1,
+    ABSOLUTE_POINT_DIFFERENCE  = 0,
+    L1_NORM              = 1,
+    MANHATTAN_NORM       = L1_NORM,
+    TAXICAB_NORM         = L1_NORM,
+    L2_NORM              = 2,
+    EUCLIDIAN_NORM       = L2_NORM,
+    LP_NORM              = 3,
+    MAX_NORM             = 4,
+    INF_NORM             = MAX_NORM,
+    LINF_NORM            = MAX_NORM,
+    L21_NORM             = 5,
+    L22_NORM             = 6,
+    FROBENIUS_NORM       = L22_NORM,
+    HILBERT_SCHMIDT_NORM = L22_NORM,
+    LPQ_NORM             = 7,
+    INDUCED_L1_NORM      = 8,
+    INDUCED_L2_NORM      = 9,
+    INDUCED_MAX_NORM     = 11,
+    INDUCED_LINF_NORM    = INDUCED_MAX_NORM
+};
+
+/** @} */
+
+
+/**
+@addtogroup CSMP_global_enumerations
+@{ */
+
+/// Fills set with all current PLACEMENT choices
+void variablePlacementSet( std::set<PLACEMENT>& plSet );
+
+/// Fills set with all finite-volume associated PLACEMENT choices
+void fvVariablePlacementSet( std::set<PLACEMENT>& plSet );
+
+/// Fills set with all VARIABLE_TYPE choices in current model
+void variableTypeSet( std::set<VARIABLE_TYPE>& );
+
+// conversion utilities
+
+/// variable type
+VARIABLE_TYPE  parseType( int type );
+std::string    parseType( VARIABLE_TYPE );
+VARIABLE_TYPE  parseType( const char* type );
+template<typename csmp_type>
+VARIABLE_TYPE  variableType();
+
+/// variable placement
+PLACEMENT      intToPLACEMENT( int i );
+PLACEMENT      parsePlacement( const char* placement );
+std::string    parsePlacement( PLACEMENT );
+bool           faceVariable( PLACEMENT );
+bool           interFaceVariable( PLACEMENT );
+
+/// determine from the element type whether the placement of the variable is Region, Boundary or SplitBoundary
+template<uint32_t dim, template<uint32_t> class PLACE>
+PLACEMENT      parsePlacement();
+
+bool           isPlacedOnIntegrationPoint( PLACEMENT );
+/// variable flag
+VARIABLE_FLAG  intToVARIABLE_FLAG( int i );
+VARIABLE_FLAG  parseCondition( std::string& s );
+VARIABLE_FLAG  parseStatus( const char* status );
+std::string    parseStatus( VARIABLE_FLAG );
+
+/// returns the side of the Face or InterFace element
+std::string    parseSide( INTERFACE_SIDE );
+
+/** @} */
+
+
+} // end namespace csmp
+
+#endif

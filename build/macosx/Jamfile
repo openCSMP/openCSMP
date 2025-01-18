@@ -1,0 +1,275 @@
+lib csmpcore
+	:
+    [ glob $(MODULE_BASE)/analysis/*.cpp ]
+	[ glob $(MODULE_BASE)/discretisation/*.cpp ]
+    [ glob $(MODULE_BASE)/eos/*.cpp ]
+    [ glob $(MODULE_BASE)/eos/h2o/*.cpp ]
+    [ glob $(MODULE_BASE)/eos/h2o_nacl/*.cpp ]
+    [ glob $(MODULE_BASE)/eos/h2o_nacl_lookup/*.cpp ]
+    [ glob $(MODULE_BASE)/integration/cvfe_hydrothermal/*.cpp ]
+    [ glob $(MODULE_BASE)/integration/finite_elements/*.cpp ]
+    [ glob $(MODULE_BASE)/integration/finite_volumes/*.cpp ]
+    [ glob $(MODULE_BASE)/integration/finite_volumes/generic_transport_scheme/source/*.cpp ]
+    [ glob $(MODULE_BASE)/integration/finite_volumes/legacy_transport_scheme/*.cpp ]
+    [ glob $(MODULE_BASE)/integration/pde_integrators/*.cpp ]
+	[ glob $(MODULE_BASE)/integration/pde_operators/*.cpp ]
+    [ glob $(MODULE_BASE)/integration/pde_operators/analytical_integration/*.cpp ]
+    [ glob $(MODULE_BASE)/integration/pde_operators/fe_numerical_integration/*.cpp ]
+    [ glob $(MODULE_BASE)/integration/pde_operators/fv_integration/*.cpp ]    
+    [ glob $(MODULE_BASE)/integration/solver/*.cpp ]    
+    [ glob $(MODULE_BASE)/integration/solver/SAMG_profiles/*.cpp ]    
+	[ glob $(MODULE_BASE)/interfaces/*.cpp ]    
+    [ glob $(MODULE_BASE)/interfaces/ANSYS/*.cpp ]    
+    [ glob $(MODULE_BASE)/interfaces/CGNS/*.cpp : $(MODULE_BASE)/interfaces/CGNS/CGNS_*.cpp ]
+    [ glob $(MODULE_BASE)/interfaces/Eclipse/*.cpp ]
+    [ glob $(MODULE_BASE)/interfaces/Fracman/*.cpp ]
+    [ glob $(MODULE_BASE)/interfaces/GeoModeller/*.cpp ]
+    [ glob $(MODULE_BASE)/interfaces/gOcad_SKUA/*.cpp ]
+    [ glob $(MODULE_BASE)/interfaces/JPEG/*.cpp ]
+    [ glob $(MODULE_BASE)/interfaces/Maple/*.cpp ]
+    [ glob $(MODULE_BASE)/interfaces/Matlab/*.cpp ]
+    [ glob $(MODULE_BASE)/interfaces/Rhinoceros/*.cpp ]
+    [ glob $(MODULE_BASE)/interfaces/Tecplot/*.cpp ]
+    [ glob $(MODULE_BASE)/interfaces/VTK/*.cpp ]
+    [ glob $(MODULE_BASE)/math/*.cpp ]
+    [ glob $(MODULE_BASE)/model/*.cpp ]
+	[ glob $(MODULE_BASE)/property_manipulation/*.cpp ]
+    [ glob $(MODULE_BASE)/property_manipulation/interrelations/*.cpp ]   
+    [ glob $(MODULE_BASE)/regular_grids/*.cpp ]
+    [ glob $(MODULE_BASE)/run_control/*.cpp : $(MODULE_BASE)/run_control/ExampleSuiteMainWindow.cpp ]
+    [ glob $(MODULE_BASE)/thmc/fractures/*.cpp ]
+    [ glob $(MODULE_BASE)/thmc/geochemistry/*.cpp ]
+    [ glob $(MODULE_BASE)/thmc/mechanics/*.cpp ]
+    [ glob $(MODULE_BASE)/thmc/single_phase_flow/*.cpp ]
+    [ glob $(MODULE_BASE)/thmc/two_phase_flow/*.cpp ]
+    [ glob $(MODULE_BASE)/utilities/*.cpp ]
+	:
+	<include>$(INCLUDE_BASE)/analysis
+	<include>$(INCLUDE_BASE)/thmc/fractures
+	<include>$(INCLUDE_BASE)/thmc/geochemistry
+	<include>$(INCLUDE_BASE)/thmc/mechanics
+	<include>$(INCLUDE_BASE)/thmc/single_phase_flow
+	<include>$(INCLUDE_BASE)/thmc/two_phase_flow
+	<include>$(INCLUDE_BASE)/interfaces/ANSYS
+	<include>$(INCLUDE_BASE)/interfaces/CGNS
+	<include>$(INCLUDE_BASE)/interfaces/Eclipse
+	<include>$(INCLUDE_BASE)/interfaces/Fracman
+	<include>$(INCLUDE_BASE)/interfaces/GeoModeller
+	<include>$(INCLUDE_BASE)/interfaces/gOcad_SKUA
+	<include>$(INCLUDE_BASE)/interfaces/JPEG
+	<include>$(INCLUDE_BASE)/interfaces/Maple
+	<include>$(INCLUDE_BASE)/interfaces/Matlab
+	<include>$(INCLUDE_BASE)/interfaces/Rhinoceros
+	<include>$(INCLUDE_BASE)/interfaces/Tecplot
+	<include>$(INCLUDE_BASE)/interfaces/VTK
+	<include>$(INCLUDE_BASE)/integration/finite_elements
+	<include>$(INCLUDE_BASE)/integration/finite_volumes
+	<include>$(INCLUDE_BASE)/integration/finite_volumes/generic_transport_scheme
+	<include>$(INCLUDE_BASE)/integration/finite_volumes/legacy_transport_scheme
+	<include>$(INCLUDE_BASE)/integration/pde_integrators
+	<include>$(INCLUDE_BASE)/integration/pde_operators
+	<include>$(INCLUDE_BASE)/integration/pde_operators/analytical
+	<include>$(INCLUDE_BASE)/integration/pde_operators/numerical
+	<include>$(INCLUDE_BASE)/integration/solver
+	<include>$(INCLUDE_BASE)/discretisation
+	<include>$(INCLUDE_BASE)/eos
+	<include>$(INCLUDE_BASE)/integration
+	<include>$(INCLUDE_BASE)/interfaces
+	<include>$(INCLUDE_BASE)/math
+	<include>$(INCLUDE_BASE)/model
+	<include>$(INCLUDE_BASE)/property_manipulation
+	<include>$(INCLUDE_BASE)/regular_grids
+	<include>$(INCLUDE_BASE)/run_control
+	<include>$(INCLUDE_BASE)/thmc
+	<include>$(INCLUDE_BASE)/utilities
+	<include>$(MODULE_BASE)/analysis
+	<include>$(MODULE_BASE)/eos/h2o
+	<include>$(MODULE_BASE)/eos/h2o_nacl
+	<include>$(MODULE_BASE)/eos/h2o_nacl_lookup
+	<include>$(MODULE_BASE)/integration/cvfe_hydrothermal
+	<include>$(MODULE_BASE)/integration/finite_elements
+	<include>$(MODULE_BASE)/integration/finite_volumes
+	<include>$(MODULE_BASE)/integration/finite_volumes/generic_transport_scheme
+	<include>$(MODULE_BASE)/integration/finite_volumes/generic_transport_scheme/source
+	<include>$(MODULE_BASE)/integration/finite_volumes/legacy_transport_scheme
+	<include>$(MODULE_BASE)/integration/pde_integrators
+	<include>$(MODULE_BASE)/integration/pde_operators
+	<include>$(MODULE_BASE)/integration/pde_operators/analytical_integration
+	<include>$(MODULE_BASE)/integration/pde_operators/fe_numerical_integration
+	<include>$(MODULE_BASE)/integration/pde_operators/fv_integration
+	<include>$(MODULE_BASE)/integration/solver
+	<include>$(MODULE_BASE)/integration/solver/SAMG_profiles
+	<include>$(MODULE_BASE)/interfaces/ANSYS
+	<include>$(MODULE_BASE)/interfaces/CGNS
+	<include>$(MODULE_BASE)/interfaces/Eclipse
+	<include>$(MODULE_BASE)/interfaces/Fracman
+	<include>$(MODULE_BASE)/interfaces/GeoModeller
+	<include>$(MODULE_BASE)/interfaces/gOcad_SKUA
+	<include>$(MODULE_BASE)/interfaces/JPEG
+	<include>$(MODULE_BASE)/interfaces/Maple
+	<include>$(MODULE_BASE)/interfaces/Matlab
+	<include>$(MODULE_BASE)/interfaces/Rhinoceros
+	<include>$(MODULE_BASE)/interfaces/Tecplot
+	<include>$(MODULE_BASE)/interfaces/VTK
+	<include>$(MODULE_BASE)/property_manipulation/interrelations
+	<include>$(MODULE_BASE)/thmc/fractures
+	<include>$(MODULE_BASE)/thmc/geochemistry
+	<include>$(MODULE_BASE)/thmc/mechanics
+	<include>$(MODULE_BASE)/thmc/single_phase_flow
+	<include>$(MODULE_BASE)/thmc/two_phase_flow
+	<include>$(MODULE_BASE)/discretisation
+	<include>$(MODULE_BASE)/eos
+	<include>$(MODULE_BASE)/integration
+	<include>$(MODULE_BASE)/interfaces
+	<include>$(MODULE_BASE)/math
+	<include>$(MODULE_BASE)/model
+	<include>$(MODULE_BASE)/property_manipulation
+	<include>$(MODULE_BASE)/regular_grids
+	<include>$(MODULE_BASE)/run_control
+	<include>$(MODULE_BASE)/thmc
+	<include>$(MODULE_BASE)/utilities
+	<include>$(LIB_BASE)/jpeg
+	<include>$(LIB_BASE)/samg
+	<include>$(LIB_BASE)/iaps_h2o_eos
+	<include>$(EXAMPLE_BASE)
+	<include>$(TEST_BASE)/unit
+	<define>CSMP_WITH_SAMG_SOLVER
+	<define>SAMG_MULTIPLE_INSTANCES
+	<define>SAMG_UNIX_LINUX
+	<define>SAMG_LCASE_USCORE
+	;
+
+lib iaps
+        :
+        [ glob $(LIB_BASE)/iaps_h2o_eos/*.cpp ]
+        ;
+
+lib jpeg
+        :
+        [ glob $(LIB_BASE)/jpeg/*.cpp ]
+        ;
+
+exe csmptest
+	:
+	$(TEST_BASE)/unit_tests_main.cpp
+    [ glob $(TEST_BASE)/integration/*.cpp ]
+    [ glob $(TEST_BASE)/unit/*.cpp ] #: $(TEST_BASE)/unit/Index_Test.cpp $(TEST_BASE)/unit/PropertyDatabase_Test.cpp ]
+	libamg_mult.dylib
+	libiomp5.dylib
+	libifportmt.dylib
+	libifcoremt.dylib
+	libimf.dylib
+	libsvml.dylib
+	libintlc.dylib
+	libiaps.dylib
+	libjpeg.dylib
+	csmpcore/<link>static
+	:
+	<include>$(INCLUDE_BASE)/analysis
+	<include>$(INCLUDE_BASE)/thmc/fractures
+	<include>$(INCLUDE_BASE)/thmc/geochemistry
+	<include>$(INCLUDE_BASE)/thmc/mechanics
+	<include>$(INCLUDE_BASE)/thmc/single_phase_flow
+	<include>$(INCLUDE_BASE)/thmc/two_phase_flow
+	<include>$(INCLUDE_BASE)/interfaces/ANSYS
+	<include>$(INCLUDE_BASE)/interfaces/CGNS
+	<include>$(INCLUDE_BASE)/interfaces/Eclipse
+	<include>$(INCLUDE_BASE)/interfaces/Fracman
+	<include>$(INCLUDE_BASE)/interfaces/GeoModeller
+	<include>$(INCLUDE_BASE)/interfaces/gOcad_SKUA
+	<include>$(INCLUDE_BASE)/interfaces/JPEG
+	<include>$(INCLUDE_BASE)/interfaces/Maple
+	<include>$(INCLUDE_BASE)/interfaces/Matlab
+	<include>$(INCLUDE_BASE)/interfaces/Rhinoceros
+	<include>$(INCLUDE_BASE)/interfaces/Tecplot
+	<include>$(INCLUDE_BASE)/interfaces/VTK
+	<include>$(INCLUDE_BASE)/integration/finite_elements
+	<include>$(INCLUDE_BASE)/integration/finite_volumes
+	<include>$(INCLUDE_BASE)/integration/finite_volumes/generic_transport_scheme
+	<include>$(INCLUDE_BASE)/integration/finite_volumes/legacy_transport_scheme
+	<include>$(INCLUDE_BASE)/integration/pde_integrators
+	<include>$(INCLUDE_BASE)/integration/pde_operators
+	<include>$(INCLUDE_BASE)/integration/pde_operators/analytical
+	<include>$(INCLUDE_BASE)/integration/pde_operators/numerical
+	<include>$(INCLUDE_BASE)/integration/solver
+	<include>$(INCLUDE_BASE)/discretisation
+	<include>$(INCLUDE_BASE)/eos
+	<include>$(INCLUDE_BASE)/integration
+	<include>$(INCLUDE_BASE)/interfaces
+	<include>$(INCLUDE_BASE)/math
+	<include>$(INCLUDE_BASE)/model
+	<include>$(INCLUDE_BASE)/property_manipulation
+	<include>$(INCLUDE_BASE)/regular_grids
+	<include>$(INCLUDE_BASE)/run_control
+	<include>$(INCLUDE_BASE)/thmc
+	<include>$(INCLUDE_BASE)/utilities
+	<include>$(MODULE_BASE)/analysis
+	<include>$(MODULE_BASE)/eos/h2o
+	<include>$(MODULE_BASE)/eos/h2o_nacl
+	<include>$(MODULE_BASE)/eos/h2o_nacl_lookup
+	<include>$(MODULE_BASE)/integration/cvfe_hydrothermal
+	<include>$(MODULE_BASE)/integration/finite_elements
+	<include>$(MODULE_BASE)/integration/finite_volumes
+	<include>$(MODULE_BASE)/integration/finite_volumes/generic_transport_scheme
+	<include>$(MODULE_BASE)/integration/finite_volumes/generic_transport_scheme/source
+	<include>$(MODULE_BASE)/integration/finite_volumes/legacy_transport_scheme
+	<include>$(MODULE_BASE)/integration/pde_integrators
+	<include>$(MODULE_BASE)/integration/pde_operators
+	<include>$(MODULE_BASE)/integration/pde_operators/analytical_integration
+	<include>$(MODULE_BASE)/integration/pde_operators/fe_numerical_integration
+	<include>$(MODULE_BASE)/integration/pde_operators/fv_integration
+	<include>$(MODULE_BASE)/integration/solver
+	<include>$(MODULE_BASE)/integration/solver/SAMG_profiles
+	<include>$(MODULE_BASE)/interfaces/ANSYS
+	<include>$(MODULE_BASE)/interfaces/CGNS
+	<include>$(MODULE_BASE)/interfaces/Eclipse
+	<include>$(MODULE_BASE)/interfaces/Fracman
+	<include>$(MODULE_BASE)/interfaces/GeoModeller
+	<include>$(MODULE_BASE)/interfaces/gOcad_SKUA
+	<include>$(MODULE_BASE)/interfaces/JPEG
+	<include>$(MODULE_BASE)/interfaces/Maple
+	<include>$(MODULE_BASE)/interfaces/Matlab
+	<include>$(MODULE_BASE)/interfaces/Rhinoceros
+	<include>$(MODULE_BASE)/interfaces/Tecplot
+	<include>$(MODULE_BASE)/interfaces/VTK
+	<include>$(MODULE_BASE)/property_manipulation/interrelations
+	<include>$(MODULE_BASE)/thmc/fractures
+	<include>$(MODULE_BASE)/thmc/geochemistry
+	<include>$(MODULE_BASE)/thmc/mechanics
+	<include>$(MODULE_BASE)/thmc/single_phase_flow
+	<include>$(MODULE_BASE)/thmc/two_phase_flow
+	<include>$(MODULE_BASE)/discretisation
+	<include>$(MODULE_BASE)/eos
+	<include>$(MODULE_BASE)/integration
+	<include>$(MODULE_BASE)/interfaces
+	<include>$(MODULE_BASE)/math
+	<include>$(MODULE_BASE)/model
+	<include>$(MODULE_BASE)/property_manipulation
+	<include>$(MODULE_BASE)/regular_grids
+	<include>$(MODULE_BASE)/run_control
+	<include>$(MODULE_BASE)/thmc
+	<include>$(MODULE_BASE)/utilities
+	<include>$(LIB_BASE)/jpeg
+	<include>$(LIB_BASE)/samg
+	<include>$(LIB_BASE)/iaps_h2o_eos
+	<include>$(EXAMPLE_BASE)
+	<include>$(TEST_BASE)/unit	
+	<define>CSMP_WITH_SAMG_SOLVER
+	<define>SAMG_MULTIPLE_INSTANCES
+	<define>SAMG_UNIX_LINUX
+	<define>SAMG_LCASE_USCORE
+	;
+
+install dist 
+    :
+	csmpcore
+	jpeg
+	iaps
+	csmptest
+    :
+	<install-dependencies>on
+	<install-type>EXE
+	<install-type>SHARED_LIB
+	<install-type>STATIC_LIB
+	<location>$(PROJECT_ROOT)/bin/macosx
+    ;

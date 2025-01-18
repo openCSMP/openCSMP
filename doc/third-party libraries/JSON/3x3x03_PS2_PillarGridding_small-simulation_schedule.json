@@ -1,0 +1,131 @@
+{
+  "WELLS": {
+    "well1": {
+      "ACTIVE_COMPLETION_INTERVAL": [
+        {
+          "HEEL": 1950,
+          "TOE": 2000,
+          "start_time": 0,
+          "end_time": 315360000
+        }
+      ],
+      "SCHEDULE": [
+        {
+          "time": 0,
+          "mode": "INJECTION",
+          "parameters": {
+            "pressure": 187525.0,
+            "rate": "no data",
+            "mass_rate": 100,
+            "cumulative_injected_mass": 0
+          },
+          "diagnostics": {
+            "pressure_at_gauge": 187525.0,
+            "pressure_gauge_depth": 2000,
+            "bottom_hole_pressure": 187525.0,
+            "temperature_at_gauge": 75,
+            "temperature_gauge_depth": 2000
+          }
+        },
+        {
+          "time": 31536000,  
+          "mode": "INJECTION",
+          "parameters": {
+            "pressure": 187525.0,
+            "rate": "no data",
+            "mass_rate": 200,
+            "cumulative_injected_mass": 3153600000
+          },
+          "diagnostics": {
+            "pressure_at_gauge": 187525.0,
+            "pressure_gauge_depth": 2000,
+            "bottom_hole_pressure": 187525.0,
+            "temperature_at_gauge": 75,
+            "temperature_gauge_depth": 2000
+          }
+        },
+        {
+          "time": 157680000,  
+          "mode": "SHUT_IN",
+          "parameters": {
+            "pressure": 187525.0,
+            "rate": "no data",
+            "mass_rate": 0,
+            "cumulative_injected_mass": 6307200000
+          },
+          "diagnostics": {
+            "pressure_at_gauge": 187525.0,
+            "pressure_gauge_depth": 2000,
+            "bottom_hole_pressure": 187525.0,
+            "temperature_at_gauge": 75,
+            "temperature_gauge_depth": 2000
+          }
+        }
+      ]
+    },
+    "well2": {
+      "ACTIVE_COMPLETION_INTERVAL": [
+        {
+          "HEEL": 1050,
+          "TOE": 1100,
+          "start_time": 0,
+          "end_time": 315360000
+        },
+        {
+          "HEEL": 1450,
+          "TOE": 1500,
+          "start_time": 0,
+          "end_time": 315360000
+        }
+      ],
+      "SCHEDULE": [
+        {
+          "time": 0,
+          "mode": "MONITORING",
+          "parameters": {
+            "pressure": 165725.0,
+            "rate": 0,
+            "mass_rate": 0,
+            "cumulative_injected_mass": 0
+          },
+          "diagnostics": {
+            "pressure_at_gauge": 165725.0,
+            "pressure_gauge_depth": 1500,
+            "bottom_hole_pressure": 165725.0,
+            "temperature_at_gauge": 60,
+            "temperature_gauge_depth": 1500
+          }
+        }
+      ]
+    },
+    "well3": {
+      "ACTIVE_COMPLETION_INTERVAL": [
+        {
+          "HEEL": 1650,
+          "TOE": 1700,
+          "start_time": 0,
+          "end_time": 315360000
+        }
+      ],
+      "SCHEDULE": [
+        {
+          "time": 0,
+          "mode": "MONITORING",
+          "parameters": {
+            "pressure": 175485.0,
+            "rate": 0,
+            "mass_rate": 0,
+            "cumulative_injected_mass": 0
+          },
+          "diagnostics": {
+            "pressure_at_gauge": 175485.0,
+            "pressure_gauge_depth": 1700,
+            "bottom_hole_pressure": 175485.0,
+            "temperature_at_gauge": 70,
+            "temperature_gauge_depth": 1700
+          }
+        }
+      ]
+    }
+  }
+}

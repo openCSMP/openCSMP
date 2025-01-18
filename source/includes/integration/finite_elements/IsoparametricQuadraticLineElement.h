@@ -1,0 +1,84 @@
+#ifndef ISOPARAMETRIC_QUADRATIC_LINE_ELEMENT_H
+#define ISOPARAMETRIC_QUADRATIC_LINE_ELEMENT_H
+
+#include "FiniteElement.h"
+
+namespace csmp {
+
+class IsoparametricQuadraticLineElement : public FiniteElement {
+
+public:
+
+    explicit IsoparametricQuadraticLineElement( uint32_t dimensions=2 );
+
+    virtual double      Volume();
+    virtual void        CornerNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t    CornerNodes() const { return 2U; }
+    virtual void        MidSideNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t    MidSideNodes() const { return 1U; }
+    virtual void        NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
+
+    virtual std::vector<uint32_t>  NodesOfFace( uint32_t face_id ) const;
+    virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
+    virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
+    virtual void        N_AtBaryCenter( std::vector<double>& N );
+    virtual void        CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
+    virtual void        EdgeLengths( std::vector<double>& vec );
+
+    virtual double    WeightAtIntegrationPoint( uint32_t i ) const;
+    virtual void      N_AtIntegrationPoint( uint32_t IP, std::vector<double>& N );
+    virtual void      JacobianAtIntegrationPoint( uint32_t IP );
+    virtual double    JacobianInverse(); // returns determinant J for values of previous function
+    
+    virtual void      dN( DenseMatrix<DM_MIN>& M );
+    virtual double    dN_AtNode( DenseMatrix<DM_MIN>& M, uint32_t node );
+    virtual double    dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, uint32_t IP );
+    virtual double    dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
+
+    virtual void      IntegralN( DenseMatrix<DM_MIN>& M );
+
+    virtual std::vector<double>  UnitNormal() const;
+    
+    // TODO: virtual void   UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
+
+    virtual void      IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
+    virtual void      ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
+                                                                  const std::vector<double>& IVAR, 
+                                                                  std::vector<double>& NVAR ) const; 
+    virtual void        OutputNodeDataToVTK( const char* file_name,
+                                           const char* var_name, 
+                                           DenseMatrix<DM_MIN>& DATA ) const;
+
+    virtual void        Nr( double r, std::vector<double>& nr ) const;
+    virtual void        Nr( double r, double* nr ) const;
+    virtual void        dNr( double r, std::vector<double>& dnr ) const;
+    
+    virtual void        ReferenceCoordinates(DenseMatrix<DM_MIN> & matCoords) const;
+	  
+  private: 
+
+    // Methods return determinants of Jacobians as scale factors: dx = J * dr
+    double            JacobianFor( const std::vector<double>& DNR, uint32_t spatial_dimension ) const;
+    double            Jacobian1D( const std::vector<double>& DNR ) const;
+    double            Jacobian2D( const std::vector<double>& DNR ) const;
+    double            Jacobian3D( const std::vector<double>& DNR ) const;
+
+    std::vector<double> IP, W; // gauss-point coordinates and weights
+    double            NX[3];
+    mutable double    DNXYZ[3];
+    double            current_detJ;
+};
+
+/**
+
+@class IsoparametricQuadraticLineElement  IsoparametricQuadraticLineElement "finite_elements/IsoparametricQuadraticLineElement.h"
+@date 2002
+@author S.K. Matthaei */
+
+} // end namespace csmp
+
+#endif
+
+
+
+

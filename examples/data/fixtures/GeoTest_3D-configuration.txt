@@ -1,0 +1,29 @@
+Test model for Geothermal Single Phase flow.
+
+# (block1) group name from parameter range
+
+# (block2) global material properties (default property values).
+permeability				1.0e-10
+porosity				0.25
+fluid volume source			0.0
+nodal fluid volume source		0.0
+fluid pressure				101325.
+mobility				1.0
+temperature				60.0
+fluid density				1000.0
+fluid viscosity				0.001
+volume flux				0.0
+
+# (block3) local material properties (of the fractures)
+
+# (block4) essential conditions on box shaped model boundaries
+#LEFT	Dirichlet	fluid pressure		1.0e6	1.0e6	1.0e6	1.0e6
+TOP	Dirichlet	fluid pressure		101325.	101325.	101325	101325.
+BOTTOM	Dirichlet	temperature		80.	80.	80.	80.
+
+# (block5) essential conditions for groups(Regions) (???)
+#LEFT	Dirichlet	fluid pressure		1.0e6	1.0e6
+#RIGHT	Dirichlet	fluid pressure		101325.	101325.
+
+# (block6) assign properties including flag to csmp::Boundary objects.
+

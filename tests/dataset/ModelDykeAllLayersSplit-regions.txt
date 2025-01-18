@@ -1,0 +1,13 @@
+'Dyke_Split_Mesh' domain selection file, DYKE_SURF, DYKE_SURF_BACK, LAYER#, LAYER_BACK#, CURVES not included
+no properties
+LAYER1_VOL
+LAYER2_VOL
+LAYER3_VOL
+LAYER4_VOL
+DYKE_VOL
+BOTTOM
+TOP
+LEFT
+BACK
+RIGHT
+FRONT

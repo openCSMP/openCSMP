@@ -1,0 +1,318 @@
+Fluid_Flower_Tri_Surface_Source Model
+
+# (1) global material properties
+permeability							6.987e-10
+vertical permeability						6.987e-10
+#tensor permeability						6.987e-10 0. 0.0 5.25e-10
+#tensor permeability						7.0e-10 0. 0.0 3.5e-10
+porosity							0.43
+fluid volume source						0.0
+fluid pressure							0.0
+single phase pressure							0.0
+nodal fluid volume source		0.0
+thickness	0.026
+acceleration gravity	9.8061
+rocktype	9.0
+entry pressure	100.0
+#brooks corey parameter	1.5
+brooks corey parameter	3.0
+saturation carbonic phase						0.
+saturation aqueous phase						1.
+viscosity carbonic phase						1.469e-05
+#viscosity aqueous phase						1.0e-03
+viscosity aqueous phase							0.0009734
+density carbonic phase							1.9801
+density aqueous phase							1002.0
+residual saturation aqueous phase		0.0
+residual saturation carbonic phase	0.0
+CO2 concentration in water	0.0
+temperature	20.0
+compressibility rock	4.5E-10
+compressibility carbonic phase		9.31920832072808E-06
+compressibility aqueous phase		5.00E-10
+total system compressibility	1.00E-09
+nodal concentration source		0.0
+concentration				0.0
+old concentration				0.0
+
+# (2) local material properties 
+#porosity
+C		complete	porosity	0.43
+C_T		complete	porosity	0.43
+C_BB_B		complete	porosity	0.43
+C_BB_T		complete	porosity	0.43
+C_BFLT_B		complete	porosity	0.43
+C_BFLT_T		complete	porosity	0.43
+C_BB_BFLT_T		complete	porosity	0.43
+D_B		complete	porosity	0.44
+D_T		complete	porosity	0.44
+D_BB		complete	porosity	0.44
+D_BFLT		complete	porosity	0.44
+E		complete	porosity	0.45
+E_M		complete	porosity	0.45
+E_T		complete	porosity	0.45
+E_BA		complete	porosity	0.45
+E_BB		complete	porosity	0.45
+E_BB_T		complete	porosity	0.45
+ESF		complete	porosity	0.44
+ESF_T		complete	porosity	0.44
+ESF_BA		complete	porosity	0.44
+ESF_BB		complete	porosity	0.44
+ESF_BB_T		complete	porosity	0.44
+F		complete	porosity	0.43
+F_T		complete	porosity	0.43
+F_BA		complete	porosity	0.43
+F_BB		complete	porosity	0.43
+F_BC		complete	porosity	0.43
+FREE_FLOW		complete	porosity	1
+G		complete	porosity	0.46
+G_BA		complete	porosity	0.46
+G_BB		complete	porosity	0.46
+G_BC		complete	porosity	0.46
+G_TFLT		complete	porosity	0.46
+G_BFLT_B		complete	porosity	0.46
+G_BFLT_T		complete	porosity	0.46
+SEALED_FLT		complete	porosity	0.0001
+# rocktype
+C		complete	rocktype	1
+C_T		complete	rocktype	1
+C_BB_B		complete	rocktype	1
+C_BB_T		complete	rocktype	1
+C_BFLT_B		complete	rocktype	1
+C_BFLT_T		complete	rocktype	1
+C_BB_BFLT_T		complete	rocktype	1
+D_B		complete	rocktype	2
+D_T		complete	rocktype	2
+D_BB		complete	rocktype	2
+D_BFLT		complete	rocktype	2
+E		complete	rocktype	3
+E_M		complete	rocktype	3
+E_T		complete	rocktype	3
+E_BA		complete	rocktype	3
+E_BB		complete	rocktype	3
+E_BB_T		complete	rocktype	3
+ESF		complete	rocktype	6
+ESF_T		complete	rocktype	6
+ESF_BA		complete	rocktype	6
+ESF_BB		complete	rocktype	6
+ESF_BB_T		complete	rocktype	6
+F		complete	rocktype	4
+F_T		complete	rocktype	4
+F_BA		complete	rocktype	4
+F_BB		complete	rocktype	4
+F_BC		complete	rocktype	4
+FREE_FLOW		complete	rocktype	7
+G		complete	rocktype	5
+G_BA		complete	rocktype	5
+G_BB		complete	rocktype	5
+G_BC		complete	rocktype	5
+G_TFLT		complete	rocktype	5
+G_BFLT_B		complete	rocktype	5
+G_BFLT_T		complete	rocktype	5
+SEALED_FLT		complete	rocktype	8
+# permeability
+C		complete	permeability	3.45E-10
+C_T		complete	permeability	3.45E-10
+C_BB_B		complete	permeability	3.45E-10
+C_BB_T		complete	permeability	3.45E-10
+C_BFLT_B		complete	permeability	3.45E-10
+C_BFLT_T		complete	permeability	3.45E-10
+C_BB_BFLT_T		complete	permeability	3.45E-10
+D_B		complete	permeability	4.18E-10
+D_T		complete	permeability	4.18E-10
+D_BB		complete	permeability	4.18E-10
+D_BFLT		complete	permeability	4.18E-10
+E		complete	permeability	7.40E-10
+E_M		complete	permeability	7.40E-10
+E_T		complete	permeability	7.40E-10
+E_BA		complete	permeability	7.40E-10
+E_BB		complete	permeability	7.40E-10
+E_BB_T		complete	permeability	7.40E-10
+ESF		complete	permeability	7.40E-11
+ESF_T		complete	permeability	7.40E-11
+ESF_BA		complete	permeability	7.40E-11
+ESF_BB		complete	permeability	7.40E-11
+ESF_BB_T		complete	permeability	7.40E-11
+F		complete	permeability	1.09E-09
+F_T		complete	permeability	1.09E-09
+F_BA		complete	permeability	1.09E-09
+F_BB		complete	permeability	1.09E-09
+F_BC		complete	permeability	1.09E-09
+FREE_FLOW		complete	permeability	1.18E-08
+G		complete	permeability	1.18E-09
+G_BA		complete	permeability	1.18E-09
+G_BB		complete	permeability	1.18E-09
+G_BC		complete	permeability	1.18E-09
+G_TFLT		complete	permeability	1.18E-09
+G_BFLT_B		complete	permeability	1.18E-09
+G_BFLT_T		complete	permeability	1.18E-09
+SEALED_FLT		complete	permeability	9.87E-15
+# vertical permeability
+C		complete	vertical permeability	3.45E-10
+C_T		complete	vertical permeability	3.45E-10
+C_BB_B		complete	vertical permeability	3.45E-10
+C_BB_T		complete	vertical permeability	3.45E-10
+C_BFLT_B		complete	vertical permeability	3.45E-10
+C_BFLT_T		complete	vertical permeability	3.45E-10
+C_BB_BFLT_T		complete	vertical permeability	3.45E-10
+D_B		complete	vertical permeability	4.18E-10
+D_T		complete	vertical permeability	4.18E-10
+D_BB		complete	vertical permeability	4.18E-10
+D_BFLT		complete	vertical permeability	4.18E-10
+E		complete	vertical permeability	7.40E-10
+E_M		complete	vertical permeability	7.40E-10
+E_T		complete	vertical permeability	7.40E-10
+E_BA		complete	vertical permeability	7.40E-10
+E_BB		complete	vertical permeability	7.40E-10
+E_BB_T		complete	vertical permeability	7.40E-10
+ESF		complete	vertical permeability	8.52E-12
+ESF_T		complete	vertical permeability	7.40E-11
+ESF_BA		complete	vertical permeability	8.52E-12
+ESF_BB		complete	vertical permeability	8.52E-12
+ESF_BB_T		complete	vertical permeability	7.40E-11
+F		complete	vertical permeability	1.09E-09
+F_T		complete	vertical permeability	1.09E-09
+F_BA		complete	vertical permeability	1.09E-09
+F_BB		complete	vertical permeability	1.09E-09
+F_BC		complete	vertical permeability	1.09E-09
+FREE_FLOW		complete	vertical permeability	1.18E-08
+G		complete	vertical permeability	1.18E-09
+G_BA		complete	vertical permeability	1.18E-09
+G_BB		complete	vertical permeability	1.18E-09
+G_BC		complete	vertical permeability	1.18E-09
+G_TFLT		complete	vertical permeability	1.18E-09
+G_BFLT_B		complete	vertical permeability	1.18E-09
+G_BFLT_T		complete	vertical permeability	1.18E-09
+SEALED_FLT		complete	vertical permeability	9.87E-15	
+# entry pressure
+C		complete	entry pressure	294.3
+C_T		complete	entry pressure	294.3
+C_BB_B		complete	entry pressure	294.3
+C_BB_T		complete	entry pressure	294.3
+C_BFLT_B		complete	entry pressure	294.3
+C_BFLT_T		complete	entry pressure	294.3
+C_BB_BFLT_T		complete	entry pressure	294.3
+D_B		complete	entry pressure	98.1
+D_T		complete	entry pressure	98.1
+D_BB		complete	entry pressure	98.1
+D_BFLT		complete	entry pressure	98.1
+E		complete	entry pressure	350.0
+E_M		complete	entry pressure	350.0
+E_T		complete	entry pressure	350.0
+E_BA		complete	entry pressure	350.0
+E_BB		complete	entry pressure	350.0
+E_BB_T		complete	entry pressure	350.0
+ESF		complete	entry pressure	6471.5e12
+ESF_T		complete	entry pressure	6471.5e12
+ESF_BA		complete	entry pressure	6471.5e12
+ESF_BB		complete	entry pressure	6471.5e12
+ESF_BB_T		complete	entry pressure	6471.5e12
+F		complete	entry pressure	100.0
+F_T		complete	entry pressure	100.0
+F_BA		complete	entry pressure	100.0
+F_BB		complete	entry pressure	100.0
+F_BC		complete	entry pressure	100.0
+FREE_FLOW		complete	entry pressure	1.0
+G		complete	entry pressure	80.0
+G_BA		complete	entry pressure	80.0
+G_BB		complete	entry pressure	80.0
+G_BC		complete	entry pressure	80.0
+G_TFLT		complete	entry pressure	80.0
+G_BFLT_B		complete	entry pressure	80.0
+G_BFLT_T		complete	entry pressure	80.0
+SEALED_FLT		complete	entry pressure	10000.0
+# residual saturation aqueous phase
+C		complete	residual saturation aqueous phase	0.15
+C_T		complete	residual saturation aqueous phase	0.15
+C_BB_B		complete	residual saturation aqueous phase	0.15
+C_BB_T		complete	residual saturation aqueous phase	0.15
+C_BFLT_B		complete	residual saturation aqueous phase	0.15
+C_BFLT_T		complete	residual saturation aqueous phase	0.15
+C_BB_BFLT_T		complete	residual saturation aqueous phase	0.15
+D_B		complete	residual saturation aqueous phase	0.17
+D_T		complete	residual saturation aqueous phase	0.17
+D_BB		complete	residual saturation aqueous phase	0.17
+D_BFLT		complete	residual saturation aqueous phase	0.17
+E		complete	residual saturation aqueous phase	0.21
+E_M		complete	residual saturation aqueous phase	0.21
+E_T		complete	residual saturation aqueous phase	0.21
+E_BA		complete	residual saturation aqueous phase	0.21
+E_BB		complete	residual saturation aqueous phase	0.21
+E_BB_T		complete	residual saturation aqueous phase	0.21
+ESF		complete	residual saturation aqueous phase	0.00
+ESF_T		complete	residual saturation aqueous phase	0.00
+ESF_BA		complete	residual saturation aqueous phase	0.00
+ESF_BB		complete	residual saturation aqueous phase	0.00
+ESF_BB_T		complete	residual saturation aqueous phase	0.00
+F		complete	residual saturation aqueous phase	0.03
+F_T		complete	residual saturation aqueous phase	0.03
+F_BA		complete	residual saturation aqueous phase	0.03
+F_BB		complete	residual saturation aqueous phase	0.03
+F_BC		complete	residual saturation aqueous phase	0.03
+FREE_FLOW		complete	residual saturation aqueous phase	0.00
+G		complete	residual saturation aqueous phase	0.14
+G_BA		complete	residual saturation aqueous phase	0.14
+G_BB		complete	residual saturation aqueous phase	0.14
+G_BC		complete	residual saturation aqueous phase	0.14
+G_TFLT		complete	residual saturation aqueous phase	0.14
+G_BFLT_B		complete	residual saturation aqueous phase	0.14
+G_BFLT_T		complete	residual saturation aqueous phase	0.14
+SEALED_FLT		complete	residual saturation aqueous phase	0.00
+# brooks corey parameter
+C		complete	brooks corey parameter	3.00
+C_T		complete	brooks corey parameter	3.00
+C_BB_B		complete	brooks corey parameter	3.00
+C_BB_T		complete	brooks corey parameter	3.00
+C_BFLT_B		complete	brooks corey parameter	3.00
+C_BFLT_T		complete	brooks corey parameter	3.00
+C_BB_BFLT_T		complete	brooks corey parameter	3.00
+D_B		complete	brooks corey parameter	3.00
+D_T		complete	brooks corey parameter	3.00
+D_BB		complete	brooks corey parameter	3.00
+D_BFLT		complete	brooks corey parameter	3.00
+E		complete	brooks corey parameter	3.00
+E_M		complete	brooks corey parameter	3.00
+E_T		complete	brooks corey parameter	3.00
+E_BA		complete	brooks corey parameter	3.00
+E_BB		complete	brooks corey parameter	3.00
+E_BB_T		complete	brooks corey parameter	3.00
+ESF		complete	brooks corey parameter	2.10
+ESF_T		complete	brooks corey parameter	2.10
+ESF_BA		complete	brooks corey parameter	2.10
+ESF_BB		complete	brooks corey parameter	2.10
+ESF_BB_T		complete	brooks corey parameter	2.10
+F		complete	brooks corey parameter	2.70
+F_T		complete	brooks corey parameter	2.70
+F_BA		complete	brooks corey parameter	2.70
+F_BB		complete	brooks corey parameter	2.70
+F_BC		complete	brooks corey parameter	2.70
+FREE_FLOW		complete	brooks corey parameter	0.10
+G		complete	brooks corey parameter	2.50
+G_BA		complete	brooks corey parameter	2.50
+G_BB		complete	brooks corey parameter	2.50
+G_BC		complete	brooks corey parameter	2.50
+G_TFLT		complete	brooks corey parameter	2.50
+G_BFLT_B		complete	brooks corey parameter	2.50
+G_BFLT_T		complete	brooks corey parameter	2.50
+SEALED_FLT		complete	brooks corey parameter	3.00
+# saturations
+FREE_FLOW	complete	saturation carbonic phase	0.0
+FREE_FLOW	complete	saturation aqueous phase	1.0
+
+#----------------------------------------------------------------
+# (3) essential conditions on model boundaries
+#----------------------------------------------------------------
+#TOP		Dirichlet	fluid pressure	0.	0.
+TOP	Dirichlet	fluid pressure		101325.		101325.		101325.		101325.
+TOP	Dirichlet	single phase pressure		101325.		101325.		101325.		101325.
+#BOTTOM	Dirichlet	fluid pressure		116358.		116358.		116358.		116358.
+TOP	Dirichlet	saturation carbonic phase	0.	0.	0.	0.
+TOP	Dirichlet	saturation aqueous phase	1.	1.	1.	1.
+TOP	Dirichlet	concentration	0.	0.	0.	0.
+
+# ----------------------------------------------------------------------
+# (4) regional variable flags		
+# ----------------------------------------------------------------------
+FREE_FLOW	complete	saturation carbonic phase	Dirichlet
+FREE_FLOW	complete	saturation aqueous phase	Dirichlet
+FREE_FLOW	complete	concentration	Dirichlet

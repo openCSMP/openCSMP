@@ -1,0 +1,5 @@
+name	MParameter	unit	index	min.	max.	place
+
+compressibility		C	Pa-1	1	1.00E-25	1.00E-05	element
+permeability	k	m2	1	1.00E-25	1.00E-02	element
+porosity	PHI	X	1	1.00E-05	1.00E+01	element

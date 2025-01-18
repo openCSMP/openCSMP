@@ -1,0 +1,3 @@
+name	MParameter	unit	index	min.	max.	place
+permeability							K		m2		1	1.00E-25	1.00E+07	element
+porosity								PHI		X		1	1.00E-05	1.00E+01	element
