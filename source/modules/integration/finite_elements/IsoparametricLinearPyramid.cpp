@@ -18,7 +18,7 @@ IsoparametricLinearPyramid::IsoparametricLinearPyramid( uint32_t integrationPoin
  {
     //AAM, 07.02
     dim = 3;
-    itp = integrationPoints;
+    itp = 1;
     // 3/4?
     npf = 3;
     npe = 5;
